@@ -1,0 +1,49 @@
+group 'org.motechproject.mots'
+version '0.1-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+
+    testCompile "junit:junit:4.11"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2.1'
+}
+
+checkstyle {
+    toolVersion '8.0'
+    configFile = file("checkstyle.xml")
+    maxWarnings = 0
+}
+
+pmd {
+    toolVersion = '5.8.1'
+    consoleOutput= true
+    ignoreFailures = false
+    ruleSetFiles = files("ruleset.xml")
+    reportsDir = file("build/reports/pmd")
+}
