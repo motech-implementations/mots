@@ -26,8 +26,14 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'mysql:mysql-connector-java'
 
     testCompile "junit:junit:4.12"
+}
+
+processResources {
+    expand(project.properties)
 }
 
 task wrapper(type: Wrapper) {
