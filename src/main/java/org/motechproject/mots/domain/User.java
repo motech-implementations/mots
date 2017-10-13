@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -17,57 +19,27 @@ public class User {
   @Type(type = "uuid-char")
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column
+  @Getter
+  @Setter
   private UUID id;
 
   @Column
+  @Getter
+  @Setter
   private String login;
 
   @Column
+  @Getter
+  @Setter
   private String password;
 
   @Column
+  @Getter
+  @Setter
   private String email;
 
   @Column
+  @Getter
+  @Setter
   private String name;
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public String getLogin() {
-    return login;
-  }
-
-  public void setLogin(String login) {
-    this.login = login;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 }
