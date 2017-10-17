@@ -5,28 +5,30 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table
-public class User extends BaseEntity {
+public class Choice extends BaseEntity {
+
+  @Column(nullable = false)
+  @Getter
+  @Setter
+  private Integer ivrPressedKey;
 
   @Column
   @Getter
   @Setter
-  private String login;
+  private String ivrName;
 
+  @Column(nullable = false)
+  @Getter
+  @Setter
+  private Boolean isCorrect;
+
+  @Type(type = "text")
   @Column
   @Getter
   @Setter
-  private String password;
-
-  @Column
-  @Getter
-  @Setter
-  private String email;
-
-  @Column
-  @Getter
-  @Setter
-  private String name;
+  private String description;
 }
