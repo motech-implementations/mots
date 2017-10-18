@@ -32,6 +32,3 @@ out/
 
 # Gradle files
 .gradle/
-gradle/
-gradlew
-gradlew.bat
