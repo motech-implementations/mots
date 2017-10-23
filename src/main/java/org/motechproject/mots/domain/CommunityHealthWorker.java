@@ -3,6 +3,8 @@ package org.motechproject.mots.domain;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -48,16 +50,19 @@ public class CommunityHealthWorker extends BaseEntity {
   private LocalDate dateOfBirth;
 
   @Column
+  @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Gender gender;
 
   @Column
+  @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Literacy literacy;
 
   @Column
+  @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private EducationLevel educationLevel;
@@ -78,6 +83,8 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private Boolean peerSupervisor;
 
+  @Column
+  @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Language preferredLanguage;

@@ -2,6 +2,8 @@ package org.motechproject.mots.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
@@ -15,7 +17,7 @@ import org.motechproject.mots.domain.enums.CallFlowElementType;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class CallFlowElement extends IvrObject {
 
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false)
   @Getter
   @Setter
   private String name;
@@ -27,6 +29,7 @@ public abstract class CallFlowElement extends IvrObject {
   private String content;
 
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   @Getter
   private CallFlowElementType type;
 
