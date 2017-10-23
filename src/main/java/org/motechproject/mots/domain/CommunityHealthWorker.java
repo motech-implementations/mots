@@ -15,7 +15,7 @@ import org.motechproject.mots.domain.enums.Literacy;
 
 @Entity
 @Table
-public class HealthWorker extends BaseEntity {
+public class CommunityHealthWorker extends BaseEntity {
 
   @Column(unique = true)
   @Getter
