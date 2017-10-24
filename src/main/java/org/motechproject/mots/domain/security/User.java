@@ -1,4 +1,4 @@
-package org.motechproject.mots.domain;
+package org.motechproject.mots.domain.security;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.domain.enums.UserPermission;
+import org.motechproject.mots.domain.BaseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,7 +56,7 @@ public class User extends BaseEntity implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return AuthorityUtils.createAuthorityList(roles.stream()
         .flatMap(userRole -> userRole.getPermissions().stream())
-        .map(UserPermission::toString).toArray(String[]::new));
+        .map(UserPermission::getRoleName).toArray(String[]::new));
   }
 
   @Override

@@ -1,5 +1,6 @@
 package org.motechproject.mots.web;
 
+import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,7 @@ public class Hello {
     return new ResponseEntity<>("hello", HttpStatus.OK);
   }
 
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize(RoleNames.HAS_ADMIN_ROLE)
   @RequestMapping(value = "/secured", method = RequestMethod.GET)
   public ResponseEntity<?> secured() {
     return new ResponseEntity<>("secured", HttpStatus.OK);

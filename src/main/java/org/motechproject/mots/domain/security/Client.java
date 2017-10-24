@@ -1,4 +1,4 @@
-package org.motechproject.mots.domain;
+package org.motechproject.mots.domain.security;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

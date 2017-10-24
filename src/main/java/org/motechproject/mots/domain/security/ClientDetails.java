@@ -1,4 +1,4 @@
-package org.motechproject.mots.domain;
+package org.motechproject.mots.domain.security;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

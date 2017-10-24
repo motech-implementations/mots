@@ -1,4 +1,4 @@
-package org.motechproject.mots.domain;
+package org.motechproject.mots.domain.security;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.domain.enums.UserPermission;
+import org.motechproject.mots.domain.BaseEntity;
 
 @Entity
 @Table
