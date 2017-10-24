@@ -1,0 +1,32 @@
+{
+  "name": "mots",
+  "version": "1.0.0",
+  "description": "MOTS app",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^3.8.1"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motech-implementations/mots.git"
+  },
+  "author": "GF",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/motech-implementations/mots/issues"
+  },
+  "homepage": "https://github.com/motech-implementations/mots#readme"
+}
