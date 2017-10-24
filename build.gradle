@@ -1,13 +1,19 @@
+import com.moowork.gradle.node.task.NodeTask
+
 group 'org.motechproject.mots'
 version '0.1-SNAPSHOT'
 
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE")
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
     }
 }
 
@@ -16,6 +22,8 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
+apply plugin: "com.moowork.node"
+
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -37,9 +45,21 @@ processResources {
     expand(project.properties)
 }
 
+node {
+    version = '6.11.4'
+    npmVersion = '3.10.10'
+    download = true
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '4.2.1'
 }
+
+task webpack(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+}
+
+processResources.dependsOn 'webpack'
 
 checkstyle {
     toolVersion '8.0'
@@ -54,3 +74,6 @@ pmd {
     ruleSetFiles = files("ruleset.xml")
     reportsDir = file("build/reports/pmd")
 }
+
+
+clean.delete << file('src/main/resources/static/site')
