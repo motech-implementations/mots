@@ -1,0 +1,18 @@
+language: java
+jdk:
+  - oraclejdk8
+
+services:
+  - mysql
+
+install: true
+
+script:
+  - sudo chmod +x ./run_build.sh
+  - ./run_build.sh
+
+cache:
+  directories:
+    - $HOME/.gradle/caches
+    - $HOME/mots/.gradle
+    - $HOME/mots/node_modules
