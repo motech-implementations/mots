@@ -19,10 +19,10 @@ public enum UserPermission {
 
   public static class RoleNames {
 
-    public final static String USER = "ROLE_USER";
-    public final static String ADMIN = "ROLE_ADMIN";
+    public static final String USER = "ROLE_USER";
+    public static final String ADMIN = "ROLE_ADMIN";
 
-    public final static String HAS_USER_ROLE = "hasRole('" + USER + "')";
-    public final static String HAS_ADMIN_ROLE = "hasRole('" + ADMIN + "')";
+    public static final String HAS_USER_ROLE = "hasRole('" + USER + "')";
+    public static final String HAS_ADMIN_ROLE = "hasRole('" + ADMIN + "')";
   }
 }
