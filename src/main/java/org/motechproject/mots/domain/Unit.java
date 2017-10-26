@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -38,4 +39,15 @@ public class Unit extends IvrObject {
   @Getter
   @Setter
   private List<CallFlowElement> callFlowElements;
+
+  @OneToOne
+  @JoinColumn(name = "continuation_question_id")
+  @Getter
+  @Setter
+  private MultipleChoiceQuestion unitContinuationQuestion;
+
+  @Column(nullable = false)
+  @Getter
+  @Setter
+  private Boolean allowReplay;
 }
