@@ -12,6 +12,8 @@ the service is running. The service may write errors and other output to your co
 ## Stopping the Service
 To stop the service (when it is running with `gradle bootRun`) use Control-C.
 
-## Before starting development
-Download the intellij-java-google-style.xml file from the http://code.google.com/p/google-styleguide/ repo. 
+## Development
+1. Install Lombok plugin under File -> Settings -> Plugins -> Browse repositories... search for the Lombok plugin nad click Install.
+2. Check the Enable annotation processing checkbox under File -> Settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors.
+3. Download the intellij-java-google-style.xml file from the http://code.google.com/p/google-styleguide/ repo. 
 Under File -> Settings -> Editor -> Code Style import the google-styleguide (gear icon -> Import Scheme -> Intellij IDEA code style XML) and choose it as current code style for the project.
