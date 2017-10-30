@@ -1,5 +1,3 @@
-import com.moowork.gradle.node.task.NodeTask
-
 group 'org.motechproject.mots'
 version '0.1-SNAPSHOT'
 
@@ -39,6 +37,7 @@ dependencies {
     compile 'org.springframework.security.oauth:spring-security-oauth2'
     compile 'mysql:mysql-connector-java'
     compile 'org.projectlombok:lombok:1.16.18'
+    compile 'org.hibernate:hibernate-java8'
 
     testCompile "junit:junit:4.12"
 }

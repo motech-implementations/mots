@@ -67,7 +67,7 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private EducationLevel educationLevel;
 
-  @Column
+  @Column(unique = true, nullable = false)
   @Getter
   @Setter
   private String phoneNumber;
