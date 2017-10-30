@@ -6,7 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -17,7 +18,7 @@ import org.motechproject.mots.domain.enums.Status;
 
 @Entity
 @Table
-public class Module extends IvrObject {
+public class Course extends IvrObject {
 
   @Column(nullable = false)
   @Getter
@@ -31,15 +32,19 @@ public class Module extends IvrObject {
   private String description;
 
   @Column(nullable = false)
-  @Getter
-  @Setter
-  private Integer moduleNumber;
-
-  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Status status;
+
+  @ManyToMany
+  @JoinTable(name = "course_module",
+      joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
+  @OrderBy("module_number ASC")
+  @Getter
+  @Setter
+  private List<Module> modules;
 
   @Column(nullable = false)
   @Getter
@@ -47,22 +52,14 @@ public class Module extends IvrObject {
   private Integer version;
 
   @OneToOne
-  @JoinColumn(name = "start_module_question_id")
-  @Getter
-  @Setter
-  private MultipleChoiceQuestion startModuleQuestion;
-
-  @OneToMany
-  @JoinColumn(name = "module_id")
-  @OrderBy("list_order ASC")
-  @Column
-  @Getter
-  @Setter
-  private List<Unit> units;
-
-  @OneToOne
   @JoinColumn(name = "previous_version_id")
   @Getter
   @Setter
-  private Module previousVersion;
+  private Course previousVersion;
+
+  @OneToOne
+  @JoinColumn(name = "no_modules_message_id")
+  @Getter
+  @Setter
+  private Message noModulesMessage;
 }
