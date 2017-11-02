@@ -14,7 +14,7 @@ import lombok.Setter;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 
 @Entity
-@Table
+@Table(name = "module_progress")
 public class ModuleProgress extends BaseEntity {
 
   @OneToOne
@@ -29,7 +29,7 @@ public class ModuleProgress extends BaseEntity {
   @Setter
   private UnitProgress currentUnit;
 
-  @Column(nullable = false)
+  @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
@@ -37,7 +37,6 @@ public class ModuleProgress extends BaseEntity {
 
   @OneToMany
   @JoinColumn(name = "module_id")
-  @Column
   @Getter
   @Setter
   private Set<UnitProgress> unitsProgress;

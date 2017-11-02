@@ -20,18 +20,18 @@ public abstract class BaseEntity {
   @GeneratedValue(generator = "uuid-gen")
   @GenericGenerator(name = "uuid-gen", strategy = "uuid2")
   @Type(type = "uuid-char")
-  @Column(updatable = false, nullable = false)
+  @Column(name = "id", updatable = false, nullable = false)
   @Getter
   @Setter
   private UUID id;
 
-  @Column
+  @Column(name = "create_date")
   @CreationTimestamp
   @Getter
   @Setter
   private Date createDate;
 
-  @Column
+  @Column(name = "update_date")
   @UpdateTimestamp
   @Getter
   @Setter

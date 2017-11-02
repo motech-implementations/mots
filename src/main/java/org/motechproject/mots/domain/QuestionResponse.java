@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "question_response")
 public class QuestionResponse extends BaseEntity {
 
   @OneToOne
@@ -24,7 +24,7 @@ public class QuestionResponse extends BaseEntity {
   @Setter
   private Choice chosenResponse;
 
-  @Column(nullable = false)
+  @Column(name = "number_of_attempts", nullable = false)
   @Getter
   @Setter
   private Integer numberOfAttempts;

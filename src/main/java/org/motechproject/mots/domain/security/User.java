@@ -17,37 +17,36 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table
+@Table(name = "user")
 public class User extends BaseEntity implements UserDetails {
 
-  @Column(nullable = false, unique = true)
+  @Column(name = "username", nullable = false, unique = true)
   @Getter
   @Setter
   private String username;
 
-  @Column
+  @Column(name = "password")
   @Getter
   @Setter
   private String password;
 
-  @Column
+  @Column(name = "email")
   @Getter
   @Setter
   private String email;
 
-  @Column
+  @Column(name = "name")
   @Getter
   @Setter
   private String name;
 
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
-  @Column
   @Getter
   @Setter
   private Set<UserRole> roles = new HashSet<>();
 
-  @Column
+  @Column(name = "enabled")
   @Getter
   @Setter
   private Boolean enabled;

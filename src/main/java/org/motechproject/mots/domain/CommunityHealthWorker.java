@@ -16,58 +16,58 @@ import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
 
 @Entity
-@Table
+@Table(name = "community_health_worker")
 public class CommunityHealthWorker extends BaseEntity {
 
-  @Column(unique = true)
+  @Column(name = "ivr_id", unique = true)
   @Getter
   @Setter
   private String ivrId;
 
-  @Column(unique = true, nullable = false)
+  @Column(name = "chw_id", unique = true, nullable = false)
   @Getter
   @Setter
   private String chwId;
 
-  @Column
+  @Column(name = "first_name")
   @Getter
   @Setter
   private String firstName;
 
-  @Column
+  @Column(name = "second_name")
   @Getter
   @Setter
   private String secondName;
 
-  @Column
+  @Column(name = "other_name")
   @Getter
   @Setter
   private String otherName;
 
-  @Column
+  @Column(name = "date_of_birth")
   @Getter
   @Setter
   private LocalDate dateOfBirth;
 
-  @Column
+  @Column(name = "gender")
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Gender gender;
 
-  @Column
+  @Column(name = "literacy")
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Literacy literacy;
 
-  @Column
+  @Column(name = "education_level")
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private EducationLevel educationLevel;
 
-  @Column(unique = true, nullable = false)
+  @Column(name = "phone_number", unique = true, nullable = false)
   @Getter
   @Setter
   private String phoneNumber;
@@ -78,12 +78,12 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private Community community;
 
-  @Column
+  @Column(name = "peer_supervisor")
   @Getter
   @Setter
   private Boolean peerSupervisor;
 
-  @Column
+  @Column(name = "preferred_language")
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter

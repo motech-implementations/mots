@@ -16,32 +16,32 @@ import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.Status;
 
 @Entity
-@Table
+@Table(name = "module")
 public class Module extends IvrObject {
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   @Getter
   @Setter
   private String name;
 
   @Type(type = "text")
-  @Column
+  @Column(name = "description")
   @Getter
   @Setter
   private String description;
 
-  @Column(nullable = false)
+  @Column(name = "module_number", nullable = false)
   @Getter
   @Setter
   private Integer moduleNumber;
 
-  @Column(nullable = false)
+  @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Status status;
 
-  @Column(nullable = false)
+  @Column(name = "version", nullable = false)
   @Getter
   @Setter
   private Integer version;
@@ -55,7 +55,6 @@ public class Module extends IvrObject {
   @OneToMany
   @JoinColumn(name = "module_id")
   @OrderBy("list_order ASC")
-  @Column
   @Getter
   @Setter
   private List<Unit> units;

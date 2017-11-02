@@ -8,26 +8,26 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table
+@Table(name = "choice")
 public class Choice extends BaseEntity {
 
-  @Column(nullable = false)
+  @Column(name = "ivr_pressed_key", nullable = false)
   @Getter
   @Setter
   private Integer ivrPressedKey;
 
-  @Column
+  @Column(name = "ivr_name")
   @Getter
   @Setter
   private String ivrName;
 
-  @Column(nullable = false)
+  @Column(name = "is_correct", nullable = false)
   @Getter
   @Setter
   private Boolean isCorrect;
 
   @Type(type = "text")
-  @Column
+  @Column(name = "description")
   @Getter
   @Setter
   private String description;

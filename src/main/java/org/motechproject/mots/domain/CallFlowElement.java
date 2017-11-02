@@ -13,27 +13,27 @@ import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 
 @Entity
-@Table
+@Table(name = "call_flow_element")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class CallFlowElement extends IvrObject {
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   @Getter
   @Setter
   private String name;
 
   @Type(type = "text")
-  @Column
+  @Column(name = "content")
   @Getter
   @Setter
   private String content;
 
-  @Column(nullable = false)
+  @Column(name = "type", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   private CallFlowElementType type;
 
-  @Column(nullable = false)
+  @Column(name = "list_order", nullable = false)
   @Getter
   @Setter
   private Integer listOrder;

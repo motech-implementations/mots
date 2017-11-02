@@ -9,20 +9,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "in_charge")
 public class InCharge extends BaseEntity {
 
-  @Column
+  @Column(name = "name")
   @Getter
   @Setter
   private String name;
 
-  @Column
+  @Column(name = "phone_number")
   @Getter
   @Setter
   private String phoneNumber;
 
-  @Column
+  @Column(name = "email")
   @Getter
   @Setter
   private String email;

@@ -8,55 +8,56 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "client")
 public class Client {
 
   @Id
+  @Column(name = "client_id")
   @Getter
   @Setter
   private String clientId;
 
-  @Column
+  @Column(name = "client_secret")
   @Getter
   @Setter
   private String clientSecret;
 
-  @Column
+  @Column(name = "scope")
   @Getter
   @Setter
   private String scope;
 
-  @Column
+  @Column(name = "resource_ids")
   @Getter
   @Setter
   private String resourceIds;
 
-  @Column(nullable = false)
+  @Column(name = "authorized_grant_types", nullable = false)
   @Getter
   @Setter
   private String authorizedGrantTypes;
 
-  @Column
+  @Column(name = "registered_redirect_uris")
   @Getter
   @Setter
   private String registeredRedirectUris;
 
-  @Column(nullable = false)
+  @Column(name = "authorities", nullable = false)
   @Getter
   @Setter
   private String authorities;
 
-  @Column
+  @Column(name = "access_token_validity_seconds")
   @Getter
   @Setter
   private Integer accessTokenValiditySeconds;
 
-  @Column
+  @Column(name = "refresh_token_validity_seconds")
   @Getter
   @Setter
   private Integer refreshTokenValiditySeconds;
 
-  @Column
+  @Column(name = "additional_information")
   @Getter
   @Setter
   private String additionalInformation;
