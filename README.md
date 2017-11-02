@@ -17,3 +17,7 @@ To stop the service (when it is running with `gradle bootRun`) use Control-C.
 2. Check the Enable annotation processing checkbox under File -> Settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors.
 3. Download the intellij-java-google-style.xml file from the http://code.google.com/p/google-styleguide/ repo. 
 Under File -> Settings -> Editor -> Code Style import the google-styleguide (gear icon -> Import Scheme -> Intellij IDEA code style XML) and choose it as current code style for the project.
+
+## Data model changes
+1. Generate the migration using the gradle task (./gradlew liquibaseDiffChangelog), the migration file will be saved at /resources/db/changelog and have the following format yyyyMMdd_HHmm.mysql.sql (e.g. 20171102_1634.mysql.sql)
+2. Include the generated migration in the changelog by adding the following line to the liquibase-changelog.xml file: <include file="{migration file name}" relativeToChangelogFile="true" />
