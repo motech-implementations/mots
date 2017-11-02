@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 
 @Entity
-@Table
+@Table(name = "message")
 @PrimaryKeyJoinColumn(name = "call_flow_element_id")
 public class Message extends CallFlowElement {
 

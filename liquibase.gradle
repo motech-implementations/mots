@@ -1,0 +1,30 @@
+configurations {
+    liquibase
+}
+
+dependencies {
+    liquibase 'org.liquibase.ext:liquibase-hibernate5:3.6'
+}
+
+task liquibaseDiffChangelog(type: JavaExec) {
+    group = "liquibase"
+
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.liquibase
+
+    main = "liquibase.integration.commandline.Main"
+
+    args "--changeLogFile=src/main/resources/db/changelog/" + buildTimestamp() + ".mysql.sql"
+    args "--referenceUrl=hibernate:spring:org.motechproject.mots.domain?dialect=org.hibernate.dialect.MySQL5Dialect"
+    args "--username=" + databaseUser
+    args "--password=" + databasePassword
+    args "--url=" + databaseUrl
+    args "--driver=com.mysql.jdbc.Driver"
+    args "diffChangeLog"
+}
+
+static def buildTimestamp() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd_HHmm')
+    return formattedDate
+}

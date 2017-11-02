@@ -38,12 +38,15 @@ dependencies {
     compile 'mysql:mysql-connector-java'
     compile 'org.projectlombok:lombok:1.16.18'
     compile 'org.hibernate:hibernate-java8'
+    compile 'org.liquibase:liquibase-core:3.5.3'
 
     testCompile "junit:junit:4.12"
 }
 
 processResources {
-    expand(project.properties)
+    filesMatching("**/application.properties") {
+        expand(project.properties)
+    }
 }
 
 node {
@@ -78,3 +81,5 @@ pmd {
 
 
 clean.delete << file('src/main/resources/static/site')
+
+apply from: 'liquibase.gradle'

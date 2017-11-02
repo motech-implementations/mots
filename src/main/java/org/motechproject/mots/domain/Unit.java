@@ -13,21 +13,21 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 @Entity
-@Table
+@Table(name = "unit")
 public class Unit extends IvrObject {
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   @Getter
   @Setter
   private String name;
 
   @Type(type = "text")
-  @Column
+  @Column(name = "description")
   @Getter
   @Setter
   private String description;
 
-  @Column(nullable = false)
+  @Column(name = "list_order", nullable = false)
   @Getter
   @Setter
   private Integer listOrder;
@@ -35,7 +35,6 @@ public class Unit extends IvrObject {
   @OneToMany
   @JoinColumn(name = "unit_id")
   @OrderBy("list_order ASC")
-  @Column
   @Getter
   @Setter
   private List<CallFlowElement> callFlowElements;
@@ -46,7 +45,7 @@ public class Unit extends IvrObject {
   @Setter
   private MultipleChoiceQuestion unitContinuationQuestion;
 
-  @Column(nullable = false)
+  @Column(name = "allow_replay", nullable = false)
   @Getter
   @Setter
   private Boolean allowReplay;

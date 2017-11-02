@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "assigned_course")
 public class AssignedCourse extends BaseEntity {
 
   @ManyToOne
@@ -25,12 +25,12 @@ public class AssignedCourse extends BaseEntity {
   @Setter
   private Course course;
 
-  @Column(nullable = false)
+  @Column(name = "start_date", nullable = false)
   @Getter
   @Setter
   private LocalDateTime startDate;
 
-  @Column
+  @Column(name = "end_date")
   @Getter
   @Setter
   private LocalDateTime endDate;

@@ -10,17 +10,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "district")
 public class District extends BaseEntity {
 
-  @Column(unique = true, nullable = false)
+  @Column(name = "name", unique = true, nullable = false)
   @Getter
   @Setter
   private String name;
 
   @OneToMany
   @JoinColumn(name = "district_id")
-  @Column
   @Getter
   @Setter
   private Set<Chiefdom> chiefdoms;

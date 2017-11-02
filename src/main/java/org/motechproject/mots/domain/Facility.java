@@ -10,22 +10,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "facility")
 public class Facility extends BaseEntity {
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   @Getter
   @Setter
   private String name;
 
-  @Column
+  @Column(name = "type")
   @Getter
   @Setter
   private String type;
 
   @OneToMany
   @JoinColumn(name = "facility_id")
-  @Column
   @Getter
   @Setter
   private Set<Community> communities;

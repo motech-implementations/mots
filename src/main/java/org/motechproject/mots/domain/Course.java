@@ -17,21 +17,21 @@ import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.Status;
 
 @Entity
-@Table
+@Table(name = "course")
 public class Course extends IvrObject {
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   @Getter
   @Setter
   private String name;
 
   @Type(type = "text")
-  @Column
+  @Column(name = "description")
   @Getter
   @Setter
   private String description;
 
-  @Column(nullable = false)
+  @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
@@ -46,7 +46,7 @@ public class Course extends IvrObject {
   @Setter
   private List<Module> modules;
 
-  @Column(nullable = false)
+  @Column(name = "version", nullable = false)
   @Getter
   @Setter
   private Integer version;

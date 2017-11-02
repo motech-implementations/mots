@@ -1,7 +1,6 @@
 package org.motechproject.mots.domain;
 
 import java.util.Set;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -11,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "assigned_modules")
 public class AssignedModules extends BaseEntity {
 
   @OneToOne
@@ -22,7 +21,6 @@ public class AssignedModules extends BaseEntity {
 
   @OneToMany
   @JoinColumn(name = "assigned_modules_id")
-  @Column
   @Getter
   @Setter
   private Set<ModuleProgress> modules;

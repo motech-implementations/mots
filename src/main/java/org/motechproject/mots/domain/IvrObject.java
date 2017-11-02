@@ -8,12 +8,12 @@ import lombok.Setter;
 @MappedSuperclass
 public abstract class IvrObject extends BaseEntity {
 
-  @Column
+  @Column(name = "ivr_id")
   @Getter
   @Setter
   private String ivrId;
 
-  @Column
+  @Column(name = "ivr_name")
   @Getter
   @Setter
   private String ivrName;
