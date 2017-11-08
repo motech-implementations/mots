@@ -20,7 +20,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'checkstyle'
 apply plugin: 'pmd'
-apply plugin: "com.moowork.node"
+apply plugin: 'com.moowork.node'
 
 
 sourceCompatibility = '1.8'
@@ -68,7 +68,8 @@ task webpackWatch(type: NodeTask, dependsOn: 'npmInstall') {
     args = ['--watch']
 }
 
-processResources.dependsOn 'webpack'
+build.dependsOn 'webpack'
+bootRun.dependsOn 'webpack'
 
 checkstyle {
     toolVersion '8.0'
@@ -83,8 +84,5 @@ pmd {
     ruleSetFiles = files("ruleset.xml")
     reportsDir = file("build/reports/pmd")
 }
-
-
-clean.delete << file('src/main/resources/static/site')
 
 apply from: 'liquibase.gradle'
