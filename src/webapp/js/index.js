@@ -12,6 +12,7 @@ import '../css/main.scss';
 import reducers from './reducers'
 import App from './components/app'
 import Signin from './components/auth/signin';
+import requireAuth from './components/auth/require_auth';
 import { AUTH_USER } from './actions/types';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
@@ -29,7 +30,7 @@ ReactDOM.render(
         <div>
           <Switch>
             <Route path="/login" component={ Signin }/>
-            <Route path="/" component={ App }/>
+            <Route path="/" component={ requireAuth(App) }/>
           </Switch>
         </div>
       </BrowserRouter>
