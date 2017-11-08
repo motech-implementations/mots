@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 const path = require('path');
-const ROOTZ = path.resolve(__dirname, 'src/webapp');
-const SRC = path.resolve(ROOTZ, 'js');
+const ROOT = path.resolve(__dirname, 'src/webapp');
+const SRC = path.resolve(ROOT, 'js');
 const DEST = path.resolve(__dirname, 'build/resources/main/static/site');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
