@@ -1,10 +1,25 @@
 import ReactDOM from 'react-dom';
 import React, { Component } from 'react';
+import Header from './components/header';
+import SideBar from './components/sidebar';
+import Home from './components/home'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+import '../css/main.scss';
 
-export default class App extends Component {
+
+class App extends Component {
     render() {
         return (
-            <div>REACT POWER</div>
+            <div>
+                <Header />
+              <div className="wrapper">
+                <SideBar />
+                <div className="body-content">
+                  <Home />
+                </div>
+              </div>
+            </div>
         );
     }
 }
