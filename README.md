@@ -9,6 +9,11 @@
 'Started Application in NN seconds'. Your console will not return to a prompt as long as
 the service is running. The service may write errors and other output to your console.
 
+## Frontend Hot-Reload with Webpack watch
+1. Start Java server with `gradle bootRun` or `./gradlew bootRun`.
+2. Run `webpack --watch` in separate terminal (or ideally in IntelliJ Idea)
+3. Profit - your .scss, and .js files are reloaded automatically. Refresh your browser.
+
 ## Stopping the Service
 To stop the service (when it is running with `gradle bootRun`) use Control-C.
 
