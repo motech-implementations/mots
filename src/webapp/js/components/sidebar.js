@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class SideBar extends Component {
 
   render() {
     return (
-      <div>
-        <nav id="sidebar">
+        <div>
+          <nav id="sidebar">
             <ul className="sidebar-nav">
               <li className="active">
-                <a href="#"><span className="glyphicon glyphicon-home"/> Home</a>
+                <Link to="/"><span className="glyphicon glyphicon-home"/> Home</Link>
               </li>
               <li>
-                <a href="#"><span className="fa fa-users"/> CHW</a>
+                <Link to="/"><span className="fa fa-users"/> CHW</Link>
               </li>
               <li>
-                <a href="#"><span className="glyphicon glyphicon-education"/> Modules</a>
+                <Link to="/"><span className="glyphicon glyphicon-education"/> Modules</Link>
               </li>
               <li>
-                <a href="#"><span className="fa fa-bar-chart"/> Reports</a>
+                <Link to="/"><span className="fa fa-bar-chart"/> Reports</Link>
               </li>
             </ul>
-        </nav>
-      </div>
+          </nav>
+        </div>
     );
   }
 }
