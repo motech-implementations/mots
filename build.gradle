@@ -63,6 +63,11 @@ task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     script = project.file('node_modules/.bin/webpack')
 }
 
+task webpackWatch(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+    args = ['--watch']
+}
+
 processResources.dependsOn 'webpack'
 
 checkstyle {

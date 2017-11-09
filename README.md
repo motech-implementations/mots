@@ -4,14 +4,14 @@
  ```shell
  git clone https://github.com/motech-implementations/mots.git
  ```
-2. Run `gradle build` to build. After the build steps finish, you should see 'Build Successful'.
-3. Start the service with `gradle bootRun`. Once it is running, you should see
+2. Run `gradle build` or `./gradlew build` to build. After the build steps finish, you should see 'Build Successful'.
+3. Start the service with `gradle bootRun` or `./gradlew bootRun`. Once it is running, you should see
 'Started Application in NN seconds'. Your console will not return to a prompt as long as
 the service is running. The service may write errors and other output to your console.
 
 ## Frontend Hot-Reload with Webpack watch
 1. Start Java server with `gradle bootRun` or `./gradlew bootRun`.
-2. Run `webpack --watch` in separate terminal (or ideally in IntelliJ Idea)
+2. Run `gradle webpackWatch` or `./gradlew webpackWatch` in separate terminal (or ideally in IntelliJ Idea)
 3. Profit - your .scss, and .js files are reloaded automatically. Refresh your browser.
 
 ## Stopping the Service
@@ -24,5 +24,5 @@ To stop the service (when it is running with `gradle bootRun`) use Control-C.
 Under File -> Settings -> Editor -> Code Style import the google-styleguide (gear icon -> Import Scheme -> Intellij IDEA code style XML) and choose it as current code style for the project.
 
 ## Data model changes
-1. Generate the migration using the gradle task (./gradlew liquibaseDiffChangelog), the migration file will be saved at /resources/db/changelog and have the following format yyyyMMdd_HHmm.mysql.sql (e.g. 20171102_1634.mysql.sql)
-2. Include the generated migration in the changelog by adding the following line to the liquibase-changelog.xml file: <include file="{migration file name}" relativeToChangelogFile="true" />
+1. Generate the migration using the gradle task (`./gradlew liquibaseDiffChangelog`), the migration file will be saved at /resources/db/changelog and have the following format yyyyMMdd_HHmm.mysql.sql (e.g. 20171102_1634.mysql.sql)
+2. Include the generated migration in the changelog by adding the following line to the liquibase-changelog.xml file: `<include file="{migration file name}" relativeToChangelogFile="true" />`
