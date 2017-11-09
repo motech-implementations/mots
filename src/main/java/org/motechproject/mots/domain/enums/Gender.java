@@ -1,6 +1,29 @@
 package org.motechproject.mots.domain.enums;
 
+import lombok.Getter;
+
 public enum Gender {
-  MALE,
-  FEMALE
+  MALE("Male"),
+  FEMALE("Female");
+
+  @Getter
+  private String displayName;
+
+  Gender(String displayName) {
+    this.displayName = displayName;
+  }
+
+  /**
+   * Return an enum value from human-readable name.
+   * @param name human-readable name of enum value
+   */
+  public static Gender getByDisplayName(String name) {
+    for (Gender gender : Gender.values()) {
+      if (gender.getDisplayName().equalsIgnoreCase(name)) {
+        return gender;
+      }
+    }
+
+    return null;
+  }
 }
