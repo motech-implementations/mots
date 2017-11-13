@@ -16,8 +16,8 @@ public enum EducationLevel {
   }
 
   /**
-   * Return an enum value from human-readable name.
-   * @param name human-readable name of enum value
+   * Return an enum value from display name.
+   * @param name display name of enum value
    */
   public static EducationLevel getByDisplayName(String name) {
     for (EducationLevel educationLevel : EducationLevel.values()) {

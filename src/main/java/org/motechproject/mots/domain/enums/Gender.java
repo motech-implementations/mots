@@ -14,8 +14,8 @@ public enum Gender {
   }
 
   /**
-   * Return an enum value from human-readable name.
-   * @param name human-readable name of enum value
+   * Return an enum value from display name.
+   * @param name display name of enum value
    */
   public static Gender getByDisplayName(String name) {
     for (Gender gender : Gender.values()) {

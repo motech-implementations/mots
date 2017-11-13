@@ -15,8 +15,8 @@ public enum ProgressStatus {
   }
 
   /**
-   * Return an enum value from human-readable name.
-   * @param name human-readable name of enum value
+   * Return an enum value from display name.
+   * @param name display name of enum value
    */
   public static ProgressStatus getByDisplayName(String name) {
     for (ProgressStatus progressStatus : ProgressStatus.values()) {

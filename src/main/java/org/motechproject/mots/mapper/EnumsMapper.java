@@ -8,8 +8,8 @@ import org.motechproject.mots.domain.enums.Literacy;
 public class EnumsMapper {
 
   /**
-   * Get Gender object from human-readable name.
-   * @param displayName human-readable name of Gender
+   * Get Gender object from display name.
+   * @param displayName display name of Gender
    * @return Gender object
    */
   public Gender toGender(String displayName) {
@@ -21,8 +21,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get human-readable name from Gender.
-   * @return human-readable name of Gender
+   * Get display name from Gender.
+   * @return display name of Gender
    */
   public String fromGender(Gender gender) {
     if (gender == null) {
@@ -33,8 +33,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get Literacy object from human-readable name.
-   * @param displayName human-readable name of Literacy
+   * Get Literacy object from display name.
+   * @param displayName display name of Literacy
    * @return Literacy object
    */
   public Literacy toLiteracy(String displayName) {
@@ -46,8 +46,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get human-readable name from Literacy.
-   * @return human-readable name of Literacy
+   * Get display name from Literacy.
+   * @return display name of Literacy
    */
   public String fromLiteracy(Literacy literacy) {
     if (literacy == null) {
@@ -58,8 +58,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get EducationLevel object from human-readable name.
-   * @param displayName human-readable name of EducationLevel
+   * Get EducationLevel object from display name.
+   * @param displayName display name of EducationLevel
    * @return EducationLevel object
    */
   public EducationLevel toEducationLevel(String displayName) {
@@ -71,8 +71,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get human-readable name from EducationLevel.
-   * @return human-readable name of EducationLevel
+   * Get display name from EducationLevel.
+   * @return display name of EducationLevel
    */
   public String fromEducationLevel(EducationLevel educationLevel) {
     if (educationLevel == null) {
@@ -83,8 +83,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get Language object from human-readable name.
-   * @param displayName human-readable name of Language
+   * Get Language object from display name.
+   * @param displayName display name of Language
    * @return Language object
    */
   public Language toLanguage(String displayName) {
@@ -96,8 +96,8 @@ public class EnumsMapper {
   }
 
   /**
-   * Get human-readable name from Language.
-   * @return human-readable name of Language
+   * Get display name from Language.
+   * @return display name of Language
    */
   public String fromLanguage(Language language) {
     if (language == null) {
