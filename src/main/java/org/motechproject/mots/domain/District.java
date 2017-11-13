@@ -3,7 +3,6 @@ package org.motechproject.mots.domain;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -18,8 +17,7 @@ public class District extends BaseEntity {
   @Setter
   private String name;
 
-  @OneToMany
-  @JoinColumn(name = "district_id")
+  @OneToMany(mappedBy = "district")
   @Getter
   @Setter
   private Set<Chiefdom> chiefdoms;

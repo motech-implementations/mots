@@ -78,10 +78,15 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private Community community;
 
-  @Column(name = "peer_supervisor")
+  @Column(name = "has_peer_supervisor")
   @Getter
   @Setter
-  private Boolean peerSupervisor;
+  private Boolean hasPeerSupervisor;
+
+  @Column(name = "supervisor")
+  @Getter
+  @Setter
+  private String supervisor;
 
   @Column(name = "preferred_language")
   @Enumerated(EnumType.STRING)

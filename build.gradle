@@ -1,6 +1,3 @@
-group 'org.motechproject.mots'
-version '0.1-SNAPSHOT'
-
 buildscript {
     repositories {
         mavenCentral()
@@ -15,13 +12,18 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'checkstyle'
-apply plugin: 'pmd'
-apply plugin: 'com.moowork.node'
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '1.5.8.RELEASE'
+    id 'checkstyle'
+    id 'pmd'
+    id 'com.moowork.node' version '1.2.0'
+    id 'net.ltgt.apt' version '0.8'
+}
 
+group 'org.motechproject.mots'
+version '0.1-SNAPSHOT'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -39,6 +41,10 @@ dependencies {
     compile 'org.projectlombok:lombok:1.16.18'
     compile 'org.hibernate:hibernate-java8'
     compile 'org.liquibase:liquibase-core:3.5.3'
+    compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
+
+    apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+    apt 'org.projectlombok:lombok:1.16.18'
 
     testCompile "junit:junit:4.12"
 }

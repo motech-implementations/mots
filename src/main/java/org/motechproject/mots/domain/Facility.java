@@ -4,6 +4,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -23,9 +24,14 @@ public class Facility extends BaseEntity {
   @Setter
   private String type;
 
-  @OneToMany
-  @JoinColumn(name = "facility_id")
+  @OneToMany(mappedBy = "facility")
   @Getter
   @Setter
   private Set<Community> communities;
+
+  @ManyToOne
+  @JoinColumn(name = "chiefdom_id")
+  @Getter
+  @Setter
+  private Chiefdom chiefdom;
 }

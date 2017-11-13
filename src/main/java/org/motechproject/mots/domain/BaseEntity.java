@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
+@NoArgsConstructor
 public abstract class BaseEntity {
 
   @Id
@@ -36,4 +38,8 @@ public abstract class BaseEntity {
   @Getter
   @Setter
   private Date updateDate;
+
+  public BaseEntity(UUID id) {
+    this.id = id;
+  }
 }
