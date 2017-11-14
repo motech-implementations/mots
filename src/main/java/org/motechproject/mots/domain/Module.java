@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +20,16 @@ import org.motechproject.mots.domain.enums.Status;
 @Table(name = "module")
 public class Module extends IvrObject {
 
+  private static final String VERSION_SEPARATOR = "_v";
+
   @Column(name = "name", nullable = false)
   @Getter
   @Setter
   private String name;
+
+  @Column(name = "name_code", unique = true, nullable = false)
+  @Getter
+  private String nameCode;
 
   @Type(type = "text")
   @Column(name = "description")
@@ -64,4 +71,10 @@ public class Module extends IvrObject {
   @Getter
   @Setter
   private Module previousVersion;
+
+  @PrePersist
+  protected void onCreate() {
+    nameCode = getName().toLowerCase().replaceAll(" ", "-")
+        + VERSION_SEPARATOR + getVersion();
+  }
 }

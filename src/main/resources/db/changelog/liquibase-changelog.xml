@@ -7,5 +7,6 @@
   <include file="initial_schema.mysql.sql" relativeToChangelogFile="true" />
   <include file="initial_data.mysql.sql" relativeToChangelogFile="true" />
   <include file="20171109_1408.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20171114_1151.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
