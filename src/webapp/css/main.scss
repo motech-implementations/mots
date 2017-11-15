@@ -85,4 +85,12 @@ a, a:hover, a:focus, a:active, a:visited {
       text-decoration: none;
     }
   }
+
+  .nav-second-level li {
+    border-bottom: 0!important;
+  }
+
+  .nav-second-level li a {
+    padding-left: 37px;
+  }
 }

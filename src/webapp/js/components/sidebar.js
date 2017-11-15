@@ -3,6 +3,43 @@ import { Link } from 'react-router-dom';
 
 export default class SideBar extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = { healthWorkersMenuCollapsed: true }
+  }
+
+  toggleHealthWorkersMenu(event) {
+    event.preventDefault();
+    this.setState({ healthWorkersMenuCollapsed: !this.state.healthWorkersMenuCollapsed });
+    return false;
+  }
+
+  renderHealthWorkersMenu() {
+    if (this.state.healthWorkersMenuCollapsed) {
+      return "";
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        <li>
+          <Link to="/healthWorkers">CHW List</Link>
+        </li>
+        <li>
+          <Link to="/healthWorkers/new">Create CHW</Link>
+        </li>
+      </ul>
+    );
+  }
+
+  getSubmenuArrowClass(collapsed) {
+    if (collapsed) {
+      return "fa fa-angle-left pull-right";
+    }
+
+    return "fa fa-angle-down pull-right";
+  }
+
   render() {
     return (
         <div>
@@ -12,7 +49,11 @@ export default class SideBar extends Component {
                 <Link to="/"><span className="glyphicon glyphicon-home"/> Home</Link>
               </li>
               <li>
-                <Link to="/"><span className="fa fa-users"/> CHW</Link>
+                <a onClick={ this.toggleHealthWorkersMenu.bind(this) }>
+                  <span className="fa fa-users"/> CHW
+                  <span className={ this.getSubmenuArrowClass(this.state.healthWorkersMenuCollapsed) } />
+                </a>
+                { this.renderHealthWorkersMenu() }
               </li>
               <li>
                 <Link to="/"><span className="glyphicon glyphicon-education"/> Modules</Link>

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import Header from './header';
 import SideBar from './sidebar';
-import Home from './home'
+import Home from './home';
+import HealthWorkers from './health-workers';
+import HealthWorkersNew from './health-workers-new';
 
 export default class App extends Component {
   render() {
@@ -12,7 +15,11 @@ export default class App extends Component {
           <div className="wrapper">
             <SideBar/>
             <div className="body-content">
-              <Home/>
+              <Switch>
+                <Route path="/healthWorkers/new" component={ HealthWorkersNew } />
+                <Route path="/healthWorkers" component={ HealthWorkers } />
+                <Route path="/" component={ Home } />
+              </Switch>
             </div>
           </div>
         </div>
