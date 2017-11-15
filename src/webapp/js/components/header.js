@@ -9,6 +9,7 @@ class Header extends Component {
   onSignout(event) {
     this.props.signoutUser();
     event.preventDefault();
+    return false;
   }
 
   render() {
