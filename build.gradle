@@ -74,7 +74,7 @@ task webpackWatch(type: NodeTask, dependsOn: 'npmInstall') {
     args = ['--watch']
 }
 
-build.dependsOn 'webpack'
+jar.dependsOn 'webpack'
 bootRun.dependsOn 'webpack'
 
 checkstyle {
