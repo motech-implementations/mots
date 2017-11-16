@@ -40,7 +40,7 @@ export function signoutUser() {
 export function fetchChws() {
 
   const token = localStorage.getItem('token');
-  const url = `/api/chw?access_token=${token}`;
+  const url = `${BASE_URL}/chw?access_token=${token}`;
   const request = axios.get(url);
 
   return {
