@@ -5,6 +5,7 @@
   "main": "index.js",
   "private": true,
   "dependencies": {
+    "axios": "^0.17.1",
     "bootstrap": "^3.3.7",
     "client-oauth2": "^4.1.0",
     "font-awesome": "^4.7.0",
@@ -13,8 +14,10 @@
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.0",
+    "react-table": "^6.7.4",
     "redux": "^3.7.2",
     "redux-form": "^6.6.3",
+    "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
