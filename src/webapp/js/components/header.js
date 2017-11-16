@@ -27,7 +27,7 @@ class Header extends Component {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" onClick={ this.onSignout.bind(this) }>
+                  <a href="" onClick={ this.onSignout.bind(this) }>
                     <span className="glyphicon glyphicon-log-in"/> Logout
                   </a>
                 </li>

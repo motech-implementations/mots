@@ -8,18 +8,21 @@ class Signin extends Component {
 
   renderField(field) {
     const { label, type, input, meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? 'has-danger' : ''}`;
+    const className = `form-group ${ touched && error ? 'has-error' : '' }`;
 
     return (
         <div className={ className }>
-          <label>{ label }</label>
-          <input
-              className="form-control"
-              type={ type }
-              { ...input }
-          />
-          <div className="text-help">
-            { touched ? error : '' }
+          <div className="row">
+            <label className="col-md-2 control-label">{ label }</label>
+            <div className="col-md-4">
+              <input className="form-control" type={ type } { ...input } />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-2" />
+            <div className="help-block col-md-4">
+              { touched ? error : '' }
+            </div>
           </div>
         </div>
     );
@@ -45,7 +48,7 @@ class Signin extends Component {
     const { handleSubmit } = this.props;
 
     return (
-        <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
+        <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
           <Field
               label="Username"
               type="text"
@@ -58,8 +61,16 @@ class Signin extends Component {
               name="password"
               component={ this.renderField }
           />
-          {this.renderAlert()}
-          <button type="submit" className="btn btn-primary">Login</button>
+          <div className="row">
+            <div className="col-md-2" />
+            <div className="col-md-10">
+              {this.renderAlert()}
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-2" />
+            <button type="submit" className="btn btn-primary">Login</button>
+          </div>
         </form>
     );
   }
