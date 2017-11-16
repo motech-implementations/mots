@@ -1,5 +1,6 @@
 import Client from 'client-oauth2';
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR } from './types';
+import {AUTH_ERROR, AUTH_USER, UNAUTH_USER, FETCH_CHWS} from './types';
+import axios from "axios";
 
 const BASE_URL = '/api';
 
@@ -34,4 +35,16 @@ export function signoutUser() {
   localStorage.removeItem('token');
 
   return { type: UNAUTH_USER };
+}
+
+export function fetchChws() {
+
+  const token = localStorage.getItem('token');
+  const url = `/api/chw?access_token=${token}`;
+  const request = axios.get(url);
+
+  return {
+    type: FETCH_CHWS,
+    payload: request
+  }
 }
