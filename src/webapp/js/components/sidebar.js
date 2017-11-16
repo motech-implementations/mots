@@ -23,10 +23,10 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         <li>
-          <Link to="/healthWorkers">CHW List</Link>
+          <Link to="/healthWorkers/new"><span className="glyphicon glyphicon-plus"/> Add CHW</Link>
         </li>
         <li>
-          <Link to="/healthWorkers/new">Create CHW</Link>
+          <Link to="/healthWorkers"><span className="glyphicon glyphicon-list-alt"/> CHW List</Link>
         </li>
       </ul>
     );
