@@ -26,7 +26,7 @@ public class CommunityHealthWorkerController extends BaseController {
    * Get list of community health workers.
    * @return list of all community health workers
    */
-  @RequestMapping(value = "/healthWorkers", method = RequestMethod.GET)
+  @RequestMapping(value = "/chw", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<CommunityHealthWorkerDto> getHealthWorkers() {
@@ -40,7 +40,7 @@ public class CommunityHealthWorkerController extends BaseController {
    * @param healthWorkerDto DTO of community health worker to be created
    * @return created community health worker
    */
-  @RequestMapping(value = "/healthWorkers", method = RequestMethod.POST)
+  @RequestMapping(value = "/chw", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public CommunityHealthWorkerDto createHealthWorker(

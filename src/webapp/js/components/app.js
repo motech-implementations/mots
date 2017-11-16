@@ -16,8 +16,8 @@ export default class App extends Component {
             <SideBar/>
             <div className="body-content">
               <Switch>
-                <Route path="/healthWorkers/new" component={ HealthWorkersNew } />
-                <Route path="/healthWorkers" component={ HealthWorkers } />
+                <Route path="/chw/new" component={ HealthWorkersNew } />
+                <Route path="/chw" component={ HealthWorkers } />
                 <Route path="/" component={ Home } />
               </Switch>
             </div>
