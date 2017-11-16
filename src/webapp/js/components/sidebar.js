@@ -49,7 +49,7 @@ export default class SideBar extends Component {
                 <Link to="/"><span className="glyphicon glyphicon-home"/> Home</Link>
               </li>
               <li>
-                <a onClick={ this.toggleHealthWorkersMenu.bind(this) }>
+                <a href="" onClick={ this.toggleHealthWorkersMenu.bind(this) }>
                   <span className="fa fa-users"/> CHW
                   <span className={ this.getSubmenuArrowClass(this.state.healthWorkersMenuCollapsed) } />
                 </a>
