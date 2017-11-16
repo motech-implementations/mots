@@ -1,6 +1,7 @@
 import Client from 'client-oauth2';
-import {AUTH_ERROR, AUTH_USER, UNAUTH_USER, FETCH_CHWS} from './types';
-import axios from "axios";
+import axios from 'axios';
+
+import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER } from './types';
 
 const BASE_URL = '/api';
 
@@ -47,4 +48,16 @@ export function fetchChws() {
     type: FETCH_CHWS,
     payload: request
   }
+}
+
+export function createHealthWorker(values, callback) {
+  const token = localStorage.getItem('token');
+
+  const request = axios.post(`${BASE_URL}/chw?access_token=${token}`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_HEALTH_WORKER,
+    payload: request
+  };
 }
