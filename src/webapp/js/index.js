@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 import ReduxPromise from 'redux-promise'
 
@@ -27,14 +27,14 @@ if (token) {
 
 ReactDOM.render(
     <Provider store={ store }>
-      <BrowserRouter>
+      <HashRouter>
         <div>
           <Switch>
             <Route path="/login" component={ Signin }/>
             <Route path="/" component={ requireAuth(App) }/>
           </Switch>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
     , document.getElementById('root')
 );
