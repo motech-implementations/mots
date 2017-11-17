@@ -11,11 +11,24 @@ public class CommunityHealthWorkerService {
   @Autowired
   private CommunityHealthWorkerRepository healthWorkerRepository;
 
+  @Autowired
+  private IvrService ivrService;
+
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
     return healthWorkerRepository.findAll();
   }
 
+  /**
+   * Create CHW and IVR Subscriber and assign it to CHW.
+   * @param healthWorker CHW to be created
+   * @return saved CHW
+   */
   public CommunityHealthWorker createHealthWorker(CommunityHealthWorker healthWorker) {
+    String phoneNumber = healthWorker.getPhoneNumber();
+
+    String ivrId = ivrService.createSubscriber(phoneNumber);
+    healthWorker.setIvrId(ivrId);
+
     return healthWorkerRepository.save(healthWorker);
   }
 }
