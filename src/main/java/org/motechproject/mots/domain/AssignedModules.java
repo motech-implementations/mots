@@ -3,7 +3,8 @@ package org.motechproject.mots.domain;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -19,9 +20,12 @@ public class AssignedModules extends BaseEntity {
   @Setter
   private CommunityHealthWorker healthWorker;
 
-  @OneToMany
+  @ManyToMany
+  @JoinTable(name = "module_assignment",
+      joinColumns = @JoinColumn(name = "assigned_modules_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "module_id", referencedColumnName = "id"))
   @JoinColumn(name = "assigned_modules_id")
   @Getter
   @Setter
-  private Set<ModuleProgress> modules;
+  private Set<Module> modules;
 }
