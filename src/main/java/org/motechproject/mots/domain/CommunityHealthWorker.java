@@ -1,6 +1,7 @@
 package org.motechproject.mots.domain;
 
 import java.time.LocalDate;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
@@ -17,6 +19,7 @@ import org.motechproject.mots.domain.enums.Literacy;
 
 @Entity
 @Table(name = "community_health_worker")
+@NoArgsConstructor
 public class CommunityHealthWorker extends BaseEntity {
 
   @Column(name = "ivr_id", unique = true)
@@ -93,4 +96,8 @@ public class CommunityHealthWorker extends BaseEntity {
   @Getter
   @Setter
   private Language preferredLanguage;
+
+  public CommunityHealthWorker(UUID id) {
+    super(id);
+  }
 }
