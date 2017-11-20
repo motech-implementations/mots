@@ -1,6 +1,10 @@
 package org.motechproject.mots.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import org.motechproject.mots.domain.AssignedModules;
+import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +14,9 @@ public class ModuleAssignmentService {
 
   @Autowired
   private AssignedModulesRepository repository;
+
+  @Autowired
+  private IvrService ivrService;
 
   /**
    * Assign modules to CHW.
@@ -26,5 +33,24 @@ public class ModuleAssignmentService {
     }
 
     repository.save(existingAssignedModules);
+
+    String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
+
+    if (ivrId != null) {
+      ivrService.addSubscriberToGroups(ivrId,
+          getIvrGroupsFromModules(existingAssignedModules.getModules()));
+    }
+  }
+
+  private List<String> getIvrGroupsFromModules(Set<Module> modules) {
+    List<String> ivrGroups = new ArrayList<>();
+
+    for (Module module: modules) {
+      if (module.getIvrGroup() != null) {
+        ivrGroups.add(module.getIvrGroup());
+      }
+    }
+
+    return ivrGroups;
   }
 }

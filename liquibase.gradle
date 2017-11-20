@@ -6,7 +6,7 @@ dependencies {
     liquibase 'org.liquibase.ext:liquibase-hibernate5:3.6'
 }
 
-task liquibaseDiffChangelog(type: JavaExec) {
+task dbDiff(type: JavaExec) {
     group = "liquibase"
 
     classpath sourceSets.main.runtimeClasspath

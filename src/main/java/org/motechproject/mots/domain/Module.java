@@ -34,6 +34,11 @@ public class Module extends IvrObject {
   @Getter
   private String nameCode;
 
+  @Column(name = "ivr_group")
+  @Getter
+  @Setter
+  private String ivrGroup;
+
   @Type(type = "text")
   @Column(name = "description")
   @Getter
