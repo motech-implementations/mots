@@ -24,7 +24,7 @@ const COLUMNS = [
     Header: 'First name',
     accessor: 'firstName'
   }, {
-    Header: 'Second name',
+    Header: 'Surname',
     accessor: 'secondName'
   }, {
     Header: 'Other name',
