@@ -7,8 +7,8 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 export default class AssignModules extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       selected: [],
       modulesList: [],
