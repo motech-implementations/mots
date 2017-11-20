@@ -45,7 +45,7 @@ export default class SideBar extends Component {
         <div>
           <nav id="sidebar">
             <ul className="sidebar-nav">
-              <li className="active">
+              <li>
                 <Link to="/"><span className="glyphicon glyphicon-home"/> Home</Link>
               </li>
               <li>
