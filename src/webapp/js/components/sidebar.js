@@ -56,7 +56,7 @@ export default class SideBar extends Component {
                 { this.renderHealthWorkersMenu() }
               </li>
               <li>
-                <Link to="/"><span className="glyphicon glyphicon-education"/> Modules</Link>
+                <Link to="/chw"><span className="glyphicon glyphicon-education"/> Modules</Link>
               </li>
               <li>
                 <Link to="/"><span className="fa fa-bar-chart"/> Reports</Link>
