@@ -4,11 +4,11 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
-public class AssignedModulesDto {
+public class ChwModulesDto {
 
   @Getter
   @Setter
-  private String chwId;
+  private CommunityHealthWorkerDto chw;
 
   @Getter
   @Setter

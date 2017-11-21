@@ -3,6 +3,7 @@ package org.motechproject.mots.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.repository.AssignedModulesRepository;
@@ -17,6 +18,10 @@ public class ModuleAssignmentService {
 
   @Autowired
   private IvrService ivrService;
+
+  public AssignedModules getAssignedModules(UUID chwId) {
+    return repository.findByHealthWorkerId(chwId);
+  }
 
   /**
    * Assign modules to CHW.
