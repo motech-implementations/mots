@@ -1,5 +1,6 @@
 package org.motechproject.mots.domain;
 
+import java.util.Collections;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -28,4 +29,13 @@ public class AssignedModules extends BaseEntity {
   @Getter
   @Setter
   private Set<Module> modules;
+
+  public AssignedModules() {
+    super();
+  }
+
+  public AssignedModules(CommunityHealthWorker healthWorker) {
+    this.healthWorker = healthWorker;
+    this.modules = Collections.emptySet();
+  }
 }
