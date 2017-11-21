@@ -141,7 +141,7 @@ class HealthWorkersNew extends Component {
     return (
         <div>
           <div>
-            <h1>Create Health Worker</h1>
+            <h1 className="page-header">Add Community Health Worker</h1>
             <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
               { _.map(FIELDS, this.renderField.bind(this)) }
               <div className="col-md-2" />

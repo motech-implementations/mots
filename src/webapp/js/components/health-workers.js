@@ -7,7 +7,7 @@ export default class HealthWorkers extends Component {
     return (
         <div>
           <div>
-            <h1>Community Health Workers List</h1>
+            <h1>Community Health Workers</h1>
             <ChwTable/>
           </div>
         </div>
