@@ -109,7 +109,13 @@ class HealthWorkersNew extends Component {
             <div className="col-md-4">
               {
                 FieldType === 'datePicker' ?
-                    <DatePicker className="form-control" {...input} dateForm="MM/DD/YYYY" selected={ input.value ? moment(input.value) : null } /> :
+                    <DatePicker className="form-control" {...input} dateForm="MM/DD/YYYY"
+                                selected={ input.value ? moment(input.value) : null }
+                                showYearDropdown
+                                dateFormatCalendar="MMMM"
+                                scrollableYearDropdown
+                                yearDropdownItemNumber={15}
+                    /> :
                     <FieldType className="form-control" { ...attr } { ...input } >
                       { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
                     </FieldType>
