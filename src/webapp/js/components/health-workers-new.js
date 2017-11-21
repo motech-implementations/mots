@@ -58,9 +58,6 @@ const FIELDS = {
     label: 'Phone Number',
     required: true
   },
-  communityId: {
-    label: 'Community'
-  },
   hasPeerSupervisor: {
     attributes: { type: 'checkbox' },
     label: 'Peer Supervisor'
