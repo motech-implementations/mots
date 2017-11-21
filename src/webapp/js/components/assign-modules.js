@@ -11,7 +11,8 @@ export default class AssignModules extends Component {
     super(props);
     this.state = {
       availableModulesList: [],
-      selectedModules: []
+      selectedModules: [],
+      chwData: {},
     };
 
     this.onChange = this.onChange.bind(this);
@@ -22,7 +23,6 @@ export default class AssignModules extends Component {
 
   componentWillMount() {
     this.fetchAvailableModules();
-
   }
 
   fetchChwModules() {
@@ -34,11 +34,14 @@ export default class AssignModules extends Component {
       chwId: this.props.match.params.chwId
     };
 
-    axios.get(url, {params}).then((response) => {
-
+    axios.get(url, {params})
+    .then((response) => {
       const selectedModules = response.data.modules;
+      const chwData = response.data.chw;
       this.setState({selectedModules});
-    }).catch(function (error) {
+      this.setState({chwData});
+    })
+    .catch(function (error) {
       alert(error);
     });
   }
@@ -59,7 +62,6 @@ export default class AssignModules extends Component {
   }
 
   sendAssignedModules() {
-
     const token = localStorage.getItem('token');
     const url = `/api/assignModules?access_token=${token}`;
     const params = {
@@ -86,11 +88,12 @@ export default class AssignModules extends Component {
   render() {
     const { selectedModules } = this.state;
     const { availableModulesList } = this.state;
+    const { chwData } = this.state;
 
     return (
         <div>
           <h1 className="page-header">Assign Modules</h1>
-          <h3>CHW ID: {this.props.match.params.chwId}</h3>
+          <h3>CHW: {`${chwData.firstName} ${chwData.otherName} ${chwData.secondName}`}</h3>
           <DualListBox canFilter
                        options={availableModulesList}
                        selected={selectedModules}
