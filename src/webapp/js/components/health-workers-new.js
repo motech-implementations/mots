@@ -2,6 +2,10 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { createHealthWorker } from '../actions';
 
@@ -20,7 +24,8 @@ const FIELDS = {
     label: 'Other Name'
   },
   dateOfBirth: {
-    label: 'Date of Birth'
+    label: 'Date of Birth',
+    type: 'datePicker'
   },
   gender: {
     type: 'select',
@@ -86,41 +91,48 @@ class HealthWorkersNew extends Component {
     ];
   }
 
+  renderInput = ({ fieldConfig, input, meta: { touched, error } }) => {
+    const { label, type, attributes, getSelectOptions } = fieldConfig;
+
+    const className = `form-group ${ touched && error ? 'has-error': '' }`;
+    const FieldType = type ? type : 'input';
+    const attr = attributes ? attributes : { type: 'text' };
+
+    if (FieldType === 'datePicker') {
+      console.log(input.value);
+    }
+
+    return (
+        <div className={ className }>
+          <div className="row">
+            <label className="col-md-2 control-label">{ label }</label>
+            <div className="col-md-4">
+              {
+                FieldType === 'datePicker' ?
+                    <DatePicker className="form-control" {...input} dateForm="MM/DD/YYYY" selected={ input.value ? moment(input.value) : null } /> :
+                    <FieldType className="form-control" { ...attr } { ...input } >
+                      { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
+                    </FieldType>
+              }
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-2" />
+            <div className="help-block col-md-4" style={{float: 'left'}}>
+              { touched ? error : '' }
+            </div>
+          </div>
+        </div>
+    );
+  };
+
   renderField(fieldConfig, fieldName) {
     return (
         <Field
             fieldConfig={ fieldConfig }
             key={ fieldName }
             name={ fieldName }
-            component={
-              (field) => {
-                const { fieldConfig, input, meta: { touched, error } } = field;
-                const { label, type, attributes, getSelectOptions } = fieldConfig;
-
-                const className = `form-group ${ touched && error ? 'has-error': '' }`;
-                const FieldType = type ? type : 'input';
-                const attr = attributes ? attributes : { type: 'text' };
-
-                return (
-                    <div className={ className }>
-                      <div className="row">
-                        <label className="col-md-2 control-label">{ label }</label>
-                        <div className="col-md-4">
-                          <FieldType className="form-control" { ...attr } { ...input } >
-                            { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
-                          </FieldType>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-2" />
-                        <div className="help-block col-md-4" style={{float: 'left'}}>
-                          { touched ? error : '' }
-                        </div>
-                      </div>
-                    </div>
-                );
-              }
-            }
+            component={ this.renderInput }
         />
     );
   }
