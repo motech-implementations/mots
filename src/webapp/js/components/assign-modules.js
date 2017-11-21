@@ -12,7 +12,11 @@ export default class AssignModules extends Component {
     this.state = {
       availableModulesList: [],
       selectedModules: [],
-      chwData: {},
+      chwData: {
+        firstName: '',
+        secondName: '',
+        otherName: ''
+      },
     };
 
     this.onChange = this.onChange.bind(this);

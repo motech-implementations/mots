@@ -18,7 +18,7 @@ const FIELDS = {
     label: 'First Name'
   },
   secondName: {
-    label: 'Second Name'
+    label: 'Surname'
   },
   otherName: {
     label: 'Other Name'
