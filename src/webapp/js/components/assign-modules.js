@@ -10,27 +10,51 @@ export default class AssignModules extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: [],
-      modulesList: [],
+      availableModulesList: [],
+      selectedModules: []
     };
 
     this.onChange = this.onChange.bind(this);
-    this.fetchModules = this.fetchModules.bind(this);
-    this.sendAssignedModules = this.sendAssignedModules.bind(this)
+    this.fetchAvailableModules = this.fetchAvailableModules.bind(this);
+    this.sendAssignedModules = this.sendAssignedModules.bind(this);
+    this.fetchChwModules = this.fetchChwModules.bind(this);
   }
 
   componentWillMount() {
-    this.fetchModules()
+    this.fetchAvailableModules();
+
   }
 
-  fetchModules() {
-    const token = localStorage.getItem('token');
-    const url = `/api/modules?access_token=${token}`;
+  fetchChwModules() {
 
-    axios.get(url).then((response) => {
-      const modulesList = _.map(response.data,
+    const token = localStorage.getItem('token');
+    const url = `/api/assignedModules`;
+    const params = {
+      access_token: token,
+      chwId: this.props.match.params.chwId
+    };
+
+    axios.get(url, {params}).then((response) => {
+
+      const selectedModules = response.data.modules;
+      this.setState({selectedModules});
+    }).catch(function (error) {
+      alert(error);
+    });
+  }
+
+  fetchAvailableModules() {
+    const token = localStorage.getItem('token');
+    const url = `/api/modules`;
+    const params = {
+      access_token: token
+    };
+
+    axios.get(url, {params}).then((response) => {
+      const availableModulesList = _.map(response.data,
           module => ({value: module.id, label: module.name}));
-      this.setState({modulesList});
+      this.setState({availableModulesList});
+      this.fetchChwModules();
     });
   }
 
@@ -38,9 +62,12 @@ export default class AssignModules extends Component {
 
     const token = localStorage.getItem('token');
     const url = `/api/assignModules?access_token=${token}`;
+    const params = {
+      access_token: token
+    };
 
     const payload = {
-      modules: this.state.selected,
+      modules: this.state.selectedModules,
       chwId: this.props.match.params.chwId
     };
 
@@ -49,24 +76,24 @@ export default class AssignModules extends Component {
       alert("Modules has been successfully assigned!")
     };
 
-    axios.post(url,payload).then(() => callback());
+    axios.post(url, payload, {params}).then(() => callback());
   }
 
-  onChange(selected) {
-    this.setState({ selected });
+  onChange(selectedModules) {
+    this.setState({ selectedModules });
   }
 
   render() {
-    const { selected } = this.state;
-    const { modulesList } = this.state;
+    const { selectedModules } = this.state;
+    const { availableModulesList } = this.state;
 
     return (
         <div>
           <h1 className="page-header">Assign Modules</h1>
           <h3>CHW ID: {this.props.match.params.chwId}</h3>
           <DualListBox canFilter
-                       options={modulesList}
-                       selected={selected}
+                       options={availableModulesList}
+                       selected={selectedModules}
                        filterPlaceholder="Filter..."
                        onChange={this.onChange}
 
