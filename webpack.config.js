@@ -6,7 +6,7 @@ const DEST = path.resolve(__dirname, 'build/resources/main/static/site');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'cheap-module-source-map',
   entry: {
       app: SRC + '/index.js'
   },
