@@ -7,24 +7,10 @@ import { signinUser } from '../../actions';
 class Signin extends Component {
 
   renderField(field) {
-    const { label, type, input, meta: { touched, error } } = field;
-    const className = `form-group ${ touched && error ? 'has-error' : '' }`;
+    const { placeholder, type, input } = field;
 
     return (
-        <div className={ className }>
-          <div className="row">
-            <label className="col-md-2 control-label">{ label }</label>
-            <div className="col-md-4">
-              <input className="form-control" type={ type } { ...input } />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-2" />
-            <div className="help-block col-md-4">
-              { touched ? error : '' }
-            </div>
-          </div>
-        </div>
+              <input className="form-control" type={ type } placeholder={ placeholder } { ...input } />
     );
   }
 
@@ -37,7 +23,7 @@ class Signin extends Component {
   renderAlert() {
     if (this.props.errorMessage) {
       return (
-          <div className="alert alert-danger">
+          <div id="login-alert" className="alert alert-danger col-sm-12">
             <strong>{this.props.errorMessage}</strong>
           </div>
       );
@@ -48,30 +34,45 @@ class Signin extends Component {
     const { handleSubmit } = this.props;
 
     return (
-        <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
-          <Field
-              label="Username"
-              type="text"
-              name="username"
-              component={ this.renderField }
-          />
-          <Field
-              label="Password"
-              type="password"
-              name="password"
-              component={ this.renderField }
-          />
-          <div className="row">
-            <div className="col-md-2" />
-            <div className="col-md-10">
-              {this.renderAlert()}
+        <div className="margin-top-xl mainbox col-md-4 col-md-offset-4
+        col-sm-8 col-sm-offset-2">
+          <div className="panel panel-info" >
+            <div className="panel-heading">
+              <div className="panel-title">Sign In</div>
+            </div>
+            <div className="panel-body padding-top-lg">
+              { this.renderAlert() }
+
+                <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
+                  <div className="input-group margin-bottom-md">
+                    <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
+                    <Field
+                      placeholder="Username"
+                      type="text"
+                      name="username"
+                      component={ this.renderField }
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="input-group margin-bottom-md">
+                    <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
+                    <Field
+                      placeholder="Password"
+                      type="password"
+                      name="password"
+                      component={ this.renderField }
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <div className="col-sm-12 controls">
+                      <button type="submit" className="btn btn-success">Login</button>
+                    </div>
+                  </div>
+                </form>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-2" />
-            <button type="submit" className="btn btn-primary">Login</button>
-          </div>
-        </form>
+        </div>
     );
   }
 }
