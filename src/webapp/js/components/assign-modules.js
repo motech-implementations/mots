@@ -41,9 +41,14 @@ export default class AssignModules extends Component {
     axios.get(url, {params})
     .then((response) => {
       const selectedModules = response.data.modules;
-      const chwData = response.data.chw;
+
+      let chwNamesData = _.pick(response.data.chw, ['firstName', 'secondName',
+        'otherName']);
+      chwNamesData = _.mapValues(chwNamesData,
+          (name) => (_.isNil(name) ? ' ' : name));
+
       this.setState({selectedModules});
-      this.setState({chwData});
+      this.setState({chwData: chwNamesData});
     })
     .catch(function (error) {
       alert(error);
