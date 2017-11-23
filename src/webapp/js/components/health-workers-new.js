@@ -24,11 +24,20 @@ const FIELDS = {
   },
   dateOfBirth: {
     label: 'Date of Birth',
-    type: 'datePicker',
-    attributes: {
-      dateFormat: 'YYYY-MM-DD',
-      timeFormat: false,
-      closeOnSelect: true
+    type: DateTime,
+    getAttributes: input => {
+      const dateFormat = 'YYYY-MM-DD';
+
+      return {
+        dateFormat: dateFormat,
+        timeFormat: false,
+        closeOnSelect: true,
+        value: input.value,
+        onChange: param => {
+          const formatted = !param || typeof param === 'string' ? param : param.format(dateFormat);
+          input.onChange(formatted);
+        }
+      }
     }
   },
   gender: {
@@ -63,7 +72,9 @@ const FIELDS = {
     required: true
   },
   hasPeerSupervisor: {
-    attributes: { type: 'checkbox', className: 'checkbox' },
+    getAttributes: input => {
+      return { type: 'checkbox', ...input }
+    },
     label: 'Peer Supervisor'
   },
   supervisor: {
@@ -93,30 +104,20 @@ class HealthWorkersNew extends Component {
   }
 
   renderInput = ({ fieldConfig, input, meta: { touched, error } }) => {
-    const { label, type, attributes, getSelectOptions } = fieldConfig;
+    const { label, type, getAttributes, getSelectOptions } = fieldConfig;
 
     const className = `form-group ${ fieldConfig.required && 'required' } ${ touched && error && 'has-error' }`;
     const FieldType = type ? type : 'input';
-    const attr = attributes ? attributes : { type: 'text', className: 'form-control' };
+    const attributes = getAttributes ? getAttributes(input) : { type: 'text', className: 'form-control', ...input };
 
     return (
         <div className={ className }>
           <div className="row">
             <label className="col-md-2 control-label">{ label }</label>
             <div className="col-md-4">
-              {
-                FieldType === 'datePicker' ?
-                    <DateTime { ...attr }
-                              value={ input.value }
-                              onChange={ param => {
-                                const formatted = !param || typeof param === 'string' ? param : param.format(attr.dateFormat);
-                                input.onChange(formatted);
-                              }}
-                    /> :
-                    <FieldType { ...attr } { ...input } >
-                      { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
-                    </FieldType>
-              }
+              <FieldType { ...attributes }  >
+                { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
+              </FieldType>
             </div>
           </div>
           <div className="row">
