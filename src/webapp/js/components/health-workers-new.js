@@ -95,7 +95,7 @@ class HealthWorkersNew extends Component {
   renderInput = ({ fieldConfig, input, meta: { touched, error } }) => {
     const { label, type, attributes, getSelectOptions } = fieldConfig;
 
-    const className = `form-group ${ touched && error ? 'has-error': '' }`;
+    const className = `form-group ${ fieldConfig.required && 'required' } ${ touched && error && 'has-error' }`;
     const FieldType = type ? type : 'input';
     const attr = attributes ? attributes : { type: 'text', className: 'form-control' };
 

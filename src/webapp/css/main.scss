@@ -5,6 +5,7 @@ $gray-mid: #e7e7e7;
 $gray-dark: #999;
 $blue-mid: #337ab7;
 $dark-navy: #23527c;
+$red: #f00;
 
 .wrapper {
   display: flex;
@@ -93,4 +94,9 @@ a, a:hover, a:focus, a:active, a:visited {
   .nav-second-level li a {
     padding-left: 37px;
   }
+}
+
+.form-group.required .control-label:after {
+  content: "*";
+  color: $red;
 }
