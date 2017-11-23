@@ -2,10 +2,9 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import DatePicker from 'react-datepicker';
+import DateTime from 'react-datetime'
 
-import 'react-datepicker/dist/react-datepicker.css';
+import 'react-datetime/css/react-datetime.css';
 
 import { createHealthWorker } from '../actions';
 
@@ -25,7 +24,12 @@ const FIELDS = {
   },
   dateOfBirth: {
     label: 'Date of Birth',
-    type: 'datePicker'
+    type: 'datePicker',
+    attributes: {
+      dateFormat: 'YYYY-MM-DD',
+      timeFormat: false,
+      closeOnSelect: true
+    }
   },
   gender: {
     type: 'select',
@@ -59,7 +63,7 @@ const FIELDS = {
     required: true
   },
   hasPeerSupervisor: {
-    attributes: { type: 'checkbox' },
+    attributes: { type: 'checkbox', className: 'checkbox' },
     label: 'Peer Supervisor'
   },
   supervisor: {
@@ -93,11 +97,7 @@ class HealthWorkersNew extends Component {
 
     const className = `form-group ${ touched && error ? 'has-error': '' }`;
     const FieldType = type ? type : 'input';
-    const attr = attributes ? attributes : { type: 'text' };
-
-    if (FieldType === 'datePicker') {
-      console.log(input.value);
-    }
+    const attr = attributes ? attributes : { type: 'text', className: 'form-control' };
 
     return (
         <div className={ className }>
@@ -106,14 +106,14 @@ class HealthWorkersNew extends Component {
             <div className="col-md-4">
               {
                 FieldType === 'datePicker' ?
-                    <DatePicker className="form-control" {...input} dateForm="MM/DD/YYYY"
-                                selected={ input.value ? moment(input.value) : null }
-                                showYearDropdown
-                                dateFormatCalendar="MMMM"
-                                scrollableYearDropdown
-                                yearDropdownItemNumber={15}
+                    <DateTime { ...attr }
+                              value={ input.value }
+                              onChange={ param => {
+                                const formatted = !param || typeof param === 'string' ? param : param.format(attr.dateFormat);
+                                input.onChange(formatted);
+                              }}
                     /> :
-                    <FieldType className="form-control" { ...attr } { ...input } >
+                    <FieldType { ...attr } { ...input } >
                       { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
                     </FieldType>
               }
