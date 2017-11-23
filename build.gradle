@@ -75,7 +75,12 @@ task webpackWatch(type: NodeTask, dependsOn: 'npmInstall') {
     args = ['--watch']
 }
 
-jar.dependsOn 'webpack'
+task webpackProduction(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+    args = ['-p']
+}
+
+jar.dependsOn 'webpackProduction'
 bootRun.dependsOn 'webpack'
 
 checkstyle {
