@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import DateTime from 'react-datetime'
+import Alert from 'react-s-alert';
 
 import 'react-datetime/css/react-datetime.css';
 
@@ -143,6 +144,7 @@ class HealthWorkersNew extends Component {
 
   onSubmit(values) {
     this.props.createHealthWorker(values, () => {
+      Alert.success('CHW has been added');
       this.props.history.push('/chw');
     });
   }

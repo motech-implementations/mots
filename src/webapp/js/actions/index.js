@@ -1,5 +1,6 @@
 import Client from 'client-oauth2';
 import axios from 'axios';
+import Alert from 'react-s-alert';
 
 import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER } from './types';
 
@@ -54,7 +55,7 @@ export function createHealthWorker(values, callback) {
   const token = localStorage.getItem('token');
 
   const request = axios.post(`${BASE_URL}/chw?access_token=${token}`, values);
-  request.then(() => callback());
+  request.then(() => callback()).catch((error) => Alert.error(error));
 
   return {
     type: CREATE_HEALTH_WORKER,

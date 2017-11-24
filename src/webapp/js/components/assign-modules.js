@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import DualListBox from 'react-dual-listbox';
+import Alert from 'react-s-alert';
 import axios from 'axios';
 
 import 'react-dual-listbox/lib/react-dual-listbox.css';
@@ -50,9 +51,7 @@ export default class AssignModules extends Component {
       this.setState({selectedModules});
       this.setState({chwData: chwNamesData});
     })
-    .catch(function (error) {
-      alert(error);
-    });
+    .catch((error) => Alert.error(error));
   }
 
   fetchAvailableModules() {
@@ -83,11 +82,12 @@ export default class AssignModules extends Component {
     };
 
     const callback = () => {
-      this.props.history.push('/chw/');
-      alert("Modules has been successfully assigned!")
+      Alert.success('Modules have been assigned!');
     };
 
-    axios.post(url, payload, {params}).then(() => callback());
+    axios.post(url, payload, {params})
+    .then(() => callback())
+    .catch((error) => Alert.error(error));
   }
 
   onChange(selectedModules) {
@@ -102,7 +102,7 @@ export default class AssignModules extends Component {
     return (
         <div>
           <h1 className="page-header">Assign Modules</h1>
-          <h3>CHW: {`${chwData.firstName} ${chwData.otherName} ${chwData.secondName}`}</h3>
+          <h4>CHW: {`${chwData.firstName} ${chwData.otherName} ${chwData.secondName}`}</h4>
           <DualListBox canFilter
                        options={availableModulesList}
                        selected={selectedModules}
