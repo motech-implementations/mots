@@ -2,6 +2,8 @@ package org.motechproject.mots.service;
 
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.exception.ChwCreationException;
+import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,13 @@ public class CommunityHealthWorkerService {
   public CommunityHealthWorker createHealthWorker(CommunityHealthWorker healthWorker) {
     String phoneNumber = healthWorker.getPhoneNumber();
 
-    String ivrId = ivrService.createSubscriber(phoneNumber);
-    healthWorker.setIvrId(ivrId);
+    try {
+      String ivrId = ivrService.createSubscriber(phoneNumber);
+      healthWorker.setIvrId(ivrId);
+    } catch (IvrException ex) {
+      String message = "Could not create CHW, because of IVR subscriber creation error";
+      throw new ChwCreationException(message, ex);
+    }
 
     healthWorkerRepository.save(healthWorker);
 
