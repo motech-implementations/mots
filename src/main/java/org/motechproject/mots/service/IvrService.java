@@ -1,13 +1,15 @@
 package org.motechproject.mots.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.dto.VotoResponseDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.motechproject.mots.exception.IvrException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -16,14 +18,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class IvrService {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(IvrService.class);
 
   private static final String BASE_URL = "https://go.votomobile.org/api/v1";
   private static final String SUBSCRIBERS_URL = BASE_URL + "/subscribers";
@@ -36,13 +37,14 @@ public class IvrService {
   private String ivrApiKey;
 
   private RestOperations restTemplate = new RestTemplate();
+  private ObjectMapper mapper = new ObjectMapper();
 
   /**
    * Create IVR Subscriber with given phone number.
    * @param phoneNumber CHW phone number
    * @return ivr id of created subscriber
    */
-  public String createSubscriber(String phoneNumber) {
+  public String createSubscriber(String phoneNumber) throws IvrException {
     Map<String, String> params = new HashMap<>();
     params.put("phone", phoneNumber);
     params.put("preferred_language", "202162");
@@ -50,8 +52,9 @@ public class IvrService {
     VotoResponseDto<String> votoResponse = sendVotoRequest(SUBSCRIBERS_URL, params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {});
 
-    if (votoResponse == null) {
-      return null;
+    if (votoResponse == null || StringUtils.isBlank(votoResponse.getData())) {
+      throw new IvrException(
+          "Ivr subscriber created successfully, but subscriber id was not returned");
     }
 
     return votoResponse.getData();
@@ -62,7 +65,8 @@ public class IvrService {
    * @param subscriberId subscriber id
    * @param groupsIds ids of groups to add subscriber
    */
-  public void addSubscriberToGroups(String subscriberId, List<String> groupsIds) {
+  public void addSubscriberToGroups(String subscriberId,
+      List<String> groupsIds) throws IvrException {
     Map<String, String> params = new HashMap<>();
     params.put("subscriber_ids", subscriberId);
     params.put("groups", StringUtils.join(groupsIds, ","));
@@ -73,7 +77,7 @@ public class IvrService {
     sendModuleAssignedMessage(subscriberId);
   }
 
-  private void sendModuleAssignedMessage(String subscriberId) {
+  private void sendModuleAssignedMessage(String subscriberId) throws IvrException {
     Map<String, String> params = new HashMap<>();
     params.put("send_to_subscribers", subscriberId);
     params.put("message_id", MODULE_ASSIGNED_MESSAGE_ID);
@@ -88,7 +92,7 @@ public class IvrService {
   }
 
   private <T> T sendVotoRequest(String url, Map<String, String> params,
-      ParameterizedTypeReference<T> responseType) {
+      ParameterizedTypeReference<T> responseType) throws IvrException {
     params.put("api_key", ivrApiKey);
 
     HttpHeaders headers = new HttpHeaders();
@@ -100,12 +104,27 @@ public class IvrService {
       ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request,
           responseType);
       return responseEntity.getBody();
-    } catch (HttpClientErrorException ex) {
-      LOGGER.error(ex.getResponseBodyAsString(), ex);
-    } catch (Exception ex) {
-      LOGGER.error(ex.getMessage(), ex);
-    }
+    } catch (RestClientResponseException ex) {
+      String responseBodyJson = ex.getResponseBodyAsString();
+      String responseMessage = responseBodyJson;
 
-    return null;
+      try {
+        VotoResponseDto<String> votoResponse = mapper.readValue(responseBodyJson,
+            new TypeReference<VotoResponseDto<String>>() {});
+
+        if (votoResponse.getMessage() != null) {
+          responseMessage = votoResponse.getMessage();
+        }
+      } catch (IOException e) {
+        responseMessage = responseBodyJson;
+      }
+
+      String message = "Invalid IVR service response: " + ex.getRawStatusCode() + " "
+          + ex.getStatusText() + ", Response body: " + responseMessage;
+      throw new IvrException(message, ex);
+    } catch (RestClientException ex) {
+      String message = "Error occurred when sending request to IVR service: " + ex.getMessage();
+      throw new IvrException(message, ex);
+    }
   }
 }

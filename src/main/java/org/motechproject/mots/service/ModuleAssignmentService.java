@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Module;
+import org.motechproject.mots.exception.IvrException;
+import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,9 +52,17 @@ public class ModuleAssignmentService {
 
     String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
 
-    if (ivrId != null) {
+    if (ivrId == null) {
+      throw new ModuleAssignmentException(
+          "Could not assign module to CHW, because CHW has empty IVR id");
+    }
+
+    try {
       ivrService.addSubscriberToGroups(ivrId,
           getIvrGroupsFromModules(existingAssignedModules.getModules()));
+    } catch (IvrException ex) {
+      String message = "Could assign module for CHW, because of IVR module assignment error";
+      throw new ModuleAssignmentException(message, ex);
     }
   }
 
