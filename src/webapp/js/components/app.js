@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import Alert from 'react-s-alert';
+
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 
 import Header from './header';
 import SideBar from './sidebar';
@@ -7,6 +11,7 @@ import Home from './home';
 import HealthWorkers from './health-workers';
 import HealthWorkersNew from './health-workers-new';
 import AssignModules from './assign-modules'
+
 
 export default class App extends Component {
   render() {
@@ -24,6 +29,12 @@ export default class App extends Component {
               </Switch>
             </div>
           </div>
+          <Alert timeout={5000}
+                 stack={{limit: 3}}
+                 offset={26}
+                 html={true}
+                 position='top-right'
+                 effect='bouncyflip'/>
         </div>
     );
   }
