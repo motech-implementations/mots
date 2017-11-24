@@ -24,9 +24,13 @@ import org.springframework.web.client.RestTemplate;
 public class IvrService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IvrService.class);
+
   private static final String BASE_URL = "https://go.votomobile.org/api/v1";
   private static final String SUBSCRIBERS_URL = BASE_URL + "/subscribers";
   private static final String ADD_TO_GROUPS_URL = BASE_URL + "/subscribers/groups";
+  private static final String SEND_MESSAGE_URL = BASE_URL + "/outgoing_calls";
+
+  private static final String MODULE_ASSIGNED_MESSAGE_ID = "2190718";
 
   @Value("${mots.ivrApiKey}")
   private String ivrApiKey;
@@ -40,29 +44,17 @@ public class IvrService {
    */
   public String createSubscriber(String phoneNumber) {
     Map<String, String> params = new HashMap<>();
-    params.put("api_key", ivrApiKey);
     params.put("phone", phoneNumber);
     params.put("preferred_language", "202162");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    VotoResponseDto<String> votoResponse = sendVotoRequest(SUBSCRIBERS_URL, params,
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {});
 
-    HttpEntity<Map<String, String>> request = new HttpEntity<>(params, headers);
-
-    try {
-      ResponseEntity<VotoResponseDto<String>> responseEntity = restTemplate.exchange(
-          SUBSCRIBERS_URL, HttpMethod.POST, request,
-          new ParameterizedTypeReference<VotoResponseDto<String>>() {});
-
-      VotoResponseDto<String> votoResponse = responseEntity.getBody();
-      return votoResponse.getData();
-    } catch (HttpClientErrorException ex) {
-      LOGGER.error(ex.getResponseBodyAsString(), ex);
-    } catch (Exception ex) {
-      LOGGER.error(ex.getMessage(), ex);
+    if (votoResponse == null) {
+      return null;
     }
 
-    return null;
+    return votoResponse.getData();
   }
 
   /**
@@ -72,9 +64,32 @@ public class IvrService {
    */
   public void addSubscriberToGroups(String subscriberId, List<String> groupsIds) {
     Map<String, String> params = new HashMap<>();
-    params.put("api_key", ivrApiKey);
     params.put("subscriber_ids", subscriberId);
     params.put("groups", StringUtils.join(groupsIds, ","));
+
+    sendVotoRequest(ADD_TO_GROUPS_URL, params,
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {});
+
+    sendModuleAssignedMessage(subscriberId);
+  }
+
+  private void sendModuleAssignedMessage(String subscriberId) {
+    Map<String, String> params = new HashMap<>();
+    params.put("send_to_subscribers", subscriberId);
+    params.put("message_id", MODULE_ASSIGNED_MESSAGE_ID);
+    params.put("send_sms_if_voice_fails", "1");
+    params.put("detect_voicemail_action", "1");
+    params.put("retry_attempts_short", "3");
+    params.put("retry_delay_short", "15");
+    params.put("retry_attempts_long", "1");
+
+    sendVotoRequest(SEND_MESSAGE_URL, params,
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {});
+  }
+
+  private <T> T sendVotoRequest(String url, Map<String, String> params,
+      ParameterizedTypeReference<T> responseType) {
+    params.put("api_key", ivrApiKey);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -82,11 +97,15 @@ public class IvrService {
     HttpEntity<Map<String, String>> request = new HttpEntity<>(params, headers);
 
     try {
-      restTemplate.exchange(ADD_TO_GROUPS_URL, HttpMethod.POST, request, String.class);
+      ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request,
+          responseType);
+      return responseEntity.getBody();
     } catch (HttpClientErrorException ex) {
       LOGGER.error(ex.getResponseBodyAsString(), ex);
     } catch (Exception ex) {
       LOGGER.error(ex.getMessage(), ex);
     }
+
+    return null;
   }
 }
