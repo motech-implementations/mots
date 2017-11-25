@@ -158,15 +158,13 @@ class HealthWorkersNew extends Component {
 
     return (
         <div>
-          <div>
-            <h1 className="page-header">Add Community Health Worker</h1>
-            <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
-              { _.map(FIELDS, this.renderField.bind(this)) }
-              <div className="col-md-2" />
-              <button type="submit" className="btn btn-primary">Submit</button>
-              <button className="btn btn-danger" onClick={ this.onSubmitCancel.bind(this) }>Cancel</button>
-            </form>
-          </div>
+          <h1 className="page-header">Add Community Health Worker</h1>
+          <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
+            { _.map(FIELDS, this.renderField.bind(this)) }
+            <div className="col-md-2" />
+            <button type="submit" className="btn btn-primary">Submit</button>
+            <button className="btn btn-danger" onClick={ this.onSubmitCancel.bind(this) }>Cancel</button>
+          </form>
         </div>
     );
   }

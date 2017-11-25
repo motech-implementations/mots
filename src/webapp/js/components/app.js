@@ -16,11 +16,13 @@ import AssignModules from './assign-modules'
 export default class App extends Component {
   render() {
     return (
-        <div>
-          <Header/>
-          <div className="wrapper">
+        <div id="wrapper">
+          <nav className="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <Header/>
             <SideBar/>
-            <div className="body-content">
+          </nav>
+          <div id="page-wrapper">
+            <div className="container-fluid">
               <Switch>
                 <Route path="/modules/assign/:chwId" component={ AssignModules } />
                 <Route path="/chw/new" component={ HealthWorkersNew } />
@@ -29,6 +31,7 @@ export default class App extends Component {
               </Switch>
             </div>
           </div>
+
           <Alert timeout={5000}
                  stack={{limit: 3}}
                  offset={32}
