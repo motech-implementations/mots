@@ -7,10 +7,14 @@ import { signinUser } from '../../actions';
 class Signin extends Component {
 
   renderField(field) {
-    const { placeholder, type, input } = field;
+    const { placeholder, type, input, icon, meta: { touched, error } } = field;
+    const resultingClassName = `input-group margin-bottom-md ${ touched && error ? 'has-error' : ''}`;
 
     return (
-              <input className="form-control" type={ type } placeholder={ placeholder } { ...input } />
+      <div className={ resultingClassName }>
+          <span className="input-group-addon"><i className={`glyphicon glyphicon-${icon}`}></i></span>
+        <input className="form-control" type={ type } placeholder={ placeholder } { ...input } />
+      </div>
     );
   }
 
@@ -42,28 +46,23 @@ class Signin extends Component {
             </div>
             <div className="panel-body padding-top-lg">
               { this.renderAlert() }
-
                 <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
-                  <div className="input-group margin-bottom-md">
-                    <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
                     <Field
                       placeholder="Username"
                       type="text"
                       name="username"
+                      icon="user"
                       component={ this.renderField }
                       className="form-control"
                     />
-                  </div>
-                  <div className="input-group margin-bottom-md">
-                    <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
                     <Field
                       placeholder="Password"
                       type="password"
                       name="password"
+                      icon="lock"
                       component={ this.renderField }
                       className="form-control"
                     />
-                  </div>
                   <div className="form-group">
                     <div className="col-sm-12 controls">
                       <button type="submit" className="btn btn-success">Login</button>
