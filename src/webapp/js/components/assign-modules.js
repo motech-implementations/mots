@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
 import axios from 'axios';
@@ -7,7 +8,6 @@ import axios from 'axios';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 export default class AssignModules extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +16,7 @@ export default class AssignModules extends Component {
       chwData: {
         firstName: '',
         secondName: '',
-        otherName: ''
+        otherName: '',
       },
     };
 
@@ -30,68 +30,71 @@ export default class AssignModules extends Component {
     this.fetchAvailableModules();
   }
 
-  fetchChwModules() {
-
-    const token = localStorage.getItem('token');
-    const url = `/api/assignedModules`;
-    const params = {
-      access_token: token,
-      chwId: this.props.match.params.chwId
-    };
-
-    axios.get(url, {params})
-    .then((response) => {
-      const selectedModules = response.data.modules;
-
-      let chwNamesData = _.pick(response.data.chw, ['firstName', 'secondName',
-        'otherName']);
-      chwNamesData = _.mapValues(chwNamesData,
-          (name) => (_.isNil(name) ? ' ' : name));
-
-      this.setState({selectedModules});
-      this.setState({chwData: chwNamesData});
-    })
-    .catch((error) => Alert.error(error));
+  onChange(selectedModules) {
+    this.setState({ selectedModules });
   }
 
   fetchAvailableModules() {
     const token = localStorage.getItem('token');
-    const url = `/api/modules`;
+    const url = '/api/modules';
     const params = {
-      access_token: token
+      access_token: token,
     };
 
-    axios.get(url, {params}).then((response) => {
-      const availableModulesList = _.map(response.data,
-          module => ({value: module.id, label: module.name}));
-      this.setState({availableModulesList});
+    axios.get(url, { params }).then((response) => {
+      const availableModulesList = _.map(
+        response.data,
+        module => ({ value: module.id, label: module.name }),
+      );
+      this.setState({ availableModulesList });
       this.fetchChwModules();
     });
+  }
+
+  fetchChwModules() {
+    const token = localStorage.getItem('token');
+    const url = '/api/assignedModules';
+    const params = {
+      access_token: token,
+      chwId: this.props.match.params.chwId,
+    };
+
+    axios.get(url, { params })
+      .then((response) => {
+        const selectedModules = response.data.modules;
+
+        let chwNamesData = _.pick(response.data.chw, ['firstName', 'secondName',
+          'otherName']);
+        chwNamesData = _.mapValues(
+          chwNamesData,
+          name => (_.isNil(name) ? ' ' : name),
+        );
+
+        this.setState({ selectedModules });
+        this.setState({ chwData: chwNamesData });
+      })
+      .catch(error => Alert.error(error));
   }
 
   sendAssignedModules() {
     const token = localStorage.getItem('token');
     const url = `/api/assignModules?access_token=${token}`;
     const params = {
-      access_token: token
+      access_token: token,
     };
 
     const payload = {
       modules: this.state.selectedModules,
-      chwId: this.props.match.params.chwId
+      chwId: this.props.match.params.chwId,
     };
 
     const callback = () => {
       Alert.success('Modules have been assigned!');
     };
 
-    axios.post(url, payload, {params})
-    .then(() => callback())
-    .catch((error) => Alert.error(error));
-  }
-
-  onChange(selectedModules) {
-    this.setState({ selectedModules });
+    axios.post(url, payload, { params })
+      .then(() => callback())
+      .catch(error => Alert.error(error));
   }
 
   render() {
@@ -100,25 +103,37 @@ export default class AssignModules extends Component {
     const { chwData } = this.state;
 
     return (
-        <div>
-          <h1 className="page-header">Assign Modules</h1>
-          <h4>CHW: {`${chwData.firstName} ${chwData.otherName} ${chwData.secondName}`}</h4>
-          <DualListBox canFilter
-                       options={availableModulesList}
-                       selected={selectedModules}
-                       filterPlaceholder="Filter..."
-                       onChange={this.onChange}
-
-          />
-          <form className="form-horizontal"
-                onSubmit={this.sendAssignedModules}>
-            <button type="submit"
-                    className="btn btn-primary btn-block
-                    margin-x-md padding-x-sm">
-              <h4>Assign!</h4>
-            </button>
-          </form>
-        </div>
+      <div>
+        <h1 className="page-header">Assign Modules</h1>
+        <h4>CHW: {`${chwData.firstName} ${chwData.otherName} ${chwData.secondName}`}</h4>
+        <DualListBox
+          canFilter
+          options={availableModulesList}
+          selected={selectedModules}
+          filterPlaceholder="Filter..."
+          onChange={this.onChange}
+        />
+        <form
+          className="form-horizontal"
+          onSubmit={this.sendAssignedModules}
+        >
+          <button
+            type="submit"
+            className="btn btn-primary btn-block
+                    margin-x-md padding-x-sm"
+          >
+            <h4>Assign!</h4>
+          </button>
+        </form>
+      </div>
     );
   }
 }
+
+AssignModules.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      chwId: PropTypes.string,
+    }),
+  }).isRequired,
+};

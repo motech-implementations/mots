@@ -18,10 +18,12 @@ and accept a prompt asking about reloading changed classes.
 3. Profit - your .scss, and .js files are reloaded automatically. Refresh your browser.
 
 ## IntelliJ Idea development
-1. Install Lombok and MapStruct plugins under File -> Settings -> Plugins -> Browse repositories... search for the Lombok and MapStruct support plugins and install them both.
+1. Install Lombok, MapStruct nad NodeJS plugins under File -> Settings -> Plugins -> Browse repositories... search for the Lombok, MapStruct support and NodeJS plugins and install them all.
 2. Check the Enable annotation processing checkbox under File -> Settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors.
 3. Download the intellij-java-google-style.xml file from the http://code.google.com/p/google-styleguide/ repo. 
 Under File -> Settings -> Editor -> Code Style import the google-styleguide (gear icon -> Import Scheme -> Intellij IDEA code style XML) and choose it as current code style for the project.
+4. Enable ESLint under File -> Settings -> Languages and Frameworks -> JavaScript -> Code Quality Tools -> ESLint and set "Node interpreter" to `~/mots/.gradle/nodejs/node-v6.11.4-linux-x64/bin/node` and "ESLint package" to `~/mots/node_modules/eslint`
+(you need to run `gradle build` or `./gradlew build` before this to install gradle and npm dependencies)
 
 ## Data model changes
 1. Generate the migration using the gradle task (`./gradlew dbDiff`), the migration file will be saved at /resources/db/changelog and have the following format yyyyMMdd_HHmm.mysql.sql (e.g. 20171102_1634.mysql.sql)
