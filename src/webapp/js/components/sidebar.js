@@ -42,27 +42,25 @@ export default class SideBar extends Component {
 
   render() {
     return (
-        <div>
-          <nav id="sidebar">
-            <ul className="sidebar-nav">
-              <li>
-                <Link to="/"><span className="glyphicon glyphicon-home"/> Home</Link>
-              </li>
-              <li>
-                <a href="" onClick={ this.toggleHealthWorkersMenu.bind(this) }>
-                  <span className="fa fa-users"/> CHW
-                  <span className={ this.getSubmenuArrowClass(this.state.healthWorkersMenuCollapsed) } />
-                </a>
-                { this.renderHealthWorkersMenu() }
-              </li>
-              <li>
-                <Link to="/chw"><span className="glyphicon glyphicon-education"/> Modules</Link>
-              </li>
-              <li>
-                <Link to="/"><span className="fa fa-bar-chart"/> Reports</Link>
-              </li>
-            </ul>
-          </nav>
+        <div className="collapse navbar-collapse navbar-ex1-collapse">
+          <ul className="nav navbar-nav side-nav">
+            <li>
+              <Link to="/"><span className="glyphicon glyphicon-home"/> Home</Link>
+            </li>
+            <li>
+              <a href="" onClick={ this.toggleHealthWorkersMenu.bind(this) }>
+                <span className="fa fa-users"/> CHW
+                <span className={ this.getSubmenuArrowClass(this.state.healthWorkersMenuCollapsed) } />
+              </a>
+              { this.renderHealthWorkersMenu() }
+            </li>
+            <li>
+              <Link to="/chw"><span className="glyphicon glyphicon-education"/> Modules</Link>
+            </li>
+            <li>
+              <Link to="/"><span className="fa fa-bar-chart"/> Reports</Link>
+            </li>
+          </ul>
         </div>
     );
   }
