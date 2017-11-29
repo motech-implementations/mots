@@ -6,7 +6,7 @@ import chwTableReducer from './chw_table_reducer';
 const rootReducer = combineReducers({
   form: formReducer,
   auth: authReducer,
-  chwList: chwTableReducer
+  chwList: chwTableReducer,
 });
 
 export default rootReducer;

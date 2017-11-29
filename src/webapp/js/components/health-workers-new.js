@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import DateTime from 'react-datetime'
+import DateTime from 'react-datetime';
 import Alert from 'react-s-alert';
 
 import 'react-datetime/css/react-datetime.css';
@@ -12,134 +13,99 @@ import { createHealthWorker } from '../actions';
 const FIELDS = {
   chwId: {
     label: 'CHW Id',
-    required: true
+    required: true,
   },
   firstName: {
-    label: 'First Name'
+    label: 'First Name',
   },
   secondName: {
-    label: 'Surname'
+    label: 'Surname',
   },
   otherName: {
-    label: 'Other Name'
+    label: 'Other Name',
   },
   dateOfBirth: {
     label: 'Date of Birth',
     type: DateTime,
-    getAttributes: input => {
+    getAttributes: (input) => {
       const dateFormat = 'YYYY-MM-DD';
 
       return {
-        dateFormat: dateFormat,
+        dateFormat,
         timeFormat: false,
         closeOnSelect: true,
         value: input.value,
-        onChange: param => {
+        onChange: (param) => {
           const formatted = !param || typeof param === 'string' ? param : param.format(dateFormat);
           input.onChange(formatted);
-        }
-      }
-    }
+        },
+      };
+    },
   },
   gender: {
     type: 'select',
     label: 'Gender',
-    getSelectOptions: () => {
-      return {
-        values: ['Male', 'Female']
-      };
-    }
+    getSelectOptions: () => ({
+      values: ['Male', 'Female'],
+    }),
   },
   literacy: {
     type: 'select',
     label: 'Literacy',
-    getSelectOptions: () => {
-      return {
-        values: ['Can read and write', 'Cannot read and write', 'Can only read']
-      };
-    }
+    getSelectOptions: () => ({
+      values: ['Can read and write', 'Cannot read and write', 'Can only read'],
+    }),
   },
   educationLevel: {
     type: 'select',
     label: 'Educational Level',
-    getSelectOptions: () => {
-      return {
-        values: ['Primary', 'Secondary', 'Higher', 'None']
-      };
-    }
+    getSelectOptions: () => ({
+      values: ['Primary', 'Secondary', 'Higher', 'None'],
+    }),
   },
   phoneNumber: {
     label: 'Phone Number',
-    required: true
+    required: true,
   },
   hasPeerSupervisor: {
-    getAttributes: input => {
-      return { type: 'checkbox', ...input }
-    },
-    label: 'Peer Supervisor'
+    getAttributes: input => ({ type: 'checkbox', ...input }),
+    label: 'Peer Supervisor',
   },
   supervisor: {
-    label: 'Supervisor'
+    label: 'Supervisor',
   },
   preferredLanguage: {
     type: 'select',
     label: 'Preferred Language',
-    getSelectOptions: () => {
-      return {
-        values: ['English', 'Krio', 'Limba', 'Susu', 'Temne']
-      };
-    }
-  }
+    getSelectOptions: () => ({
+      values: ['English', 'Krio', 'Limba', 'Susu', 'Temne'],
+    }),
+  },
 };
 
 class HealthWorkersNew extends Component {
-
-  renderSelectOptions(options) {
+  static renderSelectOptions(options) {
     const { values, valueKey, displayNameKey } = options;
 
     return [
-        <option key="empty" value={ null }></option>,
-        _.map(values, (value, index) => <option key={ index } value={ valueKey ? value[valueKey] : value }>
-          { displayNameKey ? value[displayNameKey] : value }</option>)
+      <option key="empty" value={null} />,
+      _.map(values, (value, index) => (
+        <option key={index} value={valueKey ? value[valueKey] : value}>
+          { displayNameKey ? value[displayNameKey] : value }
+        </option>)),
     ];
   }
 
-  renderInput = ({ fieldConfig, input, meta: { touched, error } }) => {
-    const { label, type, getAttributes, getSelectOptions } = fieldConfig;
+  constructor(props) {
+    super(props);
 
-    const className = `form-group ${ fieldConfig.required && 'required' } ${ touched && error && 'has-error' }`;
-    const FieldType = type ? type : 'input';
-    const attributes = getAttributes ? getAttributes(input) : { type: 'text', className: 'form-control', ...input };
+    this.onSubmitCancel = this.onSubmitCancel.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.renderField = this.renderField.bind(this);
+  }
 
-    return (
-        <div className={ className }>
-          <div className="row">
-            <label className="col-md-2 control-label">{ label }</label>
-            <div className="col-md-4">
-              <FieldType { ...attributes }  >
-                { getSelectOptions && this.renderSelectOptions(getSelectOptions(this.props)) }
-              </FieldType>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-2" />
-            <div className="help-block col-md-4" style={{float: 'left'}}>
-              { touched ? error : '' }
-            </div>
-          </div>
-        </div>
-    );
-  };
-
-  renderField(fieldConfig, fieldName) {
-    return (
-        <Field
-            fieldConfig={ fieldConfig }
-            key={ fieldName }
-            name={ fieldName }
-            component={ this.renderInput }
-        />
-    );
+  onSubmitCancel() {
+    this.props.history.push('/chw');
   }
 
   onSubmit(values) {
@@ -149,23 +115,60 @@ class HealthWorkersNew extends Component {
     });
   }
 
-  onSubmitCancel() {
-    this.props.history.push('/chw');
+  renderInput = ({ fieldConfig, input, meta: { touched, error } }) => {
+    const {
+      label, type, getAttributes, getSelectOptions,
+    } = fieldConfig;
+
+    const className = `form-group ${fieldConfig.required && 'required'} ${touched && error && 'has-error'}`;
+    const FieldType = type || 'input';
+    const attributes = getAttributes ? getAttributes(input) : { type: 'text', className: 'form-control', ...input };
+
+    return (
+      <div className={className}>
+        <div className="row">
+          <label htmlFor={input.name} className="col-md-2 control-label">{ label }</label>
+          <div className="col-md-4">
+            <FieldType {...attributes} id={input.name} >
+              { getSelectOptions
+              && HealthWorkersNew.renderSelectOptions(getSelectOptions(this.props)) }
+            </FieldType>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-2" />
+          <div className="help-block col-md-4" style={{ float: 'left' }}>
+            { touched ? error : '' }
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  renderField(fieldConfig, fieldName) {
+    return (
+      <Field
+        fieldConfig={fieldConfig}
+        key={fieldName}
+        name={fieldName}
+        component={this.renderInput}
+      />
+    );
   }
 
   render() {
     const { handleSubmit } = this.props;
 
     return (
-        <div>
-          <h1 className="page-header">Add Community Health Worker</h1>
-          <form className="form-horizontal" onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
-            { _.map(FIELDS, this.renderField.bind(this)) }
-            <div className="col-md-2" />
-            <button type="submit" className="btn btn-primary">Submit</button>
-            <button className="btn btn-danger" onClick={ this.onSubmitCancel.bind(this) }>Cancel</button>
-          </form>
-        </div>
+      <div>
+        <h1 className="page-header">Add Community Health Worker</h1>
+        <form className="form-horizontal" onSubmit={handleSubmit(this.onSubmit)}>
+          { _.map(FIELDS, this.renderField) }
+          <div className="col-md-2" />
+          <button type="submit" className="btn btn-primary">Submit</button>
+          <button className="btn btn-danger" onClick={this.onSubmitCancel}>Cancel</button>
+        </form>
+      </div>
     );
   }
 }
@@ -175,7 +178,7 @@ function validate(values) {
 
   _.each(FIELDS, (fieldConfig, fieldName) => {
     if (fieldConfig.required && !values[fieldName]) {
-      errors[fieldName] = `This field is required`;
+      errors[fieldName] = 'This field is required';
     }
   });
 
@@ -184,7 +187,13 @@ function validate(values) {
 
 export default reduxForm({
   validate,
-  form: 'HealthWorkersNewForm'
-})(
-    connect(null, { createHealthWorker })(HealthWorkersNew)
-);
+  form: 'HealthWorkersNewForm',
+})(connect(null, { createHealthWorker })(HealthWorkersNew));
+
+HealthWorkersNew.propTypes = {
+  createHealthWorker: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};

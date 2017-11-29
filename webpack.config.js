@@ -27,6 +27,12 @@ module.exports = {
   module: {
     loaders: [
       {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: ['eslint-loader']
+      },
+      {
         test: /\.js$/,
         loaders: ['babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-1'],
         include: SRC,

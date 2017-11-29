@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
@@ -12,61 +13,69 @@ const COLUMNS = [
     Header: 'Assign Modules',
     accessor: 'id',
     Cell: cell => (
-        <Link to={"/modules/assign/" + cell.value} type="button"
-              className="btn btn-success center-block">Assign Module
-        </Link>
-    )
+      <Link
+        to={`/modules/assign/${cell.value}`}
+        type="button"
+        className="btn btn-success center-block"
+      >Assign Module
+      </Link>
+    ),
   },
   {
     Header: 'ID',
-    accessor: 'chwId'
-  },{
+    accessor: 'chwId',
+  }, {
     Header: 'First name',
-    accessor: 'firstName'
+    accessor: 'firstName',
   }, {
     Header: 'Surname',
-    accessor: 'secondName'
+    accessor: 'secondName',
   }, {
     Header: 'Other name',
-    accessor: 'otherName'
+    accessor: 'otherName',
   }, {
     Header: 'DOB',
-    accessor: 'dateOfBirth'
+    accessor: 'dateOfBirth',
   }, {
     Header: 'Gender',
-    accessor: 'gender'
+    accessor: 'gender',
   }, {
     Header: 'Education level',
-    accessor: 'educationLevel'
+    accessor: 'educationLevel',
   }, {
     Header: 'Literacy',
-    accessor: 'literacy'
+    accessor: 'literacy',
   }, {
     Header: 'Community',
-    accessor: 'communityName'
+    accessor: 'communityName',
   }, {
     Header: 'Preferred language',
-    accessor: 'preferredLanguage'
+    accessor: 'preferredLanguage',
   }, {
     Header: 'Phone number',
-    accessor: 'phoneNumber'
+    accessor: 'phoneNumber',
   }];
 
 class ChwTable extends Component {
-
   componentWillMount() {
     this.props.fetchChws();
   }
 
   render() {
-    return <ReactTable data={ this.props.chwList } columns={ COLUMNS } />
+    return <ReactTable data={this.props.chwList} columns={COLUMNS} />;
   }
 }
 
 function mapStateToProps(state) {
   return {
-    chwList: state.chwList
+    chwList: state.chwList,
   };
 }
 
 export default connect(mapStateToProps, { fetchChws })(ChwTable);
+
+ChwTable.propTypes = {
+  fetchChws: PropTypes.func.isRequired,
+  chwList: PropTypes.arrayOf(PropTypes.shape({
+  })).isRequired,
+};
