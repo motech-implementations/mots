@@ -11,7 +11,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import { createHealthWorker } from '../actions';
 
-const getObjectSelectAttributes = (input) => {
+const getAttributesForObjectSelect = (input) => {
   const parse = event => (event.target.value ? JSON.parse(event.target.value) : null);
 
   return {
@@ -87,7 +87,7 @@ const FIELDS = {
       displayNameKey: 'name',
     }),
     getAttributes: (input, { dispatch }) => {
-      const attr = getObjectSelectAttributes(input);
+      const attr = getAttributesForObjectSelect(input);
 
       return ({
         ...attr,
@@ -109,7 +109,7 @@ const FIELDS = {
       displayNameKey: 'name',
     }),
     getAttributes: (input, { dispatch }) => {
-      const attr = getObjectSelectAttributes(input);
+      const attr = getAttributesForObjectSelect(input);
 
       return ({
         ...attr,
@@ -130,7 +130,7 @@ const FIELDS = {
       displayNameKey: 'name',
     }),
     getAttributes: (input, { dispatch }) => {
-      const attr = getObjectSelectAttributes(input);
+      const attr = getAttributesForObjectSelect(input);
 
       return ({
         ...attr,
@@ -150,14 +150,29 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => getObjectSelectAttributes(input),
+    getAttributes: input => getAttributesForObjectSelect(input),
   },
   hasPeerSupervisor: {
-    getAttributes: input => ({ ...input, type: 'checkbox' }),
+    getAttributes: (input, { dispatch }) => ({
+      ...input,
+      type: 'checkbox',
+      onChange: (event) => {
+        const { checked } = event.target;
+
+        if (!checked) {
+          dispatch(change('HealthWorkersNewForm', 'supervisor', null));
+        }
+
+        input.onChange(checked);
+      },
+    }),
     label: 'Peer Supervisor',
   },
   supervisor: {
     label: 'Supervisor',
+    getDynamicAttributes: ({ hasPeerSupervisor }) => ({
+      hidden: !hasPeerSupervisor,
+    }),
   },
   preferredLanguage: {
     type: 'select',
@@ -227,25 +242,27 @@ class HealthWorkersNew extends Component {
   }
 
   renderInput = ({
-    fieldConfig, selectOptions, input, meta: { touched, error },
+    fieldConfig, selectOptions, dynamicAttr, input, meta: { touched, error },
   }) => {
     const { label, type, getAttributes } = fieldConfig;
 
-    const className = `form-group ${fieldConfig.required ? 'required' : ''} ${touched && error ? 'has-error' : ''}`;
     const FieldType = type || 'input';
-    const attributes = getAttributes ? getAttributes(input, this.props) : { type: 'text', className: 'form-control', ...input };
-    const attributesWithDefaults = {
+    const attr = getAttributes ? getAttributes(input, this.props) : { type: 'text', className: 'form-control', ...input };
+    const attributes = {
       id: input.name,
       disabled: selectOptions && (!selectOptions.values || !selectOptions.values.length),
-      ...attributes,
+      ...attr,
+      ...dynamicAttr,
     };
+
+    const className = `form-group ${fieldConfig.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
 
     return (
       <div className={className}>
         <div className="row">
           <label htmlFor={input.name} className="col-md-2 control-label">{ label }</label>
           <div className="col-md-4">
-            <FieldType {...attributesWithDefaults}>
+            <FieldType {...attributes}>
               {
                 selectOptions && HealthWorkersNew.renderSelectOptions(selectOptions)
               }
@@ -270,6 +287,9 @@ class HealthWorkersNew extends Component {
           fieldConfig.getSelectOptions
             ? fieldConfig.getSelectOptions({ ...this.props, ...this.state })
             : null
+        }
+        dynamicAttr={
+          fieldConfig.getDynamicAttributes ? fieldConfig.getDynamicAttributes(this.props) : {}
         }
         key={fieldName}
         name={fieldName}
@@ -314,6 +334,7 @@ function mapStateToProps(state) {
     district: selector(state, 'district'),
     chiefdom: selector(state, 'chiefdom'),
     facility: selector(state, 'facility'),
+    hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
 
@@ -328,4 +349,21 @@ HealthWorkersNew.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  district: PropTypes.shape({
+    chiefdoms: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  chiefdom: PropTypes.shape({
+    facilities: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  facility: PropTypes.shape({
+    communities: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  hasPeerSupervisor: PropTypes.bool,
+};
+
+HealthWorkersNew.defaultProps = {
+  district: null,
+  chiefdom: null,
+  facility: null,
+  hasPeerSupervisor: false,
 };
