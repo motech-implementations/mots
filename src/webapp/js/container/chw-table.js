@@ -54,6 +54,18 @@ const COLUMNS = [
   }, {
     Header: 'Phone number',
     accessor: 'phoneNumber',
+  },
+  {
+    Header: 'Actions',
+    accessor: 'id',
+    Cell: cell => (
+      <Link
+        to={`/chw/${cell.value}`}
+        type="button"
+        className="btn btn-primary center-block"
+      ><span className="glyphicon glyphicon-edit" />
+      </Link>
+    ),
   }];
 
 class ChwTable extends Component {

@@ -1,7 +1,7 @@
 import Client from 'client-oauth2';
 import apiClient from '../utils/api-client';
 
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER } from './types';
+import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER, SAVE_HEALTH_WORKER } from './types';
 
 const BASE_URL = '/api';
 
@@ -54,6 +54,16 @@ export function createHealthWorker(values, callback) {
 
   return {
     type: CREATE_HEALTH_WORKER,
+    payload: request,
+  };
+}
+
+export function saveHealthWorker(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/chw/${values.id}`, values);
+  request.then(() => callback());
+
+  return {
+    type: SAVE_HEALTH_WORKER,
     payload: request,
   };
 }
