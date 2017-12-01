@@ -1,6 +1,7 @@
 package org.motechproject.mots.web;
 
 import java.util.List;
+import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
@@ -8,6 +9,7 @@ import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,5 +50,35 @@ public class CommunityHealthWorkerController extends BaseController {
     CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
 
     return healthWorkerMapper.toDto(healthWorkerService.createHealthWorker(healthWorker));
+  }
+
+  /**
+   * Get community health worker with given id.
+   * @param id id of CHW to find
+   * @return CHW with given id
+   */
+  @RequestMapping(value = "/chw/{id}", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public CommunityHealthWorkerDto getHealthWorker(@PathVariable("id") UUID id) {
+    CommunityHealthWorker healthWorker = healthWorkerService.getHealthWorker(id);
+
+    return healthWorkerMapper.toDto(healthWorker);
+  }
+
+  /**
+   * Update community health worker.
+   * @param id id of CHW to update
+   * @param healthWorkerDto DTO of CHW to update
+   * @return updated CHW
+   */
+  @RequestMapping(value = "/chw/{id}", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public CommunityHealthWorkerDto saveHealthWorker(@PathVariable("id") UUID id,
+      @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
+    CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
+
+    return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(healthWorker));
   }
 }

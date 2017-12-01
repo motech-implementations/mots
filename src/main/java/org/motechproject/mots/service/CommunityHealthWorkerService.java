@@ -1,5 +1,6 @@
 package org.motechproject.mots.service;
 
+import java.util.UUID;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.exception.ChwCreationException;
@@ -48,5 +49,13 @@ public class CommunityHealthWorkerService {
     assignedModulesRepository.save(emptyAssignedModulesInstance);
 
     return healthWorker;
+  }
+
+  public CommunityHealthWorker getHealthWorker(UUID id) {
+    return healthWorkerRepository.findOne(id);
+  }
+
+  public CommunityHealthWorker saveHealthWorker(CommunityHealthWorker communityHealthWorker) {
+    return healthWorkerRepository.save(communityHealthWorker);
   }
 }
