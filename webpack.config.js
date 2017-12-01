@@ -15,6 +15,9 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/site/'
   },
+  stats: {
+    colors: true
+  },
   plugins: [
     new webpack.ProvidePlugin({
       $: "jquery",
