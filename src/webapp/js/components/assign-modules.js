@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
-import axios from 'axios';
-
 import 'react-dual-listbox/lib/react-dual-listbox.css';
+
+import apiClient from '../utils/api-client';
 
 export default class AssignModules extends Component {
   constructor(props) {
@@ -35,31 +35,26 @@ export default class AssignModules extends Component {
   }
 
   fetchAvailableModules() {
-    const token = localStorage.getItem('token');
     const url = '/api/modules';
-    const params = {
-      access_token: token,
-    };
 
-    axios.get(url, { params }).then((response) => {
-      const availableModulesList = _.map(
-        response.data,
-        module => ({ value: module.id, label: module.name }),
-      );
-      this.setState({ availableModulesList });
-      this.fetchChwModules();
-    });
+    apiClient.get(url)
+      .then((response) => {
+        const availableModulesList = _.map(
+          response.data,
+          module => ({ value: module.id, label: module.name }),
+        );
+        this.setState({ availableModulesList });
+        this.fetchChwModules();
+      });
   }
 
   fetchChwModules() {
-    const token = localStorage.getItem('token');
     const url = '/api/assignedModules';
     const params = {
-      access_token: token,
       chwId: this.props.match.params.chwId,
     };
 
-    axios.get(url, { params })
+    apiClient.get(url, { params })
       .then((response) => {
         const selectedModules = response.data.modules;
 
@@ -72,16 +67,11 @@ export default class AssignModules extends Component {
 
         this.setState({ selectedModules });
         this.setState({ chwData: chwNamesData });
-      })
-      .catch(error => Alert.error(error));
+      });
   }
 
   sendAssignedModules() {
-    const token = localStorage.getItem('token');
-    const url = `/api/assignModules?access_token=${token}`;
-    const params = {
-      access_token: token,
-    };
+    const url = '/api/assignModules';
 
     const payload = {
       modules: this.state.selectedModules,
@@ -92,9 +82,8 @@ export default class AssignModules extends Component {
       Alert.success('Modules have been assigned!');
     };
 
-    axios.post(url, payload, { params })
-      .then(() => callback())
-      .catch(error => Alert.error(error));
+    apiClient.post(url, payload)
+      .then(() => callback());
   }
 
   render() {
