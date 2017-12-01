@@ -5,11 +5,11 @@ import { Field, reduxForm, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import DateTime from 'react-datetime';
 import Alert from 'react-s-alert';
-import axios from 'axios';
 
 import 'react-datetime/css/react-datetime.css';
 
 import { createHealthWorker } from '../actions';
+import apiClient from '../utils/api-client';
 
 const getAttributesForObjectSelect = (input) => {
   const parse = event => (event.target.value ? JSON.parse(event.target.value) : null);
@@ -229,13 +229,9 @@ class HealthWorkersNew extends Component {
   }
 
   fetchLocations() {
-    const token = localStorage.getItem('token');
     const url = '/api/districts';
-    const params = {
-      access_token: token,
-    };
 
-    axios.get(url, { params }).then((response) => {
+    apiClient.get(url).then((response) => {
       const availableLocations = response.data;
       this.setState({ availableLocations });
     });
