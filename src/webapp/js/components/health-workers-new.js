@@ -1,14 +1,26 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, formValueSelector, change } from 'redux-form';
 import { connect } from 'react-redux';
 import DateTime from 'react-datetime';
 import Alert from 'react-s-alert';
+import axios from 'axios';
 
 import 'react-datetime/css/react-datetime.css';
 
 import { createHealthWorker } from '../actions';
+
+const getAttributesForObjectSelect = (input) => {
+  const parse = event => (event.target.value ? JSON.parse(event.target.value) : null);
+
+  return {
+    className: 'form-control',
+    value: JSON.stringify(input.value),
+    onBlur: event => input.onBlur(parse(event)),
+    onChange: event => input.onChange(parse(event)),
+  };
+};
 
 const FIELDS = {
   chwId: {
@@ -67,12 +79,100 @@ const FIELDS = {
     label: 'Phone Number',
     required: true,
   },
+  district: {
+    type: 'select',
+    label: 'District',
+    getSelectOptions: ({ availableLocations }) => ({
+      values: availableLocations,
+      displayNameKey: 'name',
+    }),
+    getAttributes: (input, { dispatch }) => {
+      const attr = getAttributesForObjectSelect(input);
+
+      return ({
+        ...attr,
+        onChange: (event) => {
+          dispatch(change('HealthWorkersNewForm', 'chiefdom', null));
+          dispatch(change('HealthWorkersNewForm', 'facility', null));
+          dispatch(change('HealthWorkersNewForm', 'communityId', null));
+
+          input.onChange(attr.onChange(event));
+        },
+      });
+    },
+  },
+  chiefdom: {
+    type: 'select',
+    label: 'Chiefdom',
+    getSelectOptions: ({ district }) => ({
+      values: district && district.chiefdoms,
+      displayNameKey: 'name',
+    }),
+    getAttributes: (input, { dispatch }) => {
+      const attr = getAttributesForObjectSelect(input);
+
+      return ({
+        ...attr,
+        onChange: (event) => {
+          dispatch(change('HealthWorkersNewForm', 'facility', null));
+          dispatch(change('HealthWorkersNewForm', 'communityId', null));
+
+          input.onChange(attr.onChange(event));
+        },
+      });
+    },
+  },
+  facility: {
+    type: 'select',
+    label: 'Facility',
+    getSelectOptions: ({ chiefdom }) => ({
+      values: chiefdom && chiefdom.facilities,
+      displayNameKey: 'name',
+    }),
+    getAttributes: (input, { dispatch }) => {
+      const attr = getAttributesForObjectSelect(input);
+
+      return ({
+        ...attr,
+        onChange: (event) => {
+          dispatch(change('HealthWorkersNewForm', 'communityId', null));
+
+          input.onChange(attr.onChange(event));
+        },
+      });
+    },
+  },
+  communityId: {
+    type: 'select',
+    label: 'Community',
+    getSelectOptions: ({ facility }) => ({
+      values: facility && facility.communities,
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
+    getAttributes: input => getAttributesForObjectSelect(input),
+  },
   hasPeerSupervisor: {
-    getAttributes: input => ({ type: 'checkbox', ...input }),
+    getAttributes: (input, { dispatch }) => ({
+      ...input,
+      type: 'checkbox',
+      onChange: (event) => {
+        const { checked } = event.target;
+
+        if (!checked) {
+          dispatch(change('HealthWorkersNewForm', 'supervisor', null));
+        }
+
+        input.onChange(checked);
+      },
+    }),
     label: 'Peer Supervisor',
   },
   supervisor: {
     label: 'Supervisor',
+    getDynamicAttributes: ({ hasPeerSupervisor }) => ({
+      hidden: !hasPeerSupervisor,
+    }),
   },
   preferredLanguage: {
     type: 'select',
@@ -89,19 +189,32 @@ class HealthWorkersNew extends Component {
 
     return [
       <option key="empty" value={null} />,
-      _.map(values, (value, index) => (
-        <option key={index} value={valueKey ? value[valueKey] : value}>
-          { displayNameKey ? value[displayNameKey] : value }
-        </option>)),
+      _.map(values, (value, index) => {
+        const optionValue = JSON.stringify(valueKey ? value[valueKey] : value);
+        const displayValue = displayNameKey ? value[displayNameKey] : value;
+
+        return (
+          <option key={index} value={optionValue}>
+            { displayValue }
+          </option>);
+      }),
     ];
   }
 
   constructor(props) {
     super(props);
 
+    this.state = {
+      availableLocations: [],
+    };
+
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.renderField = this.renderField.bind(this);
+  }
+
+  componentWillMount() {
+    this.fetchLocations();
   }
 
   onSubmitCancel() {
@@ -115,23 +228,44 @@ class HealthWorkersNew extends Component {
     });
   }
 
-  renderInput = ({ fieldConfig, input, meta: { touched, error } }) => {
-    const {
-      label, type, getAttributes, getSelectOptions,
-    } = fieldConfig;
+  fetchLocations() {
+    const token = localStorage.getItem('token');
+    const url = '/api/districts';
+    const params = {
+      access_token: token,
+    };
 
-    const className = `form-group ${fieldConfig.required && 'required'} ${touched && error && 'has-error'}`;
+    axios.get(url, { params }).then((response) => {
+      const availableLocations = response.data;
+      this.setState({ availableLocations });
+    });
+  }
+
+  renderInput = ({
+    fieldConfig, selectOptions, dynamicAttr, input, meta: { touched, error },
+  }) => {
+    const { label, type, getAttributes } = fieldConfig;
+
     const FieldType = type || 'input';
-    const attributes = getAttributes ? getAttributes(input) : { type: 'text', className: 'form-control', ...input };
+    const attr = getAttributes ? getAttributes(input, this.props) : { type: 'text', className: 'form-control', ...input };
+    const attributes = {
+      id: input.name,
+      disabled: selectOptions && (!selectOptions.values || !selectOptions.values.length),
+      ...attr,
+      ...dynamicAttr,
+    };
+
+    const className = `form-group ${fieldConfig.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
 
     return (
       <div className={className}>
         <div className="row">
           <label htmlFor={input.name} className="col-md-2 control-label">{ label }</label>
           <div className="col-md-4">
-            <FieldType {...attributes} id={input.name} >
-              { getSelectOptions
-              && HealthWorkersNew.renderSelectOptions(getSelectOptions(this.props)) }
+            <FieldType {...attributes}>
+              {
+                selectOptions && HealthWorkersNew.renderSelectOptions(selectOptions)
+              }
             </FieldType>
           </div>
         </div>
@@ -149,6 +283,14 @@ class HealthWorkersNew extends Component {
     return (
       <Field
         fieldConfig={fieldConfig}
+        selectOptions={
+          fieldConfig.getSelectOptions
+            ? fieldConfig.getSelectOptions({ ...this.props, ...this.state })
+            : null
+        }
+        dynamicAttr={
+          fieldConfig.getDynamicAttributes ? fieldConfig.getDynamicAttributes(this.props) : {}
+        }
         key={fieldName}
         name={fieldName}
         component={this.renderInput}
@@ -185,10 +327,21 @@ function validate(values) {
   return errors;
 }
 
+const selector = formValueSelector('HealthWorkersNewForm');
+
+function mapStateToProps(state) {
+  return {
+    district: selector(state, 'district'),
+    chiefdom: selector(state, 'chiefdom'),
+    facility: selector(state, 'facility'),
+    hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
+  };
+}
+
 export default reduxForm({
   validate,
   form: 'HealthWorkersNewForm',
-})(connect(null, { createHealthWorker })(HealthWorkersNew));
+})(connect(mapStateToProps, { createHealthWorker })(HealthWorkersNew));
 
 HealthWorkersNew.propTypes = {
   createHealthWorker: PropTypes.func.isRequired,
@@ -196,4 +349,21 @@ HealthWorkersNew.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  district: PropTypes.shape({
+    chiefdoms: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  chiefdom: PropTypes.shape({
+    facilities: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  facility: PropTypes.shape({
+    communities: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  hasPeerSupervisor: PropTypes.bool,
+};
+
+HealthWorkersNew.defaultProps = {
+  district: null,
+  chiefdom: null,
+  facility: null,
+  hasPeerSupervisor: false,
 };
