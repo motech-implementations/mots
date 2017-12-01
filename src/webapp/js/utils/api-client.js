@@ -2,12 +2,12 @@ import axios from 'axios';
 import Alert from 'react-s-alert';
 
 import { signoutUser } from '../actions';
-import store from '../index';
+import { dispatch } from '../index';
 
 const handleError = (error) => {
   switch (error.response.status) {
     case 401:
-      store.dispatch(signoutUser());
+      dispatch(signoutUser());
       break;
     default:
       if (error.response.data.message) {

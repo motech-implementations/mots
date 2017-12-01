@@ -19,10 +19,13 @@ import { AUTH_USER } from './actions/types';
 const createStoreWithMiddleware = applyMiddleware(reduxThunk, ReduxPromise)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
+// eslint-disable-next-line import/prefer-default-export
+export const { dispatch } = store;
+
 const token = localStorage.getItem('token');
 
 if (token) {
-  store.dispatch({ type: AUTH_USER });
+  dispatch({ type: AUTH_USER });
 }
 
 ReactDOM.render(
@@ -38,6 +41,3 @@ ReactDOM.render(
   </Provider>
   , document.getElementById('root'),
 );
-
-export default store;
-
