@@ -10,6 +10,7 @@ import SideBar from './sidebar';
 import Home from './home';
 import HealthWorkers from './health-workers';
 import HealthWorkersNew from './health-workers-new';
+import HealthWorkersEdit from './health-workers-edit';
 import AssignModules from './assign-modules';
 
 const App = () => (
@@ -23,6 +24,7 @@ const App = () => (
         <Switch>
           <Route path="/modules/assign/:chwId" component={AssignModules} />
           <Route path="/chw/new" component={HealthWorkersNew} />
+          <Route path="/chw/:chwId" component={HealthWorkersEdit} />
           <Route path="/chw" component={HealthWorkers} />
           <Route path="/" component={Home} />
         </Switch>
