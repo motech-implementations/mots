@@ -8,7 +8,7 @@ import DateTime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
-import { createHealthWorker, fetchLocations } from '../actions';
+import { fetchLocations } from '../actions';
 import { clearFields, getAttributesForSelectWithClearOnChange } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
@@ -223,7 +223,7 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: CHW_FORM_NAME,
-})(connect(mapStateToProps, { createHealthWorker, fetchLocations })(HealthWorkersForm));
+})(connect(mapStateToProps, { fetchLocations })(HealthWorkersForm));
 
 HealthWorkersForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
