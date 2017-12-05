@@ -1,6 +1,6 @@
 package org.motechproject.mots.dto;
 
-import java.util.Set;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +20,5 @@ public class FacilityDto {
 
   @Getter
   @Setter
-  private Set<CommunityDto> communities;
+  private Map<String, CommunityDto> communities;
 }

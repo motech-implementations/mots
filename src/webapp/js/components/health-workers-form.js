@@ -8,9 +8,8 @@ import DateTime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
-import { createHealthWorker } from '../actions';
-import { clearFields, getAttributesForObjectSelect } from '../utils/form-utils';
-import apiClient from '../utils/api-client';
+import { createHealthWorker, fetchLocations } from '../actions';
+import { clearFields, getAttributesForSelectWithClearOnChange } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -70,74 +69,61 @@ const FIELDS = {
     label: 'Phone Number',
     required: true,
   },
-  district: {
+  districtId: {
     type: 'select',
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations,
+      values: availableLocations && _.values(availableLocations),
       displayNameKey: 'name',
+      valueKey: 'id',
     }),
-    getAttributes: (input) => {
-      const attr = getAttributesForObjectSelect(input);
-
-      return ({
-        ...attr,
-        onChange: (event) => {
-          clearFields(CHW_FORM_NAME, 'chiefdom', 'facility', 'communityId');
-
-          input.onChange(attr.onChange(event));
-        },
-      });
-    },
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'chiefdomId', 'facilityId', 'communityId')),
   },
-  chiefdom: {
+  chiefdomId: {
     type: 'select',
     label: 'Chiefdom',
-    getSelectOptions: ({ district }) => ({
-      values: district && district.chiefdoms,
-      displayNameKey: 'name',
-    }),
-    getAttributes: (input) => {
-      const attr = getAttributesForObjectSelect(input);
+    getSelectOptions: ({ availableLocations, districtId }) => {
+      const district = availableLocations && districtId && availableLocations[districtId];
 
       return ({
-        ...attr,
-        onChange: (event) => {
-          clearFields(CHW_FORM_NAME, 'facility', 'communityId');
-
-          input.onChange(attr.onChange(event));
-        },
+        values: district && _.values(district.chiefdoms),
+        displayNameKey: 'name',
+        valueKey: 'id',
       });
     },
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
   },
-  facility: {
+  facilityId: {
     type: 'select',
     label: 'Facility',
-    getSelectOptions: ({ chiefdom }) => ({
-      values: chiefdom && chiefdom.facilities,
-      displayNameKey: 'name',
-    }),
-    getAttributes: (input) => {
-      const attr = getAttributesForObjectSelect(input);
+    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => {
+      const district = availableLocations && districtId && availableLocations[districtId];
+      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
 
       return ({
-        ...attr,
-        onChange: (event) => {
-          clearFields(CHW_FORM_NAME, 'communityId');
-
-          input.onChange(attr.onChange(event));
-        },
+        values: chiefdom && _.values(chiefdom.facilities),
+        displayNameKey: 'name',
+        valueKey: 'id',
       });
     },
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
   },
   communityId: {
     type: 'select',
     label: 'Community',
-    getSelectOptions: ({ facility }) => ({
-      values: facility && facility.communities,
-      displayNameKey: 'name',
-      valueKey: 'id',
-    }),
+    getSelectOptions: ({
+      availableLocations, districtId, chiefdomId, facilityId,
+    }) => {
+      const district = availableLocations && districtId && availableLocations[districtId];
+      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
+      const facility = facilityId && chiefdom && chiefdom.facilities[facilityId];
+
+      return ({
+        values: facility && _.values(facility.communities),
+        displayNameKey: 'name',
+        valueKey: 'id',
+      });
+    },
   },
   hasPeerSupervisor: {
     getAttributes: input => ({
@@ -174,24 +160,11 @@ class HealthWorkersForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      availableLocations: [],
-    };
-
     this.renderField = this.renderField.bind(this);
   }
 
   componentWillMount() {
-    this.fetchLocations();
-  }
-
-  fetchLocations() {
-    const url = '/api/districts';
-
-    apiClient.get(url).then((response) => {
-      const availableLocations = response.data;
-      this.setState({ availableLocations });
-    });
+    this.props.fetchLocations();
   }
 
   renderField(fieldConfig, fieldName) {
@@ -200,10 +173,10 @@ class HealthWorkersForm extends Component {
         key={fieldName}
         fieldName={fieldName}
         fieldConfig={fieldConfig}
-        availableLocations={this.state.availableLocations}
-        district={this.props.district}
-        chiefdom={this.props.chiefdom}
-        facility={this.props.facility}
+        availableLocations={this.props.availableLocations}
+        districtId={this.props.districtId}
+        chiefdomId={this.props.chiefdomId}
+        facilityId={this.props.facilityId}
         hasPeerSupervisor={this.props.hasPeerSupervisor}
       />
     );
@@ -239,9 +212,10 @@ const selector = formValueSelector(CHW_FORM_NAME);
 
 function mapStateToProps(state) {
   return {
-    district: selector(state, 'district'),
-    chiefdom: selector(state, 'chiefdom'),
-    facility: selector(state, 'facility'),
+    availableLocations: state.availableLocations,
+    districtId: selector(state, 'districtId'),
+    chiefdomId: selector(state, 'chiefdomId'),
+    facilityId: selector(state, 'facilityId'),
     hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
@@ -249,42 +223,24 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: CHW_FORM_NAME,
-})(connect(mapStateToProps, { createHealthWorker })(HealthWorkersForm));
-
-const facilityPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  communities: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  })),
-});
-
-const chiefdomPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  facilities: PropTypes.arrayOf(facilityPropType),
-});
-
-const districtPropType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  chiefdoms: PropTypes.arrayOf(chiefdomPropType),
-});
+})(connect(mapStateToProps, { createHealthWorker, fetchLocations })(HealthWorkersForm));
 
 HealthWorkersForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  district: districtPropType,
-  chiefdom: chiefdomPropType,
-  facility: facilityPropType,
+  fetchLocations: PropTypes.func.isRequired,
+  availableLocations: PropTypes.shape({}),
+  districtId: PropTypes.string,
+  chiefdomId: PropTypes.string,
+  facilityId: PropTypes.string,
   hasPeerSupervisor: PropTypes.bool,
 };
 
 HealthWorkersForm.defaultProps = {
-  district: null,
-  chiefdom: null,
-  facility: null,
+  availableLocations: null,
+  districtId: null,
+  chiefdomId: null,
+  facilityId: null,
   hasPeerSupervisor: false,
 };
