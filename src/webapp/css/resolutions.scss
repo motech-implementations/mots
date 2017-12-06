@@ -7,3 +7,10 @@ $r-medium-max: 1365px;
 $r-big-min: 1366px;
 $r-big-max: 1919px;
 $r-large-min: 1920px;
+
+
+@media(max-width: $r-xsmall-max) {
+  .hide-max-r-xsmall-max {
+    display: none;
+  }
+}
