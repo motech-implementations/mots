@@ -34,9 +34,10 @@ public class CommunityHealthWorkerService {
    */
   public CommunityHealthWorker createHealthWorker(CommunityHealthWorker healthWorker) {
     String phoneNumber = healthWorker.getPhoneNumber();
+    String name = healthWorker.getCombinedName();
 
     try {
-      String ivrId = ivrService.createSubscriber(phoneNumber);
+      String ivrId = ivrService.createSubscriber(phoneNumber, name);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
       String message = "Could not create CHW, because of IVR subscriber creation error";
