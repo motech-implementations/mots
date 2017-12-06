@@ -1,7 +1,7 @@
 import Client from 'client-oauth2';
 import apiClient from '../utils/api-client';
 
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER, SAVE_HEALTH_WORKER } from './types';
+import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER, SAVE_HEALTH_WORKER, FETCH_LOCATIONS } from './types';
 
 const BASE_URL = '/api';
 
@@ -64,6 +64,16 @@ export function saveHealthWorker(values, callback) {
 
   return {
     type: SAVE_HEALTH_WORKER,
+    payload: request,
+  };
+}
+
+export function fetchLocations() {
+  const url = '/api/districts';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_LOCATIONS,
     payload: request,
   };
 }

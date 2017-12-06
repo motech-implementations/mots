@@ -1,6 +1,6 @@
 package org.motechproject.mots.dto;
 
-import java.util.Set;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +16,5 @@ public class ChiefdomDto {
 
   @Getter
   @Setter
-  private Set<FacilityDto> facilities;
+  private Map<String, FacilityDto> facilities;
 }

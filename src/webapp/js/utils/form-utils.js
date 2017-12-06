@@ -8,13 +8,15 @@ export function clearFields(formName, ...fields) {
   });
 }
 
-export function getAttributesForObjectSelect(input) {
-  const parse = event => (event.target.value ? JSON.parse(event.target.value) : null);
-
+export function getAttributesForSelectWithClearOnChange(input, formName, ...fieldsToClear) {
   return {
     className: 'form-control',
-    value: JSON.stringify(input.value),
-    onBlur: event => input.onBlur(parse(event)),
-    onChange: event => input.onChange(parse(event)),
+    value: input.value,
+    onBlur: event => input.onBlur(event.target.value),
+    onChange: (event) => {
+      clearFields(formName, ...fieldsToClear);
+
+      input.onChange(event.target.value);
+    },
   };
 }

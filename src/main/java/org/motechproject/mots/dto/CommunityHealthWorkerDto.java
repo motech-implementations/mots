@@ -51,11 +51,23 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
+  private String districtId;
+
+  @Getter
+  @Setter
   private String chiefdomName;
 
   @Getter
   @Setter
+  private String chiefdomId;
+
+  @Getter
+  @Setter
   private String facilityName;
+
+  @Getter
+  @Setter
+  private String facilityId;
 
   @Getter
   @Setter
