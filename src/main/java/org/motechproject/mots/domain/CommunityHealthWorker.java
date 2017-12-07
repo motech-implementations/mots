@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
@@ -99,5 +100,27 @@ public class CommunityHealthWorker extends BaseEntity {
 
   public CommunityHealthWorker(UUID id) {
     super(id);
+  }
+
+  /**
+   * Get CHW combined names.
+   * @return all CHW names combined into single String
+   */
+  public String getCombinedName() {
+    String name = "";
+
+    if (StringUtils.isNotBlank(getFirstName())) {
+      name = getFirstName();
+    }
+
+    if (StringUtils.isNotBlank(getOtherName())) {
+      name += " " + getOtherName();
+    }
+
+    if (StringUtils.isNotBlank(getSecondName())) {
+      name += " " + getSecondName();
+    }
+
+    return name.trim();
   }
 }

@@ -31,7 +31,9 @@ public class IvrService {
   private static final String ADD_TO_GROUPS_URL = BASE_URL + "/subscribers/groups";
   private static final String SEND_MESSAGE_URL = BASE_URL + "/outgoing_calls";
 
-  private static final String MODULE_ASSIGNED_MESSAGE_ID = "2190718";
+  private static final String MODULE_ASSIGNED_MESSAGE_ID = "2228099";
+  private static final String MOTS_USERS_GROUP_ID = "298868";
+  private static final String DEFAULT_LANGUAGE_ID = "206945";
 
   @Value("${mots.ivrApiKey}")
   private String ivrApiKey;
@@ -42,12 +44,18 @@ public class IvrService {
   /**
    * Create IVR Subscriber with given phone number.
    * @param phoneNumber CHW phone number
+   * @param name CHW name
    * @return ivr id of created subscriber
    */
-  public String createSubscriber(String phoneNumber) throws IvrException {
+  public String createSubscriber(String phoneNumber, String name) throws IvrException {
     Map<String, String> params = new HashMap<>();
     params.put("phone", phoneNumber);
-    params.put("preferred_language", "202162");
+    params.put("preferred_language", DEFAULT_LANGUAGE_ID);
+    params.put("groups", MOTS_USERS_GROUP_ID);
+
+    if (StringUtils.isNotBlank(name)) {
+      params.put("property[name]", name);
+    }
 
     VotoResponseDto<String> votoResponse = sendVotoRequest(SUBSCRIBERS_URL, params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {});
