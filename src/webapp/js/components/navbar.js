@@ -26,6 +26,7 @@ class Navbar extends Component {
         <Header
           signoutUser={this.onSignout}
           toggleShowMenuSmart={this.props.toggleShowMenuSmart}
+          showMenuSmart={this.props.showMenuSmart}
         />
         <SideBar
           showMenuSmart={this.props.showMenuSmart}
