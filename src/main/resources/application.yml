@@ -1,0 +1,28 @@
+liquibase:
+    change-log: classpath:/db/changelog/liquibase-changelog.xml
+
+mots:
+    ivrApiKey: ${ivrApiKey}
+    resourceId: mots
+
+security:
+    oauth2:
+        client:
+            authentication-scheme: header
+
+server:
+    port: ${tomcatServerPort}
+
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        password: ${databasePassword}
+        url: ${databaseUrl}
+        username: ${databaseUser}
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5Dialect
+        show-sql: false
