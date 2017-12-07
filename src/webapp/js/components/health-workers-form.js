@@ -151,7 +151,7 @@ const FIELDS = {
     type: 'select',
     label: 'Preferred Language',
     getSelectOptions: () => ({
-      values: ['English', 'Krio', 'Limba', 'Susu', 'Temne'],
+      values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
     }),
   },
 };
