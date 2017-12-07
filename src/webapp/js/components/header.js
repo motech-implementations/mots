@@ -13,7 +13,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart, showMenuSmart }) => (
       </button>
       <Link className="navbar-brand" to="/" onClick={toggleShowMenuSmart}>MOTS</Link>
     </div>
-    <ul className="nav navbar-right top-nav">
+    <ul className="nav navbar-right top-nav hide-max-r-xsmall-max">
       <li>
         <Link to="/" onClick={showMenuSmart ? toggleShowMenuSmart : () => {}}>
           <span className="glyphicon glyphicon-user" /> Profile

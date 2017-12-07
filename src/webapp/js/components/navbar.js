@@ -29,8 +29,9 @@ class Navbar extends Component {
           showMenuSmart={this.props.showMenuSmart}
         />
         <SideBar
-          showMenuSmart={this.props.showMenuSmart}
+          signoutUser={this.onSignout}
           toggleShowMenuSmart={this.props.toggleShowMenuSmart}
+          showMenuSmart={this.props.showMenuSmart}
         />
       </nav>
     );

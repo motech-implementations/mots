@@ -11,6 +11,12 @@ $r-large-min: 1920px;
 
 @media(max-width: $r-xsmall-max) {
   .hide-max-r-xsmall-max {
-    display: none;
+    display: none !important;
+  }
+}
+
+@media(min-width: $r-small-min) {
+  .hide-min-r-small-min {
+    display: none !important;
   }
 }

@@ -189,8 +189,8 @@ class HealthWorkersForm extends Component {
       <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
         { _.map(FIELDS, this.renderField) }
         <div className="col-md-2" />
-        <button type="submit" className="btn btn-primary">Submit</button>
-        <button className="btn btn-danger" onClick={this.props.onSubmitCancel}>Cancel</button>
+        <button type="submit" className="btn btn-primary margin-bottom-md">Submit</button>
+        <button className="btn btn-danger margin-left-sm margin-bottom-md" onClick={this.props.onSubmitCancel}>Cancel</button>
       </form>
     );
   }

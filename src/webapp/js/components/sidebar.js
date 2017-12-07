@@ -46,6 +46,11 @@ export default class SideBar extends Component {
     return (
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
         <ul className="nav navbar-nav side-nav">
+          <li className="hide-min-r-small-min">
+            <Link to="/" onClick={this.props.toggleShowMenuSmart}>
+              <span className="glyphicon glyphicon-user" /> Profile
+            </Link>
+          </li>
           <li>
             <Link to="/" onClick={this.props.toggleShowMenuSmart}><span className="glyphicon glyphicon-home" />{this.props.showMenuSmart} Home</Link>
           </li>
@@ -64,6 +69,11 @@ export default class SideBar extends Component {
           <li>
             <Link to="/" onClick={this.props.toggleShowMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>
           </li>
+          <li className="hide-min-r-small-min">
+            <a href="" onClick={this.props.signoutUser}>
+              <span className="glyphicon glyphicon-log-in" /> Logout
+            </a>
+          </li>
         </ul>
       </div>
     );
@@ -71,6 +81,7 @@ export default class SideBar extends Component {
 }
 
 SideBar.propTypes = {
+  signoutUser: PropTypes.func.isRequired,
   showMenuSmart: PropTypes.bool,
   toggleShowMenuSmart: PropTypes.func.isRequired,
 };
