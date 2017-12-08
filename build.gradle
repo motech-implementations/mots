@@ -51,7 +51,7 @@ dependencies {
 }
 
 processResources {
-    filesMatching("**/application.properties") {
+    filesMatching("**/application.yml") {
         expand(project.properties)
     }
 }
