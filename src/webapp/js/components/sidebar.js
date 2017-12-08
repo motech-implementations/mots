@@ -33,10 +33,10 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         <li>
-          <Link to="/chw/new" onClick={this.props.toggleShowMenuSmart}><span className="glyphicon glyphicon-plus" /> Add CHW</Link>
+          <Link to="/chw/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add CHW</Link>
         </li>
         <li>
-          <Link to="/chw" onClick={this.props.toggleShowMenuSmart}><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
+          <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
         </li>
       </ul>
     );
@@ -47,12 +47,12 @@ export default class SideBar extends Component {
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
         <ul className="nav navbar-nav side-nav">
           <li className="hide-min-r-small-min">
-            <Link to="/" onClick={this.props.toggleShowMenuSmart}>
+            <Link to="/" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-user" /> Profile
             </Link>
           </li>
           <li>
-            <Link to="/" onClick={this.props.toggleShowMenuSmart}><span className="glyphicon glyphicon-home" />{this.props.showMenuSmart} Home</Link>
+            <Link to="/" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-home" />{this.props.showMenuSmart} Home</Link>
           </li>
           <li>
             <a href="" onClick={this.toggleHealthWorkersMenu}>
@@ -64,10 +64,10 @@ export default class SideBar extends Component {
             { this.renderHealthWorkersMenu() }
           </li>
           <li>
-            <Link to="/chw" onClick={this.props.toggleShowMenuSmart}><span className="glyphicon glyphicon-education" /> Modules</Link>
+            <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-education" /> Modules</Link>
           </li>
           <li>
-            <Link to="/" onClick={this.props.toggleShowMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>
+            <Link to="/" onClick={this.props.hideMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>
           </li>
           <li className="hide-min-r-small-min">
             <a href="" onClick={this.props.signoutUser}>
@@ -83,7 +83,7 @@ export default class SideBar extends Component {
 SideBar.propTypes = {
   signoutUser: PropTypes.func.isRequired,
   showMenuSmart: PropTypes.bool,
-  toggleShowMenuSmart: PropTypes.func.isRequired,
+  hideMenuSmart: PropTypes.func.isRequired,
 };
 
 SideBar.defaultProps = {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Header = ({ signoutUser, toggleShowMenuSmart, showMenuSmart }) => (
+const Header = ({ signoutUser, toggleShowMenuSmart }) => (
   <div>
     <div className="navbar-header">
       <button type="button" className="navbar-toggle" onClick={toggleShowMenuSmart}>
@@ -15,7 +15,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart, showMenuSmart }) => (
     </div>
     <ul className="nav navbar-right top-nav hide-max-r-xsmall-max">
       <li>
-        <Link to="/" onClick={showMenuSmart ? toggleShowMenuSmart : () => {}}>
+        <Link to="/">
           <span className="glyphicon glyphicon-user" /> Profile
         </Link>
       </li>
@@ -34,5 +34,4 @@ export default Header;
 Header.propTypes = {
   signoutUser: PropTypes.func.isRequired,
   toggleShowMenuSmart: PropTypes.func.isRequired,
-  showMenuSmart: PropTypes.bool.isRequired,
 };

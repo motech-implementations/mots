@@ -26,12 +26,11 @@ class Navbar extends Component {
         <Header
           signoutUser={this.onSignout}
           toggleShowMenuSmart={this.props.toggleShowMenuSmart}
-          showMenuSmart={this.props.showMenuSmart}
         />
         <SideBar
           signoutUser={this.onSignout}
-          toggleShowMenuSmart={this.props.toggleShowMenuSmart}
           showMenuSmart={this.props.showMenuSmart}
+          hideMenuSmart={this.props.hideMenuSmart}
         />
       </nav>
     );
@@ -44,6 +43,7 @@ Navbar.propTypes = {
   signoutUser: PropTypes.func.isRequired,
   showMenuSmart: PropTypes.bool,
   toggleShowMenuSmart: PropTypes.func.isRequired,
+  hideMenuSmart: PropTypes.func.isRequired,
 };
 
 Navbar.defaultProps = {
