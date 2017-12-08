@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import 'react-table/react-table.css';
 
 import { fetchChws } from '../actions/index';
+import MobileTable from '../components/mobile-table';
 
 const COLUMNS = [
   {
@@ -74,7 +75,16 @@ class ChwTable extends Component {
   }
 
   render() {
-    return <ReactTable data={this.props.chwList} columns={COLUMNS} />;
+    return (
+      <div>
+        <div className="hide-min-r-small-min">
+          <MobileTable data={this.props.chwList} columns={COLUMNS} />
+        </div>
+        <div className="hide-max-r-xsmall-max">
+          <ReactTable data={this.props.chwList} columns={COLUMNS} />
+        </div>
+      </div>
+    );
   }
 }
 

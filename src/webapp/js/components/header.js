@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Header = ({ signoutUser, toggleShowMenuSmart, showMenuSmart }) => (
   <div>
     <div className="navbar-header">
-      <button type="button" className="navbar-toggle" toggleMenu="" onClick={toggleShowMenuSmart}>
+      <button type="button" className="navbar-toggle" onClick={toggleShowMenuSmart}>
         <span className="sr-only">Toggle navigation</span>
         <span className="icon-bar" />
         <span className="icon-bar" />

@@ -177,3 +177,18 @@ a, a:hover, a:focus, a:active, a:visited {
     height: 2em;
   }
 }
+
+.mobile-chw-row {
+  border: 1px solid $gray-light;
+  text-align: center;
+
+  &.lighter-gray {
+    background-color: $gray-lighter;
+  }
+
+  .button-container {
+    a {
+      max-width: 300px;
+    }
+  }
+}
