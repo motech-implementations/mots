@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Header = ({ signoutUser, toggleShowMenuSmart }) => (
+const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
   <div>
     <div className="navbar-header">
       <button type="button" className="navbar-toggle" onClick={toggleShowMenuSmart}>
@@ -11,7 +11,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart }) => (
         <span className="icon-bar" />
         <span className="icon-bar" />
       </button>
-      <Link className="navbar-brand" to="/" onClick={toggleShowMenuSmart}>MOTS</Link>
+      <Link className="navbar-brand" to="/" onClick={hideMenuSmart}>MOTS</Link>
     </div>
     <ul className="nav navbar-right top-nav hide-max-r-xsmall-max">
       <li>
@@ -34,4 +34,5 @@ export default Header;
 Header.propTypes = {
   signoutUser: PropTypes.func.isRequired,
   toggleShowMenuSmart: PropTypes.func.isRequired,
+  hideMenuSmart: PropTypes.func.isRequired,
 };
