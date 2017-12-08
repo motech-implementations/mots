@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
@@ -18,10 +16,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class IvrService {
@@ -48,13 +49,13 @@ public class IvrService {
    * @return ivr id of created subscriber
    */
   public String createSubscriber(String phoneNumber, String name) throws IvrException {
-    Map<String, String> params = new HashMap<>();
-    params.put("phone", phoneNumber);
-    params.put("preferred_language", DEFAULT_LANGUAGE_ID);
-    params.put("groups", MOTS_USERS_GROUP_ID);
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("phone", phoneNumber);
+    params.add("preferred_language", DEFAULT_LANGUAGE_ID);
+    params.add("groups", MOTS_USERS_GROUP_ID);
 
     if (StringUtils.isNotBlank(name)) {
-      params.put("property[name]", name);
+      params.add("property[name]", name);
     }
 
     VotoResponseDto<String> votoResponse = sendVotoRequest(SUBSCRIBERS_URL, params,
@@ -75,9 +76,9 @@ public class IvrService {
    */
   public void addSubscriberToGroups(String subscriberId,
       List<String> groupsIds) throws IvrException {
-    Map<String, String> params = new HashMap<>();
-    params.put("subscriber_ids", subscriberId);
-    params.put("groups", StringUtils.join(groupsIds, ","));
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("subscriber_ids", subscriberId);
+    params.add("groups", StringUtils.join(groupsIds, ","));
 
     sendVotoRequest(ADD_TO_GROUPS_URL, params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {});
@@ -86,31 +87,33 @@ public class IvrService {
   }
 
   private void sendModuleAssignedMessage(String subscriberId) throws IvrException {
-    Map<String, String> params = new HashMap<>();
-    params.put("send_to_subscribers", subscriberId);
-    params.put("message_id", MODULE_ASSIGNED_MESSAGE_ID);
-    params.put("send_sms_if_voice_fails", "1");
-    params.put("detect_voicemail_action", "1");
-    params.put("retry_attempts_short", "3");
-    params.put("retry_delay_short", "15");
-    params.put("retry_attempts_long", "1");
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("send_to_subscribers", subscriberId);
+    params.add("message_id", MODULE_ASSIGNED_MESSAGE_ID);
+    params.add("send_sms_if_voice_fails", "1");
+    params.add("detect_voicemail_action", "1");
+    params.add("retry_attempts_short", "3");
+    params.add("retry_delay_short", "15");
+    params.add("retry_attempts_long", "1");
 
     sendVotoRequest(SEND_MESSAGE_URL, params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {});
   }
 
-  private <T> T sendVotoRequest(String url, Map<String, String> params,
+  private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,
       ParameterizedTypeReference<T> responseType) throws IvrException {
-    params.put("api_key", ivrApiKey);
+    params.add("api_key", ivrApiKey);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-    HttpEntity<Map<String, String>> request = new HttpEntity<>(params, headers);
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
+
+    HttpEntity<?> request = new HttpEntity<>(headers);
 
     try {
-      ResponseEntity<T> responseEntity = restTemplate.exchange(url, HttpMethod.POST, request,
-          responseType);
+      ResponseEntity<T> responseEntity = restTemplate.exchange(builder.build().toString(),
+          HttpMethod.POST, request, responseType);
       return responseEntity.getBody();
     } catch (RestClientResponseException ex) {
       String responseBodyJson = ex.getResponseBodyAsString();
