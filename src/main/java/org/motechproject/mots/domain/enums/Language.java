@@ -7,7 +7,8 @@ public enum Language {
   KRIO("Krio"),
   LIMBA("Limba"),
   SUSU("Susu"),
-  TEMNE("Temne");
+  TEMNE("Temne"),
+  MENDE("Mende");
 
   @Getter
   private String displayName;
