@@ -11,18 +11,6 @@ import MobileTable from '../components/mobile-table';
 
 const COLUMNS = [
   {
-    Header: 'Assign Modules',
-    accessor: 'id',
-    Cell: cell => (
-      <Link
-        to={`/modules/assign/${cell.value}`}
-        type="button"
-        className="btn btn-success center-block"
-      >Assign Module
-      </Link>
-    ),
-  },
-  {
     Header: 'ID',
     accessor: 'chwId',
   }, {
@@ -58,14 +46,25 @@ const COLUMNS = [
   },
   {
     Header: 'Actions',
+    minWidth: 150,
     accessor: 'id',
     Cell: cell => (
-      <Link
-        to={`/chw/${cell.value}`}
-        type="button"
-        className="btn btn-primary center-block"
-      ><span className="glyphicon glyphicon-edit" />
-      </Link>
+      <div>
+        <Link
+          to={`/chw/${cell.value}`}
+          type="button"
+          className="btn btn-primary center-block"
+        ><span className="glyphicon glyphicon-edit" /> Edit
+        </Link>
+        <div className="padding-x-xs" />
+        <Link
+          to={`/modules/assign/${cell.value}`}
+          type="button"
+          className="btn btn-success center-block"
+        >
+          <span className="glyphicon glyphicon-circle-arrow-right" /> Assign Module
+        </Link>
+      </div>
     ),
   }];
 
