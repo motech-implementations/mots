@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 export default class SideBar extends Component {
@@ -32,10 +33,10 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         <li>
-          <Link to="/chw/new"><span className="glyphicon glyphicon-plus" /> Add CHW</Link>
+          <Link to="/chw/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add CHW</Link>
         </li>
         <li>
-          <Link to="/chw"><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
+          <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
         </li>
       </ul>
     );
@@ -43,10 +44,15 @@ export default class SideBar extends Component {
 
   render() {
     return (
-      <div className="collapse navbar-collapse navbar-ex1-collapse">
+      <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
         <ul className="nav navbar-nav side-nav">
+          <li className="hide-min-r-small-min">
+            <Link to="/" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-user" /> Profile
+            </Link>
+          </li>
           <li>
-            <Link to="/"><span className="glyphicon glyphicon-home" /> Home</Link>
+            <Link to="/" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-home" />{this.props.showMenuSmart} Home</Link>
           </li>
           <li>
             <a href="" onClick={this.toggleHealthWorkersMenu}>
@@ -58,13 +64,28 @@ export default class SideBar extends Component {
             { this.renderHealthWorkersMenu() }
           </li>
           <li>
-            <Link to="/chw"><span className="glyphicon glyphicon-education" /> Modules</Link>
+            <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-education" /> Modules</Link>
           </li>
           <li>
-            <Link to="/"><span className="fa fa-bar-chart" /> Reports</Link>
+            <Link to="/" onClick={this.props.hideMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>
+          </li>
+          <li className="hide-min-r-small-min">
+            <a href="" onClick={this.props.signoutUser}>
+              <span className="glyphicon glyphicon-log-in" /> Logout
+            </a>
           </li>
         </ul>
       </div>
     );
   }
 }
+
+SideBar.propTypes = {
+  signoutUser: PropTypes.func.isRequired,
+  showMenuSmart: PropTypes.bool,
+  hideMenuSmart: PropTypes.func.isRequired,
+};
+
+SideBar.defaultProps = {
+  showMenuSmart: false,
+};

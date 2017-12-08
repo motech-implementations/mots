@@ -1,4 +1,5 @@
 @import 'dimensions';
+@import 'resolutions';
 $gray-lighter: #f8f8f8;
 $gray-light: #ebebeb;
 $gray-mid: #e7e7e7;
@@ -10,13 +11,7 @@ $red: #f00;
 /* Global Styles */
 
 body {
-  margin-top: 100px;
-}
-
-@media(min-width:768px) {
-  body {
-    margin-top: 50px;
-  }
+  margin-top: 50px;
 }
 
 #wrapper {
@@ -35,7 +30,7 @@ body {
   }
 }
 
-@media(min-width:768px) {
+@media(min-width: $r-small-min) {
   #wrapper {
     padding-left: 225px;
   }
@@ -62,6 +57,10 @@ a, a:hover, a:focus, a:active, a:visited {
 
 .navbar {
   background-color: $gray-lighter;
+
+  .navbar-toggle {
+    background-color: $gray-dark;
+  }
 }
 
 .navbar-inverse {
@@ -99,7 +98,7 @@ a, a:hover, a:focus, a:active, a:visited {
 
 /* Side Navigation */
 
-@media(min-width:768px) {
+@media(min-width: $r-small-min) {
   .side-nav {
     position: fixed;
     top: 51px;
@@ -163,7 +162,33 @@ a, a:hover, a:focus, a:active, a:visited {
 
 /* Other Styles */
 
-.form-group.required .control-label:after {
-  content: "*";
-  color: $red;
+.form-group {
+  &.required {
+    .control-label:after {
+      content: "*";
+      color: $red;
+    }
+  }
+}
+
+.form-horizontal {
+  input[type=checkbox] {
+    width: 2em;
+    height: 2em;
+  }
+}
+
+.mobile-chw-row {
+  border: 1px solid $gray-light;
+  text-align: center;
+
+  &.lighter-gray {
+    background-color: $gray-lighter;
+  }
+
+  .button-container {
+    a {
+      max-width: 300px;
+    }
+  }
 }

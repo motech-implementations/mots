@@ -39,7 +39,7 @@ export default class FormField extends Component {
     const className = `form-group ${fieldConfig.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
 
     return (
-      <div className={className}>
+      <div className={`padding-left-md padding-right-md ${className}`}>
         <div className="row">
           <label htmlFor={attributes.id} className="col-md-2 control-label">{ label }</label>
           <div className="col-md-4">
