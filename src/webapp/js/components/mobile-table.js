@@ -15,7 +15,7 @@ const MobileTable = ({ data, columns }) => (
               <strong>{column.Header}:</strong> {
                 column.Cell && typeof column.Cell === 'function' ?
                   <div className="button-container margin-x-xs">
-                    {column.Cell(row[column.accessor])}
+                    {column.Cell({ value: row[column.accessor] })}
                   </div> :
                   row[column.accessor]
                 }
