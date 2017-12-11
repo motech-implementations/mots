@@ -46,23 +46,27 @@ const COLUMNS = [
   },
   {
     Header: 'Actions',
-    minWidth: 150,
+    minWidth: 70,
     accessor: 'id',
     Cell: cell => (
-      <div>
+      <div className="actions-buttons-container">
         <Link
           to={`/chw/${cell.value}`}
           type="button"
-          className="btn btn-primary center-block"
-        ><span className="glyphicon glyphicon-edit" /> Edit
+          className="btn btn-primary margin-right-sm"
+          title="Edit"
+        >
+          <span className="glyphicon glyphicon-edit" />
+          <span className="hide-min-r-small-min next-button-text">Edit</span>
         </Link>
-        <div className="padding-x-xs" />
         <Link
           to={`/modules/assign/${cell.value}`}
           type="button"
-          className="btn btn-success center-block"
+          className="btn btn-success"
+          title="Assign Module"
         >
-          <span className="glyphicon glyphicon-circle-arrow-right" /> Assign Module
+          <span className="glyphicon glyphicon-circle-arrow-right" />
+          <span className="hide-min-r-small-min next-button-text">Assign Module</span>
         </Link>
       </div>
     ),

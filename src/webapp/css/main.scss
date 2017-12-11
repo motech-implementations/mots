@@ -192,3 +192,17 @@ a, a:hover, a:focus, a:active, a:visited {
     }
   }
 }
+
+.actions-buttons-container {
+  .next-button-text {
+    @extend .margin-left-xs;
+  }
+}
+
+@media(min-width: $r-small-min) {
+  .actions-buttons-container {
+    .btn {
+      padding: 2px 4px;
+    }
+  }
+}
