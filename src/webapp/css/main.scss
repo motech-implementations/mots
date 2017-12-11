@@ -11,7 +11,7 @@ $red: #f00;
 /* Global Styles */
 
 body {
-  margin-top: 50px;
+  @extend .margin-top-xl;
 }
 
 #wrapper {
@@ -24,8 +24,6 @@ body {
   padding: 0;
 
   .page-header {
-    padding-bottom: 9px;
-    margin: 20px 0 20px;
     border-bottom: 1px solid $gray-mid;
   }
 }
@@ -36,7 +34,7 @@ body {
   }
 
   #page-wrapper {
-    padding: 10px;
+    padding: 1em;
   }
 }
 
@@ -74,7 +72,6 @@ a, a:hover, a:focus, a:active, a:visited {
 }
 
 .top-nav {
-  padding: 0 15px;
   color: $blue-mid !important;
   background-color: $gray-lighter;
 
@@ -83,9 +80,9 @@ a, a:hover, a:focus, a:active, a:visited {
     float: left;
 
     a {
-      padding-top: 15px;
-      padding-bottom: 15px;
-      line-height: 20px;
+      @extend .padding-top-md;
+      @extend .padding-bottom-md;
+      line-height: 1.5em;
       color: $blue-mid !important;
 
       &:hover, &:focus {
@@ -110,7 +107,7 @@ a, a:hover, a:focus, a:active, a:visited {
     overflow-y: auto;
     bottom: 0;
     overflow-x: hidden;
-    padding-bottom: 40px;
+    padding-bottom: 3em;
 
     li {
       a {
@@ -132,6 +129,8 @@ a, a:hover, a:focus, a:active, a:visited {
     border-bottom: 1px solid $gray-mid;
 
     a {
+      @extend .padding-top-md;
+      @extend .padding-bottom-md;
       background-color: $gray-lighter;
       color: $blue-mid !important;
 
@@ -146,8 +145,9 @@ a, a:hover, a:focus, a:active, a:visited {
 
       li {
         a {
+          @extend .padding-md;
           display: block;
-          padding: 10px 15px 10px 38px;
+          padding-left: 2.5em;
           text-decoration: none;
 
           &:hover, &:focus {
@@ -156,6 +156,10 @@ a, a:hover, a:focus, a:active, a:visited {
           }
         }
       }
+    }
+
+    &.border-none {
+      border: none;
     }
   }
 }

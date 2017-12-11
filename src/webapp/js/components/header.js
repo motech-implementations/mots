@@ -13,7 +13,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
       </button>
       <Link className="navbar-brand" to="/" onClick={hideMenuSmart}>MOTS</Link>
     </div>
-    <ul className="nav navbar-right top-nav hide-max-r-xsmall-max">
+    <ul className="nav navbar-right top-nav hide-max-r-xsmall-max padding-y-md">
       <li>
         <Link to="/">
           <span className="glyphicon glyphicon-user" /> Profile

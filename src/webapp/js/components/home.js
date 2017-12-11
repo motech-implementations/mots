@@ -2,7 +2,7 @@ import React from 'react';
 
 const Home = () => (
   <div>
-    <h1 className="page-header">Home Page</h1>
+    <h1 className="page-header padding-bottom-xs margin-x-sm">Home Page</h1>
   </div>
 );
 

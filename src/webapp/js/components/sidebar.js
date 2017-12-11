@@ -35,7 +35,7 @@ export default class SideBar extends Component {
         <li>
           <Link to="/chw/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add CHW</Link>
         </li>
-        <li>
+        <li className="border-none">
           <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
         </li>
       </ul>

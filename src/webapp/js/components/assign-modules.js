@@ -93,7 +93,7 @@ export default class AssignModules extends Component {
 
     return (
       <div>
-        <h1 className="page-header">Assign Modules</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Assign Modules</h1>
         <h4>CHW: {`${chwData.firstName} ${chwData.otherName} ${chwData.secondName}`}</h4>
         <DualListBox
           canFilter
