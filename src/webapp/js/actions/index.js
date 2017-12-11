@@ -33,8 +33,6 @@ export function signinUser({ username, password }, callback) {
 }
 
 export function signoutUser() {
-  localStorage.removeItem('token');
-
   return { type: UNAUTH_USER };
 }
 

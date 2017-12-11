@@ -14,19 +14,12 @@ import reducers from './reducers';
 import App from './components/app';
 import Signin from './components/auth/signin';
 import requireAuth from './components/auth/require_auth';
-import { AUTH_USER } from './actions/types';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk, ReduxPromise)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
 // eslint-disable-next-line import/prefer-default-export
 export const { dispatch } = store;
-
-const token = localStorage.getItem('token');
-
-if (token) {
-  dispatch({ type: AUTH_USER });
-}
 
 ReactDOM.render(
   <Provider store={store}>
