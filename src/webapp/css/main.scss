@@ -30,7 +30,7 @@ body {
 
 @media(min-width: $r-small-min) {
   #wrapper {
-    padding-left: 225px;
+    padding-left: 16em;
   }
 
   #page-wrapper {
@@ -99,9 +99,9 @@ a, a:hover, a:focus, a:active, a:visited {
   .side-nav {
     position: fixed;
     top: 51px;
-    left: 225px;
-    width: 225px;
-    margin-left: -225px;
+    left: 16em;
+    width: 16em;
+    margin-left: -16em;
     border-right: 1px solid $gray-mid;
     border-radius: 0;
     overflow-y: auto;
@@ -111,7 +111,7 @@ a, a:hover, a:focus, a:active, a:visited {
 
     li {
       a {
-        width: 225px;
+        width: 16em;
 
         &:hover, &:focus {
           outline: none;
@@ -188,12 +188,6 @@ a, a:hover, a:focus, a:active, a:visited {
 
   &.lighter-gray {
     background-color: $gray-lighter;
-  }
-
-  .button-container {
-    a {
-      max-width: 300px;
-    }
   }
 }
 
