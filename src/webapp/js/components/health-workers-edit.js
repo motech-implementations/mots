@@ -47,7 +47,7 @@ class HealthWorkersEdit extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header">Edit Community Health Worker</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Community Health Worker</h1>
         <HealthWorkersForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
