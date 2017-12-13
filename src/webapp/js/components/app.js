@@ -46,7 +46,7 @@ export default class App extends Component {
         <div id="page-wrapper" className={this.state.showMenuSmart ? 'hide-max-r-xsmall-max' : ''}>
           <div className="container-fluid">
             <Switch>
-              <Route path="/modules/assign/:chwId" component={AssignModules} />
+              <Route path="/modules/assign/:chwId?" component={AssignModules} />
               <Route path="/chw/new" component={HealthWorkersNew} />
               <Route path="/chw/:chwId" component={HealthWorkersEdit} />
               <Route path="/chw" component={HealthWorkers} />

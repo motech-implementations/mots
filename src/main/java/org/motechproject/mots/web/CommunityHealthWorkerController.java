@@ -3,7 +3,9 @@ package org.motechproject.mots.web;
 import java.util.List;
 import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
+import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class CommunityHealthWorkerController extends BaseController {
 
   private CommunityHealthWorkerMapper healthWorkerMapper = CommunityHealthWorkerMapper.INSTANCE;
 
+  private ChwInfoMapper chwInfoMapper = ChwInfoMapper.INSTANCE;
+
   /**
    * Get list of community health workers.
    * @return list of all community health workers
@@ -35,6 +39,19 @@ public class CommunityHealthWorkerController extends BaseController {
     Iterable<CommunityHealthWorker> healthWorkers = healthWorkerService.getHealthWorkers();
 
     return healthWorkerMapper.toDtos(healthWorkers);
+  }
+
+  /**
+   * Get list of basic representation (ChwInfoDto) representations of CHWs.
+   * @return list of ChwInfoDto representations of CHWs
+   */
+  @RequestMapping(value = "/chwInfo", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<ChwInfoDto> getHealthWorkersInfo() {
+    Iterable<CommunityHealthWorker> healthWorkers = healthWorkerService.getHealthWorkers();
+
+    return chwInfoMapper.toDtos(healthWorkers);
   }
 
   /**

@@ -14,14 +14,21 @@ export default class SideBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { healthWorkersMenuCollapsed: true };
+    this.state = { healthWorkersMenuCollapsed: true, modulesMenuCollapsed: true };
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
+    this.toggleModulesMenu = this.toggleModulesMenu.bind(this);
   }
 
   toggleHealthWorkersMenu(event) {
     event.preventDefault();
     this.setState({ healthWorkersMenuCollapsed: !this.state.healthWorkersMenuCollapsed });
+    return false;
+  }
+
+  toggleModulesMenu(event) {
+    event.preventDefault();
+    this.setState({ modulesMenuCollapsed: !this.state.modulesMenuCollapsed });
     return false;
   }
 
@@ -37,6 +44,20 @@ export default class SideBar extends Component {
         </li>
         <li className="border-none">
           <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
+        </li>
+      </ul>
+    );
+  }
+
+  renderModulesMenu() {
+    if (this.state.modulesMenuCollapsed) {
+      return '';
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        <li className="border-none">
+          <Link to="/modules/assign" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-ok" /> Assign</Link>
         </li>
       </ul>
     );
@@ -64,7 +85,13 @@ export default class SideBar extends Component {
             { this.renderHealthWorkersMenu() }
           </li>
           <li>
-            <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-education" /> Modules</Link>
+            <a href="" onClick={this.toggleModulesMenu}>
+              <span className="glyphicon glyphicon-education" /> Modules
+              <span
+                className={SideBar.getSubmenuArrowClass(this.state.modulesMenuCollapsed)}
+              />
+            </a>
+            { this.renderModulesMenu() }
           </li>
           <li>
             <Link to="/" onClick={this.props.hideMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>
