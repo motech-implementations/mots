@@ -14,12 +14,15 @@ import reducers from './reducers';
 import App from './components/app';
 import Signin from './components/auth/signin';
 import requireAuth from './components/auth/require_auth';
+import authenticateToken from './components/auth/authenticate_token';
 
 const createStoreWithMiddleware = applyMiddleware(reduxThunk, ReduxPromise)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
 // eslint-disable-next-line import/prefer-default-export
 export const { dispatch } = store;
+
+authenticateToken();
 
 ReactDOM.render(
   <Provider store={store}>
