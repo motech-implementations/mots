@@ -76,7 +76,7 @@ export default class AssignModules extends Component {
 
     const payload = {
       modules: this.state.selectedModules,
-      chwId: this.props.match.params.chwId,
+      chwId: this.state.selectedChw,
     };
 
     const callback = () => {
