@@ -61,7 +61,7 @@ export default class AssignModules extends Component {
   fetchChwModules() {
     const url = '/api/assignedModules';
     const params = {
-      chwId: this.state.selectedChw.value || this.state.selectedChw,
+      chwId: this.state.selectedChw,
     };
 
     apiClient.get(url, { params })
@@ -88,7 +88,7 @@ export default class AssignModules extends Component {
   }
 
   handleChwChange = (selectedChw) => {
-    this.setState({ selectedChw }, () => this.fetchChwModules());
+    this.setState({ selectedChw: selectedChw.value }, () => this.fetchChwModules());
   };
 
   handleModuleChange(selectedModules) {
