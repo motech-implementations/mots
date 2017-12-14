@@ -56,6 +56,16 @@ export function createHealthWorker(values, callback) {
   };
 }
 
+export function createIncharge(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/incharge`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_HEALTH_WORKER,
+    payload: request,
+  };
+}
+
 export function saveHealthWorker(values, callback) {
   const request = apiClient.put(`${BASE_URL}/chw/${values.id}`, values);
   request.then(() => callback());
