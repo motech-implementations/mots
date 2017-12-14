@@ -32,7 +32,7 @@ public class InchargeController extends BaseController {
   public InchargeDto createIncharge(@RequestBody InchargeDto inchargeDto) {
     Incharge incharge = inchargeMapper.fromDto(inchargeDto);
 
-    return inchargeMapper.toDto(inchargeService.createHealthWorker(incharge));
+    return inchargeMapper.toDto(inchargeService.createIncharge(incharge));
   }
 
 }

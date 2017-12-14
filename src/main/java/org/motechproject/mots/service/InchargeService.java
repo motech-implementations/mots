@@ -16,7 +16,7 @@ public class InchargeService {
    * @param incharge Incharge to be created
    * @return saved CHW
    */
-  public Incharge createHealthWorker(Incharge incharge) {
+  public Incharge createIncharge(Incharge incharge) {
 
     inchargeRepository.save(incharge);
 

@@ -1,7 +1,10 @@
 import Client from 'client-oauth2';
 import apiClient from '../utils/api-client';
 
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER, SAVE_HEALTH_WORKER, FETCH_LOCATIONS } from './types';
+import {
+  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
+  SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE,
+} from './types';
 
 const BASE_URL = '/api';
 
@@ -61,7 +64,7 @@ export function createIncharge(values, callback) {
   request.then(() => callback());
 
   return {
-    type: CREATE_HEALTH_WORKER,
+    type: CREATE_INCHARGE,
     payload: request,
   };
 }

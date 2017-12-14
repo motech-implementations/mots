@@ -15,6 +15,9 @@ import org.motechproject.mots.dto.InchargeDto;
 public interface InchargeMapper {
   InchargeMapper INSTANCE = Mappers.getMapper(InchargeMapper.class);
 
+  @Mappings({
+      @Mapping(target = "facilityId", source = "facility.id")
+  })
   InchargeDto toDto(Incharge incharge);
 
   @Mappings({

@@ -15,13 +15,13 @@ class InchargeNew extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/incharge');
+    this.props.history.push('/incharge/new');
   }
 
   onSubmit(values) {
     this.props.createIncharge(values, () => {
       Alert.success('Incharge has been added');
-      this.props.history.push('/incharge');
+      this.props.history.push('/incharge/new');
     });
   }
 

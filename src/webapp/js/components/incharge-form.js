@@ -60,7 +60,6 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME)),
   },
 };
 
@@ -84,7 +83,6 @@ class InchargeForm extends Component {
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
-        facilityId={this.props.facilityId}
       />
     );
   }
@@ -122,7 +120,6 @@ function mapStateToProps(state) {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
-    facilityId: selector(state, 'facilityId'),
     hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
@@ -140,12 +137,10 @@ InchargeForm.propTypes = {
   availableLocations: PropTypes.shape({}),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
-  facilityId: PropTypes.string,
 };
 
 InchargeForm.defaultProps = {
   availableLocations: null,
   districtId: null,
   chiefdomId: null,
-  facilityId: null,
 };
