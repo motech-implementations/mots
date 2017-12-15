@@ -55,7 +55,10 @@ const FIELDS = {
       const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
 
       return ({
-        values: chiefdom && _.values(chiefdom.facilities),
+        values: chiefdom && _.values(_.filter(
+          chiefdom.facilities,
+          facility => _.isNull(facility.inchargeId),
+        )),
         displayNameKey: 'name',
         valueKey: 'id',
       });
