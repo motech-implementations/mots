@@ -14,10 +14,15 @@ export default class SideBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { healthWorkersMenuCollapsed: true, modulesMenuCollapsed: true };
+    this.state = {
+      healthWorkersMenuCollapsed: true,
+      modulesMenuCollapsed: true,
+      inchargeMenuCollapsed: true,
+    };
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
     this.toggleModulesMenu = this.toggleModulesMenu.bind(this);
+    this.toggleInchargeMenu = this.toggleInchargeMenu.bind(this);
   }
 
   toggleHealthWorkersMenu(event) {
@@ -29,6 +34,12 @@ export default class SideBar extends Component {
   toggleModulesMenu(event) {
     event.preventDefault();
     this.setState({ modulesMenuCollapsed: !this.state.modulesMenuCollapsed });
+    return false;
+  }
+
+  toggleInchargeMenu(event) {
+    event.preventDefault();
+    this.setState({ inchargeMenuCollapsed: !this.state.inchargeMenuCollapsed });
     return false;
   }
 
@@ -63,6 +74,20 @@ export default class SideBar extends Component {
     );
   }
 
+  renderInchargeMenu() {
+    if (this.state.inchargeMenuCollapsed) {
+      return '';
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        <li className="border-none">
+          <Link to="/incharge/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add Incharge</Link>
+        </li>
+      </ul>
+    );
+  }
+
   render() {
     return (
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
@@ -92,6 +117,15 @@ export default class SideBar extends Component {
               />
             </a>
             { this.renderModulesMenu() }
+          </li>
+          <li>
+            <a href="" onClick={this.toggleInchargeMenu}>
+              <span className="fa fa-male" /> Incharge
+              <span
+                className={SideBar.getSubmenuArrowClass(this.state.inchargeMenuCollapsed)}
+              />
+            </a>
+            { this.renderInchargeMenu() }
           </li>
           <li>
             <Link to="/" onClick={this.props.hideMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>

@@ -21,4 +21,8 @@ public class FacilityDto {
   @Getter
   @Setter
   private Map<String, CommunityDto> communities;
+
+  @Getter
+  @Setter
+  private String inchargeId;
 }

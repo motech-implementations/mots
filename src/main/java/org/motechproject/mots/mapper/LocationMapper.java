@@ -8,6 +8,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.Chiefdom;
@@ -75,6 +77,10 @@ public interface LocationMapper {
   }
 
   Map<String, FacilityDto> toFacilityDto(Map<UUID, Facility> map);
+
+  @Mappings({@Mapping(target = "inchargeId", source = "incharge.id")})
+  FacilityDto toDto(Facility facility);
+
 
   /**
    * Convert community list to community dtos map.
