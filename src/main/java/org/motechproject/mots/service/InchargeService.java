@@ -11,15 +11,7 @@ public class InchargeService {
   @Autowired
   private InchargeRepository inchargeRepository;
 
-  /**
-   * Creates Incharge.
-   * @param incharge Incharge to be created
-   * @return saved CHW
-   */
   public Incharge createIncharge(Incharge incharge) {
-
-    inchargeRepository.save(incharge);
-
-    return incharge;
+    return inchargeRepository.save(incharge);
   }
 }
