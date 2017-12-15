@@ -11,5 +11,6 @@
   <include file="20171118_1635.mysql.sql" relativeToChangelogFile="true" />
   <include file="20171118_1759.mysql.sql" relativeToChangelogFile="true" />
   <include file="20171214_1510.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20171215_1722.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

@@ -11,9 +11,16 @@ import { getAttributesForSelectWithClearOnChange } from '../utils/form-utils';
 export const INCHARGE_FORM_NAME = 'InchargeForm';
 
 const FIELDS = {
-  name: {
-    label: 'Name',
+  firstName: {
+    label: 'First name',
     required: true,
+  },
+  secondName: {
+    label: 'Surname',
+    required: true,
+  },
+  otherName: {
+    label: 'Other name',
   },
   phoneNumber: {
     label: 'Phone number',

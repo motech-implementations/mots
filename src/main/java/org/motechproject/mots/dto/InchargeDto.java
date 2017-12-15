@@ -7,7 +7,15 @@ public class InchargeDto {
 
   @Getter
   @Setter
-  private String name;
+  private String firstName;
+
+  @Getter
+  @Setter
+  private String secondName;
+
+  @Getter
+  @Setter
+  private String otherName;
 
   @Getter
   @Setter

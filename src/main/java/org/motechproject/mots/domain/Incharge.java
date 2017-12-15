@@ -12,10 +12,20 @@ import lombok.Setter;
 @Table(name = "in_charge")
 public class Incharge extends BaseEntity {
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "first_name", nullable = false)
   @Getter
   @Setter
-  private String name;
+  private String firstName;
+
+  @Column(name = "second_name", nullable = false)
+  @Getter
+  @Setter
+  private String secondName;
+
+  @Column(name = "other_name")
+  @Getter
+  @Setter
+  private String otherName;
 
   @Column(name = "phone_number", unique = true, nullable = false)
   @Getter
