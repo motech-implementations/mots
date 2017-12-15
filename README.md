@@ -29,5 +29,15 @@ Under File -> Settings -> Editor -> Code Style import the google-styleguide (gea
 1. Generate the migration using the gradle task (`./gradlew dbDiff`), the migration file will be saved at /resources/db/changelog and have the following format yyyyMMdd_HHmm.mysql.sql (e.g. 20171102_1634.mysql.sql)
 2. Include the generated migration in the changelog by adding the following line to the liquibase-changelog.xml file: `<include file="{migration file name}" relativeToChangelogFile="true" />`
 
+## Loading initial test data
+1. In `mots` root directory run:
+`mysql -uroot -p mots < src/main/resources/test_modules.sql`
+2. Type your root password
+
+## Add VOTO ivrApiKey
+1. Go into ~/.gradle
+2. Create gradle.properties file (it will overwrite project's properties)
+3. Add `ivrApiKey=<voto-api-key>` to set VOTO communication.
+
 ## Stopping the Service
 To stop the service (when it is running with `gradle bootRun`) use Control-C.
