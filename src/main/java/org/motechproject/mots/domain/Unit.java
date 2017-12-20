@@ -1,6 +1,7 @@
 package org.motechproject.mots.domain;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -32,14 +33,13 @@ public class Unit extends IvrObject {
   @Setter
   private Integer listOrder;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "unit_id")
   @OrderBy("list_order ASC")
   @Getter
-  @Setter
   private List<CallFlowElement> callFlowElements;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "continuation_question_id")
   @Getter
   @Setter
@@ -49,4 +49,20 @@ public class Unit extends IvrObject {
   @Getter
   @Setter
   private Boolean allowReplay;
+
+  /**
+   * Update list content.
+   * @param callFlowElements list of new Call Flow Elements
+   */
+  public void setCallFlowElements(List<CallFlowElement> callFlowElements) {
+    if (this.callFlowElements == null) {
+      this.callFlowElements = callFlowElements;
+    } else if (!this.callFlowElements.equals(callFlowElements)) {
+      this.callFlowElements.clear();
+
+      if (callFlowElements != null) {
+        this.callFlowElements.addAll(callFlowElements);
+      }
+    }
+  }
 }
