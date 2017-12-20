@@ -11,16 +11,20 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "facility")
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Facility extends BaseEntity {
 
   @Column(name = "name", nullable = false)
   @Getter
   @Setter
+  @NonNull
   private String name;
 
   @Column(name = "type")
@@ -46,5 +50,24 @@ public class Facility extends BaseEntity {
 
   public Facility(UUID id) {
     super(id);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Facility facility = (Facility) o;
+
+    return name.equals(facility.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return name.hashCode();
   }
 }

@@ -39,5 +39,10 @@ Under File -> Settings -> Editor -> Code Style import the google-styleguide (gea
 2. Create gradle.properties file (it will overwrite project's properties)
 3. Add `ivrApiKey=<voto-api-key>` to set VOTO communication.
 
+## Load locations locally when starting the server
+1. Set `loadLocations=true` in project or home `gradle.properties` file.
+2. Run `./gradlew bootRun`.
+3. After starting the server locations from xlsx should be added.
+
 ## Stopping the Service
 To stop the service (when it is running with `gradle bootRun`) use Control-C.
