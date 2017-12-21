@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -13,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "community")
+@Table(name = "community", uniqueConstraints=
+  @UniqueConstraint(columnNames = {"name", "facility_id"}))
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of={"name", "facility"})
 public class Community extends BaseEntity {
 
   @Column(name = "name", nullable = false)
@@ -25,29 +29,10 @@ public class Community extends BaseEntity {
   private String name;
 
   @ManyToOne
-  @JoinColumn(name = "facility_id")
+  @JoinColumn(name = "facility_id", nullable = false)
   @Getter
   @Setter
   private Facility facility;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    Community community = (Community) o;
-
-    return name.equals(community.name);
-  }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
-  }
 
   public Community(UUID id) {
     super(id);

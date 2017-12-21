@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -16,9 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "facility")
+@Table(name = "facility", uniqueConstraints=
+  @UniqueConstraint(columnNames = {"name", "chiefdom_id"}))
 @NoArgsConstructor
 @RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = false, of={"name", "chiefdom"})
 public class Facility extends BaseEntity {
 
   @Column(name = "name", nullable = false)
@@ -38,7 +42,7 @@ public class Facility extends BaseEntity {
   private Set<Community> communities;
 
   @ManyToOne
-  @JoinColumn(name = "chiefdom_id")
+  @JoinColumn(name = "chiefdom_id", nullable = false)
   @Getter
   @Setter
   private Chiefdom chiefdom;
@@ -50,24 +54,5 @@ public class Facility extends BaseEntity {
 
   public Facility(UUID id) {
     super(id);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    Facility facility = (Facility) o;
-
-    return name.equals(facility.name);
-  }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
   }
 }

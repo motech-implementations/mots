@@ -52,12 +52,6 @@ public class LocationImporter implements ApplicationRunner {
   @Autowired
   public LocationImporter(LocationService locationService) {
     this.locationService = locationService;
-    if (loadLocations) {
-      this.districtList = locationService.getDistricts();
-      this.chiefdomList = locationService.getChiefdoms();
-      this.facilityList = locationService.getFacilites();
-      this.communityList = locationService.getCommunities();
-    }
   }
 
   /**
@@ -69,6 +63,11 @@ public class LocationImporter implements ApplicationRunner {
     if (!loadLocations) {
       return;
     }
+
+    this.districtList = locationService.getDistricts();
+    this.chiefdomList = locationService.getChiefdoms();
+    this.facilityList = locationService.getFacilites();
+    this.communityList = locationService.getCommunities();
 
     InputStream excelFileToRead = new FileInputStream("src/main/resources/SL_locations.xlsx");
     XSSFWorkbook  wb = new XSSFWorkbook(excelFileToRead);
@@ -127,14 +126,12 @@ public class LocationImporter implements ApplicationRunner {
       Chiefdom chiefdom = new Chiefdom(cellText);
       String parentName = row.getCell(1).getStringCellValue();
 
-      Optional<District> parent = districtList.stream()
+      District parent = districtList.stream()
           .filter(district -> district.getName().equals(parentName))
-          .findFirst();
-      Assert.isTrue(parent.isPresent(), String.format("'%s' Chiefdom parent is not defined "
-          + "properly in spreadsheet", chiefdom.getName()));
+          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Chiefdom parent "
+              + "is not defined properly in spreadsheet", chiefdom.getName())));
 
-
-      chiefdom.setDistrict(parent.get());
+      chiefdom.setDistrict(parent);
 
       if (!chiefdomList.contains(chiefdom)) {
         locationService.createChiefdom(chiefdom);
@@ -159,13 +156,12 @@ public class LocationImporter implements ApplicationRunner {
       Facility facility = new Facility(cellText);
       String parentName = row.getCell(1).getStringCellValue();
 
-      Optional<Chiefdom> parent = chiefdomList.stream()
+      Chiefdom parent = chiefdomList.stream()
           .filter(chiefdom -> chiefdom.getName().equals(parentName))
-          .findFirst();
-      Assert.isTrue(parent.isPresent(), String.format("'%s' Facility parent is not defined "
-          + "properly in spreadsheet", facility.getName()));
+          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Facility parent "
+              + "is not defined properly in spreadsheet", facility.getName())));
 
-      facility.setChiefdom(parent.get());
+      facility.setChiefdom(parent);
 
       if (!facilityList.contains(facility)) {
         locationService.createFacility(facility);
@@ -190,13 +186,12 @@ public class LocationImporter implements ApplicationRunner {
       Community community = new Community(cellText);
       String parentName = row.getCell(3).getStringCellValue();
 
-      Optional<Facility> parent = facilityList.stream()
+      Facility parent = facilityList.stream()
           .filter(facility -> facility.getName().equals(parentName))
-          .findFirst();
-      Assert.isTrue(parent.isPresent(), String.format("'%s' Community parent is not defined "
-          + "properly in spreadsheet", community.getName()));
+          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Community parent "
+              + "is not defined properly in spreadsheet", community.getName())));
 
-      community.setFacility(parent.get());
+      community.setFacility(parent);
 
       if (!communityList.contains(community)) {
         locationService.createCommunity(community);

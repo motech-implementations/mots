@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -16,10 +18,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "chiefdom")
+@Table(name = "chiefdom", uniqueConstraints=
+  @UniqueConstraint(columnNames = {"name", "district_id"}))
+@EqualsAndHashCode(callSuper = false, of={"name", "district"})
 public class Chiefdom extends BaseEntity {
 
-  @Column(name = "name", unique = true, nullable = false)
+  @Column(name = "name", nullable = false)
   @Getter
   @Setter
   @NonNull
@@ -31,27 +35,8 @@ public class Chiefdom extends BaseEntity {
   private Set<Facility> facilities;
 
   @ManyToOne
-  @JoinColumn(name = "district_id")
+  @JoinColumn(name = "district_id", nullable = false)
   @Getter
   @Setter
   private District district;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    Chiefdom chiefdom = (Chiefdom) o;
-
-    return name.equals(chiefdom.name);
-  }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
-  }
 }
