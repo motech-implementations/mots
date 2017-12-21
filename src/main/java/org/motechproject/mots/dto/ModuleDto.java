@@ -1,13 +1,10 @@
 package org.motechproject.mots.dto;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ModuleDto {
-
-  @Getter
-  @Setter
-  private String id;
+public class ModuleDto extends IvrObjectDto {
 
   @Getter
   @Setter
@@ -16,4 +13,20 @@ public class ModuleDto {
   @Getter
   @Setter
   private String description;
+
+  @Getter
+  @Setter
+  private String ivrGroup;
+
+  @Getter
+  @Setter
+  private Integer moduleNumber;
+
+  @Getter
+  @Setter
+  private MultipleChoiceQuestionDto startModuleQuestion;
+
+  @Getter
+  @Setter
+  private List<UnitDto> units;
 }

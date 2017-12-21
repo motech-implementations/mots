@@ -2,6 +2,7 @@ package org.motechproject.mots.domain;
 
 import java.util.List;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.Status;
+import org.motechproject.mots.exception.MotsException;
 
 @Entity
 @Table(name = "module")
@@ -24,6 +26,18 @@ import org.motechproject.mots.domain.enums.Status;
 public class Module extends IvrObject {
 
   private static final String VERSION_SEPARATOR = "_v";
+
+  /**
+   * Initialize module.
+   * @return module with initial values
+   */
+  public static Module initialize() {
+    Module module = new Module();
+    module.version = 1;
+    module.status = Status.DRAFT;
+
+    return module;
+  }
 
   @Column(name = "name", nullable = false)
   @Getter
@@ -53,25 +67,22 @@ public class Module extends IvrObject {
   @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
-  @Setter
   private Status status;
 
   @Column(name = "version", nullable = false)
   @Getter
-  @Setter
   private Integer version;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "start_module_question_id")
   @Getter
   @Setter
   private MultipleChoiceQuestion startModuleQuestion;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "module_id")
   @OrderBy("list_order ASC")
   @Getter
-  @Setter
   private List<Unit> units;
 
   @OneToOne
@@ -84,9 +95,36 @@ public class Module extends IvrObject {
     super(id);
   }
 
+  /**
+   * Update list content.
+   * @param units list of new Units
+   */
+  public void setUnits(List<Unit> units) {
+    if (this.units == null) {
+      this.units = units;
+    } else if (!this.units.equals(units)) {
+      this.units.clear();
+
+      if (units != null) {
+        this.units.addAll(units);
+      }
+    }
+  }
+
   @PrePersist
   protected void onCreate() {
     nameCode = getName().toLowerCase().replaceAll(" ", "-")
         + VERSION_SEPARATOR + getVersion();
+  }
+
+  /**
+   * Release the module.
+   */
+  public void release() {
+    if (!Status.DRAFT.equals(status)) {
+      throw new MotsException("Only Module draft can be released");
+    }
+
+    status = Status.RELEASED;
   }
 }
