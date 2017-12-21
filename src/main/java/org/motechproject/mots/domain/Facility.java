@@ -18,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "facility", uniqueConstraints=
-  @UniqueConstraint(columnNames = {"name", "chiefdom_id"}))
+@Table(name = "facility", uniqueConstraints =
+    @UniqueConstraint(columnNames = {"name", "chiefdom_id"}))
 @NoArgsConstructor
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = false, of={"name", "chiefdom"})
+@EqualsAndHashCode(callSuper = false, of = {"name", "chiefdom"})
 public class Facility extends BaseEntity {
 
   @Column(name = "name", nullable = false)

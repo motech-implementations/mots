@@ -18,9 +18,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name = "chiefdom", uniqueConstraints=
-  @UniqueConstraint(columnNames = {"name", "district_id"}))
-@EqualsAndHashCode(callSuper = false, of={"name", "district"})
+@Table(name = "chiefdom", uniqueConstraints =
+    @UniqueConstraint(columnNames = {"name", "district_id"}))
+@EqualsAndHashCode(callSuper = false, of = {"name", "district"})
 public class Chiefdom extends BaseEntity {
 
   @Column(name = "name", nullable = false)
