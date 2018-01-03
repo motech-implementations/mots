@@ -1,5 +1,6 @@
 package org.motechproject.mots.web;
 
+import java.util.List;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.dto.InchargeDto;
 import org.motechproject.mots.mapper.InchargeMapper;
@@ -20,6 +21,19 @@ public class InchargeController extends BaseController {
   private InchargeService inchargeService;
 
   private InchargeMapper inchargeMapper = InchargeMapper.INSTANCE;
+
+  /**
+   * Get list of incharges.
+   * @return list of all incharges
+   */
+  @RequestMapping(value = "/incharge", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<InchargeDto> getIncharges() {
+    Iterable<Incharge> incharges = inchargeService.getIncharges();
+
+    return inchargeMapper.toDtos(incharges);
+  }
 
   /**
    * Creates Incharge.

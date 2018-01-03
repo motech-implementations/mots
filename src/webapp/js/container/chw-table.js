@@ -81,7 +81,7 @@ class ChwTable extends Component {
     return (
       <div>
         <div className="hide-min-r-small-min">
-          <MobileTable data={this.props.chwList} columns={COLUMNS} />
+          <MobileTable data={this.props.chwList} rowIdAccessor="chwId" columns={COLUMNS} />
         </div>
         <div className="hide-max-r-xsmall-max">
           <ReactTable data={this.props.chwList} columns={COLUMNS} />
@@ -93,7 +93,7 @@ class ChwTable extends Component {
 
 function mapStateToProps(state) {
   return {
-    chwList: state.chwList,
+    chwList: state.tablesReducer.chwList,
   };
 }
 

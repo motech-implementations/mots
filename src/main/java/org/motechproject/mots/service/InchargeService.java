@@ -11,6 +11,10 @@ public class InchargeService {
   @Autowired
   private InchargeRepository inchargeRepository;
 
+  public Iterable<Incharge> getIncharges() {
+    return inchargeRepository.findAll();
+  }
+
   public Incharge createIncharge(Incharge incharge) {
     return inchargeRepository.save(incharge);
   }
