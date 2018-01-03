@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const MobileTable = ({ data, columns, rowIdAccessor }) => (
+const MobileTable = ({ data, columns }) => (
   <div>
     {
       data.map((row, index) => (
         <div
           className={`padding-md margin-sm mobile-chw-row ${
             index % 2 === 0 ? 'lighter-gray' : ''}`}
-          key={row[rowIdAccessor]}
+          key={row.id}
         >
           {columns.map(column => (
             <div className="padding-x-xxs" key={column.Header}>
@@ -32,5 +32,4 @@ export default MobileTable;
 MobileTable.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  rowIdAccessor: PropTypes.string.isRequired,
 };

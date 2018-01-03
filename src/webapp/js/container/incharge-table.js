@@ -53,7 +53,7 @@ class InchargeTable extends Component {
     return (
       <div>
         <div className="hide-min-r-small-min">
-          <MobileTable data={this.props.inchargesList} rowIdAccessor="id" columns={COLUMNS} />
+          <MobileTable data={this.props.inchargesList} columns={COLUMNS} />
         </div>
         <div className="hide-max-r-xsmall-max">
           <ReactTable data={this.props.inchargesList} columns={COLUMNS} />
