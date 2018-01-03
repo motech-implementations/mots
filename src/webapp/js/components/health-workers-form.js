@@ -19,9 +19,11 @@ const FIELDS = {
   },
   firstName: {
     label: 'First Name',
+    required: true,
   },
   secondName: {
     label: 'Surname',
+    required: true,
   },
   otherName: {
     label: 'Other Name',
@@ -47,6 +49,7 @@ const FIELDS = {
   gender: {
     type: 'select',
     label: 'Gender',
+    required: true,
     getSelectOptions: () => ({
       values: ['Male', 'Female'],
     }),
@@ -111,6 +114,7 @@ const FIELDS = {
   communityId: {
     type: 'select',
     label: 'Community',
+    required: true,
     getSelectOptions: ({
       availableLocations, districtId, chiefdomId, facilityId,
     }) => {
@@ -150,6 +154,7 @@ const FIELDS = {
   preferredLanguage: {
     type: 'select',
     label: 'Preferred Language',
+    required: true,
     getSelectOptions: () => ({
       values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
     }),
