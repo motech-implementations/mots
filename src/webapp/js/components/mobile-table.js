@@ -8,7 +8,7 @@ const MobileTable = ({ data, columns }) => (
         <div
           className={`padding-md margin-sm mobile-chw-row ${
             index % 2 === 0 ? 'lighter-gray' : ''}`}
-          key={row.chwId}
+          key={row.id}
         >
           {columns.map(column => (
             <div className="padding-x-xxs" key={column.Header}>

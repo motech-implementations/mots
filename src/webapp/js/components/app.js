@@ -7,6 +7,7 @@ import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 
 import Navbar from './navbar';
 import Home from './home';
+import Incharges from './incharges';
 import HealthWorkers from './health-workers';
 import HealthWorkersNew from './health-workers-new';
 import HealthWorkersEdit from './health-workers-edit';
@@ -49,6 +50,7 @@ export default class App extends Component {
             <Switch>
               <Route path="/modules/assign/:chwId?" component={AssignModules} />
               <Route path="/incharge/new" component={InchargeNew} />
+              <Route path="/incharge" component={Incharges} />
               <Route path="/chw/new" component={HealthWorkersNew} />
               <Route path="/chw/:chwId" component={HealthWorkersEdit} />
               <Route path="/chw" component={HealthWorkers} />

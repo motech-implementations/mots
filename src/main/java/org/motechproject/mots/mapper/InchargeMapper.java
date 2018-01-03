@@ -1,5 +1,6 @@
 package org.motechproject.mots.mapper;
 
+import java.util.List;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,6 +25,8 @@ public interface InchargeMapper {
       @Mapping(target = "facility", source = "facilityId")
   })
   Incharge fromDto(InchargeDto inchargeDto);
+
+  List<InchargeDto> toDtos(Iterable<Incharge> incharges);
 
   /**
    * Create Facility object with given id. This is to bind Incharge to Facility during creation.
