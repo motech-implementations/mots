@@ -9,13 +9,21 @@ import 'react-datetime/css/react-datetime.css';
 import HealthWorkersForm, { CHW_FORM_NAME } from './health-workers-form';
 import { saveHealthWorker } from '../actions';
 import apiClient from '../utils/api-client';
+import MotsConfirmModal from './mots-confirm-modal';
 
 class HealthWorkersEdit extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showConfirmModal: false,
+      values: {},
+    };
+
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onSubmitModal = this.onSubmitModal.bind(this);
+    this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
   componentWillMount() {
@@ -27,10 +35,18 @@ class HealthWorkersEdit extends Component {
   }
 
   onSubmit(values) {
-    this.props.saveHealthWorker(values, () => {
+    this.setState({ showConfirmModal: true, values });
+  }
+
+  onSubmitModal() {
+    this.props.saveHealthWorker(this.state.values, () => {
       Alert.success('CHW has been saved');
       this.props.history.push('/chw');
     });
+  }
+
+  hideConfirmModal() {
+    this.setState({ showConfirmModal: false });
   }
 
   fetchChw() {
@@ -51,6 +67,13 @@ class HealthWorkersEdit extends Component {
         <HealthWorkersForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
+        />
+        <MotsConfirmModal
+          showModal={this.state.showConfirmModal}
+          modalParentId="page-wrapper"
+          modalText="Are you sure to edit Community Health Worker?"
+          onConfirm={this.onSubmitModal}
+          onHide={this.hideConfirmModal}
         />
       </div>
     );
