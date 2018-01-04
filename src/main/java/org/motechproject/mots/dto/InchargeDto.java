@@ -31,5 +31,13 @@ public class InchargeDto {
 
   @Getter
   @Setter
+  private String districtId;
+
+  @Getter
+  @Setter
+  private String chiefdomId;
+
+  @Getter
+  @Setter
   private String facilityId;
 }

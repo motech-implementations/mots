@@ -17,6 +17,8 @@ public interface InchargeMapper {
   InchargeMapper INSTANCE = Mappers.getMapper(InchargeMapper.class);
 
   @Mappings({
+      @Mapping(target = "districtId", source = "facility.chiefdom.district.id"),
+      @Mapping(target = "chiefdomId", source = "facility.chiefdom.id"),
       @Mapping(target = "facilityId", source = "facility.id")
   })
   InchargeDto toDto(Incharge incharge);

@@ -14,7 +14,7 @@ function renderSelectOptions(options) {
       const displayValue = displayNameKey ? value[displayNameKey] : value;
 
       return (
-        <option key={index} value={optionValue}>
+        <option key={index} value={optionValue} disabled={value.disabled}>
           { displayValue }
         </option>);
     }),
