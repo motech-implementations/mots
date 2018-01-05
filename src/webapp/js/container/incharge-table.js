@@ -26,6 +26,9 @@ const COLUMNS = [
     Header: 'Email',
     accessor: 'email',
   }, {
+    Header: 'Facility',
+    accessor: 'facilityName',
+  }, {
     Header: 'Actions',
     minWidth: 50,
     accessor: 'id',
