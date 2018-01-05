@@ -17,7 +17,7 @@ class HealthWorkersEdit extends Component {
 
     this.state = {
       showConfirmModal: false,
-      values: {},
+      healthWorkerValues: {},
     };
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
@@ -34,12 +34,12 @@ class HealthWorkersEdit extends Component {
     this.props.history.push('/chw');
   }
 
-  onSubmit(values) {
-    this.setState({ showConfirmModal: true, values });
+  onSubmit(healthWorkerValues) {
+    this.setState({ showConfirmModal: true, healthWorkerValues });
   }
 
   onSubmitModal() {
-    this.props.saveHealthWorker(this.state.values, () => {
+    this.props.saveHealthWorker(this.state.healthWorkerValues, () => {
       Alert.success('CHW has been saved');
       this.props.history.push('/chw');
     });
