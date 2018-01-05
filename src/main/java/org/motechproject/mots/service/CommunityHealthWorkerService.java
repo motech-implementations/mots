@@ -40,7 +40,7 @@ public class CommunityHealthWorkerService {
       String ivrId = ivrService.createSubscriber(phoneNumber, name);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
-      String message = "Could not create CHW, because of IVR subscriber creation error. "
+      String message = "Could not create CHW, because of IVR subscriber creation error. \n\n"
           + ex.getClearVotoInfo();
       throw new ChwCreationException(message, ex);
     }
