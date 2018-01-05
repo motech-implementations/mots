@@ -7,7 +7,8 @@ const Home = () => (
       the backbone of the healthcare system, and the focus and objective
       of the Mobile Training and Support (MOTS) project will be strengthening
       this network to ensure preparedness for Ebola vaccine campaigns and
-      outbreak response.  The project is setting up a MOTS service that is
+      outbreak response. <br /> <br />
+      The project is setting up a MOTS service that is
       the vehicle for delivery of this training. This service will provide
       mobile training to CHWs via their mobile phones with feature phone as the
       basic requirement. The MOTS service will provide training modules that
