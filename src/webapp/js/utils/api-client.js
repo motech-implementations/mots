@@ -30,12 +30,17 @@ const handleError = (error) => {
 
       dispatch(signoutUser());
       break;
-    default:
-      if (error.response.data.message) {
-        Alert.error(error.response.data.message);
+    default: {
+      const errorMessage = error.response.data.message;
+      if (errorMessage) {
+        const alertTimeout = Math.max(5000, errorMessage.length * 100);
+        Alert.error(errorMessage, {
+          timeout: alertTimeout,
+        });
       } else {
         Alert.error(error);
       }
+    }
   }
   return Promise.reject(error);
 };

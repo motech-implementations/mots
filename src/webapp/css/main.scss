@@ -196,6 +196,13 @@ a, a:hover, a:focus, a:active, a:visited {
   }
 }
 
+/* Alerts */
+.s-alert-wrapper {
+  .s-alert-box {
+    white-space: pre-wrap;
+  }
+}
+
 /* Other Styles */
 
 .form-group {
