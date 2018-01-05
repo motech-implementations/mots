@@ -21,7 +21,7 @@ class InchargeNew extends Component {
   onSubmit(values) {
     this.props.createIncharge(values, () => {
       Alert.success('Incharge has been added');
-      this.props.history.push('/');
+      this.props.history.push('/incharge');
     });
   }
 
