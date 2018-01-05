@@ -40,4 +40,8 @@ public class InchargeDto {
   @Getter
   @Setter
   private String facilityId;
+
+  @Getter
+  @Setter
+  private String facilityName;
 }
