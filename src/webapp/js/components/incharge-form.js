@@ -57,14 +57,23 @@ const FIELDS = {
     type: 'select',
     label: 'Facility',
     required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => {
+    getSelectOptions: ({
+      availableLocations, districtId, chiefdomId,
+    }) => {
       const district = availableLocations && districtId && availableLocations[districtId];
       const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
 
       return ({
-        values: chiefdom && _.values(_.filter(
+        values: chiefdom && _.values(_.map(
           chiefdom.facilities,
-          facility => _.isNull(facility.inchargeId),
+          (facility) => {
+            if (!_.isNull(facility.inchargeId)) {
+              const disabledFacility = facility;
+              disabledFacility.disabled = true;
+              return disabledFacility;
+            }
+            return facility;
+          },
         )),
         displayNameKey: 'name',
         valueKey: 'id',

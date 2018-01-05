@@ -6,18 +6,18 @@ import { initialize } from 'redux-form';
 
 import 'react-datetime/css/react-datetime.css';
 
-import HealthWorkersForm, { CHW_FORM_NAME } from './health-workers-form';
-import { saveHealthWorker } from '../actions';
+import InchargeForm, { INCHARGE_FORM_NAME } from './incharge-form';
+import { saveIncharge } from '../actions';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
 
-class HealthWorkersEdit extends Component {
+class InchargeEdit extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       showConfirmModal: false,
-      healthWorkerValues: {},
+      inchargeValues: {},
     };
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
@@ -27,21 +27,21 @@ class HealthWorkersEdit extends Component {
   }
 
   componentWillMount() {
-    this.fetchChw();
+    this.fetchIncharge();
   }
 
   onSubmitCancel() {
-    this.props.history.push('/chw');
+    this.props.history.push('/incharge');
   }
 
-  onSubmit(healthWorkerValues) {
-    this.setState({ showConfirmModal: true, healthWorkerValues });
+  onSubmit(inchargeValues) {
+    this.setState({ showConfirmModal: true, inchargeValues });
   }
 
   onSubmitModal() {
-    this.props.saveHealthWorker(this.state.healthWorkerValues, () => {
-      Alert.success('CHW has been saved');
-      this.props.history.push('/chw');
+    this.props.saveIncharge(this.state.inchargeValues, () => {
+      Alert.success('Incharge has been saved');
+      this.props.history.push('/incharge');
     });
   }
 
@@ -49,29 +49,29 @@ class HealthWorkersEdit extends Component {
     this.setState({ showConfirmModal: false });
   }
 
-  fetchChw() {
-    const url = `/api/chw/${this.props.match.params.chwId}`;
+  fetchIncharge() {
+    const url = `/api/incharge/${this.props.match.params.inchargeId}`;
 
     apiClient.get(url)
       .then((response) => {
-        const chw = response.data;
+        const incharge = response.data;
 
-        this.props.initialize(CHW_FORM_NAME, chw);
+        this.props.initialize(INCHARGE_FORM_NAME, incharge);
       });
   }
 
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Community Health Worker</h1>
-        <HealthWorkersForm
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Incharge</h1>
+        <InchargeForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
         />
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}
           modalParentId="page-wrapper"
-          modalText="Are you sure to edit Community Health Worker?"
+          modalText="Are you sure to edit Incharge?"
           onConfirm={this.onSubmitModal}
           onHide={this.hideConfirmModal}
         />
@@ -80,16 +80,16 @@ class HealthWorkersEdit extends Component {
   }
 }
 
-export default connect(null, { saveHealthWorker, initialize })(HealthWorkersEdit);
+export default connect(null, { saveIncharge, initialize })(InchargeEdit);
 
-HealthWorkersEdit.propTypes = {
-  saveHealthWorker: PropTypes.func.isRequired,
+InchargeEdit.propTypes = {
+  saveIncharge: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      chwId: PropTypes.string,
+      inchargeId: PropTypes.string,
     }),
   }).isRequired,
   initialize: PropTypes.func.isRequired,

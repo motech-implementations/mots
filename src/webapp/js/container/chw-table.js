@@ -93,7 +93,7 @@ class ChwTable extends Component {
 
 function mapStateToProps(state) {
   return {
-    chwList: state.chwList,
+    chwList: state.tablesReducer.get('chwList'),
   };
 }
 

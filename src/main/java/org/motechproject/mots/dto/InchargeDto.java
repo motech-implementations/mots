@@ -7,6 +7,10 @@ public class InchargeDto {
 
   @Getter
   @Setter
+  private String id;
+
+  @Getter
+  @Setter
   private String firstName;
 
   @Getter
@@ -24,6 +28,14 @@ public class InchargeDto {
   @Getter
   @Setter
   private String email;
+
+  @Getter
+  @Setter
+  private String districtId;
+
+  @Getter
+  @Setter
+  private String chiefdomId;
 
   @Getter
   @Setter

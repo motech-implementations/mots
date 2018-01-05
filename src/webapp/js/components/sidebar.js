@@ -84,6 +84,9 @@ export default class SideBar extends Component {
         <li className="border-none">
           <Link to="/incharge/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add Incharge</Link>
         </li>
+        <li className="border-none">
+          <Link to="/incharge" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> Incharge list</Link>
+        </li>
       </ul>
     );
   }

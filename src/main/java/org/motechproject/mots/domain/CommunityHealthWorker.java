@@ -33,12 +33,12 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private String chwId;
 
-  @Column(name = "first_name")
+  @Column(name = "first_name", nullable = false)
   @Getter
   @Setter
   private String firstName;
 
-  @Column(name = "second_name")
+  @Column(name = "second_name", nullable = false)
   @Getter
   @Setter
   private String secondName;
@@ -53,7 +53,7 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private LocalDate dateOfBirth;
 
-  @Column(name = "gender")
+  @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
@@ -77,7 +77,7 @@ public class CommunityHealthWorker extends BaseEntity {
   private String phoneNumber;
 
   @ManyToOne
-  @JoinColumn(name = "community_id")
+  @JoinColumn(name = "community_id", nullable = false)
   @Getter
   @Setter
   private Community community;
@@ -92,7 +92,7 @@ public class CommunityHealthWorker extends BaseEntity {
   @Setter
   private String supervisor;
 
-  @Column(name = "preferred_language")
+  @Column(name = "preferred_language", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
