@@ -17,6 +17,7 @@ export default class AssignModules extends Component {
       availableModulesList: [],
       selectedModules: [],
       selectedChw: this.props.match.params.chwId || '',
+      submitDisabled: true,
     };
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
@@ -67,7 +68,10 @@ export default class AssignModules extends Component {
     apiClient.get(url, { params })
       .then((response) => {
         const selectedModules = response.data.modules;
-        this.setState({ selectedModules });
+        this.setState({
+          submitDisabled: true,
+          selectedModules,
+        });
       });
   }
 
@@ -80,6 +84,7 @@ export default class AssignModules extends Component {
     };
 
     const callback = () => {
+      this.props.history.push('/chw');
       Alert.success('Modules have been assigned!');
     };
 
@@ -92,12 +97,14 @@ export default class AssignModules extends Component {
   };
 
   handleModuleChange(selectedModules) {
+    this.setState({ submitDisabled: false });
     this.setState({ selectedModules });
   }
 
   render() {
     const { selectedModules } = this.state;
     const { availableModulesList } = this.state;
+    const { submitDisabled } = this.state;
 
     return (
       <div>
@@ -126,6 +133,7 @@ export default class AssignModules extends Component {
             type="submit"
             className="btn btn-primary btn-block
                     margin-x-md padding-x-sm"
+            disabled={submitDisabled}
           >
             <h4>Assign!</h4>
           </button>
@@ -140,5 +148,8 @@ AssignModules.propTypes = {
     params: PropTypes.shape({
       chwId: PropTypes.string,
     }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
   }).isRequired,
 };
