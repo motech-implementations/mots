@@ -26,7 +26,6 @@ public class InchargeController extends BaseController {
 
   /**
    * Get list of incharges.
-   *
    * @return list of all incharges
    */
   @RequestMapping(value = "/incharge", method = RequestMethod.GET)
@@ -75,7 +74,7 @@ public class InchargeController extends BaseController {
   @RequestMapping(value = "/incharge/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public InchargeDto saveHealthWorker(@PathVariable("id") UUID id,
+  public InchargeDto saveIncharge(@PathVariable("id") UUID id,
       @RequestBody InchargeDto inchargeDto) {
     Incharge incharge = inchargeMapper.fromDto(inchargeDto);
 

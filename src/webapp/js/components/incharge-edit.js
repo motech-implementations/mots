@@ -40,14 +40,14 @@ class InchargeEdit extends Component {
       .then((response) => {
         const incharge = response.data;
 
-        this.props.initialize(INCHARGE_FORM_NAME, incharge, 'wtf');
+        this.props.initialize(INCHARGE_FORM_NAME, incharge);
       });
   }
 
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Incharge data</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Incharge</h1>
         <InchargeForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
