@@ -6,6 +6,7 @@ export default function (state = { error: null, authenticated: false }, action) 
       return { ...state, error: null, authenticated: true };
     case UNAUTH_USER:
       localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
       return { ...state, authenticated: false };
     case AUTH_ERROR:
       return { ...state, error: action.payload, authenticated: false };

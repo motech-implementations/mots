@@ -11,6 +11,9 @@ security:
         client:
             authentication-scheme: header
 
+token:
+    validitySeconds: 600
+
 server:
     port: ${tomcatServerPort}
 
