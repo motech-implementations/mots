@@ -224,6 +224,8 @@ a, a:hover, a:focus, a:active, a:visited {
 }
 
 .actions-buttons-container {
+  text-align: center;
+
   .next-button-text {
     @extend .margin-left-xs;
   }
