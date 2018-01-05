@@ -29,19 +29,21 @@ class MotsConfirmModal extends Component {
           ariaHideApp={false}
         >
           <h3>{this.props.modalText}</h3>
-          <button
-            type="submit"
-            className="btn btn-primary margin-bottom-md"
-            onClick={this.props.onConfirm}
-          >
-            Confirm
-          </button>
-          <button
-            className="btn btn-danger margin-left-sm margin-bottom-md"
-            onClick={this.props.onHide}
-          >
-            Cancel
-          </button>
+          <div className="buttons-container padding-top-sm">
+            <button
+              type="submit"
+              className="btn btn-primary margin-bottom-md"
+              onClick={this.props.onConfirm}
+            >
+              Confirm
+            </button>
+            <button
+              className="btn btn-danger margin-left-sm margin-bottom-md"
+              onClick={this.props.onHide}
+            >
+              Cancel
+            </button>
+          </div>
         </Modal>
       </div>
     );

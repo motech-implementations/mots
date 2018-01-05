@@ -9,13 +9,21 @@ import 'react-datetime/css/react-datetime.css';
 import InchargeForm, { INCHARGE_FORM_NAME } from './incharge-form';
 import { saveIncharge } from '../actions';
 import apiClient from '../utils/api-client';
+import MotsConfirmModal from './mots-confirm-modal';
 
 class InchargeEdit extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showConfirmModal: false,
+      inchargeValues: {},
+    };
+
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onSubmitModal = this.onSubmitModal.bind(this);
+    this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
   componentWillMount() {
@@ -26,11 +34,19 @@ class InchargeEdit extends Component {
     this.props.history.push('/incharge');
   }
 
-  onSubmit(values) {
-    this.props.saveIncharge(values, () => {
+  onSubmit(inchargeValues) {
+    this.setState({ showConfirmModal: true, inchargeValues });
+  }
+
+  onSubmitModal() {
+    this.props.saveIncharge(this.state.inchargeValues, () => {
       Alert.success('Incharge has been saved');
       this.props.history.push('/incharge');
     });
+  }
+
+  hideConfirmModal() {
+    this.setState({ showConfirmModal: false });
   }
 
   fetchIncharge() {
@@ -51,6 +67,13 @@ class InchargeEdit extends Component {
         <InchargeForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
+        />
+        <MotsConfirmModal
+          showModal={this.state.showConfirmModal}
+          modalParentId="page-wrapper"
+          modalText="Are you sure to edit Incharge?"
+          onConfirm={this.onSubmitModal}
+          onHide={this.hideConfirmModal}
         />
       </div>
     );

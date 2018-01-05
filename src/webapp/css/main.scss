@@ -189,6 +189,10 @@ a, a:hover, a:focus, a:active, a:visited {
     padding: 20px;
     margin-right: -50%;
     transform: translate(-50%, -50%);
+
+    .buttons-container {
+      float: right;
+    }
   }
 }
 
