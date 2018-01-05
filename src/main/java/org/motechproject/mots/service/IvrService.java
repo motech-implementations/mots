@@ -118,13 +118,14 @@ public class IvrService {
     } catch (RestClientResponseException ex) {
       String responseBodyJson = ex.getResponseBodyAsString();
       String responseMessage = responseBodyJson;
-
+      String clearVotoInfo = "";
       try {
         VotoResponseDto<String> votoResponse = mapper.readValue(responseBodyJson,
             new TypeReference<VotoResponseDto<String>>() {});
 
         if (votoResponse.getMessage() != null) {
           responseMessage = votoResponse.getMessage();
+          clearVotoInfo = "Invalid IVR service response: " + responseMessage;
         }
       } catch (IOException e) {
         responseMessage = responseBodyJson;
@@ -132,7 +133,7 @@ public class IvrService {
 
       String message = "Invalid IVR service response: " + ex.getRawStatusCode() + " "
           + ex.getStatusText() + ", Response body: " + responseMessage;
-      throw new IvrException(message, ex);
+      throw new IvrException(message, ex, clearVotoInfo);
     } catch (RestClientException ex) {
       String message = "Error occurred when sending request to IVR service: " + ex.getMessage();
       throw new IvrException(message, ex);
