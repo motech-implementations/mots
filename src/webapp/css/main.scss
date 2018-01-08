@@ -70,6 +70,14 @@ a, a:hover, a:focus, a:active, a:visited {
 
 .navbar-inverse {
   border-color: $gray-mid;
+
+  .navbar-brand:focus {
+    color: #9d9d9d;
+  }
+
+  .navbar-brand:hover {
+    color: white;
+  }
 }
 
 /* Top Navigation */
