@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { getAttributesForSelectWithClearOnChange } from '../utils/form-utils';
+import { getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
 
 export const INCHARGE_FORM_NAME = 'InchargeForm';
 
@@ -33,7 +33,7 @@ const FIELDS = {
     type: 'select',
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations && _.values(availableLocations),
+      values: availableLocations && sortValuesByName(availableLocations),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -46,7 +46,7 @@ const FIELDS = {
       const district = availableLocations && districtId && availableLocations[districtId];
 
       return ({
-        values: district && _.values(district.chiefdoms),
+        values: district && sortValuesByName(district.chiefdoms),
         displayNameKey: 'name',
         valueKey: 'id',
       });
@@ -64,7 +64,7 @@ const FIELDS = {
       const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
 
       return ({
-        values: chiefdom && _.values(_.map(
+        values: chiefdom && sortValuesByName(_.map(
           chiefdom.facilities,
           (facility) => {
             if (!_.isNull(facility.inchargeId)) {
