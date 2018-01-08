@@ -17,13 +17,14 @@ export default class AssignModules extends Component {
       availableModulesList: [],
       selectedModules: [],
       selectedChw: this.props.match.params.chwId || '',
-      submitDisabled: true,
+      currentModules: [],
     };
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
     this.fetchAvailableModules = this.fetchAvailableModules.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
     this.fetchChwModules = this.fetchChwModules.bind(this);
+    this.areModulesEqual = this.areModulesEqual.bind(this);
   }
 
   componentWillMount() {
@@ -69,8 +70,8 @@ export default class AssignModules extends Component {
       .then((response) => {
         const selectedModules = response.data.modules;
         this.setState({
-          submitDisabled: true,
           selectedModules,
+          currentModules: selectedModules,
         });
       });
   }
@@ -97,14 +98,16 @@ export default class AssignModules extends Component {
   };
 
   handleModuleChange(selectedModules) {
-    this.setState({ submitDisabled: false });
     this.setState({ selectedModules });
+  }
+
+  areModulesEqual() {
+    return _.isEqual(this.state.selectedModules.sort(), this.state.currentModules.sort());
   }
 
   render() {
     const { selectedModules } = this.state;
     const { availableModulesList } = this.state;
-    const { submitDisabled } = this.state;
 
     return (
       <div>
@@ -133,7 +136,7 @@ export default class AssignModules extends Component {
             type="submit"
             className="btn btn-primary btn-block
                     margin-x-md padding-x-sm"
-            disabled={submitDisabled}
+            disabled={this.areModulesEqual()}
           >
             <h4>Assign!</h4>
           </button>
