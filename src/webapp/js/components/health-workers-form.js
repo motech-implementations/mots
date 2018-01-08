@@ -9,7 +9,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { clearFields, getAttributesForSelectWithClearOnChange } from '../utils/form-utils';
+import { clearFields, getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -76,7 +76,7 @@ const FIELDS = {
     type: 'select',
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations && _.values(availableLocations),
+      values: availableLocations && sortValuesByName(availableLocations),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -89,7 +89,7 @@ const FIELDS = {
       const district = availableLocations && districtId && availableLocations[districtId];
 
       return ({
-        values: district && _.values(district.chiefdoms),
+        values: district && sortValuesByName(district.chiefdoms),
         displayNameKey: 'name',
         valueKey: 'id',
       });
@@ -104,7 +104,7 @@ const FIELDS = {
       const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
 
       return ({
-        values: chiefdom && _.values(chiefdom.facilities),
+        values: chiefdom && sortValuesByName(chiefdom.facilities),
         displayNameKey: 'name',
         valueKey: 'id',
       });
@@ -123,7 +123,7 @@ const FIELDS = {
       const facility = facilityId && chiefdom && chiefdom.facilities[facilityId];
 
       return ({
-        values: facility && _.values(facility.communities),
+        values: facility && sortValuesByName(facility.communities),
         displayNameKey: 'name',
         valueKey: 'id',
       });
