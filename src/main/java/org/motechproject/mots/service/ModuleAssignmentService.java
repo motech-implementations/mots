@@ -61,8 +61,8 @@ public class ModuleAssignmentService {
       ivrService.addSubscriberToGroups(ivrId,
           getIvrGroupsFromModules(existingAssignedModules.getModules()));
     } catch (IvrException ex) {
-      String message = "Could not assign module for CHW, because of IVR module assignment error. \n\n"
-          + ex.getClearVotoInfo();
+      String message = "Could not assign module for CHW, "
+          + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
       throw new ModuleAssignmentException(message, ex);
     }
   }
