@@ -22,5 +22,5 @@ export function getAttributesForSelectWithClearOnChange(input, formName, ...fiel
 }
 
 export function sortValuesByName(object) {
-  return _.sortBy(_.values(object), x => x.name);
+  return _.sortBy(_.values(object), x => x.name.toLowerCase());
 }
