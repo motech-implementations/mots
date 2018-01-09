@@ -88,6 +88,15 @@ a, a:hover, a:focus, a:active, a:visited {
   }
 }
 
+@media(min-width: $r-big-min) {
+  .navbar {
+    .glyphicon, .fa {
+      width: 1.4em;
+      font-size: 1.2em;
+    }
+  }
+}
+
 .navbar-inverse {
   border-color: $gray-mid;
 
