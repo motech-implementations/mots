@@ -16,12 +16,14 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
     <ul className="nav navbar-right top-nav hide-max-r-xsmall-max padding-y-md">
       <li>
         <Link to="/">
-          <span className="glyphicon glyphicon-user" /> Profile
+          <span className="glyphicon glyphicon-user" />
+          <span className="icon-text">Profile</span>
         </Link>
       </li>
       <li>
         <a href="" onClick={signoutUser}>
-          <span className="glyphicon glyphicon-log-in" /> Logout
+          <span className="glyphicon glyphicon-log-in" />
+          <span className="icon-text">Logout</span>
         </a>
       </li>
     </ul>

@@ -51,10 +51,15 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         <li>
-          <Link to="/chw/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add CHW</Link>
+          <Link to="/chw/new" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-plus" />
+            <span className="icon-text">Add CHW</span>
+          </Link>
         </li>
         <li className="border-none">
-          <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> CHW List</Link>
+          <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">CHW List</span>
+          </Link>
         </li>
       </ul>
     );
@@ -68,7 +73,10 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         <li className="border-none">
-          <Link to="/modules/assign" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-ok" /> Assign</Link>
+          <Link to="/modules/assign" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-ok" />
+            <span className="icon-text">Assign</span>
+          </Link>
         </li>
       </ul>
     );
@@ -82,10 +90,16 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         <li className="border-none">
-          <Link to="/incharge/new" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-plus" /> Add Incharge</Link>
+          <Link to="/incharge/new" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-plus" />
+            <span className="icon-text">Add Incharge</span>
+          </Link>
         </li>
         <li className="border-none">
-          <Link to="/incharge" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" /> Incharge list</Link>
+          <Link to="/incharge" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">Incharge list</span>
+          </Link>
         </li>
       </ul>
     );
@@ -97,15 +111,20 @@ export default class SideBar extends Component {
         <ul className="nav navbar-nav side-nav">
           <li className="hide-min-r-small-min">
             <Link to="/" onClick={this.props.hideMenuSmart}>
-              <span className="glyphicon glyphicon-user" /> Profile
+              <span className="glyphicon glyphicon-user" />
+              <span className="icon-text">Profile</span>
             </Link>
           </li>
           <li>
-            <Link to="/" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-home" />{this.props.showMenuSmart} Home</Link>
+            <Link to="/" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-home" />
+              <span className="icon-text">{this.props.showMenuSmart} Home</span>
+            </Link>
           </li>
           <li>
             <a href="" onClick={this.toggleHealthWorkersMenu}>
-              <span className="fa fa-users" /> CHW
+              <span className="fa fa-users" />
+              <span className="icon-text">CHW</span>
               <span
                 className={SideBar.getSubmenuArrowClass(this.state.healthWorkersMenuCollapsed)}
               />
@@ -114,7 +133,8 @@ export default class SideBar extends Component {
           </li>
           <li>
             <a href="" onClick={this.toggleModulesMenu}>
-              <span className="glyphicon glyphicon-education" /> Modules
+              <span className="glyphicon glyphicon-education" />
+              <span className="icon-text">Modules</span>
               <span
                 className={SideBar.getSubmenuArrowClass(this.state.modulesMenuCollapsed)}
               />
@@ -123,7 +143,8 @@ export default class SideBar extends Component {
           </li>
           <li>
             <a href="" onClick={this.toggleInchargeMenu}>
-              <span className="fa fa-male" /> Incharge
+              <span className="glyphicon glyphicon-user" />
+              <span className="icon-text">Incharge</span>
               <span
                 className={SideBar.getSubmenuArrowClass(this.state.inchargeMenuCollapsed)}
               />
@@ -131,7 +152,10 @@ export default class SideBar extends Component {
             { this.renderInchargeMenu() }
           </li>
           <li>
-            <Link to="/" onClick={this.props.hideMenuSmart}><span className="fa fa-bar-chart" /> Reports</Link>
+            <Link to="/" onClick={this.props.hideMenuSmart}>
+              <span className="fa fa-bar-chart" />
+              <span className="icon-text">Reports</span>
+            </Link>
           </li>
           <li className="hide-min-r-small-min">
             <a href="" onClick={this.props.signoutUser}>
