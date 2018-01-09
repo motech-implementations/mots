@@ -66,7 +66,7 @@ export default class App extends Component {
         <Alert
           timeout={5000}
           stack={{ limit: 3 }}
-          offset={32}
+          offset={29.5}
           html
           position="top-right"
           effect="bouncyflip"
