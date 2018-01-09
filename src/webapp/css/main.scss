@@ -29,9 +29,14 @@ body {
     border-bottom: 1px solid $gray-mid;
   }
 
-  .container-fluid {
+  .container-wrapper {
     height: 100%;
     overflow: scroll;
+
+    .container-fluid {
+      max-width: 1280px;
+      margin-left: 30px;
+    }
   }
 }
 
@@ -66,6 +71,21 @@ a, a:hover, a:focus, a:active, a:visited {
   .navbar-toggle {
     background-color: $gray-dark;
   }
+
+  .glyphicon, .fa {
+    width: 1.3em;
+    text-align: center;
+    font-size: 1.1em;
+    margin-right: 0.15em;
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  .icon-text {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 0.5em;
+  }
 }
 
 .navbar-inverse {
@@ -83,7 +103,7 @@ a, a:hover, a:focus, a:active, a:visited {
 /* Top Navigation */
 
 .navbar-brand {
-  font-size: 1.6em
+  font-size: 1.6em;
 }
 
 .top-nav {
@@ -148,6 +168,7 @@ a, a:hover, a:focus, a:active, a:visited {
       @extend .padding-bottom-md;
       background-color: $gray-lighter;
       color: $blue-mid !important;
+      display: table;
 
       &:hover, &:focus {
         color: $dark-navy !important;
