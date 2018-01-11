@@ -65,6 +65,6 @@ public class TokenConfiguration {
 
   @Bean
   public TokenEnhancer tokenEnhancer() {
-    return new CustomTokenEnhancer();
+    return new CustomTokenEnhancer(tokenValiditySeconds);
   }
 }

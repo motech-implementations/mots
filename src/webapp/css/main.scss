@@ -87,6 +87,17 @@ a, a:hover, a:focus, a:active, a:visited {
     vertical-align: middle;
     padding-left: 0.5em;
   }
+
+  .counter-logout {
+    color: #9d9d9d;
+    width: 230px;
+    text-align: center;
+    padding-top: 0.3em;
+
+    .counter-text {
+      font-size: 0.7em;
+    }
+  }
 }
 
 @media(min-width: $r-big-min) {
