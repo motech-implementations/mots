@@ -1,10 +1,12 @@
 import axios from 'axios';
 import Client from 'client-oauth2';
+import jwtDecode from 'jwt-decode';
 import apiClient from '../utils/api-client';
 
 import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
+  SET_COUNTER_LOGOUT_TIME,
 } from './types';
 
 const BASE_URL = '/api';
@@ -31,6 +33,11 @@ export function signinUser({ username, password }, callback) {
     authClient.owner.getToken(username, password)
       .then((response) => {
         dispatch({ type: AUTH_USER });
+        const tokenDecoded = jwtDecode(response.accessToken);
+        dispatch({
+          type: SET_COUNTER_LOGOUT_TIME,
+          payload: tokenDecoded.exp_period,
+        });
         localStorage.setItem('token', response.accessToken);
         localStorage.setItem('refresh_token', response.refreshToken);
         callback();

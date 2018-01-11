@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import CounterLogout from './counter-logout';
+
 const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
   <div>
     <div className="navbar-header">
@@ -12,6 +14,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
         <span className="icon-bar" />
       </button>
       <Link className="navbar-brand" to="/" onClick={hideMenuSmart}>MOTS</Link>
+      <CounterLogout />
     </div>
     <ul className="nav navbar-right top-nav hide-max-r-xsmall-max padding-y-md">
       <li>

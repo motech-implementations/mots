@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 
-import { AUTH_USER, UNAUTH_USER } from '../../actions/types';
+import { AUTH_USER, UNAUTH_USER, SET_COUNTER_LOGOUT_TIME } from '../../actions/types';
 import { useRefreshToken } from '../../actions';
 import { dispatch } from '../../index';
 
@@ -9,7 +9,6 @@ export default () => {
   if (token) {
     const decoded = jwtDecode(token);
     const currentTime = Date.now() / 1000;
-
     if (decoded.exp < currentTime) {
       const refreshToken = localStorage.getItem('refresh_token');
 
@@ -26,6 +25,10 @@ export default () => {
       }
     } else {
       dispatch({ type: AUTH_USER });
+      dispatch({
+        type: SET_COUNTER_LOGOUT_TIME,
+        payload: decoded.exp_period,
+      });
     }
   } else {
     dispatch({ type: UNAUTH_USER });
