@@ -3,7 +3,7 @@ import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, SET_COUNTER_LOGOUT_TIME } from '../
 const initialState = {
   error: null,
   authenticated: false,
-  counterLogoutTime: 20,
+  counterLogoutTime: 600,
   resetCounter: false,
 };
 

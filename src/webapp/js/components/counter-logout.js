@@ -58,5 +58,5 @@ CounterLogout.propTypes = {
 };
 
 CounterLogout.defaultProps = {
-  counterLogoutTime: 300,
+  counterLogoutTime: 600,
 };
