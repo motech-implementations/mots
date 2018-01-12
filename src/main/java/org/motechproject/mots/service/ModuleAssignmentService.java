@@ -38,8 +38,9 @@ public class ModuleAssignmentService {
   public void assignModules(AssignedModules assignedModules) {
     AssignedModules existingAssignedModules =
         repository.findByHealthWorkerId(assignedModules.getHealthWorker().getId());
-
+    List<String> oldIvrGroups = new ArrayList<String>();
     if (existingAssignedModules != null) {
+      oldIvrGroups = getIvrGroupsFromModules(existingAssignedModules.getModules());
       existingAssignedModules.setModules(assignedModules.getModules());
     } else {
       existingAssignedModules = assignedModules;
@@ -58,10 +59,11 @@ public class ModuleAssignmentService {
     }
 
     try {
-      ivrService.addSubscriberToGroups(ivrId,
-          getIvrGroupsFromModules(existingAssignedModules.getModules()));
+      ivrService.manageSubscriberGroups(ivrId,
+          getIvrGroupsFromModules(existingAssignedModules.getModules()),
+          oldIvrGroups);
     } catch (IvrException ex) {
-      String message = "Could not assign module for CHW, "
+      String message = "Could not assign or delete module for CHW, "
           + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
       throw new ModuleAssignmentException(message, ex);
     }
