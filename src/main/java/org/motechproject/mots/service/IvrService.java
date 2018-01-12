@@ -30,6 +30,7 @@ public class IvrService {
   private static final String BASE_URL = "https://go.votomobile.org/api/v1";
   private static final String SUBSCRIBERS_URL = BASE_URL + "/subscribers";
   private static final String ADD_TO_GROUPS_URL = BASE_URL + "/subscribers/groups";
+  private static final String DELETE_GROUPS_URL = BASE_URL + "/subscribers/delete/groups";
   private static final String SEND_MESSAGE_URL = BASE_URL + "/outgoing_calls";
 
   private static final String MODULE_ASSIGNED_MESSAGE_ID = "2228099";
@@ -59,7 +60,7 @@ public class IvrService {
     }
 
     VotoResponseDto<String> votoResponse = sendVotoRequest(SUBSCRIBERS_URL, params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {});
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
 
     if (votoResponse == null || StringUtils.isBlank(votoResponse.getData())) {
       throw new IvrException(
@@ -70,20 +71,34 @@ public class IvrService {
   }
 
   /**
-   * Add subscriber to IVR groups.
+   * Manage subscriber IVR groups.
    * @param subscriberId subscriber id
-   * @param groupsIds ids of groups to add subscriber
+   * @param newGroupsIds ids of groups to add subscriber
+   * @param oldGroupsIds ids of subscriber previous groups
    */
-  public void addSubscriberToGroups(String subscriberId,
-      List<String> groupsIds) throws IvrException {
+  public void manageSubscriberGroups(String subscriberId,
+      List<String> newGroupsIds, List<String> oldGroupsIds) throws IvrException {
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add("subscriber_ids", subscriberId);
-    params.add("groups", StringUtils.join(groupsIds, ","));
+    params.add("groups", StringUtils.join(newGroupsIds, ","));
 
     sendVotoRequest(ADD_TO_GROUPS_URL, params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {});
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
 
-    sendModuleAssignedMessage(subscriberId);
+    if (!oldGroupsIds.containsAll(newGroupsIds)) {
+      sendModuleAssignedMessage(subscriberId);
+    }
+
+    List<String> deletedGroups = oldGroupsIds;
+    deletedGroups.removeAll(newGroupsIds);
+
+    if (!deletedGroups.isEmpty()) {
+      params = new LinkedMultiValueMap<>();
+      params.add("groups", StringUtils.join(deletedGroups, ","));
+      params.add("subscriber_ids", subscriberId);
+      sendVotoRequest(DELETE_GROUPS_URL, params,
+              new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.DELETE);
+    }
   }
 
   private void sendModuleAssignedMessage(String subscriberId) throws IvrException {
@@ -97,11 +112,11 @@ public class IvrService {
     params.add("retry_attempts_long", "1");
 
     sendVotoRequest(SEND_MESSAGE_URL, params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {});
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
   }
 
   private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,
-      ParameterizedTypeReference<T> responseType) throws IvrException {
+      ParameterizedTypeReference<T> responseType, HttpMethod method) throws IvrException {
     params.add("api_key", ivrApiKey);
 
     HttpHeaders headers = new HttpHeaders();
@@ -113,7 +128,7 @@ public class IvrService {
 
     try {
       ResponseEntity<T> responseEntity = restTemplate.exchange(builder.build().toString(),
-          HttpMethod.POST, request, responseType);
+          method, request, responseType);
       return responseEntity.getBody();
     } catch (RestClientResponseException ex) {
       String responseBodyJson = ex.getResponseBodyAsString();
