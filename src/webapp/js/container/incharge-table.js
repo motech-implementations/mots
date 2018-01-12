@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import 'react-table/react-table.css';
 
