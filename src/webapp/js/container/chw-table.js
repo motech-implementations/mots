@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import 'react-table/react-table.css';
 
@@ -10,6 +11,33 @@ import { fetchChws } from '../actions/index';
 import MobileTable from '../components/mobile-table';
 
 const COLUMNS = [
+  {
+    Header: 'Actions',
+    minWidth: 70,
+    accessor: 'id',
+    Cell: cell => (
+      <div className="actions-buttons-container">
+        <Link
+          to={`/chw/${cell.value}`}
+          type="button"
+          className="btn btn-primary margin-right-sm"
+          title="Edit"
+        >
+          <span className="glyphicon glyphicon-edit" />
+          <span className="hide-min-r-small-min next-button-text">Edit</span>
+        </Link>
+        <Link
+          to={`/modules/assign/${cell.value}`}
+          type="button"
+          className="btn btn-success"
+          title="Assign Module"
+        >
+          <span className="glyphicon glyphicon-circle-arrow-right" />
+          <span className="hide-min-r-small-min next-button-text">Assign Module</span>
+        </Link>
+      </div>
+    ),
+  },
   {
     Header: 'ID',
     accessor: 'chwId',
@@ -43,36 +71,15 @@ const COLUMNS = [
   }, {
     Header: 'Phone number',
     accessor: 'phoneNumber',
-  },
-  {
-    Header: 'Actions',
-    minWidth: 70,
-    accessor: 'id',
-    Cell: cell => (
-      <div className="actions-buttons-container">
-        <Link
-          to={`/chw/${cell.value}`}
-          type="button"
-          className="btn btn-primary margin-right-sm"
-          title="Edit"
-        >
-          <span className="glyphicon glyphicon-edit" />
-          <span className="hide-min-r-small-min next-button-text">Edit</span>
-        </Link>
-        <Link
-          to={`/modules/assign/${cell.value}`}
-          type="button"
-          className="btn btn-success"
-          title="Assign Module"
-        >
-          <span className="glyphicon glyphicon-circle-arrow-right" />
-          <span className="hide-min-r-small-min next-button-text">Assign Module</span>
-        </Link>
-      </div>
-    ),
   }];
 
 class ChwTable extends Component {
+  static prepareMobileColumns() {
+    const mobileColumns = _.clone(COLUMNS);
+    mobileColumns.push(mobileColumns.shift());
+    return mobileColumns;
+  }
+
   componentWillMount() {
     this.props.fetchChws();
   }
@@ -81,7 +88,7 @@ class ChwTable extends Component {
     return (
       <div>
         <div className="hide-min-r-small-min">
-          <MobileTable data={this.props.chwList} columns={COLUMNS} />
+          <MobileTable data={this.props.chwList} columns={ChwTable.prepareMobileColumns()} />
         </div>
         <div className="hide-max-r-xsmall-max">
           <ReactTable data={this.props.chwList} columns={COLUMNS} />
