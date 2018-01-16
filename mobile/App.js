@@ -11,7 +11,7 @@ import Home from './components/Home';
 const App = () => (
   <Router>
     <Stack key="root">
-      <Scene key="login" component={Home} title="Home" />
+      <Scene key="login" component={Home} title="Home Page" />
     </Stack>
   </Router>
 );
