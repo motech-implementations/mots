@@ -11,6 +11,8 @@ import Home from './components/Home';
 
 import Store from './store';
 
+export const { dispatch } = Store;
+
 const App = () => (
   <Provider store={Store}>
     <Router>
