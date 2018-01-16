@@ -47,3 +47,13 @@ and info message displayed in console.
 
 ## Stopping the Service
 To stop the service (when it is running with `gradle bootRun`) use Control-C.
+
+## Running React-Native Mobile App
+You can run React-Native project, both on physical IOS and Android devices, as well as on iOS Simulator or an Android Virtual Device.
+
+If you want to run MOTS app on Android Virtual Device, the only thing you need to do, is setting up your Android development environment.
+Install android sdk && avd. For ubuntu you can install it with Android Studio, or use Genymotion.
+
+Later, having Android Virtual Device running, go to /mobile folder and run `npm run android`. App should automatically connect and display on emulator screen.
+
+In case of any problems, or to get additional info, go to: https://facebook.github.io/react-native/docs/getting-started.html.
