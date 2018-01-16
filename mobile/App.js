@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 
 import {
   Scene,
@@ -8,12 +9,18 @@ import {
 
 import Home from './components/Home';
 
+import Store from './store';
+
+export const { dispatch } = Store;
+
 const App = () => (
-  <Router>
-    <Stack key="root">
-      <Scene key="login" component={Home} title="Home" />
-    </Stack>
-  </Router>
+  <Provider store={Store}>
+    <Router>
+      <Stack key="root">
+        <Scene key="login" component={Home} title="Home Page" />
+      </Stack>
+    </Router>
+  </Provider>
 );
 
 export default App;
