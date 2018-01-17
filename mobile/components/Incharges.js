@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import InchargeTable from '../container/Incharge-table';
+import InchargeTable from '../container/InchargeTable';
 
 const Incharges = () => (
   <View>

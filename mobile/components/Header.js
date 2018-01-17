@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = {
   viewStyle: {
@@ -25,7 +26,10 @@ const Header = () => (
   <View style={styles.viewStyle}>
     <Text style={styles.textStyle}>MOTS</Text>
     <TouchableOpacity onPress={Actions.menu} style={styles.iconStyle}>
-      <Text>Menu</Text>
+      <Icon
+        name="bars"
+        size={24}
+      />
     </TouchableOpacity>
   </View>
 );
