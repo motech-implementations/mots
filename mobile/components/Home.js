@@ -4,14 +4,21 @@ import { View, Text, StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: '#FFF',
     padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    borderBottomColor: '#9b9b9b',
+    borderBottomWidth: 1,
   },
 });
 
 const Home = () => (
   <View style={styles.container}>
+    <Text style={styles.title}>Home Page</Text>
     <Text>As in many African countries, the Community Health Worker (CHW) is
       the backbone of the healthcare system, and the focus and objective
       of the Mobile Training and Support (MOTS) project will be strengthening
