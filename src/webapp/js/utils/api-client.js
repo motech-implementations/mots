@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import axios from 'axios';
 import Alert from 'react-s-alert';
 
@@ -19,6 +20,14 @@ const justRejectRequestError = error => Promise.reject(error);
 
 const apiClient = axios.create({});
 
+const getErrorMessage = (errorResponse) => {
+  if (errorResponse.status === 400) {
+    return _.values(errorResponse.data).join('\n');
+  }
+
+  return errorResponse.data.message;
+};
+
 const handleError = (error) => {
   const refreshToken = localStorage.getItem('refresh_token');
 
@@ -31,7 +40,7 @@ const handleError = (error) => {
       dispatch(signoutUser());
       break;
     default: {
-      const errorMessage = error.response.data.message;
+      const errorMessage = getErrorMessage(error.response);
       if (errorMessage) {
         const alertTimeout = Math.max(5000, errorMessage.length * 100);
         Alert.error(errorMessage, {
