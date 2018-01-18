@@ -1,11 +1,23 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import InchargeTable from '../container/InchargeTable';
+import InchargeList from '../container/InchargeList';
+
+const styles = {
+  container: {
+    marginBottom: 20,
+    backgroundColor: '#FFF',
+  },
+  title: {
+    fontSize: 36,
+    marginHorizontal: 40,
+    marginVertical: 10,
+  },
+};
 
 const Incharges = () => (
-  <View>
-    <Text>Incharges</Text>
-    <InchargeTable />
+  <View style={styles.container}>
+    <Text style={styles.title}>Incharges</Text>
+    <InchargeList />
   </View>
 );
 
