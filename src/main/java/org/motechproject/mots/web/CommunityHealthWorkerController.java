@@ -5,12 +5,16 @@ import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
+import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
+import org.motechproject.mots.validate.ChwValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +25,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class CommunityHealthWorkerController extends BaseController {
 
+  private static final String COMMUNITY_HEALTH_WORKER = "communityHealthWorker";
+
   @Autowired
   private CommunityHealthWorkerService healthWorkerService;
+
+  @Autowired
+  private ChwValidator validator;
 
   private CommunityHealthWorkerMapper healthWorkerMapper = CommunityHealthWorkerMapper.INSTANCE;
 
@@ -66,6 +75,14 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
     CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
 
+    BindingResult bindingResult = new BeanPropertyBindingResult(healthWorker,
+        COMMUNITY_HEALTH_WORKER);
+    validator.validate(healthWorker, bindingResult);
+
+    if (bindingResult.hasErrors()) {
+      throw new BindingResultException(getErrors(bindingResult));
+    }
+
     return healthWorkerMapper.toDto(healthWorkerService.createHealthWorker(healthWorker));
   }
 
@@ -95,6 +112,14 @@ public class CommunityHealthWorkerController extends BaseController {
   public CommunityHealthWorkerDto saveHealthWorker(@PathVariable("id") UUID id,
       @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
     CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
+
+    BindingResult bindingResult = new BeanPropertyBindingResult(healthWorker,
+        COMMUNITY_HEALTH_WORKER);
+    validator.validate(healthWorker, bindingResult);
+
+    if (bindingResult.hasErrors()) {
+      throw new BindingResultException(getErrors(bindingResult));
+    }
 
     return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(healthWorker));
   }
