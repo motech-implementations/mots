@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "23.0.0"
+   "name": "Mots",
+   "icon": "./icons/soldevelo.png",
+   "version": "1.0.0",
+   "slug": "soldevelo-mots-app",
+   "sdkVersion": "23.0.0",
+   "ios": {
+     "bundleIdentifier": "org.grameenfoundation.mots"
+   },
+   "android": {
+     "package": "org.grameenfoundation.mots"
+   }
   }
 }
