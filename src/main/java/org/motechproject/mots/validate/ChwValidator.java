@@ -43,7 +43,7 @@ public class ChwValidator extends AbstractValidator {
 
     existingChw.ifPresent(healthWorker -> {
       if (!healthWorker.getId().equals(chw.getId())) {
-        errors.rejectValue("chwId", "CHW with this CHW Id already exist");
+        errors.rejectValue("chwId", "CHW with this CHW Id already exists");
       }
     });
 
@@ -51,7 +51,7 @@ public class ChwValidator extends AbstractValidator {
 
     existingChw.ifPresent(healthWorker -> {
       if (!healthWorker.getId().equals(chw.getId())) {
-        errors.rejectValue("phoneNumber", "CHW with this Phone Number already exist");
+        errors.rejectValue("phoneNumber", "CHW with this Phone Number already exists");
       }
     });
   }
