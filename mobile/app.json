@@ -6,10 +6,10 @@
    "slug": "soldevelo-mots-app",
    "sdkVersion": "23.0.0",
    "ios": {
-     "bundleIdentifier": "com.yourcompany.yourappname"
+     "bundleIdentifier": "org.grameenfoundation.mots"
    },
    "android": {
-     "package": "com.yourcompany.yourappname"
+     "package": "org.grameenfoundation.mots"
    }
   }
 }
