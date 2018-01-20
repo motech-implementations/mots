@@ -6,7 +6,6 @@ import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.exception.BindingResultException;
-import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.motechproject.mots.validate.ChwValidator;
@@ -35,12 +34,11 @@ public class CommunityHealthWorkerController extends BaseController {
 
   private CommunityHealthWorkerMapper healthWorkerMapper = CommunityHealthWorkerMapper.INSTANCE;
 
-  private ChwInfoMapper chwInfoMapper = ChwInfoMapper.INSTANCE;
-
   /**
    * Get list of community health workers.
    * @return list of all community health workers
    */
+
   @RequestMapping(value = "/chw", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
@@ -58,9 +56,7 @@ public class CommunityHealthWorkerController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<ChwInfoDto> getHealthWorkersInfo() {
-    Iterable<CommunityHealthWorker> healthWorkers = healthWorkerService.getHealthWorkers();
-
-    return chwInfoMapper.toDtos(healthWorkers);
+    return healthWorkerService.getHealthWorkersInfoDtos();
   }
 
   /**
