@@ -9,6 +9,7 @@ import 'react-table/react-table.css';
 
 import { fetchIncharges } from '../actions/index';
 import MobileTable from '../components/mobile-table';
+import { hasAuthority, INCHARGE_READ_AUTHORITY } from '../utils/authorization';
 
 const COLUMNS = [
   {
@@ -57,6 +58,9 @@ class InchargeTable extends Component {
   }
 
   componentWillMount() {
+    if (!hasAuthority(INCHARGE_READ_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
     this.props.fetchIncharges();
   }
 
@@ -89,4 +93,7 @@ InchargeTable.propTypes = {
   fetchIncharges: PropTypes.func.isRequired,
   inchargesList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };

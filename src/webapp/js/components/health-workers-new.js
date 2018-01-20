@@ -7,6 +7,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import HealthWorkersForm from './health-workers-form';
 import { createHealthWorker } from '../actions';
+import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 
 class HealthWorkersNew extends Component {
   constructor(props) {
@@ -14,6 +15,12 @@ class HealthWorkersNew extends Component {
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillMount() {
+    if (!hasAuthority(CHW_WRITE_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
   }
 
   onSubmitCancel() {

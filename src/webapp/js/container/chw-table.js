@@ -9,6 +9,7 @@ import 'react-table/react-table.css';
 
 import { fetchChws } from '../actions/index';
 import MobileTable from '../components/mobile-table';
+import { hasAuthority, CHW_READ_AUTHORITY } from '../utils/authorization';
 
 const COLUMNS = [
   {
@@ -81,6 +82,9 @@ class ChwTable extends Component {
   }
 
   componentWillMount() {
+    if (!hasAuthority(CHW_READ_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
     this.props.fetchChws();
   }
 
@@ -110,4 +114,7 @@ ChwTable.propTypes = {
   fetchChws: PropTypes.func.isRequired,
   chwList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };

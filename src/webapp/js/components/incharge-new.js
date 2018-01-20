@@ -5,6 +5,7 @@ import Alert from 'react-s-alert';
 
 import InchargeForm from './incharge-form';
 import { createIncharge } from '../actions';
+import { hasAuthority, INCHARGE_WRITE_AUTHORITY } from '../utils/authorization';
 
 class InchargeNew extends Component {
   constructor(props) {
@@ -12,6 +13,12 @@ class InchargeNew extends Component {
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillMount() {
+    if (!hasAuthority(INCHARGE_WRITE_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
   }
 
   onSubmitCancel() {

@@ -9,6 +9,7 @@ import 'react-select/dist/react-select.css';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 import apiClient from '../utils/api-client';
+import { hasAuthority, ASSIGN_MODULES_AUTHORITY } from '../utils/authorization';
 
 export default class AssignModules extends Component {
   constructor(props) {
@@ -28,6 +29,9 @@ export default class AssignModules extends Component {
   }
 
   componentWillMount() {
+    if (!hasAuthority(ASSIGN_MODULES_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
     this.fetchAvailableModules();
   }
 

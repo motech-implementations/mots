@@ -10,6 +10,7 @@ import HealthWorkersForm, { CHW_FORM_NAME } from './health-workers-form';
 import { saveHealthWorker } from '../actions';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
+import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 
 class HealthWorkersEdit extends Component {
   constructor(props) {
@@ -27,6 +28,9 @@ class HealthWorkersEdit extends Component {
   }
 
   componentWillMount() {
+    if (!hasAuthority(CHW_WRITE_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
     this.fetchChw();
   }
 
