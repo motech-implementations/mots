@@ -91,6 +91,14 @@ export default class SideBar extends Component {
             </Link>
           </li>
         }
+        { hasAuthority(MANAGE_MODULES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/modules/manage" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-th-list" />
+              <span className="icon-text">Manage Modules</span>
+            </Link>
+          </li>
+        }
       </ul>
     );
   }

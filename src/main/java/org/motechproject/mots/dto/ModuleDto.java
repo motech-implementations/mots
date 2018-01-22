@@ -8,6 +8,10 @@ public class ModuleDto extends IvrObjectDto {
 
   @Getter
   @Setter
+  private String id;
+
+  @Getter
+  @Setter
   private String name;
 
   @Getter
@@ -28,5 +32,9 @@ public class ModuleDto extends IvrObjectDto {
 
   @Getter
   @Setter
-  private List<UnitDto> units;
+  private String type;
+
+  @Getter
+  @Setter
+  private List<UnitDto> children;
 }

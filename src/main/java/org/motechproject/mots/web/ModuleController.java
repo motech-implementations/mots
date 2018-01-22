@@ -26,13 +26,26 @@ public class ModuleController extends BaseController {
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
   /**
+   * Get list of Module Simple DTOs.
+   * @return list of all Modules
+   */
+  @RequestMapping(value = "/modules/simple", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<ModuleSimpleDto> getSimpleModules() {
+    Iterable<Module> modules = moduleService.getModules();
+
+    return moduleMapper.toSimpleDtos(modules);
+  }
+
+  /**
    * Get list of Modules.
    * @return list of all Modules
    */
   @RequestMapping(value = "/modules", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public List<ModuleSimpleDto> getModules() {
+  public List<ModuleDto> getModules() {
     Iterable<Module> modules = moduleService.getModules();
 
     return moduleMapper.toDtos(modules);
