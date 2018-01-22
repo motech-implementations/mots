@@ -4,7 +4,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { offline } from 'redux-offline';
 import offlineConfig from 'redux-offline/lib/defaults';
 
-import reducers from '../src/webapp/js/reducers/index';
+import reducers from './reducers';
 
 const store = createStore(
   reducers,
