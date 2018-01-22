@@ -30,8 +30,9 @@ class InchargeEdit extends Component {
   componentWillMount() {
     if (!hasAuthority(INCHARGE_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
+    } else {
+      this.fetchIncharge();
     }
-    this.fetchIncharge();
   }
 
   onSubmitCancel() {

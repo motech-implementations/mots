@@ -60,8 +60,9 @@ class InchargeTable extends Component {
   componentWillMount() {
     if (!hasAuthority(INCHARGE_READ_AUTHORITY)) {
       this.props.history.push('/home');
+    } else {
+      this.props.fetchIncharges();
     }
-    this.props.fetchIncharges();
   }
 
   render() {

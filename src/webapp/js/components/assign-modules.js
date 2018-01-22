@@ -31,8 +31,9 @@ export default class AssignModules extends Component {
   componentWillMount() {
     if (!hasAuthority(ASSIGN_MODULES_AUTHORITY)) {
       this.props.history.push('/home');
+    } else {
+      this.fetchAvailableModules();
     }
-    this.fetchAvailableModules();
   }
 
   fetchAvailableModules() {

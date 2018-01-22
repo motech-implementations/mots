@@ -84,8 +84,9 @@ class ChwTable extends Component {
   componentWillMount() {
     if (!hasAuthority(CHW_READ_AUTHORITY)) {
       this.props.history.push('/home');
+    } else {
+      this.props.fetchChws();
     }
-    this.props.fetchChws();
   }
 
   render() {
