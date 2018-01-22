@@ -30,8 +30,9 @@ class HealthWorkersEdit extends Component {
   componentWillMount() {
     if (!hasAuthority(CHW_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
+    } else {
+      this.fetchChw();
     }
-    this.fetchChw();
   }
 
   onSubmitCancel() {
