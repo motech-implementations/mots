@@ -5,13 +5,19 @@ export default function (state = initialTablesData, action) {
   switch (action.type) {
     case FETCH_CHWS:
       if (action.payload.data !== undefined) {
-        return state.set('chwList', action.payload.data);
+        return {
+          ...state,
+          chwList: action.payload.data,
+        };
       }
       return state;
 
     case FETCH_INCHARGES:
       if (action.payload.data !== undefined) {
-        return state.set('inchargesList', action.payload.data);
+        return {
+          ...state,
+          inchargesList: action.payload.data,
+        };
       }
       return state;
     default:

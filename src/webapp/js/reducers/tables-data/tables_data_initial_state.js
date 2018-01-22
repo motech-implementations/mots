@@ -1,6 +1,4 @@
-import Immutable from 'immutable';
-
-export default Immutable.Map({
+export default {
   chwList: [],
   inchargesList: [],
-});
+};
