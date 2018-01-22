@@ -1,8 +1,8 @@
 import axios from 'axios';
-import Client from 'client-oauth2';
-import jwtDecode from 'jwt-decode';
 import { AsyncStorage } from 'react-native';
-import apiClient from '../utils/api-client';
+import ApiClient from '../utils/api-client';
+import AuthClient from '../utils/auth-client';
+import parseJwt from '../utils/encodeUtils';
 
 import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
@@ -16,11 +16,12 @@ const AUTH_URL = `${BASE_URL}/oauth/token`;
 const CLIENT_ID = 'trusted-client';
 const CLIENT_SECRET = 'secret';
 
-const authClient = new Client({
+const authClient = new AuthClient({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
-  accessTokenUri: AUTH_URL,
 });
+
+const apiClient = new ApiClient();
 
 export function authError(error) {
   return {
@@ -31,17 +32,19 @@ export function authError(error) {
 
 export function signinUser({ username, password }, callback) {
   return (dispatch) => {
-    authClient.owner.getToken(username, password)
+    authClient.getToken(username, password)
       .then((response) => {
-        dispatch({ type: AUTH_USER });
-        const tokenDecoded = jwtDecode(response.accessToken);
-        dispatch({
-          type: SET_COUNTER_LOGOUT_TIME,
-          payload: tokenDecoded.exp_period,
+        response.json().then((data) => {
+          dispatch({ type: AUTH_USER });
+          const tokenDecoded = parseJwt(data.access_token);
+          dispatch({
+            type: SET_COUNTER_LOGOUT_TIME,
+            payload: tokenDecoded.exp_period,
+          });
+          AsyncStorage.setItem('token', data.access_token);
+          AsyncStorage.setItem('refresh_token', data.refresh_token);
+          callback();
         });
-        AsyncStorage.setItem('token', response.accessToken);
-        AsyncStorage.setItem('refresh_token', response.refreshToken);
-        callback();
       })
       .catch(() => {
         dispatch(authError('Bad Credentials'));
@@ -50,9 +53,10 @@ export function signinUser({ username, password }, callback) {
 }
 
 export function useRefreshToken(refreshToken, callback) {
+  //TODO rewrite this function using new api client
   return dispatch => axios({
     method: 'post',
-    url: AUTH_URL,
+    url: `http://10.0.2.2:8080${AUTH_URL}`,
     auth: {
       username: CLIENT_ID,
       password: CLIENT_SECRET,
@@ -95,7 +99,6 @@ export function fetchChws() {
 export function fetchIncharges() {
   const url = `${BASE_URL}/incharge`;
   const request = apiClient.get(url);
-
   return {
     type: FETCH_INCHARGES,
     payload: request,

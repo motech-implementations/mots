@@ -1,14 +1,12 @@
-// TODO: Uncomment all lines below, when API actions will be properly implemented
-// TODO: Remove temporary mock data and remove state from InchargeList
 import React, { Component } from 'react';
 import { ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-// import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ListItems from '../components/ListItems';
-// import { fetchIncharges } from '../actions/index';
+import { fetchIncharges, signinUser } from '../actions/index';
 
 const styles = {
   actionButton: {
@@ -65,71 +63,33 @@ const COLUMNS = [
 
 
 class InchargeList extends Component {
-  state = { incharges: TEMPORARY_MOCK_DATA };
-
-  // componentWillMount() {
-  //   this.props.fetchIncharges();
-  // }
+  componentWillMount() {
+    this.props.signinUser({
+      username: 'admin',
+      password: 'password',
+    }, () => this.props.fetchIncharges());
+  }
 
   render() {
     return (
       <ScrollView style={{ marginBottom: 40 }}>
-        <ListItems data={this.state.incharges} columns={COLUMNS} />
+        <ListItems data={this.props.incharges} columns={COLUMNS} />
       </ScrollView>
     );
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     incharges: state.tablesReducer.inchargesList,
-//   };
-// }
+function mapStateToProps(state) {
+  return {
+    incharges: state.tablesReducer.inchargesList,
+  };
+}
 
-// export default connect(mapStateToProps, { fetchIncharges })(InchargeList);
-export default InchargeList;
+export default connect(mapStateToProps, { fetchIncharges, signinUser })(InchargeList);
 
-// InchargeList.propTypes = {
-//   fetchIncharges: PropTypes.func.isRequired,
-//   incharges: PropTypes.arrayOf(PropTypes.shape({
-//   })).isRequired,
-// };
-
-const TEMPORARY_MOCK_DATA = [
-  {
-    id: 'id1',
-    firstName: 'John',
-    secondName: 'Doe',
-    otherName: null,
-    phoneNumber: '2312313123',
-    email: null,
-    districtId: 'districtId-1',
-    chiefdomId: 'chiefdomId-1',
-    facilityId: 'facilityId-1',
-    facilityName: 'Shekaia MCHP',
-  },
-  {
-    id: 'id2',
-    firstName: 'Jane',
-    secondName: 'Doe',
-    otherName: null,
-    phoneNumber: '123333333',
-    email: null,
-    districtId: 'districtId-2',
-    chiefdomId: 'chiefdomId-2',
-    facilityId: 'facilityId-2',
-    facilityName: 'Tombo Wallah CHP',
-  },
-  {
-    id: 'id3',
-    firstName: 'Firstname',
-    secondName: 'LastName',
-    otherName: null,
-    phoneNumber: '123123123',
-    email: null,
-    districtId: 'districtId-3',
-    chiefdomId: 'chiefdomId-3',
-    facilityId: 'facilityId-3',
-    facilityName: 'Gbolon MCHP',
-  },
-];
+InchargeList.propTypes = {
+  fetchIncharges: PropTypes.func.isRequired,
+  signinUser: PropTypes.func.isRequired,
+  incharges: PropTypes.arrayOf(PropTypes.shape({
+  })).isRequired,
+};
