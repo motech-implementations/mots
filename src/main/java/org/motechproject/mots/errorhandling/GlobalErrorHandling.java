@@ -4,10 +4,12 @@ import java.util.Map;
 import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.exception.MotsException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalErrorHandling extends AbstractErrorHandling {
@@ -32,5 +34,12 @@ public class GlobalErrorHandling extends AbstractErrorHandling {
   @ResponseBody
   public Map<String, String> handleBindingResultException(BindingResultException ex) {
     return ex.getErrors();
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ResponseBody
+  public String handleAccessDeniedException(Exception ex, WebRequest request) {
+    return ex.getMessage();
   }
 }

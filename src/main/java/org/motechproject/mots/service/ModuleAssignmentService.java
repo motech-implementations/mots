@@ -7,10 +7,12 @@ import java.util.UUID;
 import javax.persistence.EntityManager;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Module;
+import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class ModuleAssignmentService {
   @Autowired
   private EntityManager entityManager;
 
+  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public AssignedModules getAssignedModules(UUID chwId) {
     return repository.findByHealthWorkerId(chwId);
   }
@@ -35,6 +38,7 @@ public class ModuleAssignmentService {
    * @param assignedModules modules assigned for CHW
    */
   @Transactional
+  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public void assignModules(AssignedModules assignedModules) {
     AssignedModules existingAssignedModules =
         repository.findByHealthWorkerId(assignedModules.getHealthWorker().getId());

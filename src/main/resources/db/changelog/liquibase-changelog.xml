@@ -15,5 +15,7 @@
   <include file="20171221_1756.mysql.sql" relativeToChangelogFile="true" />
   <include file="initial_data_update.mysql.sql" relativeToChangelogFile="true" />
   <include file="20171223_2046.mysql.sql" relativeToChangelogFile="true" />
-  
+  <include file="20180119_2316.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180119_2322_amend_roles_permissions_adminuser.sql" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

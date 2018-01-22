@@ -10,6 +10,7 @@ import InchargeForm, { INCHARGE_FORM_NAME } from './incharge-form';
 import { saveIncharge } from '../actions';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
+import { hasAuthority, INCHARGE_WRITE_AUTHORITY } from '../utils/authorization';
 
 class InchargeEdit extends Component {
   constructor(props) {
@@ -27,6 +28,9 @@ class InchargeEdit extends Component {
   }
 
   componentWillMount() {
+    if (!hasAuthority(INCHARGE_WRITE_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
     this.fetchIncharge();
   }
 

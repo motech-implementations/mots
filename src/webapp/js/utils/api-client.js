@@ -39,6 +39,9 @@ const handleError = (error) => {
 
       dispatch(signoutUser());
       break;
+    case 403:
+      Alert.error('Access denied.');
+      break;
     default: {
       const errorMessage = getErrorMessage(error.response);
       if (errorMessage) {
