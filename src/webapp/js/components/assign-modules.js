@@ -36,7 +36,7 @@ export default class AssignModules extends Component {
   }
 
   fetchAvailableModules() {
-    const url = '/api/modules';
+    const url = '/api/modules/simple';
 
     apiClient.get(url)
       .then((response) => {

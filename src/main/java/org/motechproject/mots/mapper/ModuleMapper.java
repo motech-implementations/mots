@@ -5,6 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.CallFlowElement;
@@ -30,7 +31,17 @@ public abstract class ModuleMapper {
 
   private static final String LIST_ORDER_FIELD = "listOrder";
 
+  @Mappings({
+      @Mapping(target = "children", source = "units"),
+      @Mapping(target = "type", constant = "MODULE")
+  })
   public abstract ModuleDto toDto(Module module);
+
+  @Mappings({
+      @Mapping(target = "children", source = "callFlowElements"),
+      @Mapping(target = "type", constant = "UNIT")
+  })
+  public abstract UnitDto toDto(Unit unit);
 
   CallFlowElementDto toDto(CallFlowElement callFlowElement) {
     if (CallFlowElementType.QUESTION.equals(callFlowElement.getType())) {
@@ -44,7 +55,9 @@ public abstract class ModuleMapper {
 
   abstract MultipleChoiceQuestionDto toDto(MultipleChoiceQuestion multipleChoiceQuestion);
 
-  public abstract List<ModuleSimpleDto> toDtos(Iterable<Module> modules);
+  public abstract List<ModuleSimpleDto> toSimpleDtos(Iterable<Module> modules);
+
+  public abstract List<ModuleDto> toDtos(Iterable<Module> modules);
 
   /**
    * Update Module using data from DTO.
@@ -52,7 +65,7 @@ public abstract class ModuleMapper {
    * @param module Module to be updated
    */
   public void updateModuleFromDto(ModuleDto moduleDto, Module module) {
-    List<UnitDto> unitDtos = moduleDto.getUnits();
+    List<UnitDto> unitDtos = moduleDto.getChildren();
     List<Unit> units = module.getUnits();
     List<Unit> updatedUnits = new ArrayList<>();
 
@@ -84,7 +97,7 @@ public abstract class ModuleMapper {
   }
 
   private void updateUnitFromDto(UnitDto unitDto, Unit unit) {
-    List<CallFlowElementDto> callFlowElementDtos = unitDto.getCallFlowElements();
+    List<CallFlowElementDto> callFlowElementDtos = unitDto.getChildren();
     List<CallFlowElement> callFlowElements = unit.getCallFlowElements();
     List<CallFlowElement> updatedCallFlowElements = new ArrayList<>();
 
@@ -130,7 +143,10 @@ public abstract class ModuleMapper {
   @Mapping(target = LIST_ORDER_FIELD, constant = "0")
   abstract MultipleChoiceQuestion fromDto(MultipleChoiceQuestionDto multipleChoiceQuestionDto);
 
-  @Mapping(target = "units", ignore = true)
+  @Mappings({
+      @Mapping(target = "units", ignore = true),
+      @Mapping(target = "id", ignore = true)
+  })
   abstract void updateFromDto(ModuleDto moduleDto, @MappingTarget Module module);
 
   @Mapping(target = "callFlowElements", ignore = true)

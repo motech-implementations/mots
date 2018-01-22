@@ -20,7 +20,11 @@ public class UnitDto extends IvrObjectDto {
 
   @Getter
   @Setter
-  private List<CallFlowElementDto> callFlowElements;
+  private String type;
+
+  @Getter
+  @Setter
+  private List<CallFlowElementDto> children;
 
   @Getter
   @Setter
