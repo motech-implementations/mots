@@ -82,7 +82,7 @@ class InchargeList extends Component {
 
 // function mapStateToProps(state) {
 //   return {
-//     incharges: state.tablesReducer.get('incharges'),
+//     incharges: state.tablesReducer.inchargesList,
 //   };
 // }
 
