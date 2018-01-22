@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
 
 import Collapsible from './Collapsible';
 
 const styles = {
   container: {
-    flex: 1,
     backgroundColor: '#FFF',
     flexDirection: 'column',
   },
@@ -30,76 +30,143 @@ const styles = {
     marginLeft: 10,
     width: 30,
   },
+  title: {
+    color: '#337ab7',
+    fontSize: 36,
+    marginTop: 40,
+    marginBottom: 20,
+    marginLeft: 20,
+  },
 };
 
-const Menu = () => (
-  <ScrollView style={styles.container}>
+class Menu extends Component {
+  static contextTypes = {
+    drawer: PropTypes.object,
+  };
 
-    <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-      <View style={styles.iconContainer}>
-        <Icon name="user" size={20} color="#337ab7" />
+  state = {};
+
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <Text style={styles.title}>Menu</Text>
+        <ScrollView style={styles.container}>
+          <TouchableOpacity
+            onPress={() => {
+                            Actions.home();
+                            this.context.drawer.close();
+                        }}
+            style={styles.menuItem}
+          >
+            <View style={styles.iconContainer}>
+              <Icon name="user" size={20} color="#337ab7" />
+            </View>
+            <Text style={styles.menuItemText}>Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+                            Actions.home();
+                            this.context.drawer.close();
+                        }}
+            style={styles.menuItem}
+          >
+            <View style={styles.iconContainer}>
+              <Icon name="home" size={20} color="#337ab7" />
+            </View>
+            <Text style={styles.menuItemText}>Home</Text>
+          </TouchableOpacity>
+
+          <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                                    Actions.home();
+                                    this.context.drawer.close();
+                                }}
+                style={styles.menuItem}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                  <Icon name="plus" size={20} color="#337ab7" />
+                </View>
+                <Text style={styles.menuItemText}>Add CHW</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                                    Actions.home();
+                                    this.context.drawer.close();
+                                }}
+                style={styles.menuItem}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                  <Icon name="list" size={20} color="#337ab7" />
+                </View>
+                <Text style={styles.menuItemText}>CHW List</Text>
+              </TouchableOpacity>
+            </View>
+          </Collapsible>
+
+          <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
+            <TouchableOpacity
+              onPress={() => {
+                                Actions.home();
+                                this.context.drawer.close();
+                            }}
+              style={styles.menuItem}
+            >
+              <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                <Icon name="check" size={20} color="#337ab7" />
+              </View>
+              <Text style={styles.menuItemText}>Assign</Text>
+            </TouchableOpacity>
+          </Collapsible>
+
+          <Collapsible title="Incharge" headerIcon="user" style={styles.menuItem}>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                                    Actions.home();
+                                    this.context.drawer.close();
+                                }}
+                style={styles.menuItem}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                  <Icon name="plus" size={20} color="#337ab7" />
+                </View>
+                <Text style={styles.menuItemText}>Add Incharge</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                                    Actions.incharges();
+                                    this.context.drawer.close();
+                                }}
+                style={styles.menuItem}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                  <Icon name="list" size={20} color="#337ab7" />
+                </View>
+                <Text style={styles.menuItemText}>Incharge List</Text>
+              </TouchableOpacity>
+            </View>
+          </Collapsible>
+
+          <TouchableOpacity
+            onPress={() => {
+                            Actions.home();
+                            this.context.drawer.close();
+                        }}
+            style={styles.menuItem}
+          >
+            <View style={styles.iconContainer}>
+              <Icon name="bar-chart" size={20} color="#337ab7" />
+            </View>
+            <Text style={styles.menuItemText}>Reports</Text>
+          </TouchableOpacity>
+
+        </ScrollView>
       </View>
-      <Text style={styles.menuItemText}>Profile</Text>
-    </TouchableOpacity>
-
-    <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-      <View style={styles.iconContainer}>
-        <Icon name="home" size={20} color="#337ab7" />
-      </View>
-      <Text style={styles.menuItemText}>Home</Text>
-    </TouchableOpacity>
-
-    <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
-      <View>
-        <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-          <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-            <Icon name="plus" size={20} color="#337ab7" />
-          </View>
-          <Text style={styles.menuItemText}>Add CHW</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-          <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-            <Icon name="list" size={20} color="#337ab7" />
-          </View>
-          <Text style={styles.menuItemText}>CHW List</Text>
-        </TouchableOpacity>
-      </View>
-    </Collapsible>
-
-    <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
-      <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-        <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-          <Icon name="check" size={20} color="#337ab7" />
-        </View>
-        <Text style={styles.menuItemText}>Assign</Text>
-      </TouchableOpacity>
-    </Collapsible>
-
-    <Collapsible title="Incharge" headerIcon="user" style={styles.menuItem}>
-      <View>
-        <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-          <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-            <Icon name="plus" size={20} color="#337ab7" />
-          </View>
-          <Text style={styles.menuItemText}>Add Incharge</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={Actions.incharges} style={styles.menuItem}>
-          <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-            <Icon name="list" size={20} color="#337ab7" />
-          </View>
-          <Text style={styles.menuItemText}>Incharge List</Text>
-        </TouchableOpacity>
-      </View>
-    </Collapsible>
-
-    <TouchableOpacity onPress={Actions.home} style={styles.menuItem}>
-      <View style={styles.iconContainer}>
-        <Icon name="bar-chart" size={20} color="#337ab7" />
-      </View>
-      <Text style={styles.menuItemText}>Reports</Text>
-    </TouchableOpacity>
-
-  </ScrollView>
-);
+    );
+  }
+}
 
 export default Menu;

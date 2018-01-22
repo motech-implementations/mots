@@ -4,6 +4,7 @@ import InchargeList from '../container/InchargeList';
 
 const styles = {
   container: {
+    marginTop: 60,
     marginBottom: 20,
     backgroundColor: '#FFF',
   },

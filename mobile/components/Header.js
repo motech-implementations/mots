@@ -1,38 +1,54 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import PropTypes from 'prop-types';
 
 const styles = {
   viewStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     backgroundColor: '#e1e1e1',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 60,
-    paddingTop: 15,
+    paddingTop: 20,
   },
   textStyle: {
     fontSize: 20,
-    paddingLeft: 10,
+    paddingRight: 10,
     color: '#9b9b9b',
   },
   iconStyle: {
-    paddingRight: 10,
+    paddingLeft: 10,
   },
 };
 
-const Header = () => (
-  <View style={styles.viewStyle}>
-    <Text style={styles.textStyle}>MOTS</Text>
-    <TouchableOpacity onPress={Actions.menu} style={styles.iconStyle}>
-      <Icon
-        name="bars"
-        size={24}
-      />
-    </TouchableOpacity>
-  </View>
-);
+class Header extends Component {
+  static contextTypes = {
+    drawer: PropTypes.object,
+  };
 
+  state = {};
+
+  render() {
+    return (
+      <View style={styles.viewStyle}>
+        <TouchableOpacity
+          onPress={this.context.drawer.open}
+          style={styles.iconStyle}
+        >
+          <Icon
+            name="bars"
+            size={24}
+          />
+        </TouchableOpacity>
+        <Text style={styles.textStyle}>MOTS</Text>
+      </View>
+    );
+  }
+}
 
 export default Header;

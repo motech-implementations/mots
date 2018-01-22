@@ -51,7 +51,7 @@ const COLUMNS = [
     accessor: 'id',
     Cell: () => (
       <TouchableOpacity
-        onPress={Actions.menu}
+        onPress={Actions.home}
         style={styles.actionButton}
       >
         <Icon name="pencil-square-o" color="#FFF" size={16} />
