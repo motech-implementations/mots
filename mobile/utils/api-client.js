@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import { AsyncStorage } from 'react-native';
 
-const CLIENT_URL = 'http://10.0.2.2:8080';
+import Config from '../config';
+
+const CLIENT_URL = Config.api[Config.backend.instance];
 const VALID_STATUSES = [200, 201];
 
 export default class ApiClient {

@@ -25,6 +25,7 @@
     "client-oauth2": "^4.1.0",
     "expo": "^23.0.4",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-native": "0.50.3",

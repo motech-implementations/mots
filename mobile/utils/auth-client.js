@@ -1,6 +1,8 @@
 import base64 from 'base-64';
 
-const CLIENT_URL = 'http://10.0.2.2:8080/api/oauth/token';
+import Config from '../config';
+
+const CLIENT_URL = `${Config.api[Config.backend.instance]}/api/oauth/token`;
 
 export default class AuthClient {
   constructor({ clientId, clientSecret }) {
