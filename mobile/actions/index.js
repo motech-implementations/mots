@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import ApiClient from '../utils/api-client';
+import apiClient from '../utils/api-client';
 import AuthClient from '../utils/auth-client';
 import parseJwt from '../utils/encodeUtils';
 
@@ -20,8 +20,6 @@ const authClient = new AuthClient({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
 });
-
-const apiClient = new ApiClient();
 
 export function authError(error) {
   return {
@@ -53,7 +51,7 @@ export function signinUser({ username, password }, callback) {
 }
 
 export function useRefreshToken(refreshToken, callback) {
-  //TODO rewrite this function using new api client
+  // TODO rewrite this function using new api client
   return dispatch => axios({
     method: 'post',
     url: `http://10.0.2.2:8080${AUTH_URL}`,

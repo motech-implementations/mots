@@ -4,22 +4,17 @@ import initialTablesData from './tables_data_initial_state';
 export default function (state = initialTablesData, action) {
   switch (action.type) {
     case FETCH_CHWS:
-      if (action.payload !== undefined) {
-        return {
-          ...state,
-          chwList: action.payload,
-        };
-      }
-      return state;
+      return {
+        ...state,
+        chwList: action.payload || [],
+      };
 
     case FETCH_INCHARGES:
-      if (action.payload !== undefined) {
-        return {
-          ...state,
-          inchargesList: action.payload,
-        };
-      }
-      return state;
+      return {
+        ...state,
+        inchargesList: action.payload || [],
+      };
+
     default:
       return state;
   }

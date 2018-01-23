@@ -1,29 +1,70 @@
-import RestClient from 'react-native-rest-client';
+import _ from 'lodash';
 import { AsyncStorage } from 'react-native';
 
 const CLIENT_URL = 'http://10.0.2.2:8080';
+const VALID_STATUSES = [200, 201];
 
-export default class ApiClient extends RestClient {
-  constructor() {
-    super(CLIENT_URL);
-    AsyncStorage.getItem('token').then((token) => {
-      this.headers.Authorization = `Bearer ${token}`;
-    });
+export default class ApiClient {
+  static async handleError(obj) {
+    console.log(obj);
   }
 
-  get(route, query) {
-    return this.GET(route, query || '');
+  static async chooseMethod(method, route, body) {
+    return ApiClient.motsFetch({
+      method,
+      url: route,
+      body: body || {}
+    })
+      .then((response) => {
+        const json = response.json();
+        if (VALID_STATUSES.indexOf(response.status) !== -1) {
+          return json;
+        }
+        return json.then((obj) => {
+          throw obj;
+        })
+      })
+      .catch((obj) => {
+        ApiClient.handleError(obj);
+      });
   }
 
-  post(route, body) {
-    return this.POST(route, body || {});
+  static async get(route) {
+    return ApiClient.chooseMethod('GET', route);
   }
 
-  put(route, body) {
-    return this.PUT(route, body || {});
+  static async post(route, body) {
+    return ApiClient.chooseMethod('POST', route, body);
   }
 
-  delete(route, query) {
-    return this.DELETE(route, query || '');
+  static async put(route, body) {
+    return ApiClient.chooseMethod('PUT', route, body);
+  }
+
+  static async delete(route) {
+    return ApiClient.chooseMethod('DELETE', route);
+  }
+
+  static async motsFetch(_options) {
+    const options = _.extend({
+      method: 'GET',
+      url: null,
+      body: null,
+    }, _options);
+
+    const fetchOptions = {
+      method: options.method,
+      headers: {},
+    };
+
+    const token = await AsyncStorage.getItem('token');
+    fetchOptions.headers.Authorization = `Bearer ${token}`;
+
+    if (options.method in ['POST', 'PUT', 'DELETE']) {
+      fetchOptions.headers.Accept = 'application/json';
+      fetchOptions.headers['Content-Type'] = 'application/json';
+    }
+
+    return fetch(CLIENT_URL + options.url, fetchOptions);
   }
 }
