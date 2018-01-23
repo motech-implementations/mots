@@ -56,4 +56,6 @@ Install android sdk && avd. For ubuntu you can install it with Android Studio, o
 
 Later, having Android Virtual Device running, go to /mobile folder and run `npm run android`. App should automatically connect and display on emulator screen.
 
+Also you should copy `config.example.js` in a main folder to a new file `config.js`, and there you can set up a configuration.
+
 In case of any problems, or to get additional info, go to: https://facebook.github.io/react-native/docs/getting-started.html.
