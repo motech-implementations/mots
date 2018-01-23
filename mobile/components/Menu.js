@@ -44,7 +44,10 @@ class Menu extends Component {
     drawer: PropTypes.object,
   };
 
-  state = {};
+  openSection(sectionKey) {
+    Actions[sectionKey].call();
+    this.context.drawer.close();
+  }
 
   render() {
     return (
@@ -52,10 +55,7 @@ class Menu extends Component {
         <Text style={styles.title}>Menu</Text>
         <ScrollView style={styles.container}>
           <TouchableOpacity
-            onPress={() => {
-                            Actions.home();
-                            this.context.drawer.close();
-                        }}
+            onPress={() => this.openSection('home')}
             style={styles.menuItem}
           >
             <View style={styles.iconContainer}>
@@ -65,10 +65,7 @@ class Menu extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {
-                            Actions.home();
-                            this.context.drawer.close();
-                        }}
+            onPress={() => this.openSection('home')}
             style={styles.menuItem}
           >
             <View style={styles.iconContainer}>
@@ -80,10 +77,7 @@ class Menu extends Component {
           <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
             <View>
               <TouchableOpacity
-                onPress={() => {
-                                    Actions.home();
-                                    this.context.drawer.close();
-                                }}
+                onPress={() => this.openSection('home')}
                 style={styles.menuItem}
               >
                 <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -92,10 +86,7 @@ class Menu extends Component {
                 <Text style={styles.menuItemText}>Add CHW</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                                    Actions.home();
-                                    this.context.drawer.close();
-                                }}
+                onPress={() => this.openSection('home')}
                 style={styles.menuItem}
               >
                 <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -108,10 +99,7 @@ class Menu extends Component {
 
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
             <TouchableOpacity
-              onPress={() => {
-                                Actions.home();
-                                this.context.drawer.close();
-                            }}
+              onPress={() => this.openSection('home')}
               style={styles.menuItem}
             >
               <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -124,10 +112,7 @@ class Menu extends Component {
           <Collapsible title="Incharge" headerIcon="user" style={styles.menuItem}>
             <View>
               <TouchableOpacity
-                onPress={() => {
-                                    Actions.home();
-                                    this.context.drawer.close();
-                                }}
+                onPress={() => this.openSection('home')}
                 style={styles.menuItem}
               >
                 <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -136,10 +121,7 @@ class Menu extends Component {
                 <Text style={styles.menuItemText}>Add Incharge</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                                    Actions.incharges();
-                                    this.context.drawer.close();
-                                }}
+                onPress={() => this.openSection('incharges')}
                 style={styles.menuItem}
               >
                 <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -151,10 +133,7 @@ class Menu extends Component {
           </Collapsible>
 
           <TouchableOpacity
-            onPress={() => {
-                            Actions.home();
-                            this.context.drawer.close();
-                        }}
+            onPress={() => this.openSection('home')}
             style={styles.menuItem}
           >
             <View style={styles.iconContainer}>
