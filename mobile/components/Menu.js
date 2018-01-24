@@ -86,7 +86,7 @@ class Menu extends Component {
                 <Text style={styles.menuItemText}>Add CHW</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.openSection('home')}
+                onPress={() => this.openSection('chws')}
                 style={styles.menuItem}
               >
                 <View style={[styles.iconContainer, { marginLeft: 30 }]}>

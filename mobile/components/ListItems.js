@@ -2,28 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 
-const styles = {
-  card: {
-    borderColor: '#ebebeb',
-    borderRadius: 3,
-    borderWidth: 1,
-    marginHorizontal: 40,
-    marginBottom: 20,
-    padding: 10,
-    backgroundColor: '#f8f8f8',
-    justifyContent: 'center',
-  },
-  cardLine: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bold: {
-    fontWeight: 'bold',
-  },
-  normal: {
-    fontWeight: 'normal',
-  },
-};
+import styles from '../styles/listsStyles';
 
 const ListItems = ({ data, columns }) => (
   <View>

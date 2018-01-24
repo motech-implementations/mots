@@ -8,22 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ListItems from '../components/ListItems';
 import { fetchIncharges, signinUser } from '../actions/index';
 
-const styles = {
-  actionButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 60,
-    borderRadius: 3,
-    backgroundColor: '#337ab7',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  buttonLabel: {
-    marginLeft: 5,
-    color: '#FFF',
-  },
-};
+import styles from '../styles/listsStyles';
 
 const COLUMNS = [
   {
