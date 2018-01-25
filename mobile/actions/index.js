@@ -28,7 +28,7 @@ export function authError(error) {
   };
 }
 
-export function signinUser({ username, password }, callback) {
+export function signinUser({ username, password }, callback, errorCallback) {
   return (dispatch) => {
     authClient.getToken(username, password)
       .then((response) => {
@@ -42,10 +42,13 @@ export function signinUser({ username, password }, callback) {
           AsyncStorage.setItem('token', data.access_token);
           AsyncStorage.setItem('refresh_token', data.refresh_token);
           callback();
+        }).catch(() => {
+          errorCallback();
         });
       })
       .catch(() => {
         dispatch(authError('Bad Credentials'));
+        errorCallback();
       });
   };
 }
