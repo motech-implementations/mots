@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ListItems from '../components/ListItems';
-import { fetchChws, signinUser } from '../actions/index';
+import { fetchChws } from '../actions/index';
+import Button from '../components/Button';
 
 import styles from '../styles/listsStyles';
 
@@ -51,20 +51,23 @@ const COLUMNS = [
     accessor: 'id',
     Cell: () => (
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
+        <Button
           onPress={Actions.home}
-          style={styles.actionButton}
+          iconName="pencil-square-o"
+          iconColor="#FFF"
+          buttonColor="#337ab7"
         >
-          <Icon name="pencil-square-o" color="#FFF" size={16} />
-          <Text style={styles.buttonLabel}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+            Edit
+        </Button>
+        <Button
           onPress={Actions.home}
-          style={[styles.actionButton, styles.actionButtonAssign]}
+          iconName="arrow-circle-o-right"
+          iconColor="#FFF"
+          buttonColor="#449C44"
+          marginLeft={5}
         >
-          <Icon name="arrow-circle-o-right" color="#FFF" size={16} />
-          <Text style={styles.buttonLabel}>Assign Modules</Text>
-        </TouchableOpacity>
+            Assign Modules
+        </Button>
       </View>
     ),
   },
@@ -73,10 +76,7 @@ const COLUMNS = [
 
 class HealthWorkersList extends Component {
   componentWillMount() {
-    this.props.signinUser({
-      username: 'admin',
-      password: 'password',
-    }, () => this.props.fetchChws());
+    this.props.fetchChws();
   }
 
   render() {
@@ -94,11 +94,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchChws, signinUser })(HealthWorkersList);
+export default connect(mapStateToProps, { fetchChws })(HealthWorkersList);
 
 HealthWorkersList.propTypes = {
   fetchChws: PropTypes.func.isRequired,
-  signinUser: PropTypes.func.isRequired,
   chwList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
 };

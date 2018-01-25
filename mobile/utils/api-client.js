@@ -15,7 +15,7 @@ export default class ApiClient {
     return ApiClient.motsFetch({
       method,
       url: route,
-      body: body || {}
+      body: body || {},
     })
       .then((response) => {
         const json = response.json();
@@ -24,7 +24,7 @@ export default class ApiClient {
         }
         return json.then((obj) => {
           throw obj;
-        })
+        });
       })
       .catch((obj) => {
         ApiClient.handleError(obj);

@@ -15,14 +15,20 @@ const styles = {
     alignItems: 'center',
     height: 60,
     paddingTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
   },
   textStyle: {
     fontSize: 20,
+    paddingTop: 5,
     paddingRight: 10,
     color: '#9b9b9b',
   },
   iconStyle: {
     paddingLeft: 10,
+    paddingTop: 5,
   },
 };
 

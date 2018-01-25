@@ -12,21 +12,6 @@ export default {
   buttonContainer: {
     flexDirection: 'row',
   },
-  actionButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 60,
-    borderRadius: 3,
-    backgroundColor: '#337ab7',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  actionButtonAssign: {
-    backgroundColor: '#449C44',
-    marginLeft: 5,
-    width: 150,
-  },
   buttonLabel: {
     marginLeft: 5,
     color: '#FFF',

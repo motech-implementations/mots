@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Button from '../components/Button';
 
 import ListItems from '../components/ListItems';
-import { fetchIncharges, signinUser } from '../actions/index';
-
-import styles from '../styles/listsStyles';
+import { fetchIncharges } from '../actions/index';
 
 const COLUMNS = [
   {
@@ -35,13 +33,14 @@ const COLUMNS = [
     minWidth: 50,
     accessor: 'id',
     Cell: () => (
-      <TouchableOpacity
+      <Button
         onPress={Actions.home}
-        style={styles.actionButton}
+        iconName="pencil-square-o"
+        iconColor="#FFF"
+        buttonColor="#337ab7"
       >
-        <Icon name="pencil-square-o" color="#FFF" size={16} />
-        <Text style={styles.buttonLabel}>Edit</Text>
-      </TouchableOpacity>
+        Edit
+      </Button>
     ),
   },
 ];
@@ -49,10 +48,7 @@ const COLUMNS = [
 
 class InchargeList extends Component {
   componentWillMount() {
-    this.props.signinUser({
-      username: 'admin',
-      password: 'password',
-    }, () => this.props.fetchIncharges());
+    this.props.fetchIncharges();
   }
 
   render() {
@@ -70,11 +66,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchIncharges, signinUser })(InchargeList);
+export default connect(mapStateToProps, { fetchIncharges })(InchargeList);
 
 InchargeList.propTypes = {
   fetchIncharges: PropTypes.func.isRequired,
-  signinUser: PropTypes.func.isRequired,
   incharges: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
 };
