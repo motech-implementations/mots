@@ -7,4 +7,7 @@ export default {
     STAGING: 'http://mots.soldevelo.com',
     PROD: 'http://mots.soldevelo.com',
   },
+  sentryConfig: {
+    publicDSN: 'public_dsn',
+  },
 };
