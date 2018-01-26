@@ -10,6 +10,18 @@
    },
    "android": {
      "package": "org.grameenfoundation.mots"
+   },
+   "hooks": {
+     "postPublish": [
+      {
+        "file": "sentry-expo/upload-sourcemaps",
+        "config": {
+          "organization": "organization-short-name",
+          "project": "project-short-name",
+          "authToken": "auth-token"
+        }
+      }
+    ]
    }
   }
 }

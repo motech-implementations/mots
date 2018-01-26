@@ -22,6 +22,7 @@ Below you'll find information about performing common tasks. The most recent ver
   * [Ejecting from Create React Native App](#ejecting-from-create-react-native-app)
     * [Build Dependencies (Xcode & Android Studio)](#build-dependencies-xcode-android-studio)
     * [Should I Use ExpoKit?](#should-i-use-expokit)
+* [Configuring Sentry with Expo](#configuring-sentry-with-expo)
 * [Troubleshooting](#troubleshooting)
   * [Networking](#networking)
   * [iOS Simulator won't open](#ios-simulator-wont-open)
@@ -170,6 +171,24 @@ This is usually as simple as running `npm run eject` in your project, which will
 #### Should I Use ExpoKit?
 
 If you have made use of Expo APIs while working on your project, then those API calls will stop working if you eject to a regular React Native project. If you want to continue using those APIs, you can eject to "React Native + ExpoKit" which will still allow you to build your own native code and continue using the Expo APIs. See the [ejecting guide](https://github.com/react-community/create-react-native-app/blob/master/EJECTING.md) for more details about this option.
+
+## Configuring Sentry with Expo
+
+If you want to build app using Sentry with Expo, you have to do two things.
+- Replace values below from `app.json` expo configuration file with values you generated during project creation in sentry.io:
+```
+"config": {
+  "organization": "organization-short-name",
+  "project": "project-short-name",
+  "authToken": "auth-token"
+}
+```
+- Provide public dsn for your project inside `config.js` file (after making copy of `config.example.js`):
+```
+sentryConfig: {
+  publicDSN: 'public_dsn',
+}
+```
 
 ## Troubleshooting
 
