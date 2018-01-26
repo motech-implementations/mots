@@ -84,7 +84,7 @@ class Menu extends Component {
           <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
             <View>
               <TouchableOpacity
-                onPress={() => this.openSection('home')}
+                onPress={() => this.openSection('chwsNew')}
                 style={styles.menuItem}
               >
                 <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -147,6 +147,16 @@ class Menu extends Component {
               <Icon name="bar-chart" size={20} color="#337ab7" />
             </View>
             <Text style={styles.menuItemText}>Reports</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+              onPress={() => this.openSection('synchronizeView')}
+              style={styles.menuItem}
+          >
+              <View style={styles.iconContainer}>
+                  <Icon name="bar-chart" size={20} color="#337ab7" />
+              </View>
+              <Text style={styles.menuItemText}>Synchronize</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

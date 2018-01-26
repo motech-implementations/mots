@@ -8,6 +8,8 @@ import Header from './components/Header';
 import Home from './components/Home';
 import Incharges from './components/Incharges';
 import HealthWorkers from './components/HealthWorkers';
+import HealthWorkersNew from './components/HealthWorkersNew';
+import SynchronizeView from './components/SynchronizeView';
 import Store from './store';
 import AppDrawer from './components/AppDrawer';
 import Login from './container/Login';
@@ -31,6 +33,8 @@ const App = () => (
             <Scene key="home" component={Home} title="Home" hideNavBar={false} navBar={Header} initial />
             <Scene key="incharges" component={Incharges} title="Incharge List" hideNavBar={false} navBar={Header} />
             <Scene key="chws" component={HealthWorkers} title="Community Health Workers" navBar={Header} />
+            <Scene key="chwsNew" component={HealthWorkersNew} title="Add Community Health Worker" navBar={Header} />
+            <Scene key="synchronizeView" component={SynchronizeView} title="Synchronize" navBar={Header} />
           </Scene>
         </Scene>
       </Router>

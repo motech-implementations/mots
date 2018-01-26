@@ -32,4 +32,10 @@ export default {
     borderColor: '#d9edf7',
     position: 'relative',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  chwAddContainer: {
+    paddingBottom: 50,
+  },
 };

@@ -44,4 +44,16 @@ export default {
     alignItems: 'center',
     marginTop: 10,
   },
+  labelFieldStyle: {
+    paddingRight: 5,
+    paddingLeft: 5,
+    flex: 2,
+    borderColor: '#ebebeb',
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  labelFieldSelectStyle: {
+    paddingVertical: 0,
+    borderWidth: 0,
+  },
 };
