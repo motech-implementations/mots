@@ -12,6 +12,13 @@ const styles = {
   container: {
     marginTop: 60,
   },
+  formHeader: {
+    fontSize: 18,
+    textAlign: 'center',
+    paddingVertical: 10,
+    backgroundColor: '#B4B7C0',
+    borderBottomWidth: 0.1,
+  },
 };
 
 class HealthWorkersNew extends Component {
@@ -36,7 +43,6 @@ class HealthWorkersNew extends Component {
   }
 
   onSubmit(values) {
-    console.log(values);
     this.props.createHealthWorker(values, () => {
       Actions.chws.call();
       // this.props.history.push('/chw');
@@ -46,8 +52,8 @@ class HealthWorkersNew extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Add Community Health Worker</Text>
         <ScrollView>
+          <Text style={styles.formHeader}>Add Community Health Worker</Text>
           <HealthWorkersForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
         </ScrollView>
       </View>

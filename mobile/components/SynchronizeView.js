@@ -26,7 +26,6 @@ class SynchronizeView extends Component {
     return (
       <View style={styles.container}>
         <Text>Synchronize</Text>
-        <Text>Synchronize</Text>
       </View>
     );
   }

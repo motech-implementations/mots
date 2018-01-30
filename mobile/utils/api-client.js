@@ -55,7 +55,7 @@ export default class ApiClient {
     return ApiClient.motsFetch({
       method,
       url: route,
-      body: body || {},
+      body: JSON.stringify(body) || undefined,
     })
       .then((response) => {
         if (VALID_STATUSES.indexOf(response.status) !== -1) {
@@ -84,26 +84,24 @@ export default class ApiClient {
     return ApiClient.chooseMethod('DELETE', route);
   }
 
+  static async send(effect) {
+    return ApiClient.chooseMethod(effect.method, effect.url, effect.body);
+  }
+
   static async motsFetch(_options) {
-    const options = _.extend({
+    const fetchOptions = _.extend({
+      headers: {},
       method: 'GET',
       url: null,
-      body: null,
     }, _options);
-
-    const fetchOptions = {
-      method: options.method,
-      headers: {},
-    };
 
     const token = await AsyncStorage.getItem('token');
     fetchOptions.headers.Authorization = `Bearer ${token}`;
-
-    if (options.method in ['POST', 'PUT', 'DELETE']) {
+    if (['POST', 'PUT', 'DELETE'].indexOf(fetchOptions.method) !== -1) {
       fetchOptions.headers.Accept = 'application/json';
       fetchOptions.headers['Content-Type'] = 'application/json';
     }
 
-    return fetch(CLIENT_URL + options.url, fetchOptions);
+    return fetch(CLIENT_URL + fetchOptions.url, fetchOptions);
   }
 }

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { View, TextInput, Text } from 'react-native';
-import { Select, Option } from 'react-native-chooser';
+import { Option } from 'react-native-chooser';
 import FieldWithLabel from '../components/FieldWithLabel';
 
 function renderSelectOptions(options) {
@@ -25,47 +25,42 @@ function renderSelectOptions(options) {
 
 export default class FormField extends Component {
   renderFieldInput = ({
-    fieldConfig, selectOptions, dynamicAttr, input: { onChange, ...restInput }, meta: { touched, error },
+    fieldConfig, selectOptions, dynamicAttr, input, meta: { touched, error },
   }) => {
     const { label, type, getAttributes } = fieldConfig;
-    console.log(restInput);
     const FieldType = type || TextInput;
-    const attr = getAttributes ? getAttributes(restInput) : { type: 'text', className: 'form-control', ...restInput };
+    const attr = getAttributes ? getAttributes(input) : { ...input };
     const attributes = {
-      // id: restInput.name,
-      value: restInput.value,
+      value: input.value,
       disabled: selectOptions && (!selectOptions.values || !selectOptions.values.length),
       label,
-      // ...attr,
-      // ...dynamicAttr,
+      ...attr,
+      ...dynamicAttr,
     };
 
-    // const className = `form-group ${fieldConfig.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
-
     return (
-      // <View className={`padding-left-md padding-right-md ${className}`}>
       <View>
         <View className="row">
-          {/* <label htmlFor={attributes.id} className="col-md-2 control-label">{ label }</label> */}
           <View className="col-md-4">
             <FieldWithLabel
               label={label}
-              isSelectField={FieldType === Select}
+              nonBorderField={FieldType !== TextInput}
             >
-              <FieldType {...attributes} onChangeText={(text) => { console.log(text); onChange(text) }} value={restInput.value}>
+              <FieldType
+                {...attributes}
+                onChangeText={text => input.onChange(text)}
+                value={input.value}
+              >
                 {
                   selectOptions && renderSelectOptions(selectOptions)
                 }
               </FieldType>
             </FieldWithLabel>
+            <View>
+              <Text>{ touched ? error : '' }</Text>
+            </View>
           </View>
         </View>
-        {/* <View className="row">
-          <View className="col-md-2" />
-          <View className="help-block col-md-4" style={{ float: 'left' }}>
-            { touched ? error : '' }
-          </View>
-        </View> */}
       </View>
     );
   };

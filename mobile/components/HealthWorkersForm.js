@@ -3,15 +3,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import DateTime from 'react-datetime';
-import { View, TextInput } from 'react-native';
+import { View } from 'react-native';
 import { Select } from 'react-native-chooser';
-
-// import 'react-datetime/css/react-datetime.css';
+import DatePicker from 'react-native-datepicker';
+import { CheckBox } from 'react-native-elements';
 
 import FormField from './FormField';
 import { fetchLocations } from '../actions';
-import { clearFields, getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
+import { getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
 
@@ -32,30 +31,35 @@ const FIELDS = {
   otherName: {
     label: 'Other Name',
   },
-  // dateOfBirth: {
-  //   label: 'Date of Birth',
-  //   type: DateTime,
-  //   getAttributes: (input) => {
-  //     const dateFormat = 'YYYY-MM-DD';
-  //
-  //     return {
-  //       dateFormat,
-  //       timeFormat: false,
-  //       closeOnSelect: true,
-  //       value: input.value,
-  //       onChange: (param) => {
-  //         const formatted = !param || typeof param === 'string' ? param : param.format(dateFormat);
-  //         input.onChange(formatted);
-  //       },
-  //     };
-  //   },
-  // },
+  dateOfBirth: {
+    label: 'Date of Birth',
+    type: DatePicker,
+    getAttributes: (input) => {
+      const format = 'YYYY-MM-DD';
+      return {
+        format,
+        timeFormat: false,
+        closeOnSelect: true,
+        date: input.value,
+        onDateChange: (param) => {
+          const formatted = !param || typeof param === 'string' ? param : param.format(format);
+          input.onChange(formatted);
+        },
+      };
+    },
+  },
   gender: {
     type: Select,
     label: 'Gender',
     required: true,
     getSelectOptions: () => ({
       values: ['Male', 'Female'],
+    }),
+    getAttributes: input => ({
+      selected: input.value || null,
+      onSelect: (value) => {
+        input.onChange(value);
+      },
     }),
   },
   literacy: {
@@ -132,23 +136,26 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
+    getAttributes: input => ({
+      selected: input.value || null,
+      onSelect: (value) => {
+        input.onChange(value);
+      },
+    }),
   },
-  // hasPeerSupervisor: {
-  //   getAttributes: input => ({
-  //     ...input,
-  //     type: 'checkbox',
-  //     onChange: (event) => {
-  //       const { checked } = event.target;
-  //
-  //       if (!checked) {
-  //         clearFields(CHW_FORM_NAME, 'supervisor');
-  //       }
-  //
-  //       input.onChange(checked);
-  //     },
-  //   }),
-  //   label: 'Peer Supervisor',
-  // },
+  hasPeerSupervisor: {
+    type: CheckBox,
+    label: 'Peer Supervisor',
+    getAttributes: input => (
+      {
+        title: 'check',
+        checked: input.value === true,
+        onPress: () => {
+          input.onChange(!input.value);
+        },
+      }
+    ),
+  },
   supervisor: {
     label: 'Supervisor',
     getDynamicAttributes: ({ hasPeerSupervisor }) => ({
@@ -161,6 +168,12 @@ const FIELDS = {
     required: true,
     getSelectOptions: () => ({
       values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
+    }),
+    getAttributes: input => ({
+      selected: input.value || null,
+      onSelect: (value) => {
+        input.onChange(value);
+      },
     }),
   },
 };
@@ -191,6 +204,7 @@ class HealthWorkersForm extends Component {
     );
   }
 
+
   render() {
     const { handleSubmit } = this.props;
 
@@ -199,7 +213,7 @@ class HealthWorkersForm extends Component {
         { _.map(FIELDS, this.renderField) }
         <View style={styles.buttonContainer}>
           <Button
-            onPress={() => handleSubmit(this.props.onSubmit)}
+            onPress={handleSubmit(this.props.onSubmit)}
             iconName="pencil-square-o"
             iconColor="#FFF"
             buttonColor="#337ab7"
@@ -211,8 +225,9 @@ class HealthWorkersForm extends Component {
             iconName="pencil-square-o"
             iconColor="#FFF"
             buttonColor="grey"
+            marginLeft={10}
           >
-              Cancel
+            Cancel
           </Button>
         </View>
       </View>

@@ -10,13 +10,10 @@ export function clearFields(formName, ...fields) {
 
 export function getAttributesForSelectWithClearOnChange(input, formName, ...fieldsToClear) {
   return {
-    className: 'form-control',
-    value: input.value,
-    onBlur: event => input.onBlur(event.target.value),
-    onChange: (event) => {
+    selected: input.value || null,
+    onSelect: (value) => {
       clearFields(formName, ...fieldsToClear);
-
-      input.onChange(event.target.value);
+      input.onChange(value);
     },
   };
 }

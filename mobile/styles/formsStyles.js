@@ -34,6 +34,8 @@ export default {
   },
   buttonContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 20,
   },
   chwAddContainer: {
     paddingBottom: 50,
