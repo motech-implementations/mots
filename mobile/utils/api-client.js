@@ -1,14 +1,62 @@
 import _ from 'lodash';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Alert } from 'react-native';
 
 import Config from '../config';
+import { signoutUser, useRefreshToken } from '../actions';
+import { dispatch } from '../App';
 
 const CLIENT_URL = Config.api[Config.backend.instance];
 const VALID_STATUSES = [200, 201];
 
+const getErrorMessage = (errorResponse) => {
+  if (errorResponse.status === 400) {
+    return _.values(errorResponse.data).join('\n');
+  }
+
+  return errorResponse.data.message;
+};
+
+const getAlert = message => Alert.alert(
+  'Error occurred.',
+  message,
+  [{ text: 'OK' }],
+  { cancelable: false },
+);
+
 export default class ApiClient {
-  static async handleError(obj) {
-    console.log(obj);
+  static async handleError(error) {
+    const refreshToken = await AsyncStorage.getItem('refresh_token');
+
+    if (error.error === 'invalid_token' && !error.status) {
+      if (refreshToken) {
+        return dispatch(useRefreshToken(refreshToken));
+      }
+      dispatch(signoutUser());
+    }
+
+    switch (error.status) {
+      case 401:
+        if (refreshToken) {
+          return useRefreshToken(refreshToken);
+        }
+        dispatch(signoutUser());
+        break;
+      case 403:
+        getAlert('Access denied.');
+        break;
+      case 404:
+        getAlert('Resource not found. There were some problems with data fetching.');
+        break;
+      case 500:
+        getAlert('There was an internal server error.');
+        break;
+      default: {
+        const errorMessage = getErrorMessage(error.response);
+        const message = errorMessage || error;
+        getAlert(message);
+      }
+    }
+    return error;
   }
 
   static async chooseMethod(method, route, body) {

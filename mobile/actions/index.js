@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import apiClient from '../utils/api-client';
 import AuthClient from '../utils/auth-client';
@@ -8,10 +7,9 @@ import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
   SET_COUNTER_LOGOUT_TIME,
-} from '../../src/webapp/js/actions/types';
+} from './types';
 
 const BASE_URL = '/api';
-const AUTH_URL = `${BASE_URL}/oauth/token`;
 
 const CLIENT_ID = 'trusted-client';
 const CLIENT_SECRET = 'secret';
@@ -54,33 +52,31 @@ export function signinUser({ username, password }, callback, errorCallback) {
 }
 
 export function useRefreshToken(refreshToken, callback) {
-  // TODO rewrite this function using new api client
-  return dispatch => axios({
-    method: 'post',
-    url: `http://10.0.2.2:8080${AUTH_URL}`,
-    auth: {
-      username: CLIENT_ID,
-      password: CLIENT_SECRET,
-    },
-    params: {
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    },
-  })
-    .catch(() => {
-      dispatch(authError('Error occurred when refreshing the user session'));
-    })
-    .then((response) => {
-      AsyncStorage.setItem('token', response.data.access_token);
-      AsyncStorage.setItem('refresh_token', response.data.refresh_token);
-      dispatch({ type: AUTH_USER });
+  return (dispatch) => {
+    authClient.refreshToken(refreshToken)
+      .then(response =>
+        response.json())
+      .then((data) => {
+        dispatch({ type: AUTH_USER });
+        const tokenDecoded = parseJwt(data.access_token);
+        dispatch({
+          type: SET_COUNTER_LOGOUT_TIME,
+          payload: tokenDecoded.exp_period,
+        });
+        AsyncStorage.setItem('token', data.access_token);
+        AsyncStorage.setItem('refresh_token', data.refresh_token);
+        dispatch({ type: AUTH_USER });
 
-      if (callback) {
-        return callback();
-      }
+        if (callback) {
+          return callback();
+        }
 
-      return null;
-    });
+        return null;
+      })
+      .catch(() => {
+        dispatch(authError('Error occurred when refreshing token'));
+      });
+  };
 }
 
 export function signoutUser() {
