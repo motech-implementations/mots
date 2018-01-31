@@ -142,6 +142,7 @@ const FIELDS = {
 
         input.onChange(checked);
       },
+      checked: input.value,
     }),
     label: 'Peer Supervisor',
   },

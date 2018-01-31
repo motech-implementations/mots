@@ -145,7 +145,8 @@ public abstract class ModuleMapper {
 
   @Mappings({
       @Mapping(target = "units", ignore = true),
-      @Mapping(target = "id", ignore = true)
+      @Mapping(target = "id", ignore = true),
+      @Mapping(target = "status", ignore = true)
   })
   abstract void updateFromDto(ModuleDto moduleDto, @MappingTarget Module module);
 

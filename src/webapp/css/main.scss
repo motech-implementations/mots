@@ -295,3 +295,31 @@ a, a:hover, a:focus, a:active, a:visited {
     }
   }
 }
+
+.rst__rowContents {
+  background-color: transparent !important;
+}
+
+.tree-container {
+  height: 100%;
+}
+
+.tree-node-selected {
+  box-shadow: 0 0 2px 4px #00bfff;
+}
+
+.tree-node {
+  background-color: white;
+}
+
+.tree-node-new {
+  background-color: lightgreen;
+}
+
+.tree-node-changed {
+  background-color: lightskyblue;
+}
+
+.tree-node-non-editable {
+  background-color: lightgray;
+}

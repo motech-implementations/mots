@@ -1,10 +1,11 @@
 package org.motechproject.mots.domain;
 
-import java.util.Set;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import lombok.Getter;
@@ -17,8 +18,9 @@ public class MultipleChoiceQuestion extends CallFlowElement {
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "question_id")
+  @OrderBy("ivr_pressed_key ASC")
   @Getter
-  private Set<Choice> choices;
+  private List<Choice> choices;
 
   public MultipleChoiceQuestion() {
     super(CallFlowElementType.QUESTION);
@@ -28,7 +30,7 @@ public class MultipleChoiceQuestion extends CallFlowElement {
    * Update list content.
    * @param choices list of new Choices
    */
-  public void setChoices(Set<Choice> choices) {
+  public void setChoices(List<Choice> choices) {
     if (this.choices == null) {
       this.choices = choices;
     } else if (!this.choices.equals(choices)) {
