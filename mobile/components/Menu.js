@@ -3,8 +3,10 @@ import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import Collapsible from './Collapsible';
+import { signoutUser } from '../actions';
 
 const styles = {
   container: {
@@ -47,6 +49,11 @@ class Menu extends Component {
   openSection(sectionKey) {
     Actions[sectionKey].call();
     this.context.drawer.close();
+  }
+
+  logout() {
+    this.props.signoutUser();
+    Actions.auth();
   }
 
   render() {
@@ -142,10 +149,24 @@ class Menu extends Component {
             <Text style={styles.menuItemText}>Reports</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={() => this.logout()}
+            style={styles.menuItem}
+          >
+            <View style={styles.iconContainer}>
+              <Icon name="sign-out" size={20} color="#337ab7" />
+            </View>
+            <Text style={styles.menuItemText}>Logout</Text>
+          </TouchableOpacity>
+
         </ScrollView>
       </View>
     );
   }
 }
 
-export default Menu;
+export default connect(null, { signoutUser })(Menu);
+
+Menu.propTypes = {
+  signoutUser: PropTypes.func.isRequired,
+};
