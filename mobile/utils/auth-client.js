@@ -21,6 +21,17 @@ export default class AuthClient {
     });
   }
 
+  refreshToken(token) {
+    return fetch(CLIENT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${this.getAuthorizationKey()}`,
+      },
+      body: `grant_type=refresh_token&refresh_token=${token}`,
+    });
+  }
+
   getAuthorizationKey() {
     return base64.encode(`${this.clientId}:${this.clientSecret}`);
   }
