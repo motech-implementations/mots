@@ -53,7 +53,7 @@ class Menu extends Component {
 
   logout() {
     this.props.signoutUser();
-    Actions.auth();
+    Actions.auth({ type: 'reset' });
   }
 
   render() {
