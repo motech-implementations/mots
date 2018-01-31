@@ -1,4 +1,11 @@
 export default {
+  formHeader: {
+    fontSize: 18,
+    textAlign: 'center',
+    paddingVertical: 10,
+    backgroundColor: '#B4B7C0',
+    borderBottomWidth: 0.1,
+  },
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',
@@ -38,6 +45,6 @@ export default {
     paddingTop: 20,
   },
   chwAddContainer: {
-    paddingBottom: 50,
+    paddingBottom: 20,
   },
 };

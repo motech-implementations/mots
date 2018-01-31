@@ -5,7 +5,7 @@ export default class Synchronizer {
   }
 
   logChwList() {
-    console.log(this.store.getState().tablesReducer.chwList);
+    return this.store.getState().tablesReducer.chwList;
   }
 
   synchronizeChws() {

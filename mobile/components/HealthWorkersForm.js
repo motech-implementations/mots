@@ -10,9 +10,16 @@ import { CheckBox } from 'react-native-elements';
 
 import FormField from './FormField';
 import { fetchLocations } from '../actions';
-import { getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
+import {
+  clearFields,
+  untouchFields,
+  getAttributesForSelect,
+  getAttributesForSelectWithClearOnChange,
+  sortValuesByName,
+} from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
+import Spinner from './Spinner';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -47,6 +54,7 @@ const FIELDS = {
         },
       };
     },
+    nonBorderField: true,
   },
   gender: {
     type: Select,
@@ -55,12 +63,7 @@ const FIELDS = {
     getSelectOptions: () => ({
       values: ['Male', 'Female'],
     }),
-    getAttributes: input => ({
-      selected: input.value || null,
-      onSelect: (value) => {
-        input.onChange(value);
-      },
-    }),
+    getAttributes: input => (getAttributesForSelect(input)),
   },
   literacy: {
     type: Select,
@@ -68,6 +71,7 @@ const FIELDS = {
     getSelectOptions: () => ({
       values: ['Can read and write', 'Cannot read and write', 'Can only read'],
     }),
+    getAttributes: input => (getAttributesForSelect(input)),
   },
   educationLevel: {
     type: Select,
@@ -75,6 +79,7 @@ const FIELDS = {
     getSelectOptions: () => ({
       values: ['Primary', 'Secondary', 'Higher', 'None'],
     }),
+    getAttributes: input => (getAttributesForSelect(input)),
   },
   phoneNumber: {
     label: 'Phone Number',
@@ -88,7 +93,9 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'chiefdomId', 'facilityId', 'communityId')),
+    getAttributes: input => (
+      getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'chiefdomId', 'facilityId', 'communityId')
+    ),
   },
   chiefdomId: {
     type: Select,
@@ -102,7 +109,8 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
+    getAttributes: input => (
+      getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
   },
   facilityId: {
     type: Select,
@@ -117,7 +125,8 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
+    getAttributes: input => (
+      getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
   },
   communityId: {
     type: Select,
@@ -136,12 +145,7 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => ({
-      selected: input.value || null,
-      onSelect: (value) => {
-        input.onChange(value);
-      },
-    }),
+    getAttributes: input => (getAttributesForSelect(input)),
   },
   hasPeerSupervisor: {
     type: CheckBox,
@@ -155,6 +159,7 @@ const FIELDS = {
         },
       }
     ),
+    nonBorderField: true,
   },
   supervisor: {
     label: 'Supervisor',
@@ -169,12 +174,7 @@ const FIELDS = {
     getSelectOptions: () => ({
       values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
     }),
-    getAttributes: input => ({
-      selected: input.value || null,
-      onSelect: (value) => {
-        input.onChange(value);
-      },
-    }),
+    getAttributes: input => (getAttributesForSelect(input)),
   },
 };
 
@@ -186,6 +186,8 @@ class HealthWorkersForm extends Component {
   }
 
   componentWillMount() {
+    clearFields(CHW_FORM_NAME, ...(_.keys(FIELDS)));
+    untouchFields(CHW_FORM_NAME, ...(_.keys(FIELDS)));
     this.props.fetchLocations();
   }
 
@@ -204,32 +206,44 @@ class HealthWorkersForm extends Component {
     );
   }
 
-
-  render() {
+  renderButton() {
+    if (this.props.loading) {
+      return (
+        <View style={styles.buttonContainer}>
+          <Spinner size="small" />
+        </View>
+      );
+    }
     const { handleSubmit } = this.props;
 
     return (
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={handleSubmit(this.props.onSubmit)}
+          iconName="check"
+          iconColor="#FFF"
+          buttonColor="#337ab7"
+        >
+                Submit
+        </Button>
+        <Button
+          onPress={() => this.props.onSubmitCancel()}
+          iconName="ban"
+          iconColor="#FFF"
+          buttonColor="grey"
+          marginLeft={10}
+        >
+                Cancel
+        </Button>
+      </View>
+    );
+  }
+
+  render() {
+    return (
       <View style={styles.chwAddContainer}>
         { _.map(FIELDS, this.renderField) }
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={handleSubmit(this.props.onSubmit)}
-            iconName="pencil-square-o"
-            iconColor="#FFF"
-            buttonColor="#337ab7"
-          >
-            Submit
-          </Button>
-          <Button
-            onPress={() => this.props.onSubmitCancel()}
-            iconName="pencil-square-o"
-            iconColor="#FFF"
-            buttonColor="grey"
-            marginLeft={10}
-          >
-            Cancel
-          </Button>
-        </View>
+        {this.renderButton()}
       </View>
     );
   }
@@ -273,6 +287,7 @@ HealthWorkersForm.propTypes = {
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
   hasPeerSupervisor: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 HealthWorkersForm.defaultProps = {
@@ -281,4 +296,5 @@ HealthWorkersForm.defaultProps = {
   chiefdomId: null,
   facilityId: null,
   hasPeerSupervisor: false,
+  loading: false,
 };

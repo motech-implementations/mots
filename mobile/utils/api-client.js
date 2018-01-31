@@ -9,11 +9,11 @@ const CLIENT_URL = Config.api[Config.backend.instance];
 const VALID_STATUSES = [200, 201];
 
 const getErrorMessage = (errorResponse) => {
-  if (errorResponse.status === 400) {
-    return _.values(errorResponse.data).join('\n');
+  if (errorResponse) {
+    return _.values(errorResponse).join('\n');
   }
 
-  return errorResponse.data.message;
+  return '';
 };
 
 const getAlert = (title, message) => Alert.alert(
@@ -43,9 +43,11 @@ export default class ApiClient {
         getAlert('Error occurred.', 'There was an internal server error.');
         break;
       default: {
-        const errorMessage = getErrorMessage(error.response);
-        const message = errorMessage || error;
-        getAlert('Error occurred.', message);
+        error.json().then((data) => {
+          const errorMessage = getErrorMessage(data);
+          const message = errorMessage || data;
+          getAlert('Error occurred.', message);
+        });
       }
     }
     return error;

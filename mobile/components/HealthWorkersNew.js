@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import HealthWorkersForm from './HealthWorkersForm';
 import { createHealthWorker } from '../actions';
 import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
+import listsStyles from '../styles/listsStyles';
+import formsStyles from '../styles/formsStyles';
 
-const styles = {
-  container: {
-    marginTop: 60,
-  },
-  formHeader: {
-    fontSize: 18,
-    textAlign: 'center',
-    paddingVertical: 10,
-    backgroundColor: '#B4B7C0',
-    borderBottomWidth: 0.1,
-  },
-};
+const { container } = listsStyles;
+const { formHeader } = formsStyles;
 
 class HealthWorkersNew extends Component {
   constructor(props) {
     super(props);
+    this.state = { loading: false };
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -32,29 +25,43 @@ class HealthWorkersNew extends Component {
   componentWillMount() {
     hasAuthority(CHW_WRITE_AUTHORITY).then((result) => {
       if (!result) {
-        Actions.home.call();
+        Actions.home();
       }
     });
   }
 
   onSubmitCancel() {
-    Actions.home.call();
-    // this.props.history.push('/chw');
+    this.setState();
+    Actions.home();
   }
 
   onSubmit(values) {
-    this.props.createHealthWorker(values, () => {
-      Actions.chws.call();
-      // this.props.history.push('/chw');
-    });
+    this.setState({ loading: true });
+    this.props.createHealthWorker(values, result => this.onSubmitSuccess(result));
+  }
+
+  onSubmitSuccess(result) {
+    this.setState({ loading: false });
+    if (result) {
+      Alert.alert(
+        'Success!',
+        'New Health Worker has been created',
+        [{ text: 'OK', onPress: () => Actions.home() }],
+        { cancelable: false },
+      );
+    }
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[container, { marginBottom: 0 }]}>
         <ScrollView>
-          <Text style={styles.formHeader}>Add Community Health Worker</Text>
-          <HealthWorkersForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
+          <Text style={formHeader}>Add Community Health Worker</Text>
+          <HealthWorkersForm
+            loading={this.state.loading}
+            onSubmit={this.onSubmit}
+            onSubmitCancel={this.onSubmitCancel}
+          />
         </ScrollView>
       </View>
     );

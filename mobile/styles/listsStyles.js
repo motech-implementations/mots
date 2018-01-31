@@ -1,7 +1,7 @@
 export default {
   container: {
-    marginTop: 60,
-    marginBottom: 20,
+    marginTop: 40,
+    marginBottom: 30,
     backgroundColor: '#FFF',
   },
   title: {

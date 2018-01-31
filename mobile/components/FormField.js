@@ -27,7 +27,9 @@ export default class FormField extends Component {
   renderFieldInput = ({
     fieldConfig, selectOptions, dynamicAttr, input, meta: { touched, error },
   }) => {
-    const { label, type, getAttributes } = fieldConfig;
+    const {
+      label, type, getAttributes, nonBorderField,
+    } = fieldConfig;
     const FieldType = type || TextInput;
     const attr = getAttributes ? getAttributes(input) : { ...input };
     const attributes = {
@@ -40,26 +42,22 @@ export default class FormField extends Component {
 
     return (
       <View>
-        <View className="row">
-          <View className="col-md-4">
-            <FieldWithLabel
-              label={label}
-              nonBorderField={FieldType !== TextInput}
-            >
-              <FieldType
-                {...attributes}
-                onChangeText={text => input.onChange(text)}
-                value={input.value}
-              >
-                {
+        <FieldWithLabel
+          label={label}
+          nonBorderField={nonBorderField}
+        >
+          <FieldType
+            {...attributes}
+            onChangeText={text => input.onChange(text)}
+            value={input.value}
+          >
+            {
                   selectOptions && renderSelectOptions(selectOptions)
                 }
-              </FieldType>
-            </FieldWithLabel>
-            <View>
-              <Text>{ touched ? error : '' }</Text>
-            </View>
-          </View>
+          </FieldType>
+        </FieldWithLabel>
+        <View>
+          <Text style={{ color: 'red' }}>{ touched ? error : '' }</Text>
         </View>
       </View>
     );

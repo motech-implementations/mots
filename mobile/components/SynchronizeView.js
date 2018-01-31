@@ -12,11 +12,6 @@ const styles = {
 };
 
 class SynchronizeView extends Component {
-  constructor() {
-    super();
-    console.log('hello');
-  }
-
   componentDidMount() {
     const synchronizer = new Synchronizer(store);
     synchronizer.synchronizeChws();
