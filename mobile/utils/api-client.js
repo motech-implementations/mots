@@ -31,7 +31,7 @@ export default class ApiClient {
       if (refreshToken) {
         return dispatch(useRefreshToken(refreshToken));
       }
-      dispatch(signoutUser());
+      return dispatch(signoutUser());
     }
 
     switch (error.status) {
@@ -39,8 +39,7 @@ export default class ApiClient {
         if (refreshToken) {
           return useRefreshToken(refreshToken);
         }
-        dispatch(signoutUser());
-        break;
+        return dispatch(signoutUser());
       case 403:
         getAlert('Access denied.');
         break;

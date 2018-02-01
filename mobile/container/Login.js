@@ -30,7 +30,9 @@ class Login extends Component {
   }
 
   onLoginSuccess() {
-    this.setState({ error: '', loading: false });
+    this.setState({
+      username: '', password: '', error: '', loading: false,
+    });
     Keyboard.dismiss();
     Actions.drawer();
   }
