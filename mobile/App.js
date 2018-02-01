@@ -25,9 +25,9 @@ const App = () => (
       </Scene>
       <Scene key="drawer" component={requireAuth(AppDrawer)} initial open={false}>
         <Scene key="main">
-          <Scene key="home" component={requireAuth(Home)} title="Home" hideNavBar={false} navBar={Header} initial />
-          <Scene key="incharges" component={requireAuth(Incharges)} title="Incharge List" hideNavBar={false} navBar={Header} />
-          <Scene key="chws" component={requireAuth(HealthWorkers)} title="Community Health Workers" navBar={Header} />
+          <Scene key="home" component={Home} title="Home" hideNavBar={false} navBar={Header} initial />
+          <Scene key="incharges" component={Incharges} title="Incharge List" hideNavBar={false} navBar={Header} />
+          <Scene key="chws" component={HealthWorkers} title="Community Health Workers" navBar={Header} />
         </Scene>
       </Scene>
     </Router>
