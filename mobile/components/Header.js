@@ -13,8 +13,7 @@ const styles = {
     backgroundColor: '#e1e1e1',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 60,
-    paddingTop: 20,
+    height: 40,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -22,13 +21,11 @@ const styles = {
   },
   textStyle: {
     fontSize: 20,
-    paddingTop: 5,
     paddingRight: 10,
     color: '#9b9b9b',
   },
   iconStyle: {
     paddingLeft: 10,
-    paddingTop: 5,
   },
 };
 

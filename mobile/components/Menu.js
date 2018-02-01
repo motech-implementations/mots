@@ -35,7 +35,7 @@ const styles = {
   title: {
     color: '#337ab7',
     fontSize: 36,
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 20,
     marginLeft: 20,
   },
