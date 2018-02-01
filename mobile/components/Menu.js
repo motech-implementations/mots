@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -53,7 +53,7 @@ class Menu extends Component {
 
   logout() {
     this.props.signoutUser();
-    Actions.auth({ type: 'reset' });
+    Actions.auth({ type: ActionConst.RESET });
   }
 
   render() {

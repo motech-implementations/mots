@@ -26,7 +26,7 @@ class AppDrawer extends Component {
       <Drawer
         open={state.open}
         onOpen={() => Actions.refresh({ key: state.key, open: true })}
-        onClose={() => Actions.refresh({ key: state.key, open: false })}
+        onClose={() => Actions.refresh({ key: 'drawer', open: false })}
         type="displace"
         content={<Menu />}
         tapToClose
