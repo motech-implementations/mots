@@ -16,8 +16,8 @@ const getErrorMessage = (errorResponse) => {
   return errorResponse.data.message;
 };
 
-const getAlert = message => Alert.alert(
-  'Error occurred.',
+const getAlert = (title, message) => Alert.alert(
+  title,
   message,
   [{ text: 'OK' }],
   { cancelable: false },
@@ -27,32 +27,25 @@ export default class ApiClient {
   static async handleError(error) {
     const refreshToken = await AsyncStorage.getItem('refresh_token');
 
-    if (error.error === 'invalid_token' && !error.status) {
-      if (refreshToken) {
-        return dispatch(useRefreshToken(refreshToken));
-      }
-      return dispatch(signoutUser());
-    }
-
     switch (error.status) {
       case 401:
         if (refreshToken) {
-          return useRefreshToken(refreshToken);
+          return dispatch(useRefreshToken(refreshToken));
         }
         return dispatch(signoutUser());
       case 403:
-        getAlert('Access denied.');
+        getAlert('Access denied.', 'You don\'t have permissions to fetch this data');
         break;
       case 404:
-        getAlert('Resource not found. There were some problems with data fetching.');
+        getAlert('Resource not found.', 'There were some problems with data fetching.');
         break;
       case 500:
-        getAlert('There was an internal server error.');
+        getAlert('Error occurred.', 'There was an internal server error.');
         break;
       default: {
         const errorMessage = getErrorMessage(error.response);
         const message = errorMessage || error;
-        getAlert(message);
+        getAlert('Error occurred.', message);
       }
     }
     return error;
@@ -65,13 +58,10 @@ export default class ApiClient {
       body: body || {},
     })
       .then((response) => {
-        const json = response.json();
         if (VALID_STATUSES.indexOf(response.status) !== -1) {
-          return json;
+          return response.json();
         }
-        return json.then((obj) => {
-          throw obj;
-        });
+        throw response;
       })
       .catch((obj) => {
         ApiClient.handleError(obj);
