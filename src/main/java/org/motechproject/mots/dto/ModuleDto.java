@@ -3,6 +3,7 @@ package org.motechproject.mots.dto;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.motechproject.mots.domain.enums.Status;
 
 public class ModuleDto extends IvrObjectDto {
 
@@ -25,6 +26,10 @@ public class ModuleDto extends IvrObjectDto {
   @Getter
   @Setter
   private Integer moduleNumber;
+
+  @Getter
+  @Setter
+  private Status status;
 
   @Getter
   @Setter
