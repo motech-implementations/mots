@@ -22,9 +22,6 @@
         }
       }
     ]
-   },
-   "androidStatusBar": {
-     "backgroundColor": "#000000"
    }
   }
 }
