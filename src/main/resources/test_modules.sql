@@ -1,6 +1,6 @@
-INSERT INTO `call_flow_element` (`id`, `name`, `type`) VALUES('03f8f5a7-045e-4810-ac4e-30d2beda82ae', 'start module 1', 'QUESTION');
-INSERT INTO `call_flow_element` (`id`, `name`, `type`) VALUES('03ff01a2-b413-4b19-b5e2-e3dcc652583b', 'start module 2', 'QUESTION');
-INSERT INTO `call_flow_element` (`id`, `name`, `type`) VALUES('04ea4726-2aef-459a-8a34-8ccd12613396', 'start module 3', 'QUESTION');
+INSERT INTO `call_flow_element` (`id`, `list_order`, `name`, `type`) VALUES('03f8f5a7-045e-4810-ac4e-30d2beda82ae', 0, 'start module 1', 'QUESTION');
+INSERT INTO `call_flow_element` (`id`, `list_order`, `name`, `type`) VALUES('03ff01a2-b413-4b19-b5e2-e3dcc652583b', 0, 'start module 2', 'QUESTION');
+INSERT INTO `call_flow_element` (`id`, `list_order`, `name`, `type`) VALUES('04ea4726-2aef-459a-8a34-8ccd12613396', 0, 'start module 3', 'QUESTION');
 
 INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('03f8f5a7-045e-4810-ac4e-30d2beda82ae');
 INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('03ff01a2-b413-4b19-b5e2-e3dcc652583b');
