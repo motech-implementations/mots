@@ -150,13 +150,13 @@ class Menu extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-              onPress={() => this.openSection('synchronizeView')}
-              style={styles.menuItem}
+            onPress={() => this.openSection('synchronizeView')}
+            style={styles.menuItem}
           >
-              <View style={styles.iconContainer}>
-                  <Icon name="bar-chart" size={20} color="#337ab7" />
-              </View>
-              <Text style={styles.menuItemText}>Synchronize</Text>
+            <View style={styles.iconContainer}>
+              <Icon name="refresh" size={20} color="#337ab7" />
+            </View>
+            <Text style={styles.menuItemText}>Synchronize</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

@@ -52,8 +52,8 @@ export default class FormField extends Component {
             value={input.value}
           >
             {
-                  selectOptions && renderSelectOptions(selectOptions)
-                }
+              selectOptions && renderSelectOptions(selectOptions)
+            }
           </FieldType>
         </FieldWithLabel>
         <View>
