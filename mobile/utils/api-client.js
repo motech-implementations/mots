@@ -9,11 +9,11 @@ const CLIENT_URL = Config.api[Config.backend.instance];
 const VALID_STATUSES = [200, 201];
 
 const getErrorMessage = (errorResponse) => {
-  if (errorResponse.status === 400) {
-    return _.values(errorResponse.data).join('\n');
+  if (errorResponse) {
+    return _.values(errorResponse).join('\n');
   }
 
-  return errorResponse.data.message;
+  return '';
 };
 
 const getAlert = (title, message) => Alert.alert(
@@ -43,9 +43,11 @@ export default class ApiClient {
         getAlert('Error occurred.', 'There was an internal server error.');
         break;
       default: {
-        const errorMessage = getErrorMessage(error.response);
-        const message = errorMessage || error;
-        getAlert('Error occurred.', message);
+        error.json().then((data) => {
+          const errorMessage = getErrorMessage(data);
+          const message = errorMessage || data;
+          getAlert('Error occurred.', message);
+        });
       }
     }
     return error;
@@ -55,7 +57,7 @@ export default class ApiClient {
     return ApiClient.motsFetch({
       method,
       url: route,
-      body: body || {},
+      body: JSON.stringify(body) || undefined,
     })
       .then((response) => {
         if (VALID_STATUSES.indexOf(response.status) !== -1) {
@@ -84,26 +86,24 @@ export default class ApiClient {
     return ApiClient.chooseMethod('DELETE', route);
   }
 
+  static async send(effect) {
+    return ApiClient.chooseMethod(effect.method, effect.url, effect.body);
+  }
+
   static async motsFetch(_options) {
-    const options = _.extend({
+    const fetchOptions = _.extend({
+      headers: {},
       method: 'GET',
       url: null,
-      body: null,
     }, _options);
-
-    const fetchOptions = {
-      method: options.method,
-      headers: {},
-    };
 
     const token = await AsyncStorage.getItem('token');
     fetchOptions.headers.Authorization = `Bearer ${token}`;
-
-    if (options.method in ['POST', 'PUT', 'DELETE']) {
+    if (['POST', 'PUT', 'DELETE'].indexOf(fetchOptions.method) !== -1) {
       fetchOptions.headers.Accept = 'application/json';
       fetchOptions.headers['Content-Type'] = 'application/json';
     }
 
-    return fetch(CLIENT_URL + options.url, fetchOptions);
+    return fetch(CLIENT_URL + fetchOptions.url, fetchOptions);
   }
 }

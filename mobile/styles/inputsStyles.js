@@ -44,4 +44,32 @@ export default {
     alignItems: 'center',
     marginTop: 10,
   },
+  labelFieldStyle: {
+    paddingRight: 5,
+    marginLeft: 30,
+    paddingLeft: 5,
+    marginRight: 5,
+    flex: 2,
+    borderColor: '#ebebeb',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingVertical: 5,
+  },
+  labelSelectFieldStyle: {
+    paddingRight: 5,
+    paddingLeft: 5,
+    flex: 2,
+    borderWidth: 0,
+    borderRadius: 4,
+    paddingVertical: 15,
+  },
+  nonBorderFieldStyle: {
+    paddingVertical: 0,
+    borderWidth: 0,
+    paddingLeft: 0,
+  },
+  optionListStyle: {
+    backgroundColor: '#fff',
+    borderRadius: 4,
+  },
 };

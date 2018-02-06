@@ -104,7 +104,7 @@ export function fetchIncharges() {
 
 export function createHealthWorker(values, callback) {
   const request = apiClient.post(`${BASE_URL}/chw`, values);
-  request.then(() => callback());
+  request.then(result => callback(result));
 
   return {
     type: CREATE_HEALTH_WORKER,
