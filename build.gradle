@@ -30,6 +30,8 @@ targetCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+    maven { url "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/" }
+    maven { url "http://jasperreports.sourceforge.net/maven2/" }
 }
 
 dependencies {
@@ -45,6 +47,7 @@ dependencies {
     compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'org.apache.poi:poi-ooxml:3.17'
+    compile "net.sf.jasperreports:jasperreports:6.5.0"
 
     apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
     apt 'org.projectlombok:lombok:1.16.18'
