@@ -6,13 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import javax.validation.constraints.Pattern;
-import org.motechproject.mots.constants.MotsConstants;
+import org.motechproject.mots.validate.constraintvalidators.UuidValidator;
 
 @Target(ElementType.FIELD)
-@Constraint(validatedBy={})
+@Constraint(validatedBy={UuidValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-@Pattern(regexp= MotsConstants.UUID_PATTERN)
 public @interface Uuid {
   String message() default "{invalid.uuid}";
   Class<?>[] groups() default {};

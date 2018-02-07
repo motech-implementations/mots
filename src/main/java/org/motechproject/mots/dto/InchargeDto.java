@@ -11,6 +11,7 @@ public class InchargeDto {
 
   @Getter
   @Setter
+  @Uuid(message = ValidationMessages.INVALID_INCHARGE_ID)
   private String id;
 
   @Getter

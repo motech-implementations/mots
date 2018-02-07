@@ -41,7 +41,7 @@ public class ChwValidator extends AbstractValidator {
         ValidationMessages.EMPTY_PHONE_NUMBER);
     rejectIfNull(errors, COMMUNITY, chw.getCommunity(), ValidationMessages.EMPTY_COMMUNITY);
     rejectIfNull(errors, PREFERRED_LANGUAGE, chw.getPreferredLanguage(),
-        ValidationMessages.EMPTY_PREFFERED_LANGUAGE);
+        ValidationMessages.EMPTY_PREFERRED_LANGUAGE);
 
     Optional<CommunityHealthWorker> existingChw = repository.findByChwId(chw.getChwId());
 

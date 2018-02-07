@@ -8,12 +8,13 @@ public final class ValidationMessages {
   public static final String EMPTY_GENDER = "Gender cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone Number cannot be empty";
   public static final String EMPTY_COMMUNITY = "Community cannot be empty";
-  public static final String EMPTY_PREFFERED_LANGUAGE = "Preferred Language cannot be empty";
+  public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail";
-  public static final String INVALID_DISTRICT_ID = "Invalid district's UUID";
-  public static final String INVALID_CHIEFDOM_ID = "Invalid chiefdom's UUID";
-  public static final String INVALID_FACILITY_ID = "Invalid facility's UUID";
+  public static final String INVALID_INCHARGE_ID = "Invalid incharge UUID";
+  public static final String INVALID_DISTRICT_ID = "Invalid district UUID";
+  public static final String INVALID_CHIEFDOM_ID = "Invalid chiefdom UUID";
+  public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
 
   private ValidationMessages() {}
 }
