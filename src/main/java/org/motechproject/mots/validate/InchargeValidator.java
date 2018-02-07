@@ -39,7 +39,9 @@ public class InchargeValidator extends AbstractValidator {
   }
 
   private void validatePhoneNumberUniqueness(Errors errors, Incharge incharge) {
-    Optional<Incharge> existingIncharge = inchargeRepository.findByPhoneNumber(incharge.getPhoneNumber());
+    Optional<Incharge> existingIncharge = inchargeRepository.findByPhoneNumber(
+        incharge.getPhoneNumber());
+
     existingIncharge.ifPresent(foundedIncharge -> {
       if (!foundedIncharge.getId().equals(incharge.getId())) {
         errors.rejectValue(PHONE_NUMBER, ERROR_CODE, ValidationMessages.NOT_UNIQUE_PHONE_NUMBER);
@@ -57,10 +59,9 @@ public class InchargeValidator extends AbstractValidator {
   }
 
   private void validateIfFacilityAlreadyExists(Errors errors, Facility facility) {
-    if (facility != null && facility.getId() != null) {
-      if (!facilityRepository.exists(facility.getId())) {
-        errors.rejectValue(FACILITY_ID, ERROR_CODE, ValidationMessages.NOT_EXISITNG_FACILITY);
-      }
+    if (facility != null && facility.getId() != null
+        && !facilityRepository.exists(facility.getId())) {
+      errors.rejectValue(FACILITY_ID, ERROR_CODE, ValidationMessages.NOT_EXISTING_FACILITY);
     }
   }
 }

@@ -11,9 +11,13 @@ public class UuidValidator implements ConstraintValidator<Uuid, String> {
 
   private static final Pattern PATTERN = Pattern.compile(MotsConstants.UUID_PATTERN);
 
+  @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
     return StringUtils.isEmpty(value) || PATTERN.matcher(value).matches();
   }
 
-  public void initialize(Uuid parameters) { }
+  @Override
+  public void initialize(Uuid parameters) {
+    // we don't need any passed parameters
+  }
 }

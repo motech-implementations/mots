@@ -19,7 +19,8 @@ public final class ValidationMessages {
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
   public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";
 
-  public static final String NOT_EXISITNG_FACILITY = "Facility doesn't exist";
+  public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
 
-  private ValidationMessages() {}
+  private ValidationMessages() {
+  }
 }
