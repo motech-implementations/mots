@@ -5,8 +5,6 @@ import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Select } from 'react-native-chooser';
-import DatePicker from 'react-native-datepicker';
-import { CheckBox } from 'react-native-elements';
 
 import FormField from './FormField';
 import { fetchLocations } from '../actions';
@@ -14,7 +12,6 @@ import {
   clearFields,
   untouchFields,
   getSelectableLocations,
-  getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
   sortValuesByName,
 } from '../utils/form-utils';
@@ -22,12 +19,8 @@ import Button from './Button';
 import styles from '../styles/formsStyles';
 import Spinner from './Spinner';
 
-export const CHW_FORM_NAME = 'HealthWorkersForm';
+export const INCHARGE_FORM_NAME = 'InchargesForm';
 const FIELDS = {
-  chwId: {
-    label: 'CHW Id',
-    required: true,
-  },
   firstName: {
     label: 'First Name',
     required: true,
@@ -39,52 +32,12 @@ const FIELDS = {
   otherName: {
     label: 'Other Name',
   },
-  dateOfBirth: {
-    label: 'Date of Birth',
-    type: DatePicker,
-    getAttributes: (input) => {
-      const format = 'YYYY-MM-DD';
-      return {
-        format,
-        timeFormat: false,
-        closeOnSelect: true,
-        date: input.value,
-        onDateChange: (param) => {
-          const formatted = !param || typeof param === 'string' ? param : param.format(format);
-          input.onChange(formatted);
-        },
-      };
-    },
-    nonBorderField: true,
-  },
-  gender: {
-    type: Select,
-    label: 'Gender',
-    required: true,
-    getSelectOptions: () => ({
-      values: ['Male', 'Female'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
-  literacy: {
-    type: Select,
-    label: 'Literacy',
-    getSelectOptions: () => ({
-      values: ['Can read and write', 'Cannot read and write', 'Can only read'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
-  educationLevel: {
-    type: Select,
-    label: 'Educational Level',
-    getSelectOptions: () => ({
-      values: ['Primary', 'Secondary', 'Higher', 'None'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
   phoneNumber: {
     label: 'Phone Number',
     required: true,
+  },
+  email: {
+    label: 'Email address',
   },
   districtId: {
     type: Select,
@@ -98,7 +51,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(availableLocations),
-        CHW_FORM_NAME,
+        INCHARGE_FORM_NAME,
         'chiefdomId',
         'facilityId',
         'communityId',
@@ -124,7 +77,7 @@ const FIELDS = {
           availableLocations,
           districtId,
         ),
-        CHW_FORM_NAME,
+        INCHARGE_FORM_NAME,
         'facilityId',
         'communityId',
       )
@@ -133,6 +86,7 @@ const FIELDS = {
   facilityId: {
     type: Select,
     label: 'Facility',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => {
       const district = availableLocations && districtId && availableLocations[districtId];
       const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
@@ -151,74 +105,14 @@ const FIELDS = {
           districtId,
           chiefdomId,
         ),
-        CHW_FORM_NAME,
+        INCHARGE_FORM_NAME,
         'communityId',
       )
     ),
   },
-  communityId: {
-    type: Select,
-    label: 'Community',
-    required: true,
-    getSelectOptions: ({
-      availableLocations, districtId, chiefdomId, facilityId,
-    }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
-      const facility = facilityId && chiefdom && chiefdom.facilities[facilityId];
-
-      return ({
-        values: facility && sortValuesByName(facility.communities),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
-    getAttributes: (input, {
-      availableLocations, districtId, chiefdomId, facilityId,
-    }) => (
-      getAttributesForSelect(
-        input,
-        getSelectableLocations(
-          availableLocations,
-          districtId,
-          chiefdomId,
-          facilityId,
-        ),
-      )
-    ),
-  },
-  hasPeerSupervisor: {
-    type: CheckBox,
-    label: 'Peer Supervisor',
-    getAttributes: input => (
-      {
-        title: 'check',
-        checked: input.value === true,
-        onPress: () => {
-          input.onChange(!input.value);
-        },
-      }
-    ),
-    nonBorderField: true,
-  },
-  supervisor: {
-    label: 'Supervisor',
-    getDynamicAttributes: ({ hasPeerSupervisor }) => ({
-      hidden: !hasPeerSupervisor,
-    }),
-  },
-  preferredLanguage: {
-    type: Select,
-    label: 'Preferred Language',
-    required: true,
-    getSelectOptions: () => ({
-      values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
 };
 
-class HealthWorkersForm extends Component {
+class InchargesForm extends Component {
   constructor(props) {
     super(props);
 
@@ -226,8 +120,8 @@ class HealthWorkersForm extends Component {
   }
 
   componentWillMount() {
-    clearFields(CHW_FORM_NAME, ...(_.keys(FIELDS)));
-    untouchFields(CHW_FORM_NAME, ...(_.keys(FIELDS)));
+    clearFields(INCHARGE_FORM_NAME, ...(_.keys(FIELDS)));
+    untouchFields(INCHARGE_FORM_NAME, ...(_.keys(FIELDS)));
     this.props.fetchLocations();
   }
 
@@ -240,8 +134,6 @@ class HealthWorkersForm extends Component {
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
-        facilityId={this.props.facilityId}
-        hasPeerSupervisor={this.props.hasPeerSupervisor}
       />
     );
   }
@@ -300,24 +192,22 @@ function validate(values) {
   return errors;
 }
 
-const selector = formValueSelector(CHW_FORM_NAME);
+const selector = formValueSelector(INCHARGE_FORM_NAME);
 
 function mapStateToProps(state) {
   return {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
-    facilityId: selector(state, 'facilityId'),
-    hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
 
 export default reduxForm({
   validate,
-  form: CHW_FORM_NAME,
-})(connect(mapStateToProps, { fetchLocations })(HealthWorkersForm));
+  form: INCHARGE_FORM_NAME,
+})(connect(mapStateToProps, { fetchLocations })(InchargesForm));
 
-HealthWorkersForm.propTypes = {
+InchargesForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -325,16 +215,12 @@ HealthWorkersForm.propTypes = {
   availableLocations: PropTypes.shape({}),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
-  facilityId: PropTypes.string,
-  hasPeerSupervisor: PropTypes.bool,
   loading: PropTypes.bool,
 };
 
-HealthWorkersForm.defaultProps = {
+InchargesForm.defaultProps = {
   availableLocations: null,
   districtId: null,
   chiefdomId: null,
-  facilityId: null,
-  hasPeerSupervisor: false,
   loading: false,
 };

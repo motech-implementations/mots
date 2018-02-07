@@ -124,7 +124,7 @@ export function saveHealthWorker(values, callback) {
 
 export function createIncharge(values, callback) {
   const request = apiClient.post(`${BASE_URL}/incharge`, values);
-  request.then(() => callback());
+  request.then(result => callback(result));
 
   return {
     type: CREATE_INCHARGE,
@@ -134,7 +134,7 @@ export function createIncharge(values, callback) {
 
 export function saveIncharge(values, callback) {
   const request = apiClient.put(`${BASE_URL}/incharge/${values.id}`, values);
-  request.then(() => callback());
+  request.then(result => callback(result));
 
   return {
     type: SAVE_INCHARGE,

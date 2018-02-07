@@ -32,9 +32,9 @@ const COLUMNS = [
     Header: 'Actions',
     minWidth: 50,
     accessor: 'id',
-    Cell: () => (
+    Cell: cell => (
       <Button
-        onPress={Actions.home}
+        onPress={() => Actions.inchargesEdit({ inchargeId: cell.value })}
         iconName="pencil-square-o"
         iconColor="#FFF"
         buttonColor="#337ab7"
