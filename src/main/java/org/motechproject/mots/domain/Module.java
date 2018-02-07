@@ -13,12 +13,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.MotsException;
+import org.motechproject.mots.validate.ModuleReleaseCheck;
 
 @Entity
 @Table(name = "module")
@@ -48,6 +51,7 @@ public class Module extends IvrObject {
   @Getter
   private String nameCode;
 
+  @NotBlank(message = "IVR Group cannot be empty", groups = ModuleReleaseCheck.class)
   @Column(name = "ivr_group")
   @Getter
   @Setter
@@ -73,12 +77,14 @@ public class Module extends IvrObject {
   @Getter
   private Integer version;
 
+  @Valid
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "start_module_question_id")
   @Getter
   @Setter
   private MultipleChoiceQuestion startModuleQuestion;
 
+  @Valid
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "module_id")
   @OrderBy("list_order ASC")

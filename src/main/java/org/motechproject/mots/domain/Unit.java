@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -33,12 +34,14 @@ public class Unit extends IvrObject {
   @Setter
   private Integer listOrder;
 
+  @Valid
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "unit_id")
   @OrderBy("list_order ASC")
   @Getter
   private List<CallFlowElement> callFlowElements;
 
+  @Valid
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "continuation_question_id")
   @Getter

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
@@ -18,6 +19,7 @@ public abstract class CallFlowElementDto extends IvrObjectDto {
   @Setter
   private String id;
 
+  @NotBlank(message = "Message/Question name cannot be empty")
   @Getter
   @Setter
   private String name;
