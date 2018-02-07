@@ -3,10 +3,10 @@ package org.motechproject.mots.constants;
 public final class ValidationMessages {
 
   public static final String EMPTY_CHW_ID = "CHW Id cannot be empty";
-  public static final String EMPTY_FIST_NAME = "First Name cannot be empty";
+  public static final String EMPTY_FIST_NAME = "First name cannot be empty";
   public static final String EMPTY_SECOND_NAME = "Surname cannot be empty";
   public static final String EMPTY_GENDER = "Gender cannot be empty";
-  public static final String EMPTY_PHONE_NUMBER = "Phone Number cannot be empty";
+  public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_COMMUNITY = "Community cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
 
@@ -15,6 +15,11 @@ public final class ValidationMessages {
   public static final String INVALID_DISTRICT_ID = "Invalid district UUID";
   public static final String INVALID_CHIEFDOM_ID = "Invalid chiefdom UUID";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
+
+  public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
+  public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";
+
+  public static final String NOT_EXISITNG_FACILITY = "Facility doesn't exist";
 
   private ValidationMessages() {}
 }
