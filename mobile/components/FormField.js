@@ -10,13 +10,13 @@ function renderSelectOptions(options) {
   const { values, valueKey, displayNameKey } = options;
 
   return [
-    _.map(values, (value, index) => {
+    _.map(values, (value) => {
       const rawValue = valueKey ? value[valueKey] : value;
       const optionValue = typeof rawValue === 'string' ? rawValue : JSON.stringify(rawValue);
       const displayValue = displayNameKey ? value[displayNameKey] : value;
 
       return (
-        <Option key={index} value={optionValue} disabled={value.disabled}>
+        <Option value={optionValue}>
           { displayValue || '' }
         </Option>);
     }),
@@ -31,7 +31,7 @@ export default class FormField extends Component {
       label, type, getAttributes, nonBorderField,
     } = fieldConfig;
     const FieldType = type || TextInput;
-    const attr = getAttributes ? getAttributes(input) : { ...input };
+    const attr = getAttributes ? getAttributes(input, this.props) : { ...input };
     const attributes = {
       value: input.value,
       disabled: selectOptions && (!selectOptions.values || !selectOptions.values.length),
