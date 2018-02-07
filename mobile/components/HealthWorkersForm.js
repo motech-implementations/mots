@@ -13,6 +13,7 @@ import { fetchLocations } from '../actions';
 import {
   clearFields,
   untouchFields,
+  getSelectableLocations,
   getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
   sortValuesByName,
@@ -93,8 +94,15 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (
-      getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'chiefdomId', 'facilityId', 'communityId')
+    getAttributes: (input, { availableLocations }) => (
+      getAttributesForSelectWithClearOnChange(
+        input,
+        getSelectableLocations(availableLocations),
+        CHW_FORM_NAME,
+        'chiefdomId',
+        'facilityId',
+        'communityId',
+      )
     ),
   },
   chiefdomId: {
@@ -109,8 +117,18 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => (
-      getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
+    getAttributes: (input, { availableLocations, districtId }) => (
+      getAttributesForSelectWithClearOnChange(
+        input,
+        getSelectableLocations(
+          availableLocations,
+          districtId,
+        ),
+        CHW_FORM_NAME,
+        'facilityId',
+        'communityId',
+      )
+    ),
   },
   facilityId: {
     type: Select,
@@ -125,8 +143,18 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => (
-      getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
+    getAttributes: (input, { availableLocations, districtId, chiefdomId }) => (
+      getAttributesForSelectWithClearOnChange(
+        input,
+        getSelectableLocations(
+          availableLocations,
+          districtId,
+          chiefdomId,
+        ),
+        CHW_FORM_NAME,
+        'communityId',
+      )
+    ),
   },
   communityId: {
     type: Select,
@@ -145,7 +173,19 @@ const FIELDS = {
         valueKey: 'id',
       });
     },
-    getAttributes: input => (getAttributesForSelect(input)),
+    getAttributes: (input, {
+      availableLocations, districtId, chiefdomId, facilityId,
+    }) => (
+      getAttributesForSelect(
+        input,
+        getSelectableLocations(
+          availableLocations,
+          districtId,
+          chiefdomId,
+          facilityId,
+        ),
+      )
+    ),
   },
   hasPeerSupervisor: {
     type: CheckBox,

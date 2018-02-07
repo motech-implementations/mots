@@ -5,6 +5,21 @@ import styles from '../styles/inputsStyles';
 
 const { labelSelectFieldStyle, optionListStyle } = styles;
 
+export function getSelectableLocations(locations, districtId, chiefdomId, facilityId) {
+  let { district, chiefdom, facility } = { district: {}, chiefdom: {}, facility: {} };
+
+  if (locations && districtId && locations[districtId]) {
+    district = locations[districtId];
+  }
+  if (chiefdomId && district && district.chiefdoms[chiefdomId]) {
+    chiefdom = district.chiefdoms[chiefdomId];
+  }
+  if (facilityId && chiefdom && chiefdom.facilities[facilityId]) {
+    facility = chiefdom.facilities[facilityId];
+  }
+  return facility.communities || chiefdom.facilities || district.chiefdoms || locations;
+}
+
 export function clearFields(formName, ...fields) {
   _.each(fields, (field) => {
     dispatch(change(formName, field, null));
@@ -17,9 +32,14 @@ export function untouchFields(formName, ...fields) {
   });
 }
 
-export function getAttributesForSelect(input) {
+export function getAttributesForSelect(input, availableLocations) {
+  let defaultText = input.value;
+  if (input.value && availableLocations && availableLocations[input.value]) {
+    defaultText = availableLocations[input.value].name;
+  }
+
   return {
-    selected: input.value || null,
+    defaultText: defaultText || 'Click to Select',
     onSelect: (value) => {
       input.onChange(value);
     },
@@ -29,9 +49,15 @@ export function getAttributesForSelect(input) {
   };
 }
 
-export function getAttributesForSelectWithClearOnChange(input, formName, ...fieldsToClear) {
+export function
+getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...fieldsToClear) {
+  let defaultText = input.value;
+  if (input.value && availableLocations && availableLocations[input.value]) {
+    defaultText = availableLocations[input.value].name;
+  }
+
   return {
-    selected: input.value || null,
+    defaultText: defaultText || 'Click to Select',
     onSelect: (value) => {
       clearFields(formName, ...fieldsToClear);
       input.onChange(value);

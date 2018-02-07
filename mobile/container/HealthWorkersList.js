@@ -49,10 +49,10 @@ const COLUMNS = [
     Header: 'Actions',
     minWidth: 70,
     accessor: 'id',
-    Cell: () => (
+    Cell: cell => (
       <View style={styles.buttonContainer}>
         <Button
-          onPress={Actions.home}
+          onPress={() => Actions.chwsEdit({ chwId: cell.value })}
           iconName="pencil-square-o"
           iconColor="#FFF"
           buttonColor="#337ab7"

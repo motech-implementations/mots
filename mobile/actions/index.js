@@ -114,7 +114,7 @@ export function createHealthWorker(values, callback) {
 
 export function saveHealthWorker(values, callback) {
   const request = apiClient.put(`${BASE_URL}/chw/${values.id}`, values);
-  request.then(() => callback());
+  request.then(result => callback(result));
 
   return {
     type: SAVE_HEALTH_WORKER,
