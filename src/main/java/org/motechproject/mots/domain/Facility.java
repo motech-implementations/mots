@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.motechproject.mots.domain.enums.FacilityType;
 
 @Entity
 @Table(name = "facility", uniqueConstraints =
@@ -31,10 +34,18 @@ public class Facility extends BaseEntity {
   @NonNull
   private String name;
 
-  @Column(name = "type")
+  @Column(name = "type", nullable = false)
   @Getter
   @Setter
-  private String type;
+  @NonNull
+  @Enumerated(EnumType.STRING)
+  private FacilityType type;
+
+  @Column(name = "facility_id", nullable = false, unique = true)
+  @Getter
+  @Setter
+  @NonNull
+  private String facilityId;
 
   @OneToMany(mappedBy = "facility")
   @Getter
