@@ -71,13 +71,7 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
     CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
 
-    BindingResult bindingResult = new BeanPropertyBindingResult(healthWorker,
-        COMMUNITY_HEALTH_WORKER);
-    validator.validate(healthWorker, bindingResult);
-
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
+    validateDomainObject(healthWorker);
 
     return healthWorkerMapper.toDto(healthWorkerService.createHealthWorker(healthWorker));
   }
@@ -107,8 +101,14 @@ public class CommunityHealthWorkerController extends BaseController {
   @ResponseBody
   public CommunityHealthWorkerDto saveHealthWorker(@PathVariable("id") UUID id,
       @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
-    CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
+    CommunityHealthWorker existingHealthWorker = healthWorkerService.getHealthWorker(id);
+    healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
 
+    validateDomainObject(existingHealthWorker);
+    return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(existingHealthWorker));
+  }
+
+  private void validateDomainObject(CommunityHealthWorker healthWorker) {
     BindingResult bindingResult = new BeanPropertyBindingResult(healthWorker,
         COMMUNITY_HEALTH_WORKER);
     validator.validate(healthWorker, bindingResult);
@@ -116,7 +116,5 @@ public class CommunityHealthWorkerController extends BaseController {
     if (bindingResult.hasErrors()) {
       throw new BindingResultException(getErrors(bindingResult));
     }
-
-    return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(healthWorker));
   }
 }
