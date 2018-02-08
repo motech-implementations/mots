@@ -8,7 +8,6 @@ import org.motechproject.mots.dto.InchargeDto;
 import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.mapper.InchargeMapper;
 import org.motechproject.mots.service.InchargeService;
-import org.motechproject.mots.validate.InchargeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,9 +24,6 @@ public class InchargeController extends BaseController {
 
   @Autowired
   private InchargeService inchargeService;
-
-  @Autowired
-  private InchargeValidator inchargeValidator;
 
   private InchargeMapper inchargeMapper = InchargeMapper.INSTANCE;
 
@@ -68,8 +64,8 @@ public class InchargeController extends BaseController {
   @ResponseBody
   public InchargeDto createIncharge(@RequestBody @Valid InchargeDto inchargeDto,
       BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
     Incharge incharge = inchargeMapper.fromDto(inchargeDto);
-    validateIncharge(incharge, bindingResult);
     return inchargeMapper.toDto(inchargeService.saveIncharge(incharge));
   }
 
@@ -84,18 +80,13 @@ public class InchargeController extends BaseController {
   @ResponseBody
   public InchargeDto saveIncharge(@PathVariable("id") UUID id,
       @RequestBody @Valid InchargeDto inchargeDto, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
+    checkBindingResult(bindingResult);
     Incharge existingIncharge = inchargeService.getIncharge(id);
     inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
-    validateIncharge(existingIncharge, bindingResult);
     return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
   }
 
-  private void validateIncharge(Incharge incharge, BindingResult bindingResult) {
-    inchargeValidator.validate(incharge, bindingResult);
-
+  private void checkBindingResult(BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       throw new BindingResultException(getErrors(bindingResult));
     }
