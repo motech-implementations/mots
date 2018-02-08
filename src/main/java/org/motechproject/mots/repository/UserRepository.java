@@ -7,5 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, UUID> {
 
+  Optional<User> findById(UUID id);
+
   Optional<User> findOneByUsername(String username);
 }

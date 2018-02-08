@@ -8,6 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface CommunityHealthWorkerRepository extends
     CrudRepository<CommunityHealthWorker, UUID> {
 
+  Optional<CommunityHealthWorker> findById(UUID id);
+
   Optional<CommunityHealthWorker> findByChwId(String chwId);
 
   Optional<CommunityHealthWorker> findByPhoneNumber(String phoneNumber);

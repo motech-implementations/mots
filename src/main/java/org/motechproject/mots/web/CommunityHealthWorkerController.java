@@ -102,6 +102,7 @@ public class CommunityHealthWorkerController extends BaseController {
   public CommunityHealthWorkerDto saveHealthWorker(@PathVariable("id") UUID id,
       @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
     CommunityHealthWorker existingHealthWorker = healthWorkerService.getHealthWorker(id);
+
     healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
 
     validateDomainObject(existingHealthWorker);

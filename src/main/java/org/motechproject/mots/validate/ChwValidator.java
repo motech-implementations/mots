@@ -10,6 +10,8 @@ import org.springframework.validation.Errors;
 @Component
 public class ChwValidator extends AbstractValidator {
 
+  private static final String ERROR_CODE = "errorCode";
+
   private static final String CHW_ID = "chwId";
   private static final String FIRST_NAME = "firstName";
   private static final String SECOND_NAME = "secondName";
@@ -43,7 +45,7 @@ public class ChwValidator extends AbstractValidator {
 
     existingChw.ifPresent(healthWorker -> {
       if (!healthWorker.getId().equals(chw.getId())) {
-        errors.rejectValue("chwId", "CHW with this CHW Id already exists");
+        errors.rejectValue("chwId", ERROR_CODE, "CHW with this CHW Id already exists");
       }
     });
 
@@ -51,7 +53,8 @@ public class ChwValidator extends AbstractValidator {
 
     existingChw.ifPresent(healthWorker -> {
       if (!healthWorker.getId().equals(chw.getId())) {
-        errors.rejectValue("phoneNumber", "CHW with this Phone Number already exists");
+        errors.rejectValue("phoneNumber", ERROR_CODE,
+            "CHW with this Phone Number already exists");
       }
     });
   }

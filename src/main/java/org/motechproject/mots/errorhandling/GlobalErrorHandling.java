@@ -2,6 +2,7 @@ package org.motechproject.mots.errorhandling;
 
 import java.util.Map;
 import org.motechproject.mots.exception.BindingResultException;
+import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,6 +35,13 @@ public class GlobalErrorHandling extends AbstractErrorHandling {
   @ResponseBody
   public Map<String, String> handleBindingResultException(BindingResultException ex) {
     return ex.getErrors();
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ResponseBody
+  public ErrorResponse entityNotFoundException(EntityNotFoundException ex) {
+    return logAndGetErrorResponse(ex);
   }
 
   @ExceptionHandler(AccessDeniedException.class)

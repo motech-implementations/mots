@@ -4,6 +4,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
+import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,8 @@ public class UserService {
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User getUser(UUID id) {
-    return userRepository.findOne(id);
+    return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        String.format("User with id: %s not found", id.toString())));
   }
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
