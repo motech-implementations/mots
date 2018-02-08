@@ -5,9 +5,9 @@ import { View, Text, ScrollView, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { initialize } from 'redux-form';
 
-import HealthWorkersForm, { CHW_FORM_NAME } from './HealthWorkersForm';
-import { saveHealthWorker } from '../actions';
-import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
+import InchargesForm, { INCHARGE_FORM_NAME } from './InchargesForm';
+import { saveIncharge } from '../actions';
+import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 import listsStyles from '../styles/listsStyles';
 import formsStyles from '../styles/formsStyles';
 import apiClient from '../utils/api-client';
@@ -15,7 +15,7 @@ import apiClient from '../utils/api-client';
 const { container } = listsStyles;
 const { formHeader } = formsStyles;
 
-class HealthWorkersEdit extends Component {
+class InchargesEdit extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: false };
@@ -25,28 +25,28 @@ class HealthWorkersEdit extends Component {
   }
 
   componentWillMount() {
-    hasAuthority(CHW_WRITE_AUTHORITY).then((result) => {
+    hasAuthority(INCHARGE_WRITE_AUTHORITY).then((result) => {
       if (!result) {
         Actions.home();
       }
-      this.fetchChw();
+      this.fetchIncharge();
     });
   }
 
   onSubmitCancel() {
     this.setState({ loading: false });
-    Actions.chws();
+    Actions.incharges();
   }
 
   onSubmit(values) {
     Alert.alert(
       '',
-      'Are you sure to edit Community Health Worker?',
+      'Are you sure to edit Incharge?',
       [{
         text: 'Confirm',
         onPress: () => {
           this.setState({ loading: true });
-          this.props.saveHealthWorker(values, result => this.onSubmitSuccess(result));
+          this.props.saveIncharge(values, result => this.onSubmitSuccess(result));
         },
       },
       {
@@ -62,18 +62,18 @@ class HealthWorkersEdit extends Component {
     if (result) {
       Alert.alert(
         'Success!',
-        'Health Worker has been successfully edited',
-        [{ text: 'OK', onPress: () => Actions.chws() }],
+        'Incharge has been successfully edited',
+        [{ text: 'OK', onPress: () => Actions.incharges() }],
         { cancelable: false },
       );
     }
   }
 
-  fetchChw() {
-    const url = `/api/chw/${this.props.chwId}`;
+  fetchIncharge() {
+    const url = `/api/incharge/${this.props.inchargeId}`;
     apiClient.get(url)
       .then((response) => {
-        this.props.initialize(CHW_FORM_NAME, response);
+        this.props.initialize(INCHARGE_FORM_NAME, response);
       });
   }
 
@@ -81,8 +81,8 @@ class HealthWorkersEdit extends Component {
     return (
       <View style={[container, { marginBottom: 0 }]}>
         <ScrollView>
-          <Text style={formHeader}>Edit Community Health Worker</Text>
-          <HealthWorkersForm
+          <Text style={formHeader}>Edit Incharge</Text>
+          <InchargesForm
             loading={this.state.loading}
             onSubmit={this.onSubmit}
             onSubmitCancel={this.onSubmitCancel}
@@ -93,10 +93,10 @@ class HealthWorkersEdit extends Component {
   }
 }
 
-export default connect(null, { saveHealthWorker, initialize })(HealthWorkersEdit);
+export default connect(null, { saveIncharge, initialize })(InchargesEdit);
 
-HealthWorkersEdit.propTypes = {
-  saveHealthWorker: PropTypes.func.isRequired,
-  chwId: PropTypes.string.isRequired,
+InchargesEdit.propTypes = {
+  saveIncharge: PropTypes.func.isRequired,
+  inchargeId: PropTypes.string.isRequired,
   initialize: PropTypes.func.isRequired,
 };

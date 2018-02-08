@@ -11,9 +11,12 @@ export default {
     fontSize: 18,
   },
   labelStyle: {
-    paddingLeft: 20,
-    fontSize: 18,
+    paddingLeft: 10,
+    fontSize: 16,
     flex: 1,
+  },
+  labelStyleSmall: {
+    fontSize: 14,
   },
   iconInputStyle: {
     color: '#000',

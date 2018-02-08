@@ -7,6 +7,8 @@ import { View, StatusBar } from 'react-native';
 import Header from './components/Header';
 import Home from './components/Home';
 import Incharges from './components/Incharges';
+import InchargesNew from './components/InchargesNew';
+import InchargesEdit from './components/InchargesEdit';
 import HealthWorkers from './components/HealthWorkers';
 import HealthWorkersNew from './components/HealthWorkersNew';
 import SynchronizeView from './components/SynchronizeView';
@@ -33,6 +35,8 @@ const App = () => (
           <Scene key="main">
             <Scene key="home" component={Home} title="Home" hideNavBar={false} navBar={Header} initial />
             <Scene key="incharges" component={Incharges} title="Incharge List" hideNavBar={false} navBar={Header} />
+            <Scene key="inchargesNew" component={InchargesNew} title="Add Incharge" navBar={Header} />
+            <Scene key="inchargesEdit" component={InchargesEdit} title="Edit Incharge" navBar={Header} />
             <Scene key="chws" component={HealthWorkers} title="Community Health Workers" navBar={Header} />
             <Scene key="chwsNew" component={HealthWorkersNew} title="Add Community Health Worker" navBar={Header} />
             <Scene key="chwsEdit" component={HealthWorkersEdit} title="Edit Community Health Worker" navBar={Header} />

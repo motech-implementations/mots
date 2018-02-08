@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, PixelRatio } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../styles/inputsStyles';
 
@@ -7,13 +7,14 @@ const FieldWithLabel = ({ label, children, nonBorderField }) => {
   const {
     labelFieldStyle,
     labelStyle,
+    labelStyleSmall,
     containerStyle,
     nonBorderFieldStyle,
   } = styles;
 
   return (
     <View style={containerStyle}>
-      <Text style={labelStyle}>{label}</Text>
+      <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>{label}</Text>
       <View style={[labelFieldStyle, nonBorderField ? nonBorderFieldStyle : '']}>
         {children}
       </View>

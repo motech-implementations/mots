@@ -44,7 +44,7 @@ export default {
     justifyContent: 'center',
     paddingTop: 20,
   },
-  chwAddContainer: {
+  formAddContainer: {
     paddingBottom: 20,
   },
 };

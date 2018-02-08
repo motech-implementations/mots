@@ -4,7 +4,7 @@ import HealthWorkersList from '../container/HealthWorkersList';
 
 import styles from '../styles/listsStyles';
 
-const Incharges = () => (
+const HealthWorkers = () => (
   <View style={styles.container}>
     <Text style={styles.title}>
       {PixelRatio.get() < 2 ? 'CHW List' : 'Community Health Workers'}
@@ -13,4 +13,4 @@ const Incharges = () => (
   </View>
 );
 
-export default Incharges;
+export default HealthWorkers;
