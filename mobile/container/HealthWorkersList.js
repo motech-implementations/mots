@@ -81,7 +81,7 @@ class HealthWorkersList extends Component {
 
   render() {
     return (
-      <ScrollView style={{ marginBottom: 40 }}>
+      <ScrollView>
         <ListItems data={this.props.chwList} columns={COLUMNS} />
       </ScrollView>
     );
