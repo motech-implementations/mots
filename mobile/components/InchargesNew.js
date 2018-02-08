@@ -46,7 +46,7 @@ class InchargesNew extends Component {
       Alert.alert(
         'Success!',
         'New Incharge has been created',
-        [{ text: 'OK', onPress: () => Actions.home() }],
+        [{ text: 'OK', onPress: () => Actions.incharges() }],
         { cancelable: false },
       );
     }

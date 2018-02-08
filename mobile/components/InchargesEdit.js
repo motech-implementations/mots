@@ -35,12 +35,26 @@ class InchargesEdit extends Component {
 
   onSubmitCancel() {
     this.setState({ loading: false });
-    Actions.home();
+    Actions.incharges();
   }
 
   onSubmit(values) {
-    this.setState({ loading: true });
-    this.props.saveIncharge(values, result => this.onSubmitSuccess(result));
+    Alert.alert(
+      '',
+      'Are you sure to edit Incharge?',
+      [{
+        text: 'Confirm',
+        onPress: () => {
+          this.setState({ loading: true });
+          this.props.saveIncharge(values, result => this.onSubmitSuccess(result));
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      }],
+      { cancelable: false },
+    );
   }
 
   onSubmitSuccess(result) {
@@ -49,7 +63,7 @@ class InchargesEdit extends Component {
       Alert.alert(
         'Success!',
         'Incharge has been successfully edited',
-        [{ text: 'OK', onPress: () => Actions.home() }],
+        [{ text: 'OK', onPress: () => Actions.incharges() }],
         { cancelable: false },
       );
     }

@@ -46,7 +46,7 @@ class HealthWorkersNew extends Component {
       Alert.alert(
         'Success!',
         'New Health Worker has been created',
-        [{ text: 'OK', onPress: () => Actions.home() }],
+        [{ text: 'OK', onPress: () => Actions.chws() }],
         { cancelable: false },
       );
     }

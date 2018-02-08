@@ -20,6 +20,7 @@ function renderSelectOptions(options) {
           { displayValue || '' }
         </Option>);
     }),
+    <Option value={null} />,
   ];
 }
 
@@ -28,8 +29,9 @@ export default class FormField extends Component {
     fieldConfig, selectOptions, dynamicAttr, input, meta: { touched, error },
   }) => {
     const {
-      label, type, getAttributes, nonBorderField,
+      label, type, getAttributes, nonBorderField, required,
     } = fieldConfig;
+    const labelWithAsterisk = required && `${label}*`;
     const FieldType = type || TextInput;
     const attr = getAttributes ? getAttributes(input, this.props) : { ...input };
     const attributes = {
@@ -41,9 +43,10 @@ export default class FormField extends Component {
     };
 
     return (
+      !attributes.hidden &&
       <View>
         <FieldWithLabel
-          label={label}
+          label={labelWithAsterisk || label}
           nonBorderField={nonBorderField}
         >
           <FieldType

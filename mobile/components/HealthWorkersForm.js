@@ -48,6 +48,7 @@ const FIELDS = {
         format,
         timeFormat: false,
         closeOnSelect: true,
+        placeholder: 'Select a date',
         date: input.value,
         onDateChange: (param) => {
           const formatted = !param || typeof param === 'string' ? param : param.format(format);
@@ -196,6 +197,7 @@ const FIELDS = {
         checked: input.value === true,
         onPress: () => {
           input.onChange(!input.value);
+          clearFields(CHW_FORM_NAME, 'supervisor');
         },
       }
     ),

@@ -35,12 +35,26 @@ class HealthWorkersEdit extends Component {
 
   onSubmitCancel() {
     this.setState({ loading: false });
-    Actions.home();
+    Actions.chws();
   }
 
   onSubmit(values) {
-    this.setState({ loading: true });
-    this.props.saveHealthWorker(values, result => this.onSubmitSuccess(result));
+    Alert.alert(
+      '',
+      'Are you sure to edit Community Health Worker?',
+      [{
+        text: 'Confirm',
+        onPress: () => {
+          this.setState({ loading: true });
+          this.props.saveHealthWorker(values, result => this.onSubmitSuccess(result));
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      }],
+      { cancelable: false },
+    );
   }
 
   onSubmitSuccess(result) {
@@ -49,7 +63,7 @@ class HealthWorkersEdit extends Component {
       Alert.alert(
         'Success!',
         'Health Worker has been successfully edited',
-        [{ text: 'OK', onPress: () => Actions.home() }],
+        [{ text: 'OK', onPress: () => Actions.chws() }],
         { cancelable: false },
       );
     }
