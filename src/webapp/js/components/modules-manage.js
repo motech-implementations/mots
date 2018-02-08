@@ -54,6 +54,7 @@ class ModulesManage extends Component {
 
     this.addModule = this.addModule.bind(this);
     this.saveModule = this.saveModule.bind(this);
+    this.releaseModule = this.releaseModule.bind(this);
   }
 
   componentWillMount() {
@@ -129,6 +130,16 @@ class ModulesManage extends Component {
           this.updateAndSelectModule(response.data, moduleIndex);
         });
     }
+  }
+
+  releaseModule() {
+    const moduleId = this.state.selectedElement.path[0];
+    const moduleIndex = ModulesManage.findNodeIndex(this.state.treeData, moduleId);
+
+    apiClient.put(`/api/modules/${moduleId}/release`)
+      .then((response) => {
+        this.updateAndSelectModule(response.data, moduleIndex);
+      });
   }
 
   fetchModules() {
@@ -419,6 +430,7 @@ class ModulesManage extends Component {
             {
               this.state.selectedElement.path && <ModuleForm
                 onSubmit={this.saveModule}
+                releaseModule={this.releaseModule}
                 isEditable={this.isEditable(
                   this.state.selectedElement.node,
                   this.state.selectedElement.path,

@@ -60,18 +60,16 @@ public class ModuleService {
 
   /**
    * Release Module.
-   * @param id id of Module to be released
+   * @param module Module to be released
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
-  public void releaseModule(UUID id) {
-    Module module = findById(id);
-
+  public Module releaseModule(Module module) {
     module.release();
 
-    moduleRepository.save(module);
+    return moduleRepository.save(module);
   }
 
-  private Module findById(UUID id) {
+  public Module findById(UUID id) {
     return moduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
         String.format("Module with id: %s not found", id.toString())));
   }

@@ -8,13 +8,13 @@ public abstract class AbstractValidator implements Validator {
 
   protected void rejectIfEmpty(Errors errors, String field, String value, String errorMessage) {
     if (StringUtils.isBlank(value)) {
-      errors.rejectValue(field, errorMessage);
+      errors.rejectValue(field, "", errorMessage);
     }
   }
 
   protected void rejectIfNull(Errors errors, String field, Object value, String errorMessage) {
     if (value == null) {
-      errors.rejectValue(field, errorMessage);
+      errors.rejectValue(field, "", errorMessage);
     }
   }
 }

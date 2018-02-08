@@ -324,6 +324,14 @@ class ModuleForm extends Component {
               { this.props.isEditable &&
               <button
                 type="button"
+                disabled={this.props.isNew || this.props.nodeChanged || !pristine || submitting}
+                className="btn btn-success margin-left-sm margin-bottom-md"
+                onClick={this.props.releaseModule}
+              >Publish
+              </button> }
+              { this.props.isEditable &&
+              <button
+                type="button"
                 disabled={pristine || submitting}
                 className="btn btn-danger margin-left-sm margin-bottom-md"
                 onClick={reset}
@@ -373,9 +381,11 @@ function validate(values) {
 const selector = formValueSelector(MODULE_FORM_NAME);
 
 function mapStateToProps(state) {
+  const id = selector(state, 'id');
   return {
     nodeType: selector(state, 'type'),
     nodeChanged: selector(state, 'changed'),
+    isNew: id === null || id === undefined,
   };
 }
 
@@ -390,12 +400,15 @@ ModuleForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  releaseModule: PropTypes.func.isRequired,
   isEditable: PropTypes.bool.isRequired,
   nodeType: PropTypes.string,
   nodeChanged: PropTypes.bool,
+  isNew: PropTypes.bool,
 };
 
 ModuleForm.defaultProps = {
   nodeType: null,
   nodeChanged: false,
+  isNew: true,
 };
