@@ -53,7 +53,7 @@ class InchargeList extends Component {
 
   render() {
     return (
-      <ScrollView style={{ marginBottom: 40 }}>
+      <ScrollView>
         <ListItems data={this.props.incharges} columns={COLUMNS} />
       </ScrollView>
     );
