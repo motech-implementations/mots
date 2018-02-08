@@ -34,7 +34,7 @@ public class ChwValidator extends AbstractValidator {
     CommunityHealthWorker chw = (CommunityHealthWorker) target;
 
     rejectIfEmpty(errors, CHW_ID, chw.getChwId(), ValidationMessages.EMPTY_CHW_ID);
-    rejectIfEmpty(errors, FIRST_NAME, chw.getFirstName(), ValidationMessages.EMPTY_FIST_NAME);
+    rejectIfEmpty(errors, FIRST_NAME, chw.getFirstName(), ValidationMessages.EMPTY_FIRST_NAME);
     rejectIfEmpty(errors, SECOND_NAME, chw.getSecondName(), ValidationMessages.EMPTY_SECOND_NAME);
     rejectIfNull(errors, GENDER, chw.getGender(), ValidationMessages.EMPTY_GENDER);
     rejectIfEmpty(errors, PHONE_NUMBER, chw.getPhoneNumber(),

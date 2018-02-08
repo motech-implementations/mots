@@ -3,8 +3,10 @@ package org.motechproject.mots.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class InchargeDto {
@@ -16,12 +18,12 @@ public class InchargeDto {
 
   @Getter
   @Setter
-  @NotEmpty(message = ValidationMessages.EMPTY_FIST_NAME)
+  @NotBlank(message = ValidationMessages.EMPTY_FIRST_NAME)
   private String firstName;
 
   @Getter
   @Setter
-  @NotEmpty(message = ValidationMessages.EMPTY_SECOND_NAME)
+  @NotBlank(message = ValidationMessages.EMPTY_SECOND_NAME)
   private String secondName;
 
   @Getter
@@ -30,7 +32,8 @@ public class InchargeDto {
 
   @Getter
   @Setter
-  @NotEmpty(message = ValidationMessages.EMPTY_PHONE_NUMBER)
+  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
+  @PhoneNumber
   private String phoneNumber;
 
   @Getter
@@ -40,14 +43,10 @@ public class InchargeDto {
 
   @Getter
   @Setter
-  @NotEmpty
-  @Uuid(message = ValidationMessages.INVALID_DISTRICT_ID)
   private String districtId;
 
   @Getter
   @Setter
-  @NotEmpty
-  @Uuid(message = ValidationMessages.INVALID_CHIEFDOM_ID)
   private String chiefdomId;
 
   @Getter

@@ -4,12 +4,11 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.validate.ValidationUtils;
-import org.motechproject.mots.validate.annotations.Uuid;
+import org.motechproject.mots.validate.annotations.PhoneNumber;
 
-public class UuidValidator implements ConstraintValidator<Uuid, String> {
+public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
-  private static final String PATTERN =
-      "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$";
+  private static final String PATTERN = "^\\d*$";
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -17,7 +16,7 @@ public class UuidValidator implements ConstraintValidator<Uuid, String> {
   }
 
   @Override
-  public void initialize(Uuid parameters) {
+  public void initialize(PhoneNumber parameters) {
     // we don't need any passed parameters
   }
 }
