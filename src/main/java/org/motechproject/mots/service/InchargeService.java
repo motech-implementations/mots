@@ -3,6 +3,7 @@ package org.motechproject.mots.service;
 import java.util.UUID;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
+import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.repository.InchargeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ public class InchargeService {
 
   @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
   public Incharge getIncharge(UUID id) {
-    return inchargeRepository.findOne(id);
+    return inchargeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        String.format("Incharge with id: %s not found", id.toString())));
   }
 }

@@ -7,6 +7,7 @@ import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.exception.ChwCreationException;
+import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
@@ -76,7 +77,8 @@ public class CommunityHealthWorkerService {
 
   @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public CommunityHealthWorker getHealthWorker(UUID id) {
-    return healthWorkerRepository.findOne(id);
+    return healthWorkerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
+        String.format("CommunityHealthWorker with id: %s not found", id.toString())));
   }
 
   @PreAuthorize(RoleNames.HAS_CHW_WRITE_ROLE)

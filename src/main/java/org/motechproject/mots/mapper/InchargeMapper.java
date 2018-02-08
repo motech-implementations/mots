@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -25,11 +26,18 @@ public interface InchargeMapper {
   InchargeDto toDto(Incharge incharge);
 
   @Mappings({
+      @Mapping(target = "id", ignore = true),
       @Mapping(target = "facility", source = "facilityId")
   })
   Incharge fromDto(InchargeDto inchargeDto);
 
   List<InchargeDto> toDtos(Iterable<Incharge> incharges);
+
+  @Mappings({
+      @Mapping(target = "id", ignore = true),
+      @Mapping(target = "facility", source = "facilityId")
+  })
+  void updateFromDto(InchargeDto inchargeDto, @MappingTarget Incharge incharge);
 
   /**
    * Create Facility object with given id. This is to bind Incharge to Facility during creation.

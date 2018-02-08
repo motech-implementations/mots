@@ -76,9 +76,11 @@ public class InchargeController extends BaseController {
   @ResponseBody
   public InchargeDto saveIncharge(@PathVariable("id") UUID id,
       @RequestBody InchargeDto inchargeDto) {
-    Incharge incharge = inchargeMapper.fromDto(inchargeDto);
+    Incharge existingIncharge = inchargeService.getIncharge(id);
 
-    return inchargeMapper.toDto(inchargeService.saveIncharge(incharge));
+    inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
+
+    return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
   }
 
 }

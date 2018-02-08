@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -33,12 +34,21 @@ public interface CommunityHealthWorkerMapper {
   CommunityHealthWorkerDto toDto(CommunityHealthWorker healthWorker);
 
   @Mappings({
+      @Mapping(target = "id", ignore = true),
       @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),
       @Mapping(target = "community", source = "communityId")
   })
   CommunityHealthWorker fromDto(CommunityHealthWorkerDto healthWorkerDto);
 
   List<CommunityHealthWorkerDto> toDtos(Iterable<CommunityHealthWorker> healthWorkers);
+
+  @Mappings({
+      @Mapping(target = "id", ignore = true),
+      @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),
+      @Mapping(target = "community", source = "communityId")
+  })
+  void updateFromDto(CommunityHealthWorkerDto healthWorkerDto,
+      @MappingTarget CommunityHealthWorker healthWorker);
 
   /**
    * Create community object with given id.
