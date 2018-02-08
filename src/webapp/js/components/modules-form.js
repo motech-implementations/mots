@@ -29,6 +29,7 @@ const QUESTION_FIELDS = {
       ivrPressedKey: {
         label: 'IVR Pressed Key',
         required: true,
+        minVal: 0,
         attributes: {
           type: 'number',
         },
@@ -126,6 +127,7 @@ const MODULE_FIELDS = {
   moduleNumber: {
     label: 'Module Number',
     required: true,
+    minVal: 0,
     attributes: {
       type: 'number',
     },
@@ -353,19 +355,22 @@ function validateFields(fields, values) {
   const errors = {};
 
   _.each(fields, (fieldConfig, fieldName) => {
-    if (fieldConfig.type === 'section') {
-      errors[fieldName] = validateFields(fieldConfig.fields, values[fieldName]);
-    } else if (fieldConfig.type === 'array') {
-      const array = values[fieldName];
+    const fieldValue = values[fieldName];
 
-      if (array) {
+    if (fieldConfig.type === 'section') {
+      errors[fieldName] = validateFields(fieldConfig.fields, fieldValue);
+    } else if (fieldConfig.type === 'array') {
+      if (fieldValue) {
         errors[fieldName] = [];
-        _.each(array, (value) => {
+        _.each(fieldValue, (value) => {
           errors[fieldName].push(validateFields(fieldConfig.fields, value));
         });
       }
-    } else if (fieldConfig.required && (values[fieldName] === undefined || values[fieldName] === null || values[fieldName] === '')) {
+    } else if (fieldConfig.required && (fieldValue === undefined || fieldValue === null || fieldValue === '')) {
       errors[fieldName] = 'This field is required';
+    } else if (fieldConfig.minVal !== null && fieldConfig.minVal !== undefined
+      && fieldValue !== null && fieldValue !== undefined && fieldValue < fieldConfig.minVal) {
+      errors[fieldName] = `This field value cannot be less than ${fieldConfig.minVal}`;
     }
   });
 

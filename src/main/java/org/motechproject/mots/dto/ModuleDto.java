@@ -2,6 +2,7 @@ package org.motechproject.mots.dto;
 
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class ModuleDto extends IvrObjectDto {
   @Setter
   private String ivrGroup;
 
+  @Min(value = 0, message = "Module Number cannot be negative")
   @NotNull(message = "Module Number cannot be empty")
   @Getter
   @Setter

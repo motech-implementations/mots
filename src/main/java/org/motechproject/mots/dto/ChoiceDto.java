@@ -1,5 +1,6 @@
 package org.motechproject.mots.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ public class ChoiceDto {
   @Setter
   private String id;
 
+  @Min(value = 0, message = "Choice IVR Pressed Key cannot be negative")
   @NotNull(message = "Choice IVR Pressed Key cannot be empty")
   @Getter
   @Setter
