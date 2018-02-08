@@ -6,7 +6,7 @@ import apiClient from '../utils/api-client';
 import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME,
+  SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER,
 } from './types';
 
 const BASE_URL = '/api';
@@ -79,6 +79,10 @@ export function useRefreshToken(refreshToken, callback) {
 
 export function signoutUser() {
   return { type: UNAUTH_USER };
+}
+
+export function resetLogoutCounter() {
+  return { type: RESET_LOGOUT_COUNTER };
 }
 
 export function fetchChws() {

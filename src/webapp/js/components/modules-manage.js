@@ -9,6 +9,7 @@ import update from 'immutability-helper';
 import apiClient from '../utils/api-client';
 import { hasAuthority, MANAGE_MODULES_AUTHORITY } from '../utils/authorization';
 import ModuleForm, { MODULE_FORM_NAME } from './modules-form';
+import { resetLogoutCounter } from '../actions/index';
 
 class ModulesManage extends Component {
   static getNodeKey(node) {
@@ -169,6 +170,7 @@ class ModulesManage extends Component {
     }));
 
     this.props.initialize(MODULE_FORM_NAME, _.omit(newModule, 'children', 'expanded'));
+    this.props.resetLogoutCounter();
   }
 
   updateModule(nodeIndexPath, newModule) {
@@ -228,6 +230,8 @@ class ModulesManage extends Component {
     if (ModulesManage.areEqual(this.state.selectedElement.node, module)) {
       this.props.initialize(MODULE_FORM_NAME, _.omit({ ...module, changed: true }, 'children', 'expanded'), true);
     }
+
+    this.props.resetLogoutCounter();
   }
 
   addUnit(path) {
@@ -290,8 +294,6 @@ class ModulesManage extends Component {
         },
       }),
     }));
-
-    this.reinitializeForm(this.state.treeData[nodeIndexPath[0]]);
   }
 
   removeMessageOrQuestion(nodeIndexPath) {
@@ -307,8 +309,6 @@ class ModulesManage extends Component {
         },
       }),
     }));
-
-    this.reinitializeForm(this.state.treeData[nodeIndexPath[0]]);
   }
 
   removeNode(path, node) {
@@ -320,6 +320,7 @@ class ModulesManage extends Component {
       this.removeMessageOrQuestion(nodeIndexPath);
     }
 
+    this.reinitializeForm(this.state.treeData[nodeIndexPath[0]]);
     this.selectParentNode(path, nodeIndexPath, node);
   }
 
@@ -407,6 +408,8 @@ class ModulesManage extends Component {
                   this.setState(() => ({
                     selectedElement: { node, path },
                   }));
+
+                  this.props.resetLogoutCounter();
                 },
                 className: this.getNodeClassName(node),
                 buttons: node.type === 'MODULE' || !this.isEditable(node, path) ? [] : [
@@ -454,12 +457,13 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { initialize })(ModulesManage);
+export default connect(mapStateToProps, { initialize, resetLogoutCounter })(ModulesManage);
 
 ModulesManage.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
   initialize: PropTypes.func.isRequired,
   formDirty: PropTypes.bool,
   formValues: PropTypes.shape({}),
