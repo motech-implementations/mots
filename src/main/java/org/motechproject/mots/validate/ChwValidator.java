@@ -1,6 +1,7 @@
 package org.motechproject.mots.validate;
 
 import java.util.Optional;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,15 @@ public class ChwValidator extends AbstractValidator {
   public void validate(Object target, Errors errors) {
     CommunityHealthWorker chw = (CommunityHealthWorker) target;
 
-    rejectIfEmpty(errors, CHW_ID, chw.getChwId(), "CHW Id cannot be empty");
-    rejectIfEmpty(errors, FIRST_NAME, chw.getFirstName(), "First Name cannot be empty");
-    rejectIfEmpty(errors, SECOND_NAME, chw.getSecondName(), "Surname cannot be empty");
-    rejectIfNull(errors, GENDER, chw.getGender(), "Gender cannot be empty");
-    rejectIfEmpty(errors, PHONE_NUMBER, chw.getPhoneNumber(), "Phone Number cannot be empty");
-    rejectIfNull(errors, COMMUNITY, chw.getCommunity(), "Community cannot be empty");
+    rejectIfEmpty(errors, CHW_ID, chw.getChwId(), ValidationMessages.EMPTY_CHW_ID);
+    rejectIfEmpty(errors, FIRST_NAME, chw.getFirstName(), ValidationMessages.EMPTY_FIRST_NAME);
+    rejectIfEmpty(errors, SECOND_NAME, chw.getSecondName(), ValidationMessages.EMPTY_SECOND_NAME);
+    rejectIfNull(errors, GENDER, chw.getGender(), ValidationMessages.EMPTY_GENDER);
+    rejectIfEmpty(errors, PHONE_NUMBER, chw.getPhoneNumber(),
+        ValidationMessages.EMPTY_PHONE_NUMBER);
+    rejectIfNull(errors, COMMUNITY, chw.getCommunity(), ValidationMessages.EMPTY_COMMUNITY);
     rejectIfNull(errors, PREFERRED_LANGUAGE, chw.getPreferredLanguage(),
-        "Preferred Language cannot be empty");
+        ValidationMessages.EMPTY_PREFERRED_LANGUAGE);
 
     Optional<CommunityHealthWorker> existingChw = repository.findByChwId(chw.getChwId());
 

@@ -8,4 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface InchargeRepository extends CrudRepository<Incharge, UUID> {
 
   Optional<Incharge> findById(UUID id);
+
+  Optional<Incharge> findByPhoneNumber(String phoneNumber);
+
+  Optional<Incharge> findByFacilityId(UUID id);
 }
