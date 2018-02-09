@@ -47,7 +47,6 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @DateOfBirth
-  @NotEmpty(message = ValidationMessages.EMPTY_DATE_OF_BIRTH)
   private String dateOfBirth;
 
   @Getter

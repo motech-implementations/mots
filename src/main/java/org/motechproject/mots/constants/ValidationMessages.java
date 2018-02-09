@@ -9,7 +9,6 @@ public final class ValidationMessages {
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_COMMUNITY = "Community cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
-  public static final String EMPTY_DATE_OF_BIRTH = "Date of birth cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail";
   public static final String INVALID_ID = "Invalid ID (UUID)";
