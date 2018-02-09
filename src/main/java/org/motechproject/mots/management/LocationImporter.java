@@ -198,10 +198,12 @@ public class LocationImporter implements ApplicationRunner {
           row.getCell(NAME_FACILITY_COL_NUMBER).getStringCellValue());
 
       Facility facility = new Facility(cellText, facilityType, facilityId);
-      String parentName = row.getCell(CHIEFDOM_COL_NUMBER).getStringCellValue();
+      String parentChiefdomName = row.getCell(CHIEFDOM_COL_NUMBER).getStringCellValue();
+      String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 
       Chiefdom parent = currentChiefdomList.stream()
-          .filter(chiefdom -> chiefdom.getName().equals(parentName))
+          .filter(chiefdom -> chiefdom.getName().equals(parentChiefdomName)
+              && chiefdom.getDistrict().getName().equals(parentDistrictName))
           .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Facility parent "
               + "is not defined properly in spreadsheet", facility.getName())));
 
@@ -239,10 +241,12 @@ public class LocationImporter implements ApplicationRunner {
       Community community = new Community(cellText);
       String parentFacilityName = row.getCell(FACILITY_COL_NUMBER).getStringCellValue();
       String parentChiefdomName = row.getCell(CHIEFDOM_COL_NUMBER).getStringCellValue();
+      String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 
       Facility parent = currentFacilityList.stream()
           .filter(facility -> facility.getName().equals(parentFacilityName)
-              && facility.getChiefdom().getName().equals(parentChiefdomName))
+              && facility.getChiefdom().getName().equals(parentChiefdomName)
+              && facility.getChiefdom().getDistrict().getName().equals(parentDistrictName))
           .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Community parent "
               + "is not defined properly in spreadsheet", community.getName())));
 
