@@ -1,4 +1,4 @@
-package org.motechproject.mots.validate.annotations.incharge;
+package org.motechproject.mots.validate.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.InchargeDtoFacilityUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.FacilityExistenceValidator;
 
-@Target(ElementType.TYPE)
-@Constraint(validatedBy = {InchargeDtoFacilityUniquenessValidator.class})
+@Target(ElementType.FIELD)
+@Constraint(validatedBy = {FacilityExistenceValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InchargeDtoFacilityUniqueness {
+public @interface FacilityExistence {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_UNIQUE_PHONE_NUMBER;
+  String message() default ValidationMessages.NOT_EXISTING_FACILITY;
 
   /**
    * Specify validation groups, to which this constraint belongs

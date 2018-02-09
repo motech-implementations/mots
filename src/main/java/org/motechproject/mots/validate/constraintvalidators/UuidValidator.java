@@ -8,12 +8,9 @@ import org.motechproject.mots.validate.annotations.Uuid;
 
 public class UuidValidator implements ConstraintValidator<Uuid, String> {
 
-  private static final String PATTERN =
-      "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$";
-
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return StringUtils.isEmpty(value) || ValidationUtils.matchPattern(PATTERN, value);
+    return StringUtils.isEmpty(value) || ValidationUtils.isValidUuidString(value);
   }
 
   @Override

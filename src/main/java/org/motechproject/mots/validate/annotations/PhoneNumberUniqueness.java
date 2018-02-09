@@ -1,4 +1,4 @@
-package org.motechproject.mots.validate.annotations.incharge;
+package org.motechproject.mots.validate.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,12 +7,12 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.InchargeDtoPhoneNumberUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.incharge.InchargeDtoPhoneNumberUniquenessValidator;
 
 @Target(ElementType.TYPE)
 @Constraint(validatedBy = {InchargeDtoPhoneNumberUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InchargeDtoPhoneNumberUniqueness {
+public @interface PhoneNumberUniqueness {
 
   /**
    * Specify the message in case of a validation error

@@ -6,11 +6,14 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.annotations.incharge.InchargeDtoDbConstraints;
+import org.motechproject.mots.validate.annotations.FacilityExistence;
+import org.motechproject.mots.validate.annotations.FacilityUniqueness;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
+import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
-@InchargeDtoDbConstraints
+@FacilityUniqueness
+@PhoneNumberUniqueness
 public class InchargeDto {
 
   @Getter
@@ -34,8 +37,8 @@ public class InchargeDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
   @PhoneNumber
+  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
   private String phoneNumber;
 
   @Getter
@@ -53,8 +56,9 @@ public class InchargeDto {
 
   @Getter
   @Setter
-  @NotEmpty
+  @FacilityExistence
   @Uuid(message = ValidationMessages.INVALID_FACILITY_ID)
+  @NotEmpty
   private String facilityId;
 
   @Getter
