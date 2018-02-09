@@ -21,7 +21,6 @@ public class InchargeDtoPhoneNumberUniquenessValidator implements
 
   @Override
   public boolean isValid(InchargeDto inchargeDto, ConstraintValidatorContext context) {
-    boolean isValid = true;
     if (StringUtils.isNotBlank(inchargeDto.getPhoneNumber())) {
       Optional<Incharge> existingIncharge = inchargeRepository.findByPhoneNumber(
           inchargeDto.getPhoneNumber());
@@ -30,10 +29,10 @@ public class InchargeDtoPhoneNumberUniquenessValidator implements
           && !StringUtils.equals(inchargeDto.getId(), existingIncharge.get().getId().toString())) {
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, PHONE_NUMBER);
-        isValid = false;
+        return false;
       }
     }
-    return isValid;
+    return true;
   }
 
   @Override

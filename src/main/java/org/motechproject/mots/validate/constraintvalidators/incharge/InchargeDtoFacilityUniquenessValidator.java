@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.dto.InchargeDto;
 import org.motechproject.mots.repository.InchargeRepository;
@@ -23,22 +22,20 @@ public class InchargeDtoFacilityUniquenessValidator implements
 
   @Override
   public boolean isValid(InchargeDto inchargeDto, ConstraintValidatorContext context) {
-    boolean isValid = true;
     if (StringUtils.isNotEmpty(inchargeDto.getId())
         && StringUtils.isNotEmpty(inchargeDto.getFacilityId())
         && ValidationUtils.isValidUuidString(inchargeDto.getFacilityId())) {
       UUID facilityId = UUID.fromString(inchargeDto.getFacilityId());
-      Optional<Incharge> existingIncharge = inchargeRepository
-          .findByFacility(new Facility(facilityId));
+      Optional<Incharge> existingIncharge = inchargeRepository.findByFacilityId(facilityId);
 
       if (existingIncharge.isPresent()
           && !StringUtils.equals(inchargeDto.getId(), existingIncharge.get().getId().toString())) {
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, FACILITY_ID);
-        isValid = false;
+        return false;
       }
     }
-    return isValid;
+    return true;
   }
 
   @Override

@@ -16,14 +16,13 @@ public class FacilityExistenceValidator implements ConstraintValidator<FacilityE
 
   @Override
   public boolean isValid(String facilityId, ConstraintValidatorContext context) {
-    boolean isValid = true;
     if (StringUtils.isNotEmpty(facilityId) && ValidationUtils.isValidUuidString(facilityId)) {
       UUID facility = UUID.fromString(facilityId);
       if (!facilityRepository.exists(facility)) {
-        isValid = false;
+        return false;
       }
     }
-    return isValid;
+    return true;
   }
 
   @Override

@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.dto.InchargeDto;
-import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.mapper.InchargeMapper;
 import org.motechproject.mots.service.InchargeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,11 +83,5 @@ public class InchargeController extends BaseController {
     Incharge existingIncharge = inchargeService.getIncharge(id);
     inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
     return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
-  }
-
-  private void checkBindingResult(BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
   }
 }
