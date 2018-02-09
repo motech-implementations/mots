@@ -127,7 +127,7 @@ const MODULE_FIELDS = {
   moduleNumber: {
     label: 'Module Number',
     required: true,
-    minVal: 0,
+    minVal: 1,
     attributes: {
       type: 'number',
     },
