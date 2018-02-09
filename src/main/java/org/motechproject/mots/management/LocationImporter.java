@@ -237,10 +237,12 @@ public class LocationImporter implements ApplicationRunner {
       }
 
       Community community = new Community(cellText);
-      String parentName = row.getCell(FACILITY_COL_NUMBER).getStringCellValue();
+      String parentFacilityName = row.getCell(FACILITY_COL_NUMBER).getStringCellValue();
+      String parentChiefdomName = row.getCell(CHIEFDOM_COL_NUMBER).getStringCellValue();
 
       Facility parent = currentFacilityList.stream()
-          .filter(facility -> facility.getName().equals(parentName))
+          .filter(facility -> facility.getName().equals(parentFacilityName)
+              && facility.getChiefdom().getName().equals(parentChiefdomName))
           .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Community parent "
               + "is not defined properly in spreadsheet", community.getName())));
 
