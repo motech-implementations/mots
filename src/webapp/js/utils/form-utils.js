@@ -21,6 +21,38 @@ export function getAttributesForSelectWithClearOnChange(input, formName, ...fiel
   };
 }
 
-export function sortValuesByName(object) {
-  return _.sortBy(_.values(object), x => x.name.toLowerCase());
+export function getChiefdomsFromDistrictById(list, id) {
+  const chiefdoms = [];
+  if (list && id) {
+    list.forEach((loc) => {
+      if (loc.id === id) {
+        Array.prototype.push.apply(chiefdoms, loc.chiefdoms);
+      }
+    });
+  }
+  return chiefdoms;
+}
+
+export function getFacilitiesFromChiefdomById(list, id) {
+  const facilities = [];
+  if (list && id) {
+    list.forEach((loc) => {
+      if (loc.id === id) {
+        Array.prototype.push.apply(facilities, loc.facilities);
+      }
+    });
+  }
+  return facilities;
+}
+
+export function getCommunitiesFromFacilitiesById(list, id) {
+  const communities = [];
+  if (list && id) {
+    list.forEach((loc) => {
+      if (loc.id === id) {
+        Array.prototype.push.apply(communities, loc.communities);
+      }
+    });
+  }
+  return communities;
 }

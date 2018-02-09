@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OrderBy;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -28,5 +29,6 @@ public class District extends BaseEntity {
   @OneToMany(mappedBy = "district")
   @Getter
   @Setter
+  @OrderBy(clause = "name ASC")
   private Set<Chiefdom> chiefdoms;
 }

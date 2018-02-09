@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OrderBy;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class Chiefdom extends BaseEntity {
   @OneToMany(mappedBy = "chiefdom")
   @Getter
   @Setter
+  @OrderBy(clause = "name ASC")
   private Set<Facility> facilities;
 
   @ManyToOne

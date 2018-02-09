@@ -12,11 +12,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
-import org.motechproject.mots.dto.ChiefdomDto;
 import org.motechproject.mots.dto.CommunityDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityDto;
@@ -28,55 +26,15 @@ public interface LocationMapper {
   LocationMapper INSTANCE = Mappers.getMapper(LocationMapper.class);
 
   /**
-   * Convert district list to district dtos map.
+   * Convert district list to district dtos list.
    * @param districts list of districts
-   * @return map of district dtos, where the key is the district id
+   * @return list of district dtos
    */
-  default Map<String, DistrictDto> toDistrictDtos(List<District> districts) {
-    Map<UUID, District> map = new HashMap<>();
-
-    if (districts != null) {
-      map = districts.stream().collect(Collectors.toMap(District::getId, Function.identity()));
-    }
-
-    return toDistrictDto(map);
+  default List<DistrictDto> toDistrictDtos(List<District> districts) {
+    return toDistrictDto(districts);
   }
 
-  Map<String, DistrictDto> toDistrictDto(Map<UUID, District> map);
-
-  /**
-   * Convert chiefdom list to chiefdom dtos map.
-   * @param chiefdoms list of chiefdoms
-   * @return map of chiefdom dtos, where the key is the chiefdom id
-   */
-  default Map<String, ChiefdomDto> toChiefdomDtos(Set<Chiefdom> chiefdoms) {
-    Map<UUID, Chiefdom> map = new HashMap<>();
-
-    if (chiefdoms != null) {
-      map = chiefdoms.stream().collect(Collectors.toMap(Chiefdom::getId, Function.identity()));
-    }
-
-    return toChiefdomDto(map);
-  }
-
-  Map<String, ChiefdomDto> toChiefdomDto(Map<UUID, Chiefdom> map);
-
-  /**
-   * Convert facility list to facility dtos map.
-   * @param facilities list of facilities
-   * @return map of facility dtos, where the key is the facility id
-   */
-  default Map<String, FacilityDto> toFacilityDtos(Set<Facility> facilities) {
-    Map<UUID, Facility> map = new HashMap<>();
-
-    if (facilities != null) {
-      map = facilities.stream().collect(Collectors.toMap(Facility::getId, Function.identity()));
-    }
-
-    return toFacilityDto(map);
-  }
-
-  Map<String, FacilityDto> toFacilityDto(Map<UUID, Facility> map);
+  List<DistrictDto> toDistrictDto(List<District> list);
 
   @Mappings({@Mapping(target = "inchargeId", source = "incharge.id")})
   FacilityDto toDto(Facility facility);

@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OrderBy;
 import org.motechproject.mots.domain.enums.FacilityType;
 
 @Entity
@@ -50,6 +51,7 @@ public class Facility extends BaseEntity {
   @OneToMany(mappedBy = "facility")
   @Getter
   @Setter
+  @OrderBy(clause = "name ASC")
   private Set<Community> communities;
 
   @ManyToOne
