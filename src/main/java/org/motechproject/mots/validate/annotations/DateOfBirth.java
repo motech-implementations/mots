@@ -7,21 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.chw.ChwDtoPhoneNumberUniquenessValidator;
-import org.motechproject.mots.validate.constraintvalidators.incharge.InchargeDtoPhoneNumberUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.DateOfBirthValidator;
 
-@Target(ElementType.TYPE)
-@Constraint(validatedBy = {InchargeDtoPhoneNumberUniquenessValidator.class,
-    ChwDtoPhoneNumberUniquenessValidator.class})
+@Target(ElementType.FIELD)
+@Constraint(validatedBy = {DateOfBirthValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PhoneNumberUniqueness {
+public @interface DateOfBirth {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_UNIQUE_PHONE_NUMBER;
+  String message() default ValidationMessages.INVALID_DATE_OF_BIRTH;
 
   /**
    * Specify validation groups, to which this constraint belongs
