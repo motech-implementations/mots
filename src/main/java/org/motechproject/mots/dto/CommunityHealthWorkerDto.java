@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
+import org.motechproject.mots.validate.annotations.CommunityExistence;
 import org.motechproject.mots.validate.annotations.DateOfBirth;
 import org.motechproject.mots.validate.annotations.EducationLevel;
 import org.motechproject.mots.validate.annotations.Gender;
@@ -101,6 +102,7 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
+  @CommunityExistence
   @Uuid(message = ValidationMessages.INVALID_COMMUNITY_ID)
   @NotEmpty(message = ValidationMessages.EMPTY_COMMUNITY)
   private String communityId;
