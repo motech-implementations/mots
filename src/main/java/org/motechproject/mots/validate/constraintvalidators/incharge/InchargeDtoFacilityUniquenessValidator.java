@@ -22,8 +22,7 @@ public class InchargeDtoFacilityUniquenessValidator implements
 
   @Override
   public boolean isValid(InchargeDto inchargeDto, ConstraintValidatorContext context) {
-    if (StringUtils.isNotEmpty(inchargeDto.getId())
-        && StringUtils.isNotEmpty(inchargeDto.getFacilityId())
+    if (StringUtils.isNotEmpty(inchargeDto.getFacilityId())
         && ValidationUtils.isValidUuidString(inchargeDto.getFacilityId())) {
       UUID facilityId = UUID.fromString(inchargeDto.getFacilityId());
       Optional<Incharge> existingIncharge = inchargeRepository.findByFacilityId(facilityId);

@@ -8,11 +8,9 @@ import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
-import org.motechproject.mots.validate.ChwValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class CommunityHealthWorkerController extends BaseController {
 
-  private static final String COMMUNITY_HEALTH_WORKER = "communityHealthWorker";
-
   @Autowired
   private CommunityHealthWorkerService healthWorkerService;
-
-  @Autowired
-  private ChwValidator validator;
 
   private CommunityHealthWorkerMapper healthWorkerMapper = CommunityHealthWorkerMapper.INSTANCE;
 
@@ -72,8 +65,6 @@ public class CommunityHealthWorkerController extends BaseController {
     checkBindingResult(bindingResult);
     CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
 
-    validateDomainObject(healthWorker);
-
     return healthWorkerMapper.toDto(healthWorkerService.createHealthWorker(healthWorker));
   }
 
@@ -107,15 +98,6 @@ public class CommunityHealthWorkerController extends BaseController {
 
     healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
 
-    validateDomainObject(existingHealthWorker);
     return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(existingHealthWorker));
-  }
-
-  private void validateDomainObject(CommunityHealthWorker healthWorker) {
-    BindingResult bindingResult = new BeanPropertyBindingResult(healthWorker,
-        COMMUNITY_HEALTH_WORKER);
-    validator.validate(healthWorker, bindingResult);
-
-    checkBindingResult(bindingResult);
   }
 }

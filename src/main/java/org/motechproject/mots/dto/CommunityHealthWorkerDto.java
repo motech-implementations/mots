@@ -5,14 +5,18 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
 import org.motechproject.mots.validate.annotations.DateOfBirth;
 import org.motechproject.mots.validate.annotations.EducationLevel;
 import org.motechproject.mots.validate.annotations.Gender;
 import org.motechproject.mots.validate.annotations.Language;
 import org.motechproject.mots.validate.annotations.Literacy;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
+import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
+@PhoneNumberUniqueness
+@ChwIdUniqueness
 public class CommunityHealthWorkerDto {
 
   @Getter
@@ -64,6 +68,7 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @PhoneNumber
+  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
   private String phoneNumber;
 
   @Getter
