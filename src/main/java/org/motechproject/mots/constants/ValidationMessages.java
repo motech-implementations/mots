@@ -14,6 +14,7 @@ public final class ValidationMessages {
   public static final String INVALID_INCHARGE_ID = "Invalid incharge UUID";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
+  public static final String INVALID_DATE_OF_BIRTH = "Invalid date of birth";
 
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
   public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";

@@ -2,10 +2,10 @@ package org.motechproject.mots.web;
 
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
-import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.motechproject.mots.validate.ChwValidator;
@@ -68,7 +68,8 @@ public class CommunityHealthWorkerController extends BaseController {
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public CommunityHealthWorkerDto createHealthWorker(
-      @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
+      @RequestBody @Valid CommunityHealthWorkerDto healthWorkerDto, BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
     CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
 
     validateDomainObject(healthWorker);
@@ -100,7 +101,8 @@ public class CommunityHealthWorkerController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public CommunityHealthWorkerDto saveHealthWorker(@PathVariable("id") UUID id,
-      @RequestBody CommunityHealthWorkerDto healthWorkerDto) {
+      @RequestBody @Valid CommunityHealthWorkerDto healthWorkerDto, BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
     CommunityHealthWorker existingHealthWorker = healthWorkerService.getHealthWorker(id);
 
     healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
@@ -114,8 +116,6 @@ public class CommunityHealthWorkerController extends BaseController {
         COMMUNITY_HEALTH_WORKER);
     validator.validate(healthWorker, bindingResult);
 
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
+    checkBindingResult(bindingResult);
   }
 }

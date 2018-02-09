@@ -2,6 +2,8 @@ package org.motechproject.mots.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.motechproject.mots.validate.annotations.DateOfBirth;
+import org.motechproject.mots.validate.annotations.PhoneNumber;
 
 public class CommunityHealthWorkerDto {
 
@@ -27,6 +29,7 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
+  @DateOfBirth
   private String dateOfBirth;
 
   @Getter
@@ -43,6 +46,7 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
+  @PhoneNumber
   private String phoneNumber;
 
   @Getter
