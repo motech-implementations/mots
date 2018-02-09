@@ -8,19 +8,20 @@ import FieldWithLabel from '../components/FieldWithLabel';
 
 function renderSelectOptions(options) {
   const { values, valueKey, displayNameKey } = options;
+  const emptyValue = '';
 
   return [
-    _.map(values, (value) => {
+    _.map(values, (value, index) => {
       const rawValue = valueKey ? value[valueKey] : value;
       const optionValue = typeof rawValue === 'string' ? rawValue : JSON.stringify(rawValue);
       const displayValue = displayNameKey ? value[displayNameKey] : value;
 
       return (
-        <Option value={optionValue}>
+        <Option key={index} value={optionValue}>
           { displayValue || '' }
         </Option>);
     }),
-    <Option value={null} />,
+    <Option key="undefined" value={null}>{emptyValue}</Option>,
   ];
 }
 

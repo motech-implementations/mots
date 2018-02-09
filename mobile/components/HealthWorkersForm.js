@@ -109,15 +109,14 @@ const FIELDS = {
   chiefdomId: {
     type: Select,
     label: 'Chiefdom',
-    getSelectOptions: ({ availableLocations, districtId }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-
-      return ({
-        values: district && sortValuesByName(district.chiefdoms),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    getSelectOptions: ({ availableLocations, districtId }) => ({
+      values: sortValuesByName(getSelectableLocations(
+        availableLocations,
+        districtId,
+      )),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
     getAttributes: (input, { availableLocations, districtId }) => (
       getAttributesForSelectWithClearOnChange(
         input,
@@ -134,16 +133,15 @@ const FIELDS = {
   facilityId: {
     type: Select,
     label: 'Facility',
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
-
-      return ({
-        values: chiefdom && sortValuesByName(chiefdom.facilities),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+      values: sortValuesByName(getSelectableLocations(
+        availableLocations,
+        districtId,
+        chiefdomId,
+      )),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
     getAttributes: (input, { availableLocations, districtId, chiefdomId }) => (
       getAttributesForSelectWithClearOnChange(
         input,
@@ -163,17 +161,16 @@ const FIELDS = {
     required: true,
     getSelectOptions: ({
       availableLocations, districtId, chiefdomId, facilityId,
-    }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
-      const facility = facilityId && chiefdom && chiefdom.facilities[facilityId];
-
-      return ({
-        values: facility && sortValuesByName(facility.communities),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    }) => ({
+      values: sortValuesByName(getSelectableLocations(
+        availableLocations,
+        districtId,
+        chiefdomId,
+        facilityId,
+      )),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
     getAttributes: (input, {
       availableLocations, districtId, chiefdomId, facilityId,
     }) => (
@@ -193,7 +190,7 @@ const FIELDS = {
     label: 'Peer Supervisor',
     getAttributes: input => (
       {
-        title: 'check',
+        title: '',
         checked: input.value === true,
         onPress: () => {
           input.onChange(!input.value);

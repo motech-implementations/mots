@@ -11,10 +11,10 @@ export function getSelectableLocations(locations, districtId, chiefdomId, facili
   if (locations && districtId && locations[districtId]) {
     district = locations[districtId];
   }
-  if (chiefdomId && district && district.chiefdoms[chiefdomId]) {
+  if (chiefdomId && district && district.chiefdoms && district.chiefdoms[chiefdomId]) {
     chiefdom = district.chiefdoms[chiefdomId];
   }
-  if (facilityId && chiefdom && chiefdom.facilities[facilityId]) {
+  if (facilityId && chiefdom && chiefdom.facilities && chiefdom.facilities[facilityId]) {
     facility = chiefdom.facilities[facilityId];
   }
   return facility.communities || chiefdom.facilities || district.chiefdoms || locations;
