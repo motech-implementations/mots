@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -96,6 +97,12 @@ public class Module extends IvrObject {
   @Getter
   @Setter
   private Module previousVersion;
+
+  @ManyToOne
+  @JoinColumn(name = "course_id", nullable = false)
+  @Getter
+  @Setter
+  private Course course;
 
   public Module(UUID id) {
     super(id);

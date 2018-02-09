@@ -2,6 +2,7 @@ package org.motechproject.mots.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -78,7 +79,7 @@ public abstract class ModuleMapper {
         UnitDto unitDto = unitDtos.get(i);
         Unit unit;
 
-        if (unitDto.getId() == null) {
+        if (StringUtils.isBlank(unitDto.getId())) {
           unit = new Unit();
         } else {
           unit = units.stream().filter(u -> u.getId().toString().equals(unitDto.getId()))
@@ -150,7 +151,10 @@ public abstract class ModuleMapper {
   })
   abstract void updateFromDto(ModuleDto moduleDto, @MappingTarget Module module);
 
-  @Mapping(target = "callFlowElements", ignore = true)
+  @Mappings({
+      @Mapping(target = "callFlowElements", ignore = true),
+      @Mapping(target = "id", ignore = true)
+  })
   abstract void updateFromDto(UnitDto unitDto, @MappingTarget Unit unit);
 
   private void updateFromDto(CallFlowElementDto callFlowElementDto,
@@ -164,10 +168,16 @@ public abstract class ModuleMapper {
     }
   }
 
-  @Mapping(target = LIST_ORDER_FIELD, constant = "0")
+  @Mappings({
+      @Mapping(target = LIST_ORDER_FIELD, constant = "0"),
+      @Mapping(target = "id", ignore = true)
+  })
   abstract void updateFromDto(MessageDto messageDto, @MappingTarget Message message);
 
-  @Mapping(target = LIST_ORDER_FIELD, constant = "0")
+  @Mappings({
+      @Mapping(target = LIST_ORDER_FIELD, constant = "0"),
+      @Mapping(target = "id", ignore = true)
+  })
   abstract void updateFromDto(MultipleChoiceQuestionDto multipleChoiceQuestionDto,
       @MappingTarget MultipleChoiceQuestion multipleChoiceQuestion);
 }
