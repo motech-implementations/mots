@@ -28,7 +28,7 @@ public class ModuleDto extends IvrObjectDto {
   @Setter
   private String ivrGroup;
 
-  @Min(value = 0, message = "Module Number cannot be negative")
+  @Min(value = 1, message = "Module Number cannot be less than 1")
   @NotNull(message = "Module Number cannot be empty")
   @Getter
   @Setter
