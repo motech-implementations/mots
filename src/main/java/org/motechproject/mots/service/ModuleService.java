@@ -1,6 +1,8 @@
 package org.motechproject.mots.service;
 
+import java.util.Iterator;
 import java.util.UUID;
+import org.motechproject.mots.domain.Course;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
@@ -8,6 +10,7 @@ import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.mapper.ModuleMapper;
+import org.motechproject.mots.repository.CourseRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,11 +22,14 @@ public class ModuleService {
   @Autowired
   private ModuleRepository moduleRepository;
 
+  @Autowired
+  private CourseRepository courseRepository;
+
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_OR_MANAGE_MODULES_ROLE)
   public Iterable<Module> getModules() {
-    return moduleRepository.findAll();
+    return getCourse().getModules();
   }
 
   /**
@@ -35,6 +41,9 @@ public class ModuleService {
   public Module createModule(ModuleDto moduleDto) {
     Module module = Module.initialize();
     moduleMapper.updateModuleFromDto(moduleDto, module);
+
+    Course course = getCourse();
+    module.setCourse(course);
 
     return moduleRepository.save(module);
   }
@@ -72,5 +81,16 @@ public class ModuleService {
   public Module findById(UUID id) {
     return moduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
         String.format("Module with id: %s not found", id.toString())));
+  }
+
+  private Course getCourse() {
+    Iterable<Course> courses = courseRepository.findAll();
+    Iterator<Course> courseIterator = courses.iterator();
+
+    if (!courseIterator.hasNext()) {
+      throw new EntityNotFoundException("No course exists");
+    }
+
+    return courseIterator.next();
   }
 }
