@@ -236,7 +236,7 @@ HealthWorkersForm.propTypes = {
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   fetchLocations: PropTypes.func.isRequired,
-  availableLocations: PropTypes.arrayOf(PropTypes.shape()),
+  availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,

@@ -21,38 +21,35 @@ export function getAttributesForSelectWithClearOnChange(input, formName, ...fiel
   };
 }
 
-export function getChiefdomsFromDistrictById(list, id) {
-  const chiefdoms = [];
-  if (list && id) {
-    list.forEach((loc) => {
-      if (loc.id === id) {
-        Array.prototype.push.apply(chiefdoms, loc.chiefdoms);
+export function getChiefdomsFromDistrictById(districts, districtId) {
+  if (districts && districtId) {
+    for (let i = 0; i < districts.length; i += 1) {
+      if (districts[i].id === districtId) {
+        return districts[i].chiefdoms;
       }
-    });
+    }
   }
-  return chiefdoms;
+  return [];
 }
 
-export function getFacilitiesFromChiefdomById(list, id) {
-  const facilities = [];
-  if (list && id) {
-    list.forEach((loc) => {
-      if (loc.id === id) {
-        Array.prototype.push.apply(facilities, loc.facilities);
+export function getFacilitiesFromChiefdomById(chiefdoms, chiefdomId) {
+  if (chiefdoms && chiefdomId) {
+    for (let i = 0; i < chiefdoms.length; i += 1) {
+      if (chiefdoms[i].id === chiefdomId) {
+        return chiefdoms[i].facilities;
       }
-    });
+    }
   }
-  return facilities;
+  return [];
 }
 
-export function getCommunitiesFromFacilitiesById(list, id) {
-  const communities = [];
-  if (list && id) {
-    list.forEach((loc) => {
-      if (loc.id === id) {
-        Array.prototype.push.apply(communities, loc.communities);
+export function getCommunitiesFromFacilitiesById(facilities, facilityId) {
+  if (facilities && facilityId) {
+    for (let i = 0; i < facilities.length; i += 1) {
+      if (facilities[i].id === facilityId) {
+        return facilities[i].communities;
       }
-    });
+    }
   }
-  return communities;
+  return [];
 }
