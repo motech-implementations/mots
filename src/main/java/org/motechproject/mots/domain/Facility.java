@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OrderBy;
 import org.motechproject.mots.domain.enums.FacilityType;
 
 @Entity
@@ -51,7 +51,7 @@ public class Facility extends BaseEntity {
   @OneToMany(mappedBy = "facility")
   @Getter
   @Setter
-  @OrderBy(clause = "name ASC")
+  @OrderBy("name ASC")
   private Set<Community> communities;
 
   @ManyToOne
