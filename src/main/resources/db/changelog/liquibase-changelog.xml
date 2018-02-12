@@ -19,5 +19,6 @@
   <include file="20180119_2322_amend_roles_permissions_adminuser.sql" relativeToChangelogFile="true" />
   <include file="20180208_1324.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180209_1512.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180212_1916.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

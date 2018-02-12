@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
+import org.motechproject.mots.repository.CallDetailRecordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -39,6 +42,9 @@ public class IvrService {
 
   @Value("${mots.ivrApiKey}")
   private String ivrApiKey;
+
+  @Autowired
+  private CallDetailRecordRepository callDetailRecordRepository;
 
   private RestOperations restTemplate = new RestTemplate();
   private ObjectMapper mapper = new ObjectMapper();
@@ -153,5 +159,9 @@ public class IvrService {
       String message = "Error occurred when sending request to IVR service: " + ex.getMessage();
       throw new IvrException(message, ex);
     }
+  }
+
+  public void saveCallDetailReacord(CallDetailRecord ivrData) {
+    callDetailRecordRepository.save(ivrData);
   }
 }
