@@ -10,7 +10,7 @@ public final class ValidationMessages {
   public static final String EMPTY_COMMUNITY = "Community cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
 
-  public static final String INVALID_EMAIL = "Invalid e-mail";
+  public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
   public static final String INVALID_COMMUNITY_ID = "Invalid community UUID";
