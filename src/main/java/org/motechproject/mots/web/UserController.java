@@ -3,7 +3,10 @@ package org.motechproject.mots.web;
 import java.util.List;
 import java.util.UUID;
 import org.motechproject.mots.domain.security.User;
+import org.motechproject.mots.domain.security.UserRole;
+import org.motechproject.mots.dto.RoleDto;
 import org.motechproject.mots.dto.UserDto;
+import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ public class UserController extends BaseController {
   private UserService userService;
 
   private UserMapper userMapper = UserMapper.INSTANCE;
+
+  private RoleMapper roleMapper = RoleMapper.INSTANCE;
 
   /**
    * Get list of users.
@@ -79,5 +84,18 @@ public class UserController extends BaseController {
     userMapper.updateFromDto(userDto, existingUser);
 
     return userMapper.toDto(userService.saveUser(existingUser));
+  }
+
+  /**
+   * Get list of roles.
+   * @return list of all roles
+   */
+  @RequestMapping(value = "/role", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<RoleDto> getRoles() {
+    Iterable<UserRole> roles = userService.getRoles();
+
+    return roleMapper.toDtos(roles);
   }
 }
