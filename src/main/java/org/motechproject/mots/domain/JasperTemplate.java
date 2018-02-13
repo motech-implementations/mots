@@ -2,9 +2,12 @@ package org.motechproject.mots.domain;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -37,10 +40,23 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private String type;
 
+  @Column(name = "is_displayed", columnDefinition = "boolean DEFAULT 1")
+  @Getter
+  @Setter
+  private Boolean isDisplayed = true;
+
   @Column(name = "description")
   @Getter
   @Setter
   private String description;
+
+  @Column(name = "supported_formats")
+  @CollectionTable(name = "jasper_template_supported_formats",
+      joinColumns = @JoinColumn(name = "jasper_template_id"))
+  @ElementCollection
+  @Getter
+  @Setter
+  private List<String> supportedFormats;
 
   @OneToMany(
       mappedBy = "template",
