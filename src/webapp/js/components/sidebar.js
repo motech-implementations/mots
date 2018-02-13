@@ -6,7 +6,7 @@ import {
   hasAuthority,
   INCHARGE_READ_AUTHORITY,
   INCHARGE_WRITE_AUTHORITY,
-  MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY,
+  MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
 } from '../utils/authorization';
 
 export default class SideBar extends Component {
@@ -25,11 +25,13 @@ export default class SideBar extends Component {
       healthWorkersMenuCollapsed: true,
       modulesMenuCollapsed: true,
       inchargeMenuCollapsed: true,
+      usersMenuCollapsed: true,
     };
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
     this.toggleModulesMenu = this.toggleModulesMenu.bind(this);
     this.toggleInchargeMenu = this.toggleInchargeMenu.bind(this);
+    this.toggleUsersMenu = this.toggleUsersMenu.bind(this);
   }
 
   toggleHealthWorkersMenu(event) {
@@ -47,6 +49,12 @@ export default class SideBar extends Component {
   toggleInchargeMenu(event) {
     event.preventDefault();
     this.setState({ inchargeMenuCollapsed: !this.state.inchargeMenuCollapsed });
+    return false;
+  }
+
+  toggleUsersMenu(event) {
+    event.preventDefault();
+    this.setState({ usersMenuCollapsed: !this.state.usersMenuCollapsed });
     return false;
   }
 
@@ -130,6 +138,33 @@ export default class SideBar extends Component {
     );
   }
 
+  renderUsersMenu() {
+    if (this.state.usersMenuCollapsed) {
+      return '';
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/users" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-plus" />
+            <span className="icon-text">Add User</span>
+          </Link>
+        </li>
+        }
+        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/users" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">Users list</span>
+          </Link>
+        </li>
+        }
+      </ul>
+    );
+  }
+
   render() {
     return (
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
@@ -173,7 +208,7 @@ export default class SideBar extends Component {
           { hasAuthority(INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY) &&
             <li>
               <a href="" onClick={this.toggleInchargeMenu}>
-                <span className="glyphicon glyphicon-user" />
+                <span className="fa fa-user-md" />
                 <span className="icon-text">Incharge</span>
                 <span
                   className={SideBar.getSubmenuArrowClass(this.state.inchargeMenuCollapsed)}
@@ -188,6 +223,18 @@ export default class SideBar extends Component {
               <span className="fa fa-bar-chart" />
               <span className="icon-text">Reports</span>
             </Link>
+          </li>
+          }
+          { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+          <li>
+            <a href="" onClick={this.toggleUsersMenu}>
+              <span className="glyphicon glyphicon-user" />
+              <span className="icon-text">Users</span>
+              <span
+                className={SideBar.getSubmenuArrowClass(this.state.usersMenuCollapsed)}
+              />
+            </a>
+            {this.renderUsersMenu()}
           </li>
           }
           <li className="hide-min-r-small-min">

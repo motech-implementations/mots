@@ -4,7 +4,9 @@ import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
+import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.exception.EntityNotFoundException;
+import org.motechproject.mots.repository.RoleRepository;
 import org.motechproject.mots.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,9 +19,17 @@ public class UserService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private RoleRepository roleRepository;
+
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public Iterable<User> getUsers() {
     return userRepository.findAll();
+  }
+
+  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
+  public Iterable<UserRole> getRoles() {
+    return roleRepository.findAll();
   }
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)

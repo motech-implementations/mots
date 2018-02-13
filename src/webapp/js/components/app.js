@@ -15,6 +15,7 @@ import AssignModules from './assign-modules';
 import InchargeNew from './incharge-new';
 import InchargeEdit from './incharge-edit';
 import ModulesManage from './modules-manage';
+import Users from './users';
 
 export default class App extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ export default class App extends Component {
                 <Route path="/chw/new" component={HealthWorkersNew} />
                 <Route path="/chw/:chwId" component={HealthWorkersEdit} />
                 <Route path="/chw" component={HealthWorkers} />
+                <Route path="/users" component={Users} />
                 <Route path="/" component={Home} />
               </Switch>
             </div>

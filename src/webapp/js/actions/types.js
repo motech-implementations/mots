@@ -12,3 +12,4 @@ export const CREATE_INCHARGE = 'create_incharge';
 export const SAVE_INCHARGE = 'save_incharge';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
+export const FETCH_USERS = 'fetch_users';
