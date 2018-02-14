@@ -1,6 +1,7 @@
 package org.motechproject.mots.mapper;
 
 import org.motechproject.mots.domain.enums.EducationLevel;
+import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
@@ -105,5 +106,30 @@ public class EnumsMapper {
     }
 
     return language.getDisplayName();
+  }
+
+  /**
+   * Get FacilityType object from display name.
+   * @param displayName display name of FacilityType
+   * @return FacilityType object
+   */
+  public FacilityType toFacilityType(String displayName) {
+    if (displayName == null || displayName.isEmpty()) {
+      return null;
+    }
+
+    return FacilityType.getByDisplayName(displayName);
+  }
+
+  /**
+   * Get display name from FacilityType.
+   * @return display name of FacilityType
+   */
+  public String fromFacilityType(FacilityType type) {
+    if (type == null) {
+      return null;
+    }
+
+    return type.getDisplayName();
   }
 }
