@@ -21,35 +21,37 @@ export function getAttributesForSelectWithClearOnChange(input, formName, ...fiel
   };
 }
 
-export function getChiefdomsFromDistrictById(districts, districtId) {
+function getLocationById(list, id) {
+  if (list) {
+    return list.find(location => location.id === id);
+  }
+  return {};
+}
+
+export function getSelectableLocations(
+  requestedList, districts,
+  districtId, chiefdomId, facilityId,
+) {
+  let { district, chiefdom, facility } = { district: {}, chiefdom: {}, facility: {} };
+
   if (districts && districtId) {
-    for (let i = 0; i < districts.length; i += 1) {
-      if (districts[i].id === districtId) {
-        return districts[i].chiefdoms;
-      }
-    }
+    district = getLocationById(districts, districtId);
   }
-  return [];
-}
+  if (chiefdomId && district && district.chiefdoms) {
+    chiefdom = getLocationById(district.chiefdoms, chiefdomId);
+  }
+  if (facilityId && chiefdom && chiefdom.facilities) {
+    facility = getLocationById(chiefdom.facilities, facilityId);
+  }
 
-export function getFacilitiesFromChiefdomById(chiefdoms, chiefdomId) {
-  if (chiefdoms && chiefdomId) {
-    for (let i = 0; i < chiefdoms.length; i += 1) {
-      if (chiefdoms[i].id === chiefdomId) {
-        return chiefdoms[i].facilities;
-      }
-    }
+  switch (requestedList) {
+    case 'chiefdoms':
+      return district.chiefdoms;
+    case 'facilities':
+      return chiefdom.facilities;
+    case 'communities':
+      return facility.communities;
+    default:
+      return [];
   }
-  return [];
-}
-
-export function getCommunitiesFromFacilitiesById(facilities, facilityId) {
-  if (facilities && facilityId) {
-    for (let i = 0; i < facilities.length; i += 1) {
-      if (facilities[i].id === facilityId) {
-        return facilities[i].communities;
-      }
-    }
-  }
-  return [];
 }
