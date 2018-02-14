@@ -13,12 +13,14 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+@Builder
 @Entity
 @Table(name = "jasper_templates")
 @NoArgsConstructor
@@ -30,7 +32,7 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private String name;
 
-  @Column(name = "data")
+  @Column(name = "data", columnDefinition = "MEDIUMBLOB")
   @Getter
   @Setter
   private byte[] data;
@@ -40,10 +42,10 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private String type;
 
-  @Column(name = "visible", columnDefinition = "bit DEFAULT 1")
+  @Column(name = "visible")
   @Getter
   @Setter
-  private Boolean visible = true;
+  private Boolean visible;
 
   @Column(name = "description")
   @Getter
@@ -73,6 +75,9 @@ public class JasperTemplate extends BaseEntity {
   private void preSave() {
     if (templateParameters != null) {
       templateParameters.forEach(line -> line.setTemplate(this));
+    }
+    if (null == visible) {
+      visible = true;
     }
   }
 }
