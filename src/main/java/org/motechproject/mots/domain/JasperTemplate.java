@@ -40,10 +40,10 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private String type;
 
-  @Column(name = "is_displayed", columnDefinition = "bit DEFAULT 1")
+  @Column(name = "visible", columnDefinition = "bit DEFAULT 1")
   @Getter
   @Setter
-  private Boolean isDisplayed = true;
+  private Boolean visible = true;
 
   @Column(name = "description")
   @Getter
