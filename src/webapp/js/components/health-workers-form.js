@@ -244,7 +244,7 @@ HealthWorkersForm.propTypes = {
 };
 
 HealthWorkersForm.defaultProps = {
-  availableLocations: null,
+  availableLocations: [],
   districtId: null,
   chiefdomId: null,
   facilityId: null,
