@@ -49,7 +49,7 @@ const FIELDS = {
     getAttributes: (input, { availableLocations }) => (
       getAttributesForSelectWithClearOnChange(
         input,
-        getSelectableLocations(availableLocations),
+        availableLocations,
         INCHARGE_FORM_NAME,
         'chiefdomId',
         'facilityId',

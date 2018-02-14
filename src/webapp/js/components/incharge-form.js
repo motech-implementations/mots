@@ -148,13 +148,13 @@ InchargeForm.propTypes = {
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   fetchLocations: PropTypes.func.isRequired,
-  availableLocations: PropTypes.shape({}),
+  availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
 };
 
 InchargeForm.defaultProps = {
-  availableLocations: null,
+  availableLocations: [],
   districtId: null,
   chiefdomId: null,
 };
