@@ -5,19 +5,39 @@ import styles from '../styles/inputsStyles';
 
 const { labelSelectFieldStyle, optionListStyle } = styles;
 
-export function getSelectableLocations(locations, districtId, chiefdomId, facilityId) {
+function getLocationById(list, id) {
+  if (list) {
+    return list.find(location => location.id === id);
+  }
+  return {};
+}
+
+export function getSelectableLocations(
+  requestedList, districts,
+  districtId, chiefdomId, facilityId,
+) {
   let { district, chiefdom, facility } = { district: {}, chiefdom: {}, facility: {} };
 
-  if (locations && districtId && locations[districtId]) {
-    district = locations[districtId];
+  if (districts && districtId) {
+    district = getLocationById(districts, districtId);
   }
-  if (chiefdomId && district && district.chiefdoms && district.chiefdoms[chiefdomId]) {
-    chiefdom = district.chiefdoms[chiefdomId];
+  if (chiefdomId && district && district.chiefdoms) {
+    chiefdom = getLocationById(district.chiefdoms, chiefdomId);
   }
-  if (facilityId && chiefdom && chiefdom.facilities && chiefdom.facilities[facilityId]) {
-    facility = chiefdom.facilities[facilityId];
+  if (facilityId && chiefdom && chiefdom.facilities) {
+    facility = getLocationById(chiefdom.facilities, facilityId);
   }
-  return facility.communities || chiefdom.facilities || district.chiefdoms || locations;
+
+  switch (requestedList) {
+    case 'chiefdoms':
+      return district.chiefdoms;
+    case 'facilities':
+      return chiefdom.facilities;
+    case 'communities':
+      return facility.communities;
+    default:
+      return [];
+  }
 }
 
 export function clearFields(formName, ...fields) {
@@ -34,8 +54,9 @@ export function untouchFields(formName, ...fields) {
 
 export function getAttributesForSelect(input, availableLocations) {
   let defaultText = input.value;
-  if (input.value && availableLocations && availableLocations[input.value]) {
-    defaultText = availableLocations[input.value].name;
+  const location = getLocationById(availableLocations, input.value);
+  if (input.value && availableLocations && location) {
+    defaultText = location.name;
   }
 
   return {
@@ -52,8 +73,9 @@ export function getAttributesForSelect(input, availableLocations) {
 export function
 getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...fieldsToClear) {
   let defaultText = input.value;
-  if (input.value && availableLocations && availableLocations[input.value]) {
-    defaultText = availableLocations[input.value].name;
+  const location = getLocationById(availableLocations, input.value);
+  if (input.value && availableLocations && location) {
+    defaultText = location.name;
   }
 
   return {
@@ -66,8 +88,4 @@ getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...
     optionListStyle,
     style: labelSelectFieldStyle,
   };
-}
-
-export function sortValuesByName(object) {
-  return _.sortBy(_.values(object), x => x.name.toLowerCase());
 }

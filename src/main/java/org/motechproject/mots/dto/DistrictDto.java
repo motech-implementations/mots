@@ -1,6 +1,6 @@
 package org.motechproject.mots.dto;
 
-import java.util.Map;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +16,5 @@ public class DistrictDto {
 
   @Getter
   @Setter
-  private Map<String, ChiefdomDto> chiefdoms;
+  private List<ChiefdomDto> chiefdoms;
 }

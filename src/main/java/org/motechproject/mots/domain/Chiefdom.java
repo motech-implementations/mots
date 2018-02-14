@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.EqualsAndHashCode;
@@ -32,6 +33,7 @@ public class Chiefdom extends BaseEntity {
   @OneToMany(mappedBy = "chiefdom")
   @Getter
   @Setter
+  @OrderBy("name ASC")
   private Set<Facility> facilities;
 
   @ManyToOne

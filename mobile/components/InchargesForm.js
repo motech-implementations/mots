@@ -13,7 +13,6 @@ import {
   untouchFields,
   getSelectableLocations,
   getAttributesForSelectWithClearOnChange,
-  sortValuesByName,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -43,7 +42,7 @@ const FIELDS = {
     type: Select,
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations && sortValuesByName(availableLocations),
+      values: availableLocations,
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -62,10 +61,11 @@ const FIELDS = {
     type: Select,
     label: 'Chiefdom',
     getSelectOptions: ({ availableLocations, districtId }) => ({
-      values: sortValuesByName(getSelectableLocations(
+      values: getSelectableLocations(
+        'chiefdoms',
         availableLocations,
         districtId,
-      )),
+      ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -73,6 +73,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
+          'chiefdoms',
           availableLocations,
           districtId,
         ),
@@ -87,11 +88,12 @@ const FIELDS = {
     label: 'Facility',
     required: true,
     getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
-      values: sortValuesByName(getSelectableLocations(
+      values: getSelectableLocations(
+        'facilities',
         availableLocations,
         districtId,
         chiefdomId,
-      )),
+      ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -99,6 +101,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
+          'facilities',
           availableLocations,
           districtId,
           chiefdomId,
@@ -210,14 +213,14 @@ InchargesForm.propTypes = {
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   fetchLocations: PropTypes.func.isRequired,
-  availableLocations: PropTypes.shape({}),
+  availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   loading: PropTypes.bool,
 };
 
 InchargesForm.defaultProps = {
-  availableLocations: null,
+  availableLocations: [],
   districtId: null,
   chiefdomId: null,
   loading: false,

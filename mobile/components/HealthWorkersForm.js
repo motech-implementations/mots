@@ -16,7 +16,6 @@ import {
   getSelectableLocations,
   getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
-  sortValuesByName,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -91,14 +90,14 @@ const FIELDS = {
     type: Select,
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations && sortValuesByName(availableLocations),
+      values: availableLocations,
       displayNameKey: 'name',
       valueKey: 'id',
     }),
     getAttributes: (input, { availableLocations }) => (
       getAttributesForSelectWithClearOnChange(
         input,
-        getSelectableLocations(availableLocations),
+        availableLocations,
         CHW_FORM_NAME,
         'chiefdomId',
         'facilityId',
@@ -110,10 +109,11 @@ const FIELDS = {
     type: Select,
     label: 'Chiefdom',
     getSelectOptions: ({ availableLocations, districtId }) => ({
-      values: sortValuesByName(getSelectableLocations(
+      values: getSelectableLocations(
+        'chiefdoms',
         availableLocations,
         districtId,
-      )),
+      ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -121,6 +121,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
+          'chiefdoms',
           availableLocations,
           districtId,
         ),
@@ -134,11 +135,12 @@ const FIELDS = {
     type: Select,
     label: 'Facility',
     getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
-      values: sortValuesByName(getSelectableLocations(
+      values: getSelectableLocations(
+        'facilities',
         availableLocations,
         districtId,
         chiefdomId,
-      )),
+      ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -146,6 +148,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
+          'facilities',
           availableLocations,
           districtId,
           chiefdomId,
@@ -162,12 +165,13 @@ const FIELDS = {
     getSelectOptions: ({
       availableLocations, districtId, chiefdomId, facilityId,
     }) => ({
-      values: sortValuesByName(getSelectableLocations(
+      values: getSelectableLocations(
+        'communities',
         availableLocations,
         districtId,
         chiefdomId,
         facilityId,
-      )),
+      ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -177,6 +181,7 @@ const FIELDS = {
       getAttributesForSelect(
         input,
         getSelectableLocations(
+          'communities',
           availableLocations,
           districtId,
           chiefdomId,
@@ -321,7 +326,7 @@ HealthWorkersForm.propTypes = {
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   fetchLocations: PropTypes.func.isRequired,
-  availableLocations: PropTypes.shape({}),
+  availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
@@ -330,7 +335,7 @@ HealthWorkersForm.propTypes = {
 };
 
 HealthWorkersForm.defaultProps = {
-  availableLocations: null,
+  availableLocations: [],
   districtId: null,
   chiefdomId: null,
   facilityId: null,

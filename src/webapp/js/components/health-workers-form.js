@@ -9,7 +9,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { clearFields, getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
+import { clearFields, getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -76,7 +76,7 @@ const FIELDS = {
     type: 'select',
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations && sortValuesByName(availableLocations),
+      values: availableLocations,
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -85,30 +85,30 @@ const FIELDS = {
   chiefdomId: {
     type: 'select',
     label: 'Chiefdom',
-    getSelectOptions: ({ availableLocations, districtId }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-
-      return ({
-        values: district && sortValuesByName(district.chiefdoms),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    getSelectOptions: ({ availableLocations, districtId }) => ({
+      values: getSelectableLocations(
+        'chiefdoms',
+        availableLocations,
+        districtId,
+      ),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
     getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
   },
   facilityId: {
     type: 'select',
     label: 'Facility',
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
-
-      return ({
-        values: chiefdom && sortValuesByName(chiefdom.facilities),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+      values: getSelectableLocations(
+        'facilities',
+        availableLocations,
+        districtId,
+        chiefdomId,
+      ),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
     getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
   },
   communityId: {
@@ -117,17 +117,17 @@ const FIELDS = {
     required: true,
     getSelectOptions: ({
       availableLocations, districtId, chiefdomId, facilityId,
-    }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
-      const facility = facilityId && chiefdom && chiefdom.facilities[facilityId];
-
-      return ({
-        values: facility && sortValuesByName(facility.communities),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    }) => ({
+      values: getSelectableLocations(
+        'communities',
+        availableLocations,
+        districtId,
+        chiefdomId,
+        facilityId,
+      ),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
   },
   hasPeerSupervisor: {
     getAttributes: input => ({
@@ -236,7 +236,7 @@ HealthWorkersForm.propTypes = {
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   fetchLocations: PropTypes.func.isRequired,
-  availableLocations: PropTypes.shape({}),
+  availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,

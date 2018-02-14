@@ -1,7 +1,6 @@
 package org.motechproject.mots.web;
 
 import java.util.List;
-import java.util.Map;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.mapper.LocationMapper;
@@ -29,7 +28,7 @@ public class LocationController extends BaseController {
   @RequestMapping(value = "/districts", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Map<String, DistrictDto> getDistricts() {
+  public List<DistrictDto> getDistricts() {
     List<District> districts = locationService.getDistricts();
 
     return locationMapper.toDistrictDtos(districts);

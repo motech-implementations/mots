@@ -4,6 +4,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,5 +29,6 @@ public class District extends BaseEntity {
   @OneToMany(mappedBy = "district")
   @Getter
   @Setter
+  @OrderBy("name ASC")
   private Set<Chiefdom> chiefdoms;
 }

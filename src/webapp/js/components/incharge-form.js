@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { getAttributesForSelectWithClearOnChange, sortValuesByName } from '../utils/form-utils';
+import { getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
 
 export const INCHARGE_FORM_NAME = 'InchargeForm';
 
@@ -33,7 +33,7 @@ const FIELDS = {
     type: 'select',
     label: 'District',
     getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations && sortValuesByName(availableLocations),
+      values: availableLocations,
       displayNameKey: 'name',
       valueKey: 'id',
     }),
@@ -42,43 +42,38 @@ const FIELDS = {
   chiefdomId: {
     type: 'select',
     label: 'Chiefdom',
-    getSelectOptions: ({ availableLocations, districtId }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-
-      return ({
-        values: district && sortValuesByName(district.chiefdoms),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    getSelectOptions: ({ availableLocations, districtId }) => ({
+      values: getSelectableLocations(
+        'chiefdoms',
+        availableLocations,
+        districtId,
+      ),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
     getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'facilityId')),
   },
   facilityId: {
     type: 'select',
     label: 'Facility',
     required: true,
-    getSelectOptions: ({
-      availableLocations, districtId, chiefdomId,
-    }) => {
-      const district = availableLocations && districtId && availableLocations[districtId];
-      const chiefdom = chiefdomId && district && district.chiefdoms[chiefdomId];
-
-      return ({
-        values: chiefdom && sortValuesByName(_.map(
-          chiefdom.facilities,
-          (facility) => {
-            if (!_.isNull(facility.inchargeId)) {
-              const disabledFacility = facility;
-              disabledFacility.disabled = true;
-              return disabledFacility;
-            }
-            return facility;
-          },
-        )),
-        displayNameKey: 'name',
-        valueKey: 'id',
-      });
-    },
+    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+      values: _.map(getSelectableLocations(
+        'facilities',
+        availableLocations,
+        districtId,
+        chiefdomId,
+      ), (facility) => {
+        if (!_.isNull(facility.inchargeId)) {
+          const disabledFacility = facility;
+          disabledFacility.disabled = true;
+          return disabledFacility;
+        }
+        return facility;
+      }),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
   },
 };
 

@@ -21,6 +21,37 @@ export function getAttributesForSelectWithClearOnChange(input, formName, ...fiel
   };
 }
 
-export function sortValuesByName(object) {
-  return _.sortBy(_.values(object), x => x.name.toLowerCase());
+function getLocationById(list, id) {
+  if (list) {
+    return list.find(location => location.id === id);
+  }
+  return {};
+}
+
+export function getSelectableLocations(
+  requestedList, districts,
+  districtId, chiefdomId, facilityId,
+) {
+  let { district, chiefdom, facility } = { district: {}, chiefdom: {}, facility: {} };
+
+  if (districts && districtId) {
+    district = getLocationById(districts, districtId);
+  }
+  if (chiefdomId && district && district.chiefdoms) {
+    chiefdom = getLocationById(district.chiefdoms, chiefdomId);
+  }
+  if (facilityId && chiefdom && chiefdom.facilities) {
+    facility = getLocationById(chiefdom.facilities, facilityId);
+  }
+
+  switch (requestedList) {
+    case 'chiefdoms':
+      return district.chiefdoms;
+    case 'facilities':
+      return chiefdom.facilities;
+    case 'communities':
+      return facility.communities;
+    default:
+      return [];
+  }
 }
