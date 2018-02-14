@@ -28,7 +28,7 @@ public class LocationService {
   private CommunityRepository communityRepository;
 
   public List<District> getDistricts() {
-    return districtRepository.findAll();
+    return districtRepository.findAllByOrderByNameAsc();
   }
 
 
