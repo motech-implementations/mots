@@ -7,7 +7,8 @@ import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES,
   SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS,
+  SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
+  FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES,
 } from './types';
 
 const BASE_URL = '/api';
@@ -162,6 +163,46 @@ export function fetchUsers() {
 
   return {
     type: FETCH_USERS,
+    payload: request,
+  };
+}
+
+export function fetchDistricts() {
+  const url = '/api/districtsOnly';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_DISTRICTS,
+    payload: request,
+  };
+}
+
+export function fetchChiefdoms() {
+  const url = '/api/chiefdomsOnly';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_CHIEFDOMS,
+    payload: request,
+  };
+}
+
+export function fetchFacilities() {
+  const url = '/api/facilitiesOnly';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_FACILITIES,
+    payload: request,
+  };
+}
+
+export function fetchCommunities() {
+  const url = '/api/communitiesOnly';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_COMMUNITIES,
     payload: request,
   };
 }

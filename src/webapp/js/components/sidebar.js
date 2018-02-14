@@ -7,6 +7,7 @@ import {
   INCHARGE_READ_AUTHORITY,
   INCHARGE_WRITE_AUTHORITY,
   MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
+  MANAGE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
 export default class SideBar extends Component {
@@ -222,6 +223,14 @@ export default class SideBar extends Component {
             <Link to="/" onClick={this.props.hideMenuSmart}>
               <span className="fa fa-bar-chart" />
               <span className="icon-text">Reports</span>
+            </Link>
+          </li>
+          }
+          { hasAuthority(MANAGE_FACILITIES_AUTHORITY) &&
+          <li>
+            <Link to="/locations" onClick={this.props.hideMenuSmart}>
+              <span className="fa fa-map-marker  " />
+              <span className="icon-text">Locations</span>
             </Link>
           </li>
           }
