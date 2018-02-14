@@ -7,6 +7,11 @@ import { connect } from 'react-redux';
 
 import Collapsible from './Collapsible';
 import { signoutUser } from '../actions';
+import { CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
+  DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
+  hasAuthority } from '../utils/authorization';
+
+const HIDE_NOT_IMPLEMENTED = true;
 
 const styles = {
   container: {
@@ -45,6 +50,38 @@ class Menu extends Component {
   static contextTypes = {
     drawer: PropTypes.object,
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      CHW_READ_AUTHORITY: false,
+      CHW_WRITE_AUTHORITY: false,
+      INCHARGE_READ_AUTHORITY: false,
+      INCHARGE_WRITE_AUTHORITY: false,
+      ASSIGN_MODULES_AUTHORITY: false,
+      DISPLAY_REPORTS_AUTHORITY: false,
+    };
+  }
+
+  componentWillMount() {
+    hasAuthority(CHW_READ_AUTHORITY).then((result) => {
+      if (result) { this.setState({ CHW_READ_AUTHORITY: true }); }
+    });
+    hasAuthority(CHW_WRITE_AUTHORITY).then((result) => {
+      if (result) { this.setState({ CHW_WRITE_AUTHORITY: true }); }
+    });
+    hasAuthority(INCHARGE_READ_AUTHORITY).then((result) => {
+      if (result) { this.setState({ INCHARGE_READ_AUTHORITY: true }); }
+    });
+    hasAuthority(INCHARGE_WRITE_AUTHORITY).then((result) => {
+      if (result) { this.setState({ INCHARGE_WRITE_AUTHORITY: true }); }
+    });
+    hasAuthority(ASSIGN_MODULES_AUTHORITY).then((result) => {
+      if (result) { this.setState({ ASSIGN_MODULES_AUTHORITY: true }); }
+    });
+    hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
+      if (result) { this.setState({ DISPLAY_REPORTS_AUTHORITY: true }); }
+    });
+  }
 
   openSection(sectionKey) {
     Actions[sectionKey].call();
@@ -81,8 +118,10 @@ class Menu extends Component {
             <Text style={styles.menuItemText}>Home</Text>
           </TouchableOpacity>
 
+          { (this.state.CHW_READ_AUTHORITY || this.state.CHW_WRITE_AUTHORITY) &&
           <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
             <View>
+              { this.state.CHW_WRITE_AUTHORITY &&
               <TouchableOpacity
                 onPress={() => this.openSection('chwsNew')}
                 style={styles.menuItem}
@@ -92,6 +131,8 @@ class Menu extends Component {
                 </View>
                 <Text style={styles.menuItemText}>Add CHW</Text>
               </TouchableOpacity>
+              }
+              { this.state.CHW_READ_AUTHORITY &&
               <TouchableOpacity
                 onPress={() => this.openSection('chws')}
                 style={styles.menuItem}
@@ -101,9 +142,12 @@ class Menu extends Component {
                 </View>
                 <Text style={styles.menuItemText}>CHW List</Text>
               </TouchableOpacity>
+              }
             </View>
           </Collapsible>
+          }
 
+          { this.state.ASSIGN_MODULES_AUTHORITY &&
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
             <TouchableOpacity
               onPress={() => this.openSection('home')}
@@ -115,9 +159,12 @@ class Menu extends Component {
               <Text style={styles.menuItemText}>Assign</Text>
             </TouchableOpacity>
           </Collapsible>
+          }
 
+          { (this.state.INCHARGE_WRITE_AUTHORITY || this.state.INCHARGE_READ_AUTHORITY) &&
           <Collapsible title="Incharge" headerIcon="user" style={styles.menuItem}>
             <View>
+              { this.state.INCHARGE_WRITE_AUTHORITY &&
               <TouchableOpacity
                 onPress={() => this.openSection('inchargesNew')}
                 style={styles.menuItem}
@@ -127,6 +174,9 @@ class Menu extends Component {
                 </View>
                 <Text style={styles.menuItemText}>Add Incharge</Text>
               </TouchableOpacity>
+              }
+
+              { this.state.INCHARGE_READ_AUTHORITY &&
               <TouchableOpacity
                 onPress={() => this.openSection('incharges')}
                 style={styles.menuItem}
@@ -136,9 +186,12 @@ class Menu extends Component {
                 </View>
                 <Text style={styles.menuItemText}>Incharge List</Text>
               </TouchableOpacity>
+              }
             </View>
           </Collapsible>
+          }
 
+          { this.state.DISPLAY_REPORTS_AUTHORITY &&
           <TouchableOpacity
             onPress={() => this.openSection('home')}
             style={styles.menuItem}
@@ -148,7 +201,9 @@ class Menu extends Component {
             </View>
             <Text style={styles.menuItemText}>Reports</Text>
           </TouchableOpacity>
+          }
 
+          { !HIDE_NOT_IMPLEMENTED &&
           <TouchableOpacity
             onPress={() => this.openSection('synchronizeView')}
             style={styles.menuItem}
@@ -158,6 +213,7 @@ class Menu extends Component {
             </View>
             <Text style={styles.menuItemText}>Synchronize</Text>
           </TouchableOpacity>
+          }
 
           <TouchableOpacity
             onPress={() => this.logout()}
