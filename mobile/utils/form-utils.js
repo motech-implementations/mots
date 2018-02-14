@@ -6,17 +6,16 @@ import styles from '../styles/inputsStyles';
 const { labelSelectFieldStyle, optionListStyle } = styles;
 
 function getLocationById(list, id) {
-  if (list && id) {
-    for (let i = 0; i < list.length; i += 1) {
-      if (list[i].id === id) {
-        return list[i];
-      }
-    }
+  if (list) {
+    return list.find(location => location.id === id);
   }
   return {};
 }
 
-export function getSelectableLocations(districts, districtId, chiefdomId, facilityId) {
+export function getSelectableLocations(
+  requestedList, districts,
+  districtId, chiefdomId, facilityId,
+) {
   let { district, chiefdom, facility } = { district: {}, chiefdom: {}, facility: {} };
 
   if (districts && districtId) {
@@ -28,7 +27,17 @@ export function getSelectableLocations(districts, districtId, chiefdomId, facili
   if (facilityId && chiefdom && chiefdom.facilities) {
     facility = getLocationById(chiefdom.facilities, facilityId);
   }
-  return facility.communities || chiefdom.facilities || district.chiefdoms || districts;
+
+  switch (requestedList) {
+    case 'chiefdoms':
+      return district.chiefdoms;
+    case 'facilities':
+      return chiefdom.facilities;
+    case 'communities':
+      return facility.communities;
+    default:
+      return [];
+  }
 }
 
 export function clearFields(formName, ...fields) {

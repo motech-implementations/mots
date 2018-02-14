@@ -62,6 +62,7 @@ const FIELDS = {
     label: 'Chiefdom',
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
+        'chiefdoms',
         availableLocations,
         districtId,
       ),
@@ -72,6 +73,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
+          'chiefdoms',
           availableLocations,
           districtId,
         ),
@@ -87,6 +89,7 @@ const FIELDS = {
     required: true,
     getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
       values: getSelectableLocations(
+        'facilities',
         availableLocations,
         districtId,
         chiefdomId,
@@ -98,6 +101,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
+          'facilities',
           availableLocations,
           districtId,
           chiefdomId,
