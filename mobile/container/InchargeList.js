@@ -42,9 +42,9 @@ const COLUMNS = [
           iconColor="#FFF"
           buttonColor="#337ab7"
         >
-        Edit
+          Edit
         </Button>
-      }
+        }
       </View>
     ),
   },

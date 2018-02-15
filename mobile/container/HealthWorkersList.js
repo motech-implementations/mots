@@ -61,7 +61,7 @@ const COLUMNS = [
           iconColor="#FFF"
           buttonColor="#337ab7"
         >
-            Edit
+          Edit
         </Button>
         }
         { cell.canAssign &&
@@ -72,7 +72,7 @@ const COLUMNS = [
           buttonColor="#449C44"
           marginLeft={5}
         >
-            Assign Modules
+          Assign Modules
         </Button>
         }
       </View>
