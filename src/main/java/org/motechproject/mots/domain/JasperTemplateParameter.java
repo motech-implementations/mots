@@ -88,5 +88,4 @@ public class JasperTemplateParameter extends BaseEntity {
   @Getter
   @Setter
   private Boolean required;
-
 }
