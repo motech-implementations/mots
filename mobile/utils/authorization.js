@@ -11,6 +11,7 @@ export const MANAGE_FACILITIES_AUTHORITY = 'ROLE_MANAGE_FACILITIES';
 export const ASSIGN_MODULES_AUTHORITY = 'ROLE_ASSIGN_MODULES';
 export const MANAGE_USERS_AUTHORITY = 'ROLE_MANAGE_USERS';
 export const DISPLAY_REPORTS_AUTHORITY = 'ROLE_DISPLAY_REPORTS';
+export const DISPLAY_MODULES_AUTHORITY = 'ROLE_DISPLAY_MODULES';
 
 export async function hasAuthority(...authorities) {
   const token = await AsyncStorage.getItem('token');

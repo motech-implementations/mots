@@ -162,7 +162,7 @@ class Menu extends Component {
           }
 
           { (this.state.INCHARGE_WRITE_AUTHORITY || this.state.INCHARGE_READ_AUTHORITY) &&
-          <Collapsible title="Incharge" headerIcon="user" style={styles.menuItem}>
+          <Collapsible title="Incharge" headerIcon="user-md" style={styles.menuItem}>
             <View>
               { this.state.INCHARGE_WRITE_AUTHORITY &&
               <TouchableOpacity

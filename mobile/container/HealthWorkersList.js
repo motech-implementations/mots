@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import ListItems from '../components/ListItems';
 import { fetchChws } from '../actions/index';
 import Button from '../components/Button';
+import {
+  CHW_WRITE_AUTHORITY, ASSIGN_MODULES_AUTHORITY,
+  hasAuthority } from '../utils/authorization';
 
 import styles from '../styles/listsStyles';
 
@@ -51,6 +54,7 @@ const COLUMNS = [
     accessor: 'id',
     Cell: cell => (
       <View style={styles.buttonContainer}>
+        { cell.canWrite &&
         <Button
           onPress={() => Actions.chwsEdit({ chwId: cell.value })}
           iconName="pencil-square-o"
@@ -59,6 +63,8 @@ const COLUMNS = [
         >
             Edit
         </Button>
+        }
+        { cell.canAssign &&
         <Button
           onPress={Actions.home}
           iconName="arrow-circle-o-right"
@@ -68,6 +74,7 @@ const COLUMNS = [
         >
             Assign Modules
         </Button>
+        }
       </View>
     ),
   },
@@ -75,14 +82,33 @@ const COLUMNS = [
 
 
 class HealthWorkersList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      CHW_WRITE_AUTHORITY: false,
+      ASSIGN_MODULES_AUTHORITY: false,
+    };
+  }
+
   componentWillMount() {
+    hasAuthority(CHW_WRITE_AUTHORITY).then((result) => {
+      if (result) { this.setState({ CHW_WRITE_AUTHORITY: true }); }
+    });
+    hasAuthority(ASSIGN_MODULES_AUTHORITY).then((result) => {
+      if (result) { this.setState({ ASSIGN_MODULES_AUTHORITY: true }); }
+    });
     this.props.fetchChws();
   }
 
   render() {
     return (
       <ScrollView>
-        <ListItems data={this.props.chwList} columns={COLUMNS} />
+        <ListItems
+          data={this.props.chwList}
+          columns={COLUMNS}
+          canWrite={this.state.CHW_WRITE_AUTHORITY}
+          canAssign={this.state.ASSIGN_MODULES_AUTHORITY}
+        />
       </ScrollView>
     );
   }

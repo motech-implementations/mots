@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import Button from '../components/Button';
 
 import ListItems from '../components/ListItems';
 import { fetchIncharges } from '../actions/index';
+import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 
 const COLUMNS = [
   {
@@ -33,28 +34,46 @@ const COLUMNS = [
     minWidth: 50,
     accessor: 'id',
     Cell: cell => (
-      <Button
-        onPress={() => Actions.inchargesEdit({ inchargeId: cell.value })}
-        iconName="pencil-square-o"
-        iconColor="#FFF"
-        buttonColor="#337ab7"
-      >
+      <View>
+        { cell.canWrite &&
+        <Button
+          onPress={() => Actions.inchargesEdit({ inchargeId: cell.value })}
+          iconName="pencil-square-o"
+          iconColor="#FFF"
+          buttonColor="#337ab7"
+        >
         Edit
-      </Button>
+        </Button>
+      }
+      </View>
     ),
   },
 ];
 
 
 class InchargeList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      INCHARGE_WRITE_AUTHORITY: false,
+    };
+  }
+
   componentWillMount() {
+    hasAuthority(INCHARGE_WRITE_AUTHORITY).then((result) => {
+      if (result) { this.setState({ INCHARGE_WRITE_AUTHORITY: true }); }
+    });
     this.props.fetchIncharges();
   }
 
   render() {
     return (
       <ScrollView>
-        <ListItems data={this.props.incharges} columns={COLUMNS} />
+        <ListItems
+          data={this.props.incharges}
+          columns={COLUMNS}
+          canWrite={this.state.INCHARGE_WRITE_AUTHORITY}
+        />
       </ScrollView>
     );
   }
