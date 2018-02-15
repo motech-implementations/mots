@@ -34,8 +34,8 @@ public class UserService {
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User getUser(UUID id) {
-    return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-        String.format("User with id: %s not found", id.toString())));
+    return userRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("User with id: {0} not found", id.toString()));
   }
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)

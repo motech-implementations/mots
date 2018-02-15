@@ -79,8 +79,8 @@ public class ModuleService {
   }
 
   public Module findById(UUID id) {
-    return moduleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-        String.format("Module with id: %s not found", id.toString())));
+    return moduleRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("Module with id: {0} not found", id.toString()));
   }
 
   private Course getCourse() {
