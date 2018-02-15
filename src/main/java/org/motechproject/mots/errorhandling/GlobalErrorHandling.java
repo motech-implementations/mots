@@ -37,6 +37,13 @@ public class GlobalErrorHandling extends AbstractErrorHandling {
     return ex.getErrors();
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public String handleIllegalArgumentException(IllegalArgumentException ex) {
+    return ex.getMessage();
+  }
+
   @ExceptionHandler(EntityNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ResponseBody

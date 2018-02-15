@@ -9,6 +9,9 @@ import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -39,6 +43,38 @@ public class CommunityHealthWorkerController extends BaseController {
     Iterable<CommunityHealthWorker> healthWorkers = healthWorkerService.getHealthWorkers();
 
     return healthWorkerMapper.toDtos(healthWorkers);
+  }
+
+  /**
+   * Finds CommunityHealthWorkers matching all of the provided parameters.
+   * If there are no parameters, return all CommunityHealthWorkers.
+   */
+  @RequestMapping(value = "/searchChw", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Page<CommunityHealthWorkerDto> searchCommunityHealthWorkers(
+      @RequestParam(value = "chwId", required = false) String chwId,
+      @RequestParam(value = "firstName", required = false) String firstName,
+      @RequestParam(value = "secondName", required = false) String secondName,
+      @RequestParam(value = "otherName", required = false) String otherName,
+      @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+      @RequestParam(value = "educationLevel", required = false) String educationLevel,
+      @RequestParam(value = "chiefdomId", required = false) String chiefdomId,
+      @RequestParam(value = "districtId", required = false) String districtId,
+      @RequestParam(value = "communityId", required = false) String communityId,
+      Pageable pageable) throws IllegalArgumentException {
+
+    Page<CommunityHealthWorker> healthWorkers =
+        healthWorkerService.searchCommunityHealthWorkers(
+            chwId, firstName, secondName, otherName,
+            phoneNumber, educationLevel, chiefdomId, districtId, communityId, pageable);
+
+    List<CommunityHealthWorkerDto> healthWorkersDto =
+        healthWorkerMapper.toDtos(healthWorkers.getContent());
+    Page<CommunityHealthWorkerDto> dtoPage =
+        new PageImpl<>(healthWorkersDto, pageable, healthWorkers.getTotalElements());
+
+    return dtoPage;
   }
 
   /**

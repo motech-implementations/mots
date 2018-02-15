@@ -13,6 +13,8 @@ import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,20 @@ public class CommunityHealthWorkerService {
     Iterable<CommunityHealthWorker> healthWorkers = healthWorkerRepository.findAll();
 
     return chwInfoMapper.toDtos(healthWorkers);
+  }
+
+  /**
+   * Finds CommunityHealthWorkers matching all of the provided parameters.
+   * If there are no parameters, return all CommunityHealthWorkers.
+   */
+  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
+      String chwId, String firstName, String secondName, String otherName,
+      String phoneNumber, String educationLevel, String chiefdomId,
+      String districtId, String communityId, Pageable pageable) throws IllegalArgumentException {
+    return healthWorkerRepository.searchCommunityHealthWorkers(
+        chwId, firstName, secondName, otherName,
+        phoneNumber, educationLevel, chiefdomId, districtId, communityId, pageable);
   }
 
   /**
