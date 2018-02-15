@@ -17,7 +17,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.motechproject.mots.domain.enums.FacilityType;
 
@@ -25,15 +24,8 @@ import org.motechproject.mots.domain.enums.FacilityType;
 @Table(name = "facility", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "chiefdom_id"}))
 @NoArgsConstructor
-@RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = false, of = {"name", "chiefdom"})
-public class Facility extends BaseEntity {
-
-  @Column(name = "name", nullable = false)
-  @Getter
-  @Setter
-  @NonNull
-  private String name;
+@EqualsAndHashCode(callSuper = true, of = { "chiefdom" })
+public class Facility extends Location {
 
   @Column(name = "type", nullable = false)
   @Getter
@@ -67,5 +59,35 @@ public class Facility extends BaseEntity {
 
   public Facility(UUID id) {
     super(id);
+  }
+
+  /**
+   * Construct facility by firsy calling super constructor, and then settings type and facilityId.
+   * @param name name of the facility
+   * @param facilityType type of the facility
+   * @param facilityId id of the facility
+   */
+  public Facility(String name, FacilityType facilityType, String facilityId) {
+    super(name);
+    this.type = facilityType;
+    this.facilityId = facilityId;
+  }
+
+  @Override
+  public String getParentName() {
+    return chiefdom.getName();
+  }
+
+  @Override
+  public FacilityType getFacilityType() {
+    return getType();
+  }
+
+  @Override
+  public String getInchargeFullName() {
+    if (incharge == null) {
+      return null;
+    }
+    return incharge.getFullName();
   }
 }

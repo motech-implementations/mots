@@ -1,7 +1,6 @@
 package org.motechproject.mots.domain;
 
 import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -10,23 +9,14 @@ import javax.persistence.UniqueConstraint;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "community", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "facility_id"}))
 @NoArgsConstructor
-@RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = false, of = {"name", "facility"})
-public class Community extends BaseEntity {
-
-  @Column(name = "name", nullable = false)
-  @Getter
-  @Setter
-  @NonNull
-  private String name;
+@EqualsAndHashCode(callSuper = true, of = {"facility"})
+public class Community extends Location {
 
   @ManyToOne
   @JoinColumn(name = "facility_id", nullable = false)
@@ -36,5 +26,14 @@ public class Community extends BaseEntity {
 
   public Community(UUID id) {
     super(id);
+  }
+
+  public Community(String name) {
+    super(name);
+  }
+
+  @Override
+  public String getParentName() {
+    return facility.getName();
   }
 }

@@ -16,6 +16,7 @@ import InchargeNew from './incharge-new';
 import InchargeEdit from './incharge-edit';
 import ModulesManage from './modules-manage';
 import Users from './users';
+import Locations from './locations';
 
 export default class App extends Component {
   constructor(props) {
@@ -61,6 +62,7 @@ export default class App extends Component {
                 <Route path="/chw/:chwId" component={HealthWorkersEdit} />
                 <Route path="/chw" component={HealthWorkers} />
                 <Route path="/users" component={Users} />
+                <Route path="/locations" component={Locations} />
                 <Route path="/" component={Home} />
               </Switch>
             </div>

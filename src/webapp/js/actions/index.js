@@ -7,7 +7,8 @@ import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES,
   SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS,
+  SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
+  FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES,
 } from './types';
 
 const BASE_URL = '/api';
@@ -162,6 +163,33 @@ export function fetchUsers() {
 
   return {
     type: FETCH_USERS,
+    payload: request,
+  };
+}
+
+export function fetchLocationsOfType(type) {
+  let url;
+
+  switch (type) {
+    case FETCH_DISTRICTS:
+      url = '/api/districtsOnly';
+      break;
+    case FETCH_CHIEFDOMS:
+      url = '/api/chiefdomsOnly';
+      break;
+    case FETCH_FACILITIES:
+      url = '/api/facilitiesOnly';
+      break;
+    case FETCH_COMMUNITIES:
+      url = '/api/communitiesOnly';
+      break;
+    default:
+      throw new Error('Unexpected use of fetchLocationsOfType method');
+  }
+  const request = apiClient.get(url);
+
+  return {
+    type,
     payload: request,
   };
 }

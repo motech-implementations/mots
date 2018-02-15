@@ -1,7 +1,6 @@
 package org.motechproject.mots.domain;
 
 import java.util.Set;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,23 +11,14 @@ import javax.persistence.UniqueConstraint;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "chiefdom", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "district_id"}))
-@EqualsAndHashCode(callSuper = false, of = {"name", "district"})
-public class Chiefdom extends BaseEntity {
-
-  @Column(name = "name", nullable = false)
-  @Getter
-  @Setter
-  @NonNull
-  private String name;
+@EqualsAndHashCode(callSuper = true, of = {"district"})
+public class Chiefdom extends Location {
 
   @OneToMany(mappedBy = "chiefdom")
   @Getter
@@ -41,4 +31,13 @@ public class Chiefdom extends BaseEntity {
   @Getter
   @Setter
   private District district;
+
+  public Chiefdom(String name) {
+    super(name);
+  }
+
+  @Override
+  public String getParentName() {
+    return district.getName();
+  }
 }
