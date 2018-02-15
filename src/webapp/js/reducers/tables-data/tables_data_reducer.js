@@ -34,34 +34,13 @@ export default function (state = initialTablesData, action) {
       }
       return state;
     case FETCH_COMMUNITIES:
-      if (action.payload.data !== undefined) {
-        return {
-          ...state,
-          communitiesList: action.payload.data,
-        };
-      }
-      return state;
     case FETCH_FACILITIES:
-      if (action.payload.data !== undefined) {
-        return {
-          ...state,
-          facilitiesList: action.payload.data,
-        };
-      }
-      return state;
     case FETCH_CHIEFDOMS:
-      if (action.payload.data !== undefined) {
-        return {
-          ...state,
-          chiefdomsList: action.payload.data,
-        };
-      }
-      return state;
     case FETCH_DISTRICTS:
       if (action.payload.data !== undefined) {
         return {
           ...state,
-          districtsList: action.payload.data,
+          locationsList: action.payload.data,
         };
       }
       return state;

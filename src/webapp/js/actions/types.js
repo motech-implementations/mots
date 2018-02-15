@@ -13,6 +13,7 @@ export const SAVE_INCHARGE = 'save_incharge';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
 export const FETCH_USERS = 'fetch_users';
+
 export const FETCH_DISTRICTS = 'fetch_districts';
 export const FETCH_CHIEFDOMS = 'fetch_chiefdoms';
 export const FETCH_FACILITIES = 'fetch_facilities';

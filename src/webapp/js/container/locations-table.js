@@ -10,28 +10,19 @@ import MobileTable from '../components/mobile-table';
 import {
   hasAuthority, MANAGE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
-import { fetchFacilities } from '../actions/index';
+import { fetchLocationsOfType } from '../actions/index';
 
 const COLUMNS = [
   {
-    Header: 'Facility ID',
-    accessor: 'facilityId',
-  }, {
     Header: 'Name',
     accessor: 'name',
   }, {
-    Header: 'Facility Type',
-    accessor: 'facilityType',
-  }, {
-    Header: 'Incharge name',
-    accessor: 'inchargeFullName',
-  }, {
-    Header: 'Parent Chiefdom',
+    Header: 'Parent District',
     accessor: 'parent',
   },
 ];
 
-class FacilitiesTable extends Component {
+class LocationsTable extends Component {
   static prepareMobileColumns() {
     const mobileColumns = _.clone(COLUMNS);
     mobileColumns.push(mobileColumns.shift());
@@ -42,7 +33,7 @@ class FacilitiesTable extends Component {
     if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     } else {
-      this.props.fetchFacilities();
+      this.props.fetchLocationsOfType(this.props.locationType);
     }
   }
 
@@ -51,12 +42,16 @@ class FacilitiesTable extends Component {
       <div>
         <div className="hide-min-r-small-min">
           <MobileTable
-            data={this.props.facilitiesList}
-            columns={FacilitiesTable.prepareMobileColumns()}
+            data={this.props.locationsList}
+            columns={LocationsTable.prepareMobileColumns()}
           />
         </div>
         <div className="hide-max-r-xsmall-max">
-          <ReactTable filterable data={this.props.facilitiesList} columns={COLUMNS} />
+          <ReactTable
+            data={this.props.locationsList}
+            columns={this.props.tableColumns}
+            filterable
+          />
         </div>
       </div>
     );
@@ -65,16 +60,19 @@ class FacilitiesTable extends Component {
 
 function mapStateToProps(state) {
   return {
-    facilitiesList: state.tablesReducer.facilitiesList,
+    locationsList: state.tablesReducer.locationsList,
   };
 }
 
-export default connect(mapStateToProps, { fetchFacilities })(FacilitiesTable);
+export default connect(mapStateToProps, { fetchLocationsOfType })(LocationsTable);
 
-FacilitiesTable.propTypes = {
-  fetchFacilities: PropTypes.func.isRequired,
-  facilitiesList: PropTypes.arrayOf(PropTypes.shape({
+LocationsTable.propTypes = {
+  fetchLocationsOfType: PropTypes.func.isRequired,
+  locationsList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
+  tableColumns: PropTypes.arrayOf(PropTypes.shape({
+  })).isRequired,
+  locationType: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

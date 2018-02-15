@@ -2,10 +2,55 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.scss';
-import CommunitiesTable from '../container/communities-table';
-import FacilitiesTable from '../container/facilities-table';
-import ChiefdomsTable from '../container/chiefdoms-table';
-import DistrictsTable from '../container/districts-table';
+import LocationsTable from '../container/locations-table';
+import { FETCH_CHIEFDOMS, FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES,
+} from '../actions/types';
+
+const DISTRICT_COLUMNS = [
+  {
+    Header: 'Name',
+    accessor: 'name',
+  },
+];
+
+const CHIEFDOM_COLUMNS = [
+  {
+    Header: 'Name',
+    accessor: 'name',
+  }, {
+    Header: 'Parent District',
+    accessor: 'parent',
+  },
+];
+
+const FACILITIES_COLUMNS = [
+  {
+    Header: 'Facility ID',
+    accessor: 'facilityId',
+  }, {
+    Header: 'Name',
+    accessor: 'name',
+  }, {
+    Header: 'Facility Type',
+    accessor: 'facilityType',
+  }, {
+    Header: 'Incharge name',
+    accessor: 'inchargeFullName',
+  }, {
+    Header: 'Parent Chiefdom',
+    accessor: 'parent',
+  },
+];
+
+const COMMUNITY_COLUMNS = [
+  {
+    Header: 'Name',
+    accessor: 'name',
+  }, {
+    Header: 'Parent Facility',
+    accessor: 'parent',
+  },
+];
 
 const Locations = () => (
   <div>
@@ -19,16 +64,16 @@ const Locations = () => (
       </TabList>
 
       <TabPanel>
-        <CommunitiesTable />
+        <LocationsTable locationType={FETCH_COMMUNITIES} tableColumns={COMMUNITY_COLUMNS} />
       </TabPanel>
       <TabPanel>
-        <FacilitiesTable />
+        <LocationsTable locationType={FETCH_FACILITIES} tableColumns={FACILITIES_COLUMNS} />
       </TabPanel>
       <TabPanel>
-        <ChiefdomsTable />
+        <LocationsTable locationType={FETCH_CHIEFDOMS} tableColumns={CHIEFDOM_COLUMNS} />
       </TabPanel>
       <TabPanel>
-        <DistrictsTable />
+        <LocationsTable locationType={FETCH_DISTRICTS} tableColumns={DISTRICT_COLUMNS} />
       </TabPanel>
     </Tabs>
   </div>

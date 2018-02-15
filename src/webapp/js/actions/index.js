@@ -167,42 +167,29 @@ export function fetchUsers() {
   };
 }
 
-export function fetchDistricts() {
-  const url = '/api/districtsOnly';
+export function fetchLocationsOfType(type) {
+  let url;
+
+  switch (type) {
+    case FETCH_DISTRICTS:
+      url = '/api/districtsOnly';
+      break;
+    case FETCH_CHIEFDOMS:
+      url = '/api/chiefdomsOnly';
+      break;
+    case FETCH_FACILITIES:
+      url = '/api/facilitiesOnly';
+      break;
+    case FETCH_COMMUNITIES:
+      url = '/api/communitiesOnly';
+      break;
+    default:
+      throw new Error('Unexpected use of fetchLocationsOfType method');
+  }
   const request = apiClient.get(url);
 
   return {
-    type: FETCH_DISTRICTS,
-    payload: request,
-  };
-}
-
-export function fetchChiefdoms() {
-  const url = '/api/chiefdomsOnly';
-  const request = apiClient.get(url);
-
-  return {
-    type: FETCH_CHIEFDOMS,
-    payload: request,
-  };
-}
-
-export function fetchFacilities() {
-  const url = '/api/facilitiesOnly';
-  const request = apiClient.get(url);
-
-  return {
-    type: FETCH_FACILITIES,
-    payload: request,
-  };
-}
-
-export function fetchCommunities() {
-  const url = '/api/communitiesOnly';
-  const request = apiClient.get(url);
-
-  return {
-    type: FETCH_COMMUNITIES,
+    type,
     payload: request,
   };
 }
