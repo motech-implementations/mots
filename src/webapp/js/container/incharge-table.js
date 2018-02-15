@@ -29,6 +29,7 @@ const COLUMNS = [
         </Link>
       </div>
     ),
+    filterable: false,
   },
   {
     Header: 'First name',
@@ -75,7 +76,7 @@ class InchargeTable extends Component {
           />
         </div>
         <div className="hide-max-r-xsmall-max">
-          <ReactTable data={this.props.inchargesList} columns={COLUMNS} />
+          <ReactTable filterable data={this.props.inchargesList} columns={COLUMNS} />
         </div>
       </div>
     );

@@ -29,6 +29,7 @@ const COLUMNS = [
         </Link>
       </div>
     ),
+    filterable: false,
   },
   {
     Header: 'Username',
@@ -67,7 +68,7 @@ class UsersTable extends Component {
           <MobileTable data={this.props.usersList} columns={UsersTable.prepareMobileColumns()} />
         </div>
         <div className="hide-max-r-xsmall-max">
-          <ReactTable data={this.props.usersList} columns={COLUMNS} />
+          <ReactTable filterable data={this.props.usersList} columns={COLUMNS} />
         </div>
       </div>
     );

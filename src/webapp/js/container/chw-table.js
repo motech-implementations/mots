@@ -38,6 +38,7 @@ const COLUMNS = [
         </Link>
       </div>
     ),
+    filterable: false,
   },
   {
     Header: 'ID',
@@ -96,7 +97,7 @@ class ChwTable extends Component {
           <MobileTable data={this.props.chwList} columns={ChwTable.prepareMobileColumns()} />
         </div>
         <div className="hide-max-r-xsmall-max">
-          <ReactTable data={this.props.chwList} columns={COLUMNS} />
+          <ReactTable filterable data={this.props.chwList} columns={COLUMNS} />
         </div>
       </div>
     );
