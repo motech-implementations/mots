@@ -201,11 +201,10 @@ public class IvrService {
     return ivrConfigService.getConfig().getBaseUrl() + relativeUrl;
   }
 
-  private String boolToIntAsString(Boolean boolObject) {
-    if (boolObject == null) {
+  private String boolToIntAsString(Boolean bool) {
+    if (bool == null) {
       throw new MotsException("Bad IVR config - boolean value is null");
     }
-    boolean bool = BooleanUtils.toBoolean(boolObject);
     return Integer.toString(BooleanUtils.toInteger(bool));
   }
 }

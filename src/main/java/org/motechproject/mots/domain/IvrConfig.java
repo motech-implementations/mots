@@ -10,13 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyClass;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import org.motechproject.mots.domain.enums.Language;
-import org.motechproject.mots.exception.MotsException;
 
 @Entity
 @Table(name = "ivr_config")
@@ -50,21 +48,25 @@ public class IvrConfig extends BaseEntity {
   @Column(name = "retry_attempts_short", nullable = false)
   @Getter
   @Setter
+  @Min(value = 0)
   private Integer retryAttemptsShort;
 
   @Column(name = "retry_delay_short", nullable = false)
   @Getter
   @Setter
+  @Min(value = 0)
   private Integer retryDelayShort;
 
   @Column(name = "retry_attempts_long", nullable = false)
   @Getter
   @Setter
+  @Min(value = 0)
   private Integer retryAttemptsLong;
 
   @Column(name = "retry_delay_long", nullable = false)
   @Getter
   @Setter
+  @Min(value = 0)
   private Integer retryDelayLong;
 
   @ElementCollection
@@ -76,15 +78,4 @@ public class IvrConfig extends BaseEntity {
   @Getter
   @Setter
   private Map<Language, String> ivrLanguagesIds;
-
-  @PrePersist
-  @PreUpdate
-  protected void preSave() {
-    if (retryAttemptsShort < 0
-        || retryDelayShort < 0
-        || retryAttemptsLong < 0
-        || retryDelayLong < 0) {
-      throw new MotsException("Retry configs cannot be negative");
-    }
-  }
 }
