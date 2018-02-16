@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
+import org.motechproject.mots.domain.enums.CallStatus;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
@@ -221,8 +223,36 @@ public class IvrService {
   }
 
   public void saveCallDetailRecord(CallDetailRecord callDetailRecord, String configName) {
-    callDetailRecord.setIvrConfigName(configName);
+    setConfigFields(callDetailRecord, configName);
     callDetailRecordRepository.save(callDetailRecord);
+  }
+
+  private void setConfigFields(CallDetailRecord callDetailRecord, String configName) {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+
+    Map<String, String> ivrData = callDetailRecord.getIvrData();
+
+    String ivrCallStatus = ivrData.get(ivrConfig.getCallStatusField());
+
+    callDetailRecord.setCallStatus(getCallStatus(ivrConfig, ivrCallStatus));
+    callDetailRecord.setIvrConfigName(configName);
+    callDetailRecord.setCallId(ivrData.get(ivrConfig.getCallIdField()));
+    callDetailRecord.setChwIvrId(ivrData.get(ivrConfig.getChwIvrIdField()));
+    callDetailRecord.setCallLogId(ivrData.get(ivrConfig.getCallLogIdField()));
+
+    ivrData.remove(ivrConfig.getCallIdField());
+    ivrData.remove(ivrConfig.getChwIvrIdField());
+    ivrData.remove(ivrConfig.getCallLogIdField());
+  }
+
+  private CallStatus getCallStatus(IvrConfig ivrConfig, String ivrCallStatus) {
+    CallStatus callStatus = ivrConfig.getCallStatusMap().get(ivrCallStatus);
+
+    if (callStatus == null) {
+      return CallStatus.UNKNOWN;
+    }
+
+    return callStatus;
   }
 
   private String getAbsoluteUrl(String relativeUrl) {
