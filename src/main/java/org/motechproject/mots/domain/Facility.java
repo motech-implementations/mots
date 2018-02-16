@@ -62,7 +62,7 @@ public class Facility extends Location {
   }
 
   /**
-   * Construct facility by firsy calling super constructor, and then settings type and facilityId.
+   * Construct facility by first calling super constructor, and then setting type and facilityId.
    * @param name name of the facility
    * @param facilityType type of the facility
    * @param facilityId id of the facility

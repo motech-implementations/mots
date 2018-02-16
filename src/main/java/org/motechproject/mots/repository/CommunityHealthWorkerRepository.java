@@ -3,10 +3,11 @@ package org.motechproject.mots.repository;
 import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
-import org.springframework.data.repository.CrudRepository;
+import org.motechproject.mots.repository.custom.CommunityHealthWorkerRepositoryCustom;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommunityHealthWorkerRepository extends
-    CrudRepository<CommunityHealthWorker, UUID> {
+    JpaRepository<CommunityHealthWorker, UUID>, CommunityHealthWorkerRepositoryCustom {
 
   Optional<CommunityHealthWorker> findById(UUID id);
 
