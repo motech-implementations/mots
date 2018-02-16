@@ -7,7 +7,7 @@ import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.ChwInfoDto;
-import org.motechproject.mots.exception.ChwCreationException;
+import org.motechproject.mots.exception.ChwException;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
@@ -66,7 +66,7 @@ public class CommunityHealthWorkerService {
     } catch (IvrException ex) {
       String message = "Could not create CHW, because of IVR subscriber creation error. \n\n"
           + ex.getClearVotoInfo();
-      throw new ChwCreationException(message, ex);
+      throw new ChwException(message, ex);
     }
 
     healthWorkerRepository.save(healthWorker);
@@ -83,8 +83,25 @@ public class CommunityHealthWorkerService {
         String.format("CommunityHealthWorker with id: %s not found", id.toString())));
   }
 
+  /**
+   * Update CHW and IVR Subscriber.
+   * @param chw CHW to update
+   * @return saved CHW
+   */
   @PreAuthorize(RoleNames.HAS_CHW_WRITE_ROLE)
-  public CommunityHealthWorker saveHealthWorker(CommunityHealthWorker communityHealthWorker) {
-    return healthWorkerRepository.save(communityHealthWorker);
+  public CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw) {
+    String ivrId = chw.getIvrId();
+    String phoneNumber = chw.getPhoneNumber();
+    String name = chw.getCombinedName();
+    Language preferredLanguage = chw.getPreferredLanguage();
+
+    try {
+      ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage);
+    } catch (IvrException ex) {
+      String message = "Could not update CHW, because of IVR subscriber update error. \n\n"
+          + ex.getClearVotoInfo();
+      throw new ChwException(message, ex);
+    }
+    return healthWorkerRepository.save(chw);
   }
 }

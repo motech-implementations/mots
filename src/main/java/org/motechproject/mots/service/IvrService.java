@@ -50,6 +50,7 @@ public class IvrService {
   private static final String API_KEY = "api_key";
 
   private static final String SUBSCRIBERS_URL = "/subscribers";
+  private static final String MODIFY_SUBSCRIBERS_URL = "/subscribers/%s";
   private static final String ADD_TO_GROUPS_URL = "/subscribers/groups";
   private static final String DELETE_GROUPS_URL = "/subscribers/delete/groups";
   private static final String SEND_MESSAGE_URL = "/outgoing_calls";
@@ -70,22 +71,16 @@ public class IvrService {
    * Create IVR Subscriber with given phone number.
    * @param phoneNumber CHW phone number
    * @param name CHW name
+   * @param preferredLanguage CHW preferred language
    * @return ivr id of created subscriber
    */
   public String createSubscriber(String phoneNumber, String name,
       Language preferredLanguage) throws IvrException {
-    IvrConfig ivrConfig = ivrConfigService.getConfig();
-    String preferredLanguageString = ivrConfig.getIvrLanguagesIds().get(preferredLanguage);
-    String groups = ivrConfig.getDefaultUsersGroupId();
+    MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name,
+        preferredLanguage);
 
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add(PHONE, phoneNumber);
-    params.add(PREFERRED_LANGUAGE, preferredLanguageString);
+    String groups = ivrConfigService.getConfig().getDefaultUsersGroupId();
     params.add(GROUPS, groups);
-
-    if (StringUtils.isNotBlank(name)) {
-      params.add(NAME_PROPERTY, name);
-    }
 
     VotoResponseDto<String> votoResponse = sendVotoRequest(getAbsoluteUrl(SUBSCRIBERS_URL), params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
@@ -96,6 +91,23 @@ public class IvrService {
     }
 
     return votoResponse.getData();
+  }
+
+  /**
+   * Update existing IVR subscriber.
+   * @param ivrId id of existing IVR subscriber
+   * @param phoneNumber new CHW phone number
+   * @param name new CHW name
+   * @param preferredLanguage new CHW preferred language
+   */
+  public void updateSubscriber(String ivrId, String phoneNumber, String name,
+      Language preferredLanguage) throws IvrException {
+    MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name,
+        preferredLanguage);
+
+    String url = getAbsoluteUrl(String.format(MODIFY_SUBSCRIBERS_URL, ivrId));
+    sendVotoRequest(url, params, new ParameterizedTypeReference<VotoResponseDto<String>>() {},
+        HttpMethod.PUT);
   }
 
   /**
@@ -127,6 +139,21 @@ public class IvrService {
       sendVotoRequest(getAbsoluteUrl(DELETE_GROUPS_URL), params,
               new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.DELETE);
     }
+  }
+
+  private MultiValueMap<String, String> prepareBasicSubscriberParamsToSend(String phoneNumber,
+      String name, Language preferredLanguage) {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+    String preferredLanguageString = ivrConfig.getIvrLanguagesIds().get(preferredLanguage);
+
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(PHONE, phoneNumber);
+    params.add(PREFERRED_LANGUAGE, preferredLanguageString);
+
+    if (StringUtils.isNotBlank(name)) {
+      params.add(NAME_PROPERTY, name);
+    }
+    return params;
   }
 
   private void sendModuleAssignedMessage(String subscriberId) throws IvrException {
