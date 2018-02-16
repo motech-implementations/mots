@@ -49,7 +49,7 @@ public class CommunityHealthWorkerController extends BaseController {
    * Finds CommunityHealthWorkers matching all of the provided parameters.
    * If there are no parameters, return all CommunityHealthWorkers.
    */
-  @RequestMapping(value = "/searchChw", method = RequestMethod.GET)
+  @RequestMapping(value = "/chw/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<CommunityHealthWorkerDto> searchCommunityHealthWorkers(
