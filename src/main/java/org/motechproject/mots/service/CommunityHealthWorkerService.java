@@ -96,8 +96,8 @@ public class CommunityHealthWorkerService {
 
   @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public CommunityHealthWorker getHealthWorker(UUID id) {
-    return healthWorkerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-        String.format("CommunityHealthWorker with id: %s not found", id.toString())));
+    return healthWorkerRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("CHW with id: {0} not found", id.toString()));
   }
 
   /**

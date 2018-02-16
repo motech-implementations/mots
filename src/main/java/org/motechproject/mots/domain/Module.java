@@ -1,5 +1,6 @@
 package org.motechproject.mots.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -90,7 +91,7 @@ public class Module extends IvrObject {
   @JoinColumn(name = "module_id")
   @OrderBy("list_order ASC")
   @Getter
-  private List<Unit> units;
+  private List<Unit> units = new ArrayList<>();
 
   @OneToOne
   @JoinColumn(name = "previous_version_id")

@@ -27,7 +27,7 @@ public class InchargeService {
 
   @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
   public Incharge getIncharge(UUID id) {
-    return inchargeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-        String.format("Incharge with id: %s not found", id.toString())));
+    return inchargeRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("Incharge with id: {0} not found", id.toString()));
   }
 }
