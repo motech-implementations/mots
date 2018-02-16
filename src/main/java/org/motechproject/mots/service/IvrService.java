@@ -113,30 +113,34 @@ public class IvrService {
   }
 
   /**
-   * Manage subscriber IVR groups.
+   * Add Subscriber to groups.
    * @param subscriberId subscriber id
-   * @param newGroupsIds ids of groups to add subscriber
-   * @param oldGroupsIds ids of subscriber previous groups
+   * @param groupsIds ids of groups to add subscriber
    */
-  public void manageSubscriberGroups(String subscriberId,
-      List<String> newGroupsIds, List<String> oldGroupsIds) throws IvrException {
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add(SUBSCRIBER_IDS, subscriberId);
-    params.add(GROUPS, StringUtils.join(newGroupsIds, ","));
+  public void addSubscriberToGroups(String subscriberId,
+      List<String> groupsIds) throws IvrException {
+    if (!groupsIds.isEmpty()) {
+      MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+      params.add(SUBSCRIBER_IDS, subscriberId);
+      params.add(GROUPS, StringUtils.join(groupsIds, ","));
 
-    sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
+      sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), params,
+          new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
 
-    if (!oldGroupsIds.containsAll(newGroupsIds)) {
       sendModuleAssignedMessage(subscriberId);
     }
+  }
 
-    List<String> deletedGroups = oldGroupsIds;
-    deletedGroups.removeAll(newGroupsIds);
-
-    if (!deletedGroups.isEmpty()) {
-      params = new LinkedMultiValueMap<>();
-      params.add(GROUPS, StringUtils.join(deletedGroups, ","));
+  /**
+   * Remove Subscriber from groups.
+   * @param subscriberId subscriber id
+   * @param groupsIds ids of groups to remove subscriber
+   */
+  public void removeSubscriberFromGroups(String subscriberId,
+      List<String> groupsIds) throws IvrException {
+    if (!groupsIds.isEmpty()) {
+      MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+      params.add(GROUPS, StringUtils.join(groupsIds, ","));
       params.add(SUBSCRIBER_IDS, subscriberId);
       sendVotoRequest(getAbsoluteUrl(DELETE_GROUPS_URL), params,
               new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.DELETE);
