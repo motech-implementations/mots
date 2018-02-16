@@ -44,21 +44,21 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String chiefdomId,
-      String districtId, String communityId, Pageable pageable) throws IllegalArgumentException {
+      String phoneNumber, String educationLevel, String communityId, String facilityId,
+      String chiefdomId, String districtId, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
     query = prepareQuery(query, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, chiefdomId, districtId,
-        communityId, false, pageable);
+        otherName, phoneNumber, educationLevel, communityId,
+        facilityId, chiefdomId, districtId, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, chiefdomId, districtId,
-        communityId, true, pageable);
+        otherName, phoneNumber, educationLevel, communityId,
+        facilityId, chiefdomId, districtId, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -75,8 +75,8 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String chiefdomId,
-      String districtId, String communityId,
+      String phoneNumber, String educationLevel, String communityId,
+      String facilityId, String chiefdomId, String districtId,
       boolean count,
       Pageable pageable) throws IllegalArgumentException {
 
@@ -109,8 +109,12 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
       predicate = builder.and(predicate, builder.equal(root.get(EDUCATION_LEVEL), validLevel));
     }
     if (communityId != null) {
-      predicate = builder.and(predicate,
-          builder.equal(root.get(COMMUNITY).get(ID), UUID.fromString(communityId)));
+      predicate = builder.and(predicate, builder.equal(
+          root.get(COMMUNITY).get(ID), UUID.fromString(communityId)));
+    }
+    if (facilityId != null) {
+      predicate = builder.and(predicate, builder.equal(
+          root.get(COMMUNITY).get(FACILITY).get(ID), UUID.fromString(facilityId)));
     }
     if (chiefdomId != null) {
       predicate = builder.and(predicate, builder.equal(

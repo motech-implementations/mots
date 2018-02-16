@@ -8,6 +8,6 @@ public interface CommunityHealthWorkerRepositoryCustom {
 
   Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String chiefdomId,
-      String districtId, String communityId, Pageable pageable) throws IllegalArgumentException;
+      String phoneNumber, String educationLevel, String communityId, String facilityId,
+      String chiefdomId, String districtId, Pageable pageable) throws IllegalArgumentException;
 }

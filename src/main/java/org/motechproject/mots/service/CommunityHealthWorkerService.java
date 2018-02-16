@@ -56,11 +56,12 @@ public class CommunityHealthWorkerService {
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String chiefdomId,
-      String districtId, String communityId, Pageable pageable) throws IllegalArgumentException {
+      String phoneNumber, String educationLevel, String communityId, String facilityId,
+      String chiefdomId, String districtId, Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
         chwId, firstName, secondName, otherName,
-        phoneNumber, educationLevel, chiefdomId, districtId, communityId, pageable);
+        phoneNumber, educationLevel, communityId,
+        facilityId, chiefdomId, districtId, pageable);
   }
 
   /**
