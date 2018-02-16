@@ -8,7 +8,7 @@ import org.motechproject.mots.validate.annotations.PhoneNumber;
 
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
-  private static final String PATTERN = "^\\d*$";
+  private static final String PATTERN = "^\\d{4,}$";
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {

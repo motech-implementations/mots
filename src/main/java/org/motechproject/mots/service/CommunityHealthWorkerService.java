@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.exception.ChwCreationException;
@@ -57,9 +58,10 @@ public class CommunityHealthWorkerService {
   public CommunityHealthWorker createHealthWorker(CommunityHealthWorker healthWorker) {
     String phoneNumber = healthWorker.getPhoneNumber();
     String name = healthWorker.getCombinedName();
+    Language preferredLanguage = healthWorker.getPreferredLanguage();
 
     try {
-      String ivrId = ivrService.createSubscriber(phoneNumber, name);
+      String ivrId = ivrService.createSubscriber(phoneNumber, name, preferredLanguage);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
       String message = "Could not create CHW, because of IVR subscriber creation error. \n\n"

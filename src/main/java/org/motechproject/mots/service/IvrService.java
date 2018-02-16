@@ -5,10 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.CallDetailRecord;
+import org.motechproject.mots.domain.IvrConfig;
+import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
+import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.CallDetailRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,21 +34,34 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class IvrService {
 
-  private static final String BASE_URL = "https://go.votomobile.org/api/v1";
-  private static final String SUBSCRIBERS_URL = BASE_URL + "/subscribers";
-  private static final String ADD_TO_GROUPS_URL = BASE_URL + "/subscribers/groups";
-  private static final String DELETE_GROUPS_URL = BASE_URL + "/subscribers/delete/groups";
-  private static final String SEND_MESSAGE_URL = BASE_URL + "/outgoing_calls";
+  private static final String PHONE = "phone";
+  private static final String PREFERRED_LANGUAGE = "preferred_language";
+  private static final String GROUPS = "groups";
+  private static final String NAME_PROPERTY = "property[name]";
+  private static final String SUBSCRIBER_IDS = "subscriber_ids";
+  private static final String SEND_TO_SUBSCRIBERS = "send_to_subscribers";
+  private static final String MESSAGE_ID = "message_id";
+  private static final String SEND_SMS_IF_VOICE_FAILS = "send_sms_if_voice_fails";
+  private static final String DETECT_VOICEMAIL_ACTION = "detect_voicemail_action";
+  private static final String RETRY_ATTEMPTS_SHORT = "retry_attempts_short";
+  private static final String RETRY_ATTEMPTS_LONG = "retry_attempts_long";
+  private static final String RETRY_DELAY_SHORT = "retry_delay_short";
+  private static final String RETRY_DELAY_LONG = "retry_delay_long";
+  private static final String API_KEY = "api_key";
 
-  private static final String MODULE_ASSIGNED_MESSAGE_ID = "2228099";
-  private static final String MOTS_USERS_GROUP_ID = "298868";
-  private static final String DEFAULT_LANGUAGE_ID = "206945";
+  private static final String SUBSCRIBERS_URL = "/subscribers";
+  private static final String ADD_TO_GROUPS_URL = "/subscribers/groups";
+  private static final String DELETE_GROUPS_URL = "/subscribers/delete/groups";
+  private static final String SEND_MESSAGE_URL = "/outgoing_calls";
 
   @Value("${mots.ivrApiKey}")
   private String ivrApiKey;
 
   @Autowired
   private CallDetailRecordRepository callDetailRecordRepository;
+
+  @Autowired
+  private IvrConfigService ivrConfigService;
 
   private RestOperations restTemplate = new RestTemplate();
   private ObjectMapper mapper = new ObjectMapper();
@@ -55,17 +72,22 @@ public class IvrService {
    * @param name CHW name
    * @return ivr id of created subscriber
    */
-  public String createSubscriber(String phoneNumber, String name) throws IvrException {
+  public String createSubscriber(String phoneNumber, String name,
+      Language preferredLanguage) throws IvrException {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+    String preferredLanguageString = ivrConfig.getIvrLanguagesIds().get(preferredLanguage);
+    String groups = ivrConfig.getDefaultUsersGroupId();
+
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("phone", phoneNumber);
-    params.add("preferred_language", DEFAULT_LANGUAGE_ID);
-    params.add("groups", MOTS_USERS_GROUP_ID);
+    params.add(PHONE, phoneNumber);
+    params.add(PREFERRED_LANGUAGE, preferredLanguageString);
+    params.add(GROUPS, groups);
 
     if (StringUtils.isNotBlank(name)) {
-      params.add("property[name]", name);
+      params.add(NAME_PROPERTY, name);
     }
 
-    VotoResponseDto<String> votoResponse = sendVotoRequest(SUBSCRIBERS_URL, params,
+    VotoResponseDto<String> votoResponse = sendVotoRequest(getAbsoluteUrl(SUBSCRIBERS_URL), params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
 
     if (votoResponse == null || StringUtils.isBlank(votoResponse.getData())) {
@@ -85,10 +107,10 @@ public class IvrService {
   public void manageSubscriberGroups(String subscriberId,
       List<String> newGroupsIds, List<String> oldGroupsIds) throws IvrException {
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("subscriber_ids", subscriberId);
-    params.add("groups", StringUtils.join(newGroupsIds, ","));
+    params.add(SUBSCRIBER_IDS, subscriberId);
+    params.add(GROUPS, StringUtils.join(newGroupsIds, ","));
 
-    sendVotoRequest(ADD_TO_GROUPS_URL, params,
+    sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
 
     if (!oldGroupsIds.containsAll(newGroupsIds)) {
@@ -100,30 +122,40 @@ public class IvrService {
 
     if (!deletedGroups.isEmpty()) {
       params = new LinkedMultiValueMap<>();
-      params.add("groups", StringUtils.join(deletedGroups, ","));
-      params.add("subscriber_ids", subscriberId);
-      sendVotoRequest(DELETE_GROUPS_URL, params,
+      params.add(GROUPS, StringUtils.join(deletedGroups, ","));
+      params.add(SUBSCRIBER_IDS, subscriberId);
+      sendVotoRequest(getAbsoluteUrl(DELETE_GROUPS_URL), params,
               new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.DELETE);
     }
   }
 
   private void sendModuleAssignedMessage(String subscriberId) throws IvrException {
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("send_to_subscribers", subscriberId);
-    params.add("message_id", MODULE_ASSIGNED_MESSAGE_ID);
-    params.add("send_sms_if_voice_fails", "1");
-    params.add("detect_voicemail_action", "1");
-    params.add("retry_attempts_short", "3");
-    params.add("retry_delay_short", "15");
-    params.add("retry_attempts_long", "1");
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+    String messageId = ivrConfig.getModuleAssignedMessageId();
+    String sendSmsIfVoiceFails = boolToIntAsString(ivrConfig.getSendSmsIfVoiceFails());
+    String detectVoiceMailAction = boolToIntAsString(ivrConfig.getDetectVoicemailAction());
+    String retryAttemptsShort = Integer.toString(ivrConfig.getRetryAttemptsShort());
+    String retryDelayShort = Integer.toString(ivrConfig.getRetryDelayShort());
+    String retryAttemptsLong = Integer.toString(ivrConfig.getRetryAttemptsLong());
+    String retryDelayLong = Integer.toString(ivrConfig.getRetryDelayLong());
 
-    sendVotoRequest(SEND_MESSAGE_URL, params,
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(SEND_TO_SUBSCRIBERS, subscriberId);
+    params.add(MESSAGE_ID, messageId);
+    params.add(SEND_SMS_IF_VOICE_FAILS, sendSmsIfVoiceFails);
+    params.add(DETECT_VOICEMAIL_ACTION, detectVoiceMailAction);
+    params.add(RETRY_ATTEMPTS_SHORT, retryAttemptsShort);
+    params.add(RETRY_DELAY_SHORT, retryDelayShort);
+    params.add(RETRY_ATTEMPTS_LONG, retryAttemptsLong);
+    params.add(RETRY_DELAY_LONG, retryDelayLong);
+
+    sendVotoRequest(getAbsoluteUrl(SEND_MESSAGE_URL), params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
   }
 
   private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,
       ParameterizedTypeReference<T> responseType, HttpMethod method) throws IvrException {
-    params.add("api_key", ivrApiKey);
+    params.add(API_KEY, ivrApiKey);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -161,7 +193,19 @@ public class IvrService {
     }
   }
 
-  public void saveCallDetailReacord(CallDetailRecord ivrData) {
+  public void saveCallDetailRecord(CallDetailRecord ivrData) {
     callDetailRecordRepository.save(ivrData);
+  }
+
+  private String getAbsoluteUrl(String relativeUrl) {
+    return ivrConfigService.getConfig().getBaseUrl() + relativeUrl;
+  }
+
+  private String boolToIntAsString(Boolean boolObject) {
+    if (boolObject == null) {
+      throw new MotsException("Bad IVR config - boolean value is null");
+    }
+    boolean bool = BooleanUtils.toBoolean(boolObject);
+    return Integer.toString(BooleanUtils.toInteger(bool));
   }
 }
