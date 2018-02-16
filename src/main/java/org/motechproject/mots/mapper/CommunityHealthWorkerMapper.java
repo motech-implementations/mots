@@ -44,6 +44,7 @@ public interface CommunityHealthWorkerMapper {
 
   @Mappings({
       @Mapping(target = "id", ignore = true),
+      @Mapping(target = "chwId", ignore = true),
       @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),
       @Mapping(target = "community", source = "communityId")
   })
