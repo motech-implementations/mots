@@ -220,8 +220,9 @@ public class IvrService {
     }
   }
 
-  public void saveCallDetailRecord(CallDetailRecord ivrData) {
-    callDetailRecordRepository.save(ivrData);
+  public void saveCallDetailRecord(CallDetailRecord callDetailRecord, String configName) {
+    callDetailRecord.setIvrConfigName(configName);
+    callDetailRecordRepository.save(callDetailRecord);
   }
 
   private String getAbsoluteUrl(String relativeUrl) {

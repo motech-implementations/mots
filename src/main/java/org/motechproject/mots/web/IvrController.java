@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,15 +27,16 @@ public class IvrController extends BaseController {
    * Map data to CallDetailRecord and save it.
    * @param ivrData data in form of a map from IVR system callback
    */
-  @RequestMapping(value = "/ivrCallback", method = RequestMethod.POST,
+  @RequestMapping(value = "/ivrCallback/{configName}", method = RequestMethod.POST,
       consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public void saveCallback(@RequestParam Map<String, String> ivrData) {
+  public void saveCallback(@PathVariable("configName") String configName,
+      @RequestParam Map<String, String> ivrData) {
     CallDetailRecordDto recordDto = new CallDetailRecordDto(ivrData);
 
     CallDetailRecord callDetailRecord = callDetailRecordMapper.fromDto(recordDto);
 
-    ivrService.saveCallDetailRecord(callDetailRecord);
+    ivrService.saveCallDetailRecord(callDetailRecord, configName);
   }
 
 }
