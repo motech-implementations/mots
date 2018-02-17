@@ -8,7 +8,8 @@ import 'react-table/react-table.css';
 
 import MobileTable from '../components/mobile-table';
 import {
-  hasAuthority, MANAGE_FACILITIES_AUTHORITY,
+  DISPLAY_FACILITIES_AUTHORITY,
+  hasAuthority,
 } from '../utils/authorization';
 import { fetchLocationsOfType } from '../actions/index';
 
@@ -30,7 +31,7 @@ class LocationsTable extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)) {
+    if (!hasAuthority(DISPLAY_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     } else {
       this.props.fetchLocationsOfType(this.props.locationType);
