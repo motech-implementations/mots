@@ -7,7 +7,10 @@ import SortableTree from 'react-sortable-tree';
 import update from 'immutability-helper';
 
 import apiClient from '../utils/api-client';
-import { hasAuthority, MANAGE_MODULES_AUTHORITY } from '../utils/authorization';
+import {
+  DISPLAY_MODULES_AUTHORITY, hasAuthority,
+  MANAGE_MODULES_AUTHORITY,
+} from '../utils/authorization';
 import ModuleForm, { MODULE_FORM_NAME } from './modules-form';
 import { resetLogoutCounter } from '../actions/index';
 
@@ -59,7 +62,7 @@ class ModulesManage extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_MODULES_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_MODULES_AUTHORITY, DISPLAY_MODULES_AUTHORITY)) {
       this.props.history.push('/home');
     } else {
       this.fetchModules();
@@ -357,6 +360,9 @@ class ModulesManage extends Component {
   }
 
   isEditable(node, path) {
+    if (!hasAuthority(MANAGE_MODULES_AUTHORITY)) {
+      return false;
+    }
     const module = node.type === 'MODULE' ? node : ModulesManage.findNode(this.state.treeData, path[0]);
     return !module || module.status === 'DRAFT';
   }
@@ -383,6 +389,7 @@ class ModulesManage extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Manage Modules</h1>
+        { hasAuthority(MANAGE_MODULES_AUTHORITY) &&
         <button
           className="btn btn-success margin-bottom-lg"
           onClick={this.addModule}
@@ -390,6 +397,7 @@ class ModulesManage extends Component {
           <span className="glyphicon glyphicon-plus" />
           <span className="icon-text">Add Module</span>
         </button>
+        }
         <div className="row">
           <div className="col-md-6 .tree-container">
             <SortableTree

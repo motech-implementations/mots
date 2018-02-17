@@ -27,7 +27,7 @@ public class ModuleService {
 
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_OR_MANAGE_MODULES_ROLE)
+  @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public Iterable<Module> getModules() {
     return getCourse().getModules();
   }

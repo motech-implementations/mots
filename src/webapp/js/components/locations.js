@@ -3,7 +3,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.scss';
 import LocationsTable from '../container/locations-table';
-import { FETCH_CHIEFDOMS, FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES,
+import {
+  FETCH_CHIEFDOMS, FETCH_DISTRICTS, FETCH_FACILITIES,
+  FETCH_COMMUNITIES,
 } from '../actions/types';
 
 const DISTRICT_COLUMNS = [
