@@ -86,6 +86,7 @@ class HealthWorkersEdit extends Component {
             loading={this.state.loading}
             onSubmit={this.onSubmit}
             onSubmitCancel={this.onSubmitCancel}
+            isChwIdHidden
           />
         </ScrollView>
       </View>

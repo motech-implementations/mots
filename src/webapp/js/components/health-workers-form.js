@@ -16,6 +16,9 @@ const FIELDS = {
   chwId: {
     label: 'CHW Id',
     required: true,
+    getDynamicAttributes: ({ isChwIdHidden }) => ({
+      hidden: isChwIdHidden,
+    }),
   },
   firstName: {
     label: 'First Name',
@@ -184,6 +187,7 @@ class HealthWorkersForm extends Component {
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
         hasPeerSupervisor={this.props.hasPeerSupervisor}
+        isChwIdHidden={this.props.isChwIdHidden}
       />
     );
   }
@@ -241,6 +245,7 @@ HealthWorkersForm.propTypes = {
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
   hasPeerSupervisor: PropTypes.bool,
+  isChwIdHidden: PropTypes.bool,
 };
 
 HealthWorkersForm.defaultProps = {
@@ -249,4 +254,5 @@ HealthWorkersForm.defaultProps = {
   chiefdomId: null,
   facilityId: null,
   hasPeerSupervisor: false,
+  isChwIdHidden: false,
 };
