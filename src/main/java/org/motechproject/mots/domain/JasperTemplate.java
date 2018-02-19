@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,6 +69,7 @@ public class JasperTemplate extends BaseTimestampedEntity {
   @Fetch(FetchMode.SELECT)
   @Getter
   @Setter
+  @Valid
   private List<JasperTemplateParameter> templateParameters;
 
   @PrePersist

@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -56,6 +57,7 @@ public class ModuleProgress extends BaseTimestampedEntity {
   @SortComparator(UnitProgressComparator.class)
   @Getter
   @Setter
+  @Valid
   private List<UnitProgress> unitsProgresses;
 
   /**

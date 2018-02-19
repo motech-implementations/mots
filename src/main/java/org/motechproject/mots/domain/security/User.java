@@ -10,8 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -24,9 +28,10 @@ public class User extends BaseTimestampedEntity implements UserDetails {
   @Column(name = "username", nullable = false, unique = true)
   @Getter
   @Setter
+  @NotBlank(message = ValidationMessages.EMPTY_USERNAME)
   private String username;
 
-  @Column(name = "password")
+  @Column(name = "password", nullable = false)
   @Getter
   @Setter
   private String password;
@@ -34,6 +39,7 @@ public class User extends BaseTimestampedEntity implements UserDetails {
   @Column(name = "email")
   @Getter
   @Setter
+  @Email(message = ValidationMessages.INVALID_EMAIL)
   private String email;
 
   @Column(name = "name")
@@ -50,9 +56,10 @@ public class User extends BaseTimestampedEntity implements UserDetails {
           name = "role_id", referencedColumnName = "id"))
   @Getter
   @Setter
+  @Valid
   private Set<UserRole> roles = new HashSet<>();
 
-  @Column(name = "enabled")
+  @Column(name = "enabled", nullable = false)
   @Getter
   @Setter
   private Boolean enabled;

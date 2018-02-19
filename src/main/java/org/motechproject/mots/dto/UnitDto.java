@@ -6,14 +6,17 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.Uuid;
 
 public class UnitDto extends IvrObjectDto {
 
+  @Uuid(message = ValidationMessages.INVALID_ID)
   @Getter
   @Setter
   private String id;
 
-  @NotBlank(message = "Unit Name cannot be empty")
+  @NotBlank(message = ValidationMessages.EMPTY_UNIT_NAME)
   @Getter
   @Setter
   private String name;
@@ -36,7 +39,7 @@ public class UnitDto extends IvrObjectDto {
   @Setter
   private MultipleChoiceQuestionDto unitContinuationQuestion;
 
-  @NotNull(message = "Unit Allow Reply cannot be null")
+  @NotNull(message = ValidationMessages.NULL_UNIT_ALLOW_REPLAY)
   @Getter
   @Setter
   private Boolean allowReplay;

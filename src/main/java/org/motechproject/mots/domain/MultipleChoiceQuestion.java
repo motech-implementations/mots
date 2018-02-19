@@ -8,6 +8,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.Getter;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 
@@ -20,6 +21,7 @@ public class MultipleChoiceQuestion extends CallFlowElement {
   @JoinColumn(name = "question_id")
   @OrderBy("ivr_pressed_key ASC")
   @Getter
+  @Valid
   private List<Choice> choices;
 
   public MultipleChoiceQuestion() {

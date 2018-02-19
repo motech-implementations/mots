@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class JasperTemplateParameter extends BaseTimestampedEntity {
   @JoinColumn(name = "template_id", nullable = false)
   @Getter
   @Setter
+  @Valid
   private JasperTemplate template;
 
   @Column(name = "name")

@@ -7,15 +7,18 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.Status;
+import org.motechproject.mots.validate.annotations.Uuid;
 
 public class ModuleDto extends IvrObjectDto {
 
+  @Uuid(message = ValidationMessages.INVALID_ID)
   @Getter
   @Setter
   private String id;
 
-  @NotBlank(message = "Module Name cannot be empty")
+  @NotBlank(message = ValidationMessages.EMPTY_MODULE_NAME)
   @Getter
   @Setter
   private String name;
@@ -28,8 +31,8 @@ public class ModuleDto extends IvrObjectDto {
   @Setter
   private String ivrGroup;
 
-  @Min(value = 1, message = "Module Number cannot be less than 1")
-  @NotNull(message = "Module Number cannot be empty")
+  @Min(value = 1, message = ValidationMessages.MODULE_NUMBER_LESS_THAN_ONE)
+  @NotNull(message = ValidationMessages.EMPTY_MODULE_NUMBER)
   @Getter
   @Setter
   private Integer moduleNumber;
