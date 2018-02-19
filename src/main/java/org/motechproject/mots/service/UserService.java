@@ -1,5 +1,6 @@
 package org.motechproject.mots.service;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.motechproject.mots.domain.security.User;
@@ -39,8 +40,26 @@ public class UserService {
   }
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
+  public User getUserByUserName(String userName) {
+    Optional<User> optionalUser = userRepository.findOneByUsername(userName);
+    return optionalUser.orElse(null);
+  }
+
+  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User saveUser(User user) {
     return userRepository.save(user);
+  }
+
+  /**
+   * Updates user's password.
+   * @param user which password is about to change.
+   * @param newPassword is new password value for user.
+   */
+  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
+  public void changeUserPassword(User user, String newPassword) {
+    String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
+    user.setPassword(newPasswordEncoded);
+    userRepository.save(user);
   }
 
   /**
