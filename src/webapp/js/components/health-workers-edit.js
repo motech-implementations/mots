@@ -72,7 +72,7 @@ class HealthWorkersEdit extends Component {
         <HealthWorkersForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
-          isChwIdHidden
+          isChwIdDisabled
         />
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}
