@@ -1,9 +1,4 @@
 export default {
-  container: {
-    flex: 1,
-    marginTop: 40,
-    backgroundColor: '#FFF',
-  },
   title: {
     fontSize: 36,
     marginHorizontal: 40,

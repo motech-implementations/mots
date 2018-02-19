@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 
@@ -19,36 +19,58 @@ const styles = {
     shadowOpacity: 0.2,
     elevation: 2,
   },
+  viewStyleHighResolution: {
+    height: 60,
+  },
   textStyle: {
     fontSize: 20,
     paddingRight: 10,
     color: '#9b9b9b',
+  },
+  fontSizeStyleHighResolution: {
+    fontSize: 40,
   },
   iconStyle: {
     paddingLeft: 10,
   },
 };
 
+const screen = Dimensions.get('screen');
+
 class Header extends Component {
   static contextTypes = {
     drawer: PropTypes.object,
   };
 
-  state = {};
+  state = {
+    highResolution: screen.height >= 800 || screen.width >= 800,
+  };
+
+  getViewStyle() {
+    return [styles.viewStyle, this.state.highResolution && styles.viewStyleHighResolution];
+  }
+
+  getTextStyle() {
+    return [styles.textStyle, this.state.highResolution && styles.fontSizeStyleHighResolution];
+  }
+
+  getIconSize() {
+    return this.state.highResolution ? 48 : 24;
+  }
 
   render() {
     return (
-      <View style={styles.viewStyle}>
+      <View style={this.getViewStyle()}>
         <TouchableOpacity
           onPress={this.context.drawer.open}
           style={styles.iconStyle}
         >
           <Icon
             name="bars"
-            size={24}
+            size={this.getIconSize()}
           />
         </TouchableOpacity>
-        <Text style={styles.textStyle}>MOTS</Text>
+        <Text style={this.getTextStyle()}>MOTS</Text>
       </View>
     );
   }

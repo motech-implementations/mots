@@ -37,6 +37,11 @@ export default ListItems;
 ListItems.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  canWrite: PropTypes.bool.isRequired,
-  canAssign: PropTypes.bool.isRequired,
+  canWrite: PropTypes.bool,
+  canAssign: PropTypes.bool,
+};
+
+ListItems.defaultProps = {
+  canWrite: false,
+  canAssign: false,
 };
