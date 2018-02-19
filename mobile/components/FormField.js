@@ -42,6 +42,9 @@ export default class FormField extends Component {
       ...attr,
       ...dynamicAttr,
     };
+    const style = attributes.editable === false
+      ? { ...attributes.style, backgroundColor: '#dddddd' }
+      : { ...attributes.style };
 
     return (
       !attributes.hidden &&
@@ -54,6 +57,7 @@ export default class FormField extends Component {
             {...attributes}
             onChangeText={text => input.onChange(text)}
             value={input.value}
+            style={style}
           >
             {
               selectOptions && renderSelectOptions(selectOptions)
