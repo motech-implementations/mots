@@ -92,6 +92,7 @@ const FIELDS = {
   districtId: {
     type: Select,
     label: 'District',
+    required: true,
     getSelectOptions: ({ availableLocations }) => ({
       values: availableLocations,
       displayNameKey: 'name',
@@ -111,6 +112,7 @@ const FIELDS = {
   chiefdomId: {
     type: Select,
     label: 'Chiefdom',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'chiefdoms',
@@ -133,10 +135,14 @@ const FIELDS = {
         'communityId',
       )
     ),
+    getDynamicAttributes: ({ districtId }) => ({
+      hidden: !districtId,
+    }),
   },
   facilityId: {
     type: Select,
     label: 'Facility',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
       values: getSelectableLocations(
         'facilities',
@@ -160,6 +166,9 @@ const FIELDS = {
         'communityId',
       )
     ),
+    getDynamicAttributes: ({ chiefdomId }) => ({
+      hidden: !chiefdomId,
+    }),
   },
   communityId: {
     type: Select,
@@ -192,6 +201,9 @@ const FIELDS = {
         ),
       )
     ),
+    getDynamicAttributes: ({ facilityId }) => ({
+      hidden: !facilityId,
+    }),
   },
   hasPeerSupervisor: {
     type: CheckBox,

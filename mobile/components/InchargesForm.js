@@ -41,6 +41,7 @@ const FIELDS = {
   districtId: {
     type: Select,
     label: 'District',
+    required: true,
     getSelectOptions: ({ availableLocations }) => ({
       values: availableLocations,
       displayNameKey: 'name',
@@ -60,6 +61,7 @@ const FIELDS = {
   chiefdomId: {
     type: Select,
     label: 'Chiefdom',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'chiefdoms',
@@ -82,6 +84,9 @@ const FIELDS = {
         'communityId',
       )
     ),
+    getDynamicAttributes: ({ districtId }) => ({
+      hidden: !districtId,
+    }),
   },
   facilityId: {
     type: Select,
@@ -110,6 +115,9 @@ const FIELDS = {
         'communityId',
       )
     ),
+    getDynamicAttributes: ({ chiefdomId }) => ({
+      hidden: !chiefdomId,
+    }),
   },
 };
 
