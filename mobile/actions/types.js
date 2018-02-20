@@ -11,5 +11,6 @@ export const CREATE_HEALTH_WORKER_SUCCESS = 'create_health_worker_success';
 export const SAVE_HEALTH_WORKER = 'save_health_worker';
 export const CREATE_INCHARGE = 'create_incharge';
 export const SAVE_INCHARGE = 'save_incharge';
+export const FETCH_USERS = 'fetch_users';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
