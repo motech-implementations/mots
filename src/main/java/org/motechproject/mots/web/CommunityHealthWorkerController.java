@@ -59,17 +59,17 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = "otherName", required = false) String otherName,
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "educationLevel", required = false) String educationLevel,
-      @RequestParam(value = "communityId", required = false) String communityId,
-      @RequestParam(value = "facilityId", required = false) String facilityId,
-      @RequestParam(value = "chiefdomId", required = false) String chiefdomId,
-      @RequestParam(value = "districtId", required = false) String districtId,
+      @RequestParam(value = "communityName", required = false) String communityName,
+      @RequestParam(value = "facilityName", required = false) String facilityName,
+      @RequestParam(value = "chiefdomName", required = false) String chiefdomName,
+      @RequestParam(value = "districtName", required = false) String districtName,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
             chwId, firstName, secondName, otherName,
-            phoneNumber, educationLevel, communityId,
-            facilityId, chiefdomId, districtId, pageable);
+            phoneNumber, educationLevel, communityName,
+            facilityName, chiefdomName, districtName, pageable);
 
     List<CommunityHealthWorkerDto> healthWorkersDto =
         healthWorkerMapper.toDtos(healthWorkers.getContent());

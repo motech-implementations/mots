@@ -82,9 +82,9 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(chw1.getChwId(),
         chw1.getFirstName(), chw1.getSecondName(), chw1.getOtherName(), chw1.getPhoneNumber(),
-        chw1.getEducationLevel().toString(), community.getId().toString(),
-        facility.getId().toString(), chiefdom.getId().toString(),
-        district.getId().toString(), null);
+        chw1.getEducationLevel().toString(), community.getName(),
+        facility.getName(), chiefdom.getName(),
+        district.getName(), null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -110,7 +110,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
         null, null, null, null, null,
-        null, null, null, district.getId().toString(), null);
+        null, null, null, district.getName(), null);
 
     // then
     assertThat(result.getTotalElements(), is(2L));

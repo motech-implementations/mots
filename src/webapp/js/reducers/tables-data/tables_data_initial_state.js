@@ -3,4 +3,5 @@ export default {
   inchargesList: [],
   usersList: [],
   locationsList: [],
+  chwListPages: 1,
 };

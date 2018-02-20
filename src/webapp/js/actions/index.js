@@ -87,9 +87,11 @@ export function resetLogoutCounter() {
   return { type: RESET_LOGOUT_COUNTER };
 }
 
-export function fetchChws() {
-  const url = `${BASE_URL}/chw`;
-  const request = apiClient.get(url);
+export function fetchChws(searchParams) {
+  const url = `${BASE_URL}/chw/search`;
+  const request = apiClient.get(url, {
+    params: searchParams,
+  });
 
   return {
     type: FETCH_CHWS,
