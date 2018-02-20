@@ -12,7 +12,8 @@ export default function (state = initialTablesData, action) {
       if (action.payload.data !== undefined) {
         return {
           ...state,
-          chwList: action.payload.data,
+          chwList: action.payload.data.content,
+          chwListPages: action.payload.data.totalPages,
         };
       }
       return state;

@@ -3,7 +3,6 @@ package org.motechproject.mots.repository.custom.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,7 +27,7 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
   private static final String OTHER_NAME = "otherName";
   private static final String PHONE_NUMBER = "phoneNumber";
   private static final String EDUCATION_LEVEL = "educationLevel";
-  private static final String ID = "id";
+  private static final String NAME = "name";
   private static final String FACILITY = "facility";
   private static final String CHIEFDOM = "chiefdom";
   private static final String DISTRICT = "district";
@@ -44,21 +43,21 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityId, String facilityId,
-      String chiefdomId, String districtId, Pageable pageable) throws IllegalArgumentException {
+      String phoneNumber, String educationLevel, String communityName, String facilityName,
+      String chiefdomName, String districtName, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
     query = prepareQuery(query, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityId,
-        facilityId, chiefdomId, districtId, false, pageable);
+        otherName, phoneNumber, educationLevel, communityName,
+        facilityName, chiefdomName, districtName, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityId,
-        facilityId, chiefdomId, districtId, true, pageable);
+        otherName, phoneNumber, educationLevel, communityName,
+        facilityName, chiefdomName, districtName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -75,8 +74,8 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityId,
-      String facilityId, String chiefdomId, String districtId,
+      String phoneNumber, String educationLevel, String communityName,
+      String facilityName, String chiefdomName, String districtName,
       boolean count,
       Pageable pageable) throws IllegalArgumentException {
 
@@ -90,40 +89,44 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
 
     Predicate predicate = builder.conjunction();
     if (chwId != null) {
-      predicate = builder.and(predicate, builder.equal(root.get(CHW_ID), chwId));
+      predicate = builder.and(predicate, builder.like(root.get(CHW_ID), '%' + chwId + '%'));
     }
     if (firstName != null) {
-      predicate = builder.and(predicate, builder.equal(root.get(FIRST_NAME), firstName));
+      predicate = builder.and(predicate, builder.like(root.get(FIRST_NAME),
+          '%' + firstName + '%'));
     }
     if (secondName != null) {
-      predicate = builder.and(predicate, builder.equal(root.get(SECOND_NAME), secondName));
+      predicate = builder.and(predicate, builder.like(root.get(SECOND_NAME),
+          '%' + secondName + '%'));
     }
     if (otherName != null) {
-      predicate = builder.and(predicate, builder.equal(root.get(OTHER_NAME), otherName));
+      predicate = builder.and(predicate, builder.like(root.get(OTHER_NAME),
+          '%' + otherName + '%'));
     }
     if (phoneNumber != null) {
-      predicate = builder.and(predicate, builder.equal(root.get(PHONE_NUMBER), phoneNumber));
+      predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),
+          '%' + phoneNumber + '%'));
     }
     if (educationLevel != null) {
       EducationLevel validLevel = EducationLevel.valueOf(educationLevel.toUpperCase());
       predicate = builder.and(predicate, builder.equal(root.get(EDUCATION_LEVEL), validLevel));
     }
-    if (communityId != null) {
-      predicate = builder.and(predicate, builder.equal(
-          root.get(COMMUNITY).get(ID), UUID.fromString(communityId)));
+    if (communityName != null) {
+      predicate = builder.and(predicate, builder.like(
+          root.get(COMMUNITY).get(NAME), '%' + communityName + '%'));
     }
-    if (facilityId != null) {
-      predicate = builder.and(predicate, builder.equal(
-          root.get(COMMUNITY).get(FACILITY).get(ID), UUID.fromString(facilityId)));
+    if (facilityName != null) {
+      predicate = builder.and(predicate, builder.like(
+          root.get(COMMUNITY).get(FACILITY).get(NAME), '%' + facilityName + '%'));
     }
-    if (chiefdomId != null) {
-      predicate = builder.and(predicate, builder.equal(
-          root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(ID), UUID.fromString(chiefdomId)));
+    if (chiefdomName != null) {
+      predicate = builder.and(predicate, builder.like(
+          root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(NAME), '%' + chiefdomName  + '%'));
     }
-    if (districtId != null) {
-      predicate = builder.and(predicate, builder.equal(
-          root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(ID),
-          UUID.fromString(districtId)));
+    if (districtName != null) {
+      predicate = builder.and(predicate, builder.like(
+          root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
+          '%' + districtName  + '%'));
     }
 
     query.where(predicate);
