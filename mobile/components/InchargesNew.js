@@ -7,10 +7,9 @@ import { Actions } from 'react-native-router-flux';
 import InchargesForm from './InchargesForm';
 import { createIncharge } from '../actions';
 import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
-import listsStyles from '../styles/listsStyles';
 import formsStyles from '../styles/formsStyles';
+import getContainerStyle from '../utils/styleUtils';
 
-const { container } = listsStyles;
 const { formHeader } = formsStyles;
 
 class InchargesNew extends Component {
@@ -54,7 +53,7 @@ class InchargesNew extends Component {
 
   render() {
     return (
-      <View style={[container, { marginBottom: 0 }]}>
+      <View style={getContainerStyle()}>
         <ScrollView>
           <Text style={formHeader}>Add Incharge</Text>
           <InchargesForm

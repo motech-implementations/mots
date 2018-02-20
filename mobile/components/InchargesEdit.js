@@ -8,11 +8,10 @@ import { initialize } from 'redux-form';
 import InchargesForm, { INCHARGE_FORM_NAME } from './InchargesForm';
 import { saveIncharge } from '../actions';
 import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
-import listsStyles from '../styles/listsStyles';
 import formsStyles from '../styles/formsStyles';
 import apiClient from '../utils/api-client';
+import getContainerStyle from '../utils/styleUtils';
 
-const { container } = listsStyles;
 const { formHeader } = formsStyles;
 
 class InchargesEdit extends Component {
@@ -79,7 +78,7 @@ class InchargesEdit extends Component {
 
   render() {
     return (
-      <View style={[container, { marginBottom: 0 }]}>
+      <View style={getContainerStyle()}>
         <ScrollView>
           <Text style={formHeader}>Edit Incharge</Text>
           <InchargesForm

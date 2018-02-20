@@ -8,11 +8,10 @@ import { initialize } from 'redux-form';
 import HealthWorkersForm, { CHW_FORM_NAME } from './HealthWorkersForm';
 import { saveHealthWorker } from '../actions';
 import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
-import listsStyles from '../styles/listsStyles';
 import formsStyles from '../styles/formsStyles';
 import apiClient from '../utils/api-client';
+import getContainerStyle from '../utils/styleUtils';
 
-const { container } = listsStyles;
 const { formHeader } = formsStyles;
 
 class HealthWorkersEdit extends Component {
@@ -79,7 +78,7 @@ class HealthWorkersEdit extends Component {
 
   render() {
     return (
-      <View style={[container, { marginBottom: 0 }]}>
+      <View style={getContainerStyle()}>
         <ScrollView>
           <Text style={formHeader}>Edit Community Health Worker</Text>
           <HealthWorkersForm

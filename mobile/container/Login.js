@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Keyboard } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import InputWithIcon from '../components/InputWithIcon';
@@ -34,7 +34,7 @@ class Login extends Component {
       username: '', password: '', error: '', loading: false,
     });
     Keyboard.dismiss();
-    Actions.drawer();
+    Actions.drawer({ type: ActionConst.RESET });
   }
 
   onLoginFail() {
