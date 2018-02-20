@@ -1,5 +1,5 @@
 import { FETCH_CHWS, FETCH_INCHARGES, CREATE_HEALTH_WORKER_REQUEST,
-  CREATE_HEALTH_WORKER_SUCCESS } from '../../actions/types';
+  CREATE_HEALTH_WORKER_SUCCESS, FETCH_USERS } from '../../actions/types';
 import initialTablesData from './tables_data_initial_state';
 
 export default function (state = initialTablesData, action) {
@@ -31,6 +31,14 @@ export default function (state = initialTablesData, action) {
           (chw.chwId === id) ? { ...chw, needSynchronize: false } : chw)),
       };
     }
+    case FETCH_USERS:
+      return {
+        ...state,
+        userList: action.payload.map(user => ({
+          ...user,
+          roleName: user.roles ? user.roles[0].name : '',
+        })) || [],
+      };
     default:
       return state;
   }

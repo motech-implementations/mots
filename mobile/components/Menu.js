@@ -9,7 +9,7 @@ import Collapsible from './Collapsible';
 import { signoutUser } from '../actions';
 import { CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
   DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
-  hasAuthority } from '../utils/authorization';
+  MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
 
 const HIDE_NOT_IMPLEMENTED = true;
 
@@ -59,6 +59,7 @@ class Menu extends Component {
       INCHARGE_WRITE_AUTHORITY: false,
       ASSIGN_MODULES_AUTHORITY: false,
       DISPLAY_REPORTS_AUTHORITY: false,
+      MANAGE_USERS_AUTHORITY: false,
     };
   }
 
@@ -80,6 +81,9 @@ class Menu extends Component {
     });
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) { this.setState({ DISPLAY_REPORTS_AUTHORITY: true }); }
+    });
+    hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
+      if (result) { this.setState({ MANAGE_USERS_AUTHORITY: true }); }
     });
   }
 
@@ -190,6 +194,32 @@ class Menu extends Component {
             </View>
           </Collapsible>
           }
+
+          { this.state.MANAGE_USERS_AUTHORITY &&
+            <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
+              <View>
+                <TouchableOpacity
+                  onPress={() => this.openSection('home')}
+                  style={styles.menuItem}
+                >
+                  <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                    <Icon name="plus" size={20} color="#337ab7" />
+                  </View>
+                  <Text style={styles.menuItemText}>Add User</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => this.openSection('users')}
+                  style={styles.menuItem}
+                >
+                  <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                    <Icon name="list" size={20} color="#337ab7" />
+                  </View>
+                  <Text style={styles.menuItemText}>User List</Text>
+                </TouchableOpacity>
+              </View>
+            </Collapsible>
+            }
 
           { this.state.DISPLAY_REPORTS_AUTHORITY &&
           <TouchableOpacity
