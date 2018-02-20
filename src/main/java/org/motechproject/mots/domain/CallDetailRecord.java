@@ -20,7 +20,7 @@ import org.motechproject.mots.domain.enums.CallStatus;
 @Entity
 @Table(name = "call_detail_record")
 @NoArgsConstructor
-public class CallDetailRecord extends BaseEntity {
+public class CallDetailRecord extends BaseTimestampedEntity {
 
   @Getter
   @Setter

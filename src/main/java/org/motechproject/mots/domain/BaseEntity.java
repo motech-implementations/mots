@@ -1,21 +1,20 @@
 package org.motechproject.mots.domain;
 
-import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract class BaseEntity {
 
   @Id
@@ -26,20 +25,4 @@ public abstract class BaseEntity {
   @Getter
   @Setter
   private UUID id;
-
-  @Column(name = "create_date")
-  @CreationTimestamp
-  @Getter
-  @Setter
-  private Date createDate;
-
-  @Column(name = "update_date")
-  @UpdateTimestamp
-  @Getter
-  @Setter
-  private Date updateDate;
-
-  public BaseEntity(UUID id) {
-    this.id = id;
-  }
 }

@@ -28,4 +28,5 @@
   <include file="20180215_1632.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180216_1528.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180217_1234.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180219_1840.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>

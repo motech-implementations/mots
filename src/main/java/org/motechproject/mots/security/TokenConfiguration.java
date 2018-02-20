@@ -27,6 +27,9 @@ public class TokenConfiguration {
   @Value("${token.validitySeconds}")
   private Integer tokenValiditySeconds;
 
+  @Autowired
+  private CustomTokenEnhancer customTokenEnhancer;
+
   @Bean
   public TokenStore tokenStore() {
     return new JwtTokenStore(accessTokenConverter());
@@ -65,6 +68,6 @@ public class TokenConfiguration {
 
   @Bean
   public TokenEnhancer tokenEnhancer() {
-    return new CustomTokenEnhancer(tokenValiditySeconds);
+    return customTokenEnhancer;
   }
 }

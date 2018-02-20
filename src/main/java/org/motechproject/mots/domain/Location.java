@@ -15,7 +15,7 @@ import org.motechproject.mots.domain.enums.FacilityType;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public abstract class Location extends BaseEntity {
+public abstract class Location extends BaseTimestampedEntity {
 
   @Column(name = "name", nullable = false)
   @Getter

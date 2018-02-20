@@ -13,11 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.domain.BaseEntity;
+import org.motechproject.mots.domain.BaseTimestampedEntity;
 
 @Entity
 @Table(name = "user_role")
-public class UserRole extends BaseEntity {
+public class UserRole extends BaseTimestampedEntity {
 
   @Column(name = "name", nullable = false, unique = true)
   @Getter

@@ -18,7 +18,7 @@ import org.motechproject.mots.domain.enums.Language;
 
 @Entity
 @Table(name = "ivr_config")
-public class IvrConfig extends BaseEntity {
+public class IvrConfig extends BaseTimestampedEntity {
 
   @Column(name = "base_url", nullable = false)
   @Getter

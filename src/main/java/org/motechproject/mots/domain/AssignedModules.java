@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "assigned_modules")
-public class AssignedModules extends BaseEntity {
+public class AssignedModules extends BaseTimestampedEntity {
 
   @OneToOne
   @JoinColumn(name = "health_worker_id")

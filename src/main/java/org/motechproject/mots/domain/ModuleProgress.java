@@ -21,7 +21,7 @@ import org.motechproject.mots.utils.UnitProgressComparator;
 @Entity
 @Table(name = "module_progress")
 @NoArgsConstructor
-public class ModuleProgress extends BaseEntity {
+public class ModuleProgress extends BaseTimestampedEntity {
 
   @ManyToOne
   @JoinColumn(name = "module_id", nullable = false)

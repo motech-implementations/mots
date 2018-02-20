@@ -25,7 +25,7 @@ import org.hibernate.annotations.FetchMode;
 @Table(name = "jasper_templates")
 @NoArgsConstructor
 @AllArgsConstructor
-public class JasperTemplate extends BaseEntity {
+public class JasperTemplate extends BaseTimestampedEntity {
 
   @Column(name = "name", unique = true, nullable = false)
   @Getter

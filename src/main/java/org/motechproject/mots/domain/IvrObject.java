@@ -11,7 +11,7 @@ import org.motechproject.mots.validate.ModuleReleaseCheck;
 
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class IvrObject extends BaseEntity {
+public abstract class IvrObject extends BaseTimestampedEntity {
 
   @NotBlank(message = "IVR Id cannot be empty", groups = ModuleReleaseCheck.class)
   @Column(name = "ivr_id")

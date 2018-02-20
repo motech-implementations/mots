@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(name = "in_charge")
-public class Incharge extends BaseEntity {
+public class Incharge extends BaseTimestampedEntity {
 
   @Column(name = "first_name", nullable = false)
   @Getter

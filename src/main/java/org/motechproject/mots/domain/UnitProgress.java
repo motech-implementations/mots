@@ -17,7 +17,7 @@ import org.motechproject.mots.domain.enums.ProgressStatus;
 @Entity
 @Table(name = "unit_progress")
 @NoArgsConstructor
-public class UnitProgress extends BaseEntity {
+public class UnitProgress extends BaseTimestampedEntity {
 
   @ManyToOne
   @JoinColumn(name = "unit_id", nullable = false)

@@ -21,7 +21,7 @@ import org.motechproject.mots.domain.enums.Literacy;
 @Entity
 @Table(name = "community_health_worker")
 @NoArgsConstructor
-public class CommunityHealthWorker extends BaseEntity {
+public class CommunityHealthWorker extends BaseTimestampedEntity {
 
   @Column(name = "ivr_id", unique = true)
   @Getter
