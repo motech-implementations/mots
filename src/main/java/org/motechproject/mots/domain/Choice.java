@@ -9,7 +9,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "choice")
-public class Choice extends BaseEntity {
+public class Choice extends BaseTimestampedEntity {
 
   @Column(name = "ivr_pressed_key", nullable = false)
   @Getter

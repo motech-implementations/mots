@@ -9,7 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
-import org.motechproject.mots.domain.BaseEntity;
+import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -115,7 +115,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // then
     assertThat(result.getTotalElements(), is(2L));
     Set<UUID> foundChws = result.getContent().stream()
-        .map(BaseEntity::getId)
+        .map(BaseTimestampedEntity::getId)
         .collect(Collectors.toSet());
     assertTrue(foundChws.contains(chw1.getId()));
     assertTrue(foundChws.contains(chw2.getId()));

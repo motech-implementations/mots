@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.motechproject.mots.domain.BaseEntity;
+import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.annotation.DirtiesContext;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @DirtiesContext
 @RunWith(SpringRunner.class)
-public abstract class BaseCrudRepositoryIntegrationTest<T extends BaseEntity> {
+public abstract class BaseCrudRepositoryIntegrationTest<T extends BaseTimestampedEntity> {
 
   abstract CrudRepository<T, UUID> getRepository();
 

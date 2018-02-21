@@ -18,7 +18,7 @@ import lombok.Setter;
 @Table(name = "template_parameters")
 @NoArgsConstructor
 @AllArgsConstructor
-public class JasperTemplateParameter extends BaseEntity {
+public class JasperTemplateParameter extends BaseTimestampedEntity {
 
   @ManyToOne(cascade = CascadeType.REFRESH)
   @JoinColumn(name = "template_id", nullable = false)

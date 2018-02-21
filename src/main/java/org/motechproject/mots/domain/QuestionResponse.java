@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "question_response")
-public class QuestionResponse extends BaseEntity {
+public class QuestionResponse extends BaseTimestampedEntity {
 
   @ManyToOne
   @JoinColumn(name = "question_id", nullable = false)

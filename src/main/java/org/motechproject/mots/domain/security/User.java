@@ -12,14 +12,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.domain.BaseEntity;
+import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "user")
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseTimestampedEntity implements UserDetails {
 
   @Column(name = "username", nullable = false, unique = true)
   @Getter

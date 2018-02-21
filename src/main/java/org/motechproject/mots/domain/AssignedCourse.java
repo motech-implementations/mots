@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "assigned_course")
-public class AssignedCourse extends BaseEntity {
+public class AssignedCourse extends BaseTimestampedEntity {
 
   @ManyToOne
   @JoinColumn(name = "health_worker_id")
