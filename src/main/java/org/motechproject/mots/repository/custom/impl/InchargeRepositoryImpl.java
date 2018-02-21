@@ -11,76 +11,66 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.motechproject.mots.domain.CommunityHealthWorker;
-import org.motechproject.mots.domain.enums.EducationLevel;
-import org.motechproject.mots.repository.custom.CommunityHealthWorkerRepositoryCustom;
+import org.motechproject.mots.domain.Incharge;
+import org.motechproject.mots.repository.custom.InchargeRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @SuppressWarnings("PMD.CyclomaticComplexity")
-public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorkerRepositoryCustom {
+public class InchargeRepositoryImpl implements InchargeRepositoryCustom {
 
-  private static final String CHW_ID = "chwId";
   private static final String FIRST_NAME = "firstName";
   private static final String SECOND_NAME = "secondName";
   private static final String OTHER_NAME = "otherName";
   private static final String PHONE_NUMBER = "phoneNumber";
-  private static final String EDUCATION_LEVEL = "educationLevel";
+  private static final String EMAIL = "email";
   private static final String NAME = "name";
   private static final String FACILITY = "facility";
-  private static final String CHIEFDOM = "chiefdom";
-  private static final String DISTRICT = "district";
-  private static final String COMMUNITY = "community";
 
   @PersistenceContext
   private EntityManager entityManager;
 
   /**
-   * Finds CommunityHealthWorkers matching all of the provided parameters.
-   * If there are no parameters, return all CommunityHealthWorkers.
+   * Finds Incharges matching all of the provided parameters. If there are no parameters, return all
+   * Incharges.
    */
   @Override
-  public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, Pageable pageable) throws IllegalArgumentException {
+  public Page<Incharge> searchIncharges(String firstName, String secondName,
+      String otherName, String phoneNumber, String email, String facilityName, Pageable pageable)
+      throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-    CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
-    query = prepareQuery(query, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, false, pageable);
+    CriteriaQuery<Incharge> query = builder.createQuery(Incharge.class);
+    query = prepareQuery(query, firstName, secondName, otherName, phoneNumber, email, facilityName,
+        false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, true, pageable);
+    countQuery = prepareQuery(countQuery, firstName, secondName, otherName, phoneNumber, email,
+        facilityName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
     int pageSize = null != pageable ? pageable.getPageSize() : 0;
     int firstResult = null != pageable ? pageable.getPageNumber() * pageSize : 0;
 
-    List<CommunityHealthWorker> communityHealthWorkers = entityManager.createQuery(query)
+    List<Incharge> incharges = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
         .getResultList();
 
-    return new PageImpl<>(communityHealthWorkers, pageable, count);
+    return new PageImpl<>(incharges, pageable, count);
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
-      String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityName,
-      String facilityName, String chiefdomName, String districtName,
-      boolean count, Pageable pageable) throws IllegalArgumentException {
+      String firstName, String secondName, String otherName, String phoneNumber, String email,
+      String facilityName, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-    Root<CommunityHealthWorker> root = query.from(CommunityHealthWorker.class);
+    Root<Incharge> root = query.from(Incharge.class);
 
     if (count) {
       CriteriaQuery<Long> countQuery = (CriteriaQuery<Long>) query;
@@ -88,9 +78,6 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
     }
 
     Predicate predicate = builder.conjunction();
-    if (chwId != null) {
-      predicate = builder.and(predicate, builder.like(root.get(CHW_ID), '%' + chwId + '%'));
-    }
     if (firstName != null) {
       predicate = builder.and(predicate, builder.like(root.get(FIRST_NAME),
           '%' + firstName + '%'));
@@ -107,27 +94,13 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
       predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),
           '%' + phoneNumber + '%'));
     }
-    if (educationLevel != null) {
-      EducationLevel validLevel = EducationLevel.valueOf(educationLevel.toUpperCase());
-      predicate = builder.and(predicate, builder.equal(root.get(EDUCATION_LEVEL), validLevel));
-    }
-    if (communityName != null) {
-      predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(NAME), '%' + communityName + '%'));
+    if (email != null) {
+      predicate = builder.and(predicate, builder.like(root.get(EMAIL),
+          '%' + email + '%'));
     }
     if (facilityName != null) {
-      predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(NAME), '%' + facilityName + '%'));
-    }
-    if (chiefdomName != null) {
-      predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(NAME),
-          '%' + chiefdomName  + '%'));
-    }
-    if (districtName != null) {
-      predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
-          '%' + districtName  + '%'));
+      predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(NAME),
+          '%' + facilityName + '%'));
     }
 
     query.where(predicate);
@@ -149,8 +122,8 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
     Path<T> path;
     while (iterator.hasNext()) {
       order = iterator.next();
-      if (order.getProperty().equals("communityName")) {
-        path = root.get(COMMUNITY).get(NAME);
+      if (order.getProperty().equals("facilityName")) {
+        path = root.get(FACILITY).get(NAME);
       } else {
         path = root.get(order.getProperty());
       }

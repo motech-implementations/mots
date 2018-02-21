@@ -3,9 +3,11 @@ package org.motechproject.mots.repository;
 import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.Incharge;
-import org.springframework.data.repository.CrudRepository;
+import org.motechproject.mots.repository.custom.InchargeRepositoryCustom;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InchargeRepository extends CrudRepository<Incharge, UUID> {
+public interface InchargeRepository extends JpaRepository<Incharge, UUID>,
+    InchargeRepositoryCustom {
 
   Optional<Incharge> findById(UUID id);
 

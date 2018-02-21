@@ -8,6 +8,9 @@ import org.motechproject.mots.dto.InchargeDto;
 import org.motechproject.mots.mapper.InchargeMapper;
 import org.motechproject.mots.service.InchargeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -37,6 +41,29 @@ public class InchargeController extends BaseController {
     Iterable<Incharge> incharges = inchargeService.getIncharges();
 
     return inchargeMapper.toDtos(incharges);
+  }
+
+  /**
+   * Finds Incharges matching all of the provided parameters.
+   * If there are no parameters, return all Incharges.
+   */
+  @RequestMapping(value = "/incharge/search", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Page<InchargeDto> searchIncharges(
+      @RequestParam(value = "firstName", required = false) String firstName,
+      @RequestParam(value = "surName", required = false) String surName,
+      @RequestParam(value = "otherName", required = false) String otherName,
+      @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "facilityName", required = false) String facilityName,
+      Pageable pageable) throws IllegalArgumentException {
+
+    Page<Incharge> incharges = inchargeService.searchIncharges(firstName, surName, otherName,
+        phoneNumber, email, facilityName, pageable);
+    List<InchargeDto> inchargesDto = inchargeMapper.toDtos(incharges.getContent());
+
+    return new PageImpl<>(inchargesDto, pageable, incharges.getTotalElements());
   }
 
   /**
