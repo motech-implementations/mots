@@ -11,6 +11,11 @@ import org.hibernate.annotations.Type;
 @Table(name = "choice")
 public class Choice extends BaseTimestampedEntity {
 
+  @Column(name = "choice_id", nullable = false)
+  @Getter
+  @Setter
+  private Integer choiceId;
+
   @Column(name = "ivr_pressed_key", nullable = false)
   @Getter
   @Setter
