@@ -1,6 +1,7 @@
 package org.motechproject.mots.service;
 
 import static java.io.File.createTempFile;
+import static net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN;
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 import static org.motechproject.mots.constants.ReportingMessages.ERROR_JASPER_FILE_CREATION;
 
@@ -10,9 +11,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperReport;
 import org.motechproject.mots.domain.JasperTemplate;
 import org.motechproject.mots.exception.JasperReportViewException;
@@ -41,6 +45,7 @@ public class JasperReportsViewService {
   public JasperReportsMultiFormatView getJasperReportsView(
       JasperTemplate jasperTemplate, HttpServletRequest request) throws JasperReportViewException {
     JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
+    setExportParams(jasperView);
     jasperView.setUrl(getReportUrlForReportData(jasperTemplate));
     jasperView.setJdbcDataSource(replicationDataSource);
 
@@ -48,6 +53,15 @@ public class JasperReportsViewService {
       jasperView.setApplicationContext(getApplicationContext(request));
     }
     return jasperView;
+  }
+
+  /**
+   * Set export parameters in jasper view.
+   */
+  private void setExportParams(JasperReportsMultiFormatView jasperView) {
+    Map<JRExporterParameter, Object> reportFormatMap = new HashMap<>();
+    reportFormatMap.put(IS_USING_IMAGES_TO_ALIGN, false);
+    jasperView.setExporterParameters(reportFormatMap);
   }
 
   /**
