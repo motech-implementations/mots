@@ -10,12 +10,14 @@ import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.CallFlowElement;
+import org.motechproject.mots.domain.Choice;
 import org.motechproject.mots.domain.Message;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.MultipleChoiceQuestion;
 import org.motechproject.mots.domain.Unit;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 import org.motechproject.mots.dto.CallFlowElementDto;
+import org.motechproject.mots.dto.ChoiceDto;
 import org.motechproject.mots.dto.MessageDto;
 import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.dto.ModuleSimpleDto;
@@ -143,6 +145,22 @@ public abstract class ModuleMapper {
 
   @Mapping(target = LIST_ORDER_FIELD, constant = "0")
   abstract MultipleChoiceQuestion fromDto(MultipleChoiceQuestionDto multipleChoiceQuestionDto);
+
+  List<Choice> fromDto(List<ChoiceDto> choiceDtos) {
+    List<Choice> choices = new ArrayList<>();
+
+    if (choiceDtos != null) {
+      for (int i = 0; i < choiceDtos.size(); i++) {
+        Choice choice = fromDto(choiceDtos.get(i));
+        choice.setChoiceId(i + 1);
+        choices.add(choice);
+      }
+    }
+
+    return choices;
+  }
+
+  abstract Choice fromDto(ChoiceDto choiceDto);
 
   @Mappings({
       @Mapping(target = "units", ignore = true),
