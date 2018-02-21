@@ -1,7 +1,7 @@
 {
   "expo": {
-   "name": "Mots",
-   "icon": "./icons/grameen.png",
+   "name": "MOTS",
+   "icon": "./icons/grameen-rounded.png",
    "version": "1.0.0",
    "slug": "soldevelo-mots-app",
    "sdkVersion": "23.0.0",
