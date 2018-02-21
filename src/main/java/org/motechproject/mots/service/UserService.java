@@ -44,6 +44,24 @@ public class UserService {
   }
 
   /**
+   * Updates user's password.
+   * @param username of user which password is about to change.
+   * @param newPassword is new password value for user.
+   * @param oldPassword is current user's password.
+   */
+  public void changeUserPassword(String username, String newPassword, String oldPassword) {
+    User user = getUserByUserName(username);
+
+    if (!passwordsMatch(oldPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Old password is incorrect.");
+    }
+
+    String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
+    user.setPassword(newPasswordEncoded);
+    userRepository.save(user);
+  }
+
+  /**
    * Create User with randomized password.
    * @param user User to be created.
    * @return created User
@@ -57,4 +75,14 @@ public class UserService {
 
     return userRepository.save(user);
   }
+
+  private User getUserByUserName(String userName) {
+    return userRepository.findOneByUsername(userName).orElseThrow(() ->
+        new EntityNotFoundException("User with username: {0} not found", userName));
+  }
+
+  private boolean passwordsMatch(String oldPassword, String currentPasswordEncoded) {
+    return new BCryptPasswordEncoder().matches(oldPassword, currentPasswordEncoded);
+  }
+
 }

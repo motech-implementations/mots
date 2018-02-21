@@ -1,5 +1,6 @@
 package org.motechproject.mots.web;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import org.motechproject.mots.domain.security.User;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -84,6 +86,22 @@ public class UserController extends BaseController {
     userMapper.updateFromDto(userDto, existingUser);
 
     return userMapper.toDto(userService.saveUser(existingUser));
+  }
+
+  /**
+   * Update User password.
+   * @param oldPassword user previous password, should be the same as current password
+   * @param newPassword user's new password
+   */
+  @RequestMapping(value = "/user/passwordchange",
+      method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public String changeCurrentUserPassword(@RequestParam("oldPassword") String oldPassword,
+      @RequestParam("newPassword") String newPassword, Principal principal) {
+    userService.changeUserPassword(principal.getName(), newPassword, oldPassword);
+
+    return "Password changed successfully.";
   }
 
   /**
