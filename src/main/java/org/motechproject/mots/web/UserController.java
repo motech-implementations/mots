@@ -1,5 +1,6 @@
 package org.motechproject.mots.web;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import org.motechproject.mots.domain.security.User;
@@ -9,16 +10,15 @@ import org.motechproject.mots.dto.UserDto;
 import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.service.UserService;
-import org.motechproject.mots.validate.validators.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -91,31 +91,18 @@ public class UserController extends BaseController {
 
   /**
    * Update User password.
-   * @param currentPassword user previous password, should be the same as current password
+   * @param oldPassword user previous password, should be the same as current password
    * @param newPassword user's new password
-   * @return updated User
    */
-  @RequestMapping(value = "/user/password/change/{currentPassword}/{newPassword}",
+  @RequestMapping(value = "/user/passwordchange",
       method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public ResponseEntity<String> changeCurrentUserPassword(
-      @PathVariable("currentPassword") String currentPassword,
-      @PathVariable("newPassword") String newPassword) {
+  public String changeCurrentUserPassword(@RequestParam("oldPassword") String oldPassword,
+      @RequestParam("newPassword") String newPassword, Principal principal) {
+    userService.changeUserPassword(principal.getName(), newPassword, oldPassword);
 
-    String userName =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    User existingUser = userService.getUserByUserName(userName);
-
-    if (existingUser == null
-        || !PasswordValidator.validateCurrentPassword(
-            existingUser.getPassword(), currentPassword)) {
-      return new ResponseEntity<>("Current password is incorrect.", HttpStatus.BAD_REQUEST);
-    }
-
-    userService.changeUserPassword(existingUser, newPassword);
-
-    return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
+    return "Password changed successfully.";
   }
 
   /**

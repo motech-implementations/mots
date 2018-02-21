@@ -1,6 +1,5 @@
 package org.motechproject.mots.service;
 
-import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.motechproject.mots.domain.security.User;
@@ -40,23 +39,23 @@ public class UserService {
   }
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
-  public User getUserByUserName(String userName) {
-    Optional<User> optionalUser = userRepository.findOneByUsername(userName);
-    return optionalUser.orElse(null);
-  }
-
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User saveUser(User user) {
     return userRepository.save(user);
   }
 
   /**
    * Updates user's password.
-   * @param user which password is about to change.
+   * @param username of user which password is about to change.
    * @param newPassword is new password value for user.
+   * @param oldPassword is current user's password.
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
-  public void changeUserPassword(User user, String newPassword) {
+  public void changeUserPassword(String username, String newPassword, String oldPassword) {
+    User user = getUserByUserName(username);
+
+    if (!passwordsMatch(oldPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Old password is incorrect.");
+    }
+
     String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
     user.setPassword(newPasswordEncoded);
     userRepository.save(user);
@@ -76,4 +75,14 @@ public class UserService {
 
     return userRepository.save(user);
   }
+
+  private User getUserByUserName(String userName) {
+    return userRepository.findOneByUsername(userName).orElseThrow(() ->
+        new EntityNotFoundException("User with username: {0} not found", userName));
+  }
+
+  private boolean passwordsMatch(String oldPassword, String currentPasswordEncoded) {
+    return new BCryptPasswordEncoder().matches(oldPassword, currentPasswordEncoded);
+  }
+
 }
