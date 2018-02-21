@@ -35,7 +35,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         .antMatchers(
             "/api/users/forgotPassword"
         ).permitAll()
-        .antMatchers(HttpMethod.POST, "/api/ivrCallback").permitAll()
+        .antMatchers(HttpMethod.POST, "/api/ivrCallback/*").permitAll()
         .antMatchers("/**").fullyAuthenticated();
   }
 }

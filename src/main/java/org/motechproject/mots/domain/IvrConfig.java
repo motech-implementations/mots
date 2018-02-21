@@ -1,11 +1,14 @@
 package org.motechproject.mots.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyClass;
 import javax.persistence.MapKeyColumn;
@@ -13,12 +16,20 @@ import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.motechproject.mots.domain.enums.CallStatus;
 import org.motechproject.mots.domain.enums.Language;
 
 @Entity
 @Table(name = "ivr_config")
+@NoArgsConstructor
 public class IvrConfig extends BaseTimestampedEntity {
+
+  @Getter
+  @Setter
+  @Column(name = "name", unique = true, nullable = false)
+  private String name;
 
   @Column(name = "base_url", nullable = false)
   @Getter
@@ -78,4 +89,34 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Map<Language, String> ivrLanguagesIds;
+
+  @Column(name = "call_id_field", nullable = false)
+  @Getter
+  @Setter
+  private String callIdField;
+
+  @Column(name = "chw_ivr_id_field", nullable = false)
+  @Getter
+  @Setter
+  private String chwIvrIdField;
+
+  @Column(name = "call_log_id_field", nullable = false)
+  @Getter
+  @Setter
+  private String callLogIdField;
+
+  @Column(name = "call_status_field", nullable = false)
+  @Getter
+  @Setter
+  private String callStatusField;
+
+  @ElementCollection(targetClass = CallStatus.class, fetch = FetchType.LAZY)
+  @CollectionTable(name = "ivr_config_call_status_map",
+      joinColumns = @JoinColumn(name = "ivr_config_id"))
+  @MapKeyColumn(name = "ivr_status")
+  @Column(name = "status", nullable = false)
+  @Enumerated(EnumType.STRING)
+  @Getter
+  @Setter
+  private Map<String, CallStatus> callStatusMap = new HashMap<>();
 }

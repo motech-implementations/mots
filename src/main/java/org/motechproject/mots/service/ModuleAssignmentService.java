@@ -1,13 +1,17 @@
 package org.motechproject.mots.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.motechproject.mots.domain.AssignedModules;
+import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
+import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
@@ -26,11 +30,21 @@ public class ModuleAssignmentService {
   private IvrService ivrService;
 
   @Autowired
+  private ModuleProgressService moduleProgressService;
+
+  @Autowired
   private EntityManager entityManager;
 
+  /**
+   * Get modules assinged to CHW.
+   * @param chwId Id of CHW
+   * @return modules assigned to CHW with given Id
+   */
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public AssignedModules getAssignedModules(UUID chwId) {
-    return repository.findByHealthWorkerId(chwId);
+    return repository.findByHealthWorkerId(chwId).orElseThrow(() ->
+        new EntityNotFoundException("No assigned modules found for CHW with Id: {0}",
+            chwId.toString()));
   }
 
   /**
@@ -41,14 +55,15 @@ public class ModuleAssignmentService {
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public void assignModules(AssignedModules assignedModules) {
     AssignedModules existingAssignedModules =
-        repository.findByHealthWorkerId(assignedModules.getHealthWorker().getId());
-    List<String> oldIvrGroups = new ArrayList<String>();
-    if (existingAssignedModules != null) {
-      oldIvrGroups = getIvrGroupsFromModules(existingAssignedModules.getModules());
-      existingAssignedModules.setModules(assignedModules.getModules());
-    } else {
-      existingAssignedModules = assignedModules;
-    }
+        getAssignedModules(assignedModules.getHealthWorker().getId());
+
+    Set<Module> oldModules = existingAssignedModules.getModules();
+    Set<Module> newModules = assignedModules.getModules();
+
+    Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
+    Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
+
+    existingAssignedModules.setModules(newModules);
 
     repository.save(existingAssignedModules);
 
@@ -63,14 +78,15 @@ public class ModuleAssignmentService {
     }
 
     try {
-      ivrService.manageSubscriberGroups(ivrId,
-          getIvrGroupsFromModules(existingAssignedModules.getModules()),
-          oldIvrGroups);
+      ivrService.addSubscriberToGroups(ivrId, getIvrGroupsFromModules(modulesToAdd));
+      ivrService.removeSubscriberFromGroups(ivrId, getIvrGroupsFromModules(modulesToRemove));
     } catch (IvrException ex) {
       String message = "Could not assign or delete module for CHW, "
           + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
       throw new ModuleAssignmentException(message, ex);
     }
+
+    moduleProgressService.createModuleProgresses(assignedModules.getHealthWorker(), modulesToAdd);
   }
 
   private List<String> getIvrGroupsFromModules(Set<Module> modules) {
@@ -83,5 +99,18 @@ public class ModuleAssignmentService {
     }
 
     return ivrGroups;
+  }
+
+  private Set<Module> getModulesToAdd(Set<Module> oldModules, Set<Module> newModules) {
+    return difference(newModules, oldModules, Comparator.comparing(BaseEntity::getId));
+  }
+
+  private Set<Module> getModulesToRemove(Set<Module> oldModules, Set<Module> newModules) {
+    return difference(oldModules, newModules, Comparator.comparing(BaseEntity::getId));
+  }
+
+  private <T> Set<T> difference(Set<T> set1, Set<T> set2, Comparator<T> comparator) {
+    return set1.stream().filter(o1 -> set2.stream().noneMatch(o2 ->
+        comparator.compare(o1, o2) == 0)).collect(Collectors.toSet());
   }
 }

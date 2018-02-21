@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
+import org.motechproject.mots.domain.enums.CallStatus;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
@@ -111,30 +113,34 @@ public class IvrService {
   }
 
   /**
-   * Manage subscriber IVR groups.
+   * Add Subscriber to groups.
    * @param subscriberId subscriber id
-   * @param newGroupsIds ids of groups to add subscriber
-   * @param oldGroupsIds ids of subscriber previous groups
+   * @param groupsIds ids of groups to add subscriber
    */
-  public void manageSubscriberGroups(String subscriberId,
-      List<String> newGroupsIds, List<String> oldGroupsIds) throws IvrException {
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add(SUBSCRIBER_IDS, subscriberId);
-    params.add(GROUPS, StringUtils.join(newGroupsIds, ","));
+  public void addSubscriberToGroups(String subscriberId,
+      List<String> groupsIds) throws IvrException {
+    if (!groupsIds.isEmpty()) {
+      MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+      params.add(SUBSCRIBER_IDS, subscriberId);
+      params.add(GROUPS, StringUtils.join(groupsIds, ","));
 
-    sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
+      sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), params,
+          new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
 
-    if (!oldGroupsIds.containsAll(newGroupsIds)) {
       sendModuleAssignedMessage(subscriberId);
     }
+  }
 
-    List<String> deletedGroups = oldGroupsIds;
-    deletedGroups.removeAll(newGroupsIds);
-
-    if (!deletedGroups.isEmpty()) {
-      params = new LinkedMultiValueMap<>();
-      params.add(GROUPS, StringUtils.join(deletedGroups, ","));
+  /**
+   * Remove Subscriber from groups.
+   * @param subscriberId subscriber id
+   * @param groupsIds ids of groups to remove subscriber
+   */
+  public void removeSubscriberFromGroups(String subscriberId,
+      List<String> groupsIds) throws IvrException {
+    if (!groupsIds.isEmpty()) {
+      MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+      params.add(GROUPS, StringUtils.join(groupsIds, ","));
       params.add(SUBSCRIBER_IDS, subscriberId);
       sendVotoRequest(getAbsoluteUrl(DELETE_GROUPS_URL), params,
               new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.DELETE);
@@ -220,8 +226,37 @@ public class IvrService {
     }
   }
 
-  public void saveCallDetailRecord(CallDetailRecord ivrData) {
-    callDetailRecordRepository.save(ivrData);
+  public void saveCallDetailRecord(CallDetailRecord callDetailRecord, String configName) {
+    setConfigFields(callDetailRecord, configName);
+    callDetailRecordRepository.save(callDetailRecord);
+  }
+
+  private void setConfigFields(CallDetailRecord callDetailRecord, String configName) {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+
+    Map<String, String> ivrData = callDetailRecord.getIvrData();
+
+    String ivrCallStatus = ivrData.get(ivrConfig.getCallStatusField());
+
+    callDetailRecord.setCallStatus(getCallStatus(ivrConfig, ivrCallStatus));
+    callDetailRecord.setIvrConfigName(configName);
+    callDetailRecord.setCallId(ivrData.get(ivrConfig.getCallIdField()));
+    callDetailRecord.setChwIvrId(ivrData.get(ivrConfig.getChwIvrIdField()));
+    callDetailRecord.setCallLogId(ivrData.get(ivrConfig.getCallLogIdField()));
+
+    ivrData.remove(ivrConfig.getCallIdField());
+    ivrData.remove(ivrConfig.getChwIvrIdField());
+    ivrData.remove(ivrConfig.getCallLogIdField());
+  }
+
+  private CallStatus getCallStatus(IvrConfig ivrConfig, String ivrCallStatus) {
+    CallStatus callStatus = ivrConfig.getCallStatusMap().get(ivrCallStatus);
+
+    if (callStatus == null) {
+      return CallStatus.UNKNOWN;
+    }
+
+    return callStatus;
   }
 
   private String getAbsoluteUrl(String relativeUrl) {
