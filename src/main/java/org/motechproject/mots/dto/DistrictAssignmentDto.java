@@ -16,9 +16,9 @@ public class DistrictAssignmentDto {
 
   @Getter
   @Setter
-  String startDate;
+  private String startDate;
 
   @Getter
   @Setter
-  String endDate;
+  private String endDate;
 }
