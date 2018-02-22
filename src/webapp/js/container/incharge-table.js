@@ -13,6 +13,7 @@ import {
   hasAuthority, INCHARGE_READ_AUTHORITY,
   INCHARGE_WRITE_AUTHORITY,
 } from '../utils/authorization';
+import { buildSearchParams } from '../utils/react-table-search-params';
 
 class InchargeTable extends Component {
   static getTableColumns = () => [
@@ -34,6 +35,7 @@ class InchargeTable extends Component {
         </div>
       ),
       filterable: false,
+      sortable: false,
       show: hasAuthority(INCHARGE_WRITE_AUTHORITY),
     },
     {
@@ -65,9 +67,8 @@ class InchargeTable extends Component {
   componentWillMount() {
     if (!hasAuthority(INCHARGE_READ_AUTHORITY)) {
       this.props.history.push('/home');
-    } else {
-      this.props.fetchIncharges();
     }
+    this.setState({ loading: true });
   }
 
   render() {
@@ -81,9 +82,24 @@ class InchargeTable extends Component {
         </div>
         <div className="hide-max-r-xsmall-max">
           <ReactTable
+            manual
             filterable
             data={this.props.inchargesList}
             columns={InchargeTable.getTableColumns()}
+            loading={this.state.loading}
+            pages={this.props.inchargeListPages}
+            onFetchData={(state) => {
+              this.setState({ loading: true });
+              this.props.fetchIncharges(buildSearchParams(
+                  state.filtered,
+                  state.sorted,
+                  state.page,
+                  state.pageSize,
+              ))
+              .then(() => {
+                this.setState({ loading: false });
+              });
+            }}
           />
         </div>
       </div>
@@ -94,6 +110,7 @@ class InchargeTable extends Component {
 function mapStateToProps(state) {
   return {
     inchargesList: state.tablesReducer.inchargesList,
+    inchargeListPages: state.tablesReducer.inchargeListPages,
   };
 }
 
@@ -101,6 +118,7 @@ export default connect(mapStateToProps, { fetchIncharges })(InchargeTable);
 
 InchargeTable.propTypes = {
   fetchIncharges: PropTypes.func.isRequired,
+  inchargeListPages: PropTypes.number.isRequired,
   inchargesList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
   history: PropTypes.shape({

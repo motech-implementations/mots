@@ -22,7 +22,8 @@ export default function (state = initialTablesData, action) {
       if (action.payload.data !== undefined) {
         return {
           ...state,
-          inchargesList: action.payload.data,
+          inchargesList: action.payload.data.content,
+          inchargeListPages: action.payload.data.totalPages,
         };
       }
       return state;
