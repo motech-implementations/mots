@@ -9,6 +9,7 @@ import {
   SAVE_INCHARGE,
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES,
+  FETCH_SELECTABLE_LOCATIONS_FOR_INCHARGES,
 } from './types';
 
 const BASE_URL = '/api';
@@ -150,11 +151,21 @@ export function saveIncharge(values, callback) {
 }
 
 export function fetchLocations() {
-  const url = '/api/districts';
+  const url = `${BASE_URL}/districts`;
   const request = apiClient.get(url);
 
   return {
     type: FETCH_LOCATIONS,
+    payload: request,
+  };
+}
+
+export function fetchSelectableLocationsForIncharges() {
+  const url = `${BASE_URL}/incharge/selectableDistricts`;
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_SELECTABLE_LOCATIONS_FOR_INCHARGES,
     payload: request,
   };
 }

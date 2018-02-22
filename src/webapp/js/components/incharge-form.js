@@ -5,7 +5,7 @@ import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 
 import FormField from './form-field';
-import { fetchLocations } from '../actions';
+import { fetchSelectableLocationsForIncharges } from '../actions';
 import { getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
 
 export const INCHARGE_FORM_NAME = 'InchargeForm';
@@ -85,7 +85,7 @@ class InchargeForm extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchLocations();
+    this.props.fetchSelectableLocationsForIncharges();
   }
 
   renderField(fieldConfig, fieldName) {
@@ -141,13 +141,13 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: INCHARGE_FORM_NAME,
-})(connect(mapStateToProps, { fetchLocations })(InchargeForm));
+})(connect(mapStateToProps, { fetchSelectableLocationsForIncharges })(InchargeForm));
 
 InchargeForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  fetchLocations: PropTypes.func.isRequired,
+  fetchSelectableLocationsForIncharges: PropTypes.func.isRequired,
   availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,

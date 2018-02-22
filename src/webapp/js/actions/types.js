@@ -12,6 +12,7 @@ export const CREATE_INCHARGE = 'create_incharge';
 export const SAVE_INCHARGE = 'save_incharge';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
+export const FETCH_SELECTABLE_LOCATIONS_FOR_INCHARGES = 'fetch_selectable_locations_for_incharges';
 export const FETCH_USERS = 'fetch_users';
 
 export const FETCH_DISTRICTS = 'fetch_districts';

@@ -40,6 +40,19 @@ public class LocationController extends BaseController {
   }
 
   /**
+   * Get list of selectable locations for Incharge.
+   * @return list of selectable districts
+   */
+  @RequestMapping(value = "/incharge/selectableDistricts", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<DistrictDto> getSelectableDistricts() {
+    List<District> districts = locationService.getDistricts();
+
+    return locationMapper.toDistrictDtos(districts);
+  }
+
+  /**
    * Get list of districts for preview.
    * @return list of all districts
    */
