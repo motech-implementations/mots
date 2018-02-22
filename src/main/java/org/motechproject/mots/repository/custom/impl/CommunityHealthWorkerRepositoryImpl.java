@@ -3,14 +3,13 @@ package org.motechproject.mots.repository.custom.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.repository.custom.CommunityHealthWorkerRepositoryCustom;
@@ -20,22 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @SuppressWarnings("PMD.CyclomaticComplexity")
-public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorkerRepositoryCustom {
-
-  private static final String CHW_ID = "chwId";
-  private static final String FIRST_NAME = "firstName";
-  private static final String SECOND_NAME = "secondName";
-  private static final String OTHER_NAME = "otherName";
-  private static final String PHONE_NUMBER = "phoneNumber";
-  private static final String EDUCATION_LEVEL = "educationLevel";
-  private static final String NAME = "name";
-  private static final String FACILITY = "facility";
-  private static final String CHIEFDOM = "chiefdom";
-  private static final String DISTRICT = "district";
-  private static final String COMMUNITY = "community";
-
-  @PersistenceContext
-  private EntityManager entityManager;
+public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
+    implements CommunityHealthWorkerRepositoryCustom {
 
   /**
    * Finds CommunityHealthWorkers matching all of the provided parameters.
@@ -62,12 +47,10 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
-    int pageSize = null != pageable ? pageable.getPageSize() : 0;
-    int firstResult = null != pageable ? pageable.getPageNumber() * pageSize : 0;
-
+    Pair<Integer, Integer> maxAndFirst = getMaxAndFirstResult(pageable);
     List<CommunityHealthWorker> communityHealthWorkers = entityManager.createQuery(query)
-        .setMaxResults(pageSize)
-        .setFirstResult(firstResult)
+        .setMaxResults(maxAndFirst.getLeft())
+        .setFirstResult(maxAndFirst.getRight())
         .getResultList();
 
     return new PageImpl<>(communityHealthWorkers, pageable, count);
@@ -139,7 +122,8 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
     return query;
   }
 
-  private <T> CriteriaQuery<T> addSortProperties(CriteriaQuery<T> query,
+  @Override
+  protected <T> CriteriaQuery<T> addSortProperties(CriteriaQuery<T> query,
       Root root, Pageable pageable) {
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     List<Order> orders = new ArrayList<>();
@@ -155,19 +139,9 @@ public class CommunityHealthWorkerRepositoryImpl implements CommunityHealthWorke
         path = root.get(order.getProperty());
       }
 
-      Order mountedOrder = getDirection(builder, order, path);
+      Order mountedOrder = getSortDirection(builder, order, path);
       orders.add(mountedOrder);
     }
     return query.orderBy(orders);
-  }
-
-  private <T> Order getDirection(CriteriaBuilder builder, Sort.Order order, Path<T> path) {
-    Order mountedOrder;
-    if (order.isAscending()) {
-      mountedOrder = builder.asc(path);
-    } else {
-      mountedOrder = builder.desc(path);
-    }
-    return mountedOrder;
   }
 }

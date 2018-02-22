@@ -10,6 +10,8 @@ import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.FacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,4 +63,49 @@ public class LocationService {
   public Community createCommunity(Community community) {
     return communityRepository.save(community);
   }
+
+  /**
+   * Finds districts matching all of the provided parameters.
+   * If there are no parameters, return all districts.
+   */
+  public Page<District> searchDistricts(String districtName, Pageable pageable)
+      throws IllegalArgumentException {
+
+    return districtRepository.search(districtName, pageable);
+  }
+
+  /**
+   * Finds chiefdoms matching all of the provided parameters.
+   * If there are no parameters, return all chiefdoms.
+   */
+  public Page<Chiefdom> searchChiefdoms(String chiefdomName,
+      String parentDistrict, Pageable pageable)
+      throws IllegalArgumentException {
+
+    return chiefdomRepository.search(chiefdomName, parentDistrict, pageable);
+  }
+
+  /**
+   * Finds communities matching all of the provided parameters.
+   * If there are no parameters, return all communities.
+   */
+  public Page<Community> searchCommunities(String communityName,
+      String parentFacility, Pageable pageable)
+      throws IllegalArgumentException {
+
+    return communityRepository.search(communityName, parentFacility, pageable);
+  }
+
+  /**
+   * Finds facilities matching all of the provided parameters.
+   * If there are no parameters, return all facilities.
+   */
+  public Page<Facility> searchFacilities(String facilityId, String facilityName,
+      String facilityType, String inchargeFullName, String parentChiefdom, Pageable pageable)
+      throws IllegalArgumentException {
+
+    return facilityRepository.search(facilityId, facilityName, facilityType,
+        inchargeFullName, parentChiefdom, pageable);
+  }
+
 }
