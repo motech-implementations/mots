@@ -14,17 +14,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 public abstract class BaseTimestampedEntity extends BaseEntity {
 
-  @Column(name = "create_date")
+  @Column(name = "created_date")
   @CreationTimestamp
   @Getter
   @Setter
-  private Date createDate;
+  private Date createdDate;
 
-  @Column(name = "update_date")
+  @Column(name = "updated_date")
   @UpdateTimestamp
   @Getter
   @Setter
-  private Date updateDate;
+  private Date updatedDate;
 
   public BaseTimestampedEntity(UUID id) {
     super(id);
