@@ -95,7 +95,7 @@ export default class SideBar extends Component {
       <ul className="nav nav-second-level">
         { hasAuthority(ASSIGN_MODULES_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/modules/assign" onClick={this.props.hideMenuSmart}>
+            <Link to="/modules/groupAssign" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-ok" />
               <span className="icon-text">Assign</span>
             </Link>

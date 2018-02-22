@@ -32,6 +32,11 @@ public class ModuleService {
     return getCourse().getModules();
   }
 
+  @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
+  public Iterable<Module> getReleasedModules() {
+    return getReleasedCourse().getReleasedModules();
+  }
+
   /**
    * Create new Module.
    * @param moduleDto DTO of Module to be created
@@ -92,5 +97,9 @@ public class ModuleService {
     }
 
     return courseIterator.next();
+  }
+
+  private Course getReleasedCourse() {
+    return courseRepository.findByStatus(Status.RELEASED);
   }
 }

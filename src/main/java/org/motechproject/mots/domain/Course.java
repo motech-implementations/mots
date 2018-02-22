@@ -1,6 +1,7 @@
 package org.motechproject.mots.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,4 +60,9 @@ public class Course extends IvrObject {
   @Getter
   @Setter
   private Message noModulesMessage;
+
+  public List<Module> getReleasedModules() {
+    return getModules().stream().filter(module -> module.getStatus().equals(Status.RELEASED))
+        .collect(Collectors.toList());
+  }
 }

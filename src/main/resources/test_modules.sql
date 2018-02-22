@@ -1,4 +1,4 @@
-INSERT INTO `course` (`id`, `name`, `status`, `version`) VALUES('d5c4a806-f817-47e3-b73d-8803a7e76ddd', 'course 1', 'DRAFT', 0);
+INSERT INTO `course` (`id`, `name`, `status`, `version`) VALUES('d5c4a806-f817-47e3-b73d-8803a7e76ddd', 'course 1', 'RELEASED', 0);
 
 INSERT INTO `call_flow_element` (`id`, `list_order`, `name`, `type`) VALUES('03f8f5a7-045e-4810-ac4e-30d2beda82ae', 0, 'start module 1', 'QUESTION');
 INSERT INTO `call_flow_element` (`id`, `list_order`, `name`, `type`) VALUES('03ff01a2-b413-4b19-b5e2-e3dcc652583b', 0, 'start module 2', 'QUESTION');

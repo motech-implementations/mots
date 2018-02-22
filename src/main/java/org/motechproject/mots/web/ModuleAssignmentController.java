@@ -1,14 +1,17 @@
 package org.motechproject.mots.web;
 
 import java.util.UUID;
+import javax.validation.Valid;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.dto.ChwModulesDto;
+import org.motechproject.mots.dto.DistrictAssignmentDto;
 import org.motechproject.mots.dto.ModuleAssignmentDto;
 import org.motechproject.mots.mapper.ModuleAssignmentMapper;
 import org.motechproject.mots.service.ModuleAssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,12 +31,26 @@ public class ModuleAssignmentController extends BaseController {
    * Assign modules for CHW.
    * @param moduleAssignmentDto dto with chw id and list of modules assigned to it
    */
-  @RequestMapping(value = "/assignModules", method = RequestMethod.POST)
+  @RequestMapping(value = "/module/assign", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public void assignModules(@RequestBody ModuleAssignmentDto moduleAssignmentDto) {
     AssignedModules assignedModules = moduleAssignmentMapper.fromDto(moduleAssignmentDto);
 
     moduleAssignmentService.assignModules(assignedModules);
+  }
+
+  /**
+   * Assign modules to all CHWs in a district.
+   * @param districtAssignmentDto dto with district id, list of modules assigned to it
+   *     and start and end dates
+   */
+  @RequestMapping(value = "/module/district/assign", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public void assignModulesToDistrict(
+      @RequestBody @Valid DistrictAssignmentDto districtAssignmentDto,
+      BindingResult bindingResult) {
+
+    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
   }
 
   /**
