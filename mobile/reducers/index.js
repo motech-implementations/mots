@@ -8,6 +8,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   tablesReducer: tablesDataReducer,
   availableLocations: locationsReducer,
+  selectableLocationsForIncharge: locationsReducer,
   form: formReducer,
 });
 

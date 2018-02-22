@@ -46,11 +46,11 @@ export function getSelectableLocations(
 
   switch (requestedList) {
     case 'chiefdoms':
-      return district.chiefdoms;
+      return district ? district.chiefdoms : {};
     case 'facilities':
-      return chiefdom.facilities;
+      return chiefdom ? chiefdom.facilities : {};
     case 'communities':
-      return facility.communities;
+      return facility ? facility.communities : {};
     default:
       return [];
   }

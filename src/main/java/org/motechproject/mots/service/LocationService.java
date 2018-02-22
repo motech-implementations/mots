@@ -83,7 +83,7 @@ public class LocationService {
   private Chiefdom getChiefdomWithSelectableFacilities(UUID chiefdomId) {
     Chiefdom chiefdom = chiefdomRepository.findOne(chiefdomId);
     Set<Facility> selectableFacility =
-        facilityRepository.findSelectableByChiefdom(chiefdom, LOCATION_SORT);
+        facilityRepository.findAllByChiefdomAndInchargeIsNull(chiefdom, LOCATION_SORT);
     chiefdom.setFacilities(selectableFacility);
     return chiefdom;
   }

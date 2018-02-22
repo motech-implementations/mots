@@ -47,7 +47,7 @@ public class LocationController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<DistrictDto> getSelectableDistricts() {
-    List<District> districts = locationService.getDistricts();
+    List<District> districts = locationService.getSelectableDistricts();
 
     return locationMapper.toDistrictDtos(districts);
   }

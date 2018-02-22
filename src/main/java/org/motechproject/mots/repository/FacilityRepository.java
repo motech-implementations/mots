@@ -14,6 +14,5 @@ public interface FacilityRepository extends CrudRepository<Facility, UUID> {
 
   List<Facility> findAll();
 
-  @Query("SELECT f FROM Facility f WHERE incharge IS NOT NULL AND chiefdom = :chiefdom")
-  Set<Facility> findSelectableByChiefdom(@Param("chiefdom") Chiefdom chiefdom, Sort sort);
+  Set<Facility> findAllByChiefdomAndInchargeIsNull(Chiefdom chiefdom, Sort sort);
 }
