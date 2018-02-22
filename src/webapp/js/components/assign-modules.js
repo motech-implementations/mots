@@ -82,7 +82,7 @@ export default class AssignModules extends Component {
   }
 
   sendAssignedModules() {
-    const url = '/api/assignModules';
+    const url = '/api/module/assign';
 
     const payload = {
       modules: this.state.selectedModules,

@@ -1,7 +1,9 @@
 package org.motechproject.mots.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -9,14 +11,23 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
+import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
+import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
+import org.motechproject.mots.dto.DistrictAssignmentDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
+import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
+import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
+import org.motechproject.mots.repository.DistrictRepository;
+import org.motechproject.mots.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +45,21 @@ public class ModuleAssignmentService {
 
   @Autowired
   private EntityManager entityManager;
+
+  @Autowired
+  private CommunityHealthWorkerRepository communityHealthWorkerRepository;
+
+  @Autowired
+  private ModuleRepository moduleRepository;
+
+  @Autowired
+  private DistrictAssignmentLogRepository assignmentLogRepository;
+
+  @Autowired
+  private DistrictRepository districtRepository;
+
+  @Autowired
+  private UserService userService;
 
   /**
    * Get modules assinged to CHW.
@@ -99,6 +125,75 @@ public class ModuleAssignmentService {
     }
 
     return ivrGroups;
+  }
+
+  /**
+   * Creates DistrictAssignmentLog for district assignment,
+   * and assigns modules to each CHW from a district.
+   * @param assignmentDto dto with district id, list of modules assigned to it
+   *     and start and end dates
+   */
+  @Transactional
+  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  public void assignModulesToDistrict(DistrictAssignmentDto assignmentDto) {
+    List<CommunityHealthWorker> communityHealthWorkers =
+        communityHealthWorkerRepository
+            .findByDistrictId(UUID.fromString(assignmentDto.getDistrictId()));
+
+    Set<Module> newChwModules = new HashSet<>();
+    String userName = (String) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
+    User currentUser = userService.getUserByUserName(userName);
+
+    for (String moduleId : assignmentDto.getModules()) {
+      Module moduleToAssign = moduleRepository.findById(UUID.fromString(moduleId)).orElseThrow(() ->
+          new EntityNotFoundException("No module found for Id: {0}",
+              moduleId));
+
+      newChwModules.add(moduleToAssign);
+
+      assignmentLogRepository.save(new DistrictAssignmentLog(
+          districtRepository.findOne(UUID.fromString(assignmentDto.getDistrictId())),
+          LocalDate.parse(assignmentDto.getStartDate()),
+          LocalDate.parse(assignmentDto.getEndDate()),
+          moduleToAssign,
+          currentUser
+      ));
+    }
+
+    for (CommunityHealthWorker chw : communityHealthWorkers) {
+
+      AssignedModules existingAssignedModules =
+          getAssignedModules(chw.getId());
+
+      Set<Module> oldModules = existingAssignedModules.getModules();
+
+      Set<Module> modulesToAdd = getModulesToAdd(oldModules, newChwModules);
+
+      existingAssignedModules.getModules().addAll(newChwModules);
+
+      repository.save(existingAssignedModules);
+
+      entityManager.flush();
+      entityManager.refresh(existingAssignedModules);
+
+      String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
+
+      if (ivrId == null) {
+        throw new ModuleAssignmentException(
+            "Could not assign module to CHW, because CHW has empty IVR id");
+      }
+
+      try {
+        ivrService.addSubscriberToGroups(ivrId, getIvrGroupsFromModules(modulesToAdd));
+      } catch (IvrException ex) {
+        String message = "Could not assign or delete module for CHW, "
+            + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
+        throw new ModuleAssignmentException(message, ex);
+      }
+      moduleProgressService.createModuleProgresses(chw, modulesToAdd);
+
+    }
   }
 
   private Set<Module> getModulesToAdd(Set<Module> oldModules, Set<Module> newModules) {
