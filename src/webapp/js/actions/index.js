@@ -99,9 +99,11 @@ export function fetchChws(searchParams) {
   };
 }
 
-export function fetchIncharges() {
-  const url = `${BASE_URL}/incharge`;
-  const request = apiClient.get(url);
+export function fetchIncharges(searchParams) {
+  const url = `${BASE_URL}/incharge/search`;
+  const request = apiClient.get(url, {
+    params: searchParams,
+  });
 
   return {
     type: FETCH_INCHARGES,

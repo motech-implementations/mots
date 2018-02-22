@@ -53,6 +53,7 @@ class ChwTable extends Component {
 
       ),
       filterable: false,
+      sortable: false,
       show: hasAuthority(CHW_WRITE_AUTHORITY) || hasAuthority(ASSIGN_MODULES_AUTHORITY),
     },
     {
