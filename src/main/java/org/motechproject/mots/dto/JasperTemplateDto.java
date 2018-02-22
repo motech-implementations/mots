@@ -28,10 +28,6 @@ public class JasperTemplateDto {
 
   @Getter
   @Setter
-  private byte[] data;
-
-  @Getter
-  @Setter
   private List<String> requiredRights;
 
   @Getter
