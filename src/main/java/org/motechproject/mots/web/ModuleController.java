@@ -44,7 +44,7 @@ public class ModuleController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<ModuleSimpleDto> getSimpleModules() {
-    Iterable<Module> modules = moduleService.getModules();
+    Iterable<Module> modules = moduleService.getReleasedModules();
 
     return moduleMapper.toSimpleDtos(modules);
   }
