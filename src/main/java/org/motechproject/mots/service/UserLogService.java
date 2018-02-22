@@ -26,4 +26,17 @@ public class UserLogService {
     userLog.setLogoutDate(expirationDate);
     return userLogRepository.save(userLog);
   }
+
+  public UserLog updateUserLog(UserLog userLog) {
+    return userLogRepository.save(userLog);
+  }
+
+  /**
+   * Find the most recent log of a user.
+   * @param user a user
+   * @return most recent user's User Log.
+   */
+  public UserLog getUserLog(User user) {
+    return userLogRepository.findFirstByUserOrderByLoginDateDesc(user).orElse(null);
+  }
 }

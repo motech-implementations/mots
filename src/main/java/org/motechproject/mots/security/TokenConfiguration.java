@@ -1,6 +1,7 @@
 package org.motechproject.mots.security;
 
 import java.util.Arrays;
+import org.motechproject.mots.security.token.CustomTokenServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -45,25 +45,25 @@ public class TokenConfiguration {
   }
 
   /**
-   * Set-up DefaultTokenServices with tokenStore().
+   * Set-up CustomTokenServices with tokenStore().
    * @return token services
    */
   @Bean
   @Primary
-  public DefaultTokenServices tokenServices() {
+  public CustomTokenServices tokenServices() {
     TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
     tokenEnhancerChain.setTokenEnhancers(
         Arrays.asList(tokenEnhancer(), accessTokenConverter()));
 
-    DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-    defaultTokenServices.setTokenStore(tokenStore());
-    defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
-    defaultTokenServices.setClientDetailsService(clientDetailsService);
-    defaultTokenServices.setSupportRefreshToken(true);
-    defaultTokenServices.setAccessTokenValiditySeconds(tokenValiditySeconds);
-    defaultTokenServices.setRefreshTokenValiditySeconds(tokenValiditySeconds * 2);
+    CustomTokenServices customTokenServices = new CustomTokenServices();
+    customTokenServices.setTokenStore(tokenStore());
+    customTokenServices.setTokenEnhancer(tokenEnhancerChain);
+    customTokenServices.setClientDetailsService(clientDetailsService);
+    customTokenServices.setSupportRefreshToken(true);
+    customTokenServices.setAccessTokenValiditySeconds(tokenValiditySeconds);
+    customTokenServices.setRefreshTokenValiditySeconds(tokenValiditySeconds * 2);
 
-    return defaultTokenServices;
+    return customTokenServices;
   }
 
   @Bean
