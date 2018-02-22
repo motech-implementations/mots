@@ -1,7 +1,6 @@
 package org.motechproject.mots.dto;
 
 import java.util.List;
-import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +36,5 @@ public class JasperTemplateDto {
 
   @Getter
   @Setter
-  @Valid
   private List<JasperTemplateParameterDto> templateParameters;
 }

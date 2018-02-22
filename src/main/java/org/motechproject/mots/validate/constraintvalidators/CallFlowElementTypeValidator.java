@@ -10,12 +10,20 @@ public class CallFlowElementTypeValidator implements
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    return StringUtils.isEmpty(value)
-        || org.motechproject.mots.domain.enums.CallFlowElementType.getByDisplayName(value) != null;
+    return StringUtils.isEmpty(value) || checkIfEnumExists(value);
   }
 
   @Override
   public void initialize(CallFlowElementType parameters) {
     // we don't need any passed parameters
+  }
+
+  private boolean checkIfEnumExists(String enumValue) {
+    try {
+      org.motechproject.mots.domain.enums.CallFlowElementType.valueOf(enumValue);
+      return true;
+    } catch (IllegalArgumentException ex) {
+      return false;
+    }
   }
 }
