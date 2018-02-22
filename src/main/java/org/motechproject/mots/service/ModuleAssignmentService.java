@@ -138,7 +138,7 @@ public class ModuleAssignmentService {
   public void assignModulesToDistrict(DistrictAssignmentDto assignmentDto) {
     List<CommunityHealthWorker> communityHealthWorkers =
         communityHealthWorkerRepository
-            .findByDistrictId(UUID.fromString(assignmentDto.getDistrictId()));
+            .findByCommunityFacilityChiefdomDistrictId(UUID.fromString(assignmentDto.getDistrictId()));
 
     Set<Module> newChwModules = new HashSet<>();
     String userName = (String) SecurityContextHolder.getContext().getAuthentication()
