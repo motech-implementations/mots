@@ -37,4 +37,5 @@
   <include file="20180221_1701.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180222_1132.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180222_120002_update_reports.sql" relativeToChangelogFile="true" />
+  <include file="20180222_141204_insert_chw_module_unit.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
