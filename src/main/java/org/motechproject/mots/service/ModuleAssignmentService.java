@@ -171,7 +171,7 @@ public class ModuleAssignmentService {
 
       Set<Module> modulesToAdd = getModulesToAdd(oldModules, newChwModules);
 
-      existingAssignedModules.getModules().addAll(newChwModules);
+      existingAssignedModules.getModules().addAll(modulesToAdd);
 
       repository.save(existingAssignedModules);
 
