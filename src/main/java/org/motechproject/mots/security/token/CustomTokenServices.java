@@ -3,6 +3,7 @@ package org.motechproject.mots.security.token;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserLog;
 import org.motechproject.mots.service.UserLogService;
+import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -16,6 +17,9 @@ public class CustomTokenServices extends DefaultTokenServices {
   @Autowired
   private UserLogService userLogService;
 
+  @Autowired
+  private UserService userService;
+
   private TokenStore tokenStore;
 
   @Override
@@ -23,7 +27,7 @@ public class CustomTokenServices extends DefaultTokenServices {
       throws AuthenticationException {
     OAuth2AccessToken accessToken = super.createAccessToken(authentication);
 
-    User user = (User) authentication.getUserAuthentication().getPrincipal();
+    User user = getUserFromPrincipal(authentication.getUserAuthentication().getPrincipal());
     userLogService.createNewUserLog(user, accessToken.getExpiration());
 
     return accessToken;
@@ -37,14 +41,14 @@ public class CustomTokenServices extends DefaultTokenServices {
     OAuth2Authentication authentication =
         tokenStore.readAuthenticationForRefreshToken(accessToken.getRefreshToken());
 
-    Object principal = authentication.getUserAuthentication().getPrincipal();
+    User user = getUserFromPrincipal(authentication.getUserAuthentication().getPrincipal());
 
-    if (principal instanceof String) {
-      UserLog existingUserLog = userLogService.getUserLog((String) principal);
-      if (existingUserLog != null) {
-        existingUserLog.setLogoutDate(accessToken.getExpiration());
-        userLogService.updateUserLog(existingUserLog);
-      }
+    UserLog existingUserLog = userLogService.getUserLog(user);
+    if (existingUserLog != null) {
+      existingUserLog.setLogoutDate(accessToken.getExpiration());
+      userLogService.updateUserLog(existingUserLog);
+    } else {
+      userLogService.createNewUserLog(user, accessToken.getExpiration());
     }
 
     return accessToken;
@@ -54,5 +58,14 @@ public class CustomTokenServices extends DefaultTokenServices {
   public void setTokenStore(TokenStore tokenStore) {
     super.setTokenStore(tokenStore);
     this.tokenStore = tokenStore;
+  }
+
+  private User getUserFromPrincipal(Object principal) {
+    if (principal instanceof String) {
+      return userService.getUserByUserName((String) principal);
+    } else if (principal instanceof User) {
+      return (User) principal;
+    }
+    throw new IllegalArgumentException("Unknown principal type");
   }
 }

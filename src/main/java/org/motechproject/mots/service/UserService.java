@@ -76,7 +76,7 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  private User getUserByUserName(String userName) {
+  public User getUserByUserName(String userName) {
     return userRepository.findOneByUsername(userName).orElseThrow(() ->
         new EntityNotFoundException("User with username: {0} not found", userName));
   }

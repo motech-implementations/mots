@@ -1,7 +1,6 @@
 package org.motechproject.mots.service;
 
 import java.util.Date;
-import java.util.List;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserLog;
 import org.motechproject.mots.repository.UserLogRepository;
@@ -33,16 +32,10 @@ public class UserLogService {
   }
 
   /**
-   * @param username of current user
+   * @param user of current user
    * @return most recent user's user log.
    */
-  public UserLog getUserLog(String username) {
-    List<UserLog> userLogs = userLogRepository
-        .findByUser_UsernameAndLogoutDateGreaterThanEqualOrderByLogoutDateDesc(username,
-            new Date());
-    if (!userLogs.isEmpty()) {
-      return userLogs.get(0);
-    }
-    return null;
+  public UserLog getUserLog(User user) {
+    return userLogRepository.findFirstByUserOrderByLoginDateDesc(user).orElse(null);
   }
 }
