@@ -7,4 +7,9 @@ export default {
   containerHighResolutions: {
     marginTop: 60,
   },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 };

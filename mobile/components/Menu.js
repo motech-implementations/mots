@@ -154,7 +154,7 @@ class Menu extends Component {
           { this.state.ASSIGN_MODULES_AUTHORITY &&
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
             <TouchableOpacity
-              onPress={() => this.openSection('home')}
+              onPress={() => this.openSection('modulesToUser')}
               style={styles.menuItem}
             >
               <View style={[styles.iconContainer, { marginLeft: 30 }]}>
@@ -195,6 +195,18 @@ class Menu extends Component {
           </Collapsible>
           }
 
+          { this.state.DISPLAY_REPORTS_AUTHORITY &&
+          <TouchableOpacity
+            onPress={() => this.openSection('home')}
+            style={styles.menuItem}
+          >
+            <View style={styles.iconContainer}>
+              <Icon name="bar-chart" size={20} color="#337ab7" />
+            </View>
+            <Text style={styles.menuItemText}>Reports</Text>
+          </TouchableOpacity>
+          }
+
           { this.state.MANAGE_USERS_AUTHORITY &&
             <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
               <View>
@@ -219,18 +231,6 @@ class Menu extends Component {
                 </TouchableOpacity>
               </View>
             </Collapsible>
-            }
-
-          { this.state.DISPLAY_REPORTS_AUTHORITY &&
-          <TouchableOpacity
-            onPress={() => this.openSection('home')}
-            style={styles.menuItem}
-          >
-            <View style={styles.iconContainer}>
-              <Icon name="bar-chart" size={20} color="#337ab7" />
-            </View>
-            <Text style={styles.menuItemText}>Reports</Text>
-          </TouchableOpacity>
           }
 
           { !HIDE_NOT_IMPLEMENTED &&
