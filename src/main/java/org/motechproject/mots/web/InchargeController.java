@@ -52,14 +52,14 @@ public class InchargeController extends BaseController {
   @ResponseBody
   public Page<InchargeDto> searchIncharges(
       @RequestParam(value = "firstName", required = false) String firstName,
-      @RequestParam(value = "surName", required = false) String surName,
+      @RequestParam(value = "secondName", required = false) String secondName,
       @RequestParam(value = "otherName", required = false) String otherName,
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "facilityName", required = false) String facilityName,
       Pageable pageable) throws IllegalArgumentException {
 
-    Page<Incharge> incharges = inchargeService.searchIncharges(firstName, surName, otherName,
+    Page<Incharge> incharges = inchargeService.searchIncharges(firstName, secondName, otherName,
         phoneNumber, email, facilityName, pageable);
     List<InchargeDto> inchargesDto = inchargeMapper.toDtos(incharges.getContent());
 
