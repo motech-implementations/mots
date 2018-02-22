@@ -4,6 +4,7 @@ import { AsyncStorage, Alert } from 'react-native';
 import Config from '../config';
 import { signoutUser, useRefreshToken } from '../actions';
 import { dispatch } from '../App';
+import { FETCH_ERROR } from '../actions/types';
 
 const CLIENT_URL = Config.api[Config.backend.instance];
 const VALID_STATUSES = [200, 201];
@@ -40,14 +41,19 @@ export default class ApiClient {
         getAlert('Resource not found.', 'There were some problems with data fetching.');
         break;
       case 500:
-        getAlert('Error occurred.', 'There was an internal server error.');
+        error.json().then((data) => {
+          const errorMessage = data.message ? data.message : getErrorMessage(data);
+          const message = errorMessage || data;
+          getAlert('Error occurred.', message);
+        }).catch(() =>
+          getAlert('Error occurred.', 'There was an internal server error.'));
         break;
       default: {
         error.json().then((data) => {
           const errorMessage = getErrorMessage(data);
           const message = errorMessage || data;
           getAlert('Error occurred.', message);
-        });
+        }).catch(err => getAlert('Error occurred.', err));
       }
     }
     return error;
@@ -61,11 +67,17 @@ export default class ApiClient {
     })
       .then((response) => {
         if (VALID_STATUSES.indexOf(response.status) !== -1) {
-          return response.json();
+          return response.json()
+            .then(responseJson => responseJson)
+            .catch(() => {});
         }
         throw response;
       })
       .catch((obj) => {
+        dispatch({
+          type: FETCH_ERROR,
+          payload: true,
+        });
         ApiClient.handleError(obj);
       });
   }
@@ -91,6 +103,10 @@ export default class ApiClient {
   }
 
   static async motsFetch(_options) {
+    dispatch({
+      type: FETCH_ERROR,
+      payload: false,
+    });
     const fetchOptions = _.extend({
       headers: {},
       method: 'GET',
