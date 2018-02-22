@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.CallFlowElementType;
 
 @JsonTypeInfo(use = Id.NAME, include = As.PROPERTY, property = "type", visible = true)
 @JsonSubTypes({
@@ -19,7 +22,7 @@ public abstract class CallFlowElementDto extends IvrObjectDto {
   @Setter
   private String id;
 
-  @NotBlank(message = "Message/Question name cannot be empty")
+  @NotBlank(message = ValidationMessages.EMPTY_QUESTION_OR_MESSAGE)
   @Getter
   @Setter
   private String name;
@@ -28,6 +31,8 @@ public abstract class CallFlowElementDto extends IvrObjectDto {
   @Setter
   private String content;
 
+  @CallFlowElementType
+  @NotNull(message = ValidationMessages.EMPTY_CALL_FLOW_ELEMENT_TYPE)
   @Getter
   @Setter
   private String type;

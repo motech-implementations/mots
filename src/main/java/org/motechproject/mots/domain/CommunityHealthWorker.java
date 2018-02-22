@@ -13,10 +13,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
+import org.motechproject.mots.validate.annotations.PhoneNumber;
 
 @Entity
 @Table(name = "community_health_worker")
@@ -31,16 +34,19 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Column(name = "chw_id", unique = true, nullable = false)
   @Getter
   @Setter
+  @NotBlank(message = ValidationMessages.EMPTY_CHW_ID)
   private String chwId;
 
   @Column(name = "first_name", nullable = false)
   @Getter
   @Setter
+  @NotBlank(message = ValidationMessages.EMPTY_FIRST_NAME)
   private String firstName;
 
   @Column(name = "second_name", nullable = false)
   @Getter
   @Setter
+  @NotBlank(message = ValidationMessages.EMPTY_SECOND_NAME)
   private String secondName;
 
   @Column(name = "other_name")
@@ -74,6 +80,8 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Column(name = "phone_number", unique = true, nullable = false)
   @Getter
   @Setter
+  @PhoneNumber
+  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
   private String phoneNumber;
 
   @ManyToOne

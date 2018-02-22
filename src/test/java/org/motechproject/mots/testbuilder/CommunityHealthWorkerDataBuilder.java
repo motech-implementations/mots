@@ -11,7 +11,7 @@ import org.motechproject.mots.domain.enums.Language;
 public class CommunityHealthWorkerDataBuilder {
   private static final Random RANDOM = new Random();
 
-  private static int instanceNumber = 0;
+  private static int instanceNumber = 1000;
 
   private UUID id;
   private String chwId;
@@ -34,7 +34,7 @@ public class CommunityHealthWorkerDataBuilder {
     firstName = "first " + instanceNumber;
     secondName = "second " + instanceNumber;
     gender = Gender.values()[RANDOM.nextInt(Gender.values().length)];
-    phoneNumber = "+" + instanceNumber;
+    phoneNumber = Integer.toString(instanceNumber);
     community = new CommunityDataBuilder().build();
     preferredLanguage = Language.values()[RANDOM.nextInt(Language.values().length)];
     educationLevel = EducationLevel.values()[RANDOM.nextInt(EducationLevel.values().length)];

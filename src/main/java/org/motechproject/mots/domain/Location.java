@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.FacilityType;
 
 @MappedSuperclass
@@ -21,6 +23,7 @@ public abstract class Location extends BaseTimestampedEntity {
   @Getter
   @Setter
   @NonNull
+  @NotBlank(message = ValidationMessages.EMPTY_LOCATION_NAME)
   private String name;
 
   public Location(UUID id) {

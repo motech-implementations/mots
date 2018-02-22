@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 
 @Entity
@@ -20,6 +22,7 @@ public abstract class CallFlowElement extends IvrObject {
   @Column(name = "name", nullable = false)
   @Getter
   @Setter
+  @NotBlank(message = ValidationMessages.EMPTY_QUESTION_OR_MESSAGE)
   private String name;
 
   @Type(type = "text")
