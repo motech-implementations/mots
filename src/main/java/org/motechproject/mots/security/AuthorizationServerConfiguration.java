@@ -1,5 +1,6 @@
 package org.motechproject.mots.security;
 
+import org.motechproject.mots.security.token.CustomTokenServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 @Configuration
@@ -22,7 +22,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   private TokenStore tokenStore;
 
   @Autowired
-  private DefaultTokenServices tokenServices;
+  private CustomTokenServices tokenServices;
 
   @Autowired
   @Qualifier("authenticationManagerBean")
