@@ -32,8 +32,9 @@ public class UserLogService {
   }
 
   /**
-   * @param user of current user
-   * @return most recent user's user log.
+   * Find the most recent log of a user.
+   * @param user a user
+   * @return most recent user's User Log.
    */
   public UserLog getUserLog(User user) {
     return userLogRepository.findFirstByUserOrderByLoginDateDesc(user).orElse(null);
