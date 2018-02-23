@@ -4,6 +4,7 @@ import {
   Alert,
   Text,
   ScrollView,
+  PixelRatio,
 } from 'react-native';
 import { Select, Option } from 'react-native-chooser';
 import { TagSelect } from 'react-native-tag-select';
@@ -15,12 +16,14 @@ import DatePicker from 'react-native-datepicker';
 import apiClient from '../utils/api-client';
 import formsStyles from '../styles/formsStyles';
 import modulesStyles from '../styles/modulesStyles';
+import inputsStyles from '../styles/inputsStyles';
 import Button from './Button';
 import getContainerStyle from '../utils/styleUtils';
 
 const { formHeader, buttonContainer } = formsStyles;
+const { labelStyle, labelStyleSmall } = inputsStyles;
 const {
-  modulesContainer, labelText, itemSelected,
+  modulesContainer, itemSelected,
   fieldRow, selectField, datePickerStyle,
 } = modulesStyles;
 
@@ -122,22 +125,24 @@ class AssignModulesToDistrict extends Component {
         <Text style={formHeader}>Assign Modules to a District</Text>
         <ScrollView style={modulesContainer}>
           <View style={fieldRow}>
-            <Text style={labelText}>District:</Text>
-            <Select
-              onSelect={this.onSelect}
-              defaultText={this.state.selectedDistrict.label || 'Click to Select'}
-              style={selectField}
-              textStyle={{}}
-              transparent
-              optionListStyle={{ backgroundColor: '#FFF' }}
-            >
-              {this.state.districts.map(district => (
-                <Option key={district.value} value={district.value}>{district.label}</Option>
-              ))}
-            </Select>
+            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>District:</Text>
+            <View style={selectField}>
+              <Select
+                onSelect={this.onSelect}
+                defaultText={this.state.selectedDistrict.label || 'Click to Select'}
+                textStyle={{}}
+                style={{ borderWidth: 0 }}
+                transparent
+                optionListStyle={{ backgroundColor: '#FFF' }}
+              >
+                {this.state.districts.map(district => (
+                  <Option key={district.value} value={district.value}>{district.label}</Option>
+                ))}
+              </Select>
+            </View>
           </View>
           <View style={fieldRow}>
-            <Text style={labelText}>Start Date:</Text>
+            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>Start Date:</Text>
             <DatePicker
               style={datePickerStyle}
               format="YYYY-MM-DD"
@@ -149,7 +154,7 @@ class AssignModulesToDistrict extends Component {
             />
           </View>
           <View style={fieldRow}>
-            <Text style={labelText}>End Date:</Text>
+            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>End Date:</Text>
             <DatePicker
               style={datePickerStyle}
               format="YYYY-MM-DD"
@@ -161,7 +166,14 @@ class AssignModulesToDistrict extends Component {
             />
           </View>
           <View>
-            <Text style={[labelText, { marginBottom: 15 }]}>Select modules to assign:</Text>
+            <Text style={[
+              labelStyle,
+              PixelRatio.get() < 2 && labelStyleSmall,
+              { marginBottom: 15 },
+            ]}
+            >
+              Select modules to assign:
+            </Text>
             <TagSelect
               data={this.state.availableModulesList}
               ref={(module) => { this.module = module; }}
