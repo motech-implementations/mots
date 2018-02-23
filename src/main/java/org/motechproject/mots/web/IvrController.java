@@ -3,6 +3,7 @@ package org.motechproject.mots.web;
 import java.util.Map;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.dto.CallDetailRecordDto;
+import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.CallDetailRecordMapper;
 import org.motechproject.mots.service.IvrService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class IvrController extends BaseController {
       consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
   @ResponseStatus(HttpStatus.OK)
   public void saveCallback(@PathVariable("configName") String configName,
-      @RequestParam Map<String, String> ivrData) {
+      @RequestParam Map<String, String> ivrData) throws IvrException {
     CallDetailRecordDto recordDto = new CallDetailRecordDto(ivrData);
 
     CallDetailRecord callDetailRecord = callDetailRecordMapper.fromDto(recordDto);

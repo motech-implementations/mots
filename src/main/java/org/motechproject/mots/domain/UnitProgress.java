@@ -1,6 +1,7 @@
 package org.motechproject.mots.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -76,6 +77,29 @@ public class UnitProgress extends BaseTimestampedEntity {
   }
 
   /**
+   * Change current call flow element to previous one.
+   */
+  public void previousElement() {
+    if (currentCallFlowElementNumber > 0) {
+      currentCallFlowElementNumber--;
+    }
+  }
+
+  /**
+   * Get call flow elements starting from current element.
+   * @return sublist of call flow elements
+   */
+  public List<CallFlowElement> getNotProcessedCallFlowElements() {
+    List<CallFlowElement> callFlowElements = unit.getCallFlowElements();
+
+    if (currentCallFlowElementNumber == 0) {
+      return callFlowElements;
+    }
+
+    return callFlowElements.subList(currentCallFlowElementNumber, callFlowElements.size());
+  }
+
+  /**
    * Add response to a question.
    * @param callFlowElement question that was responded to
    * @param choiceId chosen response number, null if no answer was chosen
@@ -91,5 +115,15 @@ public class UnitProgress extends BaseTimestampedEntity {
     }
 
     questionResponses.add(questionResponse);
+  }
+
+  /**
+   * Reset unit progress and increment number of replays.
+   */
+  public void resetProgressForUnitRepeat() {
+    currentCallFlowElementNumber = 0;
+    questionResponses.clear();
+    status = ProgressStatus.IN_PROGRESS;
+    numberOfReplays++;
   }
 }
