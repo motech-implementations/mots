@@ -18,6 +18,7 @@ import ModulesManage from './modules-manage';
 import Users from './users';
 import Locations from './locations';
 import GroupAssignModules from './group-assign-modules';
+import Report from './report';
 
 export default class App extends Component {
   constructor(props) {
@@ -63,6 +64,7 @@ export default class App extends Component {
                 <Route path="/chw/new" component={HealthWorkersNew} />
                 <Route path="/chw/:chwId" component={HealthWorkersEdit} />
                 <Route path="/chw" component={HealthWorkers} />
+                <Route path="/report/:reportId" exact component={Report} />
                 <Route path="/users" component={Users} />
                 <Route path="/locations" component={Locations} />
                 <Route path="/" component={Home} />
