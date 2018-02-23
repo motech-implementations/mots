@@ -40,6 +40,9 @@ public class FacilityRepositoryIntegrationTest extends
   private Facility facility1 = generateInstance();
   private Facility facility2 = generateInstance();
 
+  /**
+   * Prepare the test environment.
+   */
   @Before
   public void setUp() {
     districtRepository.save(district);
@@ -70,7 +73,7 @@ public class FacilityRepositoryIntegrationTest extends
   public void shouldFindFacilityByName() {
     // when
     Page<Facility> result = facilityRepository.search(null,
-        facility1.getName(), null, null,null, null);
+        facility1.getName(), null, null, null, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -82,7 +85,7 @@ public class FacilityRepositoryIntegrationTest extends
   public void shouldFindFacilityByChiefdom() {
     // when
     Page<Facility> result = facilityRepository.search(null, null,
-        null, null, facility1.getChiefdom().getName(),  null);
+        null, null, facility1.getChiefdom().getName(), null);
 
     // then
     assertThat(result.getTotalElements(), is(2L));

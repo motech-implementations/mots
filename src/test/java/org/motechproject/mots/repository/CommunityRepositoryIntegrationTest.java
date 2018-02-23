@@ -49,6 +49,9 @@ public class CommunityRepositoryIntegrationTest extends
   private Community community1 = generateInstance();
   private Community community2 = generateInstance();
 
+  /**
+   * Prepare the test environment.
+   */
   @Before
   public void setUp() {
     districtRepository.save(district);

@@ -19,6 +19,9 @@ public class DistrictRepositoryIntegrationTest extends
   private District district1 = generateInstance();
   private District district2 = generateInstance();
 
+  /**
+   * Prepare the test environment.
+   */
   @Before
   public void setUp() {
     districtRepository.save(district1);

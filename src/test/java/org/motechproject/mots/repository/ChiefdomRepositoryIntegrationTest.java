@@ -31,6 +31,9 @@ public class ChiefdomRepositoryIntegrationTest extends
   private Chiefdom chiefdom1 = generateInstance();
   private Chiefdom chiefdom2 = generateInstance();
 
+  /**
+   * Prepare the test environment.
+   */
   @Before
   public void setUp() {
     districtRepository.save(district);

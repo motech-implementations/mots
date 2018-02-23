@@ -9,7 +9,6 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.repository.custom.CommunityRepositoryCustom;
 import org.motechproject.mots.web.LocationController;

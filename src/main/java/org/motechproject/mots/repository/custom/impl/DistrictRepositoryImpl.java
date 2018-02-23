@@ -5,7 +5,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.repository.custom.DistrictRepositoryCustom;
 import org.springframework.data.domain.Page;

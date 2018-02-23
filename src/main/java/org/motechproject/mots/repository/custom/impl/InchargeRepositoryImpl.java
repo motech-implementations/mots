@@ -9,7 +9,6 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.repository.custom.InchargeRepositoryCustom;
 import org.motechproject.mots.web.InchargeController;
