@@ -14,12 +14,11 @@ import DatePicker from 'react-native-datepicker';
 
 import apiClient from '../utils/api-client';
 import formsStyles from '../styles/formsStyles';
-import commonStyles from '../styles/commonStyles';
 import modulesStyles from '../styles/modulesStyles';
 import Button from './Button';
+import getContainerStyle from '../utils/styleUtils';
 
 const { formHeader, buttonContainer } = formsStyles;
-const { container, center } = commonStyles;
 const {
   modulesContainer, labelText, itemSelected,
   fieldRow, selectField, datePickerStyle,
@@ -106,16 +105,24 @@ class AssignModulesToDistrict extends Component {
 
       apiClient.post(url, payload)
         .then(() => callback());
+    } else {
+      Alert.alert(
+        '',
+        'You need to select district, start date, end date ' +
+        'and module to finish assignment.',
+        [{ text: 'OK' }],
+        { cancelable: false },
+      );
     }
   }
 
   render() {
     return (
-      <View style={container}>
-        <Text style={formHeader}>Assign Modules to District</Text>
+      <View style={getContainerStyle()}>
+        <Text style={formHeader}>Assign Modules to a District</Text>
         <ScrollView style={modulesContainer}>
           <View style={fieldRow}>
-            <Text style={labelText}>Select District:</Text>
+            <Text style={labelText}>District:</Text>
             <Select
               onSelect={this.onSelect}
               defaultText={this.state.selectedDistrict.label || 'Click to Select'}
@@ -159,7 +166,6 @@ class AssignModulesToDistrict extends Component {
               data={this.state.availableModulesList}
               ref={(module) => { this.module = module; }}
               itemStyleSelected={itemSelected}
-              style={center}
             />
             <View style={buttonContainer}>
               <Button

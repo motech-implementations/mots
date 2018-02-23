@@ -13,12 +13,11 @@ import { connect } from 'react-redux';
 
 import apiClient from '../utils/api-client';
 import formsStyles from '../styles/formsStyles';
-import commonStyles from '../styles/commonStyles';
 import modulesStyles from '../styles/modulesStyles';
 import Button from './Button';
+import getContainerStyle from '../utils/styleUtils';
 
 const { formHeader, buttonContainer } = formsStyles;
-const { container } = commonStyles;
 const {
   modulesContainer, labelText, itemSelected,
   fieldRow, selectField,
@@ -136,11 +135,11 @@ class AssignModulesToChw extends Component {
 
   render() {
     return (
-      <View style={container}>
-        <Text style={formHeader}>Assign Modules to CHW</Text>
-        <View style={modulesContainer}>
+      <View style={getContainerStyle()}>
+        <Text style={formHeader}>Assign Modules to a CHW</Text>
+        <ScrollView style={modulesContainer}>
           <View style={fieldRow}>
-            <Text style={labelText}>Select CHW:</Text>
+            <Text style={labelText}>Community Health Worker:</Text>
             <Select
               onSelect={this.onSelect}
               defaultText={this.state.selectedChw.label || 'Click to Select'}
@@ -155,7 +154,7 @@ class AssignModulesToChw extends Component {
             </Select>
           </View>
           {this.state.showModuleButtons &&
-          <ScrollView>
+          <View>
             <Text style={[labelText, { marginBottom: 15 }]}>Select modules to assign:</Text>
             <TagSelect
               data={this.state.availableModulesList}
@@ -186,9 +185,9 @@ class AssignModulesToChw extends Component {
                 Cancel
               </Button>
             </View>
-          </ScrollView>
+          </View>
           }
-        </View>
+        </ScrollView>
       </View>
 
     );
