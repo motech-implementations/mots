@@ -13,23 +13,29 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
         <span className="icon-bar" />
         <span className="icon-bar" />
       </button>
-      <Link className="navbar-brand" to="/" onClick={hideMenuSmart}>Mobile Training and Support</Link>
-      <CounterLogout />
+      <Link className="navbar-brand hide-min-r-small-min" to="/" onClick={hideMenuSmart}>MOTS</Link>
+      <Link className="navbar-brand hide-max-r-xsmall-max" to="/" onClick={hideMenuSmart}>Mobile Training and Support</Link>
+      <div className="hide-min-r-small-min">
+        <CounterLogout />
+      </div>
     </div>
-    <ul className="nav navbar-right top-nav hide-max-r-xsmall-max padding-y-md">
-      <li>
-        <Link to="/">
-          <span className="glyphicon glyphicon-user" />
-          <span className="icon-text">Profile</span>
-        </Link>
-      </li>
-      <li>
-        <a href="" onClick={signoutUser}>
-          <span className="glyphicon glyphicon-log-in" />
-          <span className="icon-text">Logout</span>
-        </a>
-      </li>
-    </ul>
+    <div className="navbar-right hide-max-r-xsmall-max padding-y-md">
+      <CounterLogout />
+      <ul className="nav navbar-right top-nav padding-y-md">
+        <li>
+          <Link to="/">
+            <span className="glyphicon glyphicon-user" />
+            <span className="icon-text">Profile</span>
+          </Link>
+        </li>
+        <li>
+          <a href="" onClick={signoutUser}>
+            <span className="glyphicon glyphicon-log-in" />
+            <span className="icon-text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 );
 

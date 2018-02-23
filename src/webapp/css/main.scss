@@ -110,6 +110,14 @@ a, a:hover, a:focus, a:active, a:visited {
   }
 }
 
+@media(max-width: $r-xsmall-max) {
+  .navbar {
+    .counter-logout {
+      padding-left: 0;
+    }
+  }
+}
+
 .navbar-inverse {
   border-color: $gray-mid;
 
