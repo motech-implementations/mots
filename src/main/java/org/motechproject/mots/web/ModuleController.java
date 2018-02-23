@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.dto.ModuleSimpleDto;
-import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.mapper.ModuleMapper;
 import org.motechproject.mots.service.ModuleService;
 import org.motechproject.mots.validate.ModuleReleaseCheck;
@@ -72,9 +71,7 @@ public class ModuleController extends BaseController {
   @ResponseBody
   public ModuleDto createModule(@RequestBody @Valid ModuleDto moduleDto,
       BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
+    checkBindingResult(bindingResult);
 
     Module module = moduleService.createModule(moduleDto);
 
@@ -92,9 +89,7 @@ public class ModuleController extends BaseController {
   @ResponseBody
   public ModuleDto updateModule(@PathVariable("id") UUID id,
       @RequestBody @Valid ModuleDto moduleDto, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
+    checkBindingResult(bindingResult);
 
     Module module = moduleService.updateModule(id, moduleDto);
 
@@ -120,8 +115,6 @@ public class ModuleController extends BaseController {
     BindingResult bindingResult = new BeanPropertyBindingResult(module, MODULE);
     validator.validate(module, bindingResult, ModuleReleaseCheck.class);
 
-    if (bindingResult.hasErrors()) {
-      throw new BindingResultException(getErrors(bindingResult));
-    }
+    checkBindingResult(bindingResult);
   }
 }

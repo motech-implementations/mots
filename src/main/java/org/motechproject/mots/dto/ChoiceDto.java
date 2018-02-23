@@ -24,7 +24,6 @@ public class ChoiceDto {
   @Setter
   private String ivrName;
 
-  @NotNull(message = ValidationMessages.NULL_IS_CORRECT)
   @Getter
   @Setter
   private Boolean isCorrect;
