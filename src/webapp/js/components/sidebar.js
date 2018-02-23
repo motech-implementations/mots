@@ -10,6 +10,7 @@ import {
   MANAGE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
   DISPLAY_MODULES_AUTHORITY,
 } from '../utils/authorization';
+import apiClient from '../utils/api-client';
 
 export default class SideBar extends Component {
   static getSubmenuArrowClass(collapsed) {
@@ -28,12 +29,31 @@ export default class SideBar extends Component {
       modulesMenuCollapsed: true,
       inchargeMenuCollapsed: true,
       usersMenuCollapsed: true,
+      reportsMenuCollapsed: true,
+      reportList: [],
     };
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
     this.toggleModulesMenu = this.toggleModulesMenu.bind(this);
     this.toggleInchargeMenu = this.toggleInchargeMenu.bind(this);
     this.toggleUsersMenu = this.toggleUsersMenu.bind(this);
+    this.toggleReportsMenu = this.toggleReportsMenu.bind(this);
+    this.fetchReports = this.fetchReports.bind(this);
+  }
+
+  componentWillMount() {
+    if (hasAuthority(DISPLAY_REPORTS_AUTHORITY)) {
+      this.fetchReports();
+    }
+  }
+
+  fetchReports() {
+    const url = '/api/reports/templates/';
+
+    apiClient.get(url)
+      .then((response) => {
+        this.setState({ reportList: response.data });
+      });
   }
 
   toggleHealthWorkersMenu(event) {
@@ -57,6 +77,12 @@ export default class SideBar extends Component {
   toggleUsersMenu(event) {
     event.preventDefault();
     this.setState({ usersMenuCollapsed: !this.state.usersMenuCollapsed });
+    return false;
+  }
+
+  toggleReportsMenu(event) {
+    event.preventDefault();
+    this.setState({ reportsMenuCollapsed: !this.state.reportsMenuCollapsed });
     return false;
   }
 
@@ -167,6 +193,31 @@ export default class SideBar extends Component {
     );
   }
 
+  renderReportsMenu() {
+    if (this.state.reportsMenuCollapsed) {
+      return '';
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        {this.state.reportList.map(report => (
+          <li key={report.id}>
+            <Link
+              to={{
+                pathname: `/report/${report.id}`,
+                state: { reportName: report.name },
+              }}
+              onClick={this.props.hideMenuSmart}
+            >
+              <span className="fa fa-file-text-o" />
+              <span className="icon-text">{report.name}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
   render() {
     return (
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
@@ -225,10 +276,14 @@ export default class SideBar extends Component {
           }
           { hasAuthority(DISPLAY_REPORTS_AUTHORITY) &&
           <li>
-            <Link to="/" onClick={this.props.hideMenuSmart}>
+            <a href="" onClick={this.toggleReportsMenu}>
               <span className="fa fa-bar-chart" />
               <span className="icon-text">Reports</span>
-            </Link>
+              <span
+                className={SideBar.getSubmenuArrowClass(this.state.reportsMenuCollapsed)}
+              />
+            </a>
+            {this.renderReportsMenu()}
           </li>
           }
           { hasAuthority(DISPLAY_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY) &&
