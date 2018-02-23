@@ -2,6 +2,7 @@ package org.motechproject.mots.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -90,6 +91,7 @@ public abstract class ModuleMapper {
         }
 
         updateUnitFromDto(unitDto, unit);
+        unit.setAllowReplay(BooleanUtils.isTrue(unit.getAllowReplay()));
         unit.setListOrder(i);
         updatedUnits.add(unit);
       }
@@ -152,6 +154,7 @@ public abstract class ModuleMapper {
     if (choiceDtos != null) {
       for (int i = 0; i < choiceDtos.size(); i++) {
         Choice choice = fromDto(choiceDtos.get(i));
+        choice.setIsCorrect(BooleanUtils.isTrue(choice.getIsCorrect()));
         choice.setChoiceId(i + 1);
         choices.add(choice);
       }

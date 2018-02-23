@@ -2,7 +2,6 @@ package org.motechproject.mots.dto;
 
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -39,7 +38,6 @@ public class UnitDto extends IvrObjectDto {
   @Setter
   private MultipleChoiceQuestionDto unitContinuationQuestion;
 
-  @NotNull(message = ValidationMessages.NULL_UNIT_ALLOW_REPLAY)
   @Getter
   @Setter
   private Boolean allowReplay;

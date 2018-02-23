@@ -39,7 +39,6 @@ const QUESTION_FIELDS = {
       },
       isCorrect: {
         label: 'Is Correct',
-        required: true,
         attributes: {
           type: 'checkbox',
           className: '',
@@ -84,7 +83,6 @@ const UNIT_FIELDS = {
   },
   allowReplay: {
     label: 'Allow Replay',
-    required: true,
     attributes: {
       type: 'checkbox',
       className: '',
@@ -250,9 +248,6 @@ class ModuleForm extends Component {
 
     if (attributes && attributes.type === 'checkbox') {
       attributes.checked = input.value;
-      attributes.onChange = (event) => {
-        input.onChange(event.target.checked);
-      };
     }
 
     const FieldType = type || 'input';
