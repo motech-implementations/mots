@@ -6,10 +6,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "question_response")
+@NoArgsConstructor
 public class QuestionResponse extends BaseTimestampedEntity {
 
   @ManyToOne
@@ -19,7 +21,7 @@ public class QuestionResponse extends BaseTimestampedEntity {
   private MultipleChoiceQuestion question;
 
   @ManyToOne
-  @JoinColumn(name = "response_id", nullable = false)
+  @JoinColumn(name = "response_id")
   @Getter
   @Setter
   private Choice chosenResponse;
@@ -28,4 +30,20 @@ public class QuestionResponse extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Integer numberOfAttempts;
+
+  /**
+   * Create new Question Response.
+   * @param question question that was responded to
+   * @param choiceId chosen response number
+   * @param numberOfAttempts number of times this question was listened
+   */
+  public QuestionResponse(MultipleChoiceQuestion question, Integer choiceId,
+      Integer numberOfAttempts) {
+    this.question = question;
+    this.numberOfAttempts = numberOfAttempts;
+
+    if (choiceId != null) {
+      this.chosenResponse = question.getChoices().get(choiceId);
+    }
+  }
 }
