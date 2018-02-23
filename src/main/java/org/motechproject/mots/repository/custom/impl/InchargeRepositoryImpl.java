@@ -1,40 +1,26 @@
 package org.motechproject.mots.repository.custom.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.repository.custom.InchargeRepositoryCustom;
+import org.motechproject.mots.web.InchargeController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @SuppressWarnings("PMD.CyclomaticComplexity")
-public class InchargeRepositoryImpl implements InchargeRepositoryCustom {
-
-  private static final String FIRST_NAME = "firstName";
-  private static final String SECOND_NAME = "secondName";
-  private static final String OTHER_NAME = "otherName";
-  private static final String PHONE_NUMBER = "phoneNumber";
-  private static final String EMAIL = "email";
-  private static final String NAME = "name";
-  private static final String FACILITY = "facility";
-
-  @PersistenceContext
-  private EntityManager entityManager;
+public class InchargeRepositoryImpl extends BaseRepositoryImpl
+    implements InchargeRepositoryCustom {
 
   /**
-   * Finds Incharges matching all of the provided parameters. If there are no parameters, return all
-   * Incharges.
+   * Finds Incharges matching all of the provided parameters.
+   * If there are no parameters, return all Incharges.
    */
   @Override
   public Page<Incharge> searchIncharges(String firstName, String secondName,
@@ -54,9 +40,8 @@ public class InchargeRepositoryImpl implements InchargeRepositoryCustom {
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
-    int pageSize = null != pageable ? pageable.getPageSize() : 0;
-    int firstResult = null != pageable ? pageable.getPageNumber() * pageSize : 0;
-
+    int pageSize = getPageSize(pageable);
+    int firstResult = getFirstResult(pageable, pageSize);
     List<Incharge> incharges = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
@@ -112,35 +97,14 @@ public class InchargeRepositoryImpl implements InchargeRepositoryCustom {
     return query;
   }
 
-  private <T> CriteriaQuery<T> addSortProperties(CriteriaQuery<T> query,
-      Root root, Pageable pageable) {
-    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-    List<Order> orders = new ArrayList<>();
-    Iterator<Sort.Order> iterator = pageable.getSort().iterator();
-
-    Sort.Order order;
-    Path<T> path;
-    while (iterator.hasNext()) {
-      order = iterator.next();
-      if (order.getProperty().equals("facilityName")) {
-        path = root.get(FACILITY).get(NAME);
-      } else {
-        path = root.get(order.getProperty());
-      }
-
-      Order mountedOrder = getDirection(builder, order, path);
-      orders.add(mountedOrder);
-    }
-    return query.orderBy(orders);
-  }
-
-  private <T> Order getDirection(CriteriaBuilder builder, Sort.Order order, Path<T> path) {
-    Order mountedOrder;
-    if (order.isAscending()) {
-      mountedOrder = builder.asc(path);
+  @Override
+  protected Path getPath(Root root, Sort.Order order) {
+    Path path;
+    if (order.getProperty().equals(InchargeController.FACILITY_NAME_PARAM)) {
+      path = root.get(FACILITY).get(NAME);
     } else {
-      mountedOrder = builder.desc(path);
+      path = root.get(order.getProperty());
     }
-    return mountedOrder;
+    return path;
   }
 }

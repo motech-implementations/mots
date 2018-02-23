@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class CommunityHealthWorkerController extends BaseController {
 
+  public static final String COMMUNITY_NAME_PARAM = "communityName";
+
   @Autowired
   private CommunityHealthWorkerService healthWorkerService;
 
@@ -59,7 +61,7 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = "otherName", required = false) String otherName,
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "educationLevel", required = false) String educationLevel,
-      @RequestParam(value = "communityName", required = false) String communityName,
+      @RequestParam(value = COMMUNITY_NAME_PARAM, required = false) String communityName,
       @RequestParam(value = "facilityName", required = false) String facilityName,
       @RequestParam(value = "chiefdomName", required = false) String chiefdomName,
       @RequestParam(value = "districtName", required = false) String districtName,
