@@ -18,13 +18,13 @@ import modulesStyles from '../styles/modulesStyles';
 import Button from './Button';
 
 const { formHeader, buttonContainer } = formsStyles;
-const { container, center } = commonStyles;
+const { container } = commonStyles;
 const {
   modulesContainer, labelText, itemSelected,
-  chwFieldRow, chwSelectField,
+  fieldRow, selectField,
 } = modulesStyles;
 
-class AssignModules extends Component {
+class AssignModulesToChw extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,7 +109,7 @@ class AssignModules extends Component {
   }
 
   sendAssignedModules(selectedModules) {
-    if (this.state.selectedChw && this.state.selectedModules) {
+    if (this.state.selectedChw.value && selectedModules) {
       const url = '/api/module/assign';
       const modules = selectedModules.map(module => module.id);
 
@@ -139,12 +139,12 @@ class AssignModules extends Component {
       <View style={container}>
         <Text style={formHeader}>Assign Modules to CHW</Text>
         <View style={modulesContainer}>
-          <View style={chwFieldRow}>
+          <View style={fieldRow}>
             <Text style={labelText}>Select CHW:</Text>
             <Select
               onSelect={this.onSelect}
               defaultText={this.state.selectedChw.label || 'Click to Select'}
-              style={chwSelectField}
+              style={selectField}
               textStyle={{}}
               transparent
               optionListStyle={{ backgroundColor: '#FFF' }}
@@ -156,13 +156,12 @@ class AssignModules extends Component {
           </View>
           {this.state.showModuleButtons &&
           <ScrollView>
-            <Text style={labelText}>Select modules to assign:</Text>
+            <Text style={[labelText, { marginBottom: 15 }]}>Select modules to assign:</Text>
             <TagSelect
               data={this.state.availableModulesList}
               ref={(module) => { this.module = module; }}
               itemStyleSelected={itemSelected}
               value={this.state.selectedModules}
-              style={center}
             />
             <View style={buttonContainer}>
               <Button
@@ -202,13 +201,13 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(AssignModules);
+export default connect(mapStateToProps)(AssignModulesToChw);
 
-AssignModules.propTypes = {
+AssignModulesToChw.propTypes = {
   chwId: PropTypes.string,
   fetchError: PropTypes.bool.isRequired,
 };
 
-AssignModules.defaultProps = {
+AssignModulesToChw.defaultProps = {
   chwId: null,
 };

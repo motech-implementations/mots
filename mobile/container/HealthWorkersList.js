@@ -66,7 +66,7 @@ const COLUMNS = [
         }
         { cell.canAssign &&
         <Button
-          onPress={() => Actions.modulesToUser({ chwId: cell.value })}
+          onPress={() => Actions.modulesToChw({ chwId: cell.value })}
           iconName="arrow-circle-o-right"
           iconColor="#FFF"
           buttonColor="#449C44"
