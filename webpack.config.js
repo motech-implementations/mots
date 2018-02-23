@@ -5,6 +5,7 @@ const ROOT = path.resolve(__dirname, 'src/webapp');
 const SRC = path.resolve(ROOT, 'js');
 const DEST = path.resolve(__dirname, 'build/resources/main/static/site');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -20,6 +21,9 @@ module.exports = {
     colors: true,
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      favicon: `${ROOT}/img/favicon.ico`,
+    }),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
