@@ -7,7 +7,8 @@ import { View, StatusBar } from 'react-native';
 import Header from './components/Header';
 import Home from './components/Home';
 import Incharges from './components/Incharges';
-import AssignModules from './components/AssignModules';
+import AssignModulesToChw from './components/AssignModulesToChw';
+import AssignModulesToDistrict from './components/AssignModulesToDistrict';
 import InchargesNew from './components/InchargesNew';
 import InchargesEdit from './components/InchargesEdit';
 import HealthWorkers from './components/HealthWorkers';
@@ -39,8 +40,8 @@ const App = () => (
             <Scene key="incharges" component={Incharges} title="Incharge List" hideNavBar={false} navBar={Header} />
             <Scene key="inchargesNew" component={InchargesNew} title="Add Incharge" navBar={Header} />
             <Scene key="inchargesEdit" component={InchargesEdit} title="Edit Incharge" navBar={Header} />
-            <Scene key="modulesToUser" component={AssignModules} title="Assign Modules" navBar={Header} />
-            <Scene key="modulesToDistrict" component={AssignModules} title="Assign Modules" navBar={Header} />
+            <Scene key="modulesToChw" component={AssignModulesToChw} title="Assign Modules" navBar={Header} />
+            <Scene key="modulesToDistrict" component={AssignModulesToDistrict} title="Assign Modules" navBar={Header} />
             <Scene key="chws" component={HealthWorkers} title="Community Health Workers" navBar={Header} />
             <Scene key="chwsNew" component={HealthWorkersNew} title="Add Community Health Worker" navBar={Header} />
             <Scene key="chwsEdit" component={HealthWorkersEdit} title="Edit Community Health Worker" navBar={Header} />

@@ -8,20 +8,26 @@ export default {
     color: '#333',
     fontSize: 15,
     fontWeight: '500',
-    marginBottom: 15,
+    flex: 1,
   },
   itemSelected: {
     backgroundColor: '#337ab7',
   },
-  chwFieldRow: {
+  fieldRow: {
+    height: 40,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 10,
   },
-  chwSelectField: {
+  selectField: {
     borderWidth: 1,
     borderColor: '#CCC',
     borderRadius: 4,
-    marginBottom: 15,
+    marginLeft: 30,
+    flex: 2,
+  },
+  datePickerStyle: {
+    marginLeft: 30,
+    flex: 2,
   },
 };

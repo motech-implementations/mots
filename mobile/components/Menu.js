@@ -154,7 +154,7 @@ class Menu extends Component {
           { this.state.ASSIGN_MODULES_AUTHORITY &&
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
             <TouchableOpacity
-              onPress={() => this.openSection('modulesToUser')}
+              onPress={() => this.openSection('modulesToDistrict')}
               style={styles.menuItem}
             >
               <View style={[styles.iconContainer, { marginLeft: 30 }]}>
