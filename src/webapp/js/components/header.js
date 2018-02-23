@@ -13,7 +13,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
         <span className="icon-bar" />
         <span className="icon-bar" />
       </button>
-      <Link className="navbar-brand" to="/" onClick={hideMenuSmart}>MOTS</Link>
+      <Link className="navbar-brand" to="/" onClick={hideMenuSmart}>Mobile Training and Support</Link>
       <CounterLogout />
     </div>
     <ul className="nav navbar-right top-nav hide-max-r-xsmall-max padding-y-md">

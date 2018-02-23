@@ -30,7 +30,7 @@ class CounterLogout extends Component {
 
   render() {
     return (
-      <div className="counter-logout">
+      <div className="counter-logout hide-max-r-xsmall-max">
         <span className="counter-text">SESSION EXPIRES IN</span>
         <Countdown
           date={Date.now() + ((this.props.counterLogoutTime * 1000))}

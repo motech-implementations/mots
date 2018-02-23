@@ -70,7 +70,7 @@ class Header extends Component {
             size={this.getIconSize()}
           />
         </TouchableOpacity>
-        <Text style={this.getTextStyle()}>MOTS</Text>
+        <Text style={this.getTextStyle()}>Mobile Training and Support</Text>
       </View>
     );
   }
