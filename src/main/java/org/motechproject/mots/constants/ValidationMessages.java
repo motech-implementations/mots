@@ -8,6 +8,7 @@ public final class ValidationMessages {
   public static final String NULL_USER_ENABLED_IS_NULL = "User enabled cannot be null";
 
   public static final String EMPTY_CHW_ID = "CHW Id cannot be empty";
+  public static final String EMPTY_IVR_ID = "IVR Id cannot be empty";
   public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
   public static final String EMPTY_SECOND_NAME = "Surname cannot be empty";
   public static final String EMPTY_GENDER = "Gender cannot be empty";
