@@ -58,7 +58,7 @@ export default class Report extends Component {
   };
 
   fetchXls = () => {
-    const url = `api/reports/templates/${this.state.reportId}/html`;
+    const url = `api/reports/templates/${this.state.reportId}/xls`;
 
     apiClient({
       url,
