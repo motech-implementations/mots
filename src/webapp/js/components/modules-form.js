@@ -98,11 +98,6 @@ const UNIT_FIELDS = {
       callback: 'addQuestion',
     },
   ],
-  unitContinuationQuestion: {
-    type: 'section',
-    label: 'Unit Continuation Question',
-    fields: QUESTION_FIELDS,
-  },
 };
 
 const MODULE_FIELDS = {
@@ -134,11 +129,6 @@ const MODULE_FIELDS = {
     label: 'Add Unit',
     callback: 'addUnit',
   }],
-  startModuleQuestion: {
-    type: 'section',
-    label: 'Start Module Question',
-    fields: QUESTION_FIELDS,
-  },
 };
 
 class ModuleForm extends Component {
