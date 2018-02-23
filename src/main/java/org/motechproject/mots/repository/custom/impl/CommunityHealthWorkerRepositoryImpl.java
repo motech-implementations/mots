@@ -48,10 +48,11 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
-    Pair<Integer, Integer> maxAndFirst = getMaxAndFirstResult(pageable);
+    int pageSize = getPageSize(pageable);
+    int firstResult = getFirstResult(pageable, pageSize);
     List<CommunityHealthWorker> communityHealthWorkers = entityManager.createQuery(query)
-        .setMaxResults(maxAndFirst.getLeft())
-        .setFirstResult(maxAndFirst.getRight())
+        .setMaxResults(pageSize)
+        .setFirstResult(firstResult)
         .getResultList();
 
     return new PageImpl<>(communityHealthWorkers, pageable, count);

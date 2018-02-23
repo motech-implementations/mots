@@ -36,10 +36,12 @@ public abstract class BaseRepositoryImpl {
   @PersistenceContext
   protected EntityManager entityManager;
 
-  protected static Pair<Integer, Integer> getMaxAndFirstResult(Pageable pageable) {
-    int pageSize = null != pageable ? pageable.getPageSize() : 0;
-    int firstResult = null != pageable ? pageable.getPageNumber() * pageSize : 0;
-    return new ImmutablePair<>(pageSize, firstResult);
+  protected int getFirstResult(Pageable pageable, int pageSize) {
+    return null != pageable ? pageable.getPageNumber() * pageSize : 0;
+  }
+
+  protected int getPageSize(Pageable pageable) {
+    return null != pageable ? pageable.getPageSize() : 0;
   }
 
   protected <T> CriteriaQuery<T> addSortProperties(CriteriaQuery<T> query,

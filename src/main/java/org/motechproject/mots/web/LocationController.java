@@ -109,10 +109,10 @@ public class LocationController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchDistricts(
-      @RequestParam(value = NAME_PARAM, required = false) String districtName,
+      @RequestParam(value = NAME_PARAM, required = false) String name,
       Pageable pageable) throws IllegalArgumentException {
 
-    Page<District> districts = locationService.searchDistricts(districtName, pageable);
+    Page<District> districts = locationService.searchDistricts(name, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(districts.getContent());
 
@@ -127,12 +127,12 @@ public class LocationController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchChiefdoms(
-      @RequestParam(value = NAME_PARAM, required = false) String chiefdomName,
+      @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentDistrict,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Chiefdom> chiefdoms =
-        locationService.searchChiefdoms(chiefdomName, parentDistrict, pageable);
+        locationService.searchChiefdoms(name, parentDistrict, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(chiefdoms.getContent());
 
@@ -147,12 +147,12 @@ public class LocationController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchCommunities(
-      @RequestParam(value = NAME_PARAM, required = false) String communityName,
+      @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Community> communities =
-        locationService.searchCommunities(communityName, parentFacility, pageable);
+        locationService.searchCommunities(name, parentFacility, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(communities.getContent());
 
@@ -168,14 +168,14 @@ public class LocationController extends BaseController {
   @ResponseBody
   public Page<LocationPreviewDto> searchFacilities(
       @RequestParam(value = FACILITY_ID_PARAM, required = false) String facilityId,
-      @RequestParam(value = NAME_PARAM, required = false) String facilityName,
+      @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
       @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
       @RequestParam(value = PARENT_PARAM, required = false) String parentChiefdom,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Facility> facilities = locationService.searchFacilities(
-        facilityId, facilityName, facilityType, inchargeFullName, parentChiefdom, pageable);
+        facilityId, name, facilityType, inchargeFullName, parentChiefdom, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
 
