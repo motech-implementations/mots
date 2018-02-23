@@ -39,7 +39,7 @@ public class UnitProgress extends BaseTimestampedEntity {
   private ProgressStatus status;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "unit_id")
+  @JoinColumn(name = "unit_progress_id", nullable = false)
   @Getter
   @Setter
   private Set<QuestionResponse> questionResponses;

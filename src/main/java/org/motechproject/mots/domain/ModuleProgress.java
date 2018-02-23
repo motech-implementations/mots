@@ -52,7 +52,7 @@ public class ModuleProgress extends BaseTimestampedEntity {
   private ProgressStatus status;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "module_id")
+  @JoinColumn(name = "module_progress_id", nullable = false)
   @SortComparator(UnitProgressComparator.class)
   @Getter
   @Setter
