@@ -1,6 +1,5 @@
 package org.motechproject.mots.web;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.motechproject.mots.domain.Chiefdom;
@@ -25,6 +24,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class LocationController extends BaseController {
+
+  public static final String NAME_PARAM = "name";
+  public static final String PARENT_PARAM = "parent";
+  public static final String FACILITY_TYPE_PARAM = "facilityType";
+  public static final String INCHARGE_FULL_NAME_PARAM = "inchargeFullName";
+  public static final String FACILITY_ID_PARAM = "facilityId";
 
   @Autowired
   private LocationService locationService;
@@ -100,84 +105,80 @@ public class LocationController extends BaseController {
    * Finds districts matching all of the provided parameters.
    * If there are no parameters, return all districts.
    */
-  @RequestMapping(value = "district/locations", method = RequestMethod.GET)
+  @RequestMapping(value = "district/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchDistricts(
-      @RequestParam(value = "name", required = false) String districtName,
+      @RequestParam(value = NAME_PARAM, required = false) String districtName,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<District> districts = locationService.searchDistricts(districtName, pageable);
-    Set<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtos(districts.getContent());
+    List<LocationPreviewDto> locationPreviewDtos =
+        locationMapper.toLocationPreviewDtosWithOrder(districts.getContent());
 
-    return new PageImpl<>(new ArrayList<>(locationPreviewDtos),
-        pageable, locationPreviewDtos.size());
+    return new PageImpl<>(locationPreviewDtos, pageable, districts.getTotalElements());
   }
 
   /**
    * Finds chiefdoms matching all of the provided parameters.
    * If there are no parameters, return all chiefdoms.
    */
-  @RequestMapping(value = "chiefdom/locations", method = RequestMethod.GET)
+  @RequestMapping(value = "chiefdom/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchChiefdoms(
-      @RequestParam(value = "name", required = false) String chiefdomName,
-      @RequestParam(value = "parent", required = false) String parentDistrict,
+      @RequestParam(value = NAME_PARAM, required = false) String chiefdomName,
+      @RequestParam(value = PARENT_PARAM, required = false) String parentDistrict,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Chiefdom> chiefdoms =
         locationService.searchChiefdoms(chiefdomName, parentDistrict, pageable);
-    Set<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtos(chiefdoms.getContent());
+    List<LocationPreviewDto> locationPreviewDtos =
+        locationMapper.toLocationPreviewDtosWithOrder(chiefdoms.getContent());
 
-    return new PageImpl<>(new ArrayList<>(locationPreviewDtos),
-        pageable, locationPreviewDtos.size());
+    return new PageImpl<>(locationPreviewDtos, pageable, chiefdoms.getTotalElements());
   }
 
   /**
    * Finds communities matching all of the provided parameters.
    * If there are no parameters, return all communities.
    */
-  @RequestMapping(value = "community/locations", method = RequestMethod.GET)
+  @RequestMapping(value = "community/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchCommunities(
-      @RequestParam(value = "name", required = false) String communityName,
-      @RequestParam(value = "parent", required = false) String parentFacility,
+      @RequestParam(value = NAME_PARAM, required = false) String communityName,
+      @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Community> communities =
         locationService.searchCommunities(communityName, parentFacility, pageable);
-    Set<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtos(communities.getContent());
+    List<LocationPreviewDto> locationPreviewDtos =
+        locationMapper.toLocationPreviewDtosWithOrder(communities.getContent());
 
-    return new PageImpl<>(new ArrayList<>(locationPreviewDtos),
-        pageable, locationPreviewDtos.size());
+    return new PageImpl<>(locationPreviewDtos, pageable, communities.getTotalElements());
   }
 
   /**
    * Finds facilities matching all of the provided parameters.
    * If there are no parameters, return all facilities.
    */
-  @RequestMapping(value = "facility/locations", method = RequestMethod.GET)
+  @RequestMapping(value = "facility/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<LocationPreviewDto> searchFacilities(
-      @RequestParam(value = "facilityId", required = false) String facilityId,
-      @RequestParam(value = "name", required = false) String facilityName,
-      @RequestParam(value = "facilityType", required = false) String facilityType,
-      @RequestParam(value = "inchargeFullName", required = false) String inchargeFullName,
-      @RequestParam(value = "parent", required = false) String parentChiefdom,
+      @RequestParam(value = FACILITY_ID_PARAM, required = false) String facilityId,
+      @RequestParam(value = NAME_PARAM, required = false) String facilityName,
+      @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
+      @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
+      @RequestParam(value = PARENT_PARAM, required = false) String parentChiefdom,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Facility> facilities = locationService.searchFacilities(
         facilityId, facilityName, facilityType, inchargeFullName, parentChiefdom, pageable);
-    Set<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtos(facilities.getContent());
+    List<LocationPreviewDto> locationPreviewDtos =
+        locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
 
-    return new PageImpl<>(new ArrayList<>(locationPreviewDtos),
-        pageable, locationPreviewDtos.size());
+    return new PageImpl<>(locationPreviewDtos, pageable, facilities.getTotalElements());
   }
 }

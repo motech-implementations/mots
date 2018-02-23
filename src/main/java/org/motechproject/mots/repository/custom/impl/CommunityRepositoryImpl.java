@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.repository.custom.CommunityRepositoryCustom;
+import org.motechproject.mots.web.LocationController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -88,7 +89,7 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
     Path<T> path;
     while (iterator.hasNext()) {
       order = iterator.next();
-      if (order.getProperty().equals("parent")) {
+      if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
         path = root.get(FACILITY).get(NAME);
       } else {
         path = root.get(order.getProperty());

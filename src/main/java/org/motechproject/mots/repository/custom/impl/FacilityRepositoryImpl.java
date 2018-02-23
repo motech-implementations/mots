@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.repository.custom.FacilityRepositoryCustom;
+import org.motechproject.mots.web.LocationController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -80,9 +81,9 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     if (inchargeFullName != null) {
       predicate = builder.and(predicate, builder.like(root.get(INCHARGE).get(FIRST_NAME),
           '%' + inchargeFullName + '%'));
-      predicate = builder.and(predicate, builder.like(root.get(INCHARGE).get(SECOND_NAME),
+      predicate = builder.or(predicate, builder.like(root.get(INCHARGE).get(SECOND_NAME),
           '%' + inchargeFullName + '%'));
-      predicate = builder.and(predicate, builder.like(root.get(INCHARGE).get(OTHER_NAME),
+      predicate = builder.or(predicate, builder.like(root.get(INCHARGE).get(OTHER_NAME),
           '%' + inchargeFullName + '%'));
     }
     if (parentChiefdom != null) {
@@ -110,11 +111,11 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     Path<T> path;
     while (iterator.hasNext()) {
       order = iterator.next();
-      if (order.getProperty().equals("parent")) {
-        path = root.get(DISTRICT).get(NAME);
+      if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
+        path = root.get(CHIEFDOM).get(NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
-      } else if (order.getProperty().equals("inchargeFullName")) {
+      } else if (order.getProperty().equals(LocationController.INCHARGE_FULL_NAME_PARAM)) {
         path = root.get(INCHARGE).get(FIRST_NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
@@ -123,6 +124,10 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
         orders.add(mountedOrder);
         path = root.get(INCHARGE).get(OTHER_NAME);
         mountedOrder = getSortDirection(builder, order, path);
+        orders.add(mountedOrder);
+      } else if (order.getProperty().equals(LocationController.FACILITY_TYPE_PARAM)) {
+        path = root.get(FACILITY_TYPE);
+        Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else {
         path = root.get(order.getProperty());

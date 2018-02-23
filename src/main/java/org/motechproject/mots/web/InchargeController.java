@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class InchargeController extends BaseController {
 
+  public static final String FACILITY_NAME_PARAM = "facilityName";
+
   @Autowired
   private InchargeService inchargeService;
 
@@ -56,7 +58,7 @@ public class InchargeController extends BaseController {
       @RequestParam(value = "otherName", required = false) String otherName,
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "email", required = false) String email,
-      @RequestParam(value = "facilityName", required = false) String facilityName,
+      @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Incharge> incharges = inchargeService.searchIncharges(firstName, secondName, otherName,

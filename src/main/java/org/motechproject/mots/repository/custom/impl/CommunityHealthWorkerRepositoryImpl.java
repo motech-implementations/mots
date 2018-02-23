@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.repository.custom.CommunityHealthWorkerRepositoryCustom;
+import org.motechproject.mots.web.CommunityHealthWorkerController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -133,7 +134,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
     Path<T> path;
     while (iterator.hasNext()) {
       order = iterator.next();
-      if (order.getProperty().equals("communityName")) {
+      if (order.getProperty().equals(CommunityHealthWorkerController.COMMUNITY_NAME_PARAM)) {
         path = root.get(COMMUNITY).get(NAME);
       } else {
         path = root.get(order.getProperty());

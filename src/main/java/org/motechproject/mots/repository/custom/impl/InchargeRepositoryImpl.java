@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import org.apache.commons.lang3.tuple.Pair;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.repository.custom.InchargeRepositoryCustom;
+import org.motechproject.mots.web.InchargeController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -110,7 +111,7 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
     Path<T> path;
     while (iterator.hasNext()) {
       order = iterator.next();
-      if (order.getProperty().equals("facilityName")) {
+      if (order.getProperty().equals(InchargeController.FACILITY_NAME_PARAM)) {
         path = root.get(FACILITY).get(NAME);
       } else {
         path = root.get(order.getProperty());

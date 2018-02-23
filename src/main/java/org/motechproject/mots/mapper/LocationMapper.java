@@ -1,5 +1,6 @@
 package org.motechproject.mots.mapper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,23 @@ public interface LocationMapper {
     if (locations != null) {
       locationPreviewDtos = locations.stream()
           .map(LocationMapper.INSTANCE::toLocationPreviewDto).collect(Collectors.toSet());
+    }
+
+    return locationPreviewDtos;
+  }
+
+  /**
+   * Convert location list to location preview dto list.
+   * @param locations list of locations of any type
+   * @return list of community dtos
+   */
+  default List<LocationPreviewDto> toLocationPreviewDtosWithOrder(
+      List<? extends Location> locations) {
+    List<LocationPreviewDto> locationPreviewDtos = new ArrayList<>();
+
+    if (locations != null) {
+      locationPreviewDtos = locations.stream()
+          .map(LocationMapper.INSTANCE::toLocationPreviewDto).collect(Collectors.toList());
     }
 
     return locationPreviewDtos;
