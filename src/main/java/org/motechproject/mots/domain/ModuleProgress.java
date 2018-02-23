@@ -35,7 +35,7 @@ public class ModuleProgress extends BaseTimestampedEntity {
   @Setter
   private CommunityHealthWorker communityHealthWorker;
 
-  @Column(name = "current_unit_number")
+  @Column(name = "current_unit_number", nullable = false)
   @Getter
   @Setter
   private Integer currentUnitNumber;
@@ -68,7 +68,36 @@ public class ModuleProgress extends BaseTimestampedEntity {
     this.module = module;
     this.status = ProgressStatus.NOT_STARTED;
     this.interrupted = false;
+    this.currentUnitNumber = 0;
     this.unitsProgresses = module.getUnits().stream().map(UnitProgress::new).collect(
         Collectors.toList());
+  }
+
+  public UnitProgress getCurrentUnitProgress() {
+    return unitsProgresses.get(currentUnitNumber);
+  }
+
+  public boolean isCompleted() {
+    return ProgressStatus.COMPLETED.equals(status);
+  }
+
+  /**
+   * Change module status to in progress.
+   */
+  public void startModule() {
+    if (ProgressStatus.NOT_STARTED.equals(status)) {
+      status = ProgressStatus.IN_PROGRESS;
+    }
+  }
+
+  /**
+   * Change current unit, if no more units change status to completed.
+   */
+  public void nextUnit() {
+    if (currentUnitNumber < module.getUnits().size() - 1) {
+      currentUnitNumber++;
+    } else {
+      status = ProgressStatus.COMPLETED;
+    }
   }
 }
