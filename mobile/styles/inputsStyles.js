@@ -13,9 +13,11 @@ export default {
   labelStyle: {
     paddingLeft: 10,
     fontSize: 16,
+    fontWeight: '500',
     flex: 1,
   },
   labelStyleSmall: {
+    fontWeight: '300',
     fontSize: 14,
   },
   iconInputStyle: {

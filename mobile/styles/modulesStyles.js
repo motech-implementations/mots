@@ -4,12 +4,6 @@ export default {
     backgroundColor: '#FFF',
     margin: 15,
   },
-  labelText: {
-    color: '#333',
-    fontSize: 15,
-    fontWeight: '500',
-    flex: 1,
-  },
   itemSelected: {
     backgroundColor: '#337ab7',
   },
@@ -18,6 +12,7 @@ export default {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
+    flex: 1,
   },
   selectField: {
     borderWidth: 1,

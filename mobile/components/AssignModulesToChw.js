@@ -4,6 +4,7 @@ import {
   Alert,
   Text,
   ScrollView,
+  PixelRatio,
 } from 'react-native';
 import { Select, Option } from 'react-native-chooser';
 import { TagSelect } from 'react-native-tag-select';
@@ -13,13 +14,15 @@ import { connect } from 'react-redux';
 
 import apiClient from '../utils/api-client';
 import formsStyles from '../styles/formsStyles';
+import inputsStyles from '../styles/inputsStyles';
 import modulesStyles from '../styles/modulesStyles';
 import Button from './Button';
 import getContainerStyle from '../utils/styleUtils';
 
 const { formHeader, buttonContainer } = formsStyles;
+const { labelStyle, labelStyleSmall } = inputsStyles;
 const {
-  modulesContainer, labelText, itemSelected,
+  modulesContainer, itemSelected,
   fieldRow, selectField,
 } = modulesStyles;
 
@@ -139,7 +142,9 @@ class AssignModulesToChw extends Component {
         <Text style={formHeader}>Assign Modules to a CHW</Text>
         <ScrollView style={modulesContainer}>
           <View style={fieldRow}>
-            <Text style={labelText}>Community Health Worker:</Text>
+            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>
+              Health Worker:
+            </Text>
             <Select
               onSelect={this.onSelect}
               defaultText={this.state.selectedChw.label || 'Click to Select'}
@@ -155,7 +160,14 @@ class AssignModulesToChw extends Component {
           </View>
           {this.state.showModuleButtons &&
           <View>
-            <Text style={[labelText, { marginBottom: 15 }]}>Select modules to assign:</Text>
+            <Text style={[
+              labelStyle,
+              PixelRatio.get() < 2 && labelStyleSmall,
+              { marginBottom: 15 },
+              ]}
+            >
+              Select modules to assign:
+            </Text>
             <TagSelect
               data={this.state.availableModulesList}
               ref={(module) => { this.module = module; }}
