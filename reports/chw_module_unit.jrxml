@@ -238,8 +238,8 @@
 	<detail>
 		<band height="25">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField>
-				<reportElement x="0" y="0" width="80" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="80" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -251,8 +251,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="80" y="0" width="80" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="80" y="0" width="80" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -264,8 +264,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="160" y="0" width="80" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="160" y="0" width="80" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -277,8 +277,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="240" y="0" width="80" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="240" y="0" width="80" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -290,8 +290,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="320" y="0" width="80" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="320" y="0" width="80" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -303,8 +303,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="480" y="0" width="75" height="25" uuid="ba48f274-2222-44d2-a190-0116192044f9">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="480" y="0" width="75" height="25" uuid="ba48f274-2222-44d2-a190-0116192044f9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -316,8 +316,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="400" y="0" width="80" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="400" y="0" width="80" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
