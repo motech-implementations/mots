@@ -88,7 +88,7 @@
  JOIN module ON module.id = dal.module_id
  JOIN user ON user.id = dal.owner_id
  JOIN district ON dal.district_id = district.id
- ORDER BY dateOfPush]]>
+ ORDER BY dateOfPush DESC]]>
 	</queryString>
 	<field name="district" class="java.lang.String"/>
 	<field name="username" class="java.lang.String"/>
@@ -192,7 +192,7 @@
 				<text><![CDATA[End Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="470" y="0" width="90" height="25" uuid="aee7b737-f502-40c3-bf78-7950198baca3">
+				<reportElement x="470" y="0" width="85" height="25" uuid="aee7b737-f502-40c3-bf78-7950198baca3">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -211,8 +211,8 @@
 	<detail>
 		<band height="25">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField>
-				<reportElement x="0" y="0" width="80" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="80" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -224,8 +224,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="80" y="0" width="110" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="80" y="0" width="110" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -237,8 +237,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{module}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy-MM-dd HH:mm:ss">
-				<reportElement x="190" y="0" width="120" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="190" y="0" width="120" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -251,8 +251,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dateOfPush}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy-MM-dd">
-				<reportElement x="310" y="0" width="80" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="310" y="0" width="80" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -264,8 +264,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy-MM-dd">
-				<reportElement x="390" y="0" width="80" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="390" y="0" width="80" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -277,8 +277,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{endDate}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="470" y="0" width="90" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="470" y="0" width="85" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
