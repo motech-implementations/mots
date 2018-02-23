@@ -163,7 +163,6 @@ class ModulesManage extends Component {
       type: 'MODULE',
       status: 'DRAFT',
       children: [],
-      startModuleQuestion: { type: 'QUESTION' },
       expanded: true,
     };
 
@@ -250,7 +249,6 @@ class ModulesManage extends Component {
               type: 'UNIT',
               allowReplay: false,
               children: [],
-              unitContinuationQuestion: { type: 'QUESTION' },
               expanded: true,
             }],
           },
