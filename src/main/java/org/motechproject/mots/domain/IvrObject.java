@@ -14,7 +14,7 @@ import org.motechproject.mots.validate.ModuleReleaseCheck;
 @NoArgsConstructor
 public abstract class IvrObject extends BaseTimestampedEntity {
 
-  @NotBlank(message = ValidationMessages.EMPTY_CHW_ID, groups = ModuleReleaseCheck.class)
+  @NotBlank(message = ValidationMessages.EMPTY_IVR_ID, groups = ModuleReleaseCheck.class)
   @Column(name = "ivr_id")
   @Getter
   @Setter
