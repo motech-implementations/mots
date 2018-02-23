@@ -1,11 +1,8 @@
 package org.motechproject.mots.repository.custom.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -124,25 +121,13 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   }
 
   @Override
-  protected <T> CriteriaQuery<T> addSortProperties(CriteriaQuery<T> query,
-      Root root, Pageable pageable) {
-    CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-    List<Order> orders = new ArrayList<>();
-    Iterator<Sort.Order> iterator = pageable.getSort().iterator();
-
-    Sort.Order order;
-    Path<T> path;
-    while (iterator.hasNext()) {
-      order = iterator.next();
-      if (order.getProperty().equals(CommunityHealthWorkerController.COMMUNITY_NAME_PARAM)) {
-        path = root.get(COMMUNITY).get(NAME);
-      } else {
-        path = root.get(order.getProperty());
-      }
-
-      Order mountedOrder = getSortDirection(builder, order, path);
-      orders.add(mountedOrder);
+  protected Path getPath(Root root, Sort.Order order) {
+    Path path;
+    if (order.getProperty().equals(CommunityHealthWorkerController.COMMUNITY_NAME_PARAM)) {
+      path = root.get(COMMUNITY).get(NAME);
+    } else {
+      path = root.get(order.getProperty());
     }
-    return query.orderBy(orders);
+    return path;
   }
 }

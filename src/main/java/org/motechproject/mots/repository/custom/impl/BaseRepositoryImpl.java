@@ -52,12 +52,16 @@ public abstract class BaseRepositoryImpl {
     Path<T> path;
     while (iterator.hasNext()) {
       order = iterator.next();
-      path = root.get(order.getProperty());
+      path = getPath(root, order);
 
       Order mountedOrder = getSortDirection(builder, order, path);
       orders.add(mountedOrder);
     }
     return query.orderBy(orders);
+  }
+
+  protected Path getPath(Root root, Sort.Order order) {
+    return root.get(order.getProperty());
   }
 
   protected static <T> Order getSortDirection(CriteriaBuilder builder, Sort.Order order,
