@@ -4,6 +4,7 @@ import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
@@ -27,7 +28,8 @@ public class ChwDtoChwIdUniquenessValidator implements
       if (existingChw.isPresent()
           && !StringUtils.equals(chwDto.getId(), existingChw.get().getId().toString())) {
         context.disableDefaultConstraintViolation();
-        ValidationUtils.addDefaultViolationMessageToInnerField(context, CHW_ID);
+        ValidationUtils.addDefaultViolationMessageToInnerField(context, CHW_ID,
+            String.format(ValidationMessages.NOT_UNIQUE_CHW_ID, existingChw.get().getChwId()));
         return false;
       }
     }

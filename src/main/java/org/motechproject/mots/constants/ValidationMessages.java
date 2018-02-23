@@ -41,7 +41,8 @@ public final class ValidationMessages {
 
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
   public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";
-  public static final String NOT_UNIQUE_CHW_ID = "CHW Id is not unique";
+  public static final String NOT_UNIQUE_CHW_ID
+      = "The Community Health Worker with id %s already exists";
 
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
   public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";

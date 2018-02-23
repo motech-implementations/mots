@@ -25,7 +25,20 @@ public final class ValidationUtils {
    */
   public static void addDefaultViolationMessageToInnerField(ConstraintValidatorContext context,
       String fieldName) {
-    context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
+    addDefaultViolationMessageToInnerField(context, fieldName,
+        context.getDefaultConstraintMessageTemplate());
+  }
+
+  /**
+   * Add the custom violation message as the error message for a inner field.
+   *
+   * @param context is the validation context
+   * @param fieldName is the name of the field inner the object to which the annotation was applied
+   * @param message is the violation message that will be reported as the error message
+   */
+  public static void addDefaultViolationMessageToInnerField(ConstraintValidatorContext context,
+      String fieldName, String message) {
+    context.buildConstraintViolationWithTemplate(message)
         .addPropertyNode(fieldName)
         .addConstraintViolation();
   }
