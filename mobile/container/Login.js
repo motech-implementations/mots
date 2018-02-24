@@ -38,7 +38,7 @@ class Login extends Component {
   }
 
   onLoginFail() {
-    this.setState({ error: 'Bad Credentials', loading: false });
+    this.setState({ error: 'Wrong username or password. Please try again.', loading: false });
   }
 
   renderButton() {
