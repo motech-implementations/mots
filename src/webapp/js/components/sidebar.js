@@ -185,7 +185,7 @@ export default class SideBar extends Component {
         <li className="border-none">
           <Link to="/users" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
-            <span className="icon-text">Users list</span>
+            <span className="icon-text">User list</span>
           </Link>
         </li>
         }
