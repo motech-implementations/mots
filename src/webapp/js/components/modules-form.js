@@ -26,14 +26,6 @@ const QUESTION_FIELDS = {
     fieldLabel: 'Choice',
     defaultValue: { isCorrect: false },
     fields: {
-      ivrPressedKey: {
-        label: 'IVR Pressed Key',
-        required: true,
-        minVal: 0,
-        attributes: {
-          type: 'number',
-        },
-      },
       ivrName: {
         label: 'IVR Name',
       },
