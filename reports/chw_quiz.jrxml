@@ -77,13 +77,13 @@
 		</box>
 	</style>
 	<queryString>
-		<![CDATA[SELECT
+		<![CDATA[SELECT 
   CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) AS chwId,
   chw.phone_number AS phone,
   module.name AS module,
   unit.name AS unit,
   COUNT(*) AS total,
-  COUNT(is_correct) AS correct,
+  SUM(is_correct = TRUE) AS correct,
   chiefdom.name AS chiefdom,
   district.name AS district,
   facility.name AS phu
