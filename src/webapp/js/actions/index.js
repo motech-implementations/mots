@@ -45,7 +45,7 @@ export function signinUser({ username, password }, callback) {
         callback();
       })
       .catch(() => {
-        dispatch(authError('Bad Credentials'));
+        dispatch(authError('Wrong username or password. Please try again.'));
       });
   };
 }
