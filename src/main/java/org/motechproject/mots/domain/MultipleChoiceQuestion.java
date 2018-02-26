@@ -19,7 +19,7 @@ public class MultipleChoiceQuestion extends CallFlowElement {
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "question_id")
-  @OrderBy("ivr_pressed_key ASC")
+  @OrderBy("choice_id ASC")
   @Getter
   @Valid
   private List<Choice> choices;
