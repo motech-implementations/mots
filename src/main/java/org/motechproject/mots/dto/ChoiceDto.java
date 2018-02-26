@@ -1,7 +1,5 @@
 package org.motechproject.mots.dto;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessages;
@@ -13,12 +11,6 @@ public class ChoiceDto {
   @Getter
   @Setter
   private String id;
-
-  @Min(value = 0, message = ValidationMessages.NEGATIVE_IVR_PRESSED_KEY)
-  @NotNull(message = ValidationMessages.NULL_IVR_PRESSED_KEY)
-  @Getter
-  @Setter
-  private Integer ivrPressedKey;
 
   @Getter
   @Setter
