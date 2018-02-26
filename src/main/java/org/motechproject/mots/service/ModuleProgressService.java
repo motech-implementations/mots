@@ -96,7 +96,7 @@ public class ModuleProgressService {
 
       // main menu on Voto should start with a tree that checks if any module is available for CHW
       if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-        throw new CourseProgressException("Invalid firs main menu block");
+        throw new CourseProgressException("Invalid first main menu block");
       }
 
       // skip the check modules availability logic blocks
