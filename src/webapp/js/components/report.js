@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import FileDownload from 'react-file-download';
+import FileDownload from 'js-file-download';
 import PropTypes from 'prop-types';
 import DOMPurify from 'dompurify';
 import apiClient from '../utils/api-client';
