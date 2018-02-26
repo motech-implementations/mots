@@ -12,6 +12,7 @@ import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
 import org.motechproject.mots.domain.enums.Language;
+import org.motechproject.mots.dto.VotoCallLogDto;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.MotsException;
@@ -56,6 +57,7 @@ public class IvrService {
   private static final String ADD_TO_GROUPS_URL = "/subscribers/groups";
   private static final String DELETE_GROUPS_URL = "/subscribers/delete/groups";
   private static final String SEND_MESSAGE_URL = "/outgoing_calls";
+  private static final String GET_CALL_LOGS_URL = "/trees/%s/delivery_logs/%s";
 
   @Value("${mots.ivrApiKey}")
   private String ivrApiKey;
@@ -65,6 +67,9 @@ public class IvrService {
 
   @Autowired
   private IvrConfigService ivrConfigService;
+
+  @Autowired
+  private ModuleProgressService moduleProgressService;
 
   private RestOperations restTemplate = new RestTemplate();
   private ObjectMapper mapper = new ObjectMapper();
@@ -107,7 +112,7 @@ public class IvrService {
     MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name,
         preferredLanguage);
 
-    String url = getAbsoluteUrl(String.format(MODIFY_SUBSCRIBERS_URL, ivrId));
+    String url = getUrlWithParams(MODIFY_SUBSCRIBERS_URL, ivrId);
     sendVotoRequest(url, params, new ParameterizedTypeReference<VotoResponseDto<String>>() {},
         HttpMethod.PUT);
   }
@@ -145,6 +150,39 @@ public class IvrService {
       sendVotoRequest(getAbsoluteUrl(DELETE_GROUPS_URL), params,
               new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.DELETE);
     }
+  }
+
+  /**
+   * Save IVR Call Detail Record.
+   * @param callDetailRecord callDetailRecord to be saved
+   * @param configName name of the IVR config
+   */
+  public void saveCallDetailRecord(CallDetailRecord callDetailRecord,
+      String configName) throws IvrException {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+
+    setConfigFields(callDetailRecord, ivrConfig, configName);
+    callDetailRecordRepository.save(callDetailRecord);
+
+    CallStatus callStatus = callDetailRecord.getCallStatus();
+    boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
+
+    if (CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted) {
+      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord, ivrConfig);
+
+      moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+    }
+  }
+
+  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord,
+      IvrConfig ivrConfig) throws IvrException {
+
+    String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, ivrConfig.getVotoMainTreeId(),
+        callDetailRecord.getCallLogId());
+    VotoResponseDto<VotoCallLogDto> response = sendVotoRequest(logUrl, new LinkedMultiValueMap<>(),
+        new ParameterizedTypeReference<VotoResponseDto<VotoCallLogDto>>() {}, HttpMethod.POST);
+
+    return response.getData();
   }
 
   private MultiValueMap<String, String> prepareBasicSubscriberParamsToSend(String phoneNumber,
@@ -226,14 +264,8 @@ public class IvrService {
     }
   }
 
-  public void saveCallDetailRecord(CallDetailRecord callDetailRecord, String configName) {
-    setConfigFields(callDetailRecord, configName);
-    callDetailRecordRepository.save(callDetailRecord);
-  }
-
-  private void setConfigFields(CallDetailRecord callDetailRecord, String configName) {
-    IvrConfig ivrConfig = ivrConfigService.getConfig();
-
+  private void setConfigFields(CallDetailRecord callDetailRecord,
+      IvrConfig ivrConfig, String configName) {
     Map<String, String> ivrData = callDetailRecord.getIvrData();
 
     String ivrCallStatus = ivrData.get(ivrConfig.getCallStatusField());
@@ -261,6 +293,10 @@ public class IvrService {
 
   private String getAbsoluteUrl(String relativeUrl) {
     return ivrConfigService.getConfig().getBaseUrl() + relativeUrl;
+  }
+
+  private String getUrlWithParams(String url, String... params) {
+    return getAbsoluteUrl(String.format(url, (Object[]) params));
   }
 
   private String boolToIntAsString(Boolean bool) {
