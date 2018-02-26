@@ -11,6 +11,9 @@ import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class UserController extends BaseController {
+
+  public static final String ROLE_PARAM = "role";
 
   @Autowired
   private UserService userService;
@@ -42,6 +47,26 @@ public class UserController extends BaseController {
     Iterable<User> users = userService.getUsers();
 
     return userMapper.toDtos(users);
+  }
+
+  /**
+   * Finds users matching all of the provided parameters.
+   * If there are no parameters, return all users.
+   */
+  @RequestMapping(value = "/user/search", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Page<UserDto> searchUsers(
+      @RequestParam(value = "username", required = false) String username,
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = ROLE_PARAM, required = false) String role,
+      Pageable pageable) throws IllegalArgumentException {
+
+    Page<User> users = userService.searchUsers(username, email, name, role, pageable);
+    List<UserDto> userDtos = userMapper.toDtos(users.getContent());
+
+    return new PageImpl<>(userDtos, pageable, users.getTotalElements());
   }
 
   /**

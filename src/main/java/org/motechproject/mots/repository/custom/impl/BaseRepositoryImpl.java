@@ -30,6 +30,8 @@ public abstract class BaseRepositoryImpl {
   protected static final String COMMUNITY = "community";
   protected static final String INCHARGE = "incharge";
   protected static final String EMAIL = "email";
+  protected static final String USERNAME = "username";
+  protected static final String ROLES = "roles";
 
   @PersistenceContext
   protected EntityManager entityManager;

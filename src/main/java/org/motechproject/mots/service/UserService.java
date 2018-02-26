@@ -9,6 +9,8 @@ import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.repository.RoleRepository;
 import org.motechproject.mots.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,16 @@ public class UserService {
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public Iterable<User> getUsers() {
     return userRepository.findAll();
+  }
+
+  /**
+   * Finds users matching all of the provided parameters.
+   * If there are no parameters, return all users.
+   */
+  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
+  public Page<User> searchUsers(String username, String email, String name, String role,
+      Pageable pageable) throws IllegalArgumentException {
+    return userRepository.search(username, email, name, role, pageable);
   }
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
