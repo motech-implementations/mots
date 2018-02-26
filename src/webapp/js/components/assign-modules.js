@@ -99,7 +99,11 @@ export default class AssignModules extends Component {
   }
 
   handleChwChange = (selectedChw) => {
-    this.setState({ selectedChw: selectedChw.value }, () => this.fetchChwModules());
+    if (selectedChw) {
+      this.setState({ selectedChw: selectedChw.value }, () => this.fetchChwModules());
+    } else {
+      this.setState({ selectedChw: '' });
+    }
   };
 
   handleModuleChange(selectedModules) {
@@ -117,35 +121,37 @@ export default class AssignModules extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Assign Modules</h1>
-        <Async
-          name="form-field-name"
-          value={this.state.selectedChw}
-          loadOptions={this.fetchChwsInfo}
-          onChange={this.handleChwChange}
-          placeholder="Select a Community Health Worker"
-          className="margin-bottom-md"
-        />
-        <DualListBox
-          canFilter
-          options={availableModulesList}
-          selected={selectedModules}
-          filterPlaceholder="Filter..."
-          onChange={this.handleModuleChange}
-          disabled={this.state.selectedChw === ''}
-        />
-        <form
-          className="form-horizontal"
-          onSubmit={this.sendAssignedModules}
-        >
-          <button
-            type="submit"
-            className="btn btn-primary btn-block
-                    margin-x-md padding-x-sm"
-            disabled={this.areModulesEqual()}
+        <div className="col-md-8 col-md-offset-2">
+          <Async
+            name="form-field-name"
+            value={this.state.selectedChw}
+            loadOptions={this.fetchChwsInfo}
+            onChange={this.handleChwChange}
+            placeholder="Select a Community Health Worker"
+            className="margin-bottom-md"
+          />
+          <DualListBox
+            canFilter
+            options={availableModulesList}
+            selected={selectedModules}
+            filterPlaceholder="Filter..."
+            onChange={this.handleModuleChange}
+            disabled={this.state.selectedChw === ''}
+          />
+          <form
+            className="form-horizontal"
+            onSubmit={this.sendAssignedModules}
           >
-            <h4>Assign!</h4>
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="btn btn-primary btn-block
+                      margin-x-md padding-x-sm"
+              disabled={this.areModulesEqual()}
+            >
+              <h4>Assign!</h4>
+            </button>
+          </form>
+        </div>
       </div>
     );
   }
