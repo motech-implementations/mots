@@ -4,19 +4,12 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.motechproject.mots.BaseIntegrationTest;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest
-@DirtiesContext
-@RunWith(SpringRunner.class)
-public abstract class BaseCrudRepositoryIntegrationTest<T extends BaseTimestampedEntity> {
+public abstract class BaseCrudRepositoryIntegrationTest<T extends BaseTimestampedEntity>
+    extends BaseIntegrationTest {
 
   abstract CrudRepository<T, UUID> getRepository();
 
