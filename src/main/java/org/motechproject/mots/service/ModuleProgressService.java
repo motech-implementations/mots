@@ -315,10 +315,10 @@ public class ModuleProgressService {
   }
 
   private Integer getNumberOfAttempts(VotoBlockDto blockDto) {
-    Integer numberOfAttempts = 0;
+    Integer numberOfAttempts = 1;
 
     if (StringUtils.isNotBlank(blockDto.getNumberOfRepeats())) {
-      numberOfAttempts = Integer.valueOf(blockDto.getNumberOfRepeats());
+      numberOfAttempts = Integer.valueOf(blockDto.getNumberOfRepeats()) + 1;
     }
 
     return numberOfAttempts;
