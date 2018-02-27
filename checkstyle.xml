@@ -280,5 +280,9 @@
     <module name="WhitespaceAfter"/>
 
     <module name="RedundantModifier"/>
+
+    <module name="SuppressWarningsHolder"/>
   </module>
+
+  <module name="SuppressWarningsFilter"/>
 </module>

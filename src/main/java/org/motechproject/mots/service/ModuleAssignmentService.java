@@ -77,24 +77,26 @@ public class ModuleAssignmentService {
    * Assign modules to CHW.
    * @param assignedModules modules assigned for CHW
    */
+  @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   @Transactional
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public void assignModules(AssignedModules assignedModules) {
     AssignedModules existingAssignedModules =
         getAssignedModules(assignedModules.getHealthWorker().getId());
 
-    Set<Module> oldModules = existingAssignedModules.getModules();
-    Set<Module> newModules = assignedModules.getModules();
+    Set<Module> oldModules = new HashSet<>(existingAssignedModules.getModules());
 
-    Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
-    Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
-
-    existingAssignedModules.setModules(newModules);
+    existingAssignedModules.setModules(assignedModules.getModules());
 
     repository.save(existingAssignedModules);
 
     entityManager.flush();
     entityManager.refresh(existingAssignedModules);
+
+    Set<Module> newModules = new HashSet<>(existingAssignedModules.getModules());
+
+    Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
+    Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
 
     String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
 
