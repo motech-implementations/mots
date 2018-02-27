@@ -1,5 +1,5 @@
 import { FETCH_CHWS, FETCH_INCHARGES, CREATE_HEALTH_WORKER_REQUEST,
-  CREATE_HEALTH_WORKER_SUCCESS, FETCH_USERS, FETCH_ERROR } from '../../actions/types';
+  CREATE_HEALTH_WORKER_SUCCESS, FETCH_USERS, FETCH_ERROR, FETCH_ROLES } from '../../actions/types';
 import initialTablesData from './tables_data_initial_state';
 
 export default function (state = initialTablesData, action) {
@@ -38,6 +38,11 @@ export default function (state = initialTablesData, action) {
           ...user,
           roleName: user.roles ? user.roles[0].name : '',
         })) || [],
+      };
+    case FETCH_ROLES:
+      return {
+        ...state,
+        roles: action.payload,
       };
     case FETCH_ERROR:
       return {

@@ -65,7 +65,7 @@ export default class FormField extends Component {
           </FieldType>
         </FieldWithLabel>
         <View>
-          <Text style={{ color: 'red' }}>{ touched ? error : '' }</Text>
+          <Text style={{ color: 'red', paddingLeft: 10 }}>{ touched ? error : '' }</Text>
         </View>
       </View>
     );

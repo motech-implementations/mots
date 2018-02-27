@@ -31,7 +31,7 @@ const COLUMNS = [
       <View>
         { cell.canWrite &&
         <Button
-          onPress={() => Actions.home()}
+          onPress={() => Actions.userEdit({ userId: cell.value })}
           iconName="pencil-square-o"
           iconColor="#FFF"
           buttonColor="#337ab7"

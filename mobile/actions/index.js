@@ -6,7 +6,7 @@ import parseJwt from '../utils/encodeUtils';
 import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME, FETCH_USERS,
+  SET_COUNTER_LOGOUT_TIME, FETCH_USERS, CREATE_USER, SAVE_USER, FETCH_ROLES,
 } from './types';
 
 const BASE_URL = '/api';
@@ -152,12 +152,42 @@ export function fetchLocations() {
   };
 }
 
+export function fetchRoles() {
+  const url = '/api/role';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_ROLES,
+    payload: request,
+  };
+}
+
 export function fetchUsers() {
   const url = `${BASE_URL}/user`;
   const request = apiClient.get(url);
 
   return {
     type: FETCH_USERS,
+    payload: request,
+  };
+}
+
+export function createUser(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/user`, values);
+  request.then(result => callback(result));
+
+  return {
+    type: CREATE_USER,
+    payload: request,
+  };
+}
+
+export function saveUser(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/user/${values.id}`, values);
+  request.then(result => callback(result));
+
+  return {
+    type: SAVE_USER,
     payload: request,
   };
 }

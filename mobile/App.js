@@ -16,6 +16,8 @@ import HealthWorkersNew from './components/HealthWorkersNew';
 import SynchronizeView from './components/SynchronizeView';
 import HealthWorkersEdit from './components/HealthWorkersEdit';
 import Users from './components/Users';
+import UserNew from './components/UserNew';
+import UserEdit from './components/UserEdit';
 import Store from './store';
 import AppDrawer from './components/AppDrawer';
 import Login from './container/Login';
@@ -46,6 +48,8 @@ const App = () => (
             <Scene key="chwsNew" component={HealthWorkersNew} title="Add Community Health Worker" navBar={Header} />
             <Scene key="chwsEdit" component={HealthWorkersEdit} title="Edit Community Health Worker" navBar={Header} />
             <Scene key="users" component={Users} title="User List" hideNavBar={false} navBar={Header} />
+            <Scene key="userNew" component={UserNew} title="Add New User" navBar={Header} />
+            <Scene key="userEdit" component={UserEdit} title="Edit User" navBar={Header} />
             <Scene key="synchronizeView" component={SynchronizeView} title="Synchronize" navBar={Header} />
           </Scene>
         </Scene>
