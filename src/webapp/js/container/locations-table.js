@@ -18,7 +18,7 @@ const COLUMNS = [
     Header: 'Name',
     accessor: 'name',
   }, {
-    Header: 'Parent District',
+    Header: 'District',
     accessor: 'parent',
   },
 ];
