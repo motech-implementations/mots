@@ -211,7 +211,7 @@ class Menu extends Component {
             <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
               <View>
                 <TouchableOpacity
-                  onPress={() => this.openSection('home')}
+                  onPress={() => this.openSection('userNew')}
                   style={styles.menuItem}
                 >
                   <View style={[styles.iconContainer, { marginLeft: 30 }]}>
