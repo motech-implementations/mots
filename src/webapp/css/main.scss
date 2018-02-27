@@ -333,3 +333,11 @@ a, a:hover, a:focus, a:active, a:visited {
 .tree-node-non-editable {
   background-color: lightgray;
 }
+
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIPnI+py+0/hJzz0IruwjsVADs=);
+  background-repeat: no-repeat;
+  background-position: 96% 42%;
+}
