@@ -1,5 +1,7 @@
 package org.motechproject.mots.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +42,8 @@ public class ModuleProgressService {
   private static final int QUIT_RESPONSE = 1;
   private static final int CONTINUE_RESPONSE = 2;
   private static final int REPEAT_RESPONSE = 3;
+
+  private static final String VOTO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
   @Autowired
   private ModuleProgressRepository moduleProgressRepository;
@@ -161,8 +165,8 @@ public class ModuleProgressService {
     }
 
     if (!moduleProgress.getInterrupted()) {
-      moduleProgress.startModule();
-      checkRunUnitBlock(blockIterator, moduleProgress);
+      VotoBlockDto blockDto = checkRunUnitBlock(blockIterator, moduleProgress);
+      moduleProgress.startModule(parseDate(blockDto.getEntryAt()));
     }
 
     while (!moduleProgress.isCompleted()) {
@@ -201,11 +205,11 @@ public class ModuleProgressService {
 
     switch (choiceId) {
       case QUIT_RESPONSE:
-        moduleProgress.nextUnit();
+        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()));
 
         return true;
       case CONTINUE_RESPONSE:
-        moduleProgress.nextUnit();
+        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()));
 
         if (!moduleProgress.isCompleted()) {
           checkRunUnitBlock(blockIterator, moduleProgress);
@@ -266,7 +270,7 @@ public class ModuleProgressService {
     return false;
   }
 
-  private void checkRunUnitBlock(Iterator<VotoBlockDto> blockIterator,
+  private VotoBlockDto checkRunUnitBlock(Iterator<VotoBlockDto> blockIterator,
       ModuleProgress moduleProgress) {
     VotoBlockDto blockDto = getVotoBlock(blockIterator);
 
@@ -281,6 +285,8 @@ public class ModuleProgressService {
       throw new CourseProgressException("IVR Block Id: {} did not match current Unit IVR Id",
           blockDto.getBlockId());
     }
+
+    return blockDto;
   }
 
   private VotoBlockDto getVotoBlock(Iterator<VotoBlockDto> blockIterator) {
@@ -316,5 +322,13 @@ public class ModuleProgressService {
     }
 
     return numberOfAttempts;
+  }
+
+  private LocalDateTime parseDate(String date) {
+    if (StringUtils.isBlank(date)) {
+      return null;
+    }
+
+    return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(VOTO_DATE_FORMAT));
   }
 }
