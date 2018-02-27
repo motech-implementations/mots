@@ -1,5 +1,6 @@
 package org.motechproject.mots.domain;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -58,6 +59,16 @@ public class ModuleProgress extends BaseTimestampedEntity {
   @Setter
   private List<UnitProgress> unitsProgresses;
 
+  @Column(name = "start_date")
+  @Getter
+  @Setter
+  private LocalDateTime startDate;
+
+  @Column(name = "end_date")
+  @Getter
+  @Setter
+  private LocalDateTime endDate;
+
   /**
    * Create new Module Progress.
    * @param chw CHW which progress will be stored
@@ -84,20 +95,22 @@ public class ModuleProgress extends BaseTimestampedEntity {
   /**
    * Change module status to in progress.
    */
-  public void startModule() {
+  public void startModule(LocalDateTime startDate) {
     if (ProgressStatus.NOT_STARTED.equals(status)) {
       status = ProgressStatus.IN_PROGRESS;
+      this.startDate = startDate;
     }
   }
 
   /**
    * Change current unit, if no more units change status to completed.
    */
-  public void nextUnit() {
+  public void nextUnit(LocalDateTime endDate) {
     if (currentUnitNumber < module.getUnits().size() - 1) {
       currentUnitNumber++;
     } else {
       status = ProgressStatus.COMPLETED;
+      this.endDate = endDate;
     }
   }
 }
