@@ -20,7 +20,7 @@ const CHIEFDOM_COLUMNS = [
     Header: 'Name',
     accessor: 'name',
   }, {
-    Header: 'Parent District',
+    Header: 'District',
     accessor: 'parent',
   },
 ];
@@ -39,7 +39,7 @@ const FACILITIES_COLUMNS = [
     Header: 'Incharge name',
     accessor: 'inchargeFullName',
   }, {
-    Header: 'Parent Chiefdom',
+    Header: 'Chiefdom',
     accessor: 'parent',
   },
 ];
@@ -49,7 +49,7 @@ const COMMUNITY_COLUMNS = [
     Header: 'Name',
     accessor: 'name',
   }, {
-    Header: 'Parent Facility',
+    Header: 'Facility',
     accessor: 'parent',
   },
 ];
