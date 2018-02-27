@@ -48,4 +48,5 @@
   <include file="20180224_1518.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180226_1213_fix_chw_module_unit_and_quiz.sql" relativeToChangelogFile="true" />
   <include file="20180226_1953.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180227_1355_insert_quiz_questions_summary.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
