@@ -34,7 +34,7 @@ public class QuestionResponse extends BaseTimestampedEntity {
   /**
    * Create new Question Response.
    * @param question question that was responded to
-   * @param choiceId chosen response number
+   * @param choiceId chosen response number (starts from 1)
    * @param numberOfAttempts number of times this question was listened
    */
   public QuestionResponse(MultipleChoiceQuestion question, Integer choiceId,
@@ -43,7 +43,7 @@ public class QuestionResponse extends BaseTimestampedEntity {
     this.numberOfAttempts = numberOfAttempts;
 
     if (choiceId != null) {
-      this.chosenResponse = question.getChoices().get(choiceId);
+      this.chosenResponse = question.getChoices().get(choiceId - 1);
     }
   }
 }
