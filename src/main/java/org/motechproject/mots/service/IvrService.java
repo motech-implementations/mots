@@ -180,7 +180,7 @@ public class IvrService {
     String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, ivrConfig.getVotoMainTreeId(),
         callDetailRecord.getCallLogId());
     VotoResponseDto<VotoCallLogDto> response = sendVotoRequest(logUrl, new LinkedMultiValueMap<>(),
-        new ParameterizedTypeReference<VotoResponseDto<VotoCallLogDto>>() {}, HttpMethod.POST);
+        new ParameterizedTypeReference<VotoResponseDto<VotoCallLogDto>>() {}, HttpMethod.GET);
 
     return response.getData();
   }
