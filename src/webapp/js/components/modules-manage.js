@@ -386,7 +386,7 @@ class ModulesManage extends Component {
 
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Manage Modules</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</h1>
         { hasAuthority(MANAGE_MODULES_AUTHORITY) &&
         <button
           className="btn btn-success margin-bottom-lg"
