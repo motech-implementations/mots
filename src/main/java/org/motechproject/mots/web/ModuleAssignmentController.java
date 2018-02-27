@@ -49,7 +49,7 @@ public class ModuleAssignmentController extends BaseController {
   public void assignModulesToDistrict(
       @RequestBody @Valid DistrictAssignmentDto districtAssignmentDto,
       BindingResult bindingResult) {
-
+    checkBindingResult(bindingResult);
     moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
   }
 

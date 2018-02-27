@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
 import org.motechproject.mots.validate.annotations.CommunityExistence;
-import org.motechproject.mots.validate.annotations.DateOfBirth;
+import org.motechproject.mots.validate.annotations.DateFormat;
 import org.motechproject.mots.validate.annotations.EducationLevel;
 import org.motechproject.mots.validate.annotations.Gender;
 import org.motechproject.mots.validate.annotations.Language;
@@ -46,7 +46,7 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  @DateOfBirth
+  @DateFormat
   private String dateOfBirth;
 
   @Getter
