@@ -1,13 +1,16 @@
 package org.motechproject.mots.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -52,12 +55,12 @@ public class ModuleProgress extends BaseTimestampedEntity {
   @Setter
   private ProgressStatus status;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JoinColumn(name = "module_progress_id", nullable = false)
   @SortComparator(UnitProgressComparator.class)
   @Getter
   @Setter
-  private List<UnitProgress> unitsProgresses;
+  private SortedSet<UnitProgress> unitsProgresses;
 
   @Column(name = "start_date")
   @Getter
@@ -81,11 +84,11 @@ public class ModuleProgress extends BaseTimestampedEntity {
     this.interrupted = false;
     this.currentUnitNumber = 0;
     this.unitsProgresses = module.getUnits().stream().map(UnitProgress::new).collect(
-        Collectors.toList());
+        Collectors.toCollection(() -> new TreeSet<>(new UnitProgressComparator())));
   }
 
   public UnitProgress getCurrentUnitProgress() {
-    return unitsProgresses.get(currentUnitNumber);
+    return new ArrayList<>(unitsProgresses).get(currentUnitNumber);
   }
 
   public boolean isCompleted() {
