@@ -3,6 +3,7 @@ package org.motechproject.mots.web;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
+import javax.validation.Valid;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.dto.RoleDto;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,9 +93,11 @@ public class UserController extends BaseController {
   @RequestMapping(value = "/user", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
-  public UserDto createUser(@RequestBody UserDto userDto) {
-    User user = userMapper.fromDto(userDto);
+  public UserDto createUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
 
+    checkBindingResult(bindingResult);
+
+    User user = userMapper.fromDto(userDto);
     return userMapper.toDto(userService.registerNewUser(user));
   }
 
@@ -106,7 +110,11 @@ public class UserController extends BaseController {
   @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public UserDto saveUser(@PathVariable("id") UUID id, @RequestBody UserDto userDto) {
+  public UserDto saveUser(@PathVariable("id") UUID id, @RequestBody @Valid UserDto userDto,
+      BindingResult bindingResult) {
+
+    checkBindingResult(bindingResult);
+
     User existingUser = userService.getUser(id);
     userMapper.updateFromDto(userDto, existingUser);
 

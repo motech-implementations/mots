@@ -16,6 +16,8 @@ import InchargeNew from './incharge-new';
 import InchargeEdit from './incharge-edit';
 import ModulesManage from './modules-manage';
 import Users from './users';
+import UserNew from './user-new';
+import UserEdit from './user-edit';
 import Locations from './locations';
 import GroupAssignModules from './group-assign-modules';
 import Report from './report';
@@ -65,6 +67,8 @@ export default class App extends Component {
                 <Route path="/chw/:chwId" component={HealthWorkersEdit} />
                 <Route path="/chw" component={HealthWorkers} />
                 <Route path="/report/:reportId" exact component={Report} />
+                <Route path="/users/new" component={UserNew} />
+                <Route path="/users/:userId" component={UserEdit} />
                 <Route path="/users" component={Users} />
                 <Route path="/locations" component={Locations} />
                 <Route path="/" component={Home} />

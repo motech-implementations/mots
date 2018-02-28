@@ -1,7 +1,6 @@
 package org.motechproject.mots.service;
 
 import java.util.UUID;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.domain.security.UserRole;
@@ -50,8 +49,16 @@ public class UserService {
         new EntityNotFoundException("User with id: {0} not found", id.toString()));
   }
 
+  /**
+   * Save User with new encoded password.
+   * @param user User to be created.
+   * @return saved User
+   */
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User saveUser(User user) {
+    String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+    user.setPassword(newPasswordEncoded);
+
     return userRepository.save(user);
   }
 
@@ -74,16 +81,15 @@ public class UserService {
   }
 
   /**
-   * Create User with randomized password.
+   * Create User with new encoded password.
    * @param user User to be created.
    * @return created User
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User registerNewUser(User user) {
 
-    String randomGeneratedPassword = RandomStringUtils.random(8, true, false);
-
-    user.setPassword(new BCryptPasswordEncoder().encode(randomGeneratedPassword));
+    String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+    user.setPassword(newPasswordEncoded);
 
     return userRepository.save(user);
   }
