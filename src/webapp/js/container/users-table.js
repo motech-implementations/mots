@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
 import 'react-table/react-table.css';
@@ -81,7 +81,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchUsers })(UsersTable);
+export default withRouter(connect(mapStateToProps, { fetchUsers })(UsersTable));
 
 UsersTable.propTypes = {
   fetchUsers: PropTypes.func.isRequired,
