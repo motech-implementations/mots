@@ -112,7 +112,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="16"/>
 				</textElement>
-				<text><![CDATA[CHW Training Module Report]]></text>
+				<text><![CDATA[CHW Module Report]]></text>
 			</staticText>
 		</band>
 	</title>

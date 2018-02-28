@@ -87,9 +87,10 @@
   chiefdom.name AS chiefdom,
   district.name AS district,
   facility.name AS phu
- FROM question_response
- JOIN call_flow_element question ON question.id = question_response.question_id
- JOIN unit_progress ON question_response.unit_progress_id = unit_progress.id
+ FROM multiple_choice_question_log
+ JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
+ JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
+ JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
  JOIN unit ON unit.id = unit_progress.unit_id
  JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
  JOIN module ON module.id = module_progress.module_id
@@ -98,7 +99,7 @@
  JOIN facility ON community.facility_id = facility.id
  JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
  JOIN district ON chiefdom.district_id = district.id
- LEFT JOIN choice ON choice.id = question_response.response_id
+ LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
  GROUP BY chwId, phone, module, unit, chiefdom, district
  ORDER BY chwId, module, unit]]>
 	</queryString>
