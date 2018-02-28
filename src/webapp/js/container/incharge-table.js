@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
 import 'react-table/react-table.css';
@@ -114,7 +114,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchIncharges })(InchargeTable);
+export default withRouter(connect(mapStateToProps, { fetchIncharges })(InchargeTable));
 
 InchargeTable.propTypes = {
   fetchIncharges: PropTypes.func.isRequired,
