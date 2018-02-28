@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import InchargesForm from './InchargesForm';
@@ -42,12 +42,10 @@ class InchargesNew extends Component {
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Alert.alert(
-        'Success!',
-        'New Incharge has been created',
-        [{ text: 'OK', onPress: () => Actions.incharges() }],
-        { cancelable: false },
-      );
+      Actions.modalSuccess({
+        message: 'New Incharge has been created',
+        onClose: () => { Actions.incharges(); },
+      });
     }
   }
 

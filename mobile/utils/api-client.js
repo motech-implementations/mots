@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { AsyncStorage, Alert } from 'react-native';
+import { AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import Config from '../config';
 import { signoutUser, useRefreshToken } from '../actions';
@@ -17,12 +18,11 @@ const getErrorMessage = (errorResponse) => {
   return '';
 };
 
-const getAlert = (title, message) => Alert.alert(
-  title,
-  message,
-  [{ text: 'OK' }],
-  { cancelable: false },
-);
+const getAlert = (title, message) => {
+  Actions.modalError({
+    message, title,
+  });
+};
 
 export default class ApiClient {
   static async handleError(error) {

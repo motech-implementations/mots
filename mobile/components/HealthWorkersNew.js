@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import HealthWorkersForm from './HealthWorkersForm';
@@ -42,12 +42,10 @@ class HealthWorkersNew extends Component {
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Alert.alert(
-        'Success!',
-        'New Health Worker has been created',
-        [{ text: 'OK', onPress: () => Actions.chws() }],
-        { cancelable: false },
-      );
+      Actions.modalSuccess({
+        message: 'Incharge has been successfully edited',
+        onClose: () => { Actions.chws(); },
+      });
     }
   }
 
