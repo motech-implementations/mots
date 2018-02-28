@@ -33,23 +33,25 @@ const FIELDS = {
   },
   password: {
     label: 'Password',
-    required: true,
     getAttributes: input => ({
       ...input,
       type: 'password',
       className: 'form-control',
+    }),
+    getDynamicAttributes: ({ isPasswordRequired }) => ({
+      required: isPasswordRequired,
     }),
   },
   passwordConfirm: {
     label: 'Confirm Password',
-    required: true,
     getAttributes: input => ({
       ...input,
       type: 'password',
       className: 'form-control',
     }),
-    getDynamicAttributes: ({ password }) => ({
+    getDynamicAttributes: ({ password, isPasswordRequired }) => ({
       hidden: !password,
+      required: isPasswordRequired,
     }),
   },
 };
@@ -73,6 +75,7 @@ class UserForm extends Component {
         fieldConfig={fieldConfig}
         roles={this.props.roles}
         password={this.props.password}
+        isPasswordRequired={this.props.isPasswordRequired}
       />
     );
   }
@@ -93,14 +96,21 @@ class UserForm extends Component {
 
 function validate(values) {
   const errors = {};
+  const emailPattern = /\S+@\S+\.\S+/;
 
   _.each(FIELDS, (fieldConfig, fieldName) => {
     if (fieldConfig.required && !values[fieldName]) {
       errors[fieldName] = 'This field is required';
     }
   });
-  if (values.password && (!values.passwordConfirm || values.passwordConfirm !== values.password)) {
-    errors.passwordConfirm = 'Wrong value';
+  if (values.password && values.passwordConfirm && values.passwordConfirm !== values.password) {
+    errors.passwordConfirm = "Passwords don't match";
+  }
+  if (values.password && !values.passwordConfirm) {
+    errors.passwordConfirm = 'Can not be empty';
+  }
+  if (values.email && !emailPattern.test(values.email)) {
+    errors.email = 'Email address has incorrect format';
   }
 
   return errors;
@@ -128,9 +138,11 @@ UserForm.propTypes = {
   fetchRoles: PropTypes.func.isRequired,
   roles: PropTypes.arrayOf(PropTypes.shape({})),
   password: PropTypes.string,
+  isPasswordRequired: PropTypes.bool,
 };
 
 UserForm.defaultProps = {
   roles: [],
   password: null,
+  isPasswordRequired: true,
 };

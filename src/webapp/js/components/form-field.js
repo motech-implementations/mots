@@ -36,12 +36,12 @@ export default class FormField extends Component {
       ...dynamicAttr,
     };
 
-    const className = `form-group ${fieldConfig.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
+    const className = `form-group ${fieldConfig.required || attributes.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
 
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
         <div className="row">
-          <label htmlFor={attributes.id} className="col-md-2 control-label">{ label }</label>
+          <label htmlFor={attributes.id} className="col-md-2 control-label">{ attributes.label || label }</label>
           <div className="col-md-4">
             <FieldType {...attributes}>
               {

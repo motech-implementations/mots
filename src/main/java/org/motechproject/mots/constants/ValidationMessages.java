@@ -61,6 +61,8 @@ public final class ValidationMessages {
 
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
+  public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
+
   private ValidationMessages() {
   }
 }

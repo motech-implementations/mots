@@ -1,6 +1,7 @@
 package org.motechproject.mots.service;
 
 import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.domain.security.UserRole;
@@ -50,14 +51,16 @@ public class UserService {
   }
 
   /**
-   * Save User with new encoded password.
+   * Save User with new encoded password (if it's not blank).
    * @param user User to be created.
    * @return saved User
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public User saveUser(User user) {
-    String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
-    user.setPassword(newPasswordEncoded);
+    if (StringUtils.isNotBlank(user.getPassword())) {
+      String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+      user.setPassword(newPasswordEncoded);
+    }
 
     return userRepository.save(user);
   }
