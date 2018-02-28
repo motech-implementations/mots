@@ -65,6 +65,7 @@ class UserEdit extends Component {
       .then((response) => {
         if (response) {
           response.roleId = response.roles[0].id;
+          response.password = '';
           this.props.initialize(USER_FORM_NAME, response);
         }
       });
@@ -79,6 +80,7 @@ class UserEdit extends Component {
             loading={this.state.loading}
             onSubmit={this.onSubmit}
             onSubmitCancel={this.onSubmitCancel}
+            isPasswordRequired={false}
           />
         </ScrollView>
       </View>
