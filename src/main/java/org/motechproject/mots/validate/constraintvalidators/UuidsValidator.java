@@ -15,15 +15,18 @@ public class UuidsValidator implements ConstraintValidator<Uuids, Set<String>> {
 
   @Override
   public boolean isValid(Set<String> values, ConstraintValidatorContext context) {
-    String uuids = "";
+    StringBuilder uuids = new StringBuilder("");
+    String delimiter = "";
+
     for (String uuid : values) {
       if (!ValidationUtils.isValidUuidString(uuid)) {
-        uuids = uuids.concat(uuid + ", ");
+        uuids.append(delimiter).append(uuid);
+        delimiter = ", ";
       }
     }
-    String message = String.format(ValidationMessages.INVALID_IDS, uuids);
+    String message = String.format(ValidationMessages.INVALID_IDS, uuids.toString());
     context.disableDefaultConstraintViolation();
     ValidationUtils.addDefaultViolationMessage(context, message);
-    return uuids.isEmpty();
+    return uuids.toString().isEmpty();
   }
 }

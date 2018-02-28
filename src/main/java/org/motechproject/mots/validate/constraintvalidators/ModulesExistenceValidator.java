@@ -22,19 +22,22 @@ public class ModulesExistenceValidator
 
   @Override
   public boolean isValid(Set<String> values, ConstraintValidatorContext context) {
-    String notExistingModules = "";
     boolean uuidsValid = ValidationUtils.validateUuids(values);
     if (uuidsValid) {
+      StringBuilder notExistingModules = new StringBuilder("");
+      String delimiter = "";
+
       for (String moduleId : values) {
         if (!checkIfExist(moduleId)) {
-          notExistingModules = notExistingModules.concat(moduleId + ", ");
+          notExistingModules.append(delimiter).append(moduleId);
+          delimiter = ", ";
         }
       }
       String message = String.format(
-          ValidationMessages.NOT_EXISTING_MODULES_WITH_ID, notExistingModules);
+          ValidationMessages.NOT_EXISTING_MODULES_WITH_ID, notExistingModules.toString());
       context.disableDefaultConstraintViolation();
       ValidationUtils.addDefaultViolationMessage(context, message);
-      return notExistingModules.isEmpty();
+      return notExistingModules.toString().isEmpty();
     }
     return true;
   }
