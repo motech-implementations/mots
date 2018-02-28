@@ -38,10 +38,24 @@ class UserEdit extends Component {
   }
 
   onSubmit(values) {
-    const valuesToSend = values;
-    valuesToSend.roles = [{ id: values.roleId }];
-    this.setState({ loading: true });
-    this.props.saveUser(valuesToSend, result => this.onSubmitSuccess(result));
+    Alert.alert(
+      '',
+      'Are you sure to edit User?',
+      [{
+        text: 'Confirm',
+        onPress: () => {
+          const valuesToSend = values;
+          valuesToSend.roles = [{ id: values.roleId }];
+          this.setState({ loading: true });
+          this.props.saveUser(valuesToSend, result => this.onSubmitSuccess(result));
+        },
+      },
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      }],
+      { cancelable: false },
+    );
   }
 
   onSubmitSuccess(result) {

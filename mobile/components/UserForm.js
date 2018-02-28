@@ -57,11 +57,11 @@ const FIELDS = {
   },
   password: {
     label: 'Password',
-    secureTextEntry: true,
+    getAttributes: () => ({ secureTextEntry: true }),
   },
   passwordConfirm: {
     label: 'Confirm Password',
-    secureTextEntry: true,
+    getAttributes: () => ({ secureTextEntry: true }),
     getDynamicAttributes: ({ password }) => ({
       hidden: !password,
     }),
@@ -143,8 +143,11 @@ function validate(values) {
       errors[fieldName] = 'This field is required';
     }
   });
-  if (values.password && (!values.passwordConfirm || values.passwordConfirm !== values.password)) {
+  if (values.password && values.passwordConfirm && values.passwordConfirm !== values.password) {
     errors.passwordConfirm = 'Wrong value';
+  }
+  if (values.password && !values.passwordConfirm) {
+    errors.passwordConfirm = 'Can not be empty';
   }
 
   return errors;
