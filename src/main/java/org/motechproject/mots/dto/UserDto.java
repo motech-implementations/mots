@@ -1,10 +1,11 @@
 package org.motechproject.mots.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashSet;
 import java.util.Set;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.Uuid;
@@ -23,7 +24,16 @@ public class UserDto {
 
   @Getter
   @Setter
+  @Email(message = ValidationMessages.INVALID_EMAIL)
   private String email;
+
+  @Getter
+  @Setter
+  private String password;
+
+  @Getter
+  @Setter
+  private String passwordConfirm;
 
   @Getter
   @Setter
@@ -35,6 +45,6 @@ public class UserDto {
 
   @Getter
   @Setter
-  @NotNull(message = ValidationMessages.NULL_USER_ENABLED_IS_NULL)
-  private Boolean enabled;
+  @JsonIgnore
+  private Boolean enabled = true;
 }

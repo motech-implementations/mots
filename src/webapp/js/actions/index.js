@@ -8,7 +8,8 @@ import {
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES,
   SAVE_INCHARGE,
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
-  FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES,
+  FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
+  FETCH_ROLES, SAVE_USER,
 } from './types';
 
 const BASE_URL = '/api';
@@ -167,6 +168,36 @@ export function fetchUsers() {
 
   return {
     type: FETCH_USERS,
+    payload: request,
+  };
+}
+
+export function fetchRoles() {
+  const url = '/api/role';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_ROLES,
+    payload: request,
+  };
+}
+
+export function createUser(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/user`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_USER,
+    payload: request,
+  };
+}
+
+export function saveUser(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/user/${values.id}`, values);
+  request.then(result => callback(result));
+
+  return {
+    type: SAVE_USER,
     payload: request,
   };
 }

@@ -12,7 +12,12 @@ export const CREATE_INCHARGE = 'create_incharge';
 export const SAVE_INCHARGE = 'save_incharge';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
+
+export const CREATE_USER = 'create_user';
+export const SAVE_USER = 'save_user';
 export const FETCH_USERS = 'fetch_users';
+export const FETCH_ROLES = 'fetch_roles';
+
 
 export const FETCH_DISTRICTS = 'fetch_districts';
 export const FETCH_CHIEFDOMS = 'fetch_chiefdoms';

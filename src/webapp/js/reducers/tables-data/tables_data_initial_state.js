@@ -5,4 +5,5 @@ export default {
   locationsList: [],
   chwListPages: 1,
   inchargeListPages: 1,
+  roles: [],
 };

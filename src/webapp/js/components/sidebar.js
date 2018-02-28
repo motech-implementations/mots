@@ -175,7 +175,7 @@ export default class SideBar extends Component {
       <ul className="nav nav-second-level">
         { hasAuthority(MANAGE_USERS_AUTHORITY) &&
         <li className="border-none">
-          <Link to="/users" onClick={this.props.hideMenuSmart}>
+          <Link to="/users/new" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-plus" />
             <span className="icon-text">Add User</span>
           </Link>

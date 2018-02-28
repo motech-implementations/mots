@@ -1,7 +1,7 @@
 import {
   FETCH_CHIEFDOMS,
   FETCH_CHWS, FETCH_COMMUNITIES, FETCH_DISTRICTS, FETCH_FACILITIES,
-  FETCH_INCHARGES,
+  FETCH_INCHARGES, FETCH_ROLES,
   FETCH_USERS,
 } from '../../actions/types';
 import initialTablesData from './tables_data_initial_state';
@@ -43,6 +43,14 @@ export default function (state = initialTablesData, action) {
         return {
           ...state,
           locationsList: action.payload.data,
+        };
+      }
+      return state;
+    case FETCH_ROLES:
+      if (action.payload.data !== undefined) {
+        return {
+          ...state,
+          roles: action.payload.data,
         };
       }
       return state;
