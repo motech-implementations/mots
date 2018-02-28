@@ -76,6 +76,13 @@ class UserForm extends Component {
   }
 
   componentWillMount() {
+    if (this.props.isPasswordRequired) {
+      FIELDS.password.required = true;
+      FIELDS.passwordConfirm.required = true;
+    } else {
+      FIELDS.password.required = false;
+      FIELDS.passwordConfirm.required = false;
+    }
     clearFields(USER_FORM_NAME, ...(_.keys(FIELDS)));
     untouchFields(USER_FORM_NAME, ...(_.keys(FIELDS)));
     this.props.fetchRoles();
@@ -175,10 +182,12 @@ UserForm.propTypes = {
   roles: PropTypes.arrayOf(PropTypes.shape({})),
   password: PropTypes.string,
   loading: PropTypes.bool,
+  isPasswordRequired: PropTypes.bool,
 };
 
 UserForm.defaultProps = {
   roles: [],
   password: null,
   loading: false,
+  isPasswordRequired: true,
 };
