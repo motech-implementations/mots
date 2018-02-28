@@ -26,18 +26,24 @@ public final class ValidationMessages {
   public static final String EMPTY_CALL_FLOW_ELEMENT_TYPE
       = "Call flow element type cannot be empty";
   public static final String EMPTY_FACILITY_TYPE = "Facility type cannot be empty";
+  public static final String EMPTY_MODULES = "Modules cannot be empty";
+  public static final String EMPTY_START_DATE = "Start date cannot be empty";
+  public static final String EMPTY_END_DATE = "End date cannot be empty";
+  public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
+  public static final String INVALID_DISTRICT_ID = "Invalid district UUID";
   public static final String INVALID_COMMUNITY_ID = "Invalid community UUID";
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
-  public static final String INVALID_DATE_OF_BIRTH = "Invalid date of birth";
+  public static final String INVALID_DATE = "Invalid format of date";
   public static final String INVALID_GENDER = "Invalid gender";
   public static final String INVALID_EDUCATIONAL_LEVEL = "Invalid education level";
   public static final String INVALID_LITERACY = "Invalid literacy";
   public static final String INVALID_CALL_FLOW_ELEMENT_TYPE = "Invalid call flow element type";
   public static final String INVALID_FACILITY_TYPE = "Invalid facility type";
+  public static final String INVALID_IDS = "Invalid: %s UUID";
 
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
   public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";
@@ -46,10 +52,14 @@ public final class ValidationMessages {
 
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
   public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";
+  public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
+  public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
 
   public static final String NEGATIVE_IVR_PRESSED_KEY = "Choice IVR Pressed Key cannot be negative";
 
   public static final String MODULE_NUMBER_LESS_THAN_ONE = "Module Number cannot be less than 1";
+
+  public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
   private ValidationMessages() {
   }

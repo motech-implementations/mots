@@ -1,7 +1,12 @@
 package org.motechproject.mots.validate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 import java.util.regex.Pattern;
 import javax.validation.ConstraintValidatorContext;
+import org.apache.commons.lang.StringUtils;
 
 public final class ValidationUtils {
 
@@ -10,6 +15,36 @@ public final class ValidationUtils {
 
   public static boolean isValidUuidString(String string) {
     return matchPattern(UUID_PATTERN, string);
+  }
+
+  /**
+   * Validation of uuids.
+   *
+   * @param values collection of uuids
+   */
+  public static boolean validateUuids(Collection<String> values) {
+    for (String uuid : values) {
+      if (!StringUtils.isNotEmpty(uuid) || !ValidationUtils.isValidUuidString(uuid)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Validation of date format.
+   *
+   * @param format is the format of date
+   * @param value is a date value to check
+   */
+  public static boolean isValidDateFormat(String format, String value) {
+    SimpleDateFormat sdf = new SimpleDateFormat(format);
+    try {
+      Date date = sdf.parse(value);
+      return value.equals(sdf.format(date));
+    } catch (ParseException ex) {
+      return false;
+    }
   }
 
   public static boolean matchPattern(String stringPattern, String value) {
@@ -43,6 +78,14 @@ public final class ValidationUtils {
         .addConstraintViolation();
   }
 
-  private ValidationUtils() {
+  /**
+   * Add the custom violation message as the error message.
+   *
+   * @param context is the validation context
+   * @param message is the violation message that will be reported as the error message
+   */
+  public static void addDefaultViolationMessage(
+      ConstraintValidatorContext context, String message) {
+    context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
   }
 }

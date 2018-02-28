@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.DateOfBirthValidator;
+import org.motechproject.mots.validate.constraintvalidators.ModulesExistenceValidator;
 
 @Target(ElementType.FIELD)
-@Constraint(validatedBy = {DateOfBirthValidator.class})
+@Constraint(validatedBy = {ModulesExistenceValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DateOfBirth {
+public @interface ModulesExistence {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.INVALID_DATE_OF_BIRTH;
+  String message() default ValidationMessages.NOT_EXISTING_MODULES_WITH_ID;
 
   /**
    * Specify validation groups, to which this constraint belongs
