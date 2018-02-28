@@ -1,5 +1,6 @@
 package org.motechproject.mots.domain;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,7 +45,7 @@ public class UnitProgress extends BaseTimestampedEntity {
   @JoinColumn(name = "unit_progress_id", nullable = false)
   @Getter
   @Setter
-  private Set<QuestionResponse> questionResponses;
+  private Set<CallFlowElementLog> callFlowElementLogs;
 
   @Column(name = "number_of_replays", nullable = false)
   @Getter
@@ -101,21 +102,40 @@ public class UnitProgress extends BaseTimestampedEntity {
   }
 
   /**
-   * Add response to a question.
+   * Add Multiple Choice Question Log.
+   * @param startDate question start date
+   * @param endDate question end date
    * @param callFlowElement question that was responded to
    * @param choiceId chosen response number, null if no answer was chosen
    * @param numberOfAttempts number of times this question was listened
    */
-  public void addQuestionResponse(CallFlowElement callFlowElement, Integer choiceId,
-      Integer numberOfAttempts) {
-    QuestionResponse questionResponse =
-        new QuestionResponse((MultipleChoiceQuestion) callFlowElement, choiceId, numberOfAttempts);
+  public void addMultipleChoiceQuestionLog(LocalDateTime startDate, LocalDateTime endDate,
+      CallFlowElement callFlowElement, Integer choiceId, Integer numberOfAttempts) {
+    MultipleChoiceQuestionLog multipleChoiceQuestionLog = new MultipleChoiceQuestionLog(startDate,
+        endDate, (MultipleChoiceQuestion) callFlowElement, choiceId, numberOfAttempts);
 
-    if (questionResponses == null) {
-      questionResponses = new HashSet<>();
+    if (callFlowElementLogs == null) {
+      callFlowElementLogs = new HashSet<>();
     }
 
-    questionResponses.add(questionResponse);
+    callFlowElementLogs.add(multipleChoiceQuestionLog);
+  }
+
+  /**
+   * Add Message Log.
+   * @param startDate question start date
+   * @param endDate question end date
+   * @param callFlowElement message that was listened
+   */
+  public void addMessageLog(LocalDateTime startDate, LocalDateTime endDate,
+      CallFlowElement callFlowElement) {
+    MessageLog messageLog = new MessageLog(startDate, endDate, callFlowElement);
+
+    if (callFlowElementLogs == null) {
+      callFlowElementLogs = new HashSet<>();
+    }
+
+    callFlowElementLogs.add(messageLog);
   }
 
   /**
@@ -123,7 +143,7 @@ public class UnitProgress extends BaseTimestampedEntity {
    */
   public void resetProgressForUnitRepeat() {
     currentCallFlowElementNumber = 0;
-    questionResponses.clear();
+    callFlowElementLogs.clear();
     status = ProgressStatus.IN_PROGRESS;
     numberOfReplays++;
   }
