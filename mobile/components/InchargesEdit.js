@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { initialize } from 'redux-form';
 
@@ -38,33 +38,27 @@ class InchargesEdit extends Component {
   }
 
   onSubmit(values) {
-    Alert.alert(
-      '',
-      'Are you sure to edit Incharge?',
-      [{
-        text: 'Confirm',
-        onPress: () => {
-          this.setState({ loading: true });
-          this.props.saveIncharge(values, result => this.onSubmitSuccess(result));
-        },
+    Actions.modalInfo({
+      message: 'Are you sure to edit Incharge?',
+      closeColor: 'grey',
+      closeButtonText: 'Cancel',
+      onConfirm: () => {
+        this.setState({ loading: true });
+        this.props.saveIncharge(values, result => this.onSubmitSuccess(result));
       },
-      {
-        text: 'Cancel',
-        onPress: () => {},
-      }],
-      { cancelable: false },
-    );
+    });
   }
 
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Alert.alert(
-        'Success!',
-        'Incharge has been successfully edited',
-        [{ text: 'OK', onPress: () => Actions.incharges() }],
-        { cancelable: false },
-      );
+      Actions.modalInfo({
+        message: 'Incharge has been successfully edited',
+        title: 'Success!',
+        titleColor: '#449C44',
+        closeColor: '#449C44',
+        onClose: () => { Actions.incharges(); },
+      });
     }
   }
 

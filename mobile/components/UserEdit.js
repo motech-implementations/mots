@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, Text, ScrollView, Alert } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { initialize } from 'redux-form';
 
@@ -38,35 +38,29 @@ class UserEdit extends Component {
   }
 
   onSubmit(values) {
-    Alert.alert(
-      '',
-      'Are you sure to edit User?',
-      [{
-        text: 'Confirm',
-        onPress: () => {
-          const valuesToSend = values;
-          valuesToSend.roles = [{ id: values.roleId }];
-          this.setState({ loading: true });
-          this.props.saveUser(valuesToSend, result => this.onSubmitSuccess(result));
-        },
+    Actions.modalInfo({
+      message: 'Are you sure to edit User?',
+      closeColor: 'grey',
+      closeButtonText: 'Cancel',
+      onConfirm: () => {
+        const valuesToSend = values;
+        valuesToSend.roles = [{ id: values.roleId }];
+        this.setState({ loading: true });
+        this.props.saveUser(valuesToSend, result => this.onSubmitSuccess(result));
       },
-      {
-        text: 'Cancel',
-        onPress: () => {},
-      }],
-      { cancelable: false },
-    );
+    });
   }
 
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Alert.alert(
-        'Success!',
-        'User has been updated',
-        [{ text: 'OK', onPress: () => Actions.users() }],
-        { cancelable: false },
-      );
+      Actions.modalInfo({
+        message: 'User has been updated',
+        title: 'Success!',
+        titleColor: '#449C44',
+        closeColor: '#449C44',
+        onClose: () => { Actions.users(); },
+      });
     }
   }
 

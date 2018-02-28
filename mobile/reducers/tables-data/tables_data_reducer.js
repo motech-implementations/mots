@@ -42,12 +42,12 @@ export default function (state = initialTablesData, action) {
     case FETCH_ROLES:
       return {
         ...state,
-        roles: action.payload,
+        roles: action.payload || [],
       };
     case FETCH_ERROR:
       return {
         ...state,
-        fetchError: action.payload,
+        fetchError: action.payload || '',
       };
     default:
       return state;

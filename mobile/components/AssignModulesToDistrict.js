@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   View,
-  Alert,
   Text,
   ScrollView,
   PixelRatio,
@@ -97,25 +96,23 @@ class AssignModulesToDistrict extends Component {
 
       const callback = () => {
         if (!this.props.fetchError) {
-          Alert.alert(
-            'Success!',
-            'Modules have been assigned!',
-            [{ text: 'OK', onPress: () => Actions.chws() }],
-            { cancelable: false },
-          );
+          Actions.modalInfo({
+            message: 'Modules have been assigned!',
+            title: 'Success!',
+            titleColor: '#449C44',
+            closeColor: '#449C44',
+            onClose: () => { Actions.chws(); },
+          });
         }
       };
 
       apiClient.post(url, payload)
         .then(() => callback());
     } else {
-      Alert.alert(
-        '',
-        'You need to select district, start date, end date ' +
+      Actions.modalInfo({
+        message: 'You need to select district, start date, end date ' +
         'and module to finish assignment.',
-        [{ text: 'OK' }],
-        { cancelable: false },
-      );
+      });
     }
   }
 

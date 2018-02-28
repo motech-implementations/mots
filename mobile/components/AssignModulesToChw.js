@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   View,
-  Alert,
   Text,
   ScrollView,
   PixelRatio,
@@ -122,12 +121,13 @@ class AssignModulesToChw extends Component {
 
       const callback = () => {
         if (!this.props.fetchError) {
-          Alert.alert(
-            'Success!',
-            'Modules have been assigned!',
-            [{ text: 'OK', onPress: () => Actions.chws() }],
-            { cancelable: false },
-          );
+          Actions.modalInfo({
+            message: 'Modules have been assigned!',
+            title: 'Success!',
+            titleColor: '#449C44',
+            closeColor: '#449C44',
+            onClose: () => { Actions.chws(); },
+          });
         }
       };
 
