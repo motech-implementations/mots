@@ -249,11 +249,17 @@ public class ModuleProgressService {
               blockDto.getBlockId());
         }
 
+        LocalDateTime startDate = parseDate(blockDto.getEntryAt());
+        LocalDateTime endDate = parseDate(blockDto.getExitAt());
+
         if (CallFlowElementType.QUESTION.equals(callFlowElement.getType())) {
           Integer choiceId = getChoiceId(blockDto);
           Integer numberOfAttempts = getNumberOfAttempts(blockDto);
 
-          unitProgress.addQuestionResponse(callFlowElement, choiceId, numberOfAttempts);
+          unitProgress.addMultipleChoiceQuestionLog(startDate, endDate, callFlowElement,
+              choiceId, numberOfAttempts);
+        } else {
+          unitProgress.addMessageLog(startDate, endDate, callFlowElement);
         }
 
         unitProgress.nextElement();
