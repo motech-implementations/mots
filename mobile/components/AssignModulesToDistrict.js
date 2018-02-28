@@ -96,11 +96,8 @@ class AssignModulesToDistrict extends Component {
 
       const callback = () => {
         if (!this.props.fetchError) {
-          Actions.modalInfo({
+          Actions.modalSuccess({
             message: 'Modules have been assigned!',
-            title: 'Success!',
-            titleColor: '#449C44',
-            closeColor: '#449C44',
             onClose: () => { Actions.chws(); },
           });
         }

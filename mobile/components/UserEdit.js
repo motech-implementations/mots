@@ -38,10 +38,8 @@ class UserEdit extends Component {
   }
 
   onSubmit(values) {
-    Actions.modalInfo({
+    Actions.modalConfirm({
       message: 'Are you sure to edit User?',
-      closeColor: 'grey',
-      closeButtonText: 'Cancel',
       onConfirm: () => {
         const valuesToSend = values;
         valuesToSend.roles = [{ id: values.roleId }];
@@ -54,11 +52,8 @@ class UserEdit extends Component {
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Actions.modalInfo({
+      Actions.modalSuccess({
         message: 'User has been updated',
-        title: 'Success!',
-        titleColor: '#449C44',
-        closeColor: '#449C44',
         onClose: () => { Actions.users(); },
       });
     }

@@ -19,8 +19,8 @@ const getErrorMessage = (errorResponse) => {
 };
 
 const getAlert = (title, message) => {
-  Actions.modalInfo({
-    message, title, titleColor: '#ff0000', closeColor: '#ff0000',
+  Actions.modalError({
+    message, title,
   });
 };
 

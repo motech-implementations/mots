@@ -32,7 +32,10 @@ export default class ModalInfo extends Component {
             { this.props.onConfirm &&
             <View style={{ marginRight: 5 }}>
               <Button
-                onPress={() => { this.props.onConfirm(); Actions.pop(); }}
+                onPress={() => {
+                  this.props.onConfirm();
+                  Actions.pop({ key: this.props.sceneKey });
+                }}
                 iconName="check"
                 iconColor="#FFF"
                 buttonColor={this.props.confirmColor}
@@ -44,7 +47,7 @@ export default class ModalInfo extends Component {
           }
             <Button
               onPress={() => {
-                Actions.pop({ key: 'modalInfo' });
+                Actions.pop({ key: this.props.sceneKey });
               }}
               iconName="times-circle"
               iconColor="#FFF"
@@ -70,6 +73,7 @@ ModalInfo.propTypes = {
   onClose: PropTypes.func,
   confirmButtonText: PropTypes.string,
   closeButtonText: PropTypes.string,
+  sceneKey: PropTypes.string.isRequired,
 };
 
 ModalInfo.defaultProps = {

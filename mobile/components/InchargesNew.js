@@ -42,11 +42,8 @@ class InchargesNew extends Component {
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Actions.modalInfo({
+      Actions.modalSuccess({
         message: 'New Incharge has been created',
-        title: 'Success!',
-        titleColor: '#449C44',
-        closeColor: '#449C44',
         onClose: () => { Actions.incharges(); },
       });
     }

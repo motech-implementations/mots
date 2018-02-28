@@ -38,10 +38,8 @@ class InchargesEdit extends Component {
   }
 
   onSubmit(values) {
-    Actions.modalInfo({
+    Actions.modalConfirm({
       message: 'Are you sure to edit Incharge?',
-      closeColor: 'grey',
-      closeButtonText: 'Cancel',
       onConfirm: () => {
         this.setState({ loading: true });
         this.props.saveIncharge(values, result => this.onSubmitSuccess(result));
@@ -52,11 +50,8 @@ class InchargesEdit extends Component {
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Actions.modalInfo({
+      Actions.modalSuccess({
         message: 'Incharge has been successfully edited',
-        title: 'Success!',
-        titleColor: '#449C44',
-        closeColor: '#449C44',
         onClose: () => { Actions.incharges(); },
       });
     }

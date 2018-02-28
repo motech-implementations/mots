@@ -38,10 +38,8 @@ class HealthWorkersEdit extends Component {
   }
 
   onSubmit(values) {
-    Actions.modalInfo({
+    Actions.modalConfirm({
       message: 'Are you sure to edit Community Health Worker?',
-      closeColor: 'grey',
-      closeButtonText: 'Cancel',
       onConfirm: () => {
         this.setState({ loading: true });
         this.props.saveHealthWorker(values, result => this.onSubmitSuccess(result));
@@ -52,11 +50,8 @@ class HealthWorkersEdit extends Component {
   onSubmitSuccess(result) {
     this.setState({ loading: false });
     if (result) {
-      Actions.modalInfo({
+      Actions.modalSuccess({
         message: 'Health Worker has been successfully edited',
-        title: 'Success!',
-        titleColor: '#449C44',
-        closeColor: '#449C44',
         onClose: () => { Actions.chws(); },
       });
     }

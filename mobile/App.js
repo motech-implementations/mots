@@ -6,6 +6,9 @@ import { View, StatusBar } from 'react-native';
 
 import Header from './components/Header';
 import ModalInfo from './components/ModalInfo';
+import ModalError from './components/ModalError';
+import ModalConfirm from './components/ModalConfirm';
+import ModalSuccess from './components/ModalSuccess';
 import Home from './components/Home';
 import Incharges from './components/Incharges';
 import AssignModulesToChw from './components/AssignModulesToChw';
@@ -56,6 +59,9 @@ const App = () => (
             </Scene>
           </Scene>
           <Scene key="modalInfo" component={ModalInfo} hideNavBar />
+          <Scene key="modalError" component={ModalError} hideNavBar />
+          <Scene key="modalConfirm" component={ModalConfirm} hideNavBar />
+          <Scene key="modalSuccess" component={ModalSuccess} hideNavBar />
         </Scene>
       </Router>
     </Provider>
