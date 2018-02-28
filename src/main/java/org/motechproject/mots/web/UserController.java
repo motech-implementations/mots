@@ -116,7 +116,7 @@ public class UserController extends BaseController {
     checkBindingResult(bindingResult);
 
     User existingUser = userService.getUser(id);
-    userMapper.updateFromDto(userDto, existingUser);
+    userMapper.passwordNullSafeUpdateFromDto(userDto, existingUser);
 
     return userMapper.toDto(userService.saveUser(existingUser));
   }

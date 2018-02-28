@@ -74,6 +74,7 @@ class UserEdit extends Component {
         <UserForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
+          isPasswordRequired={false}
         />
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}

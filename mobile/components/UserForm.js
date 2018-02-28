@@ -144,7 +144,7 @@ function validate(values) {
     }
   });
   if (values.password && values.passwordConfirm && values.passwordConfirm !== values.password) {
-    errors.passwordConfirm = 'Wrong value';
+    errors.passwordConfirm = "Password don't match";
   }
   if (values.password && !values.passwordConfirm) {
     errors.passwordConfirm = 'Can not be empty';
