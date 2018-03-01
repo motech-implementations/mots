@@ -95,14 +95,14 @@ class ChwTable extends Component {
       accessor: 'literacy',
       filterable: false,
     }, {
-      Header: 'Community',
-      accessor: 'communityName',
-    }, {
       Header: 'District',
       accessor: 'districtName',
     }, {
       Header: 'Chiefdom',
       accessor: 'chiefdomName',
+    }, {
+      Header: 'Community',
+      accessor: 'communityName',
     }, {
       Header: 'Preferred language',
       accessor: 'preferredLanguage',
