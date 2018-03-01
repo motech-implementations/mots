@@ -28,7 +28,8 @@ public class UsernameValidator implements
       Optional<User> existingUser = userRepository.findOneByUsername(newUserUsername);
 
       if (existingUser.isPresent()
-          && !existingUser.get().getId().equals(UUID.fromString(userDto.getId()))) {
+          && (userDto.getId() == null
+          || !existingUser.get().getId().equals(UUID.fromString(userDto.getId())))) {
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, USERNAME,
