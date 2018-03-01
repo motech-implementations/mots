@@ -16,7 +16,6 @@ const FIELDS = {
   },
   email: {
     label: 'Email',
-    required: true,
   },
   name: {
     label: 'Name',
