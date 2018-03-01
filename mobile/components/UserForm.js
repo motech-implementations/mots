@@ -25,12 +25,11 @@ const FIELDS = {
     label: 'Username',
     required: true,
   },
-  name: {
-    label: 'Name',
-  },
   email: {
     label: 'Email',
-    required: true,
+  },
+  name: {
+    label: 'Name',
   },
   roleId: {
     type: Select,
@@ -145,6 +144,7 @@ class UserForm extends Component {
 
 function validate(values) {
   const errors = {};
+  const emailPattern = /\S+@\S+\.\S+/;
   _.each(FIELDS, (fieldConfig, fieldName) => {
     if (fieldConfig.required && !values[fieldName]) {
       errors[fieldName] = 'This field is required';
@@ -155,6 +155,9 @@ function validate(values) {
   }
   if (values.password && !values.passwordConfirm) {
     errors.passwordConfirm = 'Can not be empty';
+  }
+  if (values.email && !emailPattern.test(values.email)) {
+    errors.email = 'Email address has incorrect format';
   }
 
   return errors;
