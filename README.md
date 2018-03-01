@@ -32,10 +32,9 @@ Under File -> Settings -> Editor -> Code Style import the google-styleguide (gea
 ## Loading initial test data
 1. In `mots` root directory run:
 ```
-mysql -uroot -p mots < src/main/resources/test_modules.sql
-mysql -uroot -p mots < src/main/resources/test_ivr_config.sql
+mysql -uroot -ppassword mots < src/main/resources/test_modules.sql
+mysql -uroot -ppassword mots < src/main/resources/test_ivr_config.sql
 ```
-2. Type your root password
 
 ## Add VOTO ivrApiKey
 1. Go into ~/.gradle
