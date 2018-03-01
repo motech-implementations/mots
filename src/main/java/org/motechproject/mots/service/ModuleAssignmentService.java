@@ -89,6 +89,7 @@ public class ModuleAssignmentService {
   public void assignModules(AssignedModules assignedModules) {
     AssignedModules existingAssignedModules =
         getAssignedModules(assignedModules.getHealthWorker().getId());
+    CommunityHealthWorker assignedModulesChw = existingAssignedModules.getHealthWorker();
 
     Set<Module> oldModules = new HashSet<>(existingAssignedModules.getModules());
 
@@ -103,10 +104,10 @@ public class ModuleAssignmentService {
 
     Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
     Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
-    validateModulesToUnassign(existingAssignedModules.getHealthWorker(), modulesToRemove);
+    validateModulesToUnassign(assignedModulesChw, modulesToRemove);
+    moduleProgressService.removeModuleProgresses(assignedModulesChw, modulesToRemove);
 
-    String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
-
+    String ivrId = assignedModulesChw.getIvrId();
     if (ivrId == null) {
       throw new ModuleAssignmentException(
           "Could not assign module to CHW, because CHW has empty IVR id");
@@ -121,7 +122,7 @@ public class ModuleAssignmentService {
       throw new ModuleAssignmentException(message, ex);
     }
 
-    moduleProgressService.createModuleProgresses(assignedModules.getHealthWorker(), modulesToAdd);
+    moduleProgressService.createModuleProgresses(assignedModulesChw, modulesToAdd);
   }
 
   private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassing) {
