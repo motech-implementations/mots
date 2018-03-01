@@ -39,6 +39,15 @@ const COLUMNS = [
     Header: 'Literacy',
     accessor: 'literacy',
   }, {
+    Header: 'District',
+    accessor: 'districtName',
+  }, {
+    Header: 'Chiefdom',
+    accessor: 'chiefdomName',
+  }, {
+    Header: 'Facility',
+    accessor: 'facilityName',
+  }, {
     Header: 'Community',
     accessor: 'communityName',
   }, {
