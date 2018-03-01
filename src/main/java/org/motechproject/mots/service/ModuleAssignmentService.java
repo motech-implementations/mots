@@ -14,16 +14,19 @@ import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
+import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
+import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
+import org.motechproject.mots.repository.ModuleProgressRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +45,9 @@ public class ModuleAssignmentService {
 
   @Autowired
   private ModuleProgressService moduleProgressService;
+
+  @Autowired
+  private ModuleProgressRepository moduleProgressRepository;
 
   @Autowired
   private EntityManager entityManager;
@@ -97,6 +103,7 @@ public class ModuleAssignmentService {
 
     Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
     Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
+    validateModulesToUnassign(existingAssignedModules.getHealthWorker(), modulesToRemove);
 
     String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
 
@@ -115,6 +122,25 @@ public class ModuleAssignmentService {
     }
 
     moduleProgressService.createModuleProgresses(assignedModules.getHealthWorker(), modulesToAdd);
+  }
+
+  private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassing) {
+    HashSet<Module> startedModules = new HashSet<>();
+    modulesToUnassing.forEach(module -> moduleProgressRepository
+        .findByCommunityHealthWorkerIdAndModuleId(chw.getId(), module.getId())
+        .ifPresent(moduleProgress -> {
+          if (!ProgressStatus.NOT_STARTED.equals(moduleProgress.getStatus())) {
+            startedModules.add(module);
+          }
+        })
+    );
+
+    if (!startedModules.isEmpty()) {
+      throw new MotsException(String.format("Could not unassign started modules (module IDs: %s)",
+          startedModules.stream()
+              .map(module -> module.getId().toString())
+              .collect(Collectors.joining(", "))));
+    }
   }
 
   private List<String> getIvrGroupsFromModules(Set<Module> modules) {
