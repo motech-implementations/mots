@@ -11,7 +11,6 @@ import {
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
   FETCH_ROLES, SAVE_USER,
 } from './types';
-import { dispatch } from '../index';
 
 const BASE_URL = '/api';
 const AUTH_URL = `${BASE_URL}/oauth/token`;
@@ -33,12 +32,12 @@ export function authError(error) {
 }
 
 export function signinUser({ username, password }, callback) {
-  return (dispatcher) => {
+  return (dispatch) => {
     authClient.owner.getToken(username, password)
       .then((response) => {
-        dispatcher({ type: AUTH_USER });
+        dispatch({ type: AUTH_USER });
         const tokenDecoded = jwtDecode(response.accessToken);
-        dispatcher({
+        dispatch({
           type: SET_COUNTER_LOGOUT_TIME,
           payload: tokenDecoded.exp_period,
         });
@@ -47,13 +46,13 @@ export function signinUser({ username, password }, callback) {
         callback();
       })
       .catch(() => {
-        dispatcher(authError('Wrong username or password. Please try again.'));
+        dispatch(authError('Wrong username or password. Please try again.'));
       });
   };
 }
 
 export function useRefreshToken(refreshToken, callback) {
-  return dispatcher => axios({
+  return dispatch => axios({
     method: 'post',
     url: AUTH_URL,
     auth: {
@@ -66,12 +65,12 @@ export function useRefreshToken(refreshToken, callback) {
     },
   })
     .catch(() => {
-      dispatcher(authError('Error occurred when refreshing the user session'));
+      dispatch(authError('Error occurred when refreshing the user session'));
     })
     .then((response) => {
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
-      dispatcher({ type: AUTH_USER });
+      dispatch({ type: AUTH_USER });
 
       if (callback) {
         return callback();
@@ -86,23 +85,17 @@ export function signoutUser() {
 }
 
 export function resetLogoutCounter() {
-  const refreshToken = localStorage.getItem('refresh_token');
-  const token = localStorage.getItem('token');
-
-  if (token && refreshToken) {
-    const currentTime = Date.now() / 1000;
+  return (dispatch) => {
+    const token = localStorage.getItem('token');
     const decoded = jwtDecode(token);
-
+    const currentTime = Date.now() / 1000;
     if (decoded.exp < currentTime) {
-      const refreshDecoded = jwtDecode(refreshToken);
-
-      if (refreshDecoded.exp > currentTime) {
-        dispatch(useRefreshToken(refreshToken));
-      }
+      const refreshToken = localStorage.getItem('refresh_token');
+      dispatch(useRefreshToken(refreshToken));
     }
-  }
 
-  return { type: RESET_LOGOUT_COUNTER };
+    dispatch({ type: RESET_LOGOUT_COUNTER });
+  };
 }
 
 export function fetchChws(searchParams) {
