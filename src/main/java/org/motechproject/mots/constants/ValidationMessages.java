@@ -25,6 +25,7 @@ public final class ValidationMessages {
   public static final String EMPTY_USERNAME = "Username cannot be empty";
   public static final String EMPTY_CALL_FLOW_ELEMENT_TYPE
       = "Call flow element type cannot be empty";
+  public static final String EMPTY_FACILITY_ID = "Facility Id cannot be empty";
   public static final String EMPTY_FACILITY_TYPE = "Facility type cannot be empty";
   public static final String EMPTY_MODULES = "Modules cannot be empty";
   public static final String EMPTY_START_DATE = "Start date cannot be empty";

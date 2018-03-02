@@ -1,6 +1,7 @@
 package org.motechproject.mots.domain;
 
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,6 +32,10 @@ public class Chiefdom extends Location {
   @Getter
   @Setter
   private District district;
+
+  public Chiefdom(UUID id) {
+    super(id);
+  }
 
   public Chiefdom(String name) {
     super(name);
