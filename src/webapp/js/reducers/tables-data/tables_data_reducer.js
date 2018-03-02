@@ -42,7 +42,8 @@ export default function (state = initialTablesData, action) {
       if (action.payload.data !== undefined) {
         return {
           ...state,
-          locationsList: action.payload.data,
+          locationsList: action.payload.data.content,
+          locationListPages: action.payload.data.totalPages,
         };
       }
       return state;

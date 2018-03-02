@@ -202,26 +202,28 @@ export function saveUser(values, callback) {
   };
 }
 
-export function fetchLocationsOfType(type) {
+export function fetchLocationsOfType(type, searchParams) {
   let url;
 
   switch (type) {
     case FETCH_DISTRICTS:
-      url = '/api/districtsOnly';
+      url = `${BASE_URL}/district/locations/search`;
       break;
     case FETCH_CHIEFDOMS:
-      url = '/api/chiefdomsOnly';
+      url = `${BASE_URL}/chiefdom/locations/search`;
       break;
     case FETCH_FACILITIES:
-      url = '/api/facilitiesOnly';
+      url = `${BASE_URL}/facility/locations/search`;
       break;
     case FETCH_COMMUNITIES:
-      url = '/api/communitiesOnly';
+      url = `${BASE_URL}/community/locations/search`;
       break;
     default:
       throw new Error('Unexpected use of fetchLocationsOfType method');
   }
-  const request = apiClient.get(url);
+  const request = apiClient.get(url, {
+    params: searchParams,
+  });
 
   return {
     type,

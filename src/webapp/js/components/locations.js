@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import 'react-tabs/style/react-tabs.scss';
@@ -25,24 +25,38 @@ const CHIEFDOM_COLUMNS = [
   },
 ];
 
-const FACILITIES_COLUMNS = [
-  {
-    Header: 'Facility ID',
-    accessor: 'facilityId',
-  }, {
-    Header: 'Name',
-    accessor: 'name',
-  }, {
-    Header: 'Facility Type',
-    accessor: 'facilityType',
-  }, {
-    Header: 'Incharge name',
-    accessor: 'inchargeFullName',
-  }, {
-    Header: 'Chiefdom',
-    accessor: 'parent',
-  },
-];
+class FACILITIES_COLUMNS extends Component {
+  static getColumns = () => [
+    {
+      Header: 'Facility ID',
+      accessor: 'facilityId',
+    }, {
+      Header: 'Name',
+      accessor: 'name',
+    }, {
+      Header: 'Facility Type',
+      accessor: 'facilityType',
+      Filter: ({ onChange }) => (
+        <select
+          onChange={event => onChange(event.target.value)}
+          style={{ width: '100%' }}
+        >
+          <option value="">Show All</option>
+          <option value="CHC">CHC</option>
+          <option value="CHP">CHP</option>
+          <option value="MCHP">MCHP</option>
+          <option value="clinic">Clinic</option>
+          <option value="hospital">Hospital</option>
+        </select>),
+    }, {
+      Header: 'Incharge name',
+      accessor: 'inchargeFullName',
+    }, {
+      Header: 'Chiefdom',
+      accessor: 'parent',
+    },
+  ];
+}
 
 const COMMUNITY_COLUMNS = [
   {
@@ -69,7 +83,10 @@ const Locations = () => (
         <LocationsTable locationType={FETCH_COMMUNITIES} tableColumns={COMMUNITY_COLUMNS} />
       </TabPanel>
       <TabPanel>
-        <LocationsTable locationType={FETCH_FACILITIES} tableColumns={FACILITIES_COLUMNS} />
+        <LocationsTable
+          locationType={FETCH_FACILITIES}
+          tableColumns={FACILITIES_COLUMNS.getColumns()}
+        />
       </TabPanel>
       <TabPanel>
         <LocationsTable locationType={FETCH_CHIEFDOMS} tableColumns={CHIEFDOM_COLUMNS} />

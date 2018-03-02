@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
 import 'react-table/react-table.css';
@@ -12,20 +13,11 @@ import {
   hasAuthority,
 } from '../utils/authorization';
 import { fetchLocationsOfType } from '../actions/index';
-
-const COLUMNS = [
-  {
-    Header: 'Name',
-    accessor: 'name',
-  }, {
-    Header: 'District',
-    accessor: 'parent',
-  },
-];
+import { buildSearchParams } from '../utils/react-table-search-params';
 
 class LocationsTable extends Component {
-  static prepareMobileColumns() {
-    const mobileColumns = _.clone(COLUMNS);
+  static prepareMobileColumns(tableColumns) {
+    const mobileColumns = _.clone(tableColumns);
     mobileColumns.push(mobileColumns.shift());
     return mobileColumns;
   }
@@ -33,9 +25,8 @@ class LocationsTable extends Component {
   componentWillMount() {
     if (!hasAuthority(DISPLAY_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
-    } else {
-      this.props.fetchLocationsOfType(this.props.locationType);
     }
+    this.setState({ loading: true });
   }
 
   render() {
@@ -44,14 +35,29 @@ class LocationsTable extends Component {
         <div className="hide-min-r-small-min">
           <MobileTable
             data={this.props.locationsList}
-            columns={LocationsTable.prepareMobileColumns()}
+            columns={LocationsTable.prepareMobileColumns(this.props.tableColumns)}
           />
         </div>
         <div className="hide-max-r-xsmall-max">
           <ReactTable
+            manual
+            filterable
             data={this.props.locationsList}
             columns={this.props.tableColumns}
-            filterable
+            loading={this.state.loading}
+            pages={this.props.locationListPages}
+            onFetchData={(state) => {
+              this.setState({ loading: true });
+              this.props.fetchLocationsOfType(this.props.locationType, buildSearchParams(
+                  state.filtered,
+                  state.sorted,
+                  state.page,
+                  state.pageSize,
+              ))
+              .then(() => {
+                this.setState({ loading: false });
+              });
+            }}
           />
         </div>
       </div>
@@ -62,13 +68,15 @@ class LocationsTable extends Component {
 function mapStateToProps(state) {
   return {
     locationsList: state.tablesReducer.locationsList,
+    locationListPages: state.tablesReducer.locationListPages,
   };
 }
 
-export default connect(mapStateToProps, { fetchLocationsOfType })(LocationsTable);
+export default withRouter(connect(mapStateToProps, { fetchLocationsOfType })(LocationsTable));
 
 LocationsTable.propTypes = {
   fetchLocationsOfType: PropTypes.func.isRequired,
+  locationListPages: PropTypes.number.isRequired,
   locationsList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
   tableColumns: PropTypes.arrayOf(PropTypes.shape({
