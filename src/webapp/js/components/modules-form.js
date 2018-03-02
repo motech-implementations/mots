@@ -109,17 +109,29 @@ const MODULE_FIELDS = {
   ivrGroup: {
     label: 'IVR Group',
   },
-  moduleNumber: {
-    label: 'Module Number',
-    required: true,
-    minVal: 1,
-    attributes: {
-      type: 'number',
-    },
-  },
   buttons: [{
     label: 'Add Unit',
     callback: 'addUnit',
+  }],
+};
+
+const COURSE_FIELDS = {
+  name: {
+    label: 'Name',
+    required: true,
+  },
+  description: {
+    label: 'Description',
+  },
+  ivrId: {
+    label: 'IVR Id',
+  },
+  ivrName: {
+    label: 'IVR Name',
+  },
+  buttons: [{
+    label: 'Add Module',
+    callback: 'addModule',
   }],
 };
 
@@ -264,6 +276,8 @@ class ModuleForm extends Component {
 
   static getFields(nodeType) {
     switch (nodeType) {
+      case 'COURSE':
+        return COURSE_FIELDS;
       case 'MODULE':
         return MODULE_FIELDS;
       case 'UNIT':
@@ -288,7 +302,7 @@ class ModuleForm extends Component {
     return (
       <div>
         {
-          this.props.nodeType === 'MODULE' ?
+          this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE' ?
             <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
               { _.map(ModuleForm.getFields(this.props.nodeType), (fieldConfig, fieldName) =>
                 ModuleForm.renderField(fieldConfig, fieldName, fieldName, this.props)) }
@@ -300,12 +314,12 @@ class ModuleForm extends Component {
                 className="btn btn-primary margin-bottom-md"
               >Save
               </button> }
-              { this.props.isEditable &&
+              { this.props.nodeType === 'COURSE' && this.props.isEditable &&
               <button
                 type="button"
                 disabled={this.props.isNew || this.props.nodeChanged || !pristine || submitting}
                 className="btn btn-success margin-left-sm margin-bottom-md"
-                onClick={this.props.releaseModule}
+                onClick={this.props.releaseCourse}
               >Publish
               </button> }
               { this.props.isEditable &&
@@ -382,7 +396,7 @@ ModuleForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  releaseModule: PropTypes.func.isRequired,
+  releaseCourse: PropTypes.func.isRequired,
   isEditable: PropTypes.bool.isRequired,
   nodeType: PropTypes.string,
   nodeChanged: PropTypes.bool,

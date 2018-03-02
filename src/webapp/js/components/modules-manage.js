@@ -48,6 +48,15 @@ class ModulesManage extends Component {
     return _.find(array, node => ModulesManage.getNodeKey(node) === id);
   }
 
+  static getNodeTypeForUrl(node) {
+    switch (node.type) {
+      case 'COURSE':
+        return 'courses';
+      default:
+        return 'modules';
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -56,23 +65,22 @@ class ModulesManage extends Component {
       treeData: [],
     };
 
-    this.addModule = this.addModule.bind(this);
-    this.saveModule = this.saveModule.bind(this);
-    this.releaseModule = this.releaseModule.bind(this);
+    this.saveNode = this.saveNode.bind(this);
+    this.releaseCourse = this.releaseCourse.bind(this);
   }
 
   componentWillMount() {
     if (!hasAuthority(MANAGE_MODULES_AUTHORITY, DISPLAY_MODULES_AUTHORITY)) {
       this.props.history.push('/home');
     } else {
-      this.fetchModules();
+      this.fetchCourses();
     }
   }
 
   getNodeClassName(node) {
     const classNames = [];
 
-    if (node.type !== 'MODULE') {
+    if (node.type !== 'COURSE' && node.type !== 'MODULE') {
       classNames.push('tree-node');
     } else if (node.status !== 'DRAFT') {
       classNames.push('tree-node-non-editable');
@@ -105,49 +113,95 @@ class ModulesManage extends Component {
     return nodeIndexes;
   }
 
-  updateAndSelectModule(module, moduleIndex) {
+  getNodeWithFormValues(nodeIndexPath) {
+    switch (this.state.selectedElement.node.type) {
+      case 'COURSE':
+        return { ...this.state.treeData[nodeIndexPath[0]], ...this.props.formValues };
+      default:
+        return {
+          ...this.state.treeData[nodeIndexPath[0]].children[nodeIndexPath[1]],
+          ...this.props.formValues,
+        };
+    }
+  }
+
+  updateAndSelectModule(module, moduleIndexPath) {
     const newModule = { ...module, changed: false };
 
     this.setState(state => update(state, {
       treeData: {
-        [moduleIndex]: { $merge: newModule },
+        [moduleIndexPath[0]]: {
+          children: {
+            [moduleIndexPath[1]]: { $merge: newModule },
+          },
+        },
       },
-      selectedElement: { $set: { node: newModule, path: [newModule.id] } },
+      selectedElement: {
+        $set: {
+          node: newModule,
+          path: [state.treeData[moduleIndexPath[0]].id, newModule.id],
+        },
+      },
     }));
 
     this.props.initialize(MODULE_FORM_NAME, _.omit(newModule, 'children', 'expanded'));
   }
 
-  saveModule() {
-    const moduleId = this.state.selectedElement.path[0];
-    const moduleIndex = ModulesManage.findNodeIndex(this.state.treeData, moduleId);
-    const module = { ...this.state.treeData[moduleIndex], ...this.props.formValues };
+  updateAndSelectCourse(course, courseIndex) {
+    const newCourse = { ...course, changed: false };
 
-    if (ModulesManage.isNodeNew(module)) {
-      apiClient.post('/api/modules', module)
+    this.setState(state => update(state, {
+      treeData: {
+        [courseIndex]: { $merge: newCourse },
+      },
+      selectedElement: { $set: { node: newCourse, path: [newCourse.id] } },
+    }));
+
+    this.props.initialize(MODULE_FORM_NAME, _.omit(newCourse, 'children', 'expanded'));
+  }
+
+  updateAndSelectNode(node, nodeIndexPath) {
+    const newNode = { ...node, changed: false };
+
+    switch (newNode.type) {
+      case 'COURSE':
+        this.updateAndSelectCourse(node, nodeIndexPath);
+        break;
+      default:
+        this.updateAndSelectModule(node, nodeIndexPath);
+    }
+  }
+
+  saveNode() {
+    const nodeIndexPath = this.getNodeIndexPath(this.state.selectedElement.path);
+    const type = ModulesManage.getNodeTypeForUrl(this.state.selectedElement.node);
+    const node = this.getNodeWithFormValues(nodeIndexPath);
+
+    if (ModulesManage.isNodeNew(node)) {
+      apiClient.post(`/api/${type}`, node)
         .then((response) => {
-          this.updateAndSelectModule(response.data, moduleIndex);
+          this.updateAndSelectNode(response.data, nodeIndexPath);
         });
     } else {
-      apiClient.put(`/api/modules/${module.id}`, module)
+      apiClient.put(`/api/${type}/${node.id}`, node)
         .then((response) => {
-          this.updateAndSelectModule(response.data, moduleIndex);
+          this.updateAndSelectNode(response.data, nodeIndexPath);
         });
     }
   }
 
-  releaseModule() {
-    const moduleId = this.state.selectedElement.path[0];
-    const moduleIndex = ModulesManage.findNodeIndex(this.state.treeData, moduleId);
+  releaseCourse() {
+    const courseId = this.state.selectedElement.path[0];
+    const courseIndex = ModulesManage.findNodeIndex(this.state.treeData, courseId);
 
-    apiClient.put(`/api/modules/${moduleId}/release`)
+    apiClient.put(`/api/courses/${courseId}/release`)
       .then((response) => {
-        this.updateAndSelectModule(response.data, moduleIndex);
+        this.updateAndSelectCourse(response.data, courseIndex);
       });
   }
 
-  fetchModules() {
-    const url = '/api/modules';
+  fetchCourses() {
+    const url = '/api/courses';
 
     apiClient.get(url)
       .then((response) => {
@@ -157,28 +211,23 @@ class ModulesManage extends Component {
       });
   }
 
-  addModule() {
-    const newModule = {
-      uiId: _.uniqueId(),
-      type: 'MODULE',
-      status: 'DRAFT',
-      children: [],
-      expanded: true,
-    };
-
-    this.setState(state => update(state, {
-      treeData: { $push: [newModule] },
-      selectedElement: { $set: { node: newModule, path: [newModule.uiId] } },
+  updateCourse(nodeIndexPath, newCourse) {
+    this.setState(state => ({
+      treeData: update(state.treeData, {
+        [nodeIndexPath[0]]: { $merge: { ...newCourse, changed: true } },
+      }),
     }));
-
-    this.props.initialize(MODULE_FORM_NAME, _.omit(newModule, 'children', 'expanded'));
-    this.props.resetLogoutCounter();
   }
 
   updateModule(nodeIndexPath, newModule) {
     this.setState(state => ({
       treeData: update(state.treeData, {
-        [nodeIndexPath[0]]: { $merge: { ...newModule, changed: true } },
+        [nodeIndexPath[0]]: {
+          changed: { $set: true },
+          children: {
+            [nodeIndexPath[1]]: { $merge: { ...newModule, changed: true } },
+          },
+        },
       }),
     }));
   }
@@ -189,7 +238,12 @@ class ModulesManage extends Component {
         [nodeIndexPath[0]]: {
           changed: { $set: true },
           children: {
-            [nodeIndexPath[1]]: { $merge: newUnit },
+            [nodeIndexPath[1]]: {
+              changed: { $set: true },
+              children: {
+                [nodeIndexPath[2]]: { $merge: newUnit },
+              },
+            },
           },
         },
       }),
@@ -203,8 +257,13 @@ class ModulesManage extends Component {
           changed: { $set: true },
           children: {
             [nodeIndexPath[1]]: {
+              changed: { $set: true },
               children: {
-                [nodeIndexPath[2]]: { $merge: newNode },
+                [nodeIndexPath[2]]: {
+                  children: {
+                    [nodeIndexPath[3]]: { $merge: newNode },
+                  },
+                },
               },
             },
           },
@@ -217,6 +276,9 @@ class ModulesManage extends Component {
     const nodeIndexPath = this.getNodeIndexPath(path);
 
     switch (newNode.type) {
+      case 'COURSE':
+        this.updateCourse(nodeIndexPath, newNode);
+        break;
       case 'MODULE':
         this.updateModule(nodeIndexPath, newNode);
         break;
@@ -228,12 +290,51 @@ class ModulesManage extends Component {
     }
   }
 
-  reinitializeForm(module) {
-    if (ModulesManage.areEqual(this.state.selectedElement.node, module)) {
-      this.props.initialize(MODULE_FORM_NAME, _.omit({ ...module, changed: true }, 'children', 'expanded'), true);
+  reinitializeFormForSelectedNode(node) {
+    const selectedNode = this.state.selectedElement.node;
+
+    if (ModulesManage.areEqual(selectedNode, node)) {
+      this.props.initialize(MODULE_FORM_NAME, _.omit({ ...node, changed: true }, 'children', 'expanded'), true);
+    }
+  }
+
+  reinitializeForm(nodeIndexPath) {
+    const selectedNode = this.state.selectedElement.node;
+    const course = this.state.treeData[nodeIndexPath[0]];
+
+    if (selectedNode.type === 'COURSE') {
+      this.reinitializeFormForSelectedNode(course);
+    } else if (selectedNode.type === 'MODULE' && course) {
+      const module = course.children[nodeIndexPath[1]];
+
+      this.reinitializeFormForSelectedNode(module);
     }
 
     this.props.resetLogoutCounter();
+  }
+
+  addModule(path) {
+    const nodeIndexPath = this.getNodeIndexPath(path);
+
+    this.setState(state => ({
+      treeData: update(state.treeData, {
+        [nodeIndexPath[0]]: {
+          changed: { $set: true },
+          expanded: { $set: true },
+          children: {
+            $push: [{
+              uiId: _.uniqueId(),
+              type: 'MODULE',
+              status: 'DRAFT',
+              children: [],
+              expanded: true,
+            }],
+          },
+        },
+      }),
+    }));
+
+    this.reinitializeForm(nodeIndexPath);
   }
 
   addUnit(path) {
@@ -243,20 +344,27 @@ class ModulesManage extends Component {
       treeData: update(state.treeData, {
         [nodeIndexPath[0]]: {
           changed: { $set: true },
+          expanded: { $set: true },
           children: {
-            $push: [{
-              uiId: _.uniqueId(),
-              type: 'UNIT',
-              allowReplay: false,
-              children: [],
-              expanded: true,
-            }],
+            [nodeIndexPath[1]]: {
+              changed: { $set: true },
+              expanded: { $set: true },
+              children: {
+                $push: [{
+                  uiId: _.uniqueId(),
+                  type: 'UNIT',
+                  allowReplay: false,
+                  children: [],
+                  expanded: true,
+                }],
+              },
+            },
           },
         },
       }),
     }));
 
-    this.reinitializeForm(this.state.treeData[nodeIndexPath[0]]);
+    this.reinitializeForm(nodeIndexPath);
   }
 
   addMessageOrQuestion(path, type) {
@@ -266,16 +374,26 @@ class ModulesManage extends Component {
       treeData: update(state.treeData, {
         [nodeIndexPath[0]]: {
           changed: { $set: true },
+          expanded: { $set: true },
           children: {
             [nodeIndexPath[1]]: {
-              children: { $push: [{ uiId: _.uniqueId(), type }] },
+              changed: { $set: true },
+              expanded: { $set: true },
+              children: {
+                [nodeIndexPath[2]]: {
+                  expanded: { $set: true },
+                  children: {
+                    $push: [{ uiId: _.uniqueId(), type }],
+                  },
+                },
+              },
             },
           },
         },
       }),
     }));
 
-    this.reinitializeForm(this.state.treeData[nodeIndexPath[0]]);
+    this.reinitializeForm(nodeIndexPath);
   }
 
   addMessage(path) {
@@ -291,7 +409,12 @@ class ModulesManage extends Component {
       treeData: update(state.treeData, {
         [nodeIndexPath[0]]: {
           changed: { $set: true },
-          children: { $splice: [[nodeIndexPath[1], 1]] },
+          children: {
+            [nodeIndexPath[1]]: {
+              changed: { $set: true },
+              children: { $splice: [[nodeIndexPath[2], 1]] },
+            },
+          },
         },
       }),
     }));
@@ -304,7 +427,12 @@ class ModulesManage extends Component {
           changed: { $set: true },
           children: {
             [nodeIndexPath[1]]: {
-              children: { $splice: [[nodeIndexPath[2], 1]] },
+              changed: { $set: true },
+              children: {
+                [nodeIndexPath[2]]: {
+                  children: { $splice: [[nodeIndexPath[3], 1]] },
+                },
+              },
             },
           },
         },
@@ -321,7 +449,7 @@ class ModulesManage extends Component {
       this.removeMessageOrQuestion(nodeIndexPath);
     }
 
-    this.reinitializeForm(this.state.treeData[nodeIndexPath[0]]);
+    this.reinitializeForm(nodeIndexPath);
     this.selectParentNode(path, nodeIndexPath, node);
   }
 
@@ -344,6 +472,7 @@ class ModulesManage extends Component {
       const newPath = path.slice(0, lastIndex);
       const newIndexPath = nodeIndexPath.slice(0, lastIndex);
       const newNode = this.findNodeByIndex(newIndexPath);
+      newNode.changed = true;
 
       this.setState(() => ({
         selectedElement: { node: newNode, path: newPath },
@@ -361,41 +490,52 @@ class ModulesManage extends Component {
     if (!hasAuthority(MANAGE_MODULES_AUTHORITY)) {
       return false;
     }
-    const module = node.type === 'MODULE' ? node : ModulesManage.findNode(this.state.treeData, path[0]);
+
+    if (node.type === 'COURSE') {
+      return node.status === 'DRAFT';
+    }
+
+    const course = ModulesManage.findNode(this.state.treeData, path[0]);
+    const module = node.type === 'MODULE' ? node : ModulesManage.findNode(course.children, path[1]);
+
     return !module || module.status === 'DRAFT';
   }
 
   render() {
-    const canDrop = ({ node, prevPath, nextPath }) => (node.type === 'MODULE'
-      && nextPath.length === 1) || (prevPath.length === nextPath.length
-      && prevPath[prevPath.length - 2] === nextPath[nextPath.length - 2]);
-    const canDrag = ({ node, path }) => node.type !== 'MODULE' && this.isEditable(node, path);
+    const canDrop = ({ prevPath, nextPath }) => prevPath.length === nextPath.length
+      && prevPath[prevPath.length - 2] === nextPath[nextPath.length - 2];
+    const canDrag = ({ node, path }) => node.type !== 'COURSE' && this.isEditable(node, path);
 
     const onMoveNode = ({ node, prevPath }) => {
-      if (node.type !== 'MODULE') {
-        const moduleIndex = ModulesManage.findNodeIndex(this.state.treeData, prevPath[0]);
-        this.setState(state => ({
-          treeData: update(state.treeData, {
-            [moduleIndex]: { changed: { $set: true } },
-          }),
-        }));
+      if (node.type !== 'COURSE') {
+        const nodeIndexPath = this.getNodeIndexPath(prevPath);
 
-        this.reinitializeForm(this.state.treeData[moduleIndex]);
+        if (node.type === 'MODULE') {
+          this.setState(state => ({
+            treeData: update(state.treeData, {
+              [nodeIndexPath[0]]: { changed: { $set: true } },
+            }),
+          }));
+        } else {
+          this.setState(state => ({
+            treeData: update(state.treeData, {
+              [nodeIndexPath[0]]: {
+                changed: { $set: true },
+                children: {
+                  [nodeIndexPath[1]]: { changed: { $set: true } },
+                },
+              },
+            }),
+          }));
+        }
+
+        this.reinitializeForm(nodeIndexPath);
       }
     };
 
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</h1>
-        { hasAuthority(MANAGE_MODULES_AUTHORITY) &&
-        <button
-          className="btn btn-success margin-bottom-lg"
-          onClick={this.addModule}
-        >
-          <span className="glyphicon glyphicon-plus" />
-          <span className="icon-text">Add Module</span>
-        </button>
-        }
         <div className="row">
           <div className="col-md-6 .tree-container">
             <SortableTree
@@ -418,7 +558,7 @@ class ModulesManage extends Component {
                   this.props.resetLogoutCounter();
                 },
                 className: this.getNodeClassName(node),
-                buttons: node.type === 'MODULE' || !this.isEditable(node, path) ? [] : [
+                buttons: node.type === 'COURSE' || node.type === 'MODULE' || !this.isEditable(node, path) ? [] : [
                   <button
                     className="btn btn-danger"
                     onClick={(event) => {
@@ -438,12 +578,13 @@ class ModulesManage extends Component {
           <div className="col-md-6">
             {
               this.state.selectedElement.path && <ModuleForm
-                onSubmit={this.saveModule}
-                releaseModule={this.releaseModule}
+                onSubmit={this.saveNode}
+                releaseCourse={this.releaseCourse}
                 isEditable={this.isEditable(
                   this.state.selectedElement.node,
                   this.state.selectedElement.path,
                 )}
+                addModule={() => this.addModule(this.state.selectedElement.path)}
                 addUnit={() => this.addUnit(this.state.selectedElement.path)}
                 addMessage={() => this.addMessage(this.state.selectedElement.path)}
                 addQuestion={() => this.addQuestion(this.state.selectedElement.path)}

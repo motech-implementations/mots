@@ -3,12 +3,14 @@ package org.motechproject.mots.web;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
+import org.motechproject.mots.domain.Course;
 import org.motechproject.mots.domain.Module;
+import org.motechproject.mots.dto.CourseDto;
 import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.dto.ModuleSimpleDto;
 import org.motechproject.mots.mapper.ModuleMapper;
 import org.motechproject.mots.service.ModuleService;
-import org.motechproject.mots.validate.ModuleReleaseCheck;
+import org.motechproject.mots.validate.CourseReleaseCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class ModuleController extends BaseController {
 
-  private static final String MODULE = "module";
+  private static final String COURSE = "course";
 
   @Autowired
   private ModuleService moduleService;
@@ -97,23 +99,71 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Release Module.
-   * @param id id of Module to release
+   * Get list of Courses.
+   * @return list of all Courses
    */
-  @RequestMapping(value = "/modules/{id}/release", method = RequestMethod.PUT)
+  @RequestMapping(value = "/courses", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public ModuleDto releaseModule(@PathVariable("id") UUID id) {
-    Module module = moduleService.findById(id);
+  public List<CourseDto> getCourses() {
+    Iterable<Course> courses = moduleService.getCourses();
 
-    validateModuleForRelease(module);
-
-    return moduleMapper.toDto(moduleService.releaseModule(module));
+    return moduleMapper.toCourseDtos(courses);
   }
 
-  private void validateModuleForRelease(Module module) {
-    BindingResult bindingResult = new BeanPropertyBindingResult(module, MODULE);
-    validator.validate(module, bindingResult, ModuleReleaseCheck.class);
+  /**
+   * Create Course.
+   * @param courseDto DTO of Course to create
+   * @return created Course
+   */
+  @RequestMapping(value = "/courses", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.CREATED)
+  @ResponseBody
+  public CourseDto createCourse(@RequestBody @Valid CourseDto courseDto,
+      BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+
+    Course course = moduleService.createCourse(courseDto);
+
+    return moduleMapper.toDto(course);
+  }
+
+  /**
+   * Update Course.
+   * @param id id of Course to update
+   * @param courseDto DTO of Course to update
+   * @return updated Course
+   */
+  @RequestMapping(value = "/courses/{id}", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public CourseDto updateCourse(@PathVariable("id") UUID id,
+      @RequestBody @Valid CourseDto courseDto, BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+
+    Course course = moduleService.updateCourse(id, courseDto);
+
+    return moduleMapper.toDto(course);
+  }
+
+  /**
+   * Release Course.
+   * @param id id of Course to release
+   */
+  @RequestMapping(value = "/courses/{id}/release", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public CourseDto releaseCourse(@PathVariable("id") UUID id) {
+    Course course = moduleService.findCourseById(id);
+
+    validateCourseForRelease(course);
+
+    return moduleMapper.toDto(moduleService.releaseCourse(course));
+  }
+
+  private void validateCourseForRelease(Course course) {
+    BindingResult bindingResult = new BeanPropertyBindingResult(course, COURSE);
+    validator.validate(course, bindingResult, CourseReleaseCheck.class);
 
     checkBindingResult(bindingResult);
   }

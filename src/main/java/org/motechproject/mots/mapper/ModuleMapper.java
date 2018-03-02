@@ -12,6 +12,8 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.CallFlowElement;
 import org.motechproject.mots.domain.Choice;
+import org.motechproject.mots.domain.Course;
+import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.Message;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.MultipleChoiceQuestion;
@@ -19,6 +21,7 @@ import org.motechproject.mots.domain.Unit;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 import org.motechproject.mots.dto.CallFlowElementDto;
 import org.motechproject.mots.dto.ChoiceDto;
+import org.motechproject.mots.dto.CourseDto;
 import org.motechproject.mots.dto.MessageDto;
 import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.dto.ModuleSimpleDto;
@@ -34,6 +37,16 @@ public abstract class ModuleMapper {
   public static final ModuleMapper INSTANCE = Mappers.getMapper(ModuleMapper.class);
 
   private static final String LIST_ORDER_FIELD = "listOrder";
+
+  @Mappings({
+      @Mapping(target = "children", source = "courseModules"),
+      @Mapping(target = "type", constant = "COURSE")
+  })
+  public abstract CourseDto toDto(Course course);
+
+  public ModuleDto toDto(CourseModule courseModule) {
+    return toDto(courseModule.getModule());
+  }
 
   @Mappings({
       @Mapping(target = "children", source = "units"),
@@ -62,6 +75,46 @@ public abstract class ModuleMapper {
   public abstract List<ModuleSimpleDto> toSimpleDtos(Iterable<Module> modules);
 
   public abstract List<ModuleDto> toDtos(Iterable<Module> modules);
+
+  public abstract List<CourseDto> toCourseDtos(Iterable<Course> modules);
+
+  /**
+   * Update Course using data from DTO.
+   * @param courseDto DTO with new data
+   * @param course Course to be updated
+   */
+  public void updateCourseFromDto(CourseDto courseDto, Course course) {
+    List<ModuleDto> moduleDtos = courseDto.getChildren();
+    List<CourseModule> courseModules = course.getCourseModules();
+    List<CourseModule> updatedCourseModules = new ArrayList<>();
+
+    if (courseModules == null) {
+      courseModules = new ArrayList<>();
+    }
+
+    if (moduleDtos != null && !moduleDtos.isEmpty()) {
+      for (int i = 0; i < moduleDtos.size(); i++) {
+        ModuleDto moduleDto = moduleDtos.get(i);
+        CourseModule courseModule;
+
+        if (StringUtils.isBlank(moduleDto.getId())) {
+          courseModule = new CourseModule(course, Module.initialize());
+        } else {
+          courseModule = courseModules.stream().filter(cm ->
+              cm.getModule().getId().toString().equals(moduleDto.getId()))
+              .findAny().orElseThrow(() -> new EntityNotFoundException(
+                  "Cannot update course, because error occurred during module list update"));
+        }
+
+        updateModuleFromDto(moduleDto, courseModule.getModule());
+        courseModule.setListOrder(i);
+        updatedCourseModules.add(courseModule);
+      }
+    }
+
+    updateFromDto(courseDto, course);
+    course.setCourseModules(updatedCourseModules);
+  }
 
   /**
    * Update Module using data from DTO.
@@ -164,6 +217,13 @@ public abstract class ModuleMapper {
   }
 
   abstract Choice fromDto(ChoiceDto choiceDto);
+
+  @Mappings({
+      @Mapping(target = "courseModules", ignore = true),
+      @Mapping(target = "id", ignore = true),
+      @Mapping(target = "status", ignore = true)
+  })
+  abstract void updateFromDto(CourseDto courseDto, @MappingTarget Course course);
 
   @Mappings({
       @Mapping(target = "units", ignore = true),
