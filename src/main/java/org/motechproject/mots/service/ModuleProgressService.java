@@ -83,6 +83,11 @@ public class ModuleProgressService {
     modules.forEach(module -> createModuleProgress(chw, module));
   }
 
+  public void removeModuleProgresses(CommunityHealthWorker chw, Set<Module> modules) {
+    modules.forEach(module -> moduleProgressRepository
+        .removeAllByCommunityHealthWorkerAndModule(chw, module));
+  }
+
   private void createModuleProgress(CommunityHealthWorker chw, Module module) {
     if (!moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(chw.getId(),
         module.getId()).isPresent()) {
