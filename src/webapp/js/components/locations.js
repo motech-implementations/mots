@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import PropTypes from 'prop-types';
 
 import 'react-tabs/style/react-tabs.scss';
 import LocationsTable from '../container/locations-table';
@@ -25,38 +26,38 @@ const CHIEFDOM_COLUMNS = [
   },
 ];
 
-class FACILITIES_COLUMNS extends Component {
-  static getColumns = () => [
-    {
-      Header: 'Facility ID',
-      accessor: 'facilityId',
-    }, {
-      Header: 'Name',
-      accessor: 'name',
-    }, {
-      Header: 'Facility Type',
-      accessor: 'facilityType',
-      Filter: ({ onChange }) => (
-        <select
-          onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
-        >
-          <option value="">Show All</option>
-          <option value="CHC">CHC</option>
-          <option value="CHP">CHP</option>
-          <option value="MCHP">MCHP</option>
-          <option value="clinic">Clinic</option>
-          <option value="hospital">Hospital</option>
-        </select>),
-    }, {
-      Header: 'Incharge name',
-      accessor: 'inchargeFullName',
-    }, {
-      Header: 'Chiefdom',
-      accessor: 'parent',
-    },
-  ];
-}
+const FacilityTypeFilter = ({ onChange }) => (
+  <select
+    onChange={event => onChange(event.target.value)}
+    style={{ width: '100%' }}
+  >
+    <option value="">Show All</option>
+    <option value="CHC">CHC</option>
+    <option value="CHP">CHP</option>
+    <option value="MCHP">MCHP</option>
+    <option value="clinic">Clinic</option>
+    <option value="hospital">Hospital</option>
+  </select>);
+
+const FACILITIES_COLUMNS = [
+  {
+    Header: 'Facility ID',
+    accessor: 'facilityId',
+  }, {
+    Header: 'Name',
+    accessor: 'name',
+  }, {
+    Header: 'Facility Type',
+    accessor: 'facilityType',
+    Filter: FacilityTypeFilter,
+  }, {
+    Header: 'Incharge name',
+    accessor: 'inchargeFullName',
+  }, {
+    Header: 'Chiefdom',
+    accessor: 'parent',
+  },
+];
 
 const COMMUNITY_COLUMNS = [
   {
@@ -85,7 +86,7 @@ const Locations = () => (
       <TabPanel>
         <LocationsTable
           locationType={FETCH_FACILITIES}
-          tableColumns={FACILITIES_COLUMNS.getColumns()}
+          tableColumns={FACILITIES_COLUMNS}
         />
       </TabPanel>
       <TabPanel>
@@ -99,3 +100,7 @@ const Locations = () => (
 );
 
 export default Locations;
+
+FacilityTypeFilter.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};
