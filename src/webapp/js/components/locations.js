@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import PropTypes from 'prop-types';
 
 import 'react-tabs/style/react-tabs.scss';
 import LocationsTable from '../container/locations-table';
@@ -25,6 +26,19 @@ const CHIEFDOM_COLUMNS = [
   },
 ];
 
+const FacilityTypeFilter = ({ onChange }) => (
+  <select
+    onChange={event => onChange(event.target.value)}
+    style={{ width: '100%' }}
+  >
+    <option value="">Show All</option>
+    <option value="CHC">CHC</option>
+    <option value="CHP">CHP</option>
+    <option value="MCHP">MCHP</option>
+    <option value="clinic">Clinic</option>
+    <option value="hospital">Hospital</option>
+  </select>);
+
 const FACILITIES_COLUMNS = [
   {
     Header: 'Facility ID',
@@ -35,6 +49,7 @@ const FACILITIES_COLUMNS = [
   }, {
     Header: 'Facility Type',
     accessor: 'facilityType',
+    Filter: FacilityTypeFilter,
   }, {
     Header: 'Incharge name',
     accessor: 'inchargeFullName',
@@ -69,7 +84,10 @@ const Locations = () => (
         <LocationsTable locationType={FETCH_COMMUNITIES} tableColumns={COMMUNITY_COLUMNS} />
       </TabPanel>
       <TabPanel>
-        <LocationsTable locationType={FETCH_FACILITIES} tableColumns={FACILITIES_COLUMNS} />
+        <LocationsTable
+          locationType={FETCH_FACILITIES}
+          tableColumns={FACILITIES_COLUMNS}
+        />
       </TabPanel>
       <TabPanel>
         <LocationsTable locationType={FETCH_CHIEFDOMS} tableColumns={CHIEFDOM_COLUMNS} />
@@ -82,3 +100,7 @@ const Locations = () => (
 );
 
 export default Locations;
+
+FacilityTypeFilter.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};
