@@ -9,14 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +23,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.MotsException;
-import org.motechproject.mots.validate.ModuleReleaseCheck;
+import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
 @Table(name = "module")
@@ -56,7 +54,7 @@ public class Module extends IvrObject {
   @Getter
   private String nameCode;
 
-  @NotBlank(message = "IVR Group cannot be empty", groups = ModuleReleaseCheck.class)
+  @NotBlank(message = "IVR Group cannot be empty", groups = CourseReleaseCheck.class)
   @Column(name = "ivr_group")
   @Getter
   @Setter
@@ -67,12 +65,6 @@ public class Module extends IvrObject {
   @Getter
   @Setter
   private String description;
-
-  @Min(value = 1, message = ValidationMessages.MODULE_NUMBER_LESS_THAN_ONE)
-  @Column(name = "module_number", nullable = false)
-  @Getter
-  @Setter
-  private Integer moduleNumber;
 
   @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
@@ -102,12 +94,6 @@ public class Module extends IvrObject {
   @Getter
   @Setter
   private Module previousVersion;
-
-  @ManyToOne
-  @JoinColumn(name = "course_id", nullable = false)
-  @Getter
-  @Setter
-  private Course course;
 
   public Module(UUID id) {
     super(id);

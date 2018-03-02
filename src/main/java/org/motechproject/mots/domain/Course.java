@@ -1,5 +1,6 @@
 package org.motechproject.mots.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
@@ -24,6 +25,18 @@ import org.motechproject.mots.domain.enums.Status;
 @Table(name = "course")
 public class Course extends IvrObject {
 
+  /**
+   * Initialize Course.
+   * @return course with initial values
+   */
+  public static Course initialize() {
+    Course course = new Course();
+    course.version = 1;
+    course.status = Status.DRAFT;
+
+    return course;
+  }
+
   @Column(name = "name", nullable = false)
   @Getter
   @Setter
@@ -43,11 +56,10 @@ public class Course extends IvrObject {
   private Status status;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
-  @OrderBy("module_number ASC")
+  @OrderBy("list_order ASC")
   @Getter
-  @Setter
   @Valid
-  private List<Module> modules;
+  private List<CourseModule> courseModules;
 
   @Column(name = "version", nullable = false)
   @Getter
@@ -65,6 +77,34 @@ public class Course extends IvrObject {
   @Getter
   @Setter
   private Message noModulesMessage;
+
+  /**
+   * Update list content.
+   * @param courseModules list of new Units
+   */
+  public void setCourseModules(List<CourseModule> courseModules) {
+    if (this.courseModules == null) {
+      this.courseModules = courseModules;
+    } else if (!this.courseModules.equals(courseModules)) {
+      this.courseModules.clear();
+
+      if (courseModules != null) {
+        this.courseModules.addAll(courseModules);
+      }
+    }
+  }
+
+  /**
+   * Get list of modules.
+   * @return list of modules
+   */
+  public List<Module> getModules() {
+    if (courseModules == null || courseModules.isEmpty()) {
+      return new ArrayList<>();
+    }
+
+    return courseModules.stream().map(CourseModule::getModule).collect(Collectors.toList());
+  }
 
   public List<Module> getReleasedModules() {
     return getModules().stream().filter(module -> module.getStatus().equals(Status.RELEASED))
