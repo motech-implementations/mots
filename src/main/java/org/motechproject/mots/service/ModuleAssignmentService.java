@@ -53,6 +53,9 @@ public class ModuleAssignmentService {
   private EntityManager entityManager;
 
   @Autowired
+  private CommunityHealthWorkerService communityHealthWorkerService;
+
+  @Autowired
   private CommunityHealthWorkerRepository communityHealthWorkerRepository;
 
   @Autowired
@@ -224,6 +227,19 @@ public class ModuleAssignmentService {
       moduleProgressService.createModuleProgresses(chw, modulesToAdd);
 
     }
+  }
+
+  /**
+   * Get AssignedModules consists of Modules with started CHW ModuleProgress.
+   * @param chwId Id of CHW
+   * @return modules assigned to CHW with given Id
+   */
+  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  public AssignedModules getStartedAssignedModules(UUID chwId) {
+    AssignedModules assignedModules = new AssignedModules();
+    assignedModules.setHealthWorker(communityHealthWorkerService.getHealthWorker(chwId));
+    assignedModules.setModules(moduleRepository.findByCommunityHealthWorkerIdAndStatus(chwId));
+    return assignedModules;
   }
 
   private Set<Module> getModulesToAdd(Set<Module> oldModules, Set<Module> newModules) {
