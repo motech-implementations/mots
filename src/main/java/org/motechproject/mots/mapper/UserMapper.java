@@ -9,6 +9,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.security.User;
+import org.motechproject.mots.dto.ProfileDto;
 import org.motechproject.mots.dto.UserDto;
 
 @Mapper(uses = { UuidMapper.class },
@@ -22,6 +23,8 @@ public interface UserMapper {
       @Mapping(target = "passwordConfirm", ignore = true)
   })
   UserDto toDto(User user);
+
+  ProfileDto toProfileDto(User user);
 
   @Mapping(target = "id", ignore = true)
   User fromDto(UserDto userDto);

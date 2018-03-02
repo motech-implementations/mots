@@ -266,7 +266,7 @@ export default class SideBar extends Component {
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
         <ul className="nav navbar-nav side-nav">
           <li className="hide-min-r-small-min">
-            <Link to="/" onClick={this.props.hideMenuSmart}>
+            <Link to="/profile" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-user" />
               <span className="icon-text">Profile</span>
             </Link>

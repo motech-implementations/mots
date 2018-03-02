@@ -50,6 +50,14 @@ public class UserService {
   }
 
   /**
+   * Get User by username.
+   * @param username of user.
+   */
+  public User getUserByUsername(String username) {
+    return getUserByUserName(username);
+  }
+
+  /**
    * Save User with new encoded password (if it's not blank).
    * @param user User to be created.
    * @return saved User

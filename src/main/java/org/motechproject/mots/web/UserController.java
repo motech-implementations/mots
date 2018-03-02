@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserRole;
+import org.motechproject.mots.dto.ProfileDto;
 import org.motechproject.mots.dto.RoleDto;
 import org.motechproject.mots.dto.UserDto;
 import org.motechproject.mots.mapper.RoleMapper;
@@ -141,6 +142,18 @@ public class UserController extends BaseController {
     userService.changeUserPassword(principal.getName(), newPassword, oldPassword);
 
     return "Password changed successfully.";
+  }
+
+  /**
+   * Get info about current logged-in User.
+   */
+  @RequestMapping(value = "/user/info",
+      method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public ProfileDto getUserInfo(Principal principal) {
+    User user = userService.getUserByUsername(principal.getName());
+    return userMapper.toProfileDto(user);
   }
 
   /**
