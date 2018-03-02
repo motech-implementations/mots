@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -51,9 +52,6 @@ public class ModuleAssignmentService {
 
   @Autowired
   private EntityManager entityManager;
-
-  @Autowired
-  private CommunityHealthWorkerService communityHealthWorkerService;
 
   @Autowired
   private CommunityHealthWorkerRepository communityHealthWorkerRepository;
@@ -108,7 +106,6 @@ public class ModuleAssignmentService {
     Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
     Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
     validateModulesToUnassign(assignedModulesChw, modulesToRemove);
-    moduleProgressService.removeModuleProgresses(assignedModulesChw, modulesToRemove);
 
     String ivrId = assignedModulesChw.getIvrId();
     if (ivrId == null) {
@@ -124,26 +121,24 @@ public class ModuleAssignmentService {
           + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
       throw new ModuleAssignmentException(message, ex);
     }
-
+    moduleProgressService.removeModuleProgresses(assignedModulesChw, modulesToRemove);
     moduleProgressService.createModuleProgresses(assignedModulesChw, modulesToAdd);
   }
 
   private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassing) {
-    HashSet<Module> startedModules = new HashSet<>();
+    HashSet<String> startedModulesIds = new HashSet<>();
     modulesToUnassing.forEach(module -> moduleProgressRepository
         .findByCommunityHealthWorkerIdAndModuleId(chw.getId(), module.getId())
         .ifPresent(moduleProgress -> {
           if (!ProgressStatus.NOT_STARTED.equals(moduleProgress.getStatus())) {
-            startedModules.add(module);
+            startedModulesIds.add(module.getId().toString());
           }
         })
     );
 
-    if (!startedModules.isEmpty()) {
+    if (!startedModulesIds.isEmpty()) {
       throw new MotsException(String.format("Could not unassign started modules (module IDs: %s)",
-          startedModules.stream()
-              .map(module -> module.getId().toString())
-              .collect(Collectors.joining(", "))));
+          StringUtils.join(startedModulesIds, ", ")));
     }
   }
 
@@ -227,19 +222,6 @@ public class ModuleAssignmentService {
       moduleProgressService.createModuleProgresses(chw, modulesToAdd);
 
     }
-  }
-
-  /**
-   * Get AssignedModules consists of Modules with started CHW ModuleProgress.
-   * @param chwId Id of CHW
-   * @return modules assigned to CHW with given Id
-   */
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
-  public AssignedModules getStartedAssignedModules(UUID chwId) {
-    AssignedModules assignedModules = new AssignedModules();
-    assignedModules.setHealthWorker(communityHealthWorkerService.getHealthWorker(chwId));
-    assignedModules.setModules(moduleRepository.findByCommunityHealthWorkerIdAndStatus(chwId));
-    return assignedModules;
   }
 
   private Set<Module> getModulesToAdd(Set<Module> oldModules, Set<Module> newModules) {

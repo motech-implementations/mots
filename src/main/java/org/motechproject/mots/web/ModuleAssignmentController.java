@@ -67,19 +67,4 @@ public class ModuleAssignmentController extends BaseController {
 
     return moduleAssignmentMapper.toDto(assignedModules);
   }
-
-  /**
-   * Get Modules with started CHW ModuleProgress assigned to CHW.
-   * @param chwId id of CHW
-   * @return modules assigned to CHW
-   */
-  @RequestMapping(value = "/startedAssignedModules", method = RequestMethod.GET)
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public ChwModulesDto getStartedAssignedModules(@RequestParam(value = "chwId") String chwId) {
-    AssignedModules assignedModules =
-        moduleAssignmentService.getStartedAssignedModules(UUID.fromString(chwId));
-
-    return moduleAssignmentMapper.toDto(assignedModules);
-  }
 }
