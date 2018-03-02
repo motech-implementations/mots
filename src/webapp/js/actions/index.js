@@ -85,7 +85,17 @@ export function signoutUser() {
 }
 
 export function resetLogoutCounter() {
-  return { type: RESET_LOGOUT_COUNTER };
+  return (dispatch) => {
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    if (decoded.exp < currentTime) {
+      const refreshToken = localStorage.getItem('refresh_token');
+      dispatch(useRefreshToken(refreshToken));
+    }
+
+    dispatch({ type: RESET_LOGOUT_COUNTER });
+  };
 }
 
 export function fetchChws(searchParams) {
