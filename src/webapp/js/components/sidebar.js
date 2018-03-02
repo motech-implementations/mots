@@ -28,6 +28,7 @@ export default class SideBar extends Component {
       healthWorkersMenuCollapsed: true,
       modulesMenuCollapsed: true,
       inchargeMenuCollapsed: true,
+      locationsMenuCollapsed: true,
       usersMenuCollapsed: true,
       reportsMenuCollapsed: true,
       reportList: [],
@@ -36,6 +37,7 @@ export default class SideBar extends Component {
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
     this.toggleModulesMenu = this.toggleModulesMenu.bind(this);
     this.toggleInchargeMenu = this.toggleInchargeMenu.bind(this);
+    this.toggleLocationsMenu = this.toggleLocationsMenu.bind(this);
     this.toggleUsersMenu = this.toggleUsersMenu.bind(this);
     this.toggleReportsMenu = this.toggleReportsMenu.bind(this);
     this.fetchReports = this.fetchReports.bind(this);
@@ -71,6 +73,12 @@ export default class SideBar extends Component {
   toggleInchargeMenu(event) {
     event.preventDefault();
     this.setState({ inchargeMenuCollapsed: !this.state.inchargeMenuCollapsed });
+    return false;
+  }
+
+  toggleLocationsMenu(event) {
+    event.preventDefault();
+    this.setState({ locationsMenuCollapsed: !this.state.locationsMenuCollapsed });
     return false;
   }
 
@@ -162,6 +170,41 @@ export default class SideBar extends Component {
             </Link>
           </li>
         }
+      </ul>
+    );
+  }
+
+  renderLocationsMenu() {
+    if (this.state.locationsMenuCollapsed) {
+      return '';
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        { hasAuthority(MANAGE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/community/new" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-plus" />
+              <span className="icon-text">Add Community</span>
+            </Link>
+          </li>
+          }
+        { hasAuthority(MANAGE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/facility/new" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-plus" />
+              <span className="icon-text">Add Facility</span>
+            </Link>
+          </li>
+          }
+        { hasAuthority(DISPLAY_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-list-alt" />
+              <span className="icon-text">Location list</span>
+            </Link>
+          </li>
+          }
       </ul>
     );
   }
@@ -288,10 +331,14 @@ export default class SideBar extends Component {
           }
           { hasAuthority(DISPLAY_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY) &&
           <li>
-            <Link to="/locations" onClick={this.props.hideMenuSmart}>
-              <span className="fa fa-map-marker  " />
+            <a href="" onClick={this.toggleLocationsMenu}>
+              <span className="fa fa-map-marker" />
               <span className="icon-text">Locations</span>
-            </Link>
+              <span
+                className={SideBar.getSubmenuArrowClass(this.state.usersMenuCollapsed)}
+              />
+            </a>
+            {this.renderLocationsMenu()}
           </li>
           }
           { hasAuthority(MANAGE_USERS_AUTHORITY) &&

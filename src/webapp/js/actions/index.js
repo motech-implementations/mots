@@ -9,7 +9,8 @@ import {
   SAVE_INCHARGE,
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
-  FETCH_ROLES, SAVE_USER,
+  FETCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
+  SAVE_FACILITY,
 } from './types';
 
 const BASE_URL = '/api';
@@ -211,6 +212,47 @@ export function saveUser(values, callback) {
     payload: request,
   };
 }
+
+export function createFacility(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/facility`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_FACILITY,
+    payload: request,
+  };
+}
+
+export function saveFacility(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/facility/${values.id}`, values);
+  request.then(() => callback());
+
+  return {
+    type: SAVE_FACILITY,
+    payload: request,
+  };
+}
+
+export function createCommunity(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/community`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_COMMUNITY,
+    payload: request,
+  };
+}
+
+export function saveCommunity(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/community/${values.id}`, values);
+  request.then(() => callback());
+
+  return {
+    type: SAVE_COMMUNITY,
+    payload: request,
+  };
+}
+
 
 export function fetchLocationsOfType(type, searchParams) {
   let url;
