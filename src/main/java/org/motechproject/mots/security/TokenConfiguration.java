@@ -62,6 +62,7 @@ public class TokenConfiguration {
     customTokenServices.setSupportRefreshToken(true);
     customTokenServices.setAccessTokenValiditySeconds(tokenValiditySeconds);
     customTokenServices.setRefreshTokenValiditySeconds(tokenValiditySeconds * 2);
+    customTokenServices.setReuseRefreshToken(false);
 
     return customTokenServices;
   }
