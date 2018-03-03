@@ -57,10 +57,11 @@ public abstract class ModuleAssignmentMapper {
   }
 
   @AfterMapping
-  protected void fillIsStared(AssignedModules assignedModules,
+  protected void fillIsStaredAndRemoveName(AssignedModules assignedModules,
       @MappingTarget ChwModulesDto chwModulesDto) {
     UUID chwId = assignedModules.getHealthWorker().getId();
     for (ModuleSimpleDto module : chwModulesDto.getModules()) {
+      module.setName(null);
       module.setIsStarted(isModuleStarted(chwId, UUID.fromString(module.getId())));
     }
   }
