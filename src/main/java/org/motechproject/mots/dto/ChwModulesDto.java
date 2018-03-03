@@ -12,5 +12,5 @@ public class ChwModulesDto {
 
   @Getter
   @Setter
-  private Set<String> modules;
+  private Set<ModuleSimpleDto> modules;
 }

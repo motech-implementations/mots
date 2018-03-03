@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.mots.domain.CallFlowElement;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -19,6 +20,7 @@ import org.motechproject.mots.dto.VotoBlockDto;
 import org.motechproject.mots.dto.VotoBlockResponseDto;
 import org.motechproject.mots.dto.VotoCallLogDto;
 import org.motechproject.mots.exception.CourseProgressException;
+import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.ModuleProgressRepository;
 import org.motechproject.mots.repository.ModuleRepository;
@@ -86,6 +88,18 @@ public class ModuleProgressService {
   public void removeModuleProgresses(CommunityHealthWorker chw, Set<Module> modules) {
     modules.forEach(module -> moduleProgressRepository
         .removeAllByCommunityHealthWorkerAndModule(chw, module));
+  }
+
+  /**
+   * Get ModuleProgress with specyfic CommunityHealthWorker ID and Module ID.
+   * @param chwId CommunityHealthWorker ID
+   * @param moduleId Module ID
+   * @return ModuleProgress
+   */
+  public ModuleProgress getModuleProgress(UUID chwId, UUID moduleId) {
+    return moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(chwId, moduleId)
+        .orElseThrow(() -> new EntityNotFoundException(
+            "ModuleProgress with chwId %s and moduleId %s doesn't exist", chwId, moduleId));
   }
 
   private void createModuleProgress(CommunityHealthWorker chw, Module module) {
