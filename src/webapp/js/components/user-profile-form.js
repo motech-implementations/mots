@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import FormField from './form-field';
 
-export const PROFILE_FORM_NAME = 'ProfileForm';
+export const USER_PROFILE_FORM_NAME = 'UserProfileForm';
 
 const FIELDS = {
   name: {
@@ -40,14 +40,11 @@ const FIELDS = {
   },
 };
 
-class ProfileForm extends Component {
+class UserProfileForm extends Component {
   constructor(props) {
     super(props);
 
     this.renderField = this.renderField.bind(this);
-  }
-
-  componentWillMount() {
   }
 
   renderField(fieldConfig, fieldName) {
@@ -98,7 +95,7 @@ function validate(values) {
   return errors;
 }
 
-const selector = formValueSelector(PROFILE_FORM_NAME);
+const selector = formValueSelector(USER_PROFILE_FORM_NAME);
 
 
 function mapStateToProps(state) {
@@ -109,10 +106,10 @@ function mapStateToProps(state) {
 
 export default reduxForm({
   validate,
-  form: PROFILE_FORM_NAME,
-})(connect(mapStateToProps)(ProfileForm));
+  form: USER_PROFILE_FORM_NAME,
+})(connect(mapStateToProps)(UserProfileForm));
 
-ProfileForm.propTypes = {
+UserProfileForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -120,7 +117,7 @@ ProfileForm.propTypes = {
   isPasswordRequired: PropTypes.bool,
 };
 
-ProfileForm.defaultProps = {
+UserProfileForm.defaultProps = {
   password: null,
   isPasswordRequired: true,
 };

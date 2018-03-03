@@ -15,6 +15,7 @@ export const FETCH_LOCATIONS = 'fetch_locations';
 
 export const CREATE_USER = 'create_user';
 export const SAVE_USER = 'save_user';
+export const SAVE_USER_PROFILE = 'save_user_profile';
 export const FETCH_USERS = 'fetch_users';
 export const FETCH_ROLES = 'fetch_roles';
 

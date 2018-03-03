@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 import { initialize } from 'redux-form';
 
-import ProfileForm, { PROFILE_FORM_NAME } from './profile-form';
-import { saveUser } from '../actions/index';
+import ProfileForm, { USER_PROFILE_FORM_NAME } from './user-profile-form';
+import { saveUserProfile } from '../actions/index';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
 
-class ProfileEdit extends Component {
+class UserProfileEdit extends Component {
   constructor(props) {
     super(props);
 
@@ -40,8 +40,8 @@ class ProfileEdit extends Component {
   onSubmitModal() {
     const valuesToSend = this.state.userValues;
 
-    this.props.saveUser(valuesToSend, () => {
-      Alert.success('Profile has been updated');
+    this.props.saveUserProfile(valuesToSend, () => {
+      Alert.success('Your profile has been updated.');
       this.props.history.push('/');
     });
   }
@@ -51,12 +51,12 @@ class ProfileEdit extends Component {
   }
 
   fetchUser() {
-    const url = '/api/user/info';
+    const url = '/api/user/profile';
     apiClient.get(url)
       .then((response) => {
         if (response) {
           const currentLoggedInUser = response.data;
-          this.props.initialize(PROFILE_FORM_NAME, currentLoggedInUser);
+          this.props.initialize(USER_PROFILE_FORM_NAME, currentLoggedInUser);
         }
       });
   }
@@ -73,7 +73,7 @@ class ProfileEdit extends Component {
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}
           modalParentId="page-wrapper"
-          modalText="Are you sure to edit Profile?"
+          modalText="Are you sure to edit your Profile?"
           onConfirm={this.onSubmitModal}
           onHide={this.hideConfirmModal}
         />
@@ -82,10 +82,10 @@ class ProfileEdit extends Component {
   }
 }
 
-export default connect(null, { saveUser, initialize })(ProfileEdit);
+export default connect(null, { saveUserProfile, initialize })(UserProfileEdit);
 
-ProfileEdit.propTypes = {
-  saveUser: PropTypes.func.isRequired,
+UserProfileEdit.propTypes = {
+  saveUserProfile: PropTypes.func.isRequired,
   initialize: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,

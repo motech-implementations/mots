@@ -3,7 +3,7 @@ package org.motechproject.mots.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ProfileDto {
+public class UserProfileDto {
 
   @Getter
   @Setter
@@ -20,6 +20,4 @@ public class ProfileDto {
   @Getter
   @Setter
   private String password;
-
-
 }
