@@ -31,7 +31,8 @@ public class CommunityHealthWorkerController extends BaseController {
   @Autowired
   private CommunityHealthWorkerService healthWorkerService;
 
-  private CommunityHealthWorkerMapper healthWorkerMapper = CommunityHealthWorkerMapper.INSTANCE;
+  @Autowired
+  private CommunityHealthWorkerMapper healthWorkerMapper;
 
   /**
    * Get list of community health workers.

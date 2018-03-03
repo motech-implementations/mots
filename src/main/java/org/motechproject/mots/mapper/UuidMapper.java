@@ -1,7 +1,9 @@
 package org.motechproject.mots.mapper;
 
 import java.util.UUID;
+import org.mapstruct.Mapper;
 
+@Mapper(componentModel = "spring")
 public class UuidMapper {
 
   /**

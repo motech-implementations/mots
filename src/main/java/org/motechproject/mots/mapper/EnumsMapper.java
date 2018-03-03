@@ -1,11 +1,13 @@
 package org.motechproject.mots.mapper;
 
+import org.mapstruct.Mapper;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
 
+@Mapper(componentModel = "spring")
 public class EnumsMapper {
 
   /**

@@ -9,16 +9,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 
 @Mapper(uses = { UuidMapper.class, EnumsMapper.class },
-    unmappedTargetPolicy = ReportingPolicy.IGNORE)
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
+    componentModel = "spring")
 public interface CommunityHealthWorkerMapper {
-
-  CommunityHealthWorkerMapper INSTANCE = Mappers.getMapper(CommunityHealthWorkerMapper.class);
 
   @Mappings({
       @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),

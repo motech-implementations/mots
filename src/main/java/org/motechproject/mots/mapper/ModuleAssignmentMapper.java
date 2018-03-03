@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Module;
@@ -18,11 +17,9 @@ import org.motechproject.mots.service.ModuleProgressService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses = { UuidMapper.class, CommunityHealthWorkerMapper.class },
-    unmappedTargetPolicy = ReportingPolicy.IGNORE)
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
+    componentModel = "spring")
 public abstract class ModuleAssignmentMapper {
-
-  public static final ModuleAssignmentMapper INSTANCE =
-      Mappers.getMapper(ModuleAssignmentMapper.class);
 
   @Autowired
   private ModuleProgressService moduleProgressService;
