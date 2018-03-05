@@ -18,6 +18,14 @@ public class ErrorResponse {
   private String stacktrace;
 
   /**
+   * Creates new error response with message.
+   * @param message message displayed to the user
+   */
+  public ErrorResponse(String message) {
+    this.message = message;
+  }
+
+  /**
    * Creates new error response with message and stacktrace.
    * @param message message displayed to the user
    * @param ex cause of the error
