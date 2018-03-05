@@ -9,7 +9,6 @@ import org.mapstruct.ReportingPolicy;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Module;
-import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.dto.ChwModulesDto;
 import org.motechproject.mots.dto.ModuleAssignmentDto;
 import org.motechproject.mots.dto.ModuleSimpleDto;
@@ -29,6 +28,9 @@ public abstract class ModuleAssignmentMapper {
 
   @Mapping(target = "chw", source = "healthWorker")
   public abstract ChwModulesDto toDto(AssignedModules assignedModules);
+
+  @Mapping(target = "name", ignore = true)
+  protected abstract ModuleSimpleDto moduleToModuleSimpleDto(Module module);
 
   /**
    * Create CHW with given id.
@@ -57,17 +59,15 @@ public abstract class ModuleAssignmentMapper {
   }
 
   @AfterMapping
-  protected void fillIsStaredAndRemoveName(AssignedModules assignedModules,
+  protected void fillIsStared(AssignedModules assignedModules,
       @MappingTarget ChwModulesDto chwModulesDto) {
     UUID chwId = assignedModules.getHealthWorker().getId();
     for (ModuleSimpleDto module : chwModulesDto.getModules()) {
-      module.setName(null);
       module.setIsStarted(isModuleStarted(chwId, UUID.fromString(module.getId())));
     }
   }
 
   private Boolean isModuleStarted(UUID chwId, UUID moduleId) {
-    return moduleProgressService.getModuleProgress(chwId, moduleId).getStatus()
-        != ProgressStatus.NOT_STARTED;
+    return moduleProgressService.getModuleProgress(chwId, moduleId).isStarted();
   }
 }

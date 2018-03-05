@@ -99,7 +99,7 @@ public class ModuleProgressService {
   public ModuleProgress getModuleProgress(UUID chwId, UUID moduleId) {
     return moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(chwId, moduleId)
         .orElseThrow(() -> new EntityNotFoundException(
-            "ModuleProgress with chwId %s and moduleId %s doesn't exist", chwId, moduleId));
+            "ModuleProgress with chwId {0} and moduleId {1} doesn't exist", chwId, moduleId));
   }
 
   private void createModuleProgress(CommunityHealthWorker chw, Module module) {

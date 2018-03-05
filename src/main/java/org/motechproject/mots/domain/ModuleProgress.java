@@ -116,4 +116,8 @@ public class ModuleProgress extends BaseTimestampedEntity {
       this.endDate = endDate;
     }
   }
+
+  public boolean isStarted() {
+    return !ProgressStatus.NOT_STARTED.equals(status);
+  }
 }
