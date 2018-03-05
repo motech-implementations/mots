@@ -15,27 +15,36 @@ const FIELDS = {
   email: {
     label: 'Email',
   },
-  password: {
-    label: 'Password',
+  newPassword: {
+    label: 'New Password',
     getAttributes: input => ({
       ...input,
       type: 'password',
       className: 'form-control',
-    }),
-    getDynamicAttributes: ({ isPasswordRequired }) => ({
-      required: isPasswordRequired,
     }),
   },
-  passwordConfirm: {
-    label: 'Confirm Password',
+  confirmNewPassword: {
+    label: 'Confirm New Password',
     getAttributes: input => ({
       ...input,
       type: 'password',
       className: 'form-control',
     }),
-    getDynamicAttributes: ({ password, isPasswordRequired }) => ({
-      hidden: !password,
-      required: isPasswordRequired,
+    getDynamicAttributes: ({ newPassword }) => ({
+      disabled: !newPassword,
+      required: true,
+    }),
+  },
+  password: {
+    label: 'Current Password',
+    getAttributes: input => ({
+      ...input,
+      type: 'password',
+      className: 'form-control',
+    }),
+    getDynamicAttributes: ({ confirmNewPassword }) => ({
+      disabled: !confirmNewPassword,
+      required: true,
     }),
   },
 };
@@ -54,6 +63,8 @@ class UserProfileForm extends Component {
         fieldName={fieldName}
         fieldConfig={fieldConfig}
         password={this.props.password}
+        newPassword={this.props.newPassword}
+        confirmNewPassword={this.props.confirmNewPassword}
         isPasswordRequired={this.props.isPasswordRequired}
       />
     );
@@ -82,11 +93,15 @@ function validate(values) {
       errors[fieldName] = 'This field is required';
     }
   });
-  if (values.password && values.passwordConfirm && values.passwordConfirm !== values.password) {
-    errors.passwordConfirm = "Passwords don't match";
+  if (values.newPassword && values.confirmNewPassword
+    && values.newPassword !== values.confirmNewPassword) {
+    errors.confirmNewPassword = "Passwords don't match";
   }
-  if (values.password && !values.passwordConfirm) {
-    errors.passwordConfirm = 'Can not be empty';
+  if (values.newPassword && !values.confirmNewPassword) {
+    errors.confirmNewPassword = 'Can not be empty';
+  }
+  if (values.confirmNewPassword && !values.password) {
+    errors.password = 'Can not be empty';
   }
   if (values.email && !emailPattern.test(values.email)) {
     errors.email = 'Email address has incorrect format';
@@ -100,6 +115,8 @@ const selector = formValueSelector(USER_PROFILE_FORM_NAME);
 
 function mapStateToProps(state) {
   return {
+    newPassword: selector(state, 'newPassword'),
+    confirmNewPassword: selector(state, 'confirmNewPassword'),
     password: selector(state, 'password'),
   };
 }
@@ -113,11 +130,15 @@ UserProfileForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  newPassword: PropTypes.string,
   password: PropTypes.string,
+  confirmNewPassword: PropTypes.string,
   isPasswordRequired: PropTypes.bool,
 };
 
 UserProfileForm.defaultProps = {
   password: null,
+  newPassword: null,
+  confirmNewPassword: null,
   isPasswordRequired: true,
 };

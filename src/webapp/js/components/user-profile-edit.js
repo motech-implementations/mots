@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 import { initialize } from 'redux-form';
 
-import ProfileForm, { USER_PROFILE_FORM_NAME } from './user-profile-form';
+import UserProfileForm, { USER_PROFILE_FORM_NAME } from './user-profile-form';
 import { saveUserProfile } from '../actions/index';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
@@ -30,7 +30,7 @@ class UserProfileEdit extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/');
+    this.props.history.push('/home');
   }
 
   onSubmit(userValues) {
@@ -42,7 +42,7 @@ class UserProfileEdit extends Component {
 
     this.props.saveUserProfile(valuesToSend, () => {
       Alert.success('Your profile has been updated.');
-      this.props.history.push('/');
+      this.props.history.push('/home');
     });
   }
 
@@ -65,7 +65,7 @@ class UserProfileEdit extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Profile</h1>
-        <ProfileForm
+        <UserProfileForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
           isPasswordRequired={false}
