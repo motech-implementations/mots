@@ -34,6 +34,9 @@ public interface UserMapper {
   @Mapping(target = "id", ignore = true)
   User fromDto(UserDto userDto);
 
+  @Mapping(target = "id", ignore = true)
+  User fromUserProfileDto(UserProfileDto userProfileDto);
+
   List<UserDto> toDtos(Iterable<User> users);
 
   /**
@@ -54,18 +57,6 @@ public interface UserMapper {
   })
   void updateFromDto(UserDto userDto, @MappingTarget User user);
 
-  /**
-   * Updates user with userProfileDto. Sets password if it's present in userProfileDto.
-   * @param userProfileDto data transfer object serialized from frontend.
-   * @param user user to be updated.
-   */
-  default void passwordNullSafeUpdateFromUserProfileDto(UserProfileDto userProfileDto,
-      @MappingTarget User user) {
-    updateFromUserProfileDto(userProfileDto, user);
-    if (StringUtils.isNotBlank(userProfileDto.getPassword())) {
-      user.setPassword(userProfileDto.getPassword());
-    }
-  }
 
   @Mappings({
       @Mapping(target = "id", ignore = true),

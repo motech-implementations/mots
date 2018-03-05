@@ -44,6 +44,7 @@ class UserProfileEdit extends Component {
       Alert.success('Your profile has been updated.');
       this.props.history.push('/home');
     });
+    this.hideConfirmModal();
   }
 
   hideConfirmModal() {

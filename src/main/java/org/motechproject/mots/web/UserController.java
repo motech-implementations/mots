@@ -156,11 +156,9 @@ public class UserController extends BaseController {
   public UserProfileDto saveUserProfile(@PathVariable("id") UUID id,
       @RequestBody UserProfileDto userProfileDto) {
 
-    boolean encodeNewPassword = !StringUtils.isEmpty(userProfileDto.getPassword());
-    User existingUser = userService.getUser(id);
-    userMapper.passwordNullSafeUpdateFromUserProfileDto(userProfileDto, existingUser);
+    final User updatedUserProfile = userService.editUserProfile(id, userProfileDto);
 
-    return userMapper.toUserProfileDto(userService.saveUser(existingUser, encodeNewPassword));
+    return userMapper.toUserProfileDto(updatedUserProfile);
   }
 
   /**
