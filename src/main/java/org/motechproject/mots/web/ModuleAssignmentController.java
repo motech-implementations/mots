@@ -25,7 +25,8 @@ public class ModuleAssignmentController extends BaseController {
   @Autowired
   private ModuleAssignmentService moduleAssignmentService;
 
-  private ModuleAssignmentMapper moduleAssignmentMapper = ModuleAssignmentMapper.INSTANCE;
+  @Autowired
+  private ModuleAssignmentMapper moduleAssignmentMapper;
 
   /**
    * Assign modules for CHW.

@@ -73,7 +73,10 @@ export default class AssignModules extends Component {
 
     apiClient.get(url, { params })
       .then((response) => {
-        const selectedModules = response.data.modules;
+        const selectedModules = _.map(
+          response.data.modules,
+          module => module.id,
+        );
         this.setState({
           selectedModules,
           currentModules: selectedModules,

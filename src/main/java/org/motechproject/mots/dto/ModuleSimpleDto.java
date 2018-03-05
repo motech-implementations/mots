@@ -1,8 +1,9 @@
 package org.motechproject.mots.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.Uuid;
 
@@ -15,6 +16,11 @@ public class ModuleSimpleDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_MODULE_NAME)
+  @JsonInclude(Include.NON_NULL)
   private String name;
+
+  @Getter
+  @Setter
+  @JsonInclude(Include.NON_NULL)
+  private Boolean isStarted;
 }
