@@ -15,6 +15,10 @@ public class UnitDto extends IvrObjectDto {
   @Setter
   private String id;
 
+  @Getter
+  @Setter
+  private String treeId;
+
   @NotBlank(message = ValidationMessages.EMPTY_UNIT_NAME)
   @Getter
   @Setter

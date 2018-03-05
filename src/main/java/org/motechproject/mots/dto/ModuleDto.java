@@ -16,6 +16,10 @@ public class ModuleDto extends IvrObjectDto {
   @Setter
   private String id;
 
+  @Getter
+  @Setter
+  private String treeId;
+
   @NotBlank(message = ValidationMessages.EMPTY_MODULE_NAME)
   @Getter
   @Setter

@@ -1,6 +1,7 @@
 package org.motechproject.mots.service;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.motechproject.mots.domain.Course;
 import org.motechproject.mots.domain.CourseModule;
@@ -35,18 +36,23 @@ public class ModuleService {
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
   @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
-  public Iterable<Module> getModules() {
-    return getCourse().getModules();
+  public List<Course> getCourses() {
+    return courseRepository.findAllByOrderByVersionAsc();
   }
 
-  @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
-  public Iterable<Course> getCourses() {
-    return courseRepository.findAll();
-  }
-
+  /**
+   * Get modules from released course.
+   * @return released modules
+   */
   @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public Iterable<Module> getReleasedModules() {
-    return getReleasedCourse().getReleasedModules();
+    Course course = getReleasedCourse();
+
+    if (course == null) {
+      return new ArrayList<>();
+    }
+
+    return course.getModules();
   }
 
   /**
@@ -56,16 +62,16 @@ public class ModuleService {
    */
   @Transactional
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
-  public Module createModule(ModuleDto moduleDto) {
+  public ModuleDto createModule(ModuleDto moduleDto) {
     Module module = Module.initialize();
     moduleMapper.updateModuleFromDto(moduleDto, module);
 
     module = moduleRepository.save(module);
-    Course course = getCourse();
+    Course course = getDraftCourse();
     CourseModule courseModule = new CourseModule(course, module, course.getModules().size());
     courseModuleRepository.save(courseModule);
 
-    return module;
+    return moduleMapper.toDtoWithTreeId(module, course);
   }
 
   /**
@@ -75,7 +81,7 @@ public class ModuleService {
    * @return updated Module
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
-  public Module updateModule(UUID id, ModuleDto moduleDto) {
+  public ModuleDto updateModule(UUID id, ModuleDto moduleDto) {
     Module module = findModuleById(id);
 
     if (!Status.DRAFT.equals(module.getStatus())) {
@@ -84,19 +90,32 @@ public class ModuleService {
 
     moduleMapper.updateModuleFromDto(moduleDto, module);
 
-    return moduleRepository.save(module);
+    module =  moduleRepository.save(module);
+
+    return moduleMapper.toDtoWithTreeId(module, getDraftCourse());
   }
 
   /**
    * Create new Course.
-   * @param courseDto DTO of Course to be created
    * @return Created Course
    */
   @Transactional
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
-  public Course createCourse(CourseDto courseDto) {
-    Course course = Course.initialize();
-    moduleMapper.updateCourseFromDto(courseDto, course);
+  public Course createCourse() {
+    List<Course> courses = courseRepository.findByStatus(Status.DRAFT);
+
+    if (courses != null && !courses.isEmpty()) {
+      throw new MotsException("Only one draft course allowed at a time");
+    }
+
+    Course releasedCourse = getReleasedCourse();
+    Course course;
+
+    if (releasedCourse == null) {
+      course = Course.initialize();
+    } else {
+      course = releasedCourse.copyAsNewDraft();
+    }
 
     return courseRepository.save(course);
   }
@@ -139,18 +158,31 @@ public class ModuleService {
         new EntityNotFoundException("Course with id: {0} not found", id.toString()));
   }
 
-  private Course getCourse() {
-    Iterable<Course> courses = courseRepository.findAll();
-    Iterator<Course> courseIterator = courses.iterator();
+  private Course getDraftCourse() {
+    List<Course> courses = courseRepository.findByStatus(Status.DRAFT);
 
-    if (!courseIterator.hasNext()) {
-      throw new EntityNotFoundException("No course exists");
+    if (courses == null || courses.isEmpty()) {
+      throw new EntityNotFoundException("No draft course exists");
     }
 
-    return courseIterator.next();
+    if (courses.size() > 1) {
+      throw new MotsException("Too many draft course found");
+    }
+
+    return courses.get(0);
   }
 
   private Course getReleasedCourse() {
-    return courseRepository.findByStatus(Status.RELEASED);
+    List<Course> courses = courseRepository.findByStatus(Status.RELEASED);
+
+    if (courses == null || courses.isEmpty()) {
+      return null;
+    }
+
+    if (courses.size() > 1) {
+      throw new MotsException("Too many released course found");
+    }
+
+    return courses.get(0);
   }
 }

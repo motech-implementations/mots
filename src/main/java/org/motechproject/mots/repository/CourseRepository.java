@@ -1,5 +1,6 @@
 package org.motechproject.mots.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.Course;
@@ -10,6 +11,7 @@ public interface CourseRepository extends CrudRepository<Course, UUID> {
 
   Optional<Course> findById(UUID id);
 
-  Course findByStatus(Status status);
+  List<Course> findByStatus(Status status);
 
+  List<Course> findAllByOrderByVersionAsc();
 }

@@ -51,19 +51,6 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Get list of Modules.
-   * @return list of all Modules
-   */
-  @RequestMapping(value = "/modules", method = RequestMethod.GET)
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public List<ModuleDto> getModules() {
-    Iterable<Module> modules = moduleService.getModules();
-
-    return moduleMapper.toDtos(modules);
-  }
-
-  /**
    * Create Module.
    * @param moduleDto DTO of Module to create
    * @return created Module
@@ -75,9 +62,7 @@ public class ModuleController extends BaseController {
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
 
-    Module module = moduleService.createModule(moduleDto);
-
-    return moduleMapper.toDto(module);
+    return moduleService.createModule(moduleDto);
   }
 
   /**
@@ -93,9 +78,7 @@ public class ModuleController extends BaseController {
       @RequestBody @Valid ModuleDto moduleDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
 
-    Module module = moduleService.updateModule(id, moduleDto);
-
-    return moduleMapper.toDto(module);
+    return moduleService.updateModule(id, moduleDto);
   }
 
   /**
@@ -106,24 +89,20 @@ public class ModuleController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<CourseDto> getCourses() {
-    Iterable<Course> courses = moduleService.getCourses();
+    List<Course> courses = moduleService.getCourses();
 
     return moduleMapper.toCourseDtos(courses);
   }
 
   /**
    * Create Course.
-   * @param courseDto DTO of Course to create
    * @return created Course
    */
   @RequestMapping(value = "/courses", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
-  public CourseDto createCourse(@RequestBody @Valid CourseDto courseDto,
-      BindingResult bindingResult) {
-    checkBindingResult(bindingResult);
-
-    Course course = moduleService.createCourse(courseDto);
+  public CourseDto createCourse() {
+    Course course = moduleService.createCourse();
 
     return moduleMapper.toDto(course);
   }

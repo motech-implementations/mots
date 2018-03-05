@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -19,6 +20,7 @@ import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.MultipleChoiceQuestion;
 import org.motechproject.mots.domain.Unit;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
+import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.dto.CallFlowElementDto;
 import org.motechproject.mots.dto.ChoiceDto;
 import org.motechproject.mots.dto.CourseDto;
@@ -39,6 +41,7 @@ public abstract class ModuleMapper {
   private static final String LIST_ORDER_FIELD = "listOrder";
 
   @Mappings({
+      @Mapping(target = "treeId", source = "id"),
       @Mapping(target = "children", source = "courseModules"),
       @Mapping(target = "type", constant = "COURSE")
   })
@@ -76,7 +79,45 @@ public abstract class ModuleMapper {
 
   public abstract List<ModuleDto> toDtos(Iterable<Module> modules);
 
-  public abstract List<CourseDto> toCourseDtos(Iterable<Course> modules);
+  public abstract List<CourseDto> toCourseDtos(List<Course> modules);
+
+  /**
+   * Create Module DTO.
+   * @param module module used to create DTO
+   * @param course course used to set DTO treeId
+   * @return module DTO
+   */
+  public ModuleDto toDtoWithTreeId(Module module, Course course) {
+    String treeId = "-v" + course.getVersion();
+    ModuleDto moduleDto = toDto(module);
+
+    moduleDto.setTreeId(moduleDto.getId() + treeId);
+
+    return moduleDto;
+  }
+
+  @AfterMapping
+  protected void addTreeId(Course course, @MappingTarget CourseDto courseDto) {
+    String treeId = "-v" + course.getVersion();
+
+    if (courseDto.getChildren() != null) {
+      for (ModuleDto moduleDto : courseDto.getChildren()) {
+        moduleDto.setTreeId(moduleDto.getId() + treeId);
+
+        if (moduleDto.getChildren() != null) {
+          for (UnitDto unitDto : moduleDto.getChildren()) {
+            unitDto.setTreeId(unitDto.getId() + treeId);
+
+            if (unitDto.getChildren() != null) {
+              for (CallFlowElementDto elementDto: unitDto.getChildren()) {
+                elementDto.setTreeId(elementDto.getId() + treeId);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Update Course using data from DTO.
@@ -106,7 +147,10 @@ public abstract class ModuleMapper {
                   "Cannot update course, because error occurred during module list update"));
         }
 
-        updateModuleFromDto(moduleDto, courseModule.getModule());
+        if (Status.DRAFT.equals(courseModule.getModule().getStatus())) {
+          updateModuleFromDto(moduleDto, courseModule.getModule());
+        }
+
         courseModule.setListOrder(i);
         updatedCourseModules.add(courseModule);
       }

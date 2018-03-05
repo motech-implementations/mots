@@ -13,4 +13,14 @@ public class Message extends CallFlowElement {
   public Message() {
     super(CallFlowElementType.MESSAGE);
   }
+
+  private Message(String ivrId, String ivrName, String name, String content,
+      CallFlowElementType type, Integer listOrder) {
+    super(ivrId, ivrName, name, content, type, listOrder);
+  }
+
+  public Message copyAsNewDraft() {
+    return new Message(getIvrId(), getIvrName(), getName(),
+        getContent(), getType(), getListOrder());
+  }
 }

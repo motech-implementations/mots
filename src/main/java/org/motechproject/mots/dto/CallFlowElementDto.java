@@ -22,6 +22,10 @@ public abstract class CallFlowElementDto extends IvrObjectDto {
   @Setter
   private String id;
 
+  @Getter
+  @Setter
+  private String treeId;
+
   @NotBlank(message = ValidationMessages.EMPTY_QUESTION_OR_MESSAGE)
   @Getter
   @Setter

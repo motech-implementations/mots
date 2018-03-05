@@ -15,14 +15,14 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.Status;
 
 @Entity
 @Table(name = "course")
+@NoArgsConstructor
 public class Course extends IvrObject {
 
   /**
@@ -37,10 +37,9 @@ public class Course extends IvrObject {
     return course;
   }
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "name")
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_COURSE_NAME)
   private String name;
 
   @Type(type = "text")
@@ -78,6 +77,18 @@ public class Course extends IvrObject {
   @Setter
   private Message noModulesMessage;
 
+  private Course(String ivrId, String ivrName, String name, String description, Integer version,
+      Course previousVersion, Message noModulesMessage) {
+    super(ivrId, ivrName);
+    this.name = name;
+    this.description = description;
+    this.version = version;
+    this.previousVersion = previousVersion;
+    this.noModulesMessage = noModulesMessage;
+
+    this.status = Status.DRAFT;
+  }
+
   /**
    * Update list content.
    * @param courseModules list of new Units
@@ -106,8 +117,28 @@ public class Course extends IvrObject {
     return courseModules.stream().map(CourseModule::getModule).collect(Collectors.toList());
   }
 
-  public List<Module> getReleasedModules() {
-    return getModules().stream().filter(module -> module.getStatus().equals(Status.RELEASED))
-        .collect(Collectors.toList());
+  /**
+   * Create draft copy of released course.
+   * @return draft copy of course
+   */
+  public Course copyAsNewDraft() {
+    Message noModulesMessageCopy = null;
+
+    if (noModulesMessage != null) {
+      noModulesMessageCopy = noModulesMessage.copyAsNewDraft();
+    }
+
+    Course course = new Course(getIvrId(), getIvrName(), name, description,
+        version + 1, this, noModulesMessageCopy);
+
+    List<CourseModule> courseModulesCopy = new ArrayList<>();
+
+    if (courseModules != null) {
+      courseModules.forEach(courseModule ->
+          courseModulesCopy.add(courseModule.copyAsNewDraft(course)));
+    }
+
+    course.setCourseModules(courseModulesCopy);
+    return course;
   }
 }

@@ -16,8 +16,8 @@ import { resetLogoutCounter } from '../actions/index';
 
 class ModulesManage extends Component {
   static getNodeKey(node) {
-    if (node.id !== undefined && node.id !== null) {
-      return node.id;
+    if (node.treeId !== undefined && node.treeId !== null) {
+      return node.treeId;
     }
 
     return node.uiId;
@@ -63,8 +63,10 @@ class ModulesManage extends Component {
     this.state = {
       selectedElement: {},
       treeData: [],
+      canAddCourse: true,
     };
 
+    this.addCourse = this.addCourse.bind(this);
     this.saveNode = this.saveNode.bind(this);
     this.releaseCourse = this.releaseCourse.bind(this);
   }
@@ -75,6 +77,10 @@ class ModulesManage extends Component {
     } else {
       this.fetchCourses();
     }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    this.canAddCourse(nextState.treeData);
   }
 
   getNodeClassName(node) {
@@ -139,7 +145,7 @@ class ModulesManage extends Component {
       selectedElement: {
         $set: {
           node: newModule,
-          path: [state.treeData[moduleIndexPath[0]].id, newModule.id],
+          path: [state.treeData[moduleIndexPath[0]].treeId, newModule.treeId],
         },
       },
     }));
@@ -154,10 +160,21 @@ class ModulesManage extends Component {
       treeData: {
         [courseIndex]: { $merge: newCourse },
       },
-      selectedElement: { $set: { node: newCourse, path: [newCourse.id] } },
+      selectedElement: { $set: { node: newCourse, path: [newCourse.treeId] } },
     }));
 
     this.props.initialize(MODULE_FORM_NAME, _.omit(newCourse, 'children', 'expanded'));
+  }
+
+  addAndSelectCourse(course) {
+    this.setState(state => update(state, {
+      treeData: {
+        $push: [course],
+      },
+      selectedElement: { $set: { node: course, path: [course.treeId] } },
+    }));
+
+    this.props.initialize(MODULE_FORM_NAME, _.omit(course, 'children', 'expanded'));
   }
 
   updateAndSelectNode(node, nodeIndexPath) {
@@ -207,6 +224,7 @@ class ModulesManage extends Component {
       .then((response) => {
         const treeData = response.data;
 
+        this.canAddCourse(treeData);
         this.setState({ treeData });
       });
   }
@@ -311,6 +329,13 @@ class ModulesManage extends Component {
     }
 
     this.props.resetLogoutCounter();
+  }
+
+  addCourse() {
+    apiClient.post('/api/courses')
+      .then((response) => {
+        this.addAndSelectCourse(response.data);
+      });
   }
 
   addModule(path) {
@@ -501,6 +526,14 @@ class ModulesManage extends Component {
     return !module || module.status === 'DRAFT';
   }
 
+  canAddCourse(treeData) {
+    const canAddCourse = !_.find(treeData, { status: 'DRAFT' });
+
+    if ((canAddCourse && !this.state.canAddCourse) || (!canAddCourse && this.state.canAddCourse)) {
+      this.setState(() => ({ canAddCourse }));
+    }
+  }
+
   render() {
     const canDrop = ({ prevPath, nextPath }) => prevPath.length === nextPath.length
       && prevPath[prevPath.length - 2] === nextPath[nextPath.length - 2];
@@ -536,6 +569,16 @@ class ModulesManage extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</h1>
+        { hasAuthority(MANAGE_MODULES_AUTHORITY) &&
+        <button
+          className="btn btn-success margin-bottom-lg"
+          onClick={this.addCourse}
+          disabled={!this.state.canAddCourse}
+        >
+          <span className="glyphicon glyphicon-plus" />
+          <span className="icon-text">Add Course</span>
+        </button>
+        }
         <div className="row">
           <div className="col-md-6 .tree-container">
             <SortableTree
