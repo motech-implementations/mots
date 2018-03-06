@@ -23,6 +23,7 @@ import FacilityNew from './facility-new';
 import FacilityEdit from './facility-edit';
 import CommunityNew from './community-new';
 import CommunityEdit from './community-edit';
+import UserProfileEdit from './user-profile-edit';
 import GroupAssignModules from './group-assign-modules';
 import Report from './report';
 
@@ -79,6 +80,7 @@ export default class App extends Component {
                 <Route path="/locations/community/new" component={CommunityNew} />
                 <Route path="/locations/community/:communityId" component={CommunityEdit} />
                 <Route path="/locations" component={Locations} />
+                <Route path="/profile" component={UserProfileEdit} />
                 <Route path="/" component={Home} />
               </Switch>
             </div>

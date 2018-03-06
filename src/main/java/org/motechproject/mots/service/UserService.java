@@ -1,10 +1,13 @@
 package org.motechproject.mots.service;
 
 import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.domain.security.UserRole;
+import org.motechproject.mots.dto.UserProfileDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
+import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.repository.RoleRepository;
 import org.motechproject.mots.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class UserService {
 
   @Autowired
   private RoleRepository roleRepository;
+
+  private UserMapper userMapper = UserMapper.INSTANCE;
 
   @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
   public Iterable<User> getUsers() {
@@ -50,6 +55,35 @@ public class UserService {
   }
 
   /**
+   * Get User by username.
+   * @param username of user.
+   */
+  public User getUserByUsername(String username) {
+    return getUserByUserName(username);
+  }
+
+  /**
+   * Save User Profile with new encoded password (if it's not blank).
+   * @param userProfileDto User Profile to be updated.
+   * @return saved User
+   */
+  public User editUserProfile(UUID userId, final UserProfileDto userProfileDto) {
+    User existingUser = getUser(userId);
+    final boolean encodeNewPassword = !StringUtils.isEmpty(userProfileDto.getPassword());
+
+    if (encodeNewPassword) {
+      if (!userProfileDto.getNewPassword().equals(userProfileDto.getConfirmNewPassword())) {
+        throw new IllegalArgumentException("Passwords don't match.");
+      }
+      changeUserPassword(existingUser.getUsername(),
+          userProfileDto.getNewPassword(), userProfileDto.getPassword());
+    }
+    userMapper.updateFromUserProfileDto(userProfileDto, existingUser);
+
+    return userRepository.save(existingUser);
+  }
+
+  /**
    * Save User with new encoded password (if it's not blank).
    * @param user User to be created.
    * @return saved User
@@ -68,13 +102,13 @@ public class UserService {
    * Updates user's password.
    * @param username of user which password is about to change.
    * @param newPassword is new password value for user.
-   * @param oldPassword is current user's password.
+   * @param currentPassword is current user's password.
    */
-  public void changeUserPassword(String username, String newPassword, String oldPassword) {
+  public void changeUserPassword(String username, String newPassword, String currentPassword) {
     User user = getUserByUserName(username);
 
-    if (!passwordsMatch(oldPassword, user.getPassword())) {
-      throw new IllegalArgumentException("Old password is incorrect.");
+    if (!passwordsMatch(currentPassword, user.getPassword())) {
+      throw new IllegalArgumentException("Current password is incorrect.");
     }
 
     String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);

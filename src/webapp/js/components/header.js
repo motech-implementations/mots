@@ -23,7 +23,7 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
       <CounterLogout />
       <ul className="nav navbar-right top-nav padding-y-md">
         <li>
-          <Link to="/">
+          <Link to="/profile" onClick={hideMenuSmart}>
             <span className="glyphicon glyphicon-user" />
             <span className="icon-text">Profile</span>
           </Link>

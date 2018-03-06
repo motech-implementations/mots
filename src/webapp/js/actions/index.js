@@ -10,7 +10,7 @@ import {
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
   FETCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
-  SAVE_FACILITY,
+  SAVE_FACILITY, SAVE_USER_PROFILE,
 } from './types';
 
 const BASE_URL = '/api';
@@ -253,6 +253,15 @@ export function saveCommunity(values, callback) {
   };
 }
 
+export function saveUserProfile(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/user/profile/${values.id}`, values);
+  request.then(result => callback(result));
+
+  return {
+    type: SAVE_USER_PROFILE,
+    payload: request,
+  };
+}
 
 export function fetchLocationsOfType(type, searchParams) {
   let url;

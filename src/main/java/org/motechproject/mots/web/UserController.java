@@ -9,6 +9,7 @@ import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.dto.RoleDto;
 import org.motechproject.mots.dto.UserDto;
+import org.motechproject.mots.dto.UserProfileDto;
 import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.service.UserService;
@@ -141,6 +142,35 @@ public class UserController extends BaseController {
     userService.changeUserPassword(principal.getName(), newPassword, oldPassword);
 
     return "Password changed successfully.";
+  }
+
+  /**
+   * Update profile information about User.
+   * @param id id of User to update Profile
+   * @param userProfileDto DTO of User Profile to be updated
+   * @return updated User Profile
+   */
+  @RequestMapping(value = "/user/profile/{id}", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public UserProfileDto saveUserProfile(@PathVariable("id") UUID id,
+      @RequestBody UserProfileDto userProfileDto) {
+
+    final User updatedUserProfile = userService.editUserProfile(id, userProfileDto);
+
+    return userMapper.toUserProfileDto(updatedUserProfile);
+  }
+
+  /**
+   * Get info about current logged-in User.
+   */
+  @RequestMapping(value = "/user/profile",
+      method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public UserProfileDto getUserProfile(Principal principal) {
+    User user = userService.getUserByUsername(principal.getName());
+    return userMapper.toUserProfileDto(user);
   }
 
   /**
