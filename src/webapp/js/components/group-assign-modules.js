@@ -52,6 +52,7 @@ export default class DistrictAssignModules extends Component {
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   componentWillMount() {
@@ -98,6 +99,16 @@ export default class DistrictAssignModules extends Component {
     const dateFormat = 'YYYY-MM-DD';
     const formattedDate = !endDate || typeof endDate === 'string' ? endDate : endDate.format(dateFormat);
     this.setState({ endDate: formattedDate });
+  }
+
+  validate() {
+    const nullable = !this.state.selectedDistrict || !this.state.selectedModules
+      || !this.state.startDate || !this.state.endDate;
+    const empty = this.state.selectedDistrict === '' || this.state.selectedModules === ''
+      || this.state.selectedModules.length === 0 || this.state.startDate === '' || this.state.endDate === '';
+    const start = new Date(this.state.startDate);
+    const end = new Date(this.state.endDate);
+    return !nullable && !empty && start <= end;
   }
 
   render() {
@@ -161,12 +172,8 @@ export default class DistrictAssignModules extends Component {
           >
             <button
               type="submit"
-              className="btn btn-primary btn-block
-                    margin-x-md padding-x-sm"
-              disabled={this.state.selectedDistrict === ''
-            || this.state.selectedModules === ''
-            || this.state.startDate === ''
-            || this.state.endDate === ''}
+              className="btn btn-primary btn-block margin-x-md padding-x-sm"
+              disabled={!this.validate()}
             >
               <h4>Assign!</h4>
             </button>
