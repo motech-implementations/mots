@@ -53,6 +53,7 @@ export default class DistrictAssignModules extends Component {
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
     this.validate = this.validate.bind(this);
+    this.validateDates = this.validateDates.bind(this);
   }
 
   componentWillMount() {
@@ -62,23 +63,24 @@ export default class DistrictAssignModules extends Component {
   }
 
   sendAssignedModules() {
-    const url = '/api/module/district/assign';
+    if (this.validateDates()) {
+      const url = '/api/module/district/assign';
 
+      const payload = {
+        modules: _.map(this.state.selectedModules, module => module.value),
+        districtId: this.state.selectedDistrict.value,
+        startDate: this.state.startDate,
+        endDate: this.state.endDate,
+      };
 
-    const payload = {
-      modules: _.map(this.state.selectedModules, module => module.value),
-      districtId: this.state.selectedDistrict.value,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-    };
+      const callback = () => {
+        this.props.history.push('/chw');
+        Alert.success('Modules have been assigned!');
+      };
 
-    const callback = () => {
-      this.props.history.push('/chw');
-      Alert.success('Modules have been assigned!');
-    };
-
-    apiClient.post(url, payload)
-      .then(() => callback());
+      apiClient.post(url, payload)
+        .then(() => callback());
+    }
   }
 
   handleDistrictChange = (selectedDistrict) => {
@@ -101,14 +103,22 @@ export default class DistrictAssignModules extends Component {
     this.setState({ endDate: formattedDate });
   }
 
+  validateDates() {
+    const start = new Date(this.state.startDate);
+    const end = new Date(this.state.endDate);
+    if (start > end) {
+      Alert.error('End date must be after start date.');
+      return false;
+    }
+    return true;
+  }
+
   validate() {
     const nullable = !this.state.selectedDistrict || !this.state.selectedModules
       || !this.state.startDate || !this.state.endDate;
     const empty = this.state.selectedDistrict === '' || this.state.selectedModules === ''
       || this.state.selectedModules.length === 0 || this.state.startDate === '' || this.state.endDate === '';
-    const start = new Date(this.state.startDate);
-    const end = new Date(this.state.endDate);
-    return !nullable && !empty && start <= end;
+    return !nullable && !empty;
   }
 
   render() {
