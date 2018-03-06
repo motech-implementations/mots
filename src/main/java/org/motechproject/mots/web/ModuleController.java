@@ -82,6 +82,18 @@ public class ModuleController extends BaseController {
   }
 
   /**
+   * Copy Module as a new draft.
+   * @param id id of Module to update
+   * @return copy of Module to be edited
+   */
+  @RequestMapping(value = "/modules/{id}/edit", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public ModuleDto copyModule(@PathVariable("id") UUID id) {
+    return moduleService.copyModule(id);
+  }
+
+  /**
    * Get list of Courses.
    * @return list of all Courses
    */

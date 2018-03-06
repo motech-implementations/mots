@@ -321,6 +321,13 @@ class ModuleForm extends Component {
                 onClick={this.props.releaseCourse}
               >Publish
               </button> }
+              { this.props.isDraftCourse && this.props.nodeType === 'MODULE' && this.props.nodeStatus === 'RELEASED' &&
+              <button
+                type="button"
+                className="btn btn-primary margin-bottom-md"
+                onClick={this.props.editModule}
+              >Edit
+              </button> }
               { this.props.isEditable &&
               <button
                 type="button"
@@ -379,6 +386,7 @@ function mapStateToProps(state) {
   const id = selector(state, 'id');
   return {
     nodeType: selector(state, 'type'),
+    nodeStatus: selector(state, 'status'),
     nodeChanged: selector(state, 'changed'),
     isNew: id === null || id === undefined,
   };
@@ -396,14 +404,18 @@ ModuleForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   releaseCourse: PropTypes.func.isRequired,
+  editModule: PropTypes.func.isRequired,
   isEditable: PropTypes.bool.isRequired,
+  isDraftCourse: PropTypes.bool.isRequired,
   nodeType: PropTypes.string,
+  nodeStatus: PropTypes.string,
   nodeChanged: PropTypes.bool,
   isNew: PropTypes.bool,
 };
 
 ModuleForm.defaultProps = {
   nodeType: null,
+  nodeStatus: null,
   nodeChanged: false,
   isNew: true,
 };

@@ -91,7 +91,7 @@ public abstract class ModuleMapper {
     String treeId = "-v" + course.getVersion();
     ModuleDto moduleDto = toDto(module);
 
-    moduleDto.setTreeId(moduleDto.getId() + treeId);
+    addTreeId(moduleDto, treeId);
 
     return moduleDto;
   }
@@ -102,17 +102,21 @@ public abstract class ModuleMapper {
 
     if (courseDto.getChildren() != null) {
       for (ModuleDto moduleDto : courseDto.getChildren()) {
-        moduleDto.setTreeId(moduleDto.getId() + treeId);
+        addTreeId(moduleDto, treeId);
+      }
+    }
+  }
 
-        if (moduleDto.getChildren() != null) {
-          for (UnitDto unitDto : moduleDto.getChildren()) {
-            unitDto.setTreeId(unitDto.getId() + treeId);
+  private void addTreeId(ModuleDto moduleDto, String treeId) {
+    moduleDto.setTreeId(moduleDto.getId() + treeId);
 
-            if (unitDto.getChildren() != null) {
-              for (CallFlowElementDto elementDto: unitDto.getChildren()) {
-                elementDto.setTreeId(elementDto.getId() + treeId);
-              }
-            }
+    if (moduleDto.getChildren() != null) {
+      for (UnitDto unitDto : moduleDto.getChildren()) {
+        unitDto.setTreeId(unitDto.getId() + treeId);
+
+        if (unitDto.getChildren() != null) {
+          for (CallFlowElementDto elementDto: unitDto.getChildren()) {
+            elementDto.setTreeId(elementDto.getId() + treeId);
           }
         }
       }

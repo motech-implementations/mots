@@ -2,6 +2,7 @@ package org.motechproject.mots.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.Status;
+import org.motechproject.mots.exception.EntityNotFoundException;
 
 @Entity
 @Table(name = "course")
@@ -140,5 +142,20 @@ public class Course extends IvrObject {
 
     course.setCourseModules(courseModulesCopy);
     return course;
+  }
+
+  /**
+   * Find CourseModule with Module with given id.
+   * @param id of Module
+   * @return found CourseModule
+   */
+  public CourseModule findCourseModuleByModuleId(UUID id) {
+    if (courseModules == null || courseModules.isEmpty()) {
+      throw new EntityNotFoundException("Course has no modules");
+    }
+
+    return courseModules.stream().filter(courseModule ->
+        courseModule.getModule().getId().equals(id)).findFirst().orElseThrow(() ->
+        new EntityNotFoundException("Module with id: {} not found in course draft", id.toString()));
   }
 }

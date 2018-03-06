@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { initialize, isDirty, getFormValues } from 'redux-form';
 import SortableTree from 'react-sortable-tree';
 import update from 'immutability-helper';
+import Alert from 'react-s-alert';
 
 import apiClient from '../utils/api-client';
 import {
@@ -12,6 +13,7 @@ import {
   MANAGE_MODULES_AUTHORITY,
 } from '../utils/authorization';
 import ModuleForm, { MODULE_FORM_NAME } from './modules-form';
+import MotsConfirmModal from './mots-confirm-modal';
 import { resetLogoutCounter } from '../actions/index';
 
 class ModulesManage extends Component {
@@ -57,6 +59,16 @@ class ModulesManage extends Component {
     }
   }
 
+  static showSaveSuccessMessage(type) {
+    let nodeName = 'Module';
+
+    if (type === 'courses') {
+      nodeName = 'Course';
+    }
+
+    Alert.success(`${nodeName} has been saved successfully`);
+  }
+
   constructor(props) {
     super(props);
 
@@ -64,11 +76,15 @@ class ModulesManage extends Component {
       selectedElement: {},
       treeData: [],
       canAddCourse: true,
+      showConfirmModal: false,
     };
 
     this.addCourse = this.addCourse.bind(this);
     this.saveNode = this.saveNode.bind(this);
     this.releaseCourse = this.releaseCourse.bind(this);
+    this.editModule = this.editModule.bind(this);
+    this.showConfirmModal = this.showConfirmModal.bind(this);
+    this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
   componentWillMount() {
@@ -198,11 +214,13 @@ class ModulesManage extends Component {
       apiClient.post(`/api/${type}`, node)
         .then((response) => {
           this.updateAndSelectNode(response.data, nodeIndexPath);
+          ModulesManage.showSaveSuccessMessage(type);
         });
     } else {
       apiClient.put(`/api/${type}/${node.id}`, node)
         .then((response) => {
           this.updateAndSelectNode(response.data, nodeIndexPath);
+          ModulesManage.showSaveSuccessMessage(type);
         });
     }
   }
@@ -214,7 +232,29 @@ class ModulesManage extends Component {
     apiClient.put(`/api/courses/${courseId}/release`)
       .then((response) => {
         this.updateAndSelectCourse(response.data, courseIndex);
+        Alert.success('Course has been published successfully');
       });
+  }
+
+  editModule() {
+    const moduleId = this.state.selectedElement.node.id;
+    const nodeIndexPath = this.getNodeIndexPath(this.state.selectedElement.path);
+
+    apiClient.put(`/api/modules/${moduleId}/edit`)
+      .then((response) => {
+        this.updateAndSelectModule(response.data, nodeIndexPath);
+        Alert.success('New module draft has been created successfully');
+      });
+
+    this.hideConfirmModal();
+  }
+
+  hideConfirmModal() {
+    this.setState({ showConfirmModal: false });
+  }
+
+  showConfirmModal() {
+    this.setState({ showConfirmModal: true });
   }
 
   fetchCourses() {
@@ -335,6 +375,7 @@ class ModulesManage extends Component {
     apiClient.post('/api/courses')
       .then((response) => {
         this.addAndSelectCourse(response.data);
+        Alert.success('New Course has been created successfully');
       });
   }
 
@@ -526,6 +567,15 @@ class ModulesManage extends Component {
     return !module || module.status === 'DRAFT';
   }
 
+  isDraftCourse(node, path) {
+    if (node.type === 'COURSE') {
+      return node.status === 'DRAFT';
+    }
+
+    const course = ModulesManage.findNode(this.state.treeData, path[0]);
+    return !course || course.status === 'DRAFT';
+  }
+
   canAddCourse(treeData) {
     const canAddCourse = !_.find(treeData, { status: 'DRAFT' });
 
@@ -579,6 +629,13 @@ class ModulesManage extends Component {
           <span className="icon-text">Add Course</span>
         </button>
         }
+        <MotsConfirmModal
+          showModal={this.state.showConfirmModal}
+          modalParentId="page-wrapper"
+          modalText="If you edit this module its progress will be removed for all CHW when this Course will be published, are you sure?"
+          onConfirm={this.editModule}
+          onHide={this.hideConfirmModal}
+        />
         <div className="row">
           <div className="col-md-6 .tree-container">
             <SortableTree
@@ -623,7 +680,12 @@ class ModulesManage extends Component {
               this.state.selectedElement.path && <ModuleForm
                 onSubmit={this.saveNode}
                 releaseCourse={this.releaseCourse}
+                editModule={this.showConfirmModal}
                 isEditable={this.isEditable(
+                  this.state.selectedElement.node,
+                  this.state.selectedElement.path,
+                )}
+                isDraftCourse={this.isDraftCourse(
                   this.state.selectedElement.node,
                   this.state.selectedElement.path,
                 )}

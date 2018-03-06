@@ -90,9 +90,31 @@ public class ModuleService {
 
     moduleMapper.updateModuleFromDto(moduleDto, module);
 
-    module =  moduleRepository.save(module);
+    module = moduleRepository.save(module);
 
     return moduleMapper.toDtoWithTreeId(module, getDraftCourse());
+  }
+
+  /**
+   * Copy Module as a new draft.
+   * @param id id of module to be copied
+   * @return copied module draft
+   */
+  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  public ModuleDto copyModule(UUID id) {
+    Course course = getDraftCourse();
+    CourseModule courseModule = course.findCourseModuleByModuleId(id);
+
+    if (!Status.RELEASED.equals(courseModule.getModule().getStatus())) {
+      throw new MotsException("Only released Module can be copied");
+    }
+
+    Module moduleCopy = courseModule.getModule().copyAsNewDraft();
+    courseModule.setModule(moduleCopy);
+
+    courseModule = courseModuleRepository.save(courseModule);
+
+    return moduleMapper.toDtoWithTreeId(courseModule.getModule(), course);
   }
 
   /**
