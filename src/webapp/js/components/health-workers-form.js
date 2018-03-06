@@ -186,6 +186,7 @@ class HealthWorkersForm extends Component {
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
+        dateOfBirth={this.props.dateOfBirth}
         hasPeerSupervisor={this.props.hasPeerSupervisor}
         isChwIdDisabled={this.props.isChwIdDisabled}
       />
@@ -206,6 +207,10 @@ class HealthWorkersForm extends Component {
   }
 }
 
+function isDateBeforeToday(date) {
+  return new Date(date) <= new Date();
+}
+
 function validate(values) {
   const errors = {};
 
@@ -214,9 +219,13 @@ function validate(values) {
       errors[fieldName] = 'This field is required';
     }
   });
+  if (values.dateOfBirth && !isDateBeforeToday(values.dateOfBirth)) {
+    errors.dateOfBirth = 'Date must be in the past';
+  }
 
   return errors;
 }
+
 
 const selector = formValueSelector(CHW_FORM_NAME);
 
@@ -226,6 +235,7 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
+    dateOfBirth: selector(state, 'dateOfBirth'),
     hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
@@ -244,6 +254,7 @@ HealthWorkersForm.propTypes = {
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
+  dateOfBirth: PropTypes.string,
   hasPeerSupervisor: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
 };
@@ -253,6 +264,7 @@ HealthWorkersForm.defaultProps = {
   districtId: null,
   chiefdomId: null,
   facilityId: null,
+  dateOfBirth: null,
   hasPeerSupervisor: false,
   isChwIdDisabled: false,
 };
