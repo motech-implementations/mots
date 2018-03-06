@@ -22,6 +22,7 @@ public class CommunityHealthWorkerDataBuilder {
   private Community community;
   private Language preferredLanguage;
   private EducationLevel educationLevel;
+  private String ivrId;
 
   /**
    * Returns instance of {@link CommunityHealthWorkerDataBuilder} with sample data.
@@ -54,6 +55,7 @@ public class CommunityHealthWorkerDataBuilder {
     chw.setCommunity(community);
     chw.setPreferredLanguage(preferredLanguage);
     chw.setEducationLevel(educationLevel);
+    chw.setIvrId(ivrId);
 
     return chw;
   }
@@ -73,6 +75,14 @@ public class CommunityHealthWorkerDataBuilder {
    */
   public CommunityHealthWorkerDataBuilder withCommunity(Community community) {
     this.community = community;
+    return this;
+  }
+
+  /**
+   * Adds ivrId for new {@link CommunityHealthWorker}.
+   */
+  public CommunityHealthWorkerDataBuilder withIvrId(String ivrId) {
+    this.ivrId = ivrId;
     return this;
   }
 }
