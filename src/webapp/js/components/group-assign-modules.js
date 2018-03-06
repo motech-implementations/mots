@@ -52,6 +52,8 @@ export default class DistrictAssignModules extends Component {
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
+    this.validate = this.validate.bind(this);
+    this.validateDates = this.validateDates.bind(this);
   }
 
   componentWillMount() {
@@ -61,23 +63,24 @@ export default class DistrictAssignModules extends Component {
   }
 
   sendAssignedModules() {
-    const url = '/api/module/district/assign';
+    if (this.validateDates()) {
+      const url = '/api/module/district/assign';
 
+      const payload = {
+        modules: _.map(this.state.selectedModules, module => module.value),
+        districtId: this.state.selectedDistrict.value,
+        startDate: this.state.startDate,
+        endDate: this.state.endDate,
+      };
 
-    const payload = {
-      modules: _.map(this.state.selectedModules, module => module.value),
-      districtId: this.state.selectedDistrict.value,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-    };
+      const callback = () => {
+        this.props.history.push('/chw');
+        Alert.success('Modules have been assigned!');
+      };
 
-    const callback = () => {
-      this.props.history.push('/chw');
-      Alert.success('Modules have been assigned!');
-    };
-
-    apiClient.post(url, payload)
-      .then(() => callback());
+      apiClient.post(url, payload)
+        .then(() => callback());
+    }
   }
 
   handleDistrictChange = (selectedDistrict) => {
@@ -98,6 +101,24 @@ export default class DistrictAssignModules extends Component {
     const dateFormat = 'YYYY-MM-DD';
     const formattedDate = !endDate || typeof endDate === 'string' ? endDate : endDate.format(dateFormat);
     this.setState({ endDate: formattedDate });
+  }
+
+  validateDates() {
+    const start = new Date(this.state.startDate);
+    const end = new Date(this.state.endDate);
+    if (start > end) {
+      Alert.error('End date must be after start date.');
+      return false;
+    }
+    return true;
+  }
+
+  validate() {
+    const nullable = !this.state.selectedDistrict || !this.state.selectedModules
+      || !this.state.startDate || !this.state.endDate;
+    const empty = this.state.selectedDistrict === '' || this.state.selectedModules === ''
+      || this.state.selectedModules.length === 0 || this.state.startDate === '' || this.state.endDate === '';
+    return !nullable && !empty;
   }
 
   render() {
@@ -161,12 +182,8 @@ export default class DistrictAssignModules extends Component {
           >
             <button
               type="submit"
-              className="btn btn-primary btn-block
-                    margin-x-md padding-x-sm"
-              disabled={this.state.selectedDistrict === ''
-            || this.state.selectedModules === ''
-            || this.state.startDate === ''
-            || this.state.endDate === ''}
+              className="btn btn-primary btn-block margin-x-md padding-x-sm"
+              disabled={!this.validate()}
             >
               <h4>Assign!</h4>
             </button>
