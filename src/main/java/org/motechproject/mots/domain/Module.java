@@ -99,6 +99,21 @@ public class Module extends IvrObject {
     super(id);
   }
 
+  private Module(String ivrId, String ivrName, String name, String ivrGroup, String description,
+      Integer version, MultipleChoiceQuestion startModuleQuestion,
+      List<Unit> units, Module previousVersion) {
+    super(ivrId, ivrName);
+    this.name = name;
+    this.ivrGroup = ivrGroup;
+    this.description = description;
+    this.version = version;
+    this.startModuleQuestion = startModuleQuestion;
+    this.units = units;
+    this.previousVersion = previousVersion;
+
+    this.status = Status.DRAFT;
+  }
+
   /**
    * Update list content.
    * @param units list of new Units
@@ -130,5 +145,26 @@ public class Module extends IvrObject {
     }
 
     status = Status.RELEASED;
+  }
+
+  /**
+   * Create a draft copy of Module.
+   * @return copy of Module
+   */
+  public Module copyAsNewDraft() {
+    MultipleChoiceQuestion startModuleQuestionCopy = null;
+
+    if (startModuleQuestion != null) {
+      startModuleQuestionCopy = startModuleQuestion.copyAsNewDraft();
+    }
+
+    List<Unit> unitsCopy = new ArrayList<>();
+
+    if (units != null) {
+      units.forEach(unit -> unitsCopy.add(unit.copyAsNewDraft()));
+    }
+
+    return new Module(getIvrId(), getIvrName(), name, ivrGroup, description, version + 1,
+        startModuleQuestionCopy, unitsCopy, this);
   }
 }
