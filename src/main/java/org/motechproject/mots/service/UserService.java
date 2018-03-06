@@ -72,9 +72,6 @@ public class UserService {
     final boolean encodeNewPassword = !StringUtils.isEmpty(userProfileDto.getPassword());
 
     if (encodeNewPassword) {
-      if (!userProfileDto.getNewPassword().equals(userProfileDto.getConfirmNewPassword())) {
-        throw new IllegalArgumentException("Passwords don't match.");
-      }
       changeUserPassword(existingUser.getUsername(),
           userProfileDto.getNewPassword(), userProfileDto.getPassword());
     }

@@ -53,6 +53,8 @@ public final class ValidationMessages {
 
   public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
 
+  public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
+
   private ValidationMessages() {
   }
 }

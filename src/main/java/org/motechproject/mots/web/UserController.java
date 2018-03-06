@@ -154,8 +154,8 @@ public class UserController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public UserProfileDto saveUserProfile(@PathVariable("id") UUID id,
-      @RequestBody UserProfileDto userProfileDto) {
-
+      @RequestBody @Valid UserProfileDto userProfileDto, BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
     final User updatedUserProfile = userService.editUserProfile(id, userProfileDto);
 
     return userMapper.toUserProfileDto(updatedUserProfile);
