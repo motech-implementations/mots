@@ -118,7 +118,6 @@ const MODULE_FIELDS = {
 const COURSE_FIELDS = {
   name: {
     label: 'Name',
-    required: true,
   },
   description: {
     label: 'Description',

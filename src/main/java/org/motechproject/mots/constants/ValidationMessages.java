@@ -2,11 +2,6 @@ package org.motechproject.mots.constants;
 
 public final class ValidationMessages {
 
-  public static final String NULL_UNIT_ALLOW_REPLAY = "Unit Allow Reply cannot be empty";
-  public static final String NULL_IVR_PRESSED_KEY = "Choice IVR Pressed Key cannot be empty";
-  public static final String NULL_IS_CORRECT = "Choice Is Correct cannot be empty";
-  public static final String NULL_USER_ENABLED_IS_NULL = "User enabled cannot be null";
-
   public static final String EMPTY_CHW_ID = "CHW Id cannot be empty";
   public static final String EMPTY_IVR_ID = "IVR Id cannot be empty";
   public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
@@ -18,8 +13,6 @@ public final class ValidationMessages {
   public static final String EMPTY_QUESTION_OR_MESSAGE = "Message/Question name cannot be empty";
   public static final String EMPTY_LOCATION_NAME = "Location name cannot be empty";
   public static final String EMPTY_MODULE_NAME = "Module Name cannot be empty";
-  public static final String EMPTY_MODULE_NUMBER = "Module Number cannot be empty";
-  public static final String EMPTY_COURSE_NAME = "Course Name cannot be empty";
   public static final String EMPTY_ROLE_NAME = "Role Name cannot be empty";
   public static final String EMPTY_UNIT_NAME = "Unit Name cannot be empty";
   public static final String EMPTY_USERNAME = "Username cannot be empty";
@@ -55,10 +48,6 @@ public final class ValidationMessages {
   public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";
   public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
-
-  public static final String NEGATIVE_IVR_PRESSED_KEY = "Choice IVR Pressed Key cannot be negative";
-
-  public static final String MODULE_NUMBER_LESS_THAN_ONE = "Module Number cannot be less than 1";
 
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 

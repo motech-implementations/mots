@@ -1,5 +1,6 @@
 package org.motechproject.mots.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,6 +29,12 @@ public class MultipleChoiceQuestion extends CallFlowElement {
     super(CallFlowElementType.QUESTION);
   }
 
+  private MultipleChoiceQuestion(String ivrId, String ivrName, String name, String content,
+      CallFlowElementType type, Integer listOrder, List<Choice> choices) {
+    super(ivrId, ivrName, name, content, type, listOrder);
+    this.choices = choices;
+  }
+
   /**
    * Update list content.
    * @param choices list of new Choices
@@ -42,5 +49,20 @@ public class MultipleChoiceQuestion extends CallFlowElement {
         this.choices.addAll(choices);
       }
     }
+  }
+
+  /**
+   * Create a copy of Multiple Choice Question.
+   * @return copied question
+   */
+  public MultipleChoiceQuestion copyAsNewDraft() {
+    List<Choice> choicesCopy = new ArrayList<>();
+
+    if (choices != null) {
+      choices.forEach(choice -> choicesCopy.add(choice.copyAsNewDraft()));
+    }
+
+    return new MultipleChoiceQuestion(getIvrId(), getIvrName(), getName(),
+        getContent(), getType(), getListOrder(), choicesCopy);
   }
 }

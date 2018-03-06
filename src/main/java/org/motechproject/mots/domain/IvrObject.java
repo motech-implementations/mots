@@ -28,4 +28,9 @@ public abstract class IvrObject extends BaseTimestampedEntity {
   public IvrObject(UUID id) {
     super(id);
   }
+
+  public IvrObject(String ivrId, String ivrName) {
+    this.ivrId = ivrId;
+    this.ivrName = ivrName;
+  }
 }

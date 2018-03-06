@@ -48,4 +48,8 @@ public class CourseModule extends BaseEntity {
     this.course = course;
     this.module = module;
   }
+
+  public CourseModule copyAsNewDraft(Course course) {
+    return new CourseModule(course, module, listOrder);
+  }
 }

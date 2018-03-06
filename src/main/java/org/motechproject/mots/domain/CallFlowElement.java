@@ -44,4 +44,24 @@ public abstract class CallFlowElement extends IvrObject {
   public CallFlowElement(CallFlowElementType type) {
     this.type = type;
   }
+
+  /**
+   * Create new Call Flow Element.
+   * @param ivrId ivr id of element
+   * @param ivrName ivr name of element
+   * @param name name of element
+   * @param content content of element
+   * @param type type of element
+   * @param listOrder order of element
+   */
+  public CallFlowElement(String ivrId, String ivrName, String name, String content,
+      CallFlowElementType type, Integer listOrder) {
+    super(ivrId, ivrName);
+    this.name = name;
+    this.content = content;
+    this.type = type;
+    this.listOrder = listOrder;
+  }
+
+  public abstract CallFlowElement copyAsNewDraft();
 }
