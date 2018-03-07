@@ -13,6 +13,7 @@ import {
   untouchFields,
   getSelectableLocations,
   getAttributesForSelectWithClearOnChange,
+  getAttributesForInput,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -23,20 +24,25 @@ const FIELDS = {
   firstName: {
     label: 'First Name',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   secondName: {
     label: 'Surname',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   otherName: {
     label: 'Other Name',
+    getAttributes: () => getAttributesForInput(),
   },
   phoneNumber: {
     label: 'Phone Number',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   email: {
     label: 'Email address',
+    getAttributes: () => getAttributesForInput(),
   },
   districtId: {
     type: Select,

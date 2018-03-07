@@ -1,7 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Scene, Router, Modal } from 'react-native-router-flux';
-import Sentry from 'sentry-expo';
 import { View, StatusBar } from 'react-native';
 
 import Header from './components/Header';
@@ -25,16 +24,13 @@ import UserEdit from './components/UserEdit';
 import Store from './store';
 import AppDrawer from './components/AppDrawer';
 import Login from './container/Login';
-import Config from './config';
 import requireAuth from './components/auth/RequireAuth';
-
-Sentry.config(Config.sentryConfig.publicDSN).install();
 
 export const { dispatch } = Store;
 
 const App = () => (
   <View style={{ flex: 1 }}>
-    <View style={{ backgroundColor: '#000', height: StatusBar.currentHeight }} />
+    <StatusBar backgroundColor="black" barStyle="light-content" />
     <Provider store={Store}>
       <Router>
         <Scene key="modal" component={Modal}>

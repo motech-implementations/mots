@@ -1,6 +1,6 @@
 import base64 from 'base-64';
 
-import Config from '../config';
+import Config from '../../config';
 
 const CLIENT_URL = `${Config.api[Config.backend.instance]}/api/oauth/token`;
 
