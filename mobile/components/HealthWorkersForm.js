@@ -260,7 +260,6 @@ class HealthWorkersForm extends Component {
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
-        dateOfBirth={this.props.dateOfBirth}
         hasPeerSupervisor={this.props.hasPeerSupervisor}
         isChwIdDisabled={this.props.isChwIdDisabled}
       />
@@ -356,7 +355,6 @@ HealthWorkersForm.propTypes = {
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
-  dateOfBirth: PropTypes.string,
   hasPeerSupervisor: PropTypes.bool,
   loading: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
@@ -367,7 +365,6 @@ HealthWorkersForm.defaultProps = {
   districtId: null,
   chiefdomId: null,
   facilityId: null,
-  dateOfBirth: null,
   hasPeerSupervisor: false,
   loading: false,
   isChwIdDisabled: false,
