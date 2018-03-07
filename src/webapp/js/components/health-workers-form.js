@@ -206,6 +206,10 @@ class HealthWorkersForm extends Component {
   }
 }
 
+function isDateBeforeToday(date) {
+  return new Date(date) <= new Date();
+}
+
 function validate(values) {
   const errors = {};
 
@@ -214,6 +218,9 @@ function validate(values) {
       errors[fieldName] = 'This field is required';
     }
   });
+  if (values.dateOfBirth && !isDateBeforeToday(values.dateOfBirth)) {
+    errors.dateOfBirth = 'Date must be in the past';
+  }
 
   return errors;
 }

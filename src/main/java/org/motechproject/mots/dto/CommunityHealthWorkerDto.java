@@ -12,6 +12,7 @@ import org.motechproject.mots.validate.annotations.EducationLevel;
 import org.motechproject.mots.validate.annotations.Gender;
 import org.motechproject.mots.validate.annotations.Language;
 import org.motechproject.mots.validate.annotations.Literacy;
+import org.motechproject.mots.validate.annotations.PastDate;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
@@ -47,6 +48,7 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @DateFormat
+  @PastDate
   private String dateOfBirth;
 
   @Getter
