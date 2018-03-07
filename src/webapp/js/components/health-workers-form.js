@@ -226,7 +226,6 @@ function validate(values) {
   return errors;
 }
 
-
 const selector = formValueSelector(CHW_FORM_NAME);
 
 function mapStateToProps(state) {
