@@ -20,8 +20,8 @@ public class PastDateFormatValidator implements ConstraintValidator<PastDate, St
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (StringUtils.isEmpty(value)
-        || isValidDateFormat(MotsConstants.SIMPLE_DATE_FORMAT, value)) {
+    if (StringUtils.isNotEmpty(value)
+        && isValidDateFormat(MotsConstants.SIMPLE_DATE_FORMAT, value)) {
       SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.SIMPLE_DATE_FORMAT);
       try {
         Date date = sdf.parse(value);
