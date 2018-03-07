@@ -233,7 +233,6 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
-    dateOfBirth: selector(state, 'dateOfBirth'),
     hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
