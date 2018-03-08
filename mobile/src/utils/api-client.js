@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { AsyncStorage } from 'react-native';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 import Config from '../../config';
 import { signoutUser, useRefreshToken } from '../actions';
@@ -59,7 +60,7 @@ export default class ApiClient {
     return error;
   }
 
-  static async chooseMethod(method, route, body) {
+  static async chooseMethod(method, route, type, body) {
     return ApiClient.motsFetch({
       method,
       url: route,
@@ -67,6 +68,11 @@ export default class ApiClient {
     })
       .then((response) => {
         if (VALID_STATUSES.indexOf(response.status) !== -1) {
+          if (type === 'text') {
+            return response.text()
+              .then(responseText => responseText)
+              .catch(() => {});
+          }
           return response.json()
             .then(responseJson => responseJson)
             .catch(() => {});
@@ -83,23 +89,27 @@ export default class ApiClient {
   }
 
   static async get(route) {
-    return ApiClient.chooseMethod('GET', route);
+    return ApiClient.chooseMethod('GET', route, 'json');
+  }
+
+  static async getText(route) {
+    return ApiClient.chooseMethod('GET', route, 'text');
   }
 
   static async post(route, body) {
-    return ApiClient.chooseMethod('POST', route, body);
+    return ApiClient.chooseMethod('POST', route, 'json', body);
   }
 
   static async put(route, body) {
-    return ApiClient.chooseMethod('PUT', route, body);
+    return ApiClient.chooseMethod('PUT', route, 'json', body);
   }
 
   static async delete(route) {
-    return ApiClient.chooseMethod('DELETE', route);
+    return ApiClient.chooseMethod('DELETE', route, 'json');
   }
 
   static async send(effect) {
-    return ApiClient.chooseMethod(effect.method, effect.url, effect.body);
+    return ApiClient.chooseMethod(effect.method, effect.url, 'json', effect.body);
   }
 
   static async motsFetch(_options) {
@@ -121,5 +131,21 @@ export default class ApiClient {
     }
 
     return fetch(CLIENT_URL + fetchOptions.url, fetchOptions);
+  }
+
+  static async downloadReport(url, fileName, fileExtention) {
+    const token = await AsyncStorage.getItem('token');
+    const mimeType = fileExtention === 'xls' ? 'application/vnd.ms-excel' : 'application/pdf';
+    return RNFetchBlob
+      .config({
+        fileCache: true,
+        path: `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName.replace(/ /g, '_')}.${fileExtention}`,
+      })
+      .fetch('GET', CLIENT_URL + url, {
+        Authorization: `Bearer ${token}`,
+      })
+      .then((res) => {
+        RNFetchBlob.android.actionViewIntent(res.path(), mimeType);
+      });
   }
 }

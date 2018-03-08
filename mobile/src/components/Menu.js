@@ -10,6 +10,7 @@ import { signoutUser } from '../actions';
 import { CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
   DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
   MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
+import apiClient from '../utils/api-client';
 
 const HIDE_NOT_IMPLEMENTED = true;
 
@@ -60,6 +61,7 @@ class Menu extends Component {
       ASSIGN_MODULES_AUTHORITY: false,
       DISPLAY_REPORTS_AUTHORITY: false,
       MANAGE_USERS_AUTHORITY: false,
+      reportList: [],
     };
   }
 
@@ -80,7 +82,10 @@ class Menu extends Component {
       if (result) { this.setState({ ASSIGN_MODULES_AUTHORITY: true }); }
     });
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
-      if (result) { this.setState({ DISPLAY_REPORTS_AUTHORITY: true }); }
+      if (result) {
+        this.setState({ DISPLAY_REPORTS_AUTHORITY: true });
+        this.fetchReportList();
+      }
     });
     hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
       if (result) { this.setState({ MANAGE_USERS_AUTHORITY: true }); }
@@ -92,9 +97,53 @@ class Menu extends Component {
     this.context.drawer.close();
   }
 
+  openReportSection(props) {
+    Actions.report(props);
+    this.context.drawer.close();
+  }
+
   logout() {
     this.props.signoutUser();
     Actions.auth({ type: ActionConst.RESET });
+  }
+
+  fetchReportList() {
+    const url = '/api/reports/templates/';
+
+    apiClient.get(url)
+      .then((response) => {
+        this.setState({ reportList: response });
+      });
+  }
+
+  renderReports() {
+    if (this.state.reportList) {
+      return (
+        <View>
+          {
+            this.state.reportList.map(report => (
+              <TouchableOpacity
+                onPress={() => this.openReportSection({
+                  reportName: report.name,
+                  reportId: report.id,
+                })}
+                style={styles.menuItem}
+                key={report.id}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 15 }]}>
+                  <Icon name="file-text-o" size={14} color="#337ab7" />
+                </View>
+                <Text style={[styles.menuItemText, { fontSize: 14 }]}>{report.name.replace(' Report', '')}
+                </Text>
+              </TouchableOpacity>
+            ))
+          }
+        </View>
+      );
+    }
+    return (
+      <View />
+    );
   }
 
   render() {
@@ -196,15 +245,9 @@ class Menu extends Component {
           }
 
           { this.state.DISPLAY_REPORTS_AUTHORITY &&
-          <TouchableOpacity
-            onPress={() => this.openSection('home')}
-            style={styles.menuItem}
-          >
-            <View style={styles.iconContainer}>
-              <Icon name="bar-chart" size={20} color="#337ab7" />
-            </View>
-            <Text style={styles.menuItemText}>Reports</Text>
-          </TouchableOpacity>
+          <Collapsible title="Reports" headerIcon="bar-chart" style={styles.menuItem}>
+            {this.renderReports()}
+          </Collapsible>
           }
 
           { this.state.MANAGE_USERS_AUTHORITY &&

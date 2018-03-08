@@ -25,6 +25,7 @@ import Store from './store';
 import AppDrawer from './components/AppDrawer';
 import Login from './container/Login';
 import requireAuth from './components/auth/RequireAuth';
+import Report from './components/Report';
 
 export const { dispatch } = Store;
 
@@ -52,6 +53,7 @@ const App = () => (
               <Scene key="userNew" component={UserNew} title="Add New User" navBar={Header} />
               <Scene key="userEdit" component={UserEdit} title="Edit User" navBar={Header} />
               <Scene key="synchronizeView" component={SynchronizeView} title="Synchronize" navBar={Header} />
+              <Scene key="report" component={Report} title="Download Report" hideNavBar={false} navBar={Header} />
             </Scene>
           </Scene>
           <Scene key="modalInfo" component={ModalInfo} hideNavBar />
