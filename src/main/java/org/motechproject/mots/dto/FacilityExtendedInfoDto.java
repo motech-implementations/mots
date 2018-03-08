@@ -2,13 +2,10 @@ package org.motechproject.mots.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.FacilityType;
 import org.motechproject.mots.validate.annotations.Uuid;
 
-public class FacilityCreationDto {
+public class FacilityExtendedInfoDto {
 
   @Getter
   @Setter
@@ -17,25 +14,25 @@ public class FacilityCreationDto {
 
   @Getter
   @Setter
-  @NotEmpty(message = ValidationMessages.EMPTY)
   private String name;
 
   @Setter
   @Getter
-  @ChiefdomExistence
   @Uuid
-  @NotEmpty(message = ValidationMessages.EMPTY)
+  private String districtId;
+
+  @Setter
+  @Getter
+  @Uuid
   private String chiefdomId;
 
   @Setter
   @Getter
   @FacilityType
-  @NotEmpty(message = ValidationMessages.EMPTY)
   private String facilityType;
 
   @Setter
   @Getter
-  @NotEmpty(message = ValidationMessages.EMPTY)
   private String facilityId;
 
 }
