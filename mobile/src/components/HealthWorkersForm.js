@@ -16,6 +16,7 @@ import {
   getSelectableLocations,
   getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
+  getAttributesForInput,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -29,17 +30,21 @@ const FIELDS = {
     getDynamicAttributes: ({ isChwIdDisabled }) => ({
       editable: !isChwIdDisabled,
     }),
+    getAttributes: () => getAttributesForInput(),
   },
   firstName: {
     label: 'First Name',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   secondName: {
     label: 'Surname',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   otherName: {
     label: 'Other Name',
+    getAttributes: () => getAttributesForInput(),
   },
   dateOfBirth: {
     label: 'Date of Birth',
@@ -88,6 +93,7 @@ const FIELDS = {
   phoneNumber: {
     label: 'Phone Number',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   districtId: {
     type: Select,
@@ -225,6 +231,7 @@ const FIELDS = {
     getDynamicAttributes: ({ hasPeerSupervisor }) => ({
       hidden: !hasPeerSupervisor,
     }),
+    getAttributes: () => getAttributesForInput(),
   },
   preferredLanguage: {
     type: Select,

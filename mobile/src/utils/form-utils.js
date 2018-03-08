@@ -89,3 +89,10 @@ getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...
     style: labelSelectFieldStyle,
   };
 }
+
+export function getAttributesForInput() {
+  return {
+    underlineColorAndroid: 'rgba(0,0,0,0)',
+    style: { paddingVertical: 5 },
+  };
+}

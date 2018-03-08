@@ -9,7 +9,7 @@ import { Select } from 'react-native-chooser';
 import FormField from './FormField';
 import { fetchRoles } from '../actions';
 import {
-  clearFields,
+  clearFields, getAttributesForInput,
   untouchFields,
 } from '../utils/form-utils';
 import Button from './Button';
@@ -24,12 +24,15 @@ const FIELDS = {
   username: {
     label: 'Username',
     required: true,
+    getAttributes: () => getAttributesForInput(),
   },
   email: {
     label: 'Email',
+    getAttributes: () => getAttributesForInput(),
   },
   name: {
     label: 'Name',
+    getAttributes: () => getAttributesForInput(),
   },
   roleId: {
     type: Select,
@@ -56,11 +59,19 @@ const FIELDS = {
   },
   password: {
     label: 'Password',
-    getAttributes: () => ({ secureTextEntry: true }),
+    getAttributes: () => ({
+      secureTextEntry: true,
+      underlineColorAndroid: 'rgba(0,0,0,0)',
+      style: { paddingVertical: 5 },
+    }),
   },
   passwordConfirm: {
     label: 'Confirm Password',
-    getAttributes: () => ({ secureTextEntry: true }),
+    getAttributes: () => ({
+      secureTextEntry: true,
+      underlineColorAndroid: 'rgba(0,0,0,0)',
+      style: { paddingVertical: 5 },
+    }),
     getDynamicAttributes: ({ password }) => ({
       hidden: !password,
     }),

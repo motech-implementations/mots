@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-import Config from '../config';
+import Config from '../../config';
 import { signoutUser, useRefreshToken } from '../actions';
 import { dispatch } from '../App';
 import { FETCH_ERROR } from '../actions/types';
