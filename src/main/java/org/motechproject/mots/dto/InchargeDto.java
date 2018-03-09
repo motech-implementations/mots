@@ -6,13 +6,13 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.AssignFacilityToInchargeUniqueness;
 import org.motechproject.mots.validate.annotations.FacilityExistence;
-import org.motechproject.mots.validate.annotations.FacilityUniqueness;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
-@FacilityUniqueness
+@AssignFacilityToInchargeUniqueness
 @PhoneNumberUniqueness
 public class InchargeDto {
 

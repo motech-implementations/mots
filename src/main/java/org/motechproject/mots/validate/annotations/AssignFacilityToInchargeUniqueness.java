@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.FacilityUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.incharge.InchargeDtoFacilityUniquenessValidator;
 
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = {FacilityUniquenessValidator.class})
+@Constraint(validatedBy = {InchargeDtoFacilityUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FacilityUniqueness {
+public @interface AssignFacilityToInchargeUniqueness {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_UNIQUE_FACILITY;
+  String message() default ValidationMessages.NOT_UNIQUE_ASSIGN_FACILITY_TO_INCHARGE;
 
   /**
    * Specify validation groups, to which this constraint belongs

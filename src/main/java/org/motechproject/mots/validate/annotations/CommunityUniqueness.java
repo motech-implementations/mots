@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.FacilityUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.CommunityUniquenessValidator;
 
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = {FacilityUniquenessValidator.class})
+@Constraint(validatedBy = {CommunityUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FacilityUniqueness {
+public @interface CommunityUniqueness {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_UNIQUE_FACILITY;
+  String message() default ValidationMessages.NOT_UNIQUE_COMMUNITY;
 
   /**
    * Specify validation groups, to which this constraint belongs

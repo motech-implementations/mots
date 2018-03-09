@@ -5,9 +5,11 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.CommunityUniqueness;
 import org.motechproject.mots.validate.annotations.FacilityExistence;
 import org.motechproject.mots.validate.annotations.Uuid;
 
+@CommunityUniqueness
 public class CommunityCreationDto {
 
   @Getter
@@ -17,7 +19,7 @@ public class CommunityCreationDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY)
+  @NotBlank(message = ValidationMessages.EMPTY_LOCATION_NAME)
   private String name;
 
   @Setter

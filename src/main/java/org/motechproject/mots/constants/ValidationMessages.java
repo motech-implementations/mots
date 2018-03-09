@@ -42,7 +42,7 @@ public final class ValidationMessages {
   public static final String INVALID_IDS = "Invalid: %s UUID";
 
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
-  public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";
+  public static final String NOT_UNIQUE_ASSIGN_FACILITY_TO_INCHARGE = "Facility is not unique";
   public static final String NOT_UNIQUE_CHW_ID
       = "The Community Health Worker with id %s already exists";
 
@@ -55,6 +55,10 @@ public final class ValidationMessages {
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
   public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
+  public static final String NOT_UNIQUE_FACILITY =
+      "The Facility with name: '%s' and chiefdom: '%s' already exists";
+  public static final String NOT_UNIQUE_COMMUNITY =
+      "The Community with name: '%s' and facility: '%s' already exists";
 
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
 
