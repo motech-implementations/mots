@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.UuidValidator;
+import org.motechproject.mots.validate.constraintvalidators.ChiefdomExistenceValidator;
 
 @Target(ElementType.FIELD)
-@Constraint(validatedBy = {UuidValidator.class})
+@Constraint(validatedBy = {ChiefdomExistenceValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Uuid {
+public @interface ChiefdomExistence {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.INVALID_ID;
+  String message() default ValidationMessages.NOT_EXISTING_CHIEFDOM;
 
   /**
    * Specify validation groups, to which this constraint belongs

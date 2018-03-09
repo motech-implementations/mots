@@ -29,7 +29,12 @@ class CommunityNew extends Component {
   }
 
   onSubmit(values) {
-    this.props.createCommunity(values, () => {
+    const valuesToSend = {
+      name: values.name,
+      facilityId: values.facilityId,
+    };
+
+    this.props.createCommunity(valuesToSend, () => {
       Alert.success('Community has been added');
       this.props.history.push('/locations');
     });

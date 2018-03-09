@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.motechproject.mots.domain.Chiefdom;
@@ -18,9 +19,11 @@ import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.dto.CommunityCreationDto;
+import org.motechproject.mots.dto.CommunityExtendedInfoDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
 import org.motechproject.mots.dto.FacilityDto;
+import org.motechproject.mots.dto.FacilityExtendedInfoDto;
 import org.motechproject.mots.dto.LocationPreviewDto;
 
 @Mapper(uses = { UuidMapper.class, EnumsMapper.class },
@@ -76,19 +79,30 @@ public interface LocationMapper {
   @Mapping(target = "parent", source = "parentName")
   LocationPreviewDto toLocationPreviewDto(Location location);
 
+  @Named("createCommunity")
+  @Mapping(target = "facilityId", source = "facility.id")
+  CommunityCreationDto toCommunityCreationDto(Community community);
+
   @Mappings({
       @Mapping(target = "facilityId", source = "facility.id"),
       @Mapping(target = "chiefdomId", source = "facility.chiefdom.id"),
       @Mapping(target = "districtId", source = "facility.chiefdom.district.id")
   })
-  CommunityCreationDto toCommunityCreationDto(Community community);
+  CommunityExtendedInfoDto toCommunityExtendedInfoDto(Community community);
+
+  @Named("createFacility")
+  @Mappings({
+      @Mapping(target = "chiefdomId", source = "chiefdom.id"),
+      @Mapping(target = "facilityType", source = "type")
+  })
+  FacilityCreationDto toFacilityCreationDto(Facility facility);
 
   @Mappings({
       @Mapping(target = "chiefdomId", source = "chiefdom.id"),
       @Mapping(target = "facilityType", source = "type"),
       @Mapping(target = "districtId", source = "chiefdom.district.id")
   })
-  FacilityCreationDto toFacilityCreationDto(Facility facility);
+  FacilityExtendedInfoDto toFacilityExtendedInfoDto(Facility facility);
 
   @Mapping(target = "facility", source = "facilityId")
   Community fromDtoToCommunity(CommunityCreationDto communityCreationDto);

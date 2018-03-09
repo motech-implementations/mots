@@ -24,6 +24,7 @@ public final class ValidationMessages {
   public static final String EMPTY_START_DATE = "Start date cannot be empty";
   public static final String EMPTY_END_DATE = "End date cannot be empty";
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
+  public static final String EMPTY = "Cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
@@ -48,6 +49,7 @@ public final class ValidationMessages {
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
   public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";
   public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
+  public static final String NOT_EXISTING_CHIEFDOM = "Chiefdom doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
 
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
