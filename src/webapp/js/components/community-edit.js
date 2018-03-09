@@ -42,7 +42,11 @@ class CommunityEdit extends Component {
   }
 
   onSubmitModal() {
-    const valuesToSend = this.state.communityValues;
+    const valuesToSend = {
+      id: this.state.communityValues.id,
+      name: this.state.communityValues.name,
+      facilityId: this.state.communityValues.facilityId,
+    };
 
     this.props.saveCommunity(valuesToSend, () => {
       Alert.success('Community has been updated');

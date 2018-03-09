@@ -29,7 +29,14 @@ class FacilityNew extends Component {
   }
 
   onSubmit(values) {
-    this.props.createFacility(values, () => {
+    const valuesToSend = {
+      name: values.name,
+      chiefdomId: values.chiefdomId,
+      facilityType: values.facilityType,
+      facilityId: values.facilityId,
+    };
+
+    this.props.createFacility(valuesToSend, () => {
       Alert.success('Facility has been added');
       this.props.history.push('/locations');
     });
