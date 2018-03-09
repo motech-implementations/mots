@@ -235,7 +235,6 @@ HealthWorkersForm.propTypes = {
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
-  hasPeerSupervisor: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
 };
 
@@ -244,6 +243,5 @@ HealthWorkersForm.defaultProps = {
   districtId: null,
   chiefdomId: null,
   facilityId: null,
-  hasPeerSupervisor: false,
   isChwIdDisabled: false,
 };
