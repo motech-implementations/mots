@@ -26,6 +26,6 @@ public class CommunityCreationDto {
   @Getter
   @FacilityExistence
   @Uuid
-  @NotEmpty(message = ValidationMessages.EMPTY)
+  @NotEmpty(message = ValidationMessages.EMPTY_FACILITY_ID)
   private String facilityId;
 }

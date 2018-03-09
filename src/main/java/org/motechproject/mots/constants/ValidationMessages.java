@@ -19,6 +19,7 @@ public final class ValidationMessages {
   public static final String EMPTY_CALL_FLOW_ELEMENT_TYPE
       = "Call flow element type cannot be empty";
   public static final String EMPTY_FACILITY_ID = "Facility Id cannot be empty";
+  public static final String EMPTY_CHIEFDOM_ID = "Chiefdom Id cannot be empty";
   public static final String EMPTY_FACILITY_TYPE = "Facility type cannot be empty";
   public static final String EMPTY_MODULES = "Modules cannot be empty";
   public static final String EMPTY_START_DATE = "Start date cannot be empty";
@@ -57,9 +58,9 @@ public final class ValidationMessages {
   public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
   public static final String NOT_UNIQUE_FACILITY_ID = "The Facility with this ID already exists";
   public static final String NOT_UNIQUE_FACILITY =
-      "The Facility with name: '%s' and chiefdom: '%s' already exists";
+      "The Facility with name: '%s' within chiefdom: '%s' already exists";
   public static final String NOT_UNIQUE_COMMUNITY =
-      "The Community with name: '%s' and facility: '%s' already exists";
+      "The Community with name: '%s' within facility: '%s' already exists";
 
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
 

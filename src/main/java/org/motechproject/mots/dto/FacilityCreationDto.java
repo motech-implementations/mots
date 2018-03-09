@@ -27,19 +27,19 @@ public class FacilityCreationDto {
   @Getter
   @ChiefdomExistence
   @Uuid
-  @NotEmpty(message = ValidationMessages.EMPTY)
+  @NotEmpty(message = ValidationMessages.EMPTY_CHIEFDOM_ID)
   private String chiefdomId;
 
   @Setter
   @Getter
   @FacilityType
-  @NotEmpty(message = ValidationMessages.EMPTY)
+  @NotEmpty(message = ValidationMessages.EMPTY_FACILITY_TYPE)
   private String facilityType;
 
   @Setter
   @Getter
   @UniqueFacilityId
-  @NotEmpty(message = ValidationMessages.EMPTY)
+  @NotEmpty(message = ValidationMessages.EMPTY_FACILITY_ID)
   private String facilityId;
 
 }
