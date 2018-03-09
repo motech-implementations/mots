@@ -171,7 +171,6 @@ class HealthWorkersForm extends Component {
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
-        hasPeerSupervisor={this.props.hasPeerSupervisor}
         isChwIdDisabled={this.props.isChwIdDisabled}
       />
     );
