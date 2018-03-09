@@ -218,6 +218,9 @@ const FIELDS = {
       {
         title: '',
         checked: input.value === true,
+        onPress: () => {
+          input.onChange(!input.value);
+        },
       }
     ),
     nonBorderField: true,
