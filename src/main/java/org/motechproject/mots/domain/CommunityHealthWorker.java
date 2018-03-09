@@ -95,11 +95,6 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Setter
   private Boolean hasPeerSupervisor;
 
-  @Column(name = "supervisor")
-  @Getter
-  @Setter
-  private String supervisor;
-
   @Column(name = "preferred_language", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter

@@ -9,7 +9,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { clearFields, getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
+import { getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -136,24 +136,9 @@ const FIELDS = {
     getAttributes: input => ({
       ...input,
       type: 'checkbox',
-      onChange: (event) => {
-        const { checked } = event.target;
-
-        if (!checked) {
-          clearFields(CHW_FORM_NAME, 'supervisor');
-        }
-
-        input.onChange(checked);
-      },
       checked: input.value,
     }),
     label: 'Peer Supervisor',
-  },
-  supervisor: {
-    label: 'Supervisor',
-    getDynamicAttributes: ({ hasPeerSupervisor }) => ({
-      hidden: !hasPeerSupervisor,
-    }),
   },
   preferredLanguage: {
     type: 'select',
@@ -233,7 +218,6 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
-    hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
 

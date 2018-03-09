@@ -218,20 +218,9 @@ const FIELDS = {
       {
         title: '',
         checked: input.value === true,
-        onPress: () => {
-          input.onChange(!input.value);
-          clearFields(CHW_FORM_NAME, 'supervisor');
-        },
       }
     ),
     nonBorderField: true,
-  },
-  supervisor: {
-    label: 'Supervisor',
-    getDynamicAttributes: ({ hasPeerSupervisor }) => ({
-      hidden: !hasPeerSupervisor,
-    }),
-    getAttributes: () => getAttributesForInput(),
   },
   preferredLanguage: {
     type: Select,
@@ -343,7 +332,6 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
-    hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
 
