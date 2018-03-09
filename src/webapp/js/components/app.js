@@ -88,7 +88,7 @@ export default class App extends Component {
         </div>
 
         <Alert
-          timeout={5000}
+          timeout='none'
           stack={{ limit: 3 }}
           offset={29.5}
           html

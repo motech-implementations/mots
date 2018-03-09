@@ -45,10 +45,7 @@ const handleError = (error) => {
     default: {
       const errorMessage = getErrorMessage(error.response);
       if (errorMessage) {
-        const alertTimeout = Math.max(5000, errorMessage.length * 100);
-        Alert.error(errorMessage, {
-          timeout: alertTimeout,
-        });
+        Alert.error(errorMessage);
       } else {
         Alert.error(error);
       }
