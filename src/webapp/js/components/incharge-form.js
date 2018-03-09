@@ -134,7 +134,6 @@ function mapStateToProps(state) {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
-    hasPeerSupervisor: selector(state, 'hasPeerSupervisor'),
   };
 }
 

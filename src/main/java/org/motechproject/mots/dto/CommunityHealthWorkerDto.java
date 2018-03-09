@@ -114,10 +114,6 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  private String supervisor;
-
-  @Getter
-  @Setter
   @Language
   @NotEmpty(message = ValidationMessages.EMPTY_PREFERRED_LANGUAGE)
   private String preferredLanguage;
