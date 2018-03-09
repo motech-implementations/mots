@@ -55,6 +55,7 @@ public final class ValidationMessages {
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
   public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
+  public static final String NOT_UNIQUE_FACILITY_ID = "The Facility with this ID already exists";
   public static final String NOT_UNIQUE_FACILITY =
       "The Facility with name: '%s' and chiefdom: '%s' already exists";
   public static final String NOT_UNIQUE_COMMUNITY =

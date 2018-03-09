@@ -7,6 +7,7 @@ import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.FacilityType;
 import org.motechproject.mots.validate.annotations.FacilityUniqueness;
+import org.motechproject.mots.validate.annotations.UniqueFacilityId;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 @FacilityUniqueness
@@ -37,6 +38,7 @@ public class FacilityCreationDto {
 
   @Setter
   @Getter
+  @UniqueFacilityId
   @NotEmpty(message = ValidationMessages.EMPTY)
   private String facilityId;
 

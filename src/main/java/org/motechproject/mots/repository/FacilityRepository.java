@@ -15,4 +15,6 @@ public interface FacilityRepository extends JpaRepository<Facility, UUID>,
 
   Optional<Facility> findByNameAndChiefdom(String name, Chiefdom chiefdom);
 
+  Optional<Facility> findByFacilityId(String id);
+
 }
