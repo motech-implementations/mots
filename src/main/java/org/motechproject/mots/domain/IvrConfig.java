@@ -119,9 +119,4 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Map<String, CallStatus> callStatusMap = new HashMap<>();
-
-  @Column(name = "voto_main_tree_id", nullable = false)
-  @Getter
-  @Setter
-  private String votoMainTreeId;
 }

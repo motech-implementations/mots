@@ -2,6 +2,7 @@ package org.motechproject.mots.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -123,6 +124,33 @@ public class ModuleAssignmentService {
     }
     moduleProgressService.removeModuleProgresses(assignedModulesChw, modulesToRemove);
     moduleProgressService.createModuleProgresses(assignedModulesChw, modulesToAdd);
+  }
+
+  public void unassignOldModulesVersions(List<Module> newModules) {
+    newModules.forEach(module -> unassignOldModuleVersion(module.getPreviousVersion()));
+  }
+
+  private void unassignOldModuleVersion(Module oldModule) {
+    List<AssignedModules> assignedModulesList =
+        repository.findByModules_id(oldModule.getId());
+
+    if (assignedModulesList != null && !assignedModulesList.isEmpty()) {
+      assignedModulesList.forEach(assignedModules -> {
+        assignedModules.unassignModule(oldModule);
+
+        String ivrGroup = oldModule.getIvrGroup();
+        String chwIvrId = assignedModules.getHealthWorker().getIvrId();
+
+        try {
+          ivrService.removeSubscriberFromGroups(chwIvrId, Collections.singletonList(ivrGroup));
+        } catch (IvrException ex) {
+          throw new ModuleAssignmentException("Could not unassign old module version, "
+              + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo(), ex);
+        }
+      });
+
+      repository.save(assignedModulesList);
+    }
   }
 
   private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassing) {

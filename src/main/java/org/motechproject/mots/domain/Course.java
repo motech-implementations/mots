@@ -21,6 +21,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.EntityNotFoundException;
+import org.motechproject.mots.exception.MotsException;
 
 @Entity
 @Table(name = "course")
@@ -67,7 +68,7 @@ public class Course extends IvrObject {
   @Setter
   private Integer version;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "previous_version_id")
   @Getter
   @Setter
@@ -156,6 +157,33 @@ public class Course extends IvrObject {
 
     return courseModules.stream().filter(courseModule ->
         courseModule.getModule().getId().equals(id)).findFirst().orElseThrow(() ->
-        new EntityNotFoundException("Module with id: {} not found in course draft", id.toString()));
+        new EntityNotFoundException("Module with id {0} not found in course draft", id.toString()));
+  }
+
+  /**
+   * Release the Course.
+   */
+  public void release() {
+    getDraftModules().forEach(Module::release);
+
+    if (!Status.DRAFT.equals(status)) {
+      throw new MotsException("Only Course draft can be released");
+    }
+
+    status = Status.RELEASED;
+
+    if (previousVersion != null) {
+      previousVersion.status = Status.PREVIOUS_VERSION;
+    }
+  }
+
+  public List<Module> getNewVersionModules() {
+    return getModules().stream().filter(module -> Status.DRAFT.equals(module.getStatus())
+        && module.getPreviousVersion() != null).collect(Collectors.toList());
+  }
+
+  private List<Module> getDraftModules() {
+    return getModules().stream().filter(module -> Status.DRAFT.equals(module.getStatus())).collect(
+        Collectors.toList());
   }
 }

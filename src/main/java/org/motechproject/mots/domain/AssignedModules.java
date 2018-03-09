@@ -38,4 +38,8 @@ public class AssignedModules extends BaseTimestampedEntity {
     this.healthWorker = healthWorker;
     this.modules = Collections.emptySet();
   }
+
+  public void unassignModule(Module module) {
+    modules.removeIf(m -> m.getId().equals(module.getId()));
+  }
 }
