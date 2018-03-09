@@ -33,6 +33,7 @@ public final class ValidationMessages {
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
   public static final String INVALID_DATE = "Invalid format of date";
   public static final String INVALID_PAST_DATE = "Date must be in the past";
+  public static final String INVALID_YEAR_OF_BIRTH = "Year of birth must be 1900 or later";
   public static final String INVALID_GENDER = "Invalid gender";
   public static final String INVALID_EDUCATIONAL_LEVEL = "Invalid education level";
   public static final String INVALID_LITERACY = "Invalid literacy";

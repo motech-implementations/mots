@@ -1,6 +1,5 @@
 package org.motechproject.mots.domain;
 
-import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,10 +53,10 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Setter
   private String otherName;
 
-  @Column(name = "date_of_birth")
+  @Column(name = "year_of_birth")
   @Getter
   @Setter
-  private LocalDate dateOfBirth;
+  private Integer yearOfBirth;
 
   @Column(name = "gender", nullable = false)
   @Enumerated(EnumType.STRING)

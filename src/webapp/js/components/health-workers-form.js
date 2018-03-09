@@ -31,15 +31,19 @@ const FIELDS = {
   otherName: {
     label: 'Other Name',
   },
-  dateOfBirth: {
-    label: 'Date of Birth',
+  yearOfBirth: {
+    label: 'Year of Birth',
     type: DateTime,
     getAttributes: (input) => {
-      const dateFormat = 'YYYY-MM-DD';
+      const dateFormat = 'YYYY';
+
+      const currentYear = DateTime.moment().year();
+      const checkYear = yearPicker => yearPicker.year() <= currentYear && yearPicker.year() >= 1900;
 
       return {
         dateFormat,
         timeFormat: false,
+        isValidDate: checkYear,
         closeOnSelect: true,
         value: input.value,
         onChange: (param) => {
@@ -202,8 +206,8 @@ function validate(values) {
       errors[fieldName] = 'This field is required';
     }
   });
-  if (values.dateOfBirth && !isDateBeforeToday(values.dateOfBirth)) {
-    errors.dateOfBirth = 'Date must be in the past';
+  if (values.yearOfBirth && !isDateBeforeToday(values.yearOfBirth)) {
+    errors.yearOfBirth = 'Year must be in the past';
   }
 
   return errors;
