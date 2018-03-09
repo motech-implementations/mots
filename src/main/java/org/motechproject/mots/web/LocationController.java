@@ -9,8 +9,10 @@ import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.dto.CommunityCreationDto;
+import org.motechproject.mots.dto.CommunityExtendedInfoDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
+import org.motechproject.mots.dto.FacilityExtendedInfoDto;
 import org.motechproject.mots.dto.LocationPreviewDto;
 import org.motechproject.mots.mapper.LocationMapper;
 import org.motechproject.mots.service.LocationService;
@@ -128,10 +130,10 @@ public class LocationController extends BaseController {
   @RequestMapping(value = "/facility/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public FacilityCreationDto getFacility(@PathVariable("id") UUID id) {
+  public FacilityExtendedInfoDto getFacility(@PathVariable("id") UUID id) {
     Facility facility = locationService.getFacility(id);
 
-    return locationMapper.toFacilityCreationDto(facility);
+    return locationMapper.toFacilityExtendedInfoDto(facility);
   }
 
   /**
@@ -142,10 +144,10 @@ public class LocationController extends BaseController {
   @RequestMapping(value = "/community/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public CommunityCreationDto getCommunity(@PathVariable("id") UUID id) {
+  public CommunityExtendedInfoDto getCommunity(@PathVariable("id") UUID id) {
     Community community = locationService.getCommunity(id);
 
-    return locationMapper.toCommunityCreationDto(community);
+    return locationMapper.toCommunityExtendedInfoDto(community);
   }
 
   /**

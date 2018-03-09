@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.UuidValidator;
+import org.motechproject.mots.validate.constraintvalidators.incharge.InchargeDtoFacilityUniquenessValidator;
 
-@Target(ElementType.FIELD)
-@Constraint(validatedBy = {UuidValidator.class})
+@Target(ElementType.TYPE)
+@Constraint(validatedBy = {InchargeDtoFacilityUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Uuid {
+public @interface AssignFacilityToInchargeUniqueness {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.INVALID_ID;
+  String message() default ValidationMessages.NOT_UNIQUE_ASSIGN_FACILITY_TO_INCHARGE;
 
   /**
    * Specify validation groups, to which this constraint belongs

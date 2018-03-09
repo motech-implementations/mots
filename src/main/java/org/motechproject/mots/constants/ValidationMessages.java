@@ -19,11 +19,13 @@ public final class ValidationMessages {
   public static final String EMPTY_CALL_FLOW_ELEMENT_TYPE
       = "Call flow element type cannot be empty";
   public static final String EMPTY_FACILITY_ID = "Facility Id cannot be empty";
+  public static final String EMPTY_CHIEFDOM_ID = "Chiefdom Id cannot be empty";
   public static final String EMPTY_FACILITY_TYPE = "Facility type cannot be empty";
   public static final String EMPTY_MODULES = "Modules cannot be empty";
   public static final String EMPTY_START_DATE = "Start date cannot be empty";
   public static final String EMPTY_END_DATE = "End date cannot be empty";
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
+  public static final String EMPTY = "Cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
@@ -41,18 +43,24 @@ public final class ValidationMessages {
   public static final String INVALID_IDS = "Invalid: %s UUID";
 
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
-  public static final String NOT_UNIQUE_FACILITY = "Facility is not unique";
+  public static final String NOT_UNIQUE_ASSIGN_FACILITY_TO_INCHARGE = "Facility is not unique";
   public static final String NOT_UNIQUE_CHW_ID
       = "The Community Health Worker with id %s already exists";
 
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
   public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";
   public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
+  public static final String NOT_EXISTING_CHIEFDOM = "Chiefdom doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
 
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
   public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
+  public static final String NOT_UNIQUE_FACILITY_ID = "The Facility with this ID already exists";
+  public static final String NOT_UNIQUE_FACILITY =
+      "The Facility with name: '%s' within chiefdom: '%s' already exists";
+  public static final String NOT_UNIQUE_COMMUNITY =
+      "The Community with name: '%s' within facility: '%s' already exists";
 
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
 

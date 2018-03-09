@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.incharge.InchargeDtoFacilityUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.FacilityUniquenessValidator;
 
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = {InchargeDtoFacilityUniquenessValidator.class})
+@Constraint(validatedBy = {FacilityUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FacilityUniqueness {
 

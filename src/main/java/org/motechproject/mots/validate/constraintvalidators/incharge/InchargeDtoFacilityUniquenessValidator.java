@@ -9,11 +9,11 @@ import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.dto.InchargeDto;
 import org.motechproject.mots.repository.InchargeRepository;
 import org.motechproject.mots.validate.ValidationUtils;
-import org.motechproject.mots.validate.annotations.FacilityUniqueness;
+import org.motechproject.mots.validate.annotations.AssignFacilityToInchargeUniqueness;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class InchargeDtoFacilityUniquenessValidator implements
-    ConstraintValidator<FacilityUniqueness, InchargeDto> {
+    ConstraintValidator<AssignFacilityToInchargeUniqueness, InchargeDto> {
 
   private static final String FACILITY_ID = "facilityId";
 
@@ -38,7 +38,7 @@ public class InchargeDtoFacilityUniquenessValidator implements
   }
 
   @Override
-  public void initialize(FacilityUniqueness parameters) {
+  public void initialize(AssignFacilityToInchargeUniqueness parameters) {
     // we don't need any passed parameters
   }
 }

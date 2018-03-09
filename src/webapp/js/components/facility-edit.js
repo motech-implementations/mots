@@ -42,7 +42,13 @@ class FacilityEdit extends Component {
   }
 
   onSubmitModal() {
-    const valuesToSend = this.state.facilityValues;
+    const valuesToSend = {
+      id: this.state.facilityValues.id,
+      name: this.state.facilityValues.name,
+      chiefdomId: this.state.facilityValues.chiefdomId,
+      facilityType: this.state.facilityValues.facilityType,
+      facilityId: this.state.facilityValues.facilityId,
+    };
 
     this.props.saveFacility(valuesToSend, () => {
       Alert.success('Facility has been updated');
