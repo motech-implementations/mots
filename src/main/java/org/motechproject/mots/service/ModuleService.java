@@ -33,6 +33,9 @@ public class ModuleService {
   @Autowired
   private CourseModuleRepository courseModuleRepository;
 
+  @Autowired
+  private ModuleAssignmentService moduleAssignmentService;
+
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
   @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
@@ -167,17 +170,36 @@ public class ModuleService {
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
   public Course releaseCourse(Course course) {
-    return course;
+    List<Module> newVersionModules = course.getNewVersionModules();
+    course.release();
+
+    moduleAssignmentService.unassignOldModulesVersions(newVersionModules);
+
+    return courseRepository.save(course);
   }
 
-  public Module findModuleById(UUID id) {
-    return moduleRepository.findById(id).orElseThrow(() ->
-        new EntityNotFoundException("Module with id: {0} not found", id.toString()));
+  /**
+   * Get released course IVR Id.
+   * @return released course IVR Id
+   */
+  public String getReleasedCourseIvrId() {
+    Course course = getReleasedCourse();
+
+    if (course == null) {
+      throw new EntityNotFoundException("No released course exists");
+    }
+
+    return course.getIvrId();
   }
 
   public Course findCourseById(UUID id) {
     return courseRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("Course with id: {0} not found", id.toString()));
+  }
+
+  private Module findModuleById(UUID id) {
+    return moduleRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("Module with id: {0} not found", id.toString()));
   }
 
   private Course getDraftCourse() {

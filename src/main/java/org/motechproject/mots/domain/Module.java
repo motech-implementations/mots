@@ -89,7 +89,7 @@ public class Module extends IvrObject {
   @Getter
   private List<Unit> units = new ArrayList<>();
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "previous_version_id")
   @Getter
   @Setter
@@ -145,6 +145,10 @@ public class Module extends IvrObject {
     }
 
     status = Status.RELEASED;
+
+    if (previousVersion != null) {
+      previousVersion.status = Status.PREVIOUS_VERSION;
+    }
   }
 
   /**

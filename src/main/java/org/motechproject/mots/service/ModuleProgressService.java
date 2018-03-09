@@ -150,8 +150,10 @@ public class ModuleProgressService {
           break;
         }
 
-        if (!QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-          throw new CourseProgressException("Unexpected block type: \"{}\" in main menu",
+        //skip all "start module" questions, if main menu was repeated skip "choose module" message
+        if (!QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())
+            && !MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+          throw new CourseProgressException("Unexpected block type: \"{0}\" in main menu",
               blockDto.getBlockType());
         }
       }
@@ -176,11 +178,11 @@ public class ModuleProgressService {
     ModuleProgress moduleProgress =
         moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndModuleIvrId(chwIvrId, moduleId)
             .orElseThrow(() -> new CourseProgressException("No module progress found for CHW with "
-                + "IVR Id: {} and module with IVR Id: {}", chwIvrId, moduleId));
+                + "IVR Id: {0} and module with IVR Id: {1}", chwIvrId, moduleId));
 
     if (ProgressStatus.COMPLETED.equals(moduleProgress.getStatus())) {
-      throw new CourseProgressException("Module already completed for CHW with IVR Id: {} "
-          + "and module with IVR Id: {}", chwIvrId, moduleId);
+      throw new CourseProgressException("Module already completed for CHW with IVR Id: {0} "
+          + "and module with IVR Id: {1}", chwIvrId, moduleId);
     }
 
     if (!moduleProgress.getInterrupted()) {
@@ -237,7 +239,7 @@ public class ModuleProgressService {
         return false;
       case REPEAT_RESPONSE:
         if (!unitProgress.getUnit().getAllowReplay()) {
-          throw new CourseProgressException("Unit with IVR Id: {} cannot be replayed",
+          throw new CourseProgressException("Unit with IVR Id: {0} cannot be replayed",
               unitProgress.getUnit().getIvrId());
         }
 
@@ -246,7 +248,7 @@ public class ModuleProgressService {
         return false;
       default:
         throw new CourseProgressException("Unexpected unit continuation question response for Unit "
-            + "with IVR Id: {}", unitProgress.getUnit().getIvrId());
+            + "with IVR Id: {0}", unitProgress.getUnit().getIvrId());
     }
   }
 
@@ -264,7 +266,7 @@ public class ModuleProgressService {
         VotoBlockDto blockDto = blockIterator.next();
 
         if (!callFlowElement.getIvrId().equals(blockDto.getBlockId())) {
-          throw new CourseProgressException("IVR Block Id: {} did not match CallFlowElement IVR Id",
+          throw new CourseProgressException("IVR Block Id: {0} did not match CallFlowElement IVRId",
               blockDto.getBlockId());
         }
 
@@ -300,14 +302,14 @@ public class ModuleProgressService {
     VotoBlockDto blockDto = getVotoBlock(blockIterator);
 
     if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-      throw new CourseProgressException("Unexpected block in module: {}",
+      throw new CourseProgressException("Unexpected block in module: {0}",
           moduleProgress.getModule().getName());
     }
 
     UnitProgress unitProgress = moduleProgress.getCurrentUnitProgress();
 
     if (!blockDto.getBlockId().equals(unitProgress.getUnit().getIvrId())) {
-      throw new CourseProgressException("IVR Block Id: {} did not match current Unit IVR Id",
+      throw new CourseProgressException("IVR Block Id: {0} did not match current Unit IVR Id",
           blockDto.getBlockId());
     }
 

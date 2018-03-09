@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class CourseModule extends BaseEntity {
   @Setter
   private Course course;
 
+  @Valid
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "module_id", nullable = false)
   @Getter

@@ -1,5 +1,6 @@
 package org.motechproject.mots.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -18,4 +19,6 @@ public interface ModuleProgressRepository extends CrudRepository<ModuleProgress,
       String moduleId);
 
   void removeAllByCommunityHealthWorkerAndModule(CommunityHealthWorker chw, Module module);
+
+  List<ModuleProgress> findByModuleId(UUID moduleId);
 }

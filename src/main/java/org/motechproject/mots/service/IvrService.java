@@ -71,6 +71,9 @@ public class IvrService {
   @Autowired
   private ModuleProgressService moduleProgressService;
 
+  @Autowired
+  private ModuleService moduleService;
+
   private RestOperations restTemplate = new RestTemplate();
   private ObjectMapper mapper = new ObjectMapper();
 
@@ -168,17 +171,17 @@ public class IvrService {
     boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
 
     if (CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted) {
-      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord, ivrConfig);
+      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord);
 
       moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
     }
   }
 
-  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord,
-      IvrConfig ivrConfig) throws IvrException {
-
-    String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, ivrConfig.getVotoMainTreeId(),
+  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord) throws IvrException {
+    String votoMainTreeId = moduleService.getReleasedCourseIvrId();
+    String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, votoMainTreeId,
         callDetailRecord.getCallLogId());
+
     VotoResponseDto<VotoCallLogDto> response = sendVotoRequest(logUrl, new LinkedMultiValueMap<>(),
         new ParameterizedTypeReference<VotoResponseDto<VotoCallLogDto>>() {}, HttpMethod.GET);
 
