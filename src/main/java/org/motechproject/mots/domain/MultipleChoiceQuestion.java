@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.Getter;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
+import org.motechproject.mots.validate.CourseReleaseCheck;
+import org.motechproject.mots.validate.annotations.IsCorrect;
 
 @Entity
 @Table(name = "multiple_choice_question")
@@ -22,6 +24,7 @@ public class MultipleChoiceQuestion extends CallFlowElement {
   @JoinColumn(name = "question_id")
   @OrderBy("choice_id ASC")
   @Getter
+  @IsCorrect(groups = {CourseReleaseCheck.class})
   @Valid
   private List<Choice> choices;
 
