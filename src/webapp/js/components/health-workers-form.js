@@ -221,15 +221,15 @@ function isYobBeforeToday(date) {
 }
 
 function isAgeLowerThan15(date) {
-  const validYear = new Date();
-  validYear.setFullYear(validYear.getFullYear() - 15);
-  return new Date(date) >= validYear;
+  const maxValidYear = new Date();
+  maxValidYear.setFullYear(maxValidYear.getFullYear() - 15);
+  return new Date(date).getYear() <= maxValidYear;
 }
 
 function isAgeHigherThan100(date) {
-  const validYear = new Date();
-  validYear.setFullYear(validYear.getFullYear() - 100);
-  return new Date(date) <= validYear;
+  const minValidYear = new Date();
+  minValidYear.setFullYear(minValidYear.getFullYear() - 100);
+  return new Date(date).getYear() >= minValidYear;
 }
 
 function validate(values) {
