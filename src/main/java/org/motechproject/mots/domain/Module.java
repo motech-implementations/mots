@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -83,7 +84,10 @@ public class Module extends IvrObject {
   private MultipleChoiceQuestion startModuleQuestion;
 
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.EAGER)
   @JoinColumn(name = "module_id")
   @OrderBy("list_order ASC")
   @Getter

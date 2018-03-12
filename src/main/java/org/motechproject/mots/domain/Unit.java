@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -38,7 +39,10 @@ public class Unit extends IvrObject {
   private Integer listOrder;
 
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.EAGER)
   @JoinColumn(name = "unit_id")
   @OrderBy("list_order ASC")
   @Getter

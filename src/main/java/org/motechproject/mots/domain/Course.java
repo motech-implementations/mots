@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -57,7 +58,11 @@ public class Course extends IvrObject {
   @Setter
   private Status status;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
+  @OneToMany(
+      cascade = CascadeType.ALL,
+      mappedBy = "course",
+      orphanRemoval = true,
+      fetch = FetchType.EAGER)
   @OrderBy("list_order ASC")
   @Getter
   @Valid

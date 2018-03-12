@@ -64,6 +64,7 @@ public final class ValidationMessages {
       "The Community with name: '%s' within facility: '%s' already exists";
 
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
+  public static final String ONE_CHOICE_CORRECT = "One choice must be correct.";
 
   private ValidationMessages() {
   }
