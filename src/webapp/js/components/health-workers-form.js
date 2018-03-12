@@ -69,6 +69,7 @@ const FIELDS = {
       className: 'form-control',
     }),
     getDynamicAttributes: ({ yearOfBirth }) => ({
+      hidden: !yearOfBirth,
       value: Number.isInteger(parseInt(yearOfBirth, 10)) ?
         DateTime.moment().year() - yearOfBirth : '',
     }),
