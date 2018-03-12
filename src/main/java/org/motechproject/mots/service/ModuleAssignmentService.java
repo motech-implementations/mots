@@ -16,7 +16,6 @@ import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
-import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
@@ -28,7 +27,6 @@ import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
-import org.motechproject.mots.repository.ModuleProgressRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,9 +45,6 @@ public class ModuleAssignmentService {
 
   @Autowired
   private ModuleProgressService moduleProgressService;
-
-  @Autowired
-  private ModuleProgressRepository moduleProgressRepository;
 
   @Autowired
   private EntityManager entityManager;
@@ -106,6 +101,7 @@ public class ModuleAssignmentService {
 
     Set<Module> modulesToAdd = getModulesToAdd(oldModules, newModules);
     Set<Module> modulesToRemove = getModulesToRemove(oldModules, newModules);
+
     validateModulesToUnassign(assignedModulesChw, modulesToRemove);
 
     String ivrId = assignedModulesChw.getIvrId();
@@ -153,16 +149,13 @@ public class ModuleAssignmentService {
     }
   }
 
-  private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassing) {
+  private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassign) {
     HashSet<String> startedModulesIds = new HashSet<>();
-    modulesToUnassing.forEach(module -> moduleProgressRepository
-        .findByCommunityHealthWorkerIdAndModuleId(chw.getId(), module.getId())
-        .ifPresent(moduleProgress -> {
-          if (!ProgressStatus.NOT_STARTED.equals(moduleProgress.getStatus())) {
-            startedModulesIds.add(module.getId().toString());
-          }
-        })
-    );
+    modulesToUnassign.forEach(module -> {
+      if (moduleProgressService.getModuleProgress(chw.getId(), module.getId()).isStarted()) {
+        startedModulesIds.add(module.getId().toString());
+      }
+    });
 
     if (!startedModulesIds.isEmpty()) {
       throw new MotsException(String.format("Could not unassign started modules (module IDs: %s)",

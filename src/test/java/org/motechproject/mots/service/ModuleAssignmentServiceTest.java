@@ -43,7 +43,6 @@ import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
-import org.motechproject.mots.repository.ModuleProgressRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.testbuilder.AssignedModulesDataBuilder;
 import org.motechproject.mots.testbuilder.CommunityHealthWorkerDataBuilder;
@@ -65,9 +64,6 @@ public class ModuleAssignmentServiceTest {
 
   @Mock
   private AssignedModulesRepository assignedModulesRepository;
-
-  @Mock
-  private ModuleProgressRepository moduleProgressRepository;
 
   @Mock
   private ModuleProgressService moduleProgressService;
@@ -170,8 +166,8 @@ public class ModuleAssignmentServiceTest {
 
   @Test
   public void shouldAssignModules() throws Exception {
-    when(moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(any(), any()))
-        .thenReturn(Optional.of(getModuleProgress(ProgressStatus.NOT_STARTED)));
+    when(moduleProgressService.getModuleProgress(any(), any()))
+        .thenReturn(getModuleProgress(ProgressStatus.NOT_STARTED));
 
     moduleAssignmentService.assignModules(newAssignedModules);
 
@@ -192,16 +188,16 @@ public class ModuleAssignmentServiceTest {
 
   @Test(expected = MotsException.class)
   public void shouldThrowWhenTryToUnassignModuleInProgress() {
-    when(moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(any(), any()))
-        .thenReturn(Optional.of(getModuleProgress(ProgressStatus.IN_PROGRESS)));
+    when(moduleProgressService.getModuleProgress(any(), any()))
+        .thenReturn(getModuleProgress(ProgressStatus.IN_PROGRESS));
 
     moduleAssignmentService.assignModules(newAssignedModules);
   }
 
   @Test(expected = MotsException.class)
   public void shouldThrowWhenTryToUnassignCompletedModule() {
-    when(moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(any(), any()))
-        .thenReturn(Optional.of(getModuleProgress(ProgressStatus.COMPLETED)));
+    when(moduleProgressService.getModuleProgress(any(), any()))
+        .thenReturn(getModuleProgress(ProgressStatus.COMPLETED));
 
     moduleAssignmentService.assignModules(newAssignedModules);
   }
@@ -223,8 +219,8 @@ public class ModuleAssignmentServiceTest {
 
   @Test(expected = ModuleAssignmentException.class)
   public void assignModulesShouldThrowCustomExceptionIfIvrServiceThrow() throws Exception {
-    when(moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(any(), any()))
-        .thenReturn(Optional.of(getModuleProgress(ProgressStatus.NOT_STARTED)));
+    when(moduleProgressService.getModuleProgress(any(), any()))
+        .thenReturn(getModuleProgress(ProgressStatus.NOT_STARTED));
 
     doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
 

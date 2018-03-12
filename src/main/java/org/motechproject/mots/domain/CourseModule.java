@@ -14,7 +14,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "course_module")
 @NoArgsConstructor
-public class CourseModule extends BaseEntity {
+public class CourseModule extends IvrObject {
 
   @ManyToOne
   @JoinColumn(name = "course_id", nullable = false)
@@ -51,7 +51,15 @@ public class CourseModule extends BaseEntity {
     this.module = module;
   }
 
+  private CourseModule(String ivrId, String ivrName, Course course, Module module,
+      Integer listOrder) {
+    super(ivrId, ivrName);
+    this.course = course;
+    this.module = module;
+    this.listOrder = listOrder;
+  }
+
   public CourseModule copyAsNewDraft(Course course) {
-    return new CourseModule(course, module, listOrder);
+    return new CourseModule(getIvrId(), getIvrName(), course, module, listOrder);
   }
 }

@@ -15,7 +15,6 @@ import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.mapper.ModuleMapper;
 import org.motechproject.mots.repository.CourseModuleRepository;
 import org.motechproject.mots.repository.CourseRepository;
-import org.motechproject.mots.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ModuleService {
-
-  @Autowired
-  private ModuleRepository moduleRepository;
 
   @Autowired
   private CourseRepository courseRepository;
@@ -49,7 +45,7 @@ public class ModuleService {
    */
   @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public Iterable<Module> getReleasedModules() {
-    Course course = getReleasedCourse();
+    Course course = getReleasedCourseIfExists();
 
     if (course == null) {
       return new ArrayList<>();
@@ -66,15 +62,15 @@ public class ModuleService {
   @Transactional
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto createModule(ModuleDto moduleDto) {
-    Module module = Module.initialize();
-    moduleMapper.updateModuleFromDto(moduleDto, module);
-
-    module = moduleRepository.save(module);
     Course course = getDraftCourse();
-    CourseModule courseModule = new CourseModule(course, module, course.getModules().size());
-    courseModuleRepository.save(courseModule);
+    CourseModule courseModule = new CourseModule(course, Module.initialize(),
+        course.getModules().size());
 
-    return moduleMapper.toDtoWithTreeId(module, course);
+    moduleMapper.updateCourseModuleFromDto(moduleDto, courseModule);
+
+    courseModule = courseModuleRepository.save(courseModule);
+
+    return moduleMapper.toDto(courseModule);
   }
 
   /**
@@ -85,17 +81,20 @@ public class ModuleService {
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto updateModule(UUID id, ModuleDto moduleDto) {
-    Module module = findModuleById(id);
+    Course course = getDraftCourse();
+    CourseModule courseModule = course.findCourseModuleByModuleId(id);
+
+    Module module = courseModule.getModule();
 
     if (!Status.DRAFT.equals(module.getStatus())) {
       throw new MotsException("Only Module draft can be updated");
     }
 
-    moduleMapper.updateModuleFromDto(moduleDto, module);
+    moduleMapper.updateCourseModuleFromDto(moduleDto, courseModule);
 
-    module = moduleRepository.save(module);
+    courseModule = courseModuleRepository.save(courseModule);
 
-    return moduleMapper.toDtoWithTreeId(module, getDraftCourse());
+    return moduleMapper.toDto(courseModule);
   }
 
   /**
@@ -117,7 +116,7 @@ public class ModuleService {
 
     courseModule = courseModuleRepository.save(courseModule);
 
-    return moduleMapper.toDtoWithTreeId(courseModule.getModule(), course);
+    return moduleMapper.toDto(courseModule);
   }
 
   /**
@@ -133,7 +132,7 @@ public class ModuleService {
       throw new MotsException("Only one draft course allowed at a time");
     }
 
-    Course releasedCourse = getReleasedCourse();
+    Course releasedCourse = getReleasedCourseIfExists();
     Course course;
 
     if (releasedCourse == null) {
@@ -184,11 +183,6 @@ public class ModuleService {
    */
   public String getReleasedCourseIvrId() {
     Course course = getReleasedCourse();
-
-    if (course == null) {
-      throw new EntityNotFoundException("No released course exists");
-    }
-
     return course.getIvrId();
   }
 
@@ -197,9 +191,28 @@ public class ModuleService {
         new EntityNotFoundException("Course with id: {0} not found", id.toString()));
   }
 
-  private Module findModuleById(UUID id) {
-    return moduleRepository.findById(id).orElseThrow(() ->
-        new EntityNotFoundException("Module with id: {0} not found", id.toString()));
+  /**
+   * Find released Course Module for Module with given Id.
+   * @param id if of related Module
+   * @return Course Module with given Module
+   */
+  public CourseModule findReleasedCourseModuleByModuleId(UUID id) {
+    Course course = getReleasedCourse();
+    return course.findCourseModuleByModuleId(id);
+  }
+
+  /**
+   * Get released Course.
+   * @return Course with released status
+   */
+  public Course getReleasedCourse() {
+    Course course = getReleasedCourseIfExists();
+
+    if (course == null) {
+      throw new EntityNotFoundException("No released course exists");
+    }
+
+    return course;
   }
 
   private Course getDraftCourse() {
@@ -216,7 +229,7 @@ public class ModuleService {
     return courses.get(0);
   }
 
-  private Course getReleasedCourse() {
+  private Course getReleasedCourseIfExists() {
     List<Course> courses = courseRepository.findByStatus(Status.RELEASED);
 
     if (courses == null || courses.isEmpty()) {

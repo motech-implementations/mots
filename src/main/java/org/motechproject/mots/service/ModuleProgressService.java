@@ -11,6 +11,8 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.mots.domain.CallFlowElement;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.Course;
+import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.ModuleProgress;
 import org.motechproject.mots.domain.UnitProgress;
@@ -23,7 +25,6 @@ import org.motechproject.mots.exception.CourseProgressException;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.ModuleProgressRepository;
-import org.motechproject.mots.repository.ModuleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class ModuleProgressService {
   private ModuleProgressRepository moduleProgressRepository;
 
   @Autowired
-  private ModuleRepository moduleRepository;
+  private ModuleService moduleService;
 
   /**
    * Update Module Progress after call ends.
@@ -70,7 +71,7 @@ public class ModuleProgressService {
         ModuleProgress moduleProgress = interruptedModuleProgress.get();
 
         if (parseVotoModuleBlocks(votoCallLogDto, blockIterator,
-            moduleProgress.getModule().getIvrId(), callInterrupted)) {
+            moduleProgress.getCourseModule().getIvrId(), callInterrupted)) {
           return;
         }
       }
@@ -85,28 +86,39 @@ public class ModuleProgressService {
     modules.forEach(module -> createModuleProgress(chw, module));
   }
 
+  /**
+   * Remove Module Progresses for given CHW and Modules.
+   * @param chw CHW for which Module Progresses should be removed
+   * @param modules List of Module for which Module Progresses should be removed
+   */
   public void removeModuleProgresses(CommunityHealthWorker chw, Set<Module> modules) {
+    Course course = moduleService.getReleasedCourse();
     modules.forEach(module -> moduleProgressRepository
-        .removeAllByCommunityHealthWorkerAndModule(chw, module));
+        .removeAllByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(
+            chw.getId(), module.getId(), course.getId()));
   }
 
   /**
-   * Get ModuleProgress with specyfic CommunityHealthWorker ID and Module ID.
+   * Get ModuleProgress with specific CommunityHealthWorker ID and Module ID.
    * @param chwId CommunityHealthWorker ID
    * @param moduleId Module ID
    * @return ModuleProgress
    */
   public ModuleProgress getModuleProgress(UUID chwId, UUID moduleId) {
-    return moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(chwId, moduleId)
-        .orElseThrow(() -> new EntityNotFoundException(
+    Course course = moduleService.getReleasedCourse();
+    return moduleProgressRepository
+        .findByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(chwId,
+            moduleId, course.getId()).orElseThrow(() -> new EntityNotFoundException(
             "ModuleProgress with chwId {0} and moduleId {1} doesn't exist", chwId, moduleId));
   }
 
   private void createModuleProgress(CommunityHealthWorker chw, Module module) {
-    if (!moduleProgressRepository.findByCommunityHealthWorkerIdAndModuleId(chw.getId(),
-        module.getId()).isPresent()) {
-      Module existingModule = moduleRepository.findOne(module.getId());
-      ModuleProgress moduleProgress = new ModuleProgress(chw, existingModule);
+    Course course = moduleService.getReleasedCourse();
+    if (!moduleProgressRepository
+        .findByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(chw.getId(),
+        module.getId(), course.getId()).isPresent()) {
+      CourseModule courseModule = moduleService.findReleasedCourseModuleByModuleId(module.getId());
+      ModuleProgress moduleProgress = new ModuleProgress(chw, courseModule);
       moduleProgressRepository.save(moduleProgress);
     }
   }
@@ -176,9 +188,9 @@ public class ModuleProgressService {
     String chwIvrId = callLog.getChwIvrId();
 
     ModuleProgress moduleProgress =
-        moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndModuleIvrId(chwIvrId, moduleId)
-            .orElseThrow(() -> new CourseProgressException("No module progress found for CHW with "
-                + "IVR Id: {0} and module with IVR Id: {1}", chwIvrId, moduleId));
+        moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndCourseModuleIvrId(chwIvrId,
+            moduleId).orElseThrow(() -> new CourseProgressException("No module progress found for"
+            + " CHW with IVR Id: {0} and module with IVR Id: {1}", chwIvrId, moduleId));
 
     if (ProgressStatus.COMPLETED.equals(moduleProgress.getStatus())) {
       throw new CourseProgressException("Module already completed for CHW with IVR Id: {0} "
@@ -303,7 +315,7 @@ public class ModuleProgressService {
 
     if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
       throw new CourseProgressException("Unexpected block in module: {0}",
-          moduleProgress.getModule().getName());
+          moduleProgress.getCourseModule().getModule().getName());
     }
 
     UnitProgress unitProgress = moduleProgress.getCurrentUnitProgress();

@@ -1,24 +1,22 @@
 package org.motechproject.mots.repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.motechproject.mots.domain.CommunityHealthWorker;
-import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.ModuleProgress;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ModuleProgressRepository extends CrudRepository<ModuleProgress, UUID> {
 
-  Optional<ModuleProgress> findByCommunityHealthWorkerIdAndModuleId(UUID chwId, UUID moduleId);
+  Optional<ModuleProgress>
+      findByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(UUID chwId,
+      UUID moduleId, UUID courseId);
 
   Optional<ModuleProgress> findByCommunityHealthWorkerIvrIdAndInterrupted(String chwIvrId,
       Boolean interrupted);
 
-  Optional<ModuleProgress> findByCommunityHealthWorkerIvrIdAndModuleIvrId(String chwIvrId,
+  Optional<ModuleProgress> findByCommunityHealthWorkerIvrIdAndCourseModuleIvrId(String chwIvrId,
       String moduleId);
 
-  void removeAllByCommunityHealthWorkerAndModule(CommunityHealthWorker chw, Module module);
-
-  List<ModuleProgress> findByModuleId(UUID moduleId);
+  void removeAllByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(
+      UUID chwId, UUID moduleId, UUID courseId);
 }
