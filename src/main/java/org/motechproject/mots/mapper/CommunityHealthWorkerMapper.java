@@ -1,7 +1,5 @@
 package org.motechproject.mots.mapper;
 
-import static org.motechproject.mots.constants.MotsConstants.SIMPLE_DATE_FORMAT;
-
 import java.util.List;
 import java.util.UUID;
 import org.mapstruct.Mapper;
@@ -19,7 +17,6 @@ import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 public interface CommunityHealthWorkerMapper {
 
   @Mappings({
-      @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),
       @Mapping(target = "communityId", source = "community.id"),
       @Mapping(target = "communityName", source = "community.name"),
       @Mapping(target = "facilityName", source = "community.facility.name"),
@@ -33,7 +30,6 @@ public interface CommunityHealthWorkerMapper {
 
   @Mappings({
       @Mapping(target = "id", ignore = true),
-      @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),
       @Mapping(target = "community", source = "communityId")
   })
   CommunityHealthWorker fromDto(CommunityHealthWorkerDto healthWorkerDto);
@@ -43,7 +39,6 @@ public interface CommunityHealthWorkerMapper {
   @Mappings({
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "chwId", ignore = true),
-      @Mapping(target = "dateOfBirth", dateFormat = SIMPLE_DATE_FORMAT),
       @Mapping(target = "community", source = "communityId")
   })
   void updateFromDto(CommunityHealthWorkerDto healthWorkerDto,

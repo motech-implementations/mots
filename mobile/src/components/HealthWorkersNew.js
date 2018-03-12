@@ -43,7 +43,7 @@ class HealthWorkersNew extends Component {
     this.setState({ loading: false });
     if (result) {
       Actions.modalSuccess({
-        message: 'Incharge has been successfully edited',
+        message: 'New Health Worker has been created',
         onClose: () => { Actions.chws(); },
       });
     }

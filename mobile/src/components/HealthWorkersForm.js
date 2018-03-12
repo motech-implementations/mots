@@ -5,7 +5,6 @@ import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Select } from 'react-native-chooser';
-import DatePicker from 'react-native-datepicker';
 import { CheckBox } from 'react-native-elements';
 
 import FormField from './FormField';
@@ -46,24 +45,21 @@ const FIELDS = {
     label: 'Other Name',
     getAttributes: () => getAttributesForInput(),
   },
-  dateOfBirth: {
-    label: 'Date of Birth',
-    type: DatePicker,
-    getAttributes: (input) => {
-      const format = 'YYYY-MM-DD';
+  yearOfBirth: {
+    label: 'Year of Birth',
+    type: Select,
+    getSelectOptions: () => {
+      const values = [{ id: '', name: 'Click to Select' }];
+      for (let year = (new Date()).getFullYear(); year > 1899; year -= 1) {
+        values.push({ id: year, name: year.toString() });
+      }
       return {
-        format,
-        timeFormat: false,
-        closeOnSelect: true,
-        placeholder: 'Select a date',
-        date: input.value,
-        onDateChange: (param) => {
-          const formatted = !param || typeof param === 'string' ? param : param.format(format);
-          input.onChange(formatted);
-        },
+        values,
+        displayNameKey: 'name',
+        valueKey: 'id',
       };
     },
-    nonBorderField: true,
+    getAttributes: input => (getAttributesForSelect(input)),
   },
   gender: {
     type: Select,
@@ -307,8 +303,12 @@ class HealthWorkersForm extends Component {
   }
 }
 
-function isDateBeforeToday(date) {
-  return new Date(date) <= new Date();
+function isAgeLowerThan15(year) {
+  return year <= new Date().getFullYear() - 15;
+}
+
+function isAgeHigherThan100(year) {
+  return year >= new Date().getFullYear() - 100;
 }
 
 function validate(values) {
@@ -319,8 +319,11 @@ function validate(values) {
     }
   });
 
-  if (values.dateOfBirth && !isDateBeforeToday(values.dateOfBirth)) {
-    errors.dateOfBirth = 'Date must be in the past';
+  if (values.yearOfBirth && !isAgeLowerThan15(values.yearOfBirth)) {
+    errors.yearOfBirth = 'Minimum age is 15';
+  }
+  if (values.yearOfBirth && !isAgeHigherThan100(values.yearOfBirth)) {
+    errors.yearOfBirth = 'Maximum age is 100';
   }
 
   return errors;

@@ -31,23 +31,48 @@ const FIELDS = {
   otherName: {
     label: 'Other Name',
   },
-  dateOfBirth: {
-    label: 'Date of Birth',
+  yearOfBirth: {
+    label: 'Year of Birth',
     type: DateTime,
     getAttributes: (input) => {
-      const dateFormat = 'YYYY-MM-DD';
+      const dateFormat = 'YYYY';
+      const currentYear = DateTime.moment().year();
+      const maxYear = (currentYear - 15);
+
+      const yearRange = yearPicker => yearPicker.year() <= maxYear
+          && yearPicker.year() >= 1900;
 
       return {
         dateFormat,
         timeFormat: false,
+        isValidDate: yearRange,
+        viewDate: maxYear.toString(),
         closeOnSelect: true,
         value: input.value,
         onChange: (param) => {
-          const formatted = !param || typeof param === 'string' ? param : param.format(dateFormat);
+          let formatted;
+          if (typeof param === 'string') {
+            formatted = param.length === 0 ? null : param;
+          } else {
+            formatted = param.format(dateFormat);
+          }
           input.onChange(formatted);
         },
       };
     },
+  },
+  age: {
+    label: 'Age',
+    disabled: true,
+    getAttributes: () => ({
+      disabled: true,
+      className: 'form-control',
+    }),
+    getDynamicAttributes: ({ yearOfBirth }) => ({
+      hidden: !yearOfBirth,
+      value: Number.isInteger(parseInt(yearOfBirth, 10)) ?
+        DateTime.moment().year() - yearOfBirth : '',
+    }),
   },
   gender: {
     type: 'select',
@@ -171,6 +196,7 @@ class HealthWorkersForm extends Component {
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
+        yearOfBirth={this.props.yearOfBirth}
         isChwIdDisabled={this.props.isChwIdDisabled}
       />
     );
@@ -190,8 +216,20 @@ class HealthWorkersForm extends Component {
   }
 }
 
-function isDateBeforeToday(date) {
+function isYobBeforeToday(date) {
   return new Date(date) <= new Date();
+}
+
+function isAgeLowerThan15(date) {
+  const maxValidYear = new Date();
+  maxValidYear.setFullYear(maxValidYear.getFullYear() - 15);
+  return new Date(date).getYear() <= maxValidYear;
+}
+
+function isAgeHigherThan100(date) {
+  const minValidYear = new Date();
+  minValidYear.setFullYear(minValidYear.getFullYear() - 100);
+  return new Date(date).getYear() >= minValidYear;
 }
 
 function validate(values) {
@@ -202,8 +240,14 @@ function validate(values) {
       errors[fieldName] = 'This field is required';
     }
   });
-  if (values.dateOfBirth && !isDateBeforeToday(values.dateOfBirth)) {
-    errors.dateOfBirth = 'Date must be in the past';
+  if (values.yearOfBirth && !isYobBeforeToday(values.yearOfBirth)) {
+    errors.yearOfBirth = 'Year must be in the past';
+  }
+  if (values.yearOfBirth && !isAgeLowerThan15(values.yearOfBirth)) {
+    errors.yearOfBirth = 'Minimum age is 15';
+  }
+  if (values.yearOfBirth && !isAgeHigherThan100(values.yearOfBirth)) {
+    errors.yearOfBirth = 'Maximum age is 100';
   }
 
   return errors;
@@ -217,6 +261,7 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
+    yearOfBirth: selector(state, 'yearOfBirth'),
   };
 }
 
@@ -234,6 +279,7 @@ HealthWorkersForm.propTypes = {
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
+  yearOfBirth: PropTypes.string,
   isChwIdDisabled: PropTypes.bool,
 };
 
@@ -242,5 +288,6 @@ HealthWorkersForm.defaultProps = {
   districtId: null,
   chiefdomId: null,
   facilityId: null,
+  yearOfBirth: null,
   isChwIdDisabled: false,
 };
