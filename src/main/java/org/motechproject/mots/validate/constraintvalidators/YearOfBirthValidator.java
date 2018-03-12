@@ -1,6 +1,5 @@
 package org.motechproject.mots.validate.constraintvalidators;
 
-
 import java.time.LocalDate;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -18,12 +17,12 @@ public class YearOfBirthValidator implements ConstraintValidator<YearOfBirth, St
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (StringUtils.isNotEmpty(value)) {
+    if (value != null) {
       if (StringUtils.isNumeric(value)) {
 
         int yearInt = Integer.valueOf(value);
 
-        return yearInt >= MINIMAL_YEAR_OF_BIRTH && yearInt <= LocalDate.now().getYear();
+        return yearInt >= MINIMAL_YEAR_OF_BIRTH && yearInt <= LocalDate.now().getYear() - 15;
       }
       return false;
     }
