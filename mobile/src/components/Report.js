@@ -85,9 +85,6 @@ export default class Report extends Component {
                         Download XLS
             </Button>
           </View>
-          <Text style={reportStyles.reportPreviewTitle}>
-                    Report Preview
-          </Text>
           <View style={reportStyles.reportHtmlStyle}>
             <WebView
               source={{ html: this.state.reportHtml }}
