@@ -27,8 +27,8 @@ const COLUMNS = [
     Header: 'Other name',
     accessor: 'otherName',
   }, {
-    Header: 'DOB',
-    accessor: 'dateOfBirth',
+    Header: 'YOB',
+    accessor: 'yearOfBirth',
   }, {
     Header: 'Gender',
     accessor: 'gender',
