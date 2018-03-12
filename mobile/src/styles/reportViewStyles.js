@@ -6,9 +6,7 @@ export default {
   },
   reportHtmlStyle: {
     flex: 1,
-    marginHorizontal: 20,
-    marginBottom: 20,
-    marginTop: 10,
+    margin: 20,
     borderWidth: 1,
     borderColor: 'grey',
   },
