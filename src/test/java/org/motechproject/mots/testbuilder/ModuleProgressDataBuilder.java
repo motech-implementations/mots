@@ -2,7 +2,7 @@ package org.motechproject.mots.testbuilder;
 
 import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
-import org.motechproject.mots.domain.Module;
+import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.ModuleProgress;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 
@@ -10,7 +10,7 @@ public class ModuleProgressDataBuilder {
 
   private UUID id;
   private ProgressStatus status;
-  private Module module;
+  private CourseModule courseModule;
   private CommunityHealthWorker chw;
 
   /**
@@ -28,7 +28,7 @@ public class ModuleProgressDataBuilder {
 
     ModuleProgress moduleProgress = new ModuleProgress();
     moduleProgress.setStatus(status);
-    moduleProgress.setModule(module);
+    moduleProgress.setCourseModule(courseModule);
     moduleProgress.setCommunityHealthWorker(chw);
 
     return moduleProgress;
@@ -47,8 +47,8 @@ public class ModuleProgressDataBuilder {
   /**
    * Adds Module for new {@link ModuleProgress}.
    */
-  public ModuleProgressDataBuilder withModule(Module module) {
-    this.module = module;
+  public ModuleProgressDataBuilder withCourseModule(CourseModule courseModule) {
+    this.courseModule = courseModule;
     return this;
   }
 

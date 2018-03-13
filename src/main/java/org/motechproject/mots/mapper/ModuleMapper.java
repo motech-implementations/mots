@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -47,8 +46,21 @@ public abstract class ModuleMapper {
   })
   public abstract CourseDto toDto(Course course);
 
+  /**
+   * Create new DTO with Course Module data.
+   * @param courseModule used to create DTO
+   * @return DTO with Course Module data
+   */
   public ModuleDto toDto(CourseModule courseModule) {
-    return toDto(courseModule.getModule());
+    String treeId = "-v" + courseModule.getCourse().getVersion();
+    ModuleDto moduleDto =  toDto(courseModule.getModule());
+
+    addTreeId(moduleDto, treeId);
+
+    moduleDto.setIvrId(courseModule.getIvrId());
+    moduleDto.setIvrName(courseModule.getIvrName());
+
+    return moduleDto;
   }
 
   @Mappings({
@@ -77,35 +89,7 @@ public abstract class ModuleMapper {
 
   public abstract List<ModuleSimpleDto> toSimpleDtos(Iterable<Module> modules);
 
-  public abstract List<ModuleDto> toDtos(Iterable<Module> modules);
-
   public abstract List<CourseDto> toCourseDtos(List<Course> modules);
-
-  /**
-   * Create Module DTO.
-   * @param module module used to create DTO
-   * @param course course used to set DTO treeId
-   * @return module DTO
-   */
-  public ModuleDto toDtoWithTreeId(Module module, Course course) {
-    String treeId = "-v" + course.getVersion();
-    ModuleDto moduleDto = toDto(module);
-
-    addTreeId(moduleDto, treeId);
-
-    return moduleDto;
-  }
-
-  @AfterMapping
-  protected void addTreeId(Course course, @MappingTarget CourseDto courseDto) {
-    String treeId = "-v" + course.getVersion();
-
-    if (courseDto.getChildren() != null) {
-      for (ModuleDto moduleDto : courseDto.getChildren()) {
-        addTreeId(moduleDto, treeId);
-      }
-    }
-  }
 
   private void addTreeId(ModuleDto moduleDto, String treeId) {
     moduleDto.setTreeId(moduleDto.getId() + treeId);
@@ -151,9 +135,7 @@ public abstract class ModuleMapper {
                   "Cannot update course, because error occurred during module list update"));
         }
 
-        if (Status.DRAFT.equals(courseModule.getModule().getStatus())) {
-          updateModuleFromDto(moduleDto, courseModule.getModule());
-        }
+        updateCourseModuleFromDto(moduleDto, courseModule);
 
         courseModule.setListOrder(i);
         updatedCourseModules.add(courseModule);
@@ -165,11 +147,25 @@ public abstract class ModuleMapper {
   }
 
   /**
+   * Update Course Module using data from DTO.
+   * @param moduleDto DTO with new data
+   * @param courseModule Course Module to be updated
+   */
+  public void updateCourseModuleFromDto(ModuleDto moduleDto, CourseModule courseModule) {
+    if (Status.DRAFT.equals(courseModule.getModule().getStatus())) {
+      updateModuleFromDto(moduleDto, courseModule.getModule());
+      courseModule.setIvrName(moduleDto.getIvrName());
+    }
+
+    courseModule.setIvrId(moduleDto.getIvrId());
+  }
+
+  /**
    * Update Module using data from DTO.
    * @param moduleDto DTO with new data
    * @param module Module to be updated
    */
-  public void updateModuleFromDto(ModuleDto moduleDto, Module module) {
+  private void updateModuleFromDto(ModuleDto moduleDto, Module module) {
     List<UnitDto> unitDtos = moduleDto.getChildren();
     List<Unit> units = module.getUnits();
     List<Unit> updatedUnits = new ArrayList<>();

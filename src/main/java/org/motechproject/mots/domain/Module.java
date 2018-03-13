@@ -29,7 +29,7 @@ import org.motechproject.mots.validate.CourseReleaseCheck;
 @Entity
 @Table(name = "module")
 @NoArgsConstructor
-public class Module extends IvrObject {
+public class Module extends BaseTimestampedEntity {
 
   private static final String VERSION_SEPARATOR = "_v";
 
@@ -103,10 +103,9 @@ public class Module extends IvrObject {
     super(id);
   }
 
-  private Module(String ivrId, String ivrName, String name, String ivrGroup, String description,
+  private Module(String name, String ivrGroup, String description,
       Integer version, MultipleChoiceQuestion startModuleQuestion,
       List<Unit> units, Module previousVersion) {
-    super(ivrId, ivrName);
     this.name = name;
     this.ivrGroup = ivrGroup;
     this.description = description;
@@ -172,7 +171,7 @@ public class Module extends IvrObject {
       units.forEach(unit -> unitsCopy.add(unit.copyAsNewDraft()));
     }
 
-    return new Module(getIvrId(), getIvrName(), name, ivrGroup, description, version + 1,
+    return new Module(name, ivrGroup, description, version + 1,
         startModuleQuestionCopy, unitsCopy, this);
   }
 }

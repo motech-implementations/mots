@@ -562,9 +562,8 @@ class ModulesManage extends Component {
     }
 
     const course = ModulesManage.findNode(this.state.treeData, path[0]);
-    const module = node.type === 'MODULE' ? node : ModulesManage.findNode(course.children, path[1]);
 
-    return !module || module.status === 'DRAFT';
+    return course && course.status === 'DRAFT';
   }
 
   isDraftCourse(node, path) {
@@ -574,6 +573,17 @@ class ModulesManage extends Component {
 
     const course = ModulesManage.findNode(this.state.treeData, path[0]);
     return !course || course.status === 'DRAFT';
+  }
+
+  isModuleReleased(node, path) {
+    if (node.type === 'MODULE') {
+      return node.status === 'RELEASED';
+    }
+
+    const course = ModulesManage.findNode(this.state.treeData, path[0]);
+    const module = ModulesManage.findNode(course.children, path[1]);
+
+    return module !== undefined && module !== null && module.status === 'RELEASED';
   }
 
   canAddCourse(treeData) {
@@ -587,7 +597,7 @@ class ModulesManage extends Component {
   render() {
     const canDrop = ({ prevPath, nextPath }) => prevPath.length === nextPath.length
       && prevPath[prevPath.length - 2] === nextPath[nextPath.length - 2];
-    const canDrag = ({ node, path }) => node.type !== 'COURSE' && this.isEditable(node, path);
+    const canDrag = ({ node, path }) => node.type !== 'COURSE' && this.isEditable(node, path) && (node.type === 'MODULE' || !this.isModuleReleased(node, path));
 
     const onMoveNode = ({ node, prevPath }) => {
       if (node.type !== 'COURSE') {
@@ -658,7 +668,7 @@ class ModulesManage extends Component {
                   this.props.resetLogoutCounter();
                 },
                 className: this.getNodeClassName(node),
-                buttons: node.type === 'COURSE' || node.type === 'MODULE' || !this.isEditable(node, path) ? [] : [
+                buttons: node.type === 'COURSE' || node.type === 'MODULE' || !this.isEditable(node, path) || this.isModuleReleased(node, path) ? [] : [
                   <button
                     className="btn btn-danger"
                     onClick={(event) => {
@@ -686,6 +696,10 @@ class ModulesManage extends Component {
                   this.state.selectedElement.path,
                 )}
                 isDraftCourse={this.isDraftCourse(
+                  this.state.selectedElement.node,
+                  this.state.selectedElement.path,
+                )}
+                isModuleReleased={this.isModuleReleased(
                   this.state.selectedElement.node,
                   this.state.selectedElement.path,
                 )}

@@ -102,6 +102,7 @@ const MODULE_FIELDS = {
   },
   ivrId: {
     label: 'IVR Id',
+    releasedEditable: true,
   },
   ivrName: {
     label: 'IVR Name',
@@ -148,7 +149,7 @@ class ModuleForm extends Component {
 
   static renderField(fieldConfig, fieldName, fieldKey, props) {
     if (fieldName === 'buttons') {
-      if (!props.isEditable) {
+      if (!props.isEditable || props.isModuleReleased) {
         return null;
       }
 
@@ -202,7 +203,7 @@ class ModuleForm extends Component {
         name={fieldName}
         component={ModuleForm.renderFieldInput}
         fieldConfig={fieldConfig}
-        disabled={!props.isEditable}
+        disabled={!props.isEditable || (props.isModuleReleased && !fieldConfig.releasedEditable)}
       />
     );
   }
@@ -210,7 +211,7 @@ class ModuleForm extends Component {
   static renderFieldArray = ({ fieldsConfig, properties, fields }) => (
     <div>
       <div className="text-center">
-        { properties.isEditable &&
+        { properties.isEditable && !properties.isModuleReleased &&
         <button type="button" className="btn btn-success margin-bottom-lg" onClick={() => fields.push(fieldsConfig.defaultValue)}>
           <span className="glyphicon glyphicon-plus" />
           <span className="icon-text">{fieldsConfig.addLabel}</span>
@@ -221,7 +222,7 @@ class ModuleForm extends Component {
           // eslint-disable-next-line react/no-array-index-key
           <li key={index}>
             <div className="row">
-              { properties.isEditable &&
+              { properties.isEditable && !properties.isModuleReleased &&
               <button type="button" className="btn btn-danger pull-right margin-right-md" onClick={() => fields.remove(index)}>
                 <span className="glyphicon glyphicon-trash" />
               </button> }
@@ -306,7 +307,7 @@ class ModuleForm extends Component {
               { _.map(ModuleForm.getFields(this.props.nodeType), (fieldConfig, fieldName) =>
                 ModuleForm.renderField(fieldConfig, fieldName, fieldName, this.props)) }
               <div className="col-md-4" />
-              { this.props.isEditable &&
+              { this.props.isEditable && !this.props.isModuleReleased &&
               <button
                 type="submit"
                 disabled={!this.props.nodeChanged && (pristine || submitting)}
@@ -321,14 +322,14 @@ class ModuleForm extends Component {
                 onClick={this.props.releaseCourse}
               >Publish
               </button> }
-              { this.props.isDraftCourse && this.props.nodeType === 'MODULE' && this.props.nodeStatus === 'RELEASED' &&
+              { this.props.isDraftCourse && this.props.nodeType === 'MODULE' && this.props.isModuleReleased &&
               <button
                 type="button"
                 className="btn btn-primary margin-bottom-md"
                 onClick={this.props.editModule}
               >Edit
               </button> }
-              { this.props.isEditable &&
+              { this.props.isEditable && !this.props.isModuleReleased &&
               <button
                 type="button"
                 disabled={pristine || submitting}
@@ -407,6 +408,7 @@ ModuleForm.propTypes = {
   editModule: PropTypes.func.isRequired,
   isEditable: PropTypes.bool.isRequired,
   isDraftCourse: PropTypes.bool.isRequired,
+  isModuleReleased: PropTypes.bool.isRequired,
   nodeType: PropTypes.string,
   nodeStatus: PropTypes.string,
   nodeChanged: PropTypes.bool,

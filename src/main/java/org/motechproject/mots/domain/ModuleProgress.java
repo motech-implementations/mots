@@ -28,10 +28,10 @@ import org.motechproject.mots.utils.UnitProgressComparator;
 public class ModuleProgress extends BaseTimestampedEntity {
 
   @ManyToOne
-  @JoinColumn(name = "module_id", nullable = false)
+  @JoinColumn(name = "course_module_id", nullable = false)
   @Getter
   @Setter
-  private Module module;
+  private CourseModule courseModule;
 
   @ManyToOne
   @JoinColumn(name = "chw_id", nullable = false)
@@ -75,16 +75,16 @@ public class ModuleProgress extends BaseTimestampedEntity {
   /**
    * Create new Module Progress.
    * @param chw CHW which progress will be stored
-   * @param module Module which progress will be stored
+   * @param courseModule Module which progress will be stored
    */
-  public ModuleProgress(CommunityHealthWorker chw, Module module) {
+  public ModuleProgress(CommunityHealthWorker chw, CourseModule courseModule) {
     this.communityHealthWorker = chw;
-    this.module = module;
+    this.courseModule = courseModule;
     this.status = ProgressStatus.NOT_STARTED;
     this.interrupted = false;
     this.currentUnitNumber = 0;
-    this.unitsProgresses = module.getUnits().stream().map(UnitProgress::new).collect(
-        Collectors.toCollection(() -> new TreeSet<>(new UnitProgressComparator())));
+    this.unitsProgresses = courseModule.getModule().getUnits().stream().map(UnitProgress::new)
+        .collect(Collectors.toCollection(() -> new TreeSet<>(new UnitProgressComparator())));
   }
 
   public UnitProgress getCurrentUnitProgress() {
@@ -109,7 +109,7 @@ public class ModuleProgress extends BaseTimestampedEntity {
    * Change current unit, if no more units change status to completed.
    */
   public void nextUnit(LocalDateTime endDate) {
-    if (currentUnitNumber < module.getUnits().size() - 1) {
+    if (currentUnitNumber < courseModule.getModule().getUnits().size() - 1) {
       currentUnitNumber++;
     } else {
       status = ProgressStatus.COMPLETED;

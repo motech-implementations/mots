@@ -93,7 +93,8 @@
  FROM unit_progress
  JOIN unit ON unit.id = unit_progress.unit_id
  JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
- JOIN module ON module.id = module_progress.module_id
+ JOIN course_module ON course_module.id = module_progress.course_module_id
+ JOIN module ON module.id = course_module.module_id
  JOIN community_health_worker chw ON module_progress.chw_id = chw.id
  JOIN community ON chw.community_id = community.id
  JOIN facility ON community.facility_id = facility.id

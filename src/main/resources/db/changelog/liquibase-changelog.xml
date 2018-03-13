@@ -58,4 +58,6 @@
   <include file="20180308_1601.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180309_1408.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180309_1800.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180309_1839.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180312_1744.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
