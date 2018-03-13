@@ -68,7 +68,7 @@ class UsersTable extends Component {
         <div className="hide-min-r-small-min">
           <MobileTable
             data={this.props.usersList}
-            columns={UsersTable.getTableColumns()}
+            columns={UsersTable.prepareMobileColumns()}
           />
         </div>
         <div className="hide-max-r-xsmall-max">

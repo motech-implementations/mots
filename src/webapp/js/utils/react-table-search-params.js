@@ -4,7 +4,11 @@ export function buildSearchParams(filtered, sorted, page, pageSize) {
   const searchParams = {};
 
   _.forEach(filtered, (filter) => {
-    searchParams[filter.id] = filter.value;
+    if (filter.id === 'roles[0].name') {
+      searchParams.role = filter.value;
+    } else {
+      searchParams[filter.id] = filter.value;
+    }
   });
 
   if (!_.isEmpty(sorted)) {
