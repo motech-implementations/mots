@@ -63,3 +63,10 @@ Also you should copy `config.example.js` in a main folder to a new file `config.
 Use: `cp ./mobile/config.example.js ./mobile/config.js`.
 
 In case of any problems, or to get additional info, go to: https://facebook.github.io/react-native/docs/getting-started.html.
+
+## Jasper Reports
+1. Install Jaspersoft Studio 6.4.3
+2. Add mots/reports folder in Jasper Project Explorer
+3. After creating/editing a report (.jrxml) right click it and choose Compile from the menu .jasper file wil be generated
+4. Use generateHex.sh script to generate file with reports in hex format (used in migrations)
+5. Create migration with report, example or report update "20180228_1458_update_reports.sql", example of new report "20180227_1609_insert_chw_module.sql"
