@@ -16,6 +16,7 @@ import {
   getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
   getAttributesForInput,
+  getAttributesForYOB,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -59,7 +60,15 @@ const FIELDS = {
         valueKey: 'id',
       };
     },
-    getAttributes: input => (getAttributesForSelect(input)),
+    getAttributes: input => getAttributesForYOB(input, CHW_FORM_NAME, 'age'),
+  },
+  age: {
+    label: 'Age',
+    getAttributes: () => getAttributesForInput(),
+    getDynamicAttributes: ({ yearOfBirth }) => ({
+      editable: false,
+      hidden: !yearOfBirth,
+    }),
   },
   gender: {
     type: Select,
@@ -256,6 +265,7 @@ class HealthWorkersForm extends Component {
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
         isChwIdDisabled={this.props.isChwIdDisabled}
+        yearOfBirth={this.props.yearOfBirth}
       />
     );
   }
@@ -337,6 +347,7 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
+    yearOfBirth: selector(state, 'yearOfBirth'),
   };
 }
 
@@ -356,6 +367,7 @@ HealthWorkersForm.propTypes = {
   facilityId: PropTypes.string,
   loading: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
+  yearOfBirth: PropTypes.string,
 };
 
 HealthWorkersForm.defaultProps = {
@@ -365,4 +377,5 @@ HealthWorkersForm.defaultProps = {
   facilityId: null,
   loading: false,
   isChwIdDisabled: false,
+  yearOfBirth: null,
 };
