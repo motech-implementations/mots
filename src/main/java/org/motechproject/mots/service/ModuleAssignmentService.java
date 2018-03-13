@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
-import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -150,17 +149,11 @@ public class ModuleAssignmentService {
   }
 
   private void validateModulesToUnassign(CommunityHealthWorker chw, Set<Module> modulesToUnassign) {
-    HashSet<String> startedModulesIds = new HashSet<>();
     modulesToUnassign.forEach(module -> {
       if (moduleProgressService.getModuleProgress(chw.getId(), module.getId()).isStarted()) {
-        startedModulesIds.add(module.getId().toString());
+        throw new MotsException("Could not unassign started modules");
       }
     });
-
-    if (!startedModulesIds.isEmpty()) {
-      throw new MotsException(String.format("Could not unassign started modules (module IDs: %s)",
-          StringUtils.join(startedModulesIds, ", ")));
-    }
   }
 
   private List<String> getIvrGroupsFromModules(Set<Module> modules) {
