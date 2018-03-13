@@ -70,20 +70,6 @@ export function getAttributesForSelect(input, availableLocations) {
   };
 }
 
-export function getAttributesForYOB(input, formName, field) {
-  return {
-    defaultText: input.value || 'Click to Select',
-    onSelect: (value) => {
-      const ageValue = new Date().getFullYear() - value;
-      dispatch(change(formName, field, ageValue.toString()));
-      input.onChange(value);
-    },
-    transparent: true,
-    optionListStyle,
-    style: labelSelectFieldStyle,
-  };
-}
-
 export function
 getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...fieldsToClear) {
   let defaultText = input.value;
@@ -109,4 +95,8 @@ export function getAttributesForInput() {
     underlineColorAndroid: 'rgba(0,0,0,0)',
     style: { paddingVertical: 5 },
   };
+}
+
+export function getSupervisorNameFromFacility(list, facilityId) {
+  return getLocationById(list, facilityId).inchargeFullName;
 }
