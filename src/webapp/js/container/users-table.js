@@ -10,45 +10,47 @@ import 'react-table/react-table.css';
 import MobileTable from '../components/mobile-table';
 import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
 import { fetchUsers } from '../actions/index';
+import { buildSearchParams } from '../utils/react-table-search-params';
 
-const COLUMNS = [
-  {
-    Header: 'Actions',
-    minWidth: 50,
-    accessor: 'id',
-    Cell: cell => (
-      <div className="actions-buttons-container">
-        <Link
-          to={`/users/${cell.value}`}
-          type="button"
-          className="btn btn-primary margin-right-sm"
-          title="Edit"
-        >
-          <span className="glyphicon glyphicon-edit" />
-          <span className="hide-min-r-small-min next-button-text">Edit</span>
-        </Link>
-      </div>
-    ),
-    filterable: false,
-  },
-  {
-    Header: 'Username',
-    accessor: 'username',
-  }, {
-    Header: 'Email',
-    accessor: 'email',
-  }, {
-    Header: 'Name',
-    accessor: 'name',
-  }, {
-    Header: 'Role',
-    accessor: 'roles[0].name',
-  },
-];
 
 class UsersTable extends Component {
+  static getTableColumns = () => [
+    {
+      Header: 'Actions',
+      minWidth: 50,
+      accessor: 'id',
+      Cell: cell => (
+        <div className="actions-buttons-container">
+          <Link
+            to={`/users/${cell.value}`}
+            type="button"
+            className="btn btn-primary margin-right-sm"
+            title="Edit"
+          >
+            <span className="glyphicon glyphicon-edit" />
+            <span className="hide-min-r-small-min next-button-text">Edit</span>
+          </Link>
+        </div>
+      ),
+      filterable: false,
+      sortable: false,
+    },
+    {
+      Header: 'Username',
+      accessor: 'username',
+    }, {
+      Header: 'Email',
+      accessor: 'email',
+    }, {
+      Header: 'Name',
+      accessor: 'name',
+    }, {
+      Header: 'Role',
+      accessor: 'roles[0].name',
+    }];
+
   static prepareMobileColumns() {
-    const mobileColumns = _.clone(COLUMNS);
+    const mobileColumns = _.clone(UsersTable.getTableColumns());
     mobileColumns.push(mobileColumns.shift());
     return mobileColumns;
   }
@@ -56,19 +58,40 @@ class UsersTable extends Component {
   componentWillMount() {
     if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
-    } else {
-      this.props.fetchUsers();
     }
+    this.setState({ loading: true });
   }
 
   render() {
     return (
       <div>
         <div className="hide-min-r-small-min">
-          <MobileTable data={this.props.usersList} columns={UsersTable.prepareMobileColumns()} />
+          <MobileTable
+            data={this.props.usersList}
+            columns={UsersTable.getTableColumns()}
+          />
         </div>
         <div className="hide-max-r-xsmall-max">
-          <ReactTable filterable data={this.props.usersList} columns={COLUMNS} />
+          <ReactTable
+            manual
+            filterable
+            data={this.props.usersList}
+            columns={UsersTable.getTableColumns()}
+            loading={this.state.loading}
+            pages={this.props.userListPages}
+            onFetchData={(state) => {
+              this.setState({ loading: true });
+              this.props.fetchUsers(buildSearchParams(
+                  state.filtered,
+                  state.sorted,
+                  state.page,
+                  state.pageSize,
+              ))
+              .then(() => {
+                this.setState({ loading: false });
+              });
+            }}
+          />
         </div>
       </div>
     );
@@ -78,6 +101,7 @@ class UsersTable extends Component {
 function mapStateToProps(state) {
   return {
     usersList: state.tablesReducer.usersList,
+    userListPages: state.tablesReducer.userListPages,
   };
 }
 
@@ -87,6 +111,7 @@ UsersTable.propTypes = {
   fetchUsers: PropTypes.func.isRequired,
   usersList: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
+  userListPages: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

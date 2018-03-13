@@ -31,7 +31,8 @@ export default function (state = initialTablesData, action) {
       if (action.payload.data !== undefined) {
         return {
           ...state,
-          usersList: action.payload.data,
+          usersList: action.payload.data.content,
+          userListPages: action.payload.data.totalPages,
         };
       }
       return state;
