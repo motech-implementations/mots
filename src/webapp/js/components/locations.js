@@ -28,6 +28,11 @@ const FacilityTypeFilter = ({ onChange }) => (
   </select>);
 
 class Locations extends Component {
+  constructor(props){
+      super(props);
+      this.handleTabSelect = this.handleTabSelect.bind(this);
+  }
+
   static getCommunityColumns = () => [
     {
       Header: 'Actions',
@@ -117,11 +122,21 @@ class Locations extends Component {
     },
   ];
 
+  handleTabSelect(index) {
+    this.props.match.params.tabIndex = Number.parseInt(index, 10);
+    this.setState({selectedIndex: index});
+  }
+
   render() {
+    let index = Number.parseInt(this.props.match.params.tabIndex, 10);
+    if (!this.props.match.params.tabIndex) {
+      index = 0;
+    }
+
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Locations</h1>
-        <Tabs>
+        <Tabs selectedIndex={index} onSelect={this.handleTabSelect}>
           <TabList>
             <Tab>Communities</Tab>
             <Tab>Facilities</Tab>
@@ -160,6 +175,22 @@ class Locations extends Component {
 }
 
 export default Locations;
+
+Locations.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      tabIndex: PropTypes.number,
+    }),
+  }).isRequired,
+};
+
+Locations.defaultProps = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      tabIndex: 0,
+    }),
+  }).isRequired,
+};
 
 FacilityTypeFilter.propTypes = {
   onChange: PropTypes.func.isRequired,

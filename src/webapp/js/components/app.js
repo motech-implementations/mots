@@ -79,7 +79,7 @@ export default class App extends Component {
                 <Route path="/locations/facility/:facilityId" component={FacilityEdit} />
                 <Route path="/locations/community/new" component={CommunityNew} />
                 <Route path="/locations/community/:communityId" component={CommunityEdit} />
-                <Route path="/locations" component={Locations} />
+                <Route path="/locations/:tabIndex?" component={Locations} />
                 <Route path="/profile" component={UserProfileEdit} />
                 <Route path="/" component={Home} />
               </Switch>

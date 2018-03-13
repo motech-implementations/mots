@@ -38,7 +38,9 @@ class FacilityNew extends Component {
 
     this.props.createFacility(valuesToSend, () => {
       Alert.success('Facility has been added');
-      this.props.history.push('/locations');
+      this.props.history.push({
+        pathname: '/locations/1',
+      });
     });
   }
 
