@@ -28,6 +28,10 @@ function getLocationById(list, id) {
   return {};
 }
 
+export function getSupervisorNameFromFacility(list, facilityId) {
+  return getLocationById(list, facilityId).inchargeFullName;
+}
+
 export function getSelectableLocations(
   requestedList, districts,
   districtId, chiefdomId, facilityId,

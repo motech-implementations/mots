@@ -34,4 +34,8 @@ public class FacilityDto {
   @Getter
   @Setter
   private String inchargeId;
+
+  @Getter
+  @Setter
+  private String inchargeFullName;
 }

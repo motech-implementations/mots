@@ -9,7 +9,10 @@ import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
+import {
+  getAttributesForSelectWithClearOnChange, getSelectableLocations,
+  getSupervisorNameFromFacility,
+} from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -63,7 +66,6 @@ const FIELDS = {
   },
   age: {
     label: 'Age',
-    disabled: true,
     getAttributes: () => ({
       disabled: true,
       className: 'form-control',
@@ -103,6 +105,7 @@ const FIELDS = {
   districtId: {
     type: 'select',
     label: 'District',
+    required: true,
     getSelectOptions: ({ availableLocations }) => ({
       values: availableLocations,
       displayNameKey: 'name',
@@ -113,6 +116,7 @@ const FIELDS = {
   chiefdomId: {
     type: 'select',
     label: 'Chiefdom',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'chiefdoms',
@@ -127,6 +131,7 @@ const FIELDS = {
   facilityId: {
     type: 'select',
     label: 'Facility',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
       values: getSelectableLocations(
         'facilities',
@@ -137,7 +142,33 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId', 'supervisorName')),
+  },
+  supervisorName: {
+    label: 'Supervisor',
+    getAttributes: () => ({
+      disabled: true,
+      className: 'form-control',
+    }),
+    getDynamicAttributes: ({
+      availableLocations, districtId, chiefdomId, facilityId,
+    }) => {
+      if (!facilityId) {
+        return { hidden: true };
+      }
+      const supervisorName =
+          getSupervisorNameFromFacility(
+            getSelectableLocations(
+              'facilities',
+              availableLocations,
+              districtId,
+              chiefdomId,
+            ),
+            facilityId,
+          );
+
+      return { value: supervisorName || 'Unassigned' };
+    },
   },
   communityId: {
     type: 'select',
