@@ -16,7 +16,7 @@ import {
   getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
   getAttributesForInput,
-  getAttributesForYOB,
+  getSupervisorNameFromFacility,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -60,7 +60,7 @@ const FIELDS = {
         valueKey: 'id',
       };
     },
-    getAttributes: input => getAttributesForYOB(input, CHW_FORM_NAME, 'age'),
+    getAttributes: input => getAttributesForSelect(input),
   },
   age: {
     label: 'Age',
@@ -68,6 +68,7 @@ const FIELDS = {
     getDynamicAttributes: ({ yearOfBirth }) => ({
       editable: false,
       hidden: !yearOfBirth,
+      value: yearOfBirth ? (new Date().getFullYear() - yearOfBirth).toString() : '',
     }),
   },
   gender: {
@@ -180,6 +181,29 @@ const FIELDS = {
     getDynamicAttributes: ({ chiefdomId }) => ({
       hidden: !chiefdomId,
     }),
+  },
+  supervisorName: {
+    label: 'Supervisor',
+    getAttributes: () => getAttributesForInput(),
+    getDynamicAttributes: ({
+      availableLocations, districtId, chiefdomId, facilityId,
+    }) => {
+      if (!facilityId) {
+        return { hidden: true };
+      }
+      const supervisorName =
+              getSupervisorNameFromFacility(
+                getSelectableLocations(
+                  'facilities',
+                  availableLocations,
+                  districtId,
+                  chiefdomId,
+                ),
+                facilityId,
+              );
+
+      return { value: supervisorName || 'Unassigned', editable: false };
+    },
   },
   communityId: {
     type: Select,

@@ -56,7 +56,6 @@ export default class FormField extends Component {
           <FieldType
             {...attributes}
             onChangeText={text => input.onChange(text)}
-            value={input.value}
             style={style}
           >
             {
