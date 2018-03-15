@@ -115,7 +115,7 @@ public class ModuleProgressService {
 
   /**
    * Update ModuleProgresses with new Course Modules when Module is reused in newly released Course.
-   * @param courseModules lis of new Course Modules with reused Modules
+   * @param courseModules list of new Course Modules with reused Modules
    */
   public void updateModuleProgressWithNewCourseModules(List<CourseModule> courseModules) {
     courseModules.forEach(courseModule -> {
