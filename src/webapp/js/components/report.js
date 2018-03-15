@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import FileDownload from 'js-file-download';
 import PropTypes from 'prop-types';
-import DOMPurify from 'dompurify';
+import ReactTable from 'react-table';
+
+import MobileTable from '../components/mobile-table';
 import apiClient from '../utils/api-client';
 import {
   DISPLAY_REPORTS_AUTHORITY,
   hasAuthority,
 } from '../utils/authorization';
 
-/* eslint-disable react/no-danger */
 export default class Report extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reportHtml: '',
+      reportData: [],
+      reportModel: [],
       reportId: '',
     };
 
@@ -35,12 +37,27 @@ export default class Report extends Component {
   }
 
   fetchReport = () => {
-    const url = `api/reports/templates/${this.state.reportId}/html`;
+    const url = `api/reports/templates/${this.state.reportId}/json`;
 
     apiClient.get(url)
       .then((response) => {
-        const cleanHtml = DOMPurify.sanitize(response.data);
-        this.setState({ reportHtml: cleanHtml });
+        if (response.data && response.data.length === 1) {
+          const { colModel, values } = response.data[0];
+
+          if (colModel && colModel.length === 1) {
+            const columns = colModel[0];
+            const reportData = values || [];
+            const reportModel = [];
+
+            _.forEach(columns, (value, key) => {
+              reportModel.push({ ...value[0], accessor: key });
+            });
+
+            reportModel.sort((o1, o2) => o1.order > o2.order);
+
+            this.setState({ reportData, reportModel });
+          }
+        }
       });
   };
 
@@ -88,7 +105,27 @@ export default class Report extends Component {
           className="btn btn-success margin-left-sm margin-bottom-md"
         >Download XLS
         </button>
-        <div dangerouslySetInnerHTML={{ __html: this.state.reportHtml }} />
+        { this.state.reportModel &&
+        <div>
+          <div className="hide-min-r-small-min">
+            <MobileTable
+              data={this.state.reportData}
+              columns={this.state.reportModel}
+            />
+          </div>
+          <div className="hide-max-r-xsmall-max">
+            <ReactTable
+              filterable
+              data={this.state.reportData}
+              columns={this.state.reportModel}
+              defaultFilterMethod={(filter, row) => {
+                const id = filter.pivotId || filter.id;
+                return row[id] !== undefined ? _.includes(row[id], filter.value) : true;
+              }}
+            />
+          </div>
+        </div>
+        }
       </div>
     );
   }
