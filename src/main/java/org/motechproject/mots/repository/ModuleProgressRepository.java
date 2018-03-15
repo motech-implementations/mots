@@ -1,5 +1,6 @@
 package org.motechproject.mots.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.ModuleProgress;
@@ -19,4 +20,6 @@ public interface ModuleProgressRepository extends CrudRepository<ModuleProgress,
 
   void removeAllByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(
       UUID chwId, UUID moduleId, UUID courseId);
+
+  List<ModuleProgress> findByCourseModuleId(UUID courseModuleId);
 }

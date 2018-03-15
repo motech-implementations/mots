@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.security.User;
@@ -123,6 +124,10 @@ public class ModuleAssignmentService {
 
   public void unassignOldModulesVersions(List<Module> newModules) {
     newModules.forEach(module -> unassignOldModuleVersion(module.getPreviousVersion()));
+  }
+
+  public void updateModuleProgress(List<CourseModule> releasedCourseModules) {
+    moduleProgressService.updateModuleProgressWithNewCourseModules(releasedCourseModules);
   }
 
   private void unassignOldModuleVersion(Module oldModule) {

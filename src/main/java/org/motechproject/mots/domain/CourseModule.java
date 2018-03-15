@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.Getter;
@@ -34,6 +35,12 @@ public class CourseModule extends IvrObject {
   @Setter
   private Integer listOrder;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "previous_version_id")
+  @Getter
+  @Setter
+  private CourseModule previousVersion;
+
   /**
    * Create new CourseModule.
    * @param course parent course
@@ -52,14 +59,15 @@ public class CourseModule extends IvrObject {
   }
 
   private CourseModule(String ivrId, String ivrName, Course course, Module module,
-      Integer listOrder) {
+      Integer listOrder, CourseModule previousVersion) {
     super(ivrId, ivrName);
     this.course = course;
     this.module = module;
     this.listOrder = listOrder;
+    this.previousVersion = previousVersion;
   }
 
   public CourseModule copyAsNewDraft(Course course) {
-    return new CourseModule(getIvrId(), getIvrName(), course, module, listOrder);
+    return new CourseModule(getIvrId(), getIvrName(), course, module, listOrder, this);
   }
 }
