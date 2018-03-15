@@ -170,9 +170,11 @@ public class ModuleService {
   @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
   public Course releaseCourse(Course course) {
     List<Module> newVersionModules = course.getNewVersionModules();
+    List<CourseModule> releasedCourseModules = course.getReleasedCourseModules();
     course.release();
 
     moduleAssignmentService.unassignOldModulesVersions(newVersionModules);
+    moduleAssignmentService.updateModuleProgress(releasedCourseModules);
 
     return courseRepository.save(course);
   }

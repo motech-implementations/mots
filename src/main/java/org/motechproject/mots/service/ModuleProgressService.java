@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@SuppressWarnings("PMD.TooManyMethods")
 public class ModuleProgressService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ModuleProgressService.class);
@@ -110,6 +111,23 @@ public class ModuleProgressService {
         .findByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(chwId,
             moduleId, course.getId()).orElseThrow(() -> new EntityNotFoundException(
             "ModuleProgress with chwId {0} and moduleId {1} doesn't exist", chwId, moduleId));
+  }
+
+  /**
+   * Update ModuleProgresses with new Course Modules when Module is reused in newly released Course.
+   * @param courseModules lis of new Course Modules with reused Modules
+   */
+  public void updateModuleProgressWithNewCourseModules(List<CourseModule> courseModules) {
+    courseModules.forEach(courseModule -> {
+      UUID courseModuleId = courseModule.getPreviousVersion().getId();
+      List<ModuleProgress> moduleProgresses =
+          moduleProgressRepository.findByCourseModuleId(courseModuleId);
+
+      if (moduleProgresses != null && !moduleProgresses.isEmpty()) {
+        moduleProgresses.forEach(moduleProgress -> moduleProgress.setCourseModule(courseModule));
+        moduleProgressRepository.save(moduleProgresses);
+      }
+    });
   }
 
   private void createModuleProgress(CommunityHealthWorker chw, Module module) {

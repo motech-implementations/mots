@@ -187,6 +187,11 @@ public class Course extends IvrObject {
         && module.getPreviousVersion() != null).collect(Collectors.toList());
   }
 
+  public List<CourseModule> getReleasedCourseModules() {
+    return courseModules.stream().filter(courseModule ->
+        Status.RELEASED.equals(courseModule.getModule().getStatus())).collect(Collectors.toList());
+  }
+
   private List<Module> getDraftModules() {
     return getModules().stream().filter(module -> Status.DRAFT.equals(module.getStatus())).collect(
         Collectors.toList());
