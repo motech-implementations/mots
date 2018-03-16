@@ -40,9 +40,10 @@ public class FacilityUniquenessValidator implements
 
       Optional<Facility> existing = facilityRepository.findByNameAndChiefdom(name, chiefdom);
 
-      if (existing.isPresent()) {
+      if (existing.isPresent() // when edit facility allows change
+          && !existing.get().getId().toString().equals(facilityCreationDto.getId())) {
         String message = String.format(ValidationMessages.NOT_UNIQUE_FACILITY,
-                existing.get().getName(), existing.get().getChiefdom().getId().toString());
+                existing.get().getName());
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, NAME, message);
