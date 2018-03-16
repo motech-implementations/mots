@@ -127,9 +127,8 @@ class Locations extends Component {
   }
 
   componentWillMount() {
-    this.setState({ selectedIndex: Number.parseInt(this.props.match.params.tabIndex, 10) });
-    if (!this.props.match.params.tabIndex) {
-      this.setState({ selectedIndex: 0 });
+    if (this.props.match.params.tabIndex) {
+      this.setState({ selectedIndex: Number.parseInt(this.props.match.params.tabIndex, 10) });
     }
   }
 
@@ -184,7 +183,7 @@ export default Locations;
 Locations.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      tabIndex: PropTypes.shape({}),
+      tabIndex: PropTypes.string,
     }),
   }).isRequired,
 };
