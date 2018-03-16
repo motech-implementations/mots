@@ -5,6 +5,7 @@ export default {
   locationsList: [],
   chwListPages: 1,
   inchargeListPages: 1,
-  locationsListPages: 1,
+  locationListPages: 1,
+  userListPages: 1,
   roles: [],
 };

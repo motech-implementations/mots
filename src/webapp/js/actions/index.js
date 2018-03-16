@@ -173,9 +173,11 @@ export function fetchLocations() {
   };
 }
 
-export function fetchUsers() {
-  const url = '/api/user';
-  const request = apiClient.get(url);
+export function fetchUsers(searchParams) {
+  const url = '/api/user/search';
+  const request = apiClient.get(url, {
+    params: searchParams,
+  });
 
   return {
     type: FETCH_USERS,
