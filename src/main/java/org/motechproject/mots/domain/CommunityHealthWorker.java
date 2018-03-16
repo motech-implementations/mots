@@ -102,7 +102,7 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
   @Getter
   @Setter
-  private Boolean selected;
+  private Boolean selected = false;
 
   public CommunityHealthWorker(UUID id) {
     super(id);
