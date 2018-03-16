@@ -40,9 +40,10 @@ public class CommunityUniquenessValidator implements
 
       Optional<Community> existing = communityRepository.findByNameAndFacility(name, facility);
 
-      if (existing.isPresent()) {
+      if (existing.isPresent() // when edit community allows change
+          && !existing.get().getId().toString().equals(communityCreationDto.getId())) {
         String message = String.format(ValidationMessages.NOT_UNIQUE_COMMUNITY,
-            existing.get().getName(), existing.get().getFacility().getId());
+            existing.get().getName());
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, NAME, message);

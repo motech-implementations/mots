@@ -9,7 +9,7 @@ import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.constraintvalidators.UniqueFacilityIdValidator;
 
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Constraint(validatedBy = {UniqueFacilityIdValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueFacilityId {

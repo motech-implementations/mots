@@ -59,9 +59,9 @@ public final class ValidationMessages {
   public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
   public static final String NOT_UNIQUE_FACILITY_ID = "The Facility with this ID already exists";
   public static final String NOT_UNIQUE_FACILITY =
-      "The Facility with name: '%s' within chiefdom: '%s' already exists";
+      "The Facility with name: '%s' within chiefdom already exists";
   public static final String NOT_UNIQUE_COMMUNITY =
-      "The Community with name: '%s' within facility: '%s' already exists";
+      "The Community with name: '%s' within facility already exists";
 
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
   public static final String ONE_CHOICE_CORRECT = "One choice must be correct.";

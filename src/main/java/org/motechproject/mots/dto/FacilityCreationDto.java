@@ -11,6 +11,7 @@ import org.motechproject.mots.validate.annotations.UniqueFacilityId;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 @FacilityUniqueness
+@UniqueFacilityId
 public class FacilityCreationDto {
 
   @Getter
@@ -38,7 +39,6 @@ public class FacilityCreationDto {
 
   @Setter
   @Getter
-  @UniqueFacilityId
   @NotEmpty(message = ValidationMessages.EMPTY_FACILITY_ID)
   private String facilityId;
 
