@@ -76,11 +76,10 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Setter
   private EducationLevel educationLevel;
 
-  @Column(name = "phone_number", unique = true, nullable = false)
+  @Column(name = "phone_number", unique = true)
   @Getter
   @Setter
   @PhoneNumber
-  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
   private String phoneNumber;
 
   @ManyToOne
@@ -99,6 +98,11 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Language preferredLanguage;
+
+  @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
+  @Getter
+  @Setter
+  private Boolean selected;
 
   public CommunityHealthWorker(UUID id) {
     super(id);
