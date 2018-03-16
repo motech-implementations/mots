@@ -34,7 +34,9 @@ class FacilityEdit extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/locations');
+    this.props.history.push({
+      pathname: '/locations/1',
+    });
   }
 
   onSubmit(facilityValues) {
@@ -52,8 +54,11 @@ class FacilityEdit extends Component {
 
     this.props.saveFacility(valuesToSend, () => {
       Alert.success('Facility has been updated');
-      this.props.history.push('/locations');
+      this.props.history.push({
+        pathname: '/locations/1',
+      });
     });
+    this.hideConfirmModal();
   }
 
   hideConfirmModal() {
