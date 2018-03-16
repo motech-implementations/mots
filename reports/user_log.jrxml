@@ -79,15 +79,15 @@
 	<queryString>
 		<![CDATA[SELECT 
   user.username AS username,
-  user_log.login_date AS loginDate,
-  user_log.logout_date AS logoutDate
+  DATE_FORMAT(user_log.login_date, '%Y-%m-%d %H:%i:%S') AS loginDate,
+  DATE_FORMAT(user_log.logout_date, '%Y-%m-%d %H:%i:%S') AS logoutDate
  FROM user_log
  JOIN user ON user_log.user_id = user.id
  ORDER BY loginDate DESC]]>
 	</queryString>
 	<field name="username" class="java.lang.String"/>
-	<field name="loginDate" class="java.sql.Timestamp"/>
-	<field name="logoutDate" class="java.sql.Timestamp"/>
+	<field name="loginDate" class="java.lang.String"/>
+	<field name="logoutDate" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -102,6 +102,42 @@
 					<font size="16"/>
 				</textElement>
 				<text><![CDATA[User Log Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.username.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Username"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.username.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="0"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.loginDate.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Login Date"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.loginDate.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="1"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.logoutDate.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Logout Date"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.logoutDate.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="2"/>
+				</reportElement>
 			</staticText>
 		</band>
 	</title>
@@ -163,6 +199,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="185" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.username"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -173,10 +210,11 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="185" y="0" width="185" height="25" uuid="f675d757-a01f-427f-97e2-1be2e26b612a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.loginDate"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -187,9 +225,10 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{loginDate}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="370" y="0" width="185" height="25" uuid="48f57fda-3046-40f3-b951-c8f10c915ac3">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.logoutDate"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
