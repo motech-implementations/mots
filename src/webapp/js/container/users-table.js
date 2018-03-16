@@ -80,15 +80,14 @@ class UsersTable extends Component {
             loading={this.state.loading}
             pages={this.props.userListPages}
             onFetchData={(state) => {
-              const filters = [...state.filtered];
+              const filters = state.filtered.map(a => ({ ...a }));
               const index = _.findIndex(filters, ['id', 'roles[0].name']);
               if (index !== -1) {
                 filters[index].id = 'role';
               }
               this.setState({ loading: true });
-              this.setState({ filtered: filters });
               this.props.fetchUsers(buildSearchParams(
-                  state.filtered,
+                  filters,
                   state.sorted,
                   state.page,
                   state.pageSize,
