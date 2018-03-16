@@ -69,8 +69,8 @@ class ChwTable extends Component {
       Header: 'Other name',
       accessor: 'otherName',
     }, {
-      Header: 'DOB',
-      accessor: 'dateOfBirth',
+      Header: 'YOB',
+      accessor: 'yearOfBirth',
       filterable: false,
     }, {
       Header: 'Gender',
