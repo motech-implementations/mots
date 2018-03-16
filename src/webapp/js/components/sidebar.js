@@ -199,7 +199,7 @@ export default class SideBar extends Component {
           }
         { hasAuthority(DISPLAY_FACILITIES_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/locations" onClick={this.props.hideMenuSmart}>
+            <Link to="/locations/0" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-list-alt" />
               <span className="icon-text">Location list</span>
             </Link>

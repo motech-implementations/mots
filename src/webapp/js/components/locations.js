@@ -126,17 +126,17 @@ class Locations extends Component {
     this.handleTabSelect = this.handleTabSelect.bind(this);
   }
 
+  componentWillMount() {
+    if (this.props.match.params.tabIndex) {
+      this.setState({ selectedIndex: Number.parseInt(this.props.match.params.tabIndex, 10) });
+    }
+  }
+
   handleTabSelect(index) {
-    this.props.match.params.tabIndex = Number.parseInt(index, 10);
     this.setState({ selectedIndex: index });
   }
 
   render() {
-    this.state.selectedIndex = Number.parseInt(this.props.match.params.tabIndex, 10);
-    if (!this.props.match.params.tabIndex) {
-      this.state.selectedIndex = 0;
-    }
-
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Locations</h1>
@@ -183,15 +183,7 @@ export default Locations;
 Locations.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      tabIndex: PropTypes.number,
-    }),
-  }).isRequired,
-};
-
-Locations.defaultProps = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      tabIndex: 0,
+      tabIndex: PropTypes.string,
     }),
   }).isRequired,
 };
