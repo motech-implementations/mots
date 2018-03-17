@@ -3,22 +3,29 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector, Field, FieldArray, FormSection } from 'redux-form';
 import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 
 export const MODULE_FORM_NAME = 'ModuleForm';
+
+const useHtmlSyntaxInTooltips = true;
 
 const QUESTION_FIELDS = {
   name: {
     label: 'Name',
     required: true,
+    tooltip: 'Enter a meaningful  name of the question. <br /> This field is mandatory.',
   },
   content: {
     label: 'Content',
+    tooltip: 'Enter a short description of the question. <br /> This field is optional.',
   },
   ivrId: {
     label: 'IVR Id',
+    tooltip: 'Enter IVR Id of all questions in this module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
+    tooltip: 'Enter the IVR Name of the question which you can find on Voto. <br /> This field is optional.',
   },
   choices: {
     type: 'array',
@@ -28,6 +35,7 @@ const QUESTION_FIELDS = {
     fields: {
       ivrName: {
         label: 'IVR Name',
+        tooltip: 'Enter the IVR Name of the choice which you can find on Voto. <br /> This field is optional.',
       },
       isCorrect: {
         label: 'Is Correct',
@@ -35,9 +43,11 @@ const QUESTION_FIELDS = {
           type: 'checkbox',
           className: '',
         },
+        tooltip: 'Check this field if this answer is the correct one out of the list of options.',
       },
       description: {
         label: 'Description',
+        tooltip: 'Enter here a short description of the answer. <br /> This field is optional.',
       },
     },
   },
@@ -47,15 +57,19 @@ const MESSAGE_FIELDS = {
   name: {
     label: 'Name',
     required: true,
+    tooltip: 'Enter a meaningful name of the message. <br /> This field is mandatory.',
   },
   content: {
     label: 'Content',
+    tooltip: 'Enter a short description of the message.  <br /> This field is optional.',
   },
   ivrId: {
     label: 'IVR Id',
+    tooltip: 'Enter IVR Id of all messages in this module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
+    tooltip: 'Enter here the IVR Name of the message which you can find on Voto. <br /> This field is optional.',
   },
 };
 
@@ -63,15 +77,19 @@ const UNIT_FIELDS = {
   name: {
     label: 'Name',
     required: true,
+    tooltip: 'Enter a meaningful name of the unit. <br /> This field is mandatory.',
   },
   description: {
     label: 'Description',
+    tooltip: 'Enter the description of the unit. <br /> This field is optional.',
   },
   ivrId: {
     label: 'IVR Id',
+    tooltip: 'Enter IVR Id of all units in this module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
+    tooltip: 'Enter the IVR Name of the unit which you can find on Voto. <br /> This field is optional.',
   },
   allowReplay: {
     label: 'Allow Replay',
@@ -79,6 +97,7 @@ const UNIT_FIELDS = {
       type: 'checkbox',
       className: '',
     },
+    tooltip: 'Check this field if you want to allow a replay of this unit during learning process. <br /> This field is optional.',
   },
   buttons: [
     {
@@ -96,19 +115,24 @@ const MODULE_FIELDS = {
   name: {
     label: 'Name',
     required: true,
+    tooltip: 'Enter a meaningful name of the module. <br /> This field is mandatory.',
   },
   description: {
     label: 'Description',
+    tooltip: 'Enter the description of the module. <br /> This field is optional.',
   },
   ivrId: {
     label: 'IVR Id',
     releasedEditable: true,
+    tooltip: 'Enter IVR Id of the module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
+    tooltip: 'Enter the IVR Name of the module which you can find on Voto. <br /> This field is optional.',
   },
   ivrGroup: {
     label: 'IVR Group',
+    tooltip: 'Enter IVR Group of the module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
   },
   buttons: [{
     label: 'Add Unit',
@@ -119,15 +143,19 @@ const MODULE_FIELDS = {
 const COURSE_FIELDS = {
   name: {
     label: 'Name',
+    tooltip: 'Enter a meaningful name of the course. <br /> This field is mandatory.',
   },
   description: {
     label: 'Description',
+    tooltip: 'Enter the description of the course. <br /> This field is optional.',
   },
   ivrId: {
     label: 'IVR Id',
+    tooltip: 'Enter IVR Id of the course which you can find on Voto. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
+    tooltip: 'Enter the IVR Name of the course which you can find on Voto. <br /> This field is optional.',
   },
   buttons: [{
     label: 'Add Module',
@@ -258,11 +286,12 @@ class ModuleForm extends Component {
 
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
-        <div className="row">
+        <div className="row" data-tip={fieldConfig.tooltip}>
           <label htmlFor={attr.id} className="col-md-4 control-label">{ label }</label>
           <div className="col-md-8">
-            <FieldType {...attr} />
+            <FieldType {...attr} onClick={() => { ReactTooltip.hide(); }} />
           </div>
+          <ReactTooltip place="top" type="info" effect="float" delayShow={200} html={useHtmlSyntaxInTooltips} />
         </div>
         <div className="row">
           <div className="col-md-4" />

@@ -263,6 +263,11 @@ a, a:hover, a:focus, a:active, a:visited {
   }
 }
 
+/* Tooltips */
+.__react_component_tooltip {
+  opacity: 0.5 !important;
+}
+
 /* Other Styles */
 
 .form-group {
