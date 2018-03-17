@@ -32,6 +32,7 @@ const FIELDS = {
   districtId: {
     type: 'select',
     label: 'District',
+    required: true,
     getSelectOptions: ({ availableLocations }) => ({
       values: availableLocations,
       displayNameKey: 'name',
@@ -42,6 +43,7 @@ const FIELDS = {
   chiefdomId: {
     type: 'select',
     label: 'Chiefdom',
+    required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'chiefdoms',
