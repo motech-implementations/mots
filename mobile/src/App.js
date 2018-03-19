@@ -26,6 +26,7 @@ import AppDrawer from './components/AppDrawer';
 import Login from './container/Login';
 import requireAuth from './components/auth/RequireAuth';
 import Report from './components/Report';
+import ProfileEdit from './components/ProfileEdit';
 
 export const { dispatch } = Store;
 
@@ -41,6 +42,7 @@ const App = () => (
           <Scene key="drawer" component={requireAuth(AppDrawer)} initial open={false}>
             <Scene key="main">
               <Scene key="home" component={Home} title="Home" hideNavBar={false} navBar={Header} initial />
+              <Scene key="profile" component={ProfileEdit} title="Edit profile" navBar={Header} />
               <Scene key="incharges" component={Incharges} title="Incharge List" hideNavBar={false} navBar={Header} />
               <Scene key="inchargesNew" component={InchargesNew} title="Add Incharge" navBar={Header} />
               <Scene key="inchargesEdit" component={InchargesEdit} title="Edit Incharge" navBar={Header} />
