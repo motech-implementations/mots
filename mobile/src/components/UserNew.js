@@ -9,8 +9,10 @@ import { createUser } from '../actions';
 import { MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
 
 const { formHeader } = formsStyles;
+const { lightThemeText } = commonStyles;
 
 class UserNew extends Component {
   constructor(props) {
@@ -55,7 +57,7 @@ class UserNew extends Component {
     return (
       <View style={getContainerStyle()}>
         <ScrollView>
-          <Text style={formHeader}>Add User</Text>
+          <Text style={[formHeader, lightThemeText]}>Add User</Text>
           <UserForm
             loading={this.state.loading}
             onSubmit={this.onSubmit}

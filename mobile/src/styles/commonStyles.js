@@ -12,4 +12,7 @@ export default {
     alignItems: 'center',
     justifyContent: 'center',
   },
+  lightThemeText: {
+    color: '#000000',
+  },
 };

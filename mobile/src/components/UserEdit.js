@@ -11,8 +11,10 @@ import { MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
 import apiClient from '../utils/api-client';
+import commonStyles from '../styles/commonStyles';
 
 const { formHeader } = formsStyles;
+const { lightThemeText } = commonStyles;
 
 class UserEdit extends Component {
   constructor(props) {
@@ -75,7 +77,7 @@ class UserEdit extends Component {
     return (
       <View style={getContainerStyle()}>
         <ScrollView>
-          <Text style={formHeader}>Edit User</Text>
+          <Text style={[formHeader, lightThemeText]}>Edit User</Text>
           <UserForm
             loading={this.state.loading}
             onSubmit={this.onSubmit}

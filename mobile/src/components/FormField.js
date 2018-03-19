@@ -5,6 +5,9 @@ import { Field } from 'redux-form';
 import { View, TextInput, Text } from 'react-native';
 import { Option } from 'react-native-chooser';
 import FieldWithLabel from '../components/FieldWithLabel';
+import commonStyles from '../styles/commonStyles';
+
+const { lightThemeText } = commonStyles;
 
 function renderSelectOptions(options) {
   const { values, valueKey, displayNameKey } = options;
@@ -17,11 +20,11 @@ function renderSelectOptions(options) {
       const displayValue = displayNameKey ? value[displayNameKey] : value;
 
       return (
-        <Option key={index} value={optionValue}>
+        <Option key={index} value={optionValue} styleText={lightThemeText}>
           { displayValue || '' }
         </Option>);
     }),
-    <Option key="undefined" value={null}>{emptyValue}</Option>,
+    <Option key="undefined" value={null} styleText={lightThemeText}>{emptyValue}</Option>,
   ];
 }
 

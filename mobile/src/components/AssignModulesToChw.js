@@ -17,6 +17,7 @@ import inputsStyles from '../styles/inputsStyles';
 import modulesStyles from '../styles/modulesStyles';
 import Button from './Button';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
 
 const { formHeader, buttonContainer } = formsStyles;
 const { labelStyle, labelStyleSmall } = inputsStyles;
@@ -24,6 +25,7 @@ const {
   modulesContainer, itemSelected,
   fieldRow, selectField,
 } = modulesStyles;
+const { lightThemeText } = commonStyles;
 
 class AssignModulesToChw extends Component {
   constructor(props) {
@@ -136,22 +138,24 @@ class AssignModulesToChw extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <Text style={formHeader}>Assign Modules to a CHW</Text>
+        <Text style={[formHeader, lightThemeText]}>Assign Modules to a CHW</Text>
         <ScrollView style={modulesContainer}>
           <View style={fieldRow}>
-            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>
+            <Text style={[labelStyle, lightThemeText, PixelRatio.get() < 2 && labelStyleSmall]}>
               Health Worker:
             </Text>
             <Select
               onSelect={this.onSelect}
               defaultText={this.state.selectedChw.label || 'Click to Select'}
               style={selectField}
-              textStyle={{}}
+              textStyle={lightThemeText}
               transparent
               optionListStyle={{ backgroundColor: '#FFF' }}
             >
               {this.state.chwList.map(chw => (
-                <Option key={chw.value} value={chw.value}>{chw.label}</Option>
+                <Option key={chw.value} value={chw.value} styleText={lightThemeText}>
+                  {chw.label}
+                </Option>
               ))}
             </Select>
           </View>
@@ -159,6 +163,7 @@ class AssignModulesToChw extends Component {
           <View>
             <Text style={[
               labelStyle,
+              lightThemeText,
               PixelRatio.get() < 2 && labelStyleSmall,
               { marginBottom: 15 },
               ]}

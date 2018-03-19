@@ -11,8 +11,10 @@ import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import apiClient from '../utils/api-client';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
 
 const { formHeader } = formsStyles;
+const { lightThemeText } = commonStyles;
 
 class HealthWorkersEdit extends Component {
   constructor(props) {
@@ -69,7 +71,7 @@ class HealthWorkersEdit extends Component {
     return (
       <View style={getContainerStyle()}>
         <ScrollView>
-          <Text style={formHeader}>Edit Community Health Worker</Text>
+          <Text style={[formHeader, lightThemeText]}>Edit Community Health Worker</Text>
           <HealthWorkersForm
             loading={this.state.loading}
             onSubmit={this.onSubmit}

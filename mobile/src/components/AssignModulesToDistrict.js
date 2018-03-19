@@ -18,13 +18,15 @@ import modulesStyles from '../styles/modulesStyles';
 import inputsStyles from '../styles/inputsStyles';
 import Button from './Button';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
 
 const { formHeader, buttonContainer } = formsStyles;
 const { labelStyle, labelStyleSmall } = inputsStyles;
 const {
   modulesContainer, itemSelected,
-  fieldRow, selectField, datePickerStyle,
+  fieldRow, selectField, datePickerStyle, dateInput,
 } = modulesStyles;
+const { lightThemeText } = commonStyles;
 
 class AssignModulesToDistrict extends Component {
   constructor(props) {
@@ -116,45 +118,69 @@ class AssignModulesToDistrict extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <Text style={formHeader}>Assign Modules to a District</Text>
+        <Text style={[formHeader, lightThemeText]}>Assign Modules to a District</Text>
         <ScrollView style={modulesContainer}>
           <View style={fieldRow}>
-            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>District:</Text>
+            <Text style={[labelStyle, lightThemeText, PixelRatio.get() < 2 && labelStyleSmall]}>
+              District:
+            </Text>
             <View style={selectField}>
               <Select
                 onSelect={this.onSelect}
                 defaultText={this.state.selectedDistrict.label || 'Click to Select'}
-                textStyle={{}}
+                textStyle={lightThemeText}
                 style={{ borderWidth: 0 }}
                 transparent
                 optionListStyle={{ backgroundColor: '#FFF' }}
               >
                 {this.state.districts.map(district => (
-                  <Option key={district.value} value={district.value}>{district.label}</Option>
+                  <Option key={district.value} value={district.value} styleText={lightThemeText}>
+                    {district.label}
+                  </Option>
                 ))}
               </Select>
             </View>
           </View>
           <View style={fieldRow}>
-            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>Start Date:</Text>
+            <Text style={[
+              labelStyle,
+              lightThemeText,
+              PixelRatio.get() < 2 && labelStyleSmall]}
+            >
+              Start Date:
+            </Text>
             <DatePicker
               style={datePickerStyle}
               format="YYYY-MM-DD"
               timeFormat={false}
               closeOnSelect
               placeholder="Select a date"
+              customStyles={{
+                placeholderText: lightThemeText,
+                dateInput,
+              }}
               date={this.state.startDate}
               onDateChange={(date) => { this.setState({ startDate: date }); }}
             />
           </View>
           <View style={fieldRow}>
-            <Text style={[labelStyle, PixelRatio.get() < 2 && labelStyleSmall]}>End Date:</Text>
+            <Text style={[
+              labelStyle,
+              lightThemeText,
+              PixelRatio.get() < 2 && labelStyleSmall]}
+            >
+              End Date:
+            </Text>
             <DatePicker
               style={datePickerStyle}
               format="YYYY-MM-DD"
               timeFormat={false}
               closeOnSelect
               placeholder="Select a date"
+              customStyles={{
+                placeholderText: lightThemeText,
+                dateInput,
+              }}
               date={this.state.endDate}
               onDateChange={(date) => { this.setState({ endDate: date }); }}
             />
@@ -162,6 +188,7 @@ class AssignModulesToDistrict extends Component {
           <View>
             <Text style={[
               labelStyle,
+              lightThemeText,
               PixelRatio.get() < 2 && labelStyleSmall,
               { marginBottom: 15 },
             ]}

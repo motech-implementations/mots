@@ -4,10 +4,13 @@ import HealthWorkersList from '../container/HealthWorkersList';
 
 import styles from '../styles/listsStyles';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
+
+const { lightThemeText } = commonStyles;
 
 const HealthWorkers = () => (
   <View style={getContainerStyle()}>
-    <Text style={styles.title}>
+    <Text style={[styles.title, lightThemeText]}>
       {PixelRatio.get() < 2 ? 'CHW List' : 'Community Health Workers'}
     </Text>
     <HealthWorkersList />

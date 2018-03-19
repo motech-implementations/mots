@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import commonStyles from '../styles/commonStyles';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,11 +17,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
 });
+const { lightThemeText } = commonStyles;
 
 const Home = () => (
   <View style={styles.container}>
-    <Text style={styles.title}>Home Page</Text>
-    <Text>As in many African countries, the Community Health Worker (CHW) is
+    <Text style={[styles.title, lightThemeText]}>Home Page</Text>
+    <Text style={lightThemeText}>As in many African countries, the Community Health Worker (CHW) is
       the backbone of the healthcare system, and the focus and objective
       of the Mobile Training and Support (MOTS) project will be strengthening
       this network to ensure preparedness for Ebola vaccine campaigns and

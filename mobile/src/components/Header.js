@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
+import commonStyles from '../styles/commonStyles';
 
 const styles = {
   viewStyle: {
@@ -35,6 +36,7 @@ const styles = {
   },
 };
 
+const { lightThemeText } = commonStyles;
 const screen = Dimensions.get('screen');
 
 class Header extends Component {
@@ -68,6 +70,7 @@ class Header extends Component {
           <Icon
             name="bars"
             size={this.getIconSize()}
+            style={lightThemeText}
           />
         </TouchableOpacity>
         <Text style={this.getTextStyle()}>Mobile Training and Support</Text>

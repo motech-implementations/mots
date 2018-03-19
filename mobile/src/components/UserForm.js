@@ -16,8 +16,10 @@ import Button from './Button';
 import styles from '../styles/formsStyles';
 import inputsStyles from '../styles/inputsStyles';
 import Spinner from './Spinner';
+import commonStyles from '../styles/commonStyles';
 
 const { labelSelectFieldStyle, optionListStyle } = inputsStyles;
+const { lightThemeText } = commonStyles;
 
 export const USER_FORM_NAME = 'UserForm';
 const FIELDS = {
@@ -54,6 +56,7 @@ const FIELDS = {
         transparent: true,
         optionListStyle,
         style: labelSelectFieldStyle,
+        textStyle: lightThemeText,
       };
     },
   },

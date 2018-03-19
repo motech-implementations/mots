@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 
 import styles from '../styles/listsStyles';
+import commonStyles from '../styles/commonStyles';
+
+const { lightThemeText } = commonStyles;
 
 const ListItems = ({
   data, columns, canWrite, canAssign,
@@ -16,8 +19,12 @@ const ListItems = ({
         >
           {columns.map(column => (
             <View key={column.Header} style={styles.cardLine}>
-              <Text style={styles.bold}>{column.Header}:
-                { !column.Cell && <Text style={styles.normal}> {row[column.accessor]}</Text> }
+              <Text style={[styles.bold, lightThemeText]}>{column.Header}:
+                {!column.Cell &&
+                <Text style={[styles.normal, lightThemeText]}>
+                  {row[column.accessor]}
+                </Text>
+                }
               </Text>
               <View>
                 { column.Cell &&

@@ -25,4 +25,8 @@ export default {
     marginLeft: 30,
     flex: 2,
   },
+  dateInput: {
+    borderRadius: 4,
+    borderColor: '#ccc',
+  },
 };
