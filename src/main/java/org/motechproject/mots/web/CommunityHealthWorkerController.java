@@ -81,6 +81,20 @@ public class CommunityHealthWorkerController extends BaseController {
   }
 
   /**
+   * Find CHW by CHW Id.
+   * @param chwId chw id to find CHW by.
+   * @return found CHW
+   */
+  @RequestMapping(value = "/chw/findByChwId/{chwId}", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public CommunityHealthWorkerDto findByChwId(@PathVariable("chwId") String chwId) {
+    CommunityHealthWorker healthWorker = healthWorkerService.findByChwId(chwId);
+
+    return healthWorkerMapper.toDto(healthWorker);
+  }
+
+  /**
    * Get list of basic representation (ChwInfoDto) representations of CHWs.
    * @return list of ChwInfoDto representations of CHWs
    */
@@ -89,6 +103,13 @@ public class CommunityHealthWorkerController extends BaseController {
   @ResponseBody
   public List<ChwInfoDto> getHealthWorkersInfo() {
     return healthWorkerService.getHealthWorkersInfoDtos();
+  }
+
+  @RequestMapping(value = "/chw/notSelected", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<String> getNotSelectedChwIds() {
+    return healthWorkerService.getNotSelectedChwIds();
   }
 
   /**

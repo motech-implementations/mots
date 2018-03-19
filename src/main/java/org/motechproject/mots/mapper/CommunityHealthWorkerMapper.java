@@ -40,6 +40,7 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "chwId", ignore = true),
       @Mapping(target = "community", source = "communityId"),
+      @Mapping(target = "selected", constant = "true"),
       @Mapping(target = "yearOfBirth",
           expression = "java(healthWorkerDto.getYearOfBirth() == null ? null : "
               + "Integer.parseInt(healthWorkerDto.getYearOfBirth()))")

@@ -1,6 +1,34 @@
 import _ from 'lodash';
-import { change } from 'redux-form';
+import { change, initialize } from 'redux-form';
 import { dispatch } from '../index';
+
+import apiClient from './api-client';
+
+function initializeForm(formName, formValues) {
+  dispatch(initialize(formName, formValues));
+}
+
+export function getAttributesForSelectWithInitializeOnChange(input, formName, baseUrl) {
+  return {
+    className: 'form-control',
+    value: input.value,
+    onBlur: event => input.onBlur(event.target.value),
+    onChange: (event) => {
+      const { value } = event.target;
+
+      const url = `${baseUrl}/${value}`;
+
+      if (value && value !== '') {
+        apiClient.get(url)
+          .then((response) => {
+            initializeForm(formName, response.data);
+          });
+      }
+
+      input.onChange(value);
+    },
+  };
+}
 
 export function clearFields(formName, ...fields) {
   _.each(fields, (field) => {
