@@ -29,7 +29,11 @@ function getLocationById(list, id) {
 }
 
 export function getSupervisorNameFromFacility(list, facilityId) {
-  return getLocationById(list, facilityId).inchargeFullName;
+  const location = getLocationById(list, facilityId);
+  if (location) {
+    return location.inchargeFullName;
+  }
+  return {};
 }
 
 export function getSelectableLocations(
@@ -50,12 +54,17 @@ export function getSelectableLocations(
 
   switch (requestedList) {
     case 'chiefdoms':
-      return district.chiefdoms;
+      if (district && district.chiefdoms) return district.chiefdoms;
+      break;
     case 'facilities':
-      return chiefdom.facilities;
+      if (chiefdom && chiefdom.facilities) return chiefdom.facilities;
+      break;
     case 'communities':
-      return facility.communities;
+      if (facility && facility.communities) return facility.communities;
+      break;
     default:
       return [];
   }
+
+  return [];
 }
