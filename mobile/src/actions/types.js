@@ -18,3 +18,5 @@ export const FETCH_ERROR = 'fetch_error';
 export const FETCH_ROLES = 'fetch_roles';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
+
+export const SAVE_PROFILE = 'save_profile';

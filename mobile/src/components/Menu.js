@@ -152,7 +152,7 @@ class Menu extends Component {
         <Text style={styles.title}>Menu</Text>
         <ScrollView style={styles.container}>
           <TouchableOpacity
-            onPress={() => this.openSection('home')}
+            onPress={() => this.openSection('profile')}
             style={styles.menuItem}
           >
             <View style={styles.iconContainer}>
