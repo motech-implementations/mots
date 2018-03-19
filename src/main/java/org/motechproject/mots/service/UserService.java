@@ -55,14 +55,6 @@ public class UserService {
   }
 
   /**
-   * Get User by username.
-   * @param username of user.
-   */
-  public User getUserByUsername(String username) {
-    return getUserByUserName(username);
-  }
-
-  /**
    * Save User Profile with new encoded password (if it's not blank).
    * @param userProfileDto User Profile to be updated.
    * @return saved User
