@@ -30,6 +30,7 @@
     "react-sortable-tree": "^1.7.0",
     "react-table": "^6.7.4",
     "react-tabs": "^2.2.1",
+    "react-tooltip": "^3.4.0",
     "redux": "^3.7.2",
     "redux-form": "^6.6.3",
     "redux-offline": "^2.0.0",
