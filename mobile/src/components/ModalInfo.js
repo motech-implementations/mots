@@ -4,10 +4,12 @@ import { Actions } from 'react-native-router-flux';
 import PropTypes from 'prop-types';
 import Button from './Button';
 import modalInfoSyles from '../styles/modalInfoStyles';
+import commonStyles from '../styles/commonStyles';
 
 const {
   modalContainer, modalBox, title, message, buttonsRow,
 } = modalInfoSyles;
+const { lightThemeText } = commonStyles;
 
 export default class ModalInfo extends Component {
   componentWillUnmount() {
@@ -26,7 +28,7 @@ export default class ModalInfo extends Component {
           </Text>
           }
           <ScrollView style={{ maxHeight: 250 }} >
-            <Text style={message}>{this.props.message}</Text>
+            <Text style={[message, lightThemeText]}>{this.props.message}</Text>
           </ScrollView>
           <View style={buttonsRow}>
             { this.props.onConfirm &&

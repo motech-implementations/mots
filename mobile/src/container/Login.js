@@ -7,8 +7,10 @@ import InputWithIcon from '../components/InputWithIcon';
 import { signinUser } from '../actions';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
-
 import styles from '../styles/formsStyles';
+import commonStyles from '../styles/commonStyles';
+
+const { lightThemeText } = commonStyles;
 
 class Login extends Component {
   constructor(props) {
@@ -62,7 +64,7 @@ class Login extends Component {
     return (
       <View style={[styles.mainCard, { marginTop: 80 }]}>
         <View style={styles.headerRow}>
-          <Text>MOTS Login</Text>
+          <Text style={lightThemeText}>MOTS Login</Text>
         </View>
 
         <View style={styles.cardRow}>

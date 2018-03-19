@@ -2,8 +2,10 @@ import _ from 'lodash';
 import { change, untouch } from 'redux-form';
 import { dispatch } from '../App';
 import styles from '../styles/inputsStyles';
+import commonStyles from '../styles/commonStyles';
 
 const { labelSelectFieldStyle, optionListStyle } = styles;
+const { lightThemeText } = commonStyles;
 
 function getLocationById(list, id) {
   if (list) {
@@ -67,6 +69,7 @@ export function getAttributesForSelect(input, availableLocations) {
     transparent: true,
     optionListStyle,
     style: labelSelectFieldStyle,
+    textStyle: lightThemeText,
   };
 }
 
@@ -87,13 +90,14 @@ getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...
     transparent: true,
     optionListStyle,
     style: labelSelectFieldStyle,
+    textStyle: lightThemeText,
   };
 }
 
 export function getAttributesForInput() {
   return {
     underlineColorAndroid: 'rgba(0,0,0,0)',
-    style: { paddingVertical: 5 },
+    style: { paddingVertical: 5, color: '#000' },
   };
 }
 

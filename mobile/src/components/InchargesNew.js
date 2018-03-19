@@ -9,8 +9,10 @@ import { createIncharge } from '../actions';
 import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
 
 const { formHeader } = formsStyles;
+const { lightThemeText } = commonStyles;
 
 class InchargesNew extends Component {
   constructor(props) {
@@ -53,7 +55,7 @@ class InchargesNew extends Component {
     return (
       <View style={getContainerStyle()}>
         <ScrollView>
-          <Text style={formHeader}>Add Incharge</Text>
+          <Text style={[formHeader, lightThemeText]}>Add Incharge</Text>
           <InchargesForm
             loading={this.state.loading}
             onSubmit={this.onSubmit}

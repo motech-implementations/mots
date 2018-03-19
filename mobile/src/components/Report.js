@@ -12,6 +12,9 @@ import Button from './Button';
 import styles from '../styles/formsStyles';
 import reportStyles from '../styles/reportViewStyles';
 import getContainerStyle from '../utils/styleUtils';
+import commonStyles from '../styles/commonStyles';
+
+const { lightThemeText } = commonStyles;
 
 export default class Report extends Component {
   constructor(props) {
@@ -64,7 +67,7 @@ export default class Report extends Component {
     render() {
       return (
         <View style={getContainerStyle()}>
-          <Text style={styles.formHeader}>{this.state.reportName}</Text>
+          <Text style={[styles.formHeader, lightThemeText]}>{this.state.reportName}</Text>
 
           <View style={styles.buttonContainer}>
             <Button
