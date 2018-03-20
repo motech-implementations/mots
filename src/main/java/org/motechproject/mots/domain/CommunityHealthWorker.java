@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,11 +19,11 @@ import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
-import org.motechproject.mots.validate.annotations.PhoneNumber;
 
 @Entity
 @Table(name = "community_health_worker")
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommunityHealthWorker extends BaseTimestampedEntity {
 
   @Column(name = "ivr_id", unique = true)
@@ -79,7 +80,6 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Column(name = "phone_number", unique = true)
   @Getter
   @Setter
-  @PhoneNumber
   private String phoneNumber;
 
   @ManyToOne

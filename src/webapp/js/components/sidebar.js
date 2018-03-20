@@ -109,12 +109,27 @@ export default class SideBar extends Component {
             </Link>
           </li>
         }
+        {
+          <li>
+            <Link to="/chw/upload" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-save-file" />
+              <span className="icon-text">Upload CSV</span>
+            </Link>
+          </li>
+        }
         { hasAuthority(CHW_READ_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/chw" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" />
+            <Link to="/chw/overall" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" />
               <span className="icon-text">CHW List</span>
             </Link>
           </li>
+        }
+        { hasAuthority(CHW_READ_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/chw/selected" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">Selected CHW List</span>
+          </Link>
+        </li>
         }
       </ul>
     );

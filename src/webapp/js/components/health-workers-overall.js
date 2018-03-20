@@ -1,13 +1,13 @@
 import React from 'react';
 import ChwTable from '../container/chw-table';
 
-const HealthWorkers = () => (
+const HealthWorkersOverall = () => (
   <div>
     <div>
       <h1>Community Health Workers</h1>
-      <ChwTable />
+      <ChwTable selected={false} />
     </div>
   </div>
 );
 
-export default HealthWorkers;
+export default HealthWorkersOverall;
