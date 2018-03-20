@@ -11,14 +11,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditListener {
 
-  @Value("${mots.loadLocations}")
-  private boolean loadLocations;
+  static private boolean loadLocations;
 
   static private AuthenticationHelper authenticationHelper;
 
   @Autowired
-  public void init(final AuthenticationHelper authenticationHelper) {
+  public void init(final AuthenticationHelper authenticationHelper,
+      @Value("${mots.loadLocations}") boolean loadLocations) {
     AuditListener.authenticationHelper = authenticationHelper;
+    AuditListener.loadLocations = loadLocations;
   }
 
   @PrePersist
