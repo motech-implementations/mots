@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode';
 import apiClient from '../utils/api-client';
 
 import {
-  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
+  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES,
   SAVE_INCHARGE,
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
@@ -119,16 +119,6 @@ export function fetchIncharges(searchParams) {
 
   return {
     type: FETCH_INCHARGES,
-    payload: request,
-  };
-}
-
-export function createHealthWorker(values, callback) {
-  const request = apiClient.post(`${BASE_URL}/chw`, values);
-  request.then(() => callback());
-
-  return {
-    type: CREATE_HEALTH_WORKER,
     payload: request,
   };
 }

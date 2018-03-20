@@ -6,12 +6,17 @@ import Alert from 'react-s-alert';
 import 'react-datetime/css/react-datetime.css';
 
 import HealthWorkersForm from './health-workers-form';
-import { createHealthWorker } from '../actions';
+import apiClient from '../utils/api-client';
+import { saveHealthWorker } from '../actions';
 import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 
 class HealthWorkersNew extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      notSelectedChwIds: [],
+    };
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -20,6 +25,8 @@ class HealthWorkersNew extends Component {
   componentWillMount() {
     if (!hasAuthority(CHW_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
+    } else {
+      this.fetchNotSelectedChwIds();
     }
   }
 
@@ -28,26 +35,42 @@ class HealthWorkersNew extends Component {
   }
 
   onSubmit(values) {
-    this.props.createHealthWorker(values, () => {
+    this.props.saveHealthWorker(values, () => {
       Alert.success('CHW has been added');
       this.props.history.push('/chw');
     });
+  }
+
+  fetchNotSelectedChwIds() {
+    const url = '/api/chw/notSelected';
+
+    apiClient.get(url)
+      .then((response) => {
+        const notSelectedChwIds = response.data;
+
+        this.setState({ notSelectedChwIds });
+      });
   }
 
   render() {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Add Community Health Worker</h1>
-        <HealthWorkersForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
+        <HealthWorkersForm
+          onSubmit={this.onSubmit}
+          onSubmitCancel={this.onSubmitCancel}
+          notSelectedChwIds={this.state.notSelectedChwIds}
+          addChw
+        />
       </div>
     );
   }
 }
 
-export default connect(null, { createHealthWorker })(HealthWorkersNew);
+export default connect(null, { saveHealthWorker })(HealthWorkersNew);
 
 HealthWorkersNew.propTypes = {
-  createHealthWorker: PropTypes.func.isRequired,
+  saveHealthWorker: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

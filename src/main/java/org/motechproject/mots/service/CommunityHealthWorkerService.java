@@ -2,6 +2,7 @@ package org.motechproject.mots.service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.enums.Language;
@@ -48,6 +49,22 @@ public class CommunityHealthWorkerService {
     Iterable<CommunityHealthWorker> healthWorkers = healthWorkerRepository.findAll();
 
     return chwInfoMapper.toDtos(healthWorkers);
+  }
+
+  /**
+   * Get list of not selected CHW Ids.
+   * @return list of not selected CHW Ids
+   */
+  public List<String> getNotSelectedChwIds() {
+    List<CommunityHealthWorker> notSelectedChws = healthWorkerRepository.findBySelected(false);
+
+    return notSelectedChws.stream().map(CommunityHealthWorker::getChwId)
+        .collect(Collectors.toList());
+  }
+
+  public CommunityHealthWorker findByChwId(String chwId) {
+    return healthWorkerRepository.findByChwId(chwId).orElseThrow(() ->
+        new EntityNotFoundException("CHW with CHW Id: {0} not found", chwId));
   }
 
   /**

@@ -18,4 +18,5 @@ public interface CommunityHealthWorkerRepository extends
 
   List<CommunityHealthWorker> findByCommunityFacilityChiefdomDistrictId(UUID districtId);
 
+  List<CommunityHealthWorker> findBySelected(Boolean selected);
 }

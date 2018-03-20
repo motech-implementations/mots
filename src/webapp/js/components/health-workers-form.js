@@ -11,16 +11,25 @@ import FormField from './form-field';
 import { fetchLocations } from '../actions';
 import {
   getAttributesForSelectWithClearOnChange, getSelectableLocations,
-  getSupervisorNameFromFacility,
+  getSupervisorNameFromFacility, getAttributesForSelectWithInitializeOnChange,
 } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
   chwId: {
+    type: 'select',
     label: 'CHW Id',
     required: true,
-    getDynamicAttributes: ({ isChwIdDisabled }) => ({
-      disabled: isChwIdDisabled,
+    getSelectOptions: ({ addChw, chwId, notSelectedChwIds }) => {
+      if (!addChw) {
+        return { values: [chwId] };
+      }
+
+      return { values: notSelectedChwIds };
+    },
+    getAttributes: input => (getAttributesForSelectWithInitializeOnChange(input, CHW_FORM_NAME, '/api/chw/findByChwId')),
+    getDynamicAttributes: ({ addChw }) => ({
+      disabled: !addChw,
     }),
   },
   firstName: {
@@ -228,7 +237,9 @@ class HealthWorkersForm extends Component {
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
         yearOfBirth={this.props.yearOfBirth}
-        isChwIdDisabled={this.props.isChwIdDisabled}
+        chwId={this.props.chwId}
+        addChw={this.props.addChw}
+        notSelectedChwIds={this.props.notSelectedChwIds}
       />
     );
   }
@@ -293,6 +304,7 @@ function mapStateToProps(state) {
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
     yearOfBirth: selector(state, 'yearOfBirth'),
+    chwId: selector(state, 'chwId'),
   };
 }
 
@@ -311,7 +323,9 @@ HealthWorkersForm.propTypes = {
   chiefdomId: PropTypes.string,
   facilityId: PropTypes.string,
   yearOfBirth: PropTypes.string,
-  isChwIdDisabled: PropTypes.bool,
+  chwId: PropTypes.string,
+  addChw: PropTypes.bool,
+  notSelectedChwIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 HealthWorkersForm.defaultProps = {
@@ -320,5 +334,7 @@ HealthWorkersForm.defaultProps = {
   chiefdomId: null,
   facilityId: null,
   yearOfBirth: null,
-  isChwIdDisabled: false,
+  chwId: '',
+  addChw: false,
+  notSelectedChwIds: [],
 };
