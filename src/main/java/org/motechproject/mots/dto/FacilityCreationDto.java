@@ -42,4 +42,7 @@ public class FacilityCreationDto {
   @NotEmpty(message = ValidationMessages.EMPTY_FACILITY_ID)
   private String facilityId;
 
+  @Getter
+  @Setter
+  private String ownerUsername;
 }

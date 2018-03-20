@@ -35,4 +35,7 @@ public class FacilityExtendedInfoDto {
   @Getter
   private String facilityId;
 
+  @Getter
+  @Setter
+  private String ownerUsername;
 }
