@@ -47,7 +47,7 @@ export default function (state = initialTablesData, action) {
     case FETCH_ERROR:
       return {
         ...state,
-        fetchError: action.payload || '',
+        fetchError: action.payload || false,
       };
     default:
       return state;

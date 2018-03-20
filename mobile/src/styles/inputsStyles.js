@@ -17,7 +17,7 @@ export default {
     flex: 1,
   },
   labelStyleSmall: {
-    fontWeight: '300',
+    fontWeight: '500',
     fontSize: 14,
   },
   iconInputStyle: {
