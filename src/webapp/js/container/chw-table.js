@@ -15,9 +15,15 @@ import {
 } from '../utils/authorization';
 import { buildSearchParams } from '../utils/react-table-search-params';
 
-
 class ChwTable extends Component {
-  static getTableColumns = () => [
+  componentWillMount() {
+    if (!hasAuthority(CHW_READ_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
+    this.setState({ loading: true });
+  }
+
+  getTableColumns = () => [
     {
       Header: 'Actions',
       minWidth: 70,
@@ -54,7 +60,8 @@ class ChwTable extends Component {
       ),
       filterable: false,
       sortable: false,
-      show: hasAuthority(CHW_WRITE_AUTHORITY) || hasAuthority(ASSIGN_MODULES_AUTHORITY),
+      show: this.props.selected && (hasAuthority(CHW_WRITE_AUTHORITY) ||
+          hasAuthority(ASSIGN_MODULES_AUTHORITY)),
     },
     {
       Header: 'ID',
@@ -115,30 +122,24 @@ class ChwTable extends Component {
       accessor: 'phoneNumber',
     }];
 
-  static prepareMobileColumns() {
-    const mobileColumns = _.clone(ChwTable.getTableColumns());
+  prepareMobileColumns() {
+    const mobileColumns = _.clone(this.getTableColumns());
     mobileColumns.push(mobileColumns.shift());
     return mobileColumns;
   }
 
-  componentWillMount() {
-    if (!hasAuthority(CHW_READ_AUTHORITY)) {
-      this.props.history.push('/home');
-    }
-    this.setState({ loading: true });
-  }
   render() {
     return (
       <div>
         <div className="hide-min-r-small-min">
-          <MobileTable data={this.props.chwList} columns={ChwTable.prepareMobileColumns()} />
+          <MobileTable data={this.props.chwList} columns={this.prepareMobileColumns()} />
         </div>
         <div className="hide-max-r-xsmall-max">
           <ReactTable
             manual
             filterable
             data={this.props.chwList}
-            columns={ChwTable.getTableColumns()}
+            columns={this.getTableColumns()}
             loading={this.state.loading}
             pages={this.props.chwListPages}
             onFetchData={(state) => {
@@ -148,7 +149,7 @@ class ChwTable extends Component {
                   state.sorted,
                   state.page,
                   state.pageSize,
-              ))
+              ), this.props.selected)
               .then(() => {
                 this.setState({ loading: false });
               });
@@ -177,4 +178,9 @@ ChwTable.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  selected: PropTypes.bool,
+};
+
+ChwTable.defaultProps = {
+  selected: true,
 };

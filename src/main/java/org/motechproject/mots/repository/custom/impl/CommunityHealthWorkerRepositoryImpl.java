@@ -27,20 +27,21 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, Pageable pageable) throws IllegalArgumentException {
+      String chiefdomName, String districtName, Boolean selected, Pageable pageable)
+      throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
     query = prepareQuery(query, chwId, firstName, secondName,
         otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, false, pageable);
+        facilityName, chiefdomName, districtName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
         otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, true, pageable);
+        facilityName, chiefdomName, districtName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -58,7 +59,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName,
       String facilityName, String chiefdomName, String districtName,
-      boolean count, Pageable pageable) throws IllegalArgumentException {
+      Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<CommunityHealthWorker> root = query.from(CommunityHealthWorker.class);
@@ -109,6 +110,11 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
       predicate = builder.and(predicate, builder.like(
           root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
           '%' + districtName  + '%'));
+    }
+
+    if (selected != null) {
+      predicate = builder.and(predicate, builder.equal(
+          root.get(SELECTED), selected));
     }
 
     query.where(predicate);

@@ -8,9 +8,11 @@ import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 import Navbar from './navbar';
 import Home from './home';
 import Incharges from './incharges';
-import HealthWorkers from './health-workers';
+import HealthWorkersOverall from './health-workers-overall';
+import HealthWorkersSelected from './health-workers-selected';
 import HealthWorkersNew from './health-workers-new';
 import HealthWorkersEdit from './health-workers-edit';
+import HealthWorkersUpload from './health-workers-upload';
 import AssignModules from './assign-modules';
 import InchargeNew from './incharge-new';
 import InchargeEdit from './incharge-edit';
@@ -68,9 +70,11 @@ export default class App extends Component {
                 <Route path="/incharge/new" component={InchargeNew} />
                 <Route path="/incharge/:inchargeId" component={InchargeEdit} />
                 <Route path="/incharge" component={Incharges} />
+                <Route path="/chw/upload" component={HealthWorkersUpload} />
                 <Route path="/chw/new" component={HealthWorkersNew} />
+                <Route path="/chw/selected" component={HealthWorkersSelected} />
+                <Route path="/chw/overall" component={HealthWorkersOverall} />
                 <Route path="/chw/:chwId" component={HealthWorkersEdit} />
-                <Route path="/chw" component={HealthWorkers} />
                 <Route path="/report/:reportId" exact component={Report} />
                 <Route path="/users/new" component={UserNew} />
                 <Route path="/users/:userId" component={UserEdit} />

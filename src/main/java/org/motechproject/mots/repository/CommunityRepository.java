@@ -15,4 +15,6 @@ public interface CommunityRepository extends JpaRepository<Community, UUID>,
 
   Optional<Community> findByNameAndFacility(String name, Facility facility);
 
+  Community findByNameAndFacilityName(String name, String facilityName);
+
 }

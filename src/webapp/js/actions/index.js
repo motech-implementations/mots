@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import Client from 'client-oauth2';
 import jwtDecode from 'jwt-decode';
@@ -99,8 +100,11 @@ export function resetLogoutCounter() {
   };
 }
 
-export function fetchChws(searchParams) {
+export function fetchChws(searchParams, selected) {
   const url = `${BASE_URL}/chw/search`;
+
+  searchParams.selected = selected;
+
   const request = apiClient.get(url, {
     params: searchParams,
   });

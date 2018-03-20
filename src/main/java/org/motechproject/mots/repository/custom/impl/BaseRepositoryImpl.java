@@ -32,6 +32,7 @@ public abstract class BaseRepositoryImpl {
   protected static final String EMAIL = "email";
   protected static final String USERNAME = "username";
   protected static final String ROLES = "roles";
+  protected static final String SELECTED = "selected";
 
   @PersistenceContext
   protected EntityManager entityManager;

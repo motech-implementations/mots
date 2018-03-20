@@ -1,11 +1,26 @@
 package org.motechproject.mots.service;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.AssignedModules;
+import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.enums.EducationLevel;
+import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
+import org.motechproject.mots.domain.enums.Literacy;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.exception.ChwException;
@@ -14,12 +29,21 @@ import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
+import org.motechproject.mots.repository.CommunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.supercsv.cellprocessor.constraint.NotNull;
+import org.supercsv.cellprocessor.constraint.Unique;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapReader;
+import org.supercsv.io.ICsvMapReader;
+import org.supercsv.prefs.CsvPreference;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @Service
 public class CommunityHealthWorkerService {
 
@@ -30,10 +54,15 @@ public class CommunityHealthWorkerService {
   private AssignedModulesRepository assignedModulesRepository;
 
   @Autowired
+  private CommunityRepository communityRepository;
+
+  @Autowired
   private IvrService ivrService;
 
   private ChwInfoMapper chwInfoMapper = ChwInfoMapper.INSTANCE;
 
+  private static final Logger LOGGER =
+      Logger.getLogger(CommunityHealthWorkerService.class);
 
   @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
@@ -75,11 +104,12 @@ public class CommunityHealthWorkerService {
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, Pageable pageable) throws IllegalArgumentException {
+      String chiefdomName, String districtName, Boolean selected, Pageable pageable)
+      throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
         chwId, firstName, secondName, otherName,
         phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, pageable);
+        facilityName, chiefdomName, districtName, selected, pageable);
   }
 
   /**
@@ -138,4 +168,133 @@ public class CommunityHealthWorkerService {
     }
     return healthWorkerRepository.save(chw);
   }
+
+  /**.
+   * Processes CSV file which contains CHW list and returns list of errors
+   * @param chwCsvFile CSV file with CHW list
+   * @return map with row numbers as keys and errors as values.
+   * @throws IOException in case of file issues
+   */
+  public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile) throws IOException {
+    File csvFile = multipartToFile(chwCsvFile);
+    ICsvMapReader csvMapReader;
+    csvMapReader = new CsvMapReader(new FileReader(csvFile), CsvPreference.STANDARD_PREFERENCE);
+
+    final String[] header = csvMapReader.getHeader(true);
+    final CellProcessor[] processors = getProcessors();
+
+    Map<String, Object> csvRow;
+    Set<String> phoneNumberSet = new HashSet<>();
+    Map<Integer, String> errorMap = new HashMap<>();
+
+    while ((csvRow = csvMapReader.read(header, processors)) != null) {
+      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
+          csvMapReader.getRowNumber(), csvRow));
+      String phoneNumber = Objects.toString(csvRow.get("Mobile"), null);
+      String community = Objects.toString(csvRow.get("Community"), null);
+      String facility = Objects.toString(csvRow.get("PHU"), null);
+
+      if (phoneNumberSet.contains(phoneNumber)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Phone number is duplicated in CSV");
+        continue;
+      }
+
+      if (phoneNumber != null) {
+        phoneNumberSet.add(phoneNumber);
+      }
+
+      Community chwCommunity = communityRepository
+          .findByNameAndFacilityName(community, facility);
+
+      if (chwCommunity == null) {
+        errorMap.put(csvMapReader.getLineNumber(), String.format(
+            "There is no community %s in facility %s in MOTS",
+            community, facility));
+        continue;
+      }
+
+      Optional<CommunityHealthWorker> existingHealthWorker = healthWorkerRepository
+          .findByChwId(csvRow.get("CHW ID").toString());
+
+      if (existingHealthWorker.isPresent()) {
+        existingHealthWorker.get().setChwId(csvRow.get("CHW ID").toString());
+        existingHealthWorker.get().setFirstName(csvRow.get("First_Name").toString());
+        existingHealthWorker.get().setSecondName(csvRow.get("Second_Name").toString());
+        existingHealthWorker.get().setOtherName(Objects.toString(
+            csvRow.get("Other_Name"), null));
+        existingHealthWorker.get().setYearOfBirth(csvRow.get("Age") != null
+            ? LocalDate.now().getYear() - Integer.valueOf(Objects.toString(csvRow.get("Age"),
+            null)) : null);
+        existingHealthWorker.get().setGender(Gender.getByDisplayName(
+            csvRow.get("Gender").toString()));
+        existingHealthWorker.get().setLiteracy(Literacy.getByDisplayName(
+            csvRow.get("Read_Write").toString()));
+        existingHealthWorker.get().setEducationLevel(EducationLevel.getByDisplayName(
+            csvRow.get("Education").toString()));
+        existingHealthWorker.get().setPhoneNumber(Objects.toString(
+            csvRow.get("Mobile"), null));
+        existingHealthWorker.get().setCommunity(chwCommunity);
+        existingHealthWorker.get().setHasPeerSupervisor(
+            csvRow.get("Peer_Supervisor").equals("Yes"));
+        healthWorkerRepository.save(existingHealthWorker.get());
+        continue;
+      }
+
+      healthWorkerRepository.save(new CommunityHealthWorker(
+          null,
+          csvRow.get("CHW ID").toString(),
+          csvRow.get("First_Name").toString(),
+          csvRow.get("Second_Name").toString(),
+          Objects.toString(csvRow.get("Other_Name"), null),
+          csvRow.get("Age") != null ? LocalDate.now().getYear()
+              - Integer.valueOf(Objects.toString(csvRow.get("Age"),
+              null)) : null,
+          Gender.getByDisplayName(csvRow.get("Gender").toString()),
+          Literacy.getByDisplayName(csvRow.get("Read_Write").toString()),
+          EducationLevel.getByDisplayName(csvRow.get("Education").toString()),
+          Objects.toString(csvRow.get("Mobile"), null),
+          chwCommunity,
+          csvRow.get("Peer_Supervisor").equals("Yes"),
+          Language.ENGLISH,
+          false
+      ));
+    }
+    return errorMap;
+  }
+
+  private File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
+    File convFile = new File(multipart.getOriginalFilename());
+    multipart.transferTo(convFile);
+    return convFile;
+  }
+
+  /**
+   * Sets up the processors used for the CSV with CHW list. Empty columns are read as null
+   * (hence the NotNull() for mandatory columns).
+   *
+   * @return the cell processors
+   */
+  private CellProcessor[] getProcessors() {
+
+    final CellProcessor[] processors = new CellProcessor[] {
+        new Unique(), // chwId (must be unique)
+        new NotNull(), // district
+        new NotNull(), // chiefdom
+        new NotNull(), // working?
+        new NotNull(), // firstName
+        new NotNull(), // secondName
+        null, // otherName
+        null, // age
+        new NotNull(), // gender
+        new NotNull(), // readWrite
+        new NotNull(), // educationLevel
+        null, // phoneNumber
+        null, // community
+        new NotNull(), // phu
+        new NotNull(), // PHU_suppervisor
+        new NotNull() // peer_supervisor
+    };
+    return processors;
+  }
+
 }

@@ -18,6 +18,11 @@ body {
   padding-left: 0;
 }
 
+.preformatted {
+  font-family: monospace;
+  white-space: pre;
+}
+
 #page-wrapper {
   height: calc(100vh - 50px);
   font-family: sans-serif;

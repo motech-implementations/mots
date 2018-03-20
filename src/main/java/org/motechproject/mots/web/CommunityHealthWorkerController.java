@@ -1,11 +1,14 @@
 package org.motechproject.mots.web;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
+import org.motechproject.mots.exception.ReportingException;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class CommunityHealthWorkerController extends BaseController {
@@ -66,13 +71,14 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = "facilityName", required = false) String facilityName,
       @RequestParam(value = "chiefdomName", required = false) String chiefdomName,
       @RequestParam(value = "districtName", required = false) String districtName,
+      @RequestParam(value = "selected", required = false) Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
             chwId, firstName, secondName, otherName,
             phoneNumber, educationLevel, communityName,
-            facilityName, chiefdomName, districtName, pageable);
+            facilityName, chiefdomName, districtName, selected, pageable);
 
     List<CommunityHealthWorkerDto> healthWorkersDto =
         healthWorkerMapper.toDtos(healthWorkers.getContent());
@@ -159,5 +165,17 @@ public class CommunityHealthWorkerController extends BaseController {
     healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
 
     return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(existingHealthWorker));
+  }
+
+  /**
+   * Upload list of CHWs in ".csv" format to mots, parse it and save records in DB.
+   * @param file File in ".csv" format to upload
+   */
+  @RequestMapping(value = "/chw/upload", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Map<Integer, String> uploadChwSpreadsheet(
+      @RequestPart("file") MultipartFile file) throws ReportingException, IOException {
+    return healthWorkerService.processChwCsv(file);
   }
 }
