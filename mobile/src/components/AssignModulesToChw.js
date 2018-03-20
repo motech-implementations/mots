@@ -82,13 +82,21 @@ class AssignModulesToChw extends Component {
       const url = `/api/assignedModules/?chwId=${this.state.selectedChw.value || this.props.chwId}`;
       apiClient.get(url)
         .then((response) => {
-          const selectedModules = response.modules.map(module => module.id);
-          this.setState({
-            selectedModules: this.state.availableModulesList.filter(module =>
-              selectedModules.find(selectedModule => module.id === selectedModule)),
-            showModuleButtons: true,
-          });
-        });
+          if (response) {
+            const selectedModules = response.modules.map(module => module.id);
+            this.setState({
+              selectedModules: this.state.availableModulesList.filter(module =>
+                selectedModules.find(selectedModule => module.id === selectedModule)),
+              showModuleButtons: true,
+            });
+          } else {
+            this.setState({
+              selectedModules: [],
+              showModuleButtons: true,
+            });
+          }
+        })
+        .catch(() => this.setState({ selectedModules: [], showModuleButtons: true }));
     }
   }
 

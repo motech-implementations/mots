@@ -42,6 +42,7 @@ const FIELDS = {
     }),
     getDynamicAttributes: ({ newPassword }) => ({
       hidden: !newPassword,
+      required: !!newPassword,
     }),
   },
   password: {
@@ -53,6 +54,7 @@ const FIELDS = {
     }),
     getDynamicAttributes: ({ confirmNewPassword }) => ({
       hidden: !confirmNewPassword,
+      required: !!confirmNewPassword,
     }),
   },
 };

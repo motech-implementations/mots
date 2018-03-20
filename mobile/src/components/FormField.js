@@ -35,7 +35,7 @@ export default class FormField extends Component {
     const {
       label, type, getAttributes, nonBorderField, required,
     } = fieldConfig;
-    const labelWithAsterisk = required && `${label}*`;
+    const labelWithAsterisk = (required || dynamicAttr.required) && `${label}*`;
     const FieldType = type || TextInput;
     const attr = getAttributes ? getAttributes(input, this.props) : { ...input };
     const attributes = {
