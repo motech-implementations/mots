@@ -119,7 +119,13 @@ public class CommunityHealthWorkerService {
    * @return saved CHW
    */
   @PreAuthorize(RoleNames.HAS_CHW_WRITE_ROLE)
-  public CommunityHealthWorker createHealthWorker(CommunityHealthWorker healthWorker) {
+  public CommunityHealthWorker selectHealthWorker(CommunityHealthWorker healthWorker) {
+    if (healthWorker.getSelected()) {
+      throw new ChwException("Could not select CHW, because already selected");
+    }
+
+    healthWorker.setSelected(true);
+
     String phoneNumber = healthWorker.getPhoneNumber();
     String name = healthWorker.getCombinedName();
     Language preferredLanguage = healthWorker.getPreferredLanguage();
@@ -128,7 +134,7 @@ public class CommunityHealthWorkerService {
       String ivrId = ivrService.createSubscriber(phoneNumber, name, preferredLanguage);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
-      String message = "Could not create CHW, because of IVR subscriber creation error. \n\n"
+      String message = "Could not select CHW, because of IVR subscriber creation error. \n\n"
           + ex.getClearVotoInfo();
       throw new ChwException(message, ex);
     }

@@ -119,19 +119,22 @@ public class CommunityHealthWorkerController extends BaseController {
   }
 
   /**
-   * Create community health worker.
-   * @param healthWorkerDto DTO of community health worker to be created
-   * @return created community health worker
+   * Select community health worker.
+   * @param id id of CHW to select
+   * @param healthWorkerDto DTO of community health worker to be selected
+   * @return selected community health worker
    */
-  @RequestMapping(value = "/chw", method = RequestMethod.POST)
-  @ResponseStatus(HttpStatus.CREATED)
+  @RequestMapping(value = "/chw/{id}/select", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public CommunityHealthWorkerDto createHealthWorker(
+  public CommunityHealthWorkerDto selectHealthWorker(@PathVariable("id") UUID id,
       @RequestBody @Valid CommunityHealthWorkerDto healthWorkerDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    CommunityHealthWorker healthWorker = healthWorkerMapper.fromDto(healthWorkerDto);
+    CommunityHealthWorker existingHealthWorker = healthWorkerService.getHealthWorker(id);
 
-    return healthWorkerMapper.toDto(healthWorkerService.createHealthWorker(healthWorker));
+    healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
+
+    return healthWorkerMapper.toDto(healthWorkerService.selectHealthWorker(existingHealthWorker));
   }
 
   /**
