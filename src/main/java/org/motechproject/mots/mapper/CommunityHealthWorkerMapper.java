@@ -28,19 +28,12 @@ public interface CommunityHealthWorkerMapper {
   })
   CommunityHealthWorkerDto toDto(CommunityHealthWorker healthWorker);
 
-  @Mappings({
-      @Mapping(target = "id", ignore = true),
-      @Mapping(target = "community", source = "communityId")
-  })
-  CommunityHealthWorker fromDto(CommunityHealthWorkerDto healthWorkerDto);
-
   List<CommunityHealthWorkerDto> toDtos(Iterable<CommunityHealthWorker> healthWorkers);
 
   @Mappings({
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "chwId", ignore = true),
       @Mapping(target = "community", source = "communityId"),
-      @Mapping(target = "selected", constant = "true"),
       @Mapping(target = "yearOfBirth",
           expression = "java(healthWorkerDto.getYearOfBirth() == null ? null : "
               + "Integer.parseInt(healthWorkerDto.getYearOfBirth()))")

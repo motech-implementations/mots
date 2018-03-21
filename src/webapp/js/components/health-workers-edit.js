@@ -36,7 +36,7 @@ class HealthWorkersEdit extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/chw');
+    this.props.history.push('/chw/selected');
   }
 
   onSubmit(healthWorkerValues) {
@@ -46,7 +46,7 @@ class HealthWorkersEdit extends Component {
   onSubmitModal() {
     this.props.saveHealthWorker(this.state.healthWorkerValues, () => {
       Alert.success('CHW has been saved');
-      this.props.history.push('/chw');
+      this.props.history.push('/chw/selected');
     });
   }
 

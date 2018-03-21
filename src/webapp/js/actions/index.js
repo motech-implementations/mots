@@ -137,6 +137,16 @@ export function saveHealthWorker(values, callback) {
   };
 }
 
+export function selectHealthWorker(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/chw/${values.id}/select`, values);
+  request.then(() => callback());
+
+  return {
+    type: SAVE_HEALTH_WORKER,
+    payload: request,
+  };
+}
+
 export function createIncharge(values, callback) {
   const request = apiClient.post(`${BASE_URL}/incharge`, values);
   request.then(() => callback());

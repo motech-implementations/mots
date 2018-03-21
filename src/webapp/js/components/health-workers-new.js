@@ -7,7 +7,7 @@ import 'react-datetime/css/react-datetime.css';
 
 import HealthWorkersForm from './health-workers-form';
 import apiClient from '../utils/api-client';
-import { saveHealthWorker } from '../actions';
+import { selectHealthWorker } from '../actions';
 import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 
 class HealthWorkersNew extends Component {
@@ -31,13 +31,13 @@ class HealthWorkersNew extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/chw');
+    this.props.history.push('/chw/selected');
   }
 
   onSubmit(values) {
-    this.props.saveHealthWorker(values, () => {
+    this.props.selectHealthWorker(values, () => {
       Alert.success('CHW has been added');
-      this.props.history.push('/chw');
+      this.props.history.push('/chw/selected');
     });
   }
 
@@ -67,10 +67,10 @@ class HealthWorkersNew extends Component {
   }
 }
 
-export default connect(null, { saveHealthWorker })(HealthWorkersNew);
+export default connect(null, { selectHealthWorker })(HealthWorkersNew);
 
 HealthWorkersNew.propTypes = {
-  saveHealthWorker: PropTypes.func.isRequired,
+  selectHealthWorker: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
