@@ -16,7 +16,8 @@ public interface CommunityHealthWorkerRepository extends
 
   Optional<CommunityHealthWorker> findByPhoneNumber(String phoneNumber);
 
-  List<CommunityHealthWorker> findByCommunityFacilityChiefdomDistrictId(UUID districtId);
+  List<CommunityHealthWorker> findByCommunityFacilityChiefdomDistrictIdAndSelected(UUID districtId,
+      Boolean selected);
 
   List<CommunityHealthWorker> findBySelected(Boolean selected);
 }

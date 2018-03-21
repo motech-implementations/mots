@@ -230,8 +230,8 @@ public class ModuleAssignmentServiceTest {
   @Test
   public void shouldAssignModulesToDistrict() throws Exception {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictId(any()))
-        .thenReturn(Collections.singletonList(CHW));
+    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
+        any())).thenReturn(Collections.singletonList(CHW));
 
     moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
 
@@ -272,8 +272,8 @@ public class ModuleAssignmentServiceTest {
         .withChw(chw)
         .build();
 
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictId(any()))
-        .thenReturn(Collections.singletonList(chw));
+    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
+        any())).thenReturn(Collections.singletonList(chw));
     when(assignedModulesRepository.findByHealthWorkerId(eq(chw.getId())))
         .thenReturn(Optional.of(assignedModules));
 
@@ -283,8 +283,8 @@ public class ModuleAssignmentServiceTest {
   @Test(expected = ModuleAssignmentException.class)
   public void assignModulesToDistrictShouldThrowCustomExceptionIfIvrServiceThrow()
       throws Exception {
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictId(any()))
-        .thenReturn(Collections.singletonList(CHW));
+    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
+        any())).thenReturn(Collections.singletonList(CHW));
 
     doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
 

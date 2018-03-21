@@ -101,7 +101,7 @@ public class CommunityHealthWorkerController extends BaseController {
   }
 
   /**
-   * Get list of basic representation (ChwInfoDto) representations of CHWs.
+   * Get list of basic representation (ChwInfoDto) of selected CHWs.
    * @return list of ChwInfoDto representations of CHWs
    */
   @RequestMapping(value = "/chwInfo", method = RequestMethod.GET)

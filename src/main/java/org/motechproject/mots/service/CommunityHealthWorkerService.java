@@ -70,12 +70,12 @@ public class CommunityHealthWorkerService {
   }
 
   /**
-   * Gets all of CHWs and returns their short representation using mapper.
+   * Gets selected CHWs and returns their short representation using mapper.
    * @return List of CHWs short representation
    */
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public List<ChwInfoDto> getHealthWorkersInfoDtos() {
-    Iterable<CommunityHealthWorker> healthWorkers = healthWorkerRepository.findAll();
+    Iterable<CommunityHealthWorker> healthWorkers = healthWorkerRepository.findBySelected(true);
 
     return chwInfoMapper.toDtos(healthWorkers);
   }
