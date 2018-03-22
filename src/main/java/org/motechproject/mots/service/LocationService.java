@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("PMD.TooManyMethods")
 @Service
 public class LocationService {
 
@@ -124,6 +125,13 @@ public class LocationService {
     return communityRepository.save(community);
   }
 
+  /**
+   * Update Facility.
+   *
+   * @param facility facility to update
+   *
+   * @return updated Facility
+   */
   @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Facility saveFacility(Facility facility) {
     if (!canEditLocation(facility)) {
@@ -133,6 +141,13 @@ public class LocationService {
     return facilityRepository.save(facility);
   }
 
+  /**
+   * Update Community.
+   *
+   * @param community community to update
+   *
+   * @return updated Community
+   */
   @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Community saveCommunity(Community community) {
     if (!canEditLocation(community)) {

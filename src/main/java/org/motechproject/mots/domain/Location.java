@@ -14,10 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.domain.audit.AuditListener;
 import org.motechproject.mots.domain.audit.Auditable;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.security.User;
-import org.motechproject.mots.service.AuditListener;
 
 @MappedSuperclass
 @NoArgsConstructor

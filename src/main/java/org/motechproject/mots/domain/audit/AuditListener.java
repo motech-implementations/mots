@@ -1,8 +1,6 @@
-package org.motechproject.mots.service;
+package org.motechproject.mots.domain.audit;
 
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import org.motechproject.mots.domain.audit.Auditable;
 import org.motechproject.mots.utils.AuthenticationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditListener {
 
-  static private boolean loadLocations;
+  private static boolean loadLocations;
 
-  static private AuthenticationHelper authenticationHelper;
+  private static AuthenticationHelper authenticationHelper;
 
   @Autowired
   public void init(final AuthenticationHelper authenticationHelper,
