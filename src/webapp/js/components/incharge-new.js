@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 
 import InchargeForm from './incharge-form';
-import { createIncharge } from '../actions';
+import { selectIncharge } from '../actions';
 import { hasAuthority, INCHARGE_WRITE_AUTHORITY } from '../utils/authorization';
 
 class InchargeNew extends Component {
@@ -26,7 +26,7 @@ class InchargeNew extends Component {
   }
 
   onSubmit(values) {
-    this.props.createIncharge(values, () => {
+    this.props.selectIncharge(values, () => {
       Alert.success('Incharge has been added');
       this.props.history.push('/incharge');
     });
@@ -36,16 +36,16 @@ class InchargeNew extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Add Incharge</h1>
-        <InchargeForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
+        <InchargeForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} addIncharge />
       </div>
     );
   }
 }
 
-export default connect(null, { createIncharge })(InchargeNew);
+export default connect(null, { selectIncharge })(InchargeNew);
 
 InchargeNew.propTypes = {
-  createIncharge: PropTypes.func.isRequired,
+  selectIncharge: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

@@ -147,8 +147,8 @@ export function selectHealthWorker(values, callback) {
   };
 }
 
-export function createIncharge(values, callback) {
-  const request = apiClient.post(`${BASE_URL}/incharge`, values);
+export function selectIncharge(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/incharge/${values.id}/select`, values);
   request.then(() => callback());
 
   return {

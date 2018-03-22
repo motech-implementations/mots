@@ -38,4 +38,8 @@ public class FacilityDto {
   @Getter
   @Setter
   private String inchargeFullName;
+
+  @Getter
+  @Setter
+  private Boolean inchargeSelected;
 }

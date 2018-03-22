@@ -25,12 +25,6 @@ public interface InchargeMapper {
   })
   InchargeDto toDto(Incharge incharge);
 
-  @Mappings({
-      @Mapping(target = "id", ignore = true),
-      @Mapping(target = "facility", source = "facilityId")
-  })
-  Incharge fromDto(InchargeDto inchargeDto);
-
   List<InchargeDto> toDtos(Iterable<Incharge> incharges);
 
   @Mappings({

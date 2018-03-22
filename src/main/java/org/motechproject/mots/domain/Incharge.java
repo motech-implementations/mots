@@ -46,6 +46,11 @@ public class Incharge extends BaseTimestampedEntity {
   @Setter
   private Facility facility;
 
+  @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
+  @Getter
+  @Setter
+  private Boolean selected = false;
+
   /**
    * Constructs full-name out of first, sur-, and other names. Ignores nulls
    * @return string containing full-name

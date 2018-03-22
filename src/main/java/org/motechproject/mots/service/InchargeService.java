@@ -33,6 +33,12 @@ public class InchargeService {
         new EntityNotFoundException("Incharge with id: {0} not found", id.toString()));
   }
 
+  @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
+  public Incharge findByFacilityId(UUID id) {
+    return inchargeRepository.findByFacilityId(id).orElseThrow(() ->
+        new EntityNotFoundException("Incharge with Facility Id: {0} not found", id.toString()));
+  }
+
   /**
    * Finds Incharges matching all of the provided parameters.
    * If there are no parameters, return all Incharges.

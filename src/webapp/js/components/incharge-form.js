@@ -6,11 +6,69 @@ import { connect } from 'react-redux';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions';
-import { getAttributesForSelectWithClearOnChange, getSelectableLocations } from '../utils/form-utils';
+import { getAttributesForSelectWithClearOnChange, getSelectableLocations, getAttributesForSelectWithInitializeOnChange } from '../utils/form-utils';
 
 export const INCHARGE_FORM_NAME = 'InchargeForm';
 
 const FIELDS = {
+  districtId: {
+    type: 'select',
+    label: 'District',
+    required: true,
+    getSelectOptions: ({ availableLocations }) => ({
+      values: availableLocations,
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'chiefdomId', 'facilityId')),
+    getDynamicAttributes: ({ addIncharge }) => ({
+      disabled: !addIncharge,
+    }),
+  },
+  chiefdomId: {
+    type: 'select',
+    label: 'Chiefdom',
+    required: true,
+    getSelectOptions: ({ availableLocations, districtId }) => ({
+      values: getSelectableLocations(
+        'chiefdoms',
+        availableLocations,
+        districtId,
+      ),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'facilityId')),
+    getDynamicAttributes: ({ addIncharge }) => ({
+      disabled: !addIncharge,
+    }),
+  },
+  facilityId: {
+    type: 'select',
+    label: 'Facility',
+    required: true,
+    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+      values: _.map(getSelectableLocations(
+        'facilities',
+        availableLocations,
+        districtId,
+        chiefdomId,
+      ), (facility) => {
+        if (_.isNull(facility.inchargeId) || facility.inchargeSelected) {
+          const disabledFacility = facility;
+          disabledFacility.disabled = true;
+          return disabledFacility;
+        }
+        return facility;
+      }),
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
+    getAttributes: input => (getAttributesForSelectWithInitializeOnChange(input, INCHARGE_FORM_NAME, '/api/incharge/findByFacilityId')),
+    getDynamicAttributes: ({ addIncharge }) => ({
+      disabled: !addIncharge,
+    }),
+  },
   firstName: {
     label: 'First name',
     required: true,
@@ -28,54 +86,6 @@ const FIELDS = {
   },
   email: {
     label: 'Email address',
-  },
-  districtId: {
-    type: 'select',
-    label: 'District',
-    required: true,
-    getSelectOptions: ({ availableLocations }) => ({
-      values: availableLocations,
-      displayNameKey: 'name',
-      valueKey: 'id',
-    }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'chiefdomId', 'facilityId')),
-  },
-  chiefdomId: {
-    type: 'select',
-    label: 'Chiefdom',
-    required: true,
-    getSelectOptions: ({ availableLocations, districtId }) => ({
-      values: getSelectableLocations(
-        'chiefdoms',
-        availableLocations,
-        districtId,
-      ),
-      displayNameKey: 'name',
-      valueKey: 'id',
-    }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'facilityId')),
-  },
-  facilityId: {
-    type: 'select',
-    label: 'Facility',
-    required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
-      values: _.map(getSelectableLocations(
-        'facilities',
-        availableLocations,
-        districtId,
-        chiefdomId,
-      ), (facility) => {
-        if (!_.isNull(facility.inchargeId)) {
-          const disabledFacility = facility;
-          disabledFacility.disabled = true;
-          return disabledFacility;
-        }
-        return facility;
-      }),
-      displayNameKey: 'name',
-      valueKey: 'id',
-    }),
   },
 };
 
@@ -99,6 +109,7 @@ class InchargeForm extends Component {
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
+        addIncharge={this.props.addIncharge}
       />
     );
   }
@@ -152,10 +163,12 @@ InchargeForm.propTypes = {
   availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
+  addIncharge: PropTypes.bool,
 };
 
 InchargeForm.defaultProps = {
   availableLocations: [],
   districtId: null,
   chiefdomId: null,
+  addIncharge: false,
 };
