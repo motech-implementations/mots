@@ -71,6 +71,10 @@ public class User extends BaseTimestampedEntity implements UserDetails {
         .map(UserPermission::getRoleName).toArray(String[]::new));
   }
 
+  public boolean hasPermission(UserPermission permission) {
+    return roles.stream().anyMatch(role -> role.hasPermission(permission));
+  }
+
   @Override
   public boolean isAccountNonExpired() {
     return true;

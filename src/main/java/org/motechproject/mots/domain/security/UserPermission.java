@@ -13,6 +13,7 @@ public enum UserPermission {
   MANAGE_MODULES(RoleNames.MANAGE_MODULES, "Manage Modules"),
   MANAGE_FACILITIES(RoleNames.MANAGE_FACILITIES, "Manage Facilities"),
   MANAGE_OWN_FACILITIES(RoleNames.MANAGE_OWN_FACILITIES, "Manage Own Facilities"),
+  CREATE_FACILITIES(RoleNames.CREATE_FACILITIES, "Create Facilities"),
   DISPLAY_FACILITIES(RoleNames.DISPLAY_FACILITIES, "Display Facilities"),
   MANAGE_USERS(RoleNames.MANAGE_USERS, "Manage Users"),
   DISPLAY_REPORTS(RoleNames.DISPLAY_REPORTS, "Display Reports");
@@ -37,7 +38,8 @@ public enum UserPermission {
     private static final String MANAGE_MODULES = "ROLE_MANAGE_MODULES";
     private static final String DISPLAY_MODULES = "ROLE_DISPLAY_MODULES";
     private static final String MANAGE_FACILITIES = "ROLE_MANAGE_FACILITIES";
-    private static final String MANAGE_OWN_FACILITIES = "ROLE_MANAGE_FACILITIES";
+    private static final String MANAGE_OWN_FACILITIES = "ROLE_MANAGE_OWN_FACILITIES";
+    private static final String CREATE_FACILITIES = "ROLE_CREATE_FACILITIES";
     private static final String DISPLAY_FACILITIES = "ROLE_DISPLAY_FACILITIES";
     private static final String ASSIGN_MODULES = "ROLE_ASSIGN_MODULES";
     private static final String MANAGE_USERS = "ROLE_MANAGE_USERS";
@@ -50,17 +52,19 @@ public enum UserPermission {
     public static final String HAS_MANAGE_MODULES_ROLE = "hasRole('" + MANAGE_MODULES + "')";
     public static final String HAS_DISPLAY_MODULES_ROLE = "hasRole('" + DISPLAY_MODULES + "')";
     public static final String HAS_MANAGE_FACILITIES_ROLE = "hasRole('" + MANAGE_FACILITIES + "')";
+    public static final String HAS_CREATE_FACILITIES_ROLE = "hasRole('" + CREATE_FACILITIES + "')";
     public static final String HAS_DISPLAY_FACILITIES_ROLE =
         "hasRole('" + DISPLAY_FACILITIES + "')";
     public static final String HAS_ASSIGN_MODULES_ROLE = "hasRole('" + ASSIGN_MODULES + "')";
     public static final String HAS_MANAGE_USERS_ROLE = "hasRole('" + MANAGE_USERS + "')";
     public static final String HAS_DISPLAY_REPORTS_ROLE = "hasRole('" + DISPLAY_REPORTS + "')";
-    public static final String HAS_MANAGE_OWN_FACILITIES = "hasRole('" + MANAGE_OWN_FACILITIES + "')";
+    public static final String HAS_MANAGE_OWN_FACILITIES =
+        "hasRole('" + MANAGE_OWN_FACILITIES + "')";
 
     public static final String HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE =
         "hasAnyRole('" + ASSIGN_MODULES + "','" + MANAGE_MODULES + "','" + DISPLAY_MODULES + "')";
 
-    public static final String HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES =
+    public static final String HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE =
         "hasAnyRole('" + MANAGE_FACILITIES + "','" + MANAGE_OWN_FACILITIES + "')";
 
   }

@@ -7,8 +7,8 @@ import {
   INCHARGE_READ_AUTHORITY,
   INCHARGE_WRITE_AUTHORITY,
   MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
-  MANAGE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
-  DISPLAY_MODULES_AUTHORITY,
+  CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
+  DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 import apiClient from '../utils/api-client';
 
@@ -196,7 +196,7 @@ export default class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(MANAGE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/community/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
@@ -204,7 +204,7 @@ export default class SideBar extends Component {
             </Link>
           </li>
           }
-        { hasAuthority(MANAGE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/facility/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
@@ -344,7 +344,12 @@ export default class SideBar extends Component {
             {this.renderReportsMenu()}
           </li>
           }
-          { hasAuthority(DISPLAY_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY) &&
+          { hasAuthority(
+            DISPLAY_FACILITIES_AUTHORITY,
+            MANAGE_FACILITIES_AUTHORITY,
+            MANAGE_OWN_FACILITIES_AUTHORITY,
+            CREATE_FACILITIES_AUTHORITY,
+          ) &&
           <li>
             <a href="" onClick={this.toggleLocationsMenu}>
               <span className="fa fa-map-marker" />
@@ -356,7 +361,7 @@ export default class SideBar extends Component {
             {this.renderLocationsMenu()}
           </li>
           }
-          { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+          { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY) &&
           <li>
             <a href="" onClick={this.toggleUsersMenu}>
               <span className="glyphicon glyphicon-user" />

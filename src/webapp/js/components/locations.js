@@ -13,6 +13,7 @@ import {
   hasAuthority,
   canEditLocation,
   MANAGE_FACILITIES_AUTHORITY,
+  MANAGE_OWN_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
 const FacilityTypeFilter = ({ onChange }) => (
@@ -51,7 +52,7 @@ class Locations extends Component {
       ),
       filterable: false,
       sortable: false,
-      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY),
+      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY),
     },
     {
       Header: 'Name',
@@ -84,7 +85,7 @@ class Locations extends Component {
       ),
       filterable: false,
       sortable: false,
-      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY),
+      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY),
     },
     {
       Header: 'Facility ID',

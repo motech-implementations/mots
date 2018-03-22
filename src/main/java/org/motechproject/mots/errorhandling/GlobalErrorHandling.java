@@ -3,6 +3,7 @@ package org.motechproject.mots.errorhandling;
 import java.util.Map;
 import org.motechproject.mots.exception.BindingResultException;
 import org.motechproject.mots.exception.EntityNotFoundException;
+import org.motechproject.mots.exception.LocationException;
 import org.motechproject.mots.exception.MotsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -55,6 +56,13 @@ public class GlobalErrorHandling extends AbstractErrorHandling {
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ResponseBody
   public String handleAccessDeniedException(Exception ex, WebRequest request) {
+    return ex.getMessage();
+  }
+
+  @ExceptionHandler(LocationException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ResponseBody
+  public String handleLocationException(Exception ex) {
     return ex.getMessage();
   }
 }

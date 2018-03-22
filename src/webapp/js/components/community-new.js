@@ -7,7 +7,7 @@ import CommunityForm from './community-form';
 import { createCommunity } from '../actions';
 import {
   hasAuthority,
-  MANAGE_FACILITIES_AUTHORITY,
+  CREATE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
 class CommunityNew extends Component {
@@ -19,7 +19,7 @@ class CommunityNew extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)) {
+    if (!hasAuthority(CREATE_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }
   }

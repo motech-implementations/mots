@@ -34,4 +34,8 @@ public class UserRole extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Set<UserPermission> permissions = new HashSet<>();
+
+  public boolean hasPermission(UserPermission permission) {
+    return permissions.contains(permission);
+  }
 }

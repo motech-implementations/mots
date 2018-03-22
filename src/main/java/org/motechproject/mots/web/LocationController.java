@@ -59,7 +59,7 @@ public class LocationController extends BaseController {
     checkBindingResult(bindingResult);
     Facility facility = locationMapper.fromDtoToFacility(facilityCreationDto);
 
-    return locationMapper.toFacilityCreationDto(locationService.saveFacility(facility));
+    return locationMapper.toFacilityCreationDto(locationService.createFacility(facility));
   }
 
   /**
@@ -77,7 +77,7 @@ public class LocationController extends BaseController {
     checkBindingResult(bindingResult);
     Community community = locationMapper.fromDtoToCommunity(communityCreationDto);
 
-    return locationMapper.toCommunityCreationDto(locationService.saveCommunity(community));
+    return locationMapper.toCommunityCreationDto(locationService.createCommunity(community));
   }
 
   /**
