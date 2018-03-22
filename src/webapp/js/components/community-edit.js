@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 import { initialize } from 'redux-form';
 
-import { hasAuthority, MANAGE_FACILITIES_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY } from '../utils/authorization';
 import { saveCommunity } from '../actions/index';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
@@ -27,7 +27,8 @@ class CommunityEdit extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)
+      && !hasAuthority(MANAGE_OWN_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.fetchCommunity();

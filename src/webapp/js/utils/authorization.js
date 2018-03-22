@@ -8,6 +8,7 @@ export const INCHARGE_WRITE_AUTHORITY = 'ROLE_INCHARGE_WRITE';
 export const MANAGE_MODULES_AUTHORITY = 'ROLE_MANAGE_MODULES';
 export const DISPLAY_MODULES_AUTHORITY = 'ROLE_DISPLAY_MODULES';
 export const MANAGE_FACILITIES_AUTHORITY = 'ROLE_MANAGE_FACILITIES';
+export const MANAGE_OWN_FACILITIES_AUTHORITY = 'ROLE_MANAGE_OWN_FACILITIES';
 export const DISPLAY_FACILITIES_AUTHORITY = 'ROLE_DISPLAY_FACILITIES';
 export const ASSIGN_MODULES_AUTHORITY = 'ROLE_ASSIGN_MODULES';
 export const MANAGE_USERS_AUTHORITY = 'ROLE_MANAGE_USERS';
@@ -27,5 +28,6 @@ export function canEditLocation(username) {
     const currentUser = tokenDecoded.user_name;
     return currentUser === username.original.ownerUsername;
   }
+
   return false;
 }
