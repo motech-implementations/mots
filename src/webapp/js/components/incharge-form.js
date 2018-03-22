@@ -21,9 +21,6 @@ const FIELDS = {
       valueKey: 'id',
     }),
     getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'chiefdomId', 'facilityId')),
-    getDynamicAttributes: ({ addIncharge }) => ({
-      disabled: !addIncharge,
-    }),
   },
   chiefdomId: {
     type: 'select',
@@ -39,35 +36,40 @@ const FIELDS = {
       valueKey: 'id',
     }),
     getAttributes: input => (getAttributesForSelectWithClearOnChange(input, INCHARGE_FORM_NAME, 'facilityId')),
-    getDynamicAttributes: ({ addIncharge }) => ({
-      disabled: !addIncharge,
-    }),
   },
   facilityId: {
     type: 'select',
     label: 'Facility',
     required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+    getSelectOptions: ({
+      availableLocations,
+      districtId,
+      chiefdomId,
+      addIncharge,
+    }) => ({
       values: _.map(getSelectableLocations(
         'facilities',
         availableLocations,
         districtId,
         chiefdomId,
       ), (facility) => {
-        if (_.isNull(facility.inchargeId) || facility.inchargeSelected) {
-          const disabledFacility = facility;
-          disabledFacility.disabled = true;
-          return disabledFacility;
+        if (addIncharge && (_.isNull(facility.inchargeId) || facility.inchargeSelected)) {
+          return { ...facility, disabled: true };
+        } else if (!addIncharge && !_.isNull(facility.inchargeId)) {
+          return { ...facility, disabled: true };
         }
         return facility;
       }),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithInitializeOnChange(input, INCHARGE_FORM_NAME, '/api/incharge/findByFacilityId')),
-    getDynamicAttributes: ({ addIncharge }) => ({
-      disabled: !addIncharge,
-    }),
+    getAttributes: (input, { addIncharge }) => {
+      if (addIncharge) {
+        return getAttributesForSelectWithInitializeOnChange(input, INCHARGE_FORM_NAME, '/api/incharge/findByFacilityId');
+      }
+
+      return { className: 'form-control', ...input };
+    },
   },
   firstName: {
     label: 'First name',
@@ -106,6 +108,7 @@ class InchargeForm extends Component {
         key={fieldName}
         fieldName={fieldName}
         fieldConfig={fieldConfig}
+        dynamicProps={{ addIncharge: this.props.addIncharge }}
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
