@@ -83,18 +83,40 @@ public class InchargeController extends BaseController {
   }
 
   /**
-   * Creates Incharge.
-   * @param inchargeDto DTO of Incharge to be created
-   * @return created Incharge
+   * Find by Facility Id.
+   * @param facilityId id of Facility to find Incharge by
+   * @return Incharge with given facility
    */
-  @RequestMapping(value = "/incharge", method = RequestMethod.POST)
-  @ResponseStatus(HttpStatus.CREATED)
+  @RequestMapping(value = "/incharge/findByFacilityId/{facilityId}", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public InchargeDto createIncharge(@RequestBody @Valid InchargeDto inchargeDto,
-      BindingResult bindingResult) {
+  public InchargeDto findByFacilityId(@PathVariable("facilityId") UUID facilityId) {
+    Incharge incharge = inchargeService.findByFacilityId(facilityId);
+
+    return inchargeMapper.toDto(incharge);
+  }
+
+  /**
+   * Select Incharge.
+   * @param id id of Incharge to select
+   * @param inchargeDto DTO of Incharge to be selected
+   * @return selected Incharge
+   */
+  @RequestMapping(value = "/incharge/{id}/select", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public InchargeDto selectIncharge(@PathVariable("id") UUID id,
+      @RequestBody @Valid InchargeDto inchargeDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    Incharge incharge = inchargeMapper.fromDto(inchargeDto);
-    return inchargeMapper.toDto(inchargeService.saveIncharge(incharge));
+    Incharge existingIncharge = inchargeService.getIncharge(id);
+
+    if (existingIncharge.getSelected()) {
+      throw new IllegalArgumentException("This incharge is already selected");
+    }
+
+    inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
+    existingIncharge.setSelected(true);
+    return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
   }
 
   /**

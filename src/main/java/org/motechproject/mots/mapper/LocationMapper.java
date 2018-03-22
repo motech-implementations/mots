@@ -40,7 +40,10 @@ public interface LocationMapper {
    */
   List<DistrictDto> toDistrictDtos(List<District> districts);
 
-  @Mappings({@Mapping(target = "inchargeId", source = "incharge.id")})
+  @Mappings({
+      @Mapping(target = "inchargeId", source = "incharge.id"),
+      @Mapping(target = "inchargeSelected", source = "incharge.selected")
+  })
   FacilityDto toDto(Facility facility);
 
   /**
