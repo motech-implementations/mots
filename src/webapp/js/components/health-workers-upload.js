@@ -10,6 +10,7 @@ class HealthWorkersUpload extends Component {
     this.state = {
       file: null,
       loading: false,
+      filename: '',
     };
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -23,7 +24,7 @@ class HealthWorkersUpload extends Component {
   }
 
   onChange(e) {
-    this.setState({ file: e.target.files[0] });
+    this.setState({ file: e.target.files[0], filename: e.target.files[0].name });
   }
 
   fileUpload(file) {
@@ -38,8 +39,7 @@ class HealthWorkersUpload extends Component {
     };
 
     apiClient.post(url, formData, config).then((response) => {
-      let content = `Your upload has been successful! 
-      There were ${_.size(response.data)} issue/s. \n`;
+      let content = `Your upload has been successful! \nThere were ${_.size(response.data)} issue/s with your file. \n`;
 
       _.map(response.data, (value, key) => {
         content += `CSV row ${key}: ${value} \n`;
@@ -57,8 +57,36 @@ class HealthWorkersUpload extends Component {
         </div>
         <div>
           <form onSubmit={this.onFormSubmit} >
-            <input type="file" onChange={this.onChange} accept=".csv" />
-            <button type="submit">Upload</button>
+            <div className="row padding-bottom-xs">
+              <div className="input-group col-md-4">
+                <label className="input-group-btn" htmlFor="csvInput">
+                  <span className="btn btn-primary">
+                    Browse <input
+                      id="csvInput"
+                      type="file"
+                      style={{ display: 'none' }}
+                      onChange={this.onChange}
+                      accept=".csv"
+                      className="btn btn-primary"
+                    />
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  readOnly
+                  value={this.state.filename}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <button
+                type="submit"
+                className="col-md-4 offset-md-2 btn btn-primary"
+                disabled={!this.state.file}
+              >Upload
+              </button>
+            </div>
           </form>
         </div>
         <h3>Result</h3>
