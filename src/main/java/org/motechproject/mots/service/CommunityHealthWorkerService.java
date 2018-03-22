@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
@@ -270,7 +271,7 @@ public class CommunityHealthWorkerService {
 
   private File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
     File convFile = new File(multipart.getOriginalFilename());
-    multipart.transferTo(convFile);
+    FileUtils.writeByteArrayToFile(convFile, multipart.getBytes());
     return convFile;
   }
 
