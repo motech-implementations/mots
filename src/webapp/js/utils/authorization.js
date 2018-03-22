@@ -19,3 +19,13 @@ export function hasAuthority(...authorities) {
   const currentUserAuthorities = tokenDecoded.authorities;
   return _.some(currentUserAuthorities, el => _.includes(authorities, el));
 }
+
+export function canEditLocation(username) {
+  if (username.original) {
+    const token = localStorage.getItem('token');
+    const tokenDecoded = jwtDecode(token);
+    const currentUser = tokenDecoded.user_name;
+    return currentUser === username.original.ownerUsername;
+  }
+  return false;
+}

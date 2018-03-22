@@ -11,6 +11,7 @@ import {
 } from '../actions/types';
 import {
   hasAuthority,
+  canEditLocation,
   MANAGE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
@@ -33,17 +34,19 @@ class Locations extends Component {
       Header: 'Actions',
       minWidth: 50,
       accessor: 'id',
-      Cell: cell => (
+      Cell: cellInfo => (
         <div className="actions-buttons-container">
-          <Link
-            to={`/locations/community/${cell.value}`}
-            type="button"
-            className="btn btn-primary margin-right-sm"
-            title="Edit"
-          >
-            <span className="glyphicon glyphicon-edit" />
-            <span className="hide-min-r-small-min next-button-text">Edit</span>
-          </Link>
+          { canEditLocation(cellInfo) &&
+            <Link
+              to={`/locations/community/${cellInfo.value}`}
+              type="button"
+              className="btn btn-primary margin-right-sm"
+              title="Edit"
+            >
+              <span className="glyphicon glyphicon-edit" />
+              <span className="hide-min-r-small-min next-button-text">Edit</span>
+            </Link>
+          }
         </div>
       ),
       filterable: false,
@@ -64,17 +67,19 @@ class Locations extends Component {
       Header: 'Actions',
       minWidth: 50,
       accessor: 'id',
-      Cell: cell => (
+      Cell: cellInfo => (
         <div className="actions-buttons-container">
-          <Link
-            to={`/locations/facility/${cell.value}`}
-            type="button"
-            className="btn btn-primary margin-right-sm"
-            title="Edit"
-          >
-            <span className="glyphicon glyphicon-edit" />
-            <span className="hide-min-r-small-min next-button-text">Edit</span>
-          </Link>
+          { canEditLocation(cellInfo) &&
+            <Link
+              to={`/locations/facility/${cellInfo.value}`}
+              type="button"
+              className="btn btn-primary margin-right-sm"
+              title="Edit"
+            >
+              <span className="glyphicon glyphicon-edit" />
+              <span className="hide-min-r-small-min next-button-text">Edit</span>
+            </Link>
+          }
         </div>
       ),
       filterable: false,
