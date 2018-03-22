@@ -23,12 +23,12 @@ function renderSelectOptions(options) {
 
 export default class FormField extends Component {
   renderFieldInput = ({
-    fieldConfig, selectOptions, dynamicAttr, input, meta: { touched, error },
+    fieldConfig, selectOptions, dynamicAttr, dynamicProps, input, meta: { touched, error },
   }) => {
     const { label, type, getAttributes } = fieldConfig;
 
     const FieldType = type || 'input';
-    const attr = getAttributes ? getAttributes(input) : { type: 'text', className: 'form-control', ...input };
+    const attr = getAttributes ? getAttributes(input, dynamicProps) : { type: 'text', className: 'form-control', ...input };
     const attributes = {
       id: input.name,
       disabled: selectOptions && (!selectOptions.values || !selectOptions.values.length),
@@ -61,7 +61,7 @@ export default class FormField extends Component {
   };
 
   render() {
-    const { fieldName, fieldConfig } = this.props;
+    const { fieldName, fieldConfig, dynamicProps } = this.props;
 
     return (
       <Field
@@ -76,6 +76,7 @@ export default class FormField extends Component {
         dynamicAttr={
           fieldConfig.getDynamicAttributes ? fieldConfig.getDynamicAttributes(this.props) : {}
         }
+        dynamicProps={dynamicProps}
       />
     );
   }
@@ -94,4 +95,9 @@ FormField.propTypes = {
     getSelectOptions: PropTypes.func,
     getDynamicAttributes: PropTypes.func,
   }).isRequired,
+  dynamicProps: PropTypes.shape({}),
+};
+
+FormField.defaultProps = {
+  dynamicProps: {},
 };
