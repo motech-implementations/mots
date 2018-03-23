@@ -8,6 +8,17 @@ function initializeForm(formName, formValues) {
   dispatch(initialize(formName, formValues));
 }
 
+export function fetchDataAndInitializeFrom(formName, baseUrl, value) {
+  if (value && value !== '') {
+    const url = `${baseUrl}/${value}`;
+
+    apiClient.get(url)
+      .then((response) => {
+        initializeForm(formName, response.data);
+      });
+  }
+}
+
 export function getAttributesForSelectWithInitializeOnChange(input, formName, baseUrl) {
   return {
     className: 'form-control',
@@ -16,14 +27,7 @@ export function getAttributesForSelectWithInitializeOnChange(input, formName, ba
     onChange: (event) => {
       const { value } = event.target;
 
-      const url = `${baseUrl}/${value}`;
-
-      if (value && value !== '') {
-        apiClient.get(url)
-          .then((response) => {
-            initializeForm(formName, response.data);
-          });
-      }
+      fetchDataAndInitializeFrom(formName, baseUrl, value);
 
       input.onChange(value);
     },
