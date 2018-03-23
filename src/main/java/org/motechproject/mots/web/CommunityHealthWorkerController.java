@@ -32,6 +32,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class CommunityHealthWorkerController extends BaseController {
 
   public static final String COMMUNITY_NAME_PARAM = "communityName";
+  public static final String FACILITY_NAME_PARAM = "facilityName";
+  public static final String CHIEFDOM_NAME_PARAM = "chiefdomName";
+  public static final String DISTRICT_NAME_PARAM = "districtName";
 
   @Autowired
   private CommunityHealthWorkerService healthWorkerService;
@@ -68,9 +71,9 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "educationLevel", required = false) String educationLevel,
       @RequestParam(value = COMMUNITY_NAME_PARAM, required = false) String communityName,
-      @RequestParam(value = "facilityName", required = false) String facilityName,
-      @RequestParam(value = "chiefdomName", required = false) String chiefdomName,
-      @RequestParam(value = "districtName", required = false) String districtName,
+      @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
+      @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdomName,
+      @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String districtName,
       @RequestParam(value = "selected", required = false) Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
