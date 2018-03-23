@@ -289,6 +289,7 @@ class ModuleForm extends Component {
           <Tooltip
             title={fieldConfig.tooltip}
             position="top"
+            theme="transparent"
             animation="shift"
             arrow="true"
             followCursor="true"
