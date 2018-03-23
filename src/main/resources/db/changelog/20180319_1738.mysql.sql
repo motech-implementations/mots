@@ -12,6 +12,12 @@ ALTER TABLE district ADD owner_id VARCHAR(255) NOT NULL;
 --changeset user:1521477496398-4
 ALTER TABLE facility ADD owner_id VARCHAR(255) NOT NULL;
 
+--changeset user:1521477496398-10
+UPDATE community SET owner_id = '51f6bdc1-4932-4bc3-9589-368646ef7ad3';
+UPDATE facility SET owner_id = '51f6bdc1-4932-4bc3-9589-368646ef7ad3';
+UPDATE chiefdom SET owner_id = '51f6bdc1-4932-4bc3-9589-368646ef7ad3';
+UPDATE district SET owner_id = '51f6bdc1-4932-4bc3-9589-368646ef7ad3';
+
 --changeset user:1521477496398-5
 ALTER TABLE community ADD CONSTRAINT FK89wcnl1eeatyb4intp7xqsgkc FOREIGN KEY (owner_id) REFERENCES user (id);
 
@@ -23,11 +29,4 @@ ALTER TABLE facility ADD CONSTRAINT FKj4bbqvvhwk0fy0kqih94i361f FOREIGN KEY (own
 
 --changeset user:1521477496398-8
 ALTER TABLE district ADD CONSTRAINT FKmqx0dvfgyjfvu55qo4n7e4rmb FOREIGN KEY (owner_id) REFERENCES user (id);
-
---changeset user:1521477496398-9
-ALTER TABLE community_health_worker ALTER selected SET DEFAULT 0;
-
---changeset user:1521477496398-10
-ALTER TABLE in_charge DROP KEY UC_IN_CHARGEFACILITY_ID_COL;
-ALTER TABLE in_charge ADD CONSTRAINT UC_IN_CHARGEFACILITY_ID_COL UNIQUE (facility_id);
 
