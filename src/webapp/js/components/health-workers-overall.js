@@ -5,7 +5,7 @@ const HealthWorkersOverall = () => (
   <div>
     <div>
       <h1>Community Health Workers</h1>
-      <ChwTable selected={false} />
+      <ChwTable selected={null} />
     </div>
   </div>
 );
