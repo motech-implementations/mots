@@ -16,7 +16,14 @@ import {
 import { buildSearchParams } from '../utils/react-table-search-params';
 
 class InchargeTable extends Component {
-  static getTableColumns = () => [
+  componentWillMount() {
+    if (!hasAuthority(INCHARGE_READ_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
+    this.setState({ loading: true });
+  }
+
+  getTableColumns = () => [
     {
       Header: 'Actions',
       minWidth: 50,
@@ -36,7 +43,7 @@ class InchargeTable extends Component {
       ),
       filterable: false,
       sortable: false,
-      show: hasAuthority(INCHARGE_WRITE_AUTHORITY),
+      show: this.props.selected && hasAuthority(INCHARGE_WRITE_AUTHORITY),
     },
     {
       Header: 'First name',
@@ -58,17 +65,10 @@ class InchargeTable extends Component {
       accessor: 'facilityName',
     }];
 
-  static prepareMobileColumns() {
-    const mobileColumns = _.clone(InchargeTable.getTableColumns());
+  prepareMobileColumns() {
+    const mobileColumns = _.clone(this.getTableColumns());
     mobileColumns.push(mobileColumns.shift());
     return mobileColumns;
-  }
-
-  componentWillMount() {
-    if (!hasAuthority(INCHARGE_READ_AUTHORITY)) {
-      this.props.history.push('/home');
-    }
-    this.setState({ loading: true });
   }
 
   render() {
@@ -77,7 +77,7 @@ class InchargeTable extends Component {
         <div className="hide-min-r-small-min">
           <MobileTable
             data={this.props.inchargesList}
-            columns={InchargeTable.prepareMobileColumns()}
+            columns={this.prepareMobileColumns()}
           />
         </div>
         <div className="hide-max-r-xsmall-max">
@@ -85,7 +85,7 @@ class InchargeTable extends Component {
             manual
             filterable
             data={this.props.inchargesList}
-            columns={InchargeTable.getTableColumns()}
+            columns={this.getTableColumns()}
             loading={this.state.loading}
             pages={this.props.inchargeListPages}
             onFetchData={(state) => {
@@ -95,7 +95,7 @@ class InchargeTable extends Component {
                   state.sorted,
                   state.page,
                   state.pageSize,
-              ))
+              ), this.props.selected)
               .then(() => {
                 this.setState({ loading: false });
               });
@@ -124,4 +124,9 @@ InchargeTable.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  selected: PropTypes.bool,
+};
+
+InchargeTable.defaultProps = {
+  selected: true,
 };

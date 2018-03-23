@@ -1,8 +1,7 @@
 package org.motechproject.mots.service;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,7 +12,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
@@ -185,9 +183,9 @@ public class CommunityHealthWorkerService {
    * @throws IOException in case of file issues
    */
   public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile) throws IOException {
-    File csvFile = multipartToFile(chwCsvFile);
     ICsvMapReader csvMapReader;
-    csvMapReader = new CsvMapReader(new FileReader(csvFile), CsvPreference.STANDARD_PREFERENCE);
+    csvMapReader = new CsvMapReader(new InputStreamReader(chwCsvFile.getInputStream()),
+        CsvPreference.STANDARD_PREFERENCE);
 
     final String[] header = csvMapReader.getHeader(true);
     final CellProcessor[] processors = getProcessors();
@@ -269,12 +267,6 @@ public class CommunityHealthWorkerService {
       ));
     }
     return errorMap;
-  }
-
-  private File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
-    File convFile = new File(multipart.getOriginalFilename());
-    FileUtils.writeByteArrayToFile(convFile, multipart.getBytes());
-    return convFile;
   }
 
   /**

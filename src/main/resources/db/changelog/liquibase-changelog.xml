@@ -67,5 +67,6 @@
   <include file="20180319_1738.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180322_1003.mysql.sql" relativeToChangelogFile="true" />
   <include file="20180322_1719_update_roles.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20180323_1813.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

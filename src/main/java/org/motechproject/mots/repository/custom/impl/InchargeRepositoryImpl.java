@@ -24,19 +24,19 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<Incharge> searchIncharges(String firstName, String secondName,
-      String otherName, String phoneNumber, String email, String facilityName, Pageable pageable)
-      throws IllegalArgumentException {
+      String otherName, String phoneNumber, String email, String facilityName, Boolean selected,
+      Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Incharge> query = builder.createQuery(Incharge.class);
     query = prepareQuery(query, firstName, secondName, otherName, phoneNumber, email, facilityName,
-        false, pageable);
+        selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, firstName, secondName, otherName, phoneNumber, email,
-        facilityName, true, pageable);
+        facilityName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -52,7 +52,8 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String firstName, String secondName, String otherName, String phoneNumber, String email,
-      String facilityName, boolean count, Pageable pageable) throws IllegalArgumentException {
+      String facilityName, Boolean selected, boolean count, Pageable pageable)
+      throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Incharge> root = query.from(Incharge.class);
@@ -86,6 +87,10 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(NAME),
           '%' + facilityName + '%'));
+    }
+
+    if (selected != null) {
+      predicate = builder.and(predicate, builder.equal(root.get(SELECTED), selected));
     }
 
     query.where(predicate);
