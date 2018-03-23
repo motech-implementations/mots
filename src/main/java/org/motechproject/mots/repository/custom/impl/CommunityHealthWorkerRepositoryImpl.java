@@ -128,12 +128,17 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
   @Override
   protected Path getPath(Root root, Sort.Order order) {
-    Path path;
-    if (order.getProperty().equals(CommunityHealthWorkerController.COMMUNITY_NAME_PARAM)) {
-      path = root.get(COMMUNITY).get(NAME);
-    } else {
-      path = root.get(order.getProperty());
+    switch (order.getProperty()) {
+      case CommunityHealthWorkerController.COMMUNITY_NAME_PARAM:
+        return root.get(COMMUNITY).get(NAME);
+      case CommunityHealthWorkerController.FACILITY_NAME_PARAM:
+        return root.get(COMMUNITY).get(FACILITY).get(NAME);
+      case CommunityHealthWorkerController.CHIEFDOM_NAME_PARAM:
+        return root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(NAME);
+      case CommunityHealthWorkerController.DISTRICT_NAME_PARAM:
+        return root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME);
+      default:
+        return root.get(order.getProperty());
     }
-    return path;
   }
 }
