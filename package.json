@@ -31,7 +31,7 @@
     "react-spinners": "^0.2.6",
     "react-table": "^6.7.4",
     "react-tabs": "^2.2.1",
-    "react-tooltip": "^3.4.0",
+    "react-tippy": "^1.2.2",
     "redux": "^3.7.2",
     "redux-form": "^6.6.3",
     "redux-offline": "^2.0.0",
