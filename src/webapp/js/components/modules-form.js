@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector, Field, FieldArray, FormSection } from 'redux-form';
 import { connect } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tippy';
+import 'react-tippy/dist/tippy.css';
 
 export const MODULE_FORM_NAME = 'ModuleForm';
-
-const useHtmlSyntaxInTooltips = true;
 
 const QUESTION_FIELDS = {
   name: {
@@ -286,12 +285,25 @@ class ModuleForm extends Component {
 
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
-        <div className="row" data-tip={fieldConfig.tooltip}>
-          <label htmlFor={attr.id} className="col-md-4 control-label">{ label }</label>
-          <div className="col-md-8">
-            <FieldType {...attr} onClick={() => { ReactTooltip.hide(); }} />
-          </div>
-          <ReactTooltip place="top" type="info" effect="float" delayShow={200} html={useHtmlSyntaxInTooltips} />
+        <div className="row" >
+          <Tooltip
+            title={fieldConfig.tooltip}
+            position="top"
+            theme="transparent"
+            animation="shift"
+            arrow="true"
+            followCursor="true"
+            delay="150"
+            duration="250"
+            hideDelay="50"
+            size="big"
+            style={{ display: 'block' }}
+          >
+            <label htmlFor={attr.id} className="col-md-4 control-label">{ label }</label>
+            <div className="col-md-8">
+              <FieldType {...attr} />
+            </div>
+          </Tooltip>
         </div>
         <div className="row">
           <div className="col-md-4" />
