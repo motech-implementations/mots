@@ -81,6 +81,8 @@ public interface LocationMapper {
 
   @Mappings({
       @Mapping(target = "parent", source = "parentName"),
+      @Mapping(target = "district", source = "districtName"),
+      @Mapping(target = "chiefdom", source = "chiefdomName"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
   LocationPreviewDto toLocationPreviewDto(Location location);

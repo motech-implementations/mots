@@ -45,6 +45,14 @@ public abstract class Location extends BaseTimestampedEntity implements Auditabl
 
   public abstract String getParentName();
 
+  public String getChiefdomName() {
+    return null;
+  }
+
+  public String getDistrictName() {
+    return null;
+  }
+
   public FacilityType getFacilityType() {
     return null;
   }

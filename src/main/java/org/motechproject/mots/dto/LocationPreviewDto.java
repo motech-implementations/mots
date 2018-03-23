@@ -28,6 +28,16 @@ public class LocationPreviewDto {
   @Setter
   @Getter
   @JsonInclude(Include.NON_NULL)
+  private String district;
+
+  @Setter
+  @Getter
+  @JsonInclude(Include.NON_NULL)
+  private String chiefdom;
+
+  @Setter
+  @Getter
+  @JsonInclude(Include.NON_NULL)
   private String facilityType;
 
   @Setter

@@ -39,6 +39,8 @@ public class LocationController extends BaseController {
   public static final String FACILITY_TYPE_PARAM = "facilityType";
   public static final String INCHARGE_FULL_NAME_PARAM = "inchargeFullName";
   public static final String FACILITY_ID_PARAM = "facilityId";
+  public static final String CHIEFDOM_PARAM = "chiefdom";
+  public static final String DISTRICT_PARAM = "district";
 
   @Autowired
   private LocationService locationService;
@@ -263,10 +265,12 @@ public class LocationController extends BaseController {
   public Page<LocationPreviewDto> searchCommunities(
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
+      @RequestParam(value = CHIEFDOM_PARAM, required = false) String chiefdom,
+      @RequestParam(value = DISTRICT_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Community> communities =
-        locationService.searchCommunities(name, parentFacility, pageable);
+        locationService.searchCommunities(name, parentFacility, chiefdom, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(communities.getContent());
 
@@ -286,10 +290,11 @@ public class LocationController extends BaseController {
       @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
       @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
       @RequestParam(value = PARENT_PARAM, required = false) String parentChiefdom,
+      @RequestParam(value = DISTRICT_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Facility> facilities = locationService.searchFacilities(
-        facilityId, name, facilityType, inchargeFullName, parentChiefdom, pageable);
+        facilityId, name, facilityType, inchargeFullName, parentChiefdom, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
 

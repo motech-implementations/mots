@@ -36,4 +36,14 @@ public class Community extends Location {
   public String getParentName() {
     return facility.getName();
   }
+
+  @Override
+  public String getDistrictName() {
+    return facility.getDistrictName();
+  }
+
+  @Override
+  public String getChiefdomName() {
+    return facility.getChiefdom().getName();
+  }
 }

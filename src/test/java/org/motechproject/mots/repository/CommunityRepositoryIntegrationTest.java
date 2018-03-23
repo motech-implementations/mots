@@ -72,7 +72,7 @@ public class CommunityRepositoryIntegrationTest extends
   public void shouldFindCommunityByName() {
     // when
     Page<Community> result = communityRepository.search(
-        community1.getName(), null, null);
+        community1.getName(), null, null, null, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -84,7 +84,7 @@ public class CommunityRepositoryIntegrationTest extends
   public void shouldFindCommunityByDistrict() {
     // when
     Page<Community> result = communityRepository.search(
-        null, community1.getParentName(), null);
+        null, community1.getParentName(), null, null, null);
 
     // then
     assertThat(result.getTotalElements(), is(2L));
