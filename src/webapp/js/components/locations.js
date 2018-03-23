@@ -11,7 +11,9 @@ import {
 } from '../actions/types';
 import {
   hasAuthority,
+  canEditLocation,
   MANAGE_FACILITIES_AUTHORITY,
+  MANAGE_OWN_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
 const FacilityTypeFilter = ({ onChange }) => (
@@ -33,22 +35,24 @@ class Locations extends Component {
       Header: 'Actions',
       minWidth: 50,
       accessor: 'id',
-      Cell: cell => (
+      Cell: cellInfo => (
         <div className="actions-buttons-container">
-          <Link
-            to={`/locations/community/${cell.value}`}
-            type="button"
-            className="btn btn-primary margin-right-sm"
-            title="Edit"
-          >
-            <span className="glyphicon glyphicon-edit" />
-            <span className="hide-min-r-small-min next-button-text">Edit</span>
-          </Link>
+          { canEditLocation(cellInfo.original) &&
+            <Link
+              to={`/locations/community/${cellInfo.value}`}
+              type="button"
+              className="btn btn-primary margin-right-sm"
+              title="Edit"
+            >
+              <span className="glyphicon glyphicon-edit" />
+              <span className="hide-min-r-small-min next-button-text">Edit</span>
+            </Link>
+          }
         </div>
       ),
       filterable: false,
       sortable: false,
-      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY),
+      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY),
     },
     {
       Header: 'Name',
@@ -64,22 +68,24 @@ class Locations extends Component {
       Header: 'Actions',
       minWidth: 50,
       accessor: 'id',
-      Cell: cell => (
+      Cell: cellInfo => (
         <div className="actions-buttons-container">
-          <Link
-            to={`/locations/facility/${cell.value}`}
-            type="button"
-            className="btn btn-primary margin-right-sm"
-            title="Edit"
-          >
-            <span className="glyphicon glyphicon-edit" />
-            <span className="hide-min-r-small-min next-button-text">Edit</span>
-          </Link>
+          { canEditLocation(cellInfo.original) &&
+            <Link
+              to={`/locations/facility/${cellInfo.value}`}
+              type="button"
+              className="btn btn-primary margin-right-sm"
+              title="Edit"
+            >
+              <span className="glyphicon glyphicon-edit" />
+              <span className="hide-min-r-small-min next-button-text">Edit</span>
+            </Link>
+          }
         </div>
       ),
       filterable: false,
       sortable: false,
-      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY),
+      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY),
     },
     {
       Header: 'Facility ID',

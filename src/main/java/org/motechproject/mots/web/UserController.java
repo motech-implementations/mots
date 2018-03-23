@@ -169,7 +169,7 @@ public class UserController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public UserProfileDto getUserProfile(Principal principal) {
-    User user = userService.getUserByUsername(principal.getName());
+    User user = userService.getUserByUserName(principal.getName());
     return userMapper.toUserProfileDto(user);
   }
 

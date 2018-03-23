@@ -29,4 +29,8 @@ public class CommunityExtendedInfoDto {
   @Getter
   @Uuid
   private String facilityId;
+
+  @Getter
+  @Setter
+  private String ownerUsername;
 }

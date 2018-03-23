@@ -11,12 +11,16 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "user_role")
 public class UserRole extends BaseTimestampedEntity {
@@ -34,4 +38,8 @@ public class UserRole extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Set<UserPermission> permissions = new HashSet<>();
+
+  public boolean hasPermission(UserPermission permission) {
+    return permissions.contains(permission);
+  }
 }

@@ -79,40 +79,53 @@ public interface LocationMapper {
     return locationPreviewDtos;
   }
 
-  @Mapping(target = "parent", source = "parentName")
+  @Mappings({
+      @Mapping(target = "parent", source = "parentName"),
+      @Mapping(target = "ownerUsername", source = "owner.username")
+  })
   LocationPreviewDto toLocationPreviewDto(Location location);
 
   @Named("createCommunity")
-  @Mapping(target = "facilityId", source = "facility.id")
+  @Mappings({
+      @Mapping(target = "facilityId", source = "facility.id"),
+      @Mapping(target = "ownerUsername", source = "owner.username")
+  })
   CommunityCreationDto toCommunityCreationDto(Community community);
 
   @Mappings({
       @Mapping(target = "facilityId", source = "facility.id"),
       @Mapping(target = "chiefdomId", source = "facility.chiefdom.id"),
-      @Mapping(target = "districtId", source = "facility.chiefdom.district.id")
+      @Mapping(target = "districtId", source = "facility.chiefdom.district.id"),
+      @Mapping(target = "ownerUsername", source = "owner.username")
   })
   CommunityExtendedInfoDto toCommunityExtendedInfoDto(Community community);
 
   @Named("createFacility")
   @Mappings({
       @Mapping(target = "chiefdomId", source = "chiefdom.id"),
-      @Mapping(target = "facilityType", source = "type")
+      @Mapping(target = "facilityType", source = "type"),
+      @Mapping(target = "ownerUsername", source = "owner.username")
   })
   FacilityCreationDto toFacilityCreationDto(Facility facility);
 
   @Mappings({
       @Mapping(target = "chiefdomId", source = "chiefdom.id"),
       @Mapping(target = "facilityType", source = "type"),
-      @Mapping(target = "districtId", source = "chiefdom.district.id")
+      @Mapping(target = "districtId", source = "chiefdom.district.id"),
+      @Mapping(target = "ownerUsername", source = "owner.username")
   })
   FacilityExtendedInfoDto toFacilityExtendedInfoDto(Facility facility);
 
-  @Mapping(target = "facility", source = "facilityId")
+  @Mappings({
+      @Mapping(target = "facility", source = "facilityId"),
+      @Mapping(target = "owner", ignore = true)
+  })
   Community fromDtoToCommunity(CommunityCreationDto communityCreationDto);
 
   @Mappings({
       @Mapping(target = "chiefdom", source = "chiefdomId"),
-      @Mapping(target = "type", source = "facilityType")
+      @Mapping(target = "type", source = "facilityType"),
+      @Mapping(target = "owner", ignore = true)
   })
   Facility fromDtoToFacility(FacilityCreationDto facilityCreationDto);
 
@@ -142,13 +155,17 @@ public interface LocationMapper {
     return new Chiefdom(UUID.fromString(chiefdomId));
   }
 
-  @Mapping(target = "facility", source = "facilityId")
+  @Mappings({
+      @Mapping(target = "facility", source = "facilityId"),
+      @Mapping(target = "owner", ignore = true)
+  })
   void updateCommunityFromDto(CommunityCreationDto communityCreationDto,
       @MappingTarget Community community);
 
   @Mappings({
       @Mapping(target = "chiefdom", source = "chiefdomId"),
-      @Mapping(target = "type", source = "facilityType")
+      @Mapping(target = "type", source = "facilityType"),
+      @Mapping(target = "owner", ignore = true)
   })
   void updateFacilityFromDto(FacilityCreationDto facilityCreationDto,
       @MappingTarget Facility facility);

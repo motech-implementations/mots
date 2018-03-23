@@ -6,17 +6,22 @@ import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
+import org.motechproject.mots.domain.Location;
+import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
+import org.motechproject.mots.exception.MotsAccessDeniedException;
 import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.FacilityRepository;
+import org.motechproject.mots.utils.AuthenticationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("PMD.TooManyMethods")
 @Service
 public class LocationService {
 
@@ -31,6 +36,9 @@ public class LocationService {
 
   @Autowired
   private CommunityRepository communityRepository;
+
+  @Autowired
+  private AuthenticationHelper authenticationHelper;
 
   public List<District> getDistricts() {
     return districtRepository.findAllByOrderByNameAsc();
@@ -51,20 +59,20 @@ public class LocationService {
     return communityRepository.findAll();
   }
 
+  public Facility createImportedFacility(Facility facility) {
+    return facilityRepository.save(facility);
+  }
+
+  public Community createImportedCommunity(Community community) {
+    return communityRepository.save(community);
+  }
+
   public District createDistrict(District district) {
     return districtRepository.save(district);
   }
 
   public Chiefdom createChiefdom(Chiefdom chiefdom) {
     return chiefdomRepository.save(chiefdom);
-  }
-
-  public Facility createFacility(Facility facility) {
-    return facilityRepository.save(facility);
-  }
-
-  public Community createCommunity(Community community) {
-    return communityRepository.save(community);
   }
 
   /**
@@ -115,22 +123,67 @@ public class LocationService {
         inchargeFullName, parentChiefdom, pageable);
   }
 
-  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_ROLE)
-  public Facility saveFacility(Facility facility) {
+  @PreAuthorize(RoleNames.HAS_CREATE_FACILITIES_ROLE)
+  public Facility createFacility(Facility facility) {
     return facilityRepository.save(facility);
   }
 
-  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_ROLE)
-  public Community saveCommunity(Community community) {
+  @PreAuthorize(RoleNames.HAS_CREATE_FACILITIES_ROLE)
+  public Community createCommunity(Community community) {
     return communityRepository.save(community);
   }
 
-  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_ROLE)
+  /**
+   * Update Facility.
+   * @param facility facility to update
+   * @return updated Facility
+   */
+  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  public Facility saveFacility(Facility facility) {
+    if (!canEditLocation(facility)) {
+      throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
+    }
+
+    return facilityRepository.save(facility);
+  }
+
+  /**
+   * Update Community.
+   * @param community community to update
+   * @return updated Community
+   */
+  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  public Community saveCommunity(Community community) {
+    if (!canEditLocation(community)) {
+      throw new MotsAccessDeniedException(
+          "Could not edit community, because you are not the owner"
+      );
+    }
+
+    return communityRepository.save(community);
+  }
+
+  private boolean canEditLocation(Location location) {
+    return canEditOwnLocation(location) || canEditAllLocations();
+  }
+
+  private boolean canEditAllLocations() {
+    return authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_FACILITIES);
+  }
+
+  private boolean canEditOwnLocation(Location location) {
+    return authenticationHelper.getCurrentUser().hasPermission(
+        UserPermission.MANAGE_OWN_FACILITIES)
+      && authenticationHelper.getCurrentUser().getUsername().equals(
+          location.getOwner().getUsername());
+  }
+
+  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
   public Community getCommunity(UUID id) {
     return communityRepository.findOne(id);
   }
 
-  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
   public Facility getFacility(UUID id) {
     return facilityRepository.findOne(id);
   }

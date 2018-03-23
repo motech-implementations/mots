@@ -12,7 +12,7 @@ public class LocationPreviewDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter
@@ -40,4 +40,7 @@ public class LocationPreviewDto {
   @JsonInclude(Include.NON_NULL)
   private String inchargeFullName;
 
+  @Getter
+  @Setter
+  private String ownerUsername;
 }

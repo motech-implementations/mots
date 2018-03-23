@@ -16,9 +16,11 @@ import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.testbuilder.ChiefdomDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.FacilityDataBuilder;
+import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+@WithMockAdminUser
 public class FacilityRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<Facility> {
 

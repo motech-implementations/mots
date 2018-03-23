@@ -11,7 +11,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -21,6 +23,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User extends BaseTimestampedEntity implements UserDetails {
@@ -69,6 +73,10 @@ public class User extends BaseTimestampedEntity implements UserDetails {
     return AuthorityUtils.createAuthorityList(roles.stream()
         .flatMap(userRole -> userRole.getPermissions().stream())
         .map(UserPermission::getRoleName).toArray(String[]::new));
+  }
+
+  public boolean hasPermission(UserPermission permission) {
+    return roles.stream().anyMatch(role -> role.hasPermission(permission));
   }
 
   @Override

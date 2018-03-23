@@ -8,6 +8,8 @@ export const INCHARGE_WRITE_AUTHORITY = 'ROLE_INCHARGE_WRITE';
 export const MANAGE_MODULES_AUTHORITY = 'ROLE_MANAGE_MODULES';
 export const DISPLAY_MODULES_AUTHORITY = 'ROLE_DISPLAY_MODULES';
 export const MANAGE_FACILITIES_AUTHORITY = 'ROLE_MANAGE_FACILITIES';
+export const CREATE_FACILITIES_AUTHORITY = 'ROLE_CREATE_FACILITIES';
+export const MANAGE_OWN_FACILITIES_AUTHORITY = 'ROLE_MANAGE_OWN_FACILITIES';
 export const DISPLAY_FACILITIES_AUTHORITY = 'ROLE_DISPLAY_FACILITIES';
 export const ASSIGN_MODULES_AUTHORITY = 'ROLE_ASSIGN_MODULES';
 export const MANAGE_USERS_AUTHORITY = 'ROLE_MANAGE_USERS';
@@ -18,4 +20,15 @@ export function hasAuthority(...authorities) {
   const tokenDecoded = jwtDecode(token);
   const currentUserAuthorities = tokenDecoded.authorities;
   return _.some(currentUserAuthorities, el => _.includes(authorities, el));
+}
+
+export function canEditLocation(location) {
+  if (location) {
+    const token = localStorage.getItem('token');
+    const tokenDecoded = jwtDecode(token);
+    const currentUser = tokenDecoded.user_name;
+    return currentUser === location.ownerUsername;
+  }
+
+  return false;
 }

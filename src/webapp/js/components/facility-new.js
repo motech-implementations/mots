@@ -7,7 +7,7 @@ import FacilityForm from './facility-form';
 import { createFacility } from '../actions';
 import {
   hasAuthority,
-  MANAGE_FACILITIES_AUTHORITY,
+  CREATE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
 class FacilityNew extends Component {
@@ -19,7 +19,7 @@ class FacilityNew extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)) {
+    if (!hasAuthority(CREATE_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }
   }

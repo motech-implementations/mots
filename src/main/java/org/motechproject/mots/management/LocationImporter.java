@@ -213,7 +213,7 @@ public class LocationImporter implements ApplicationRunner {
 
     newFacilitySet.forEach(newFacility ->  {
       if (!currentFacilityList.contains(newFacility)) {
-        locationService.createFacility(newFacility);
+        locationService.createImportedFacility(newFacility);
       }
     });
   }
@@ -256,7 +256,7 @@ public class LocationImporter implements ApplicationRunner {
 
     newCommunitySet.forEach(newCommunity -> {
       if (!currentCommunityList.contains(newCommunity)) {
-        locationService.createCommunity(newCommunity);
+        locationService.createImportedCommunity(newCommunity);
       }
     });
   }
