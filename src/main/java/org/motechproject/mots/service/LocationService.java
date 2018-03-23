@@ -9,7 +9,7 @@ import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserPermission.RoleNames;
-import org.motechproject.mots.exception.LocationException;
+import org.motechproject.mots.exception.MotsAccessDeniedException;
 import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.DistrictRepository;
@@ -57,6 +57,14 @@ public class LocationService {
 
   public List<Community> getCommunities() {
     return communityRepository.findAll();
+  }
+
+  public Facility createImportedFacility(Facility facility) {
+    return facilityRepository.save(facility);
+  }
+
+  public Community createImportedCommunity(Community community) {
+    return communityRepository.save(community);
   }
 
   public District createDistrict(District district) {
@@ -127,15 +135,13 @@ public class LocationService {
 
   /**
    * Update Facility.
-   *
    * @param facility facility to update
-   *
    * @return updated Facility
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Facility saveFacility(Facility facility) {
     if (!canEditLocation(facility)) {
-      throw new LocationException("Could not edit facility, because you are not the owner");
+      throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
     }
 
     return facilityRepository.save(facility);
@@ -143,15 +149,15 @@ public class LocationService {
 
   /**
    * Update Community.
-   *
    * @param community community to update
-   *
    * @return updated Community
    */
   @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Community saveCommunity(Community community) {
     if (!canEditLocation(community)) {
-      throw new LocationException("Could not edit community, because you are not the owner");
+      throw new MotsAccessDeniedException(
+          "Could not edit community, because you are not the owner"
+      );
     }
 
     return communityRepository.save(community);

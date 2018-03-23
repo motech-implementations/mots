@@ -22,12 +22,12 @@ export function hasAuthority(...authorities) {
   return _.some(currentUserAuthorities, el => _.includes(authorities, el));
 }
 
-export function canEditLocation(username) {
-  if (username.original) {
+export function canEditLocation(location) {
+  if (location) {
     const token = localStorage.getItem('token');
     const tokenDecoded = jwtDecode(token);
     const currentUser = tokenDecoded.user_name;
-    return currentUser === username.original.ownerUsername;
+    return currentUser === location.ownerUsername;
   }
 
   return false;

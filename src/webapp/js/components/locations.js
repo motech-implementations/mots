@@ -37,7 +37,7 @@ class Locations extends Component {
       accessor: 'id',
       Cell: cellInfo => (
         <div className="actions-buttons-container">
-          { canEditLocation(cellInfo) &&
+          { canEditLocation(cellInfo.original) &&
             <Link
               to={`/locations/community/${cellInfo.value}`}
               type="button"
@@ -70,7 +70,7 @@ class Locations extends Component {
       accessor: 'id',
       Cell: cellInfo => (
         <div className="actions-buttons-container">
-          { canEditLocation(cellInfo) &&
+          { canEditLocation(cellInfo.original) &&
             <Link
               to={`/locations/facility/${cellInfo.value}`}
               type="button"

@@ -27,8 +27,7 @@ class CommunityEdit extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY)
-      && !hasAuthority(MANAGE_OWN_FACILITIES_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.fetchCommunity();
