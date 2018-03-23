@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import DateTime from 'react-datetime';
+import Select from 'react-select';
 
 import 'react-datetime/css/react-datetime.css';
 
@@ -11,23 +12,34 @@ import FormField from './form-field';
 import { fetchLocations } from '../actions';
 import {
   getAttributesForSelectWithClearOnChange, getSelectableLocations,
-  getSupervisorNameFromFacility, getAttributesForSelectWithInitializeOnChange,
+  getSupervisorNameFromFacility, fetchDataAndInitializeFrom,
 } from '../utils/form-utils';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
   chwId: {
-    type: 'select',
+    type: Select,
     label: 'CHW Id',
     required: true,
-    getSelectOptions: ({ addChw, chwId, notSelectedChwIds }) => {
-      if (!addChw) {
-        return { values: [chwId] };
+    getAttributes: (input, { addChw, chwId, notSelectedChwIds }) => {
+      let options = [{ value: chwId, label: chwId }];
+
+      if (addChw) {
+        options = _.map(notSelectedChwIds, chw => ({ value: chw, label: chw }));
       }
 
-      return { values: notSelectedChwIds };
+      return {
+        name: input.name,
+        value: input.value,
+        onChange: (value) => {
+          fetchDataAndInitializeFrom(CHW_FORM_NAME, '/api/chw/findByChwId', value);
+
+          input.onChange(value);
+        },
+        options,
+        simpleValue: true,
+      };
     },
-    getAttributes: input => (getAttributesForSelectWithInitializeOnChange(input, CHW_FORM_NAME, '/api/chw/findByChwId')),
     getDynamicAttributes: ({ addChw }) => ({
       disabled: !addChw,
     }),
@@ -232,14 +244,17 @@ class HealthWorkersForm extends Component {
         key={fieldName}
         fieldName={fieldName}
         fieldConfig={fieldConfig}
+        dynamicProps={{
+          addChw: this.props.addChw,
+          chwId: this.props.chwId,
+          notSelectedChwIds: this.props.notSelectedChwIds,
+        }}
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
         yearOfBirth={this.props.yearOfBirth}
-        chwId={this.props.chwId}
         addChw={this.props.addChw}
-        notSelectedChwIds={this.props.notSelectedChwIds}
       />
     );
   }

@@ -76,7 +76,8 @@ public class CommunityHealthWorkerService {
    */
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public List<ChwInfoDto> getHealthWorkersInfoDtos() {
-    Iterable<CommunityHealthWorker> healthWorkers = healthWorkerRepository.findBySelected(true);
+    Iterable<CommunityHealthWorker> healthWorkers =
+        healthWorkerRepository.findBySelectedOrderByChwId(true);
 
     return chwInfoMapper.toDtos(healthWorkers);
   }
@@ -86,7 +87,8 @@ public class CommunityHealthWorkerService {
    * @return list of not selected CHW Ids
    */
   public List<String> getNotSelectedChwIds() {
-    List<CommunityHealthWorker> notSelectedChws = healthWorkerRepository.findBySelected(false);
+    List<CommunityHealthWorker> notSelectedChws =
+        healthWorkerRepository.findBySelectedOrderByChwId(false);
 
     return notSelectedChws.stream().map(CommunityHealthWorker::getChwId)
         .collect(Collectors.toList());
