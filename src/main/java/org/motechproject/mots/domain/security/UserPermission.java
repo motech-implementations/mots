@@ -31,19 +31,19 @@ public enum UserPermission {
 
   public static class RoleNames {
 
-    private static final String CHW_READ = "ROLE_CHW_READ";
-    private static final String CHW_WRITE = "ROLE_CHW_WRITE";
-    private static final String INCHARGE_READ = "ROLE_INCHARGE_READ";
-    private static final String INCHARGE_WRITE = "ROLE_INCHARGE_WRITE";
-    private static final String MANAGE_MODULES = "ROLE_MANAGE_MODULES";
-    private static final String DISPLAY_MODULES = "ROLE_DISPLAY_MODULES";
-    private static final String MANAGE_FACILITIES = "ROLE_MANAGE_FACILITIES";
-    private static final String MANAGE_OWN_FACILITIES = "ROLE_MANAGE_OWN_FACILITIES";
-    private static final String CREATE_FACILITIES = "ROLE_CREATE_FACILITIES";
-    private static final String DISPLAY_FACILITIES = "ROLE_DISPLAY_FACILITIES";
-    private static final String ASSIGN_MODULES = "ROLE_ASSIGN_MODULES";
-    private static final String MANAGE_USERS = "ROLE_MANAGE_USERS";
-    private static final String DISPLAY_REPORTS = "ROLE_DISPLAY_REPORTS";
+    public static final String CHW_READ = "ROLE_CHW_READ";
+    public static final String CHW_WRITE = "ROLE_CHW_WRITE";
+    public static final String INCHARGE_READ = "ROLE_INCHARGE_READ";
+    public static final String INCHARGE_WRITE = "ROLE_INCHARGE_WRITE";
+    public static final String MANAGE_MODULES = "ROLE_MANAGE_MODULES";
+    public static final String DISPLAY_MODULES = "ROLE_DISPLAY_MODULES";
+    public static final String MANAGE_FACILITIES = "ROLE_MANAGE_FACILITIES";
+    public static final String MANAGE_OWN_FACILITIES = "ROLE_MANAGE_OWN_FACILITIES";
+    public static final String CREATE_FACILITIES = "ROLE_CREATE_FACILITIES";
+    public static final String DISPLAY_FACILITIES = "ROLE_DISPLAY_FACILITIES";
+    public static final String ASSIGN_MODULES = "ROLE_ASSIGN_MODULES";
+    public static final String MANAGE_USERS = "ROLE_MANAGE_USERS";
+    public static final String DISPLAY_REPORTS = "ROLE_DISPLAY_REPORTS";
 
     public static final String HAS_CHW_READ_ROLE = "hasRole('" + CHW_READ + "')";
     public static final String HAS_CHW_WRITE_ROLE = "hasRole('" + CHW_WRITE + "')";

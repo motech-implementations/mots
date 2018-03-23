@@ -14,9 +14,11 @@ import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.testbuilder.ChiefdomDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
+import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+@WithMockAdminUser
 public class ChiefdomRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<Chiefdom> {
 

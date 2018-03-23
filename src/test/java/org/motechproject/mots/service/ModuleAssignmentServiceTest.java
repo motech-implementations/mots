@@ -2,15 +2,12 @@ package org.motechproject.mots.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,11 +47,9 @@ import org.motechproject.mots.testbuilder.DistrictAssignmentDtoDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.ModuleDataBuilder;
 import org.motechproject.mots.testbuilder.ModuleProgressDataBuilder;
-import org.motechproject.mots.testbuilder.UserDataBuilder;
+import org.motechproject.mots.utils.TestUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @RunWith(PowerMockRunner.class)
@@ -124,7 +119,7 @@ public class ModuleAssignmentServiceTest {
    */
   @Before
   public void setUp() {
-    user = createNewUserAndAddToSecurityContext();
+    user = TestUtils.createNewUserAndAddToSecurityContext();
     existingAssignedModules = new AssignedModulesDataBuilder()
         .withChw(CHW)
         .withModule(MODULE_1)
@@ -307,19 +302,6 @@ public class ModuleAssignmentServiceTest {
     return new ModuleProgressDataBuilder()
         .withStatus(status)
         .build();
-  }
-
-  private static User createNewUserAndAddToSecurityContext() {
-    final User user = new UserDataBuilder().build();
-
-    SecurityContext securityContext = mock(SecurityContext.class);
-    Authentication authentication = mock(Authentication.class);
-    mockStatic(SecurityContextHolder.class);
-    given(SecurityContextHolder.getContext()).willReturn(securityContext);
-    when(securityContext.getAuthentication()).thenReturn(authentication);
-    when(authentication.getPrincipal()).thenReturn(user.getUsername());
-
-    return user;
   }
 
   private void mockModuleInModuleRepository(Module module) {

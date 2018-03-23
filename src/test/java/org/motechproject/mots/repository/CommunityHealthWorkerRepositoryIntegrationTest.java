@@ -20,9 +20,11 @@ import org.motechproject.mots.testbuilder.CommunityDataBuilder;
 import org.motechproject.mots.testbuilder.CommunityHealthWorkerDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.FacilityDataBuilder;
+import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
+@WithMockAdminUser
 public class CommunityHealthWorkerRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<CommunityHealthWorker> {
 
