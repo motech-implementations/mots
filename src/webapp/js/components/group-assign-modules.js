@@ -74,7 +74,7 @@ export default class DistrictAssignModules extends Component {
       };
 
       const callback = () => {
-        this.props.history.push('/chw');
+        this.props.history.push('/chw/selected');
         Alert.success('Modules have been assigned!');
       };
 
