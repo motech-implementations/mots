@@ -1,10 +1,13 @@
 package org.motechproject.mots.web;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.dto.InchargeDto;
+import org.motechproject.mots.exception.ReportingException;
 import org.motechproject.mots.mapper.InchargeMapper;
 import org.motechproject.mots.service.InchargeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class InchargeController extends BaseController {
@@ -59,10 +64,11 @@ public class InchargeController extends BaseController {
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
+      @RequestParam(value = "selected", required = false) Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Incharge> incharges = inchargeService.searchIncharges(firstName, secondName, otherName,
-        phoneNumber, email, facilityName, pageable);
+        phoneNumber, email, facilityName, selected, pageable);
     List<InchargeDto> inchargesDto = inchargeMapper.toDtos(incharges.getContent());
 
     return new PageImpl<>(inchargesDto, pageable, incharges.getTotalElements());
@@ -134,5 +140,17 @@ public class InchargeController extends BaseController {
     Incharge existingIncharge = inchargeService.getIncharge(id);
     inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
     return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
+  }
+
+  /**
+   * Upload list of Inchages in ".csv" format to mots, parse it and save records in DB.
+   * @param file File in ".csv" format to upload
+   */
+  @RequestMapping(value = "/incharge/upload", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Map<Integer, String> uploadInchagesSpreadsheet(
+      @RequestPart("file") MultipartFile file) throws ReportingException, IOException {
+    return inchargeService.processInchageCsv(file);
   }
 }

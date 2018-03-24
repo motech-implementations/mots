@@ -7,12 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(name = "in_charge")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Incharge extends BaseTimestampedEntity {
 
   @Column(name = "first_name", nullable = false)
@@ -30,7 +34,7 @@ public class Incharge extends BaseTimestampedEntity {
   @Setter
   private String otherName;
 
-  @Column(name = "phone_number", unique = true, nullable = false)
+  @Column(name = "phone_number", unique = true)
   @Getter
   @Setter
   private String phoneNumber;

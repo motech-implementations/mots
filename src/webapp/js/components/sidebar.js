@@ -177,11 +177,27 @@ export default class SideBar extends Component {
             </Link>
           </li>
         }
+        {
+          <li>
+            <Link to="/incharge/upload" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-save-file" />
+              <span className="icon-text">Upload CSV</span>
+            </Link>
+          </li>
+        }
         { hasAuthority(INCHARGE_READ_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/incharge" onClick={this.props.hideMenuSmart}>
+            <Link to="/incharge/overall" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-list-alt" />
               <span className="icon-text">Incharge list</span>
+            </Link>
+          </li>
+        }
+        { hasAuthority(INCHARGE_READ_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/incharge/selected" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-list-alt" />
+              <span className="icon-text">Selected Incharge list</span>
             </Link>
           </li>
         }

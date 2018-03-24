@@ -115,8 +115,11 @@ export function fetchChws(searchParams, selected) {
   };
 }
 
-export function fetchIncharges(searchParams) {
+export function fetchIncharges(searchParams, selected) {
   const url = `${BASE_URL}/incharge/search`;
+
+  searchParams.selected = selected;
+
   const request = apiClient.get(url, {
     params: searchParams,
   });
