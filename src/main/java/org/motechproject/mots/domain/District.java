@@ -14,7 +14,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "district", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name"}))
-public class District extends  Location {
+public class District extends Location {
 
   @OneToMany(mappedBy = "district")
   @Getter

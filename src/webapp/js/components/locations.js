@@ -60,6 +60,12 @@ class Locations extends Component {
     }, {
       Header: 'Facility',
       accessor: 'parent',
+    }, {
+      Header: 'Chiefdom',
+      accessor: 'chiefdomName',
+    }, {
+      Header: 'District',
+      accessor: 'districtName',
     },
   ];
 
@@ -103,6 +109,9 @@ class Locations extends Component {
     }, {
       Header: 'Chiefdom',
       accessor: 'parent',
+    }, {
+      Header: 'District',
+      accessor: 'districtName',
     },
   ];
 

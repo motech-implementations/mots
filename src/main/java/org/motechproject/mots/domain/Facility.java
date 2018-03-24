@@ -79,6 +79,11 @@ public class Facility extends Location {
   }
 
   @Override
+  public String getDistrictName() {
+    return chiefdom.getDistrict().getName();
+  }
+
+  @Override
   public FacilityType getFacilityType() {
     return getType();
   }
