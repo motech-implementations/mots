@@ -53,7 +53,7 @@ export default class Report extends Component {
               reportModel.push({ ...value[0], accessor: key });
             });
 
-            reportModel.sort((o1, o2) => o1.order > o2.order);
+            reportModel.sort((o1, o2) => parseInt(o1.order, 10) > parseInt(o2.order, 10));
 
             this.setState({ reportData, reportModel });
           }
