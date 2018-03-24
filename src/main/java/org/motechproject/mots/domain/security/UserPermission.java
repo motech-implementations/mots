@@ -16,6 +16,7 @@ public enum UserPermission {
   CREATE_FACILITIES(RoleNames.CREATE_FACILITIES, "Create Facilities"),
   DISPLAY_FACILITIES(RoleNames.DISPLAY_FACILITIES, "Display Facilities"),
   MANAGE_USERS(RoleNames.MANAGE_USERS, "Manage Users"),
+  MANAGE_INCHARGE_USERS(RoleNames.MANAGE_INCHARGE_USERS, "Manage Incharge Users"),
   DISPLAY_REPORTS(RoleNames.DISPLAY_REPORTS, "Display Reports");
 
   @Getter
@@ -43,6 +44,7 @@ public enum UserPermission {
     public static final String DISPLAY_FACILITIES = "ROLE_DISPLAY_FACILITIES";
     public static final String ASSIGN_MODULES = "ROLE_ASSIGN_MODULES";
     public static final String MANAGE_USERS = "ROLE_MANAGE_USERS";
+    public static final String MANAGE_INCHARGE_USERS = "ROLE_MANAGE_INCHARGE_USERS";
     public static final String DISPLAY_REPORTS = "ROLE_DISPLAY_REPORTS";
 
     public static final String HAS_CHW_READ_ROLE = "hasRole('" + CHW_READ + "')";
@@ -57,6 +59,8 @@ public enum UserPermission {
         "hasRole('" + DISPLAY_FACILITIES + "')";
     public static final String HAS_ASSIGN_MODULES_ROLE = "hasRole('" + ASSIGN_MODULES + "')";
     public static final String HAS_MANAGE_USERS_ROLE = "hasRole('" + MANAGE_USERS + "')";
+    public static final String HAS_MANAGE_INCHARGE_USERS_ROLE =
+        "hasRole('" + MANAGE_INCHARGE_USERS + "')";
     public static final String HAS_DISPLAY_REPORTS_ROLE = "hasRole('" + DISPLAY_REPORTS + "')";
     public static final String HAS_MANAGE_OWN_FACILITIES =
         "hasRole('" + MANAGE_OWN_FACILITIES + "')";
@@ -67,5 +71,7 @@ public enum UserPermission {
     public static final String HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE =
         "hasAnyRole('" + MANAGE_FACILITIES + "','" + MANAGE_OWN_FACILITIES + "')";
 
+    public static final String HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE =
+        "hasAnyRole('" + MANAGE_USERS + "','" + MANAGE_INCHARGE_USERS + "')";
   }
 }

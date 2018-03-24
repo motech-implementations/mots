@@ -1,8 +1,11 @@
 package org.motechproject.mots.domain.security;
 
+import static com.google.common.collect.MoreCollectors.onlyElement;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
@@ -77,6 +81,17 @@ public class User extends BaseTimestampedEntity implements UserDetails {
 
   public boolean hasPermission(UserPermission permission) {
     return roles.stream().anyMatch(role -> role.hasPermission(permission));
+  }
+
+  /**
+   * Check if user has only this role.
+   * @param roleId ID of role
+   */
+  public boolean hasOnlyRole(UUID roleId) {
+    if (roleId != null && !StringUtils.isEmpty(roleId.toString())) {
+      return roles.stream().collect(onlyElement()).getId().equals(roleId);
+    }
+    return false;
   }
 
   @Override

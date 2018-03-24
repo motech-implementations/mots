@@ -51,6 +51,7 @@ dependencies {
     compile 'org.apache.poi:poi-ooxml:3.17'
     compile "net.sf.jasperreports:jasperreports:6.4.1"
     compile 'net.sf.supercsv:super-csv:2.4.0'
+    compile 'com.google.guava:guava:24.1-jre'
 
     apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
     apt 'org.projectlombok:lombok:1.16.18'

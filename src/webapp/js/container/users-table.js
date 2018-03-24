@@ -8,7 +8,7 @@ import _ from 'lodash';
 import 'react-table/react-table.css';
 
 import MobileTable from '../components/mobile-table';
-import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY } from '../utils/authorization';
 import { fetchUsers } from '../actions/index';
 import { buildSearchParams } from '../utils/react-table-search-params';
 
@@ -56,7 +56,7 @@ class UsersTable extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.setState({ loading: true });

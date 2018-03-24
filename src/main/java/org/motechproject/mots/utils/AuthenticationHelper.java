@@ -1,5 +1,7 @@
 package org.motechproject.mots.utils;
 
+import static org.motechproject.mots.constants.MotsConstants.ADMIN_USER;
+
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationHelper {
-
-  private static final String ADMIN = "admin";
 
   @Autowired
   private UserService userService;
@@ -31,6 +31,6 @@ public class AuthenticationHelper {
    * @return User entity of admin user.
    */
   public User getAdminUser() {
-    return userService.getUserByUserName(ADMIN);
+    return userService.getUserByUserName(ADMIN_USER);
   }
 }
