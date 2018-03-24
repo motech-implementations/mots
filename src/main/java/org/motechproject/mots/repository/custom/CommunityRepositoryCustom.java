@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommunityRepositoryCustom {
 
-  Page<Community> search(String communityName, String parentFacility, String chiefdom,
-      String district, Pageable pageable) throws IllegalArgumentException;
+  Page<Community> search(String communityName, String parentFacility, String chiefdomName,
+      String districtName, Pageable pageable) throws IllegalArgumentException;
 }

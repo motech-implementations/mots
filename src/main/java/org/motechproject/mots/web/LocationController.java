@@ -39,8 +39,8 @@ public class LocationController extends BaseController {
   public static final String FACILITY_TYPE_PARAM = "facilityType";
   public static final String INCHARGE_FULL_NAME_PARAM = "inchargeFullName";
   public static final String FACILITY_ID_PARAM = "facilityId";
-  public static final String CHIEFDOM_PARAM = "chiefdom";
-  public static final String DISTRICT_PARAM = "district";
+  public static final String CHIEFDOM_NAME_PARAM = "chiefdomName";
+  public static final String DISTRICT_NAME_PARAM = "districtName";
 
   @Autowired
   private LocationService locationService;
@@ -265,8 +265,8 @@ public class LocationController extends BaseController {
   public Page<LocationPreviewDto> searchCommunities(
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
-      @RequestParam(value = CHIEFDOM_PARAM, required = false) String chiefdom,
-      @RequestParam(value = DISTRICT_PARAM, required = false) String district,
+      @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdom,
+      @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Community> communities =
@@ -290,7 +290,7 @@ public class LocationController extends BaseController {
       @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
       @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
       @RequestParam(value = PARENT_PARAM, required = false) String parentChiefdom,
-      @RequestParam(value = DISTRICT_PARAM, required = false) String district,
+      @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Facility> facilities = locationService.searchFacilities(

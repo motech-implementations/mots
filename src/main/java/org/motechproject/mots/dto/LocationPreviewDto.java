@@ -28,12 +28,12 @@ public class LocationPreviewDto {
   @Setter
   @Getter
   @JsonInclude(Include.NON_NULL)
-  private String district;
+  private String districtName;
 
   @Setter
   @Getter
   @JsonInclude(Include.NON_NULL)
-  private String chiefdom;
+  private String chiefdomName;
 
   @Setter
   @Getter

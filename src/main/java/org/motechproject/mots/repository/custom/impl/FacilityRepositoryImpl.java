@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings("PMD.CyclomaticComplexity")
 public class FacilityRepositoryImpl extends BaseRepositoryImpl
     implements FacilityRepositoryCustom {
 
@@ -28,19 +28,19 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<Facility> search(String facilityId, String facilityName, String facilityType,
-      String inchargeFullName, String parentChiefdom, String district, Pageable pageable)
+      String inchargeFullName, String parentChiefdom, String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Facility> query = builder.createQuery(Facility.class);
     query = prepareQuery(query, facilityId, facilityName, facilityType,
-        inchargeFullName, parentChiefdom, district, false, pageable);
+        inchargeFullName, parentChiefdom, districtName, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, facilityId, facilityName, facilityType,
-        inchargeFullName, parentChiefdom, district, true, pageable);
+        inchargeFullName, parentChiefdom, districtName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -56,7 +56,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String facilityId,
       String facilityName, String facilityType, String inchargeFullName, String parentChiefdom,
-      String district, boolean count, Pageable pageable) throws IllegalArgumentException {
+      String districtName, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Facility> root = query.from(Facility.class);
@@ -92,10 +92,10 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
       predicate = builder.and(predicate, builder.like(root.get(CHIEFDOM).get(NAME),
           '%' + parentChiefdom + '%'));
     }
-    if (district != null) {
+    if (districtName != null) {
       predicate = builder.and(
           predicate, builder.like(root.get(CHIEFDOM).get(DISTRICT).get(NAME),
-              '%' + district + '%')
+              '%' + districtName + '%')
       );
     }
 
@@ -137,7 +137,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
         path = root.get(FACILITY_TYPE);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
-      } else if (order.getProperty().equals(LocationController.DISTRICT_PARAM)) {
+      } else if (order.getProperty().equals(LocationController.DISTRICT_NAME_PARAM)) {
         path = root.get(CHIEFDOM).get(DISTRICT).get(NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);

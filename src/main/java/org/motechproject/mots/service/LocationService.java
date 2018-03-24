@@ -104,10 +104,11 @@ public class LocationService {
    */
   @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
   public Page<Community> searchCommunities(String communityName,
-      String parentFacility, String chiefdom, String district, Pageable pageable)
+      String parentFacility, String chiefdomName, String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
-    return communityRepository.search(communityName, parentFacility, chiefdom, district, pageable);
+    return communityRepository.search(
+        communityName, parentFacility, chiefdomName, districtName, pageable);
   }
 
   /**
@@ -116,11 +117,11 @@ public class LocationService {
    */
   @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityId, String facilityName,
-      String facilityType, String inchargeFullName, String parentChiefdom, String district,
+      String facilityType, String inchargeFullName, String parentChiefdom, String districtName,
       Pageable pageable) throws IllegalArgumentException {
 
     return facilityRepository.search(facilityId, facilityName, facilityType,
-        inchargeFullName, parentChiefdom, district, pageable);
+        inchargeFullName, parentChiefdom, districtName, pageable);
   }
 
   @PreAuthorize(RoleNames.HAS_CREATE_FACILITIES_ROLE)
