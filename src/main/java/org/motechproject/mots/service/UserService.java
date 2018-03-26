@@ -60,9 +60,9 @@ public class UserService {
       return userRepository.search(username, email, name, role, pageable);
     }
 
-    final Optional<UserRole> incharge = inchargeRole();
-    if (incharge.isPresent()) {
-      return userRepository.search(username, email, name, incharge.get().getName(), pageable);
+    final Optional<UserRole> inchargeRole = getInchargeRole();
+    if (inchargeRole.isPresent()) {
+      return userRepository.search(username, email, name, inchargeRole.get().getName(), pageable);
     }
 
     return new PageImpl<>(Collections.EMPTY_LIST);
@@ -77,9 +77,9 @@ public class UserService {
       return roleRepository.findAll();
     }
 
-    final Optional<UserRole> incharge = inchargeRole();
-    if (incharge.isPresent()) {
-      return Collections.singleton(incharge.get());
+    final Optional<UserRole> inchargeRole = getInchargeRole();
+    if (inchargeRole.isPresent()) {
+      return Collections.singleton(inchargeRole.get());
     }
 
     return Collections.EMPTY_LIST;
@@ -166,14 +166,14 @@ public class UserService {
 
   private User validateAndSave(User user) {
     if (authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_INCHARGE_USERS)
-        && !user.hasOnlyRole(inchargeRole().get().getId())) {
+        && !user.hasOnlyRole(getInchargeRole().get().getId())) {
       throw new MotsAccessDeniedException("You can manage only Incharge users");
     }
 
     return userRepository.save(user);
   }
 
-  private Optional<UserRole> inchargeRole() {
+  private Optional<UserRole> getInchargeRole() {
     return roleRepository.findByName(INCHARGE_USER_ROLE);
   }
 }
