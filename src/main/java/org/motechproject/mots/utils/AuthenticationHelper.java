@@ -1,7 +1,5 @@
 package org.motechproject.mots.utils;
 
-import static org.motechproject.mots.constants.MotsConstants.ADMIN_USER;
-
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationHelper {
+
+  public static final String ADMIN_USER = "admin";
 
   @Autowired
   private UserService userService;

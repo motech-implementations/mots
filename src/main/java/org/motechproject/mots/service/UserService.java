@@ -1,7 +1,5 @@
 package org.motechproject.mots.service;
 
-import static org.motechproject.mots.constants.MotsConstants.INCHARGE_USER_ROLE;
-
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
+  public static final String INCHARGE_USER_ROLE = "Incharge";
 
   @Autowired
   private UserRepository userRepository;
@@ -60,7 +60,7 @@ public class UserService {
       return userRepository.search(username, email, name, role, pageable);
     }
 
-    final Optional<UserRole> incharge = getInchargeUserRole();
+    final Optional<UserRole> incharge = inchargeRole();
     if (incharge.isPresent()) {
       return userRepository.search(username, email, name, incharge.get().getName(), pageable);
     }
@@ -77,7 +77,7 @@ public class UserService {
       return roleRepository.findAll();
     }
 
-    final Optional<UserRole> incharge = getInchargeUserRole();
+    final Optional<UserRole> incharge = inchargeRole();
     if (incharge.isPresent()) {
       return Collections.singleton(incharge.get());
     }
@@ -89,10 +89,6 @@ public class UserService {
   public User getUser(UUID id) {
     return userRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("User with id: {0} not found", id.toString()));
-  }
-
-  private Optional<UserRole> getInchargeUserRole() {
-    return roleRepository.findByName(INCHARGE_USER_ROLE);
   }
 
   /**
@@ -108,7 +104,7 @@ public class UserService {
       user.setPassword(newPasswordEncoded);
     }
 
-    return validAndSave(user);
+    return validateAndSave(user);
   }
 
   /**
@@ -123,16 +119,7 @@ public class UserService {
     String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
     user.setPassword(newPasswordEncoded);
 
-    return validAndSave(user);
-  }
-
-  private User validAndSave(User user) {
-    if (authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_INCHARGE_USERS)
-        && !user.hasOnlyRole(getInchargeUserRole().get().getId())) {
-      throw new MotsAccessDeniedException("You can manage only Incharge users");
-    }
-
-    return userRepository.save(user);
+    return validateAndSave(user);
   }
 
   /**
@@ -175,5 +162,18 @@ public class UserService {
 
   private boolean passwordsMatch(String oldPassword, String currentPasswordEncoded) {
     return new BCryptPasswordEncoder().matches(oldPassword, currentPasswordEncoded);
+  }
+
+  private User validateAndSave(User user) {
+    if (authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_INCHARGE_USERS)
+        && !user.hasOnlyRole(inchargeRole().get().getId())) {
+      throw new MotsAccessDeniedException("You can manage only Incharge users");
+    }
+
+    return userRepository.save(user);
+  }
+
+  private Optional<UserRole> inchargeRole() {
+    return roleRepository.findByName(INCHARGE_USER_ROLE);
   }
 }
