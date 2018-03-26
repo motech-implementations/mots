@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationHelper {
 
-  private static final String ADMIN = "admin";
+  public static final String ADMIN_USER = "admin";
 
   @Autowired
   private UserService userService;
@@ -31,6 +31,6 @@ public class AuthenticationHelper {
    * @return User entity of admin user.
    */
   public User getAdminUser() {
-    return userService.getUserByUserName(ADMIN);
+    return userService.getUserByUserName(ADMIN_USER);
   }
 }
