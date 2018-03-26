@@ -28,7 +28,7 @@ class InchargeNew extends Component {
   onSubmit(values) {
     this.props.selectIncharge(values, () => {
       Alert.success('Incharge has been added');
-      this.props.history.push('/incharge');
+      this.props.history.push('/incharge/selected');
     });
   }
 

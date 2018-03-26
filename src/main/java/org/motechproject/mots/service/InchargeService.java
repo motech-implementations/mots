@@ -160,7 +160,6 @@ public class InchargeService {
         incharge.setSecondName(secondName);
         incharge.setOtherName(otherName);
         incharge.setPhoneNumber(phoneNumber);
-        incharge.setSelected(false);
 
         inchargeRepository.save(incharge);
         continue;

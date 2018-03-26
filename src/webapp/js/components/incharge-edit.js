@@ -36,7 +36,7 @@ class InchargeEdit extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/incharge');
+    this.props.history.push('/incharge/selected');
   }
 
   onSubmit(inchargeValues) {
@@ -46,7 +46,7 @@ class InchargeEdit extends Component {
   onSubmitModal() {
     this.props.saveIncharge(this.state.inchargeValues, () => {
       Alert.success('Incharge has been saved');
-      this.props.history.push('/incharge');
+      this.props.history.push('/incharge/selected');
     });
   }
 
