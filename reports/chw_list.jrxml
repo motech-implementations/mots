@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chw_list" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chw_list" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LocalDataAdapter.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
@@ -21,6 +21,15 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="summary"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="reportType" value="CHW List"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -299,10 +308,10 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="25">
+		<band height="30">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="0" y="0" width="40" height="25" uuid="cf6b0abd-3327-4263-b2db-96a319f5ed65">
+				<reportElement x="0" y="0" width="55" height="30" uuid="cf6b0abd-3327-4263-b2db-96a319f5ed65">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -317,7 +326,7 @@
 				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="40" y="0" width="40" height="25" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
+				<reportElement x="55" y="0" width="55" height="30" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -332,7 +341,7 @@
 				<text><![CDATA[First Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="80" y="0" width="40" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
+				<reportElement x="110" y="0" width="60" height="30" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -347,7 +356,7 @@
 				<text><![CDATA[Surname]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="0" width="40" height="25" uuid="9e572b39-b7d8-49b2-845b-2defa797cbd0">
+				<reportElement x="170" y="0" width="55" height="30" uuid="9e572b39-b7d8-49b2-845b-2defa797cbd0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -362,7 +371,7 @@
 				<text><![CDATA[Other Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="0" width="40" height="25" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">
+				<reportElement x="225" y="0" width="35" height="30" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -377,7 +386,7 @@
 				<text><![CDATA[YOB]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="200" y="0" width="40" height="25" uuid="ece61ced-7409-4f8c-8c05-ba304746d28c">
+				<reportElement x="260" y="0" width="50" height="30" uuid="ece61ced-7409-4f8c-8c05-ba304746d28c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -392,7 +401,7 @@
 				<text><![CDATA[Gender]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="240" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="310" y="0" width="65" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -407,7 +416,7 @@
 				<text><![CDATA[Education Level]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="0" width="40" height="25" uuid="aee7b737-f502-40c3-bf78-7950198baca3">
+				<reportElement x="375" y="0" width="60" height="30" uuid="aee7b737-f502-40c3-bf78-7950198baca3">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -422,7 +431,7 @@
 				<text><![CDATA[Literacy]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="320" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="435" y="0" width="50" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -437,7 +446,7 @@
 				<text><![CDATA[District]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="485" y="0" width="65" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -452,7 +461,7 @@
 				<text><![CDATA[Chiefdom]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="400" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="550" y="0" width="55" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -467,7 +476,7 @@
 				<text><![CDATA[Facility]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="605" y="0" width="70" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -482,7 +491,7 @@
 				<text><![CDATA[Community]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="480" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="675" y="0" width="70" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -497,7 +506,7 @@
 				<text><![CDATA[Preferred Language]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="520" y="0" width="40" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="745" y="0" width="55" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -514,10 +523,10 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25">
+		<band height="30" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="40" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="55" height="30" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.chwId"/>
 				</reportElement>
@@ -531,7 +540,7 @@
 				<textFieldExpression><![CDATA[$F{chwId}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="40" y="0" width="40" height="25" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
+				<reportElement stretchType="RelativeToTallestObject" x="55" y="0" width="55" height="30" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.firstName"/>
 				</reportElement>
@@ -545,7 +554,7 @@
 				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="80" y="0" width="40" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
+				<reportElement stretchType="RelativeToTallestObject" x="110" y="0" width="60" height="30" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.secondName"/>
 				</reportElement>
@@ -559,7 +568,7 @@
 				<textFieldExpression><![CDATA[$F{secondName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="120" y="0" width="40" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
+				<reportElement stretchType="RelativeToTallestObject" x="170" y="0" width="55" height="30" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.otherName"/>
 				</reportElement>
@@ -573,7 +582,7 @@
 				<textFieldExpression><![CDATA[$F{otherName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="160" y="0" width="40" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
+				<reportElement stretchType="RelativeToTallestObject" x="225" y="0" width="35" height="30" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.yob"/>
 				</reportElement>
@@ -587,7 +596,7 @@
 				<textFieldExpression><![CDATA[$F{yob}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="200" y="0" width="40" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
+				<reportElement stretchType="RelativeToTallestObject" x="260" y="0" width="50" height="30" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.gender"/>
 				</reportElement>
@@ -601,7 +610,7 @@
 				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="240" y="0" width="40" height="25" uuid="ba48f274-2222-44d2-a190-0116192044f9">
+				<reportElement stretchType="RelativeToTallestObject" x="310" y="0" width="65" height="30" uuid="ba48f274-2222-44d2-a190-0116192044f9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.education"/>
 				</reportElement>
@@ -615,7 +624,7 @@
 				<textFieldExpression><![CDATA[$F{education}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="375" y="0" width="60" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.literacy"/>
 				</reportElement>
@@ -629,7 +638,7 @@
 				<textFieldExpression><![CDATA[$F{literacy}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="320" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="435" y="0" width="50" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.district"/>
 				</reportElement>
@@ -643,7 +652,7 @@
 				<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="360" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="485" y="0" width="65" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.chiefdom"/>
 				</reportElement>
@@ -657,7 +666,7 @@
 				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="400" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="550" y="0" width="55" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.facility"/>
 				</reportElement>
@@ -671,7 +680,7 @@
 				<textFieldExpression><![CDATA[$F{facility}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="440" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="605" y="0" width="70" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.community"/>
 				</reportElement>
@@ -685,7 +694,7 @@
 				<textFieldExpression><![CDATA[$F{community}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="480" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="675" y="0" width="70" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.language"/>
 				</reportElement>
@@ -699,7 +708,7 @@
 				<textFieldExpression><![CDATA[$F{language}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="520" y="0" width="40" height="25" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="745" y="0" width="55" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.phone"/>
 				</reportElement>
