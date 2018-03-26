@@ -23,7 +23,10 @@ export function hasAuthority(...authorities) {
 }
 
 export function canEditLocation(location) {
-  if (location) {
+  if (hasAuthority(MANAGE_FACILITIES_AUTHORITY)) {
+    return true;
+  }
+  if (hasAuthority(MANAGE_OWN_FACILITIES_AUTHORITY) && location) {
     const token = localStorage.getItem('token');
     const tokenDecoded = jwtDecode(token);
     const currentUser = tokenDecoded.user_name;
