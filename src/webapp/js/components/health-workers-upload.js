@@ -4,7 +4,10 @@ import CsvUpload from './csv-upload';
 
 const HealthWorkersUpload = () => (
   <div>
-    <CsvUpload uploadUrl="/api/chw/upload" />
+    <CsvUpload
+      uploadUrl="/api/chw/upload"
+      selectText="Select uploaded CHWs"
+    />
   </div>
 );
 
