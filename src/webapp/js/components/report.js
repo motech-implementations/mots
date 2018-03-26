@@ -50,10 +50,10 @@ export default class Report extends Component {
             const reportModel = [];
 
             _.forEach(columns, (value, key) => {
-              reportModel.push({ ...value[0], accessor: key });
+              reportModel.push({ ...value[0], order: parseInt(value[0].order, 10), accessor: key });
             });
 
-            reportModel.sort((o1, o2) => parseInt(o1.order, 10) > parseInt(o2.order, 10));
+            _.sortBy(reportModel, ['order']);
 
             this.setState({ reportData, reportModel });
           }
