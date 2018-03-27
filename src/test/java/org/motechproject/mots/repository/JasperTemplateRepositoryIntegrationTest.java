@@ -72,11 +72,11 @@ public class JasperTemplateRepositoryIntegrationTest extends
     jasperTemplateRepository.save(hiddenTemplate);
 
     assertThat(
-        jasperTemplateRepository.findByVisible(true),
+        jasperTemplateRepository.findByVisibleOrderByCreatedDateAsc(true),
         hasItem(hasProperty("id", is(visibleTemplate.getId()))));
 
     assertThat(
-        jasperTemplateRepository.findByVisible(false),
+        jasperTemplateRepository.findByVisibleOrderByCreatedDateAsc(false),
         hasItem(hasProperty("id", is(hiddenTemplate.getId()))));
   }
 }

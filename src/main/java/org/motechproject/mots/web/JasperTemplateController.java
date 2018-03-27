@@ -78,7 +78,8 @@ public class JasperTemplateController extends BaseController {
   @ResponseBody
   public List<JasperTemplateDto> getVisibleTemplates() {
     // we want to show only visible reports
-    return jasperTemplateMapper.toDtos(jasperTemplateRepository.findByVisible(true));
+    return jasperTemplateMapper.toDtos(
+        jasperTemplateRepository.findByVisibleOrderByCreatedDateAsc(true));
   }
 
   /**
