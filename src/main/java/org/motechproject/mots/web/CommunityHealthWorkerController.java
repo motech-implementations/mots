@@ -177,11 +177,11 @@ public class CommunityHealthWorkerController extends BaseController {
    * Upload list of CHWs in ".csv" format to mots, parse it and save records in DB.
    * @param file File in ".csv" format to upload
    */
-  @RequestMapping(value = "/chw/upload", method = RequestMethod.POST)
+  @RequestMapping(value = "/chw/upload/{selected}", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Map<Integer, String> uploadChwSpreadsheet(
+  public Map<Integer, String> uploadChwSpreadsheet(@PathVariable("selected") Boolean selected,
       @RequestPart("file") MultipartFile file) throws ReportingException, IOException {
-    return healthWorkerService.processChwCsv(file);
+    return healthWorkerService.processChwCsv(file, selected);
   }
 }

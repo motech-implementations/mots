@@ -87,7 +87,9 @@ public class InchargeService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  public Map<Integer, String> processInchageCsv(MultipartFile inchargeCsvFile) throws IOException {
+  @SuppressWarnings("PMD.CyclomaticComplexity")
+  public Map<Integer, String> processInchageCsv(MultipartFile inchargeCsvFile, Boolean selected)
+      throws IOException {
     ICsvMapReader csvMapReader;
     csvMapReader = new CsvMapReader(new InputStreamReader(inchargeCsvFile.getInputStream()),
         CsvPreference.STANDARD_PREFERENCE);
@@ -161,12 +163,16 @@ public class InchargeService {
         incharge.setOtherName(otherName);
         incharge.setPhoneNumber(phoneNumber);
 
+        if (selected) {
+          incharge.setSelected(true);
+        }
+
         inchargeRepository.save(incharge);
         continue;
       }
 
       inchargeRepository.save(new Incharge(firstName, secondName, otherName,
-          phoneNumber, null, facility, false));
+          phoneNumber, null, facility, selected));
     }
     return errorMap;
   }

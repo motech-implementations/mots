@@ -182,7 +182,8 @@ public class CommunityHealthWorkerService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile) throws IOException {
+  public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile, Boolean selected)
+      throws IOException {
     ICsvMapReader csvMapReader;
     csvMapReader = new CsvMapReader(new InputStreamReader(chwCsvFile.getInputStream()),
         CsvPreference.STANDARD_PREFERENCE);
@@ -243,6 +244,12 @@ public class CommunityHealthWorkerService {
         existingHealthWorker.get().setCommunity(chwCommunity);
         existingHealthWorker.get().setHasPeerSupervisor(
             csvRow.get("Peer_Supervisor").equals("Yes"));
+        existingHealthWorker.get().setWorking(csvRow.get("Working").equals("Yes"));
+
+        if (selected) {
+          existingHealthWorker.get().setSelected(true);
+        }
+
         healthWorkerRepository.save(existingHealthWorker.get());
         continue;
       }
@@ -263,7 +270,8 @@ public class CommunityHealthWorkerService {
           chwCommunity,
           csvRow.get("Peer_Supervisor").equals("Yes"),
           Language.ENGLISH,
-          false
+          csvRow.get("Working").equals("Yes"),
+          selected
       ));
     }
     return errorMap;

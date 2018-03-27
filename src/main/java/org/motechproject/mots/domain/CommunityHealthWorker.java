@@ -99,6 +99,11 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Setter
   private Language preferredLanguage;
 
+  @Column(name = "working")
+  @Getter
+  @Setter
+  private Boolean working;
+
   @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
   @Getter
   @Setter

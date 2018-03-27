@@ -12,6 +12,7 @@ class CsvUpload extends Component {
       file: null,
       loading: false,
       filename: '',
+      selected: false,
     };
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -39,7 +40,9 @@ class CsvUpload extends Component {
       },
     };
 
-    apiClient.post(this.props.uploadUrl, formData, config).then((response) => {
+    const url = `${this.props.uploadUrl}/${this.state.selected}`;
+
+    apiClient.post(url, formData, config).then((response) => {
       let content = `Your upload has been successful! \nThere were ${_.size(response.data)} issue/s with your file. \n`;
 
       _.map(response.data, (value, key) => {
@@ -57,7 +60,7 @@ class CsvUpload extends Component {
           <h1>CSV File Upload</h1>
         </div>
         <div>
-          <form onSubmit={this.onFormSubmit} >
+          <form className="form-horizontal" onSubmit={this.onFormSubmit} >
             <div className="row padding-bottom-xs">
               <div className="input-group col-md-4">
                 <label className="input-group-btn" htmlFor="csvInput">
@@ -78,6 +81,20 @@ class CsvUpload extends Component {
                   readOnly
                   value={this.state.filename}
                 />
+              </div>
+            </div>
+            <div className="row">
+              <div className="input-group margin-top-md margin-bottom-md">
+                <input
+                  id="selectedInput"
+                  type="checkbox"
+                  className="checkbox-inline"
+                  checked={this.state.selected}
+                  onChange={event => this.setState({ selected: event.target.checked })}
+                />
+                <label className="margin-left-sm" htmlFor="selectedInput">
+                  {this.props.selectText}
+                </label>
               </div>
             </div>
             <div className="row">
@@ -109,4 +126,5 @@ export default CsvUpload;
 
 CsvUpload.propTypes = {
   uploadUrl: PropTypes.string.isRequired,
+  selectText: PropTypes.string.isRequired,
 };

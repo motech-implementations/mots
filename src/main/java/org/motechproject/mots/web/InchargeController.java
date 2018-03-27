@@ -146,11 +146,11 @@ public class InchargeController extends BaseController {
    * Upload list of Inchages in ".csv" format to mots, parse it and save records in DB.
    * @param file File in ".csv" format to upload
    */
-  @RequestMapping(value = "/incharge/upload", method = RequestMethod.POST)
+  @RequestMapping(value = "/incharge/upload/{selected}", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Map<Integer, String> uploadInchagesSpreadsheet(
+  public Map<Integer, String> uploadInchagesSpreadsheet(@PathVariable("selected") Boolean selected,
       @RequestPart("file") MultipartFile file) throws ReportingException, IOException {
-    return inchargeService.processInchageCsv(file);
+    return inchargeService.processInchageCsv(file, selected);
   }
 }

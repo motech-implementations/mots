@@ -120,6 +120,13 @@ class ChwTable extends Component {
     }, {
       Header: 'Phone number',
       accessor: 'phoneNumber',
+    }, {
+      Header: 'Working',
+      accessor: 'working',
+      filterable: false,
+      Cell: cell => (
+        <div>{cell.value ? 'Yes' : 'No'}</div>
+      ),
     }];
 
   prepareMobileColumns() {
