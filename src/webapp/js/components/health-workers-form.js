@@ -225,6 +225,14 @@ const FIELDS = {
       values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
     }),
   },
+  working: {
+    getAttributes: input => ({
+      ...input,
+      type: 'checkbox',
+      checked: input.value,
+    }),
+    label: 'Working',
+  },
 };
 
 class HealthWorkersForm extends Component {
