@@ -244,6 +244,7 @@ public class CommunityHealthWorkerService {
         existingHealthWorker.get().setCommunity(chwCommunity);
         existingHealthWorker.get().setHasPeerSupervisor(
             csvRow.get("Peer_Supervisor").equals("Yes"));
+        existingHealthWorker.get().setWorking(csvRow.get("Working").equals("Yes"));
 
         if (selected) {
           existingHealthWorker.get().setSelected(true);
@@ -269,6 +270,7 @@ public class CommunityHealthWorkerService {
           chwCommunity,
           csvRow.get("Peer_Supervisor").equals("Yes"),
           Language.ENGLISH,
+          csvRow.get("Working").equals("Yes"),
           selected
       ));
     }
