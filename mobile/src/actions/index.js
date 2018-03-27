@@ -84,7 +84,8 @@ export function signoutUser() {
 }
 
 export function fetchChws(selected) {
-  const url = `${BASE_URL}/chw/search?selected=${selected}&size=100000`;
+  const param = selected ? `&selected=${selected}` : '';
+  const url = `${BASE_URL}/chw/search?size=100000${param}`;
   const request = apiClient.get(url);
 
   return {
@@ -93,8 +94,9 @@ export function fetchChws(selected) {
   };
 }
 
-export function fetchIncharges() {
-  const url = `${BASE_URL}/incharge`;
+export function fetchIncharges(selected) {
+  const param = selected ? `&selected=${selected}` : '';
+  const url = `${BASE_URL}/incharge/search?&size=10000${param}`;
   const request = apiClient.get(url);
   return {
     type: FETCH_INCHARGES,
