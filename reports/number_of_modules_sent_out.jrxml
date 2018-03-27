@@ -281,7 +281,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25">
+		<band height="25" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="80" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
