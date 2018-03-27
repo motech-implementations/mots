@@ -15,6 +15,7 @@ import AssignModulesToDistrict from './components/AssignModulesToDistrict';
 import InchargesNew from './components/InchargesNew';
 import InchargesEdit from './components/InchargesEdit';
 import HealthWorkers from './components/HealthWorkers';
+import HealthWorkersOverall from './components/HealthWorkersOverall';
 import HealthWorkersNew from './components/HealthWorkersNew';
 import SynchronizeView from './components/SynchronizeView';
 import HealthWorkersEdit from './components/HealthWorkersEdit';
@@ -49,6 +50,7 @@ const App = () => (
               <Scene key="modulesToChw" component={AssignModulesToChw} title="Assign Modules" navBar={Header} />
               <Scene key="modulesToDistrict" component={AssignModulesToDistrict} title="Assign Modules" navBar={Header} />
               <Scene key="chws" component={HealthWorkers} title="Community Health Workers" navBar={Header} />
+              <Scene key="allChws" component={HealthWorkersOverall} title="Community Health Workers" navBar={Header} />
               <Scene key="chwsNew" component={HealthWorkersNew} title="Add Community Health Worker" navBar={Header} />
               <Scene key="chwsEdit" component={HealthWorkersEdit} title="Edit Community Health Worker" navBar={Header} />
               <Scene key="users" component={Users} title="User List" hideNavBar={false} navBar={Header} />
