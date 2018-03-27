@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { initialize } from 'redux-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
@@ -7,7 +8,7 @@ import _ from 'lodash';
 
 import 'react-table/react-table.css';
 
-import { fetchChws } from '../actions/index';
+import { fetchChws, resetLogoutCounter } from '../actions/index';
 import MobileTable from '../components/mobile-table';
 import {
   hasAuthority, CHW_READ_AUTHORITY,
@@ -160,6 +161,7 @@ class ChwTable extends Component {
               .then(() => {
                 this.setState({ loading: false });
               });
+              this.props.resetLogoutCounter();
             }}
           />
         </div>
@@ -175,7 +177,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { fetchChws })(ChwTable));
+export default withRouter(connect(mapStateToProps, {
+  fetchChws, initialize, resetLogoutCounter,
+})(ChwTable));
 
 ChwTable.propTypes = {
   fetchChws: PropTypes.func.isRequired,
@@ -186,6 +190,7 @@ ChwTable.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   selected: PropTypes.bool,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
 
 ChwTable.defaultProps = {

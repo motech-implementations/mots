@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { initialize } from 'redux-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
@@ -7,7 +8,7 @@ import _ from 'lodash';
 
 import 'react-table/react-table.css';
 
-import { fetchIncharges } from '../actions/index';
+import { fetchIncharges, resetLogoutCounter } from '../actions/index';
 import MobileTable from '../components/mobile-table';
 import {
   hasAuthority, INCHARGE_READ_AUTHORITY,
@@ -99,6 +100,7 @@ class InchargeTable extends Component {
               .then(() => {
                 this.setState({ loading: false });
               });
+              this.props.resetLogoutCounter();
             }}
           />
         </div>
@@ -114,7 +116,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { fetchIncharges })(InchargeTable));
+export default withRouter(connect(mapStateToProps, {
+  fetchIncharges, initialize, resetLogoutCounter,
+})(InchargeTable));
 
 InchargeTable.propTypes = {
   fetchIncharges: PropTypes.func.isRequired,
@@ -125,6 +129,7 @@ InchargeTable.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   selected: PropTypes.bool,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
 
 InchargeTable.defaultProps = {

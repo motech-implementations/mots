@@ -3,7 +3,10 @@ import _ from 'lodash';
 import FileDownload from 'js-file-download';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
+import { initialize } from 'redux-form';
+import { connect } from 'react-redux';
 
+import { resetLogoutCounter } from '../actions/index';
 import MobileTable from '../components/mobile-table';
 import apiClient from '../utils/api-client';
 import {
@@ -11,7 +14,7 @@ import {
   hasAuthority,
 } from '../utils/authorization';
 
-export default class Report extends Component {
+class Report extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,7 +53,11 @@ export default class Report extends Component {
             const reportModel = [];
 
             _.forEach(columns, (value, key) => {
-              reportModel.push({ ...value[0], order: parseInt(value[0].order, 10), accessor: key });
+              reportModel.push({
+                ...value[0],
+                order: parseInt(value[0].order, 10),
+                accessor: key,
+              });
             });
 
             _.sortBy(reportModel, ['order']);
@@ -72,6 +79,8 @@ export default class Report extends Component {
       .then((response) => {
         FileDownload(response.data, `${this.props.location.state.reportName}.pdf`);
       });
+
+    this.props.resetLogoutCounter();
   };
 
   fetchXls = () => {
@@ -85,6 +94,8 @@ export default class Report extends Component {
       .then((response) => {
         FileDownload(response.data, `${this.props.location.state.reportName}.xls`);
       });
+
+    this.props.resetLogoutCounter();
   };
 
   render() {
@@ -118,6 +129,9 @@ export default class Report extends Component {
               filterable
               data={this.state.reportData}
               columns={this.state.reportModel}
+              onFilteredChange={() => {
+                this.props.resetLogoutCounter();
+              }}
               defaultFilterMethod={(filter, row) => {
                 const id = filter.pivotId || filter.id;
                 return row[id] !== undefined ? _.includes(row[id], filter.value) : true;
@@ -131,6 +145,8 @@ export default class Report extends Component {
   }
 }
 
+export default connect(null, { initialize, resetLogoutCounter })(Report);
+
 Report.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
@@ -141,4 +157,5 @@ Report.propTypes = {
   location: PropTypes.shape({
     state: PropTypes.shape({ reportName: PropTypes.string }),
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };

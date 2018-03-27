@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, formValueSelector, Field, FieldArray, FormSection } from 'redux-form';
+import { reduxForm, formValueSelector, Field, FieldArray, FormSection, initialize } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
+import { resetLogoutCounter } from '../actions/index';
 
 export const MODULE_FORM_NAME = 'ModuleForm';
 
@@ -229,6 +230,7 @@ class ModuleForm extends Component {
         key={fieldKey}
         name={fieldName}
         component={ModuleForm.renderFieldInput}
+        onFocus={props.resetLogoutCounter()}
         fieldConfig={fieldConfig}
         disabled={!props.isEditable || (props.isModuleReleased && !fieldConfig.releasedEditable)}
       />
@@ -437,7 +439,7 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: MODULE_FORM_NAME,
-})(connect(mapStateToProps)(ModuleForm));
+})(connect(mapStateToProps, { initialize, resetLogoutCounter })(ModuleForm));
 
 ModuleForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -454,6 +456,7 @@ ModuleForm.propTypes = {
   nodeStatus: PropTypes.string,
   nodeChanged: PropTypes.bool,
   isNew: PropTypes.bool,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
 
 ModuleForm.defaultProps = {

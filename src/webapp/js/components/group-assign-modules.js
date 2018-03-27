@@ -1,17 +1,19 @@
+import 'react-datetime/css/react-datetime.css';
+
 import React, { Component } from 'react';
+import { initialize } from 'redux-form';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Async } from 'react-select';
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
 import DateTime from 'react-datetime';
 
-import 'react-datetime/css/react-datetime.css';
-
-
+import { resetLogoutCounter } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { ASSIGN_MODULES_AUTHORITY, hasAuthority } from '../utils/authorization';
 
-export default class DistrictAssignModules extends Component {
+class DistrictAssignModules extends Component {
   static fetchAvailableModules() {
     const url = '/api/modules/simple';
 
@@ -132,6 +134,7 @@ export default class DistrictAssignModules extends Component {
             value={this.state.selectedDistrict}
             loadOptions={DistrictAssignModules.fetchDistricts}
             onChange={this.handleDistrictChange}
+            onFocus={() => this.props.resetLogoutCounter()}
             placeholder="Select a District"
             className="margin-bottom-sm col-md-12"
             menuContainerStyle={{ zIndex: 5 }}
@@ -140,6 +143,7 @@ export default class DistrictAssignModules extends Component {
             value={this.state.selectedModules}
             loadOptions={DistrictAssignModules.fetchAvailableModules}
             onChange={this.handleModuleChange}
+            onFocus={() => this.props.resetLogoutCounter()}
             disabled={this.state.selectedDistrict === ''}
             placeholder="Select Modules assignment"
             multi
@@ -157,6 +161,7 @@ export default class DistrictAssignModules extends Component {
                 inputProps={{ disabled: this.state.selectedModules === '' }}
                 value={this.state.startDate}
                 onChange={this.handleStartDateChange}
+                onFocus={() => this.props.resetLogoutCounter()}
                 id="start-date"
               />
             </div>
@@ -172,6 +177,7 @@ export default class DistrictAssignModules extends Component {
                 inputProps={{ disabled: this.state.selectedModules === '' }}
                 value={this.state.endDate}
                 onChange={this.handleEndDateChange}
+                onFocus={() => this.props.resetLogoutCounter()}
                 id="end-date"
               />
             </div>
@@ -194,8 +200,11 @@ export default class DistrictAssignModules extends Component {
   }
 }
 
+export default connect(null, { initialize, resetLogoutCounter })(DistrictAssignModules);
+
 DistrictAssignModules.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };

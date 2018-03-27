@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { initialize } from 'redux-form';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,7 +13,7 @@ import {
   DISPLAY_FACILITIES_AUTHORITY,
   hasAuthority,
 } from '../utils/authorization';
-import { fetchLocationsOfType } from '../actions/index';
+import { fetchLocationsOfType, resetLogoutCounter } from '../actions/index';
 import { buildSearchParams } from '../utils/react-table-search-params';
 
 class LocationsTable extends Component {
@@ -57,6 +58,7 @@ class LocationsTable extends Component {
               .then(() => {
                 this.setState({ loading: false });
               });
+              this.props.resetLogoutCounter();
             }}
           />
         </div>
@@ -72,7 +74,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { fetchLocationsOfType })(LocationsTable));
+export default withRouter(connect(mapStateToProps, {
+  fetchLocationsOfType, initialize, resetLogoutCounter,
+})(LocationsTable));
 
 LocationsTable.propTypes = {
   fetchLocationsOfType: PropTypes.func.isRequired,
@@ -85,4 +89,5 @@ LocationsTable.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };

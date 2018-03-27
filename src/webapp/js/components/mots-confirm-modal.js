@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { initialize } from 'redux-form';
+import { connect } from 'react-redux';
+import { resetLogoutCounter } from '../actions/index';
 
 class MotsConfirmModal extends Component {
   constructor(props) {
     super(props);
 
     this.getModalParent = this.getModalParent.bind(this);
+    this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
   getModalParent() {
     return document.querySelector(`#${this.props.modalParentId}`);
+  }
+
+  hideConfirmModal() {
+    this.props.onHide();
+    this.props.resetLogoutCounter();
   }
 
   render() {
@@ -39,7 +48,7 @@ class MotsConfirmModal extends Component {
             </button>
             <button
               className="btn btn-danger margin-left-sm margin-bottom-md"
-              onClick={this.props.onHide}
+              onClick={this.hideConfirmModal}
             >
               Cancel
             </button>
@@ -50,7 +59,7 @@ class MotsConfirmModal extends Component {
   }
 }
 
-export default MotsConfirmModal;
+export default connect(null, { initialize, resetLogoutCounter })(MotsConfirmModal);
 
 MotsConfirmModal.propTypes = {
   showModal: PropTypes.bool,
@@ -58,6 +67,7 @@ MotsConfirmModal.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   modalParentId: PropTypes.string.isRequired,
   modalText: PropTypes.string,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
 
 MotsConfirmModal.defaultProps = {

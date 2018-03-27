@@ -1,17 +1,20 @@
+import 'react-select/dist/react-select.css';
+import 'react-dual-listbox/lib/react-dual-listbox.css';
+
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { initialize } from 'redux-form';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
 import { Async } from 'react-select';
-
-import 'react-select/dist/react-select.css';
-import 'react-dual-listbox/lib/react-dual-listbox.css';
+import { resetLogoutCounter } from '../actions/index';
 
 import apiClient from '../utils/api-client';
 import { hasAuthority, ASSIGN_MODULES_AUTHORITY } from '../utils/authorization';
 
-export default class AssignModules extends Component {
+class AssignModules extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -130,6 +133,7 @@ export default class AssignModules extends Component {
             value={this.state.selectedChw}
             loadOptions={this.fetchChwsInfo}
             onChange={this.handleChwChange}
+            onFocus={() => this.props.resetLogoutCounter()}
             placeholder="Select a Community Health Worker"
             className="margin-bottom-md"
           />
@@ -139,6 +143,7 @@ export default class AssignModules extends Component {
             selected={selectedModules}
             filterPlaceholder="Filter..."
             onChange={this.handleModuleChange}
+            onFocus={() => this.props.resetLogoutCounter()}
             disabled={this.state.selectedChw === ''}
           />
           <form
@@ -160,6 +165,8 @@ export default class AssignModules extends Component {
   }
 }
 
+export default connect(null, { initialize, resetLogoutCounter })(AssignModules);
+
 AssignModules.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -169,4 +176,5 @@ AssignModules.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
