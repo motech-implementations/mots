@@ -1,6 +1,3 @@
-import 'react-select/dist/react-select.css';
-import 'react-dual-listbox/lib/react-dual-listbox.css';
-
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -8,8 +5,11 @@ import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
 import { Async } from 'react-select';
-import { resetLogoutCounter } from '../actions/index';
 
+import 'react-select/dist/react-select.css';
+import 'react-dual-listbox/lib/react-dual-listbox.css';
+
+import { resetLogoutCounter } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { hasAuthority, ASSIGN_MODULES_AUTHORITY } from '../utils/authorization';
 

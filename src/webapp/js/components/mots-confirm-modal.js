@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
+
 import { resetLogoutCounter } from '../actions/index';
 
 class MotsConfirmModal extends Component {

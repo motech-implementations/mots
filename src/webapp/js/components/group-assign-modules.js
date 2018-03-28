@@ -1,5 +1,3 @@
-import 'react-datetime/css/react-datetime.css';
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -7,6 +5,8 @@ import { Async } from 'react-select';
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
 import DateTime from 'react-datetime';
+
+import 'react-datetime/css/react-datetime.css';
 
 import { resetLogoutCounter } from '../actions/index';
 import apiClient from '../utils/api-client';

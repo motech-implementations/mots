@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+
 import { resetLogoutCounter } from '../actions/index';
 
 function renderSelectOptions(options) {

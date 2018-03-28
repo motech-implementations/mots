@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import Header from './header';
 import SideBar from './sidebar';
-
 import { signoutUser } from '../actions';
 
 class Navbar extends Component {

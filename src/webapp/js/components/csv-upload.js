@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import apiClient from '../utils/api-client';
 import { resetLogoutCounter } from '../actions/index';
 
-
 class CsvUpload extends Component {
   constructor(props) {
     super(props);
