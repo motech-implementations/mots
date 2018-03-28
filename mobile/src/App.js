@@ -10,6 +10,7 @@ import ModalConfirm from './components/ModalConfirm';
 import ModalSuccess from './components/ModalSuccess';
 import Home from './components/Home';
 import Incharges from './components/Incharges';
+import InchargesOverall from './components/InchargesOverall';
 import AssignModulesToChw from './components/AssignModulesToChw';
 import AssignModulesToDistrict from './components/AssignModulesToDistrict';
 import InchargesNew from './components/InchargesNew';
@@ -44,12 +45,13 @@ const App = () => (
             <Scene key="main">
               <Scene key="home" component={Home} title="Home" hideNavBar={false} navBar={Header} initial />
               <Scene key="profile" component={ProfileEdit} title="Edit profile" navBar={Header} />
-              <Scene key="incharges" component={Incharges} title="Incharge List" hideNavBar={false} navBar={Header} />
+              <Scene key="incharges" component={Incharges} title="Selected Incharge List" hideNavBar={false} navBar={Header} />
+              <Scene key="allIncharges" component={InchargesOverall} title="Incharge List" hideNavBar={false} navBar={Header} />
               <Scene key="inchargesNew" component={InchargesNew} title="Add Incharge" navBar={Header} />
               <Scene key="inchargesEdit" component={InchargesEdit} title="Edit Incharge" navBar={Header} />
               <Scene key="modulesToChw" component={AssignModulesToChw} title="Assign Modules" navBar={Header} />
               <Scene key="modulesToDistrict" component={AssignModulesToDistrict} title="Assign Modules" navBar={Header} />
-              <Scene key="chws" component={HealthWorkers} title="Community Health Workers" navBar={Header} />
+              <Scene key="chws" component={HealthWorkers} title="Selected Community Health Workers" navBar={Header} />
               <Scene key="allChws" component={HealthWorkersOverall} title="Community Health Workers" navBar={Header} />
               <Scene key="chwsNew" component={HealthWorkersNew} title="Add Community Health Worker" navBar={Header} />
               <Scene key="chwsEdit" component={HealthWorkersEdit} title="Edit Community Health Worker" navBar={Header} />

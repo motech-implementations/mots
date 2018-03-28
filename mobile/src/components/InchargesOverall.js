@@ -9,8 +9,8 @@ const { lightThemeText } = commonStyles;
 
 const Incharges = () => (
   <View style={getContainerStyle()}>
-    <Text style={[styles.title, lightThemeText]}>Selected Incharges</Text>
-    <InchargeList selected />
+    <Text style={[styles.title, lightThemeText]}>Incharges</Text>
+    <InchargeList selected={false} />
   </View>
 );
 

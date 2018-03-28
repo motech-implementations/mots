@@ -9,48 +9,6 @@ import ListItem from '../components/ListItem';
 import { fetchIncharges } from '../actions/index';
 import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 
-const COLUMNS = [
-  {
-    Header: 'First name',
-    accessor: 'firstName',
-  }, {
-    Header: 'Surname',
-    accessor: 'secondName',
-  }, {
-    Header: 'Other name',
-    accessor: 'otherName',
-  }, {
-    Header: 'Phone number',
-    accessor: 'phoneNumber',
-  }, {
-    Header: 'Email',
-    accessor: 'email',
-  }, {
-    Header: 'Facility',
-    accessor: 'facilityName',
-  },
-  {
-    Header: 'Actions',
-    minWidth: 50,
-    accessor: 'id',
-    Cell: cell => (
-      <View>
-        { cell.canWrite &&
-        <Button
-          onPress={() => Actions.inchargesEdit({ inchargeId: cell.value })}
-          iconName="pencil-square-o"
-          iconColor="#FFF"
-          buttonColor="#337ab7"
-        >
-          Edit
-        </Button>
-        }
-      </View>
-    ),
-  },
-];
-
-
 class InchargeList extends Component {
   constructor(props) {
     super(props);
@@ -63,7 +21,51 @@ class InchargeList extends Component {
     hasAuthority(INCHARGE_WRITE_AUTHORITY).then((result) => {
       if (result) { this.setState({ INCHARGE_WRITE_AUTHORITY: true }); }
     });
-    this.props.fetchIncharges();
+    this.props.fetchIncharges(this.props.selected);
+  }
+
+  getColumnDefinitions() {
+    return [
+      {
+        Header: 'First name',
+        accessor: 'firstName',
+      }, {
+        Header: 'Surname',
+        accessor: 'secondName',
+      }, {
+        Header: 'Other name',
+        accessor: 'otherName',
+      }, {
+        Header: 'Phone number',
+        accessor: 'phoneNumber',
+      }, {
+        Header: 'Email',
+        accessor: 'email',
+      }, {
+        Header: 'Facility',
+        accessor: 'facilityName',
+      },
+      {
+        Header: 'Actions',
+        minWidth: 50,
+        accessor: 'id',
+        Cell: cell => (
+          <View>
+            { cell.canWrite &&
+            <Button
+              onPress={() => Actions.inchargesEdit({ inchargeId: cell.value })}
+              iconName="pencil-square-o"
+              iconColor="#FFF"
+              buttonColor="#337ab7"
+            >
+                          Edit
+            </Button>
+                      }
+          </View>
+        ),
+        hide: !this.props.selected,
+      },
+    ];
   }
 
   render() {
@@ -74,7 +76,7 @@ class InchargeList extends Component {
           ({ item }) =>
             (<ListItem
               row={item}
-              columns={COLUMNS}
+              columns={this.getColumnDefinitions()}
               canWrite={this.state.INCHARGE_WRITE_AUTHORITY}
             />)}
         keyExtractor={(item, index) => index}
@@ -95,4 +97,9 @@ InchargeList.propTypes = {
   fetchIncharges: PropTypes.func.isRequired,
   incharges: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
+  selected: PropTypes.bool,
+};
+
+InchargeList.defaultProps = {
+  selected: true,
 };

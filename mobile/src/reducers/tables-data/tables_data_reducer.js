@@ -13,10 +13,13 @@ export default function (state = initialTablesData, action) {
       }
       return state;
     case FETCH_INCHARGES:
-      return {
-        ...state,
-        inchargesList: action.payload || [],
-      };
+      if (action.payload && action.payload.content) {
+        return {
+          ...state,
+          inchargesList: action.payload.content || [],
+        };
+      }
+      return state;
     case CREATE_HEALTH_WORKER_REQUEST: {
       const { newHealthWorker } = action.payload;
       newHealthWorker.needSynchronize = true;
