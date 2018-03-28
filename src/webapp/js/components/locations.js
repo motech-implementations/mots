@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import 'react-tabs/style/react-tabs.scss';
+
+import { resetLogoutCounter } from '../actions/index';
 import LocationsTable from '../container/locations-table';
 import {
   FETCH_CHIEFDOMS, FETCH_DISTRICTS, FETCH_FACILITIES,
@@ -149,6 +152,7 @@ class Locations extends Component {
 
   handleTabSelect(index) {
     this.setState({ selectedIndex: index });
+    this.props.resetLogoutCounter();
   }
 
   render() {
@@ -193,7 +197,7 @@ class Locations extends Component {
   }
 }
 
-export default Locations;
+export default connect(null, { resetLogoutCounter })(Locations);
 
 Locations.propTypes = {
   match: PropTypes.shape({
@@ -201,6 +205,7 @@ Locations.propTypes = {
       tabIndex: PropTypes.string,
     }),
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
 
 FacilityTypeFilter.propTypes = {

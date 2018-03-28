@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+
 import {
   ASSIGN_MODULES_AUTHORITY, CHW_READ_AUTHORITY, CHW_WRITE_AUTHORITY,
   hasAuthority,

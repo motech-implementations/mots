@@ -1,7 +1,10 @@
 import _ from 'lodash';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+
+import { resetLogoutCounter } from '../actions/index';
 
 function renderSelectOptions(options) {
   const { values, valueKey, displayNameKey } = options;
@@ -21,7 +24,7 @@ function renderSelectOptions(options) {
   ];
 }
 
-export default class FormField extends Component {
+class FormField extends Component {
   renderFieldInput = ({
     fieldConfig, selectOptions, dynamicAttr, dynamicProps, input, meta: { touched, error },
   }) => {
@@ -34,10 +37,12 @@ export default class FormField extends Component {
       disabled: selectOptions && (!selectOptions.values || !selectOptions.values.length),
       ...attr,
       ...dynamicAttr,
+      onFocus: () => {
+        this.props.resetLogoutCounter();
+      },
     };
 
     const className = `form-group ${fieldConfig.required || attributes.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
-
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
         <div className="row">
@@ -82,6 +87,8 @@ export default class FormField extends Component {
   }
 }
 
+export default connect(null, { resetLogoutCounter })(FormField);
+
 FormField.propTypes = {
   fieldName: PropTypes.string.isRequired,
   fieldConfig: PropTypes.shape({
@@ -96,6 +103,7 @@ FormField.propTypes = {
     getDynamicAttributes: PropTypes.func,
   }).isRequired,
   dynamicProps: PropTypes.shape({}),
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
 
 FormField.defaultProps = {

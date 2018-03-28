@@ -5,11 +5,10 @@ import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import DateTime from 'react-datetime';
 import Select from 'react-select';
-
 import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
-import { fetchLocations } from '../actions';
+import { fetchLocations } from '../actions/index';
 import {
   getAttributesForSelectWithClearOnChange, getSelectableLocations,
   getSupervisorNameFromFacility, fetchDataAndInitializeFrom,

@@ -9,9 +9,8 @@ import 'react-table/react-table.css';
 
 import MobileTable from '../components/mobile-table';
 import { hasAuthority, MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY } from '../utils/authorization';
-import { fetchUsers } from '../actions/index';
+import { fetchUsers, resetLogoutCounter } from '../actions/index';
 import { buildSearchParams } from '../utils/react-table-search-params';
-
 
 class UsersTable extends Component {
   static getTableColumns = () => [
@@ -100,6 +99,7 @@ class UsersTable extends Component {
               .then(() => {
                 this.setState({ loading: false });
               });
+              this.props.resetLogoutCounter();
             }}
           />
         </div>
@@ -115,7 +115,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { fetchUsers })(UsersTable));
+export default withRouter(connect(mapStateToProps, {
+  fetchUsers, resetLogoutCounter,
+})(UsersTable));
 
 UsersTable.propTypes = {
   fetchUsers: PropTypes.func.isRequired,
@@ -125,4 +127,5 @@ UsersTable.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };

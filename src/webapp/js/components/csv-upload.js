@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import { ClimbingBoxLoader } from 'react-spinners';
 import PropTypes from 'prop-types';
 
 import apiClient from '../utils/api-client';
+import { resetLogoutCounter } from '../actions/index';
 
 class CsvUpload extends Component {
   constructor(props) {
@@ -72,6 +74,7 @@ class CsvUpload extends Component {
                       onChange={this.onChange}
                       accept=".csv"
                       className="btn btn-primary"
+                      onClick={() => this.props.resetLogoutCounter()}
                     />
                   </span>
                 </label>
@@ -91,6 +94,7 @@ class CsvUpload extends Component {
                   className="checkbox-inline"
                   checked={this.state.selected}
                   onChange={event => this.setState({ selected: event.target.checked })}
+                  onFocus={() => this.props.resetLogoutCounter()}
                 />
                 <label className="margin-left-sm" htmlFor="selectedInput">
                   {this.props.selectText}
@@ -122,9 +126,10 @@ class CsvUpload extends Component {
   }
 }
 
-export default CsvUpload;
+export default connect(null, { resetLogoutCounter })(CsvUpload);
 
 CsvUpload.propTypes = {
   uploadUrl: PropTypes.string.isRequired,
   selectText: PropTypes.string.isRequired,
+  resetLogoutCounter: PropTypes.func.isRequired,
 };
