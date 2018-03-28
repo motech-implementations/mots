@@ -186,15 +186,26 @@ class Menu extends Component {
               </TouchableOpacity>
               }
               { this.state.CHW_READ_AUTHORITY &&
-              <TouchableOpacity
-                onPress={() => this.openSection('chws')}
-                style={styles.menuItem}
-              >
-                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-                  <Icon name="list" size={20} color="#337ab7" />
-                </View>
-                <Text style={styles.menuItemText}>CHW List</Text>
-              </TouchableOpacity>
+              <View>
+                <TouchableOpacity
+                  onPress={() => this.openSection('chws')}
+                  style={styles.menuItem}
+                >
+                  <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                    <Icon name="list" size={20} color="#337ab7" />
+                  </View>
+                  <Text style={styles.menuItemText}>Selected CHW List</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.openSection('allChws')}
+                  style={styles.menuItem}
+                >
+                  <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                    <Icon name="list" size={20} color="#337ab7" />
+                  </View>
+                  <Text style={styles.menuItemText}>CHW List</Text>
+                </TouchableOpacity>
+              </View>
               }
             </View>
           </Collapsible>

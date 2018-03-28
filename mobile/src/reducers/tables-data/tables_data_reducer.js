@@ -5,11 +5,13 @@ import initialTablesData from './tables_data_initial_state';
 export default function (state = initialTablesData, action) {
   switch (action.type) {
     case FETCH_CHWS:
-      return {
-        ...state,
-        chwList: action.payload || [],
-      };
-
+      if (action.payload && action.payload.content) {
+        return {
+          ...state,
+          chwList: action.payload.content || [],
+        };
+      }
+      return state;
     case FETCH_INCHARGES:
       return {
         ...state,

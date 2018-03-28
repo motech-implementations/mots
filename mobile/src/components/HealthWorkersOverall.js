@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, PixelRatio } from 'react-native';
 import HealthWorkersList from '../container/HealthWorkersList';
 
 import styles from '../styles/listsStyles';
@@ -8,13 +8,13 @@ import commonStyles from '../styles/commonStyles';
 
 const { lightThemeText } = commonStyles;
 
-const HealthWorkers = () => (
+const HealthWorkersOverall = () => (
   <View style={getContainerStyle()}>
     <Text style={[styles.title, lightThemeText]}>
-      Selected CHWs
+      {PixelRatio.get() < 2 ? 'CHW List' : 'Community Health Workers'}
     </Text>
-    <HealthWorkersList selected />
+    <HealthWorkersList selected={false} />
   </View>
 );
 
-export default HealthWorkers;
+export default HealthWorkersOverall;

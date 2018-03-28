@@ -83,8 +83,8 @@ export function signoutUser() {
   return { type: UNAUTH_USER };
 }
 
-export function fetchChws() {
-  const url = `${BASE_URL}/chw`;
+export function fetchChws(selected) {
+  const url = `${BASE_URL}/chw/search?selected=${selected}&size=100000`;
   const request = apiClient.get(url);
 
   return {
