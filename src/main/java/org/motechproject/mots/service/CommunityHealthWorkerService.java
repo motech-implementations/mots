@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
@@ -114,9 +115,9 @@ public class CommunityHealthWorkerService {
   }
 
   /**
-   * Create CHW and IVR Subscriber, and assign it to CHW. Initiate empty AssignedModules
-   * instance for newly created CHW.
-   * @param healthWorker CHW to be created
+   * Select CHW, create IVR Subscriber and assign it to CHW. Initiate empty AssignedModules
+   * instance for selected CHW.
+   * @param healthWorker CHW to be selected
    * @return saved CHW
    */
   @PreAuthorize(RoleNames.HAS_CHW_WRITE_ROLE)
@@ -182,6 +183,7 @@ public class CommunityHealthWorkerService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
+  @SuppressWarnings("PMD.CyclomaticComplexity")
   public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile, Boolean selected)
       throws IOException {
     ICsvMapReader csvMapReader;
@@ -199,8 +201,6 @@ public class CommunityHealthWorkerService {
       LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
       String phoneNumber = Objects.toString(csvRow.get("Mobile"), null);
-      String community = Objects.toString(csvRow.get("Community"), null);
-      String facility = Objects.toString(csvRow.get("PHU"), null);
 
       if (phoneNumberSet.contains(phoneNumber)) {
         errorMap.put(csvMapReader.getLineNumber(), "Phone number is duplicated in CSV");
@@ -210,6 +210,9 @@ public class CommunityHealthWorkerService {
       if (phoneNumber != null) {
         phoneNumberSet.add(phoneNumber);
       }
+
+      String community = Objects.toString(csvRow.get("Community"), null);
+      String facility = Objects.toString(csvRow.get("PHU"), null);
 
       Community chwCommunity = communityRepository
           .findByNameAndFacilityName(community, facility);
@@ -224,55 +227,46 @@ public class CommunityHealthWorkerService {
       Optional<CommunityHealthWorker> existingHealthWorker = healthWorkerRepository
           .findByChwId(csvRow.get("CHW ID").toString());
 
+      CommunityHealthWorker communityHealthWorker;
+
       if (existingHealthWorker.isPresent()) {
-        existingHealthWorker.get().setChwId(csvRow.get("CHW ID").toString());
-        existingHealthWorker.get().setFirstName(csvRow.get("First_Name").toString());
-        existingHealthWorker.get().setSecondName(csvRow.get("Second_Name").toString());
-        existingHealthWorker.get().setOtherName(Objects.toString(
-            csvRow.get("Other_Name"), null));
-        existingHealthWorker.get().setYearOfBirth(csvRow.get("Age") != null
-            ? LocalDate.now().getYear() - Integer.valueOf(Objects.toString(csvRow.get("Age"),
-            null)) : null);
-        existingHealthWorker.get().setGender(Gender.getByDisplayName(
-            csvRow.get("Gender").toString()));
-        existingHealthWorker.get().setLiteracy(Literacy.getByDisplayName(
-            csvRow.get("Read_Write").toString()));
-        existingHealthWorker.get().setEducationLevel(EducationLevel.getByDisplayName(
-            csvRow.get("Education").toString()));
-        existingHealthWorker.get().setPhoneNumber(Objects.toString(
-            csvRow.get("Mobile"), null));
-        existingHealthWorker.get().setCommunity(chwCommunity);
-        existingHealthWorker.get().setHasPeerSupervisor(
-            csvRow.get("Peer_Supervisor").equals("Yes"));
-        existingHealthWorker.get().setWorking(csvRow.get("Working").equals("Yes"));
+        communityHealthWorker = existingHealthWorker.get();
+      } else {
+        communityHealthWorker = new CommunityHealthWorker();
+        communityHealthWorker.setPreferredLanguage(Language.ENGLISH);
+        communityHealthWorker.setSelected(false);
+      }
 
-        if (selected) {
-          existingHealthWorker.get().setSelected(true);
-        }
-
-        healthWorkerRepository.save(existingHealthWorker.get());
+      if ((selected || communityHealthWorker.getSelected()) && StringUtils.isBlank(phoneNumber)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Phone number is empty");
         continue;
       }
 
-      healthWorkerRepository.save(new CommunityHealthWorker(
-          null,
-          csvRow.get("CHW ID").toString(),
-          csvRow.get("First_Name").toString(),
-          csvRow.get("Second_Name").toString(),
-          Objects.toString(csvRow.get("Other_Name"), null),
-          csvRow.get("Age") != null ? LocalDate.now().getYear()
-              - Integer.valueOf(Objects.toString(csvRow.get("Age"),
-              null)) : null,
-          Gender.getByDisplayName(csvRow.get("Gender").toString()),
-          Literacy.getByDisplayName(csvRow.get("Read_Write").toString()),
-          EducationLevel.getByDisplayName(csvRow.get("Education").toString()),
-          Objects.toString(csvRow.get("Mobile"), null),
-          chwCommunity,
-          csvRow.get("Peer_Supervisor").equals("Yes"),
-          Language.ENGLISH,
-          csvRow.get("Working").equals("Yes"),
-          selected
-      ));
+      communityHealthWorker.setChwId(csvRow.get("CHW ID").toString());
+      communityHealthWorker.setFirstName(csvRow.get("First_Name").toString());
+      communityHealthWorker.setSecondName(csvRow.get("Second_Name").toString());
+      communityHealthWorker.setOtherName(Objects.toString(
+          csvRow.get("Other_Name"), null));
+      communityHealthWorker.setYearOfBirth(csvRow.get("Age") != null
+          ? LocalDate.now().getYear() - Integer.valueOf(Objects.toString(csvRow.get("Age"),
+          null)) : null);
+      communityHealthWorker.setGender(Gender.getByDisplayName(
+          csvRow.get("Gender").toString()));
+      communityHealthWorker.setLiteracy(Literacy.getByDisplayName(
+          csvRow.get("Read_Write").toString()));
+      communityHealthWorker.setEducationLevel(EducationLevel.getByDisplayName(
+          csvRow.get("Education").toString()));
+      communityHealthWorker.setPhoneNumber(phoneNumber);
+      communityHealthWorker.setCommunity(chwCommunity);
+      communityHealthWorker.setHasPeerSupervisor(
+          csvRow.get("Peer_Supervisor").equals("Yes"));
+      communityHealthWorker.setWorking(csvRow.get("Working").equals("Yes"));
+
+      if (selected && !communityHealthWorker.getSelected()) {
+        selectHealthWorker(communityHealthWorker);
+      } else {
+        healthWorkerRepository.save(communityHealthWorker);
+      }
     }
     return errorMap;
   }
