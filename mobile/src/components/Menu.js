@@ -9,7 +9,8 @@ import Collapsible from './Collapsible';
 import { signoutUser } from '../actions';
 import { CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
   DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
-  MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
+  MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY, hasAuthority,
+} from '../utils/authorization';
 import apiClient from '../utils/api-client';
 
 const HIDE_NOT_IMPLEMENTED = true;
@@ -28,7 +29,7 @@ const styles = {
     height: 50,
   },
   menuItemText: {
-    fontSize: 20,
+    fontSize: 19,
     color: '#337ab7',
     paddingLeft: 5,
   },
@@ -61,6 +62,7 @@ class Menu extends Component {
       ASSIGN_MODULES_AUTHORITY: false,
       DISPLAY_REPORTS_AUTHORITY: false,
       MANAGE_USERS_AUTHORITY: false,
+      MANAGE_INCHARGE_USERS_AUTHORITY: false,
       reportList: [],
     };
   }
@@ -89,6 +91,9 @@ class Menu extends Component {
     });
     hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
       if (result) { this.setState({ MANAGE_USERS_AUTHORITY: true }); }
+    });
+    hasAuthority(MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
+      if (result) { this.setState({ MANAGE_INCHARGE_USERS_AUTHORITY: true }); }
     });
   }
 
@@ -272,7 +277,7 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { this.state.MANAGE_USERS_AUTHORITY &&
+          { (this.state.MANAGE_USERS_AUTHORITY || this.state.MANAGE_INCHARGE_USERS_AUTHORITY) &&
             <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
               <View>
                 <TouchableOpacity

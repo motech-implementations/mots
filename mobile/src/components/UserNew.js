@@ -6,7 +6,11 @@ import { Actions } from 'react-native-router-flux';
 
 import UserForm from './UserForm';
 import { createUser } from '../actions';
-import { MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
+import {
+  MANAGE_USERS_AUTHORITY,
+  MANAGE_INCHARGE_USERS_AUTHORITY,
+  hasAuthority,
+} from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
 import commonStyles from '../styles/commonStyles';
@@ -24,7 +28,7 @@ class UserNew extends Component {
   }
 
   componentWillMount() {
-    hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
+    hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
       if (!result) {
         Actions.home();
       }
