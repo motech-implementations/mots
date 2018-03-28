@@ -1,6 +1,5 @@
 import 'react-tabs/style/react-tabs.scss';
 import React, { Component } from 'react';
-import { initialize } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { Link } from 'react-router-dom';
@@ -197,7 +196,7 @@ class Locations extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(Locations);
+export default connect(null, { resetLogoutCounter })(Locations);
 
 Locations.propTypes = {
   match: PropTypes.shape({

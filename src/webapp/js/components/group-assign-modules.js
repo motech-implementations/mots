@@ -1,7 +1,6 @@
 import 'react-datetime/css/react-datetime.css';
 
 import React, { Component } from 'react';
-import { initialize } from 'redux-form';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Async } from 'react-select';
@@ -200,7 +199,7 @@ class DistrictAssignModules extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(DistrictAssignModules);
+export default connect(null, { resetLogoutCounter })(DistrictAssignModules);
 
 DistrictAssignModules.propTypes = {
   history: PropTypes.shape({

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { initialize } from 'redux-form';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -117,7 +116,7 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps, {
-  fetchUsers, initialize, resetLogoutCounter,
+  fetchUsers, resetLogoutCounter,
 })(UsersTable));
 
 UsersTable.propTypes = {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { initialize } from 'redux-form';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { ClimbingBoxLoader } from 'react-spinners';
@@ -96,6 +95,7 @@ class CsvUpload extends Component {
                   className="checkbox-inline"
                   checked={this.state.selected}
                   onChange={event => this.setState({ selected: event.target.checked })}
+                  onFocus={() => this.props.resetLogoutCounter()}
                 />
                 <label className="margin-left-sm" htmlFor="selectedInput">
                   {this.props.selectText}
@@ -107,7 +107,6 @@ class CsvUpload extends Component {
                 type="submit"
                 className="col-md-4 offset-md-2 btn btn-primary"
                 disabled={!this.state.file}
-                onClick={() => this.props.resetLogoutCounter()}
               >Upload
               </button>
             </div>
@@ -128,7 +127,7 @@ class CsvUpload extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(CsvUpload);
+export default connect(null, { resetLogoutCounter })(CsvUpload);
 
 CsvUpload.propTypes = {
   uploadUrl: PropTypes.string.isRequired,

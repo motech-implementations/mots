@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Field, initialize } from 'redux-form';
+import { Field } from 'redux-form';
 import { resetLogoutCounter } from '../actions/index';
 
 function renderSelectOptions(options) {
@@ -86,7 +86,7 @@ class FormField extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(FormField);
+export default connect(null, { resetLogoutCounter })(FormField);
 
 FormField.propTypes = {
   fieldName: PropTypes.string.isRequired,

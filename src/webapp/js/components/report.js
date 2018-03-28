@@ -3,7 +3,6 @@ import _ from 'lodash';
 import FileDownload from 'js-file-download';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
-import { initialize } from 'redux-form';
 import { connect } from 'react-redux';
 
 import { resetLogoutCounter } from '../actions/index';
@@ -145,7 +144,7 @@ class Report extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(Report);
+export default connect(null, { resetLogoutCounter })(Report);
 
 Report.propTypes = {
   history: PropTypes.shape({

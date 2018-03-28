@@ -3,7 +3,6 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { initialize } from 'redux-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
@@ -165,7 +164,7 @@ class AssignModules extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(AssignModules);
+export default connect(null, { resetLogoutCounter })(AssignModules);
 
 AssignModules.propTypes = {
   match: PropTypes.shape({

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, formValueSelector, Field, FieldArray, FormSection, initialize } from 'redux-form';
+import { reduxForm, formValueSelector, Field, FieldArray, FormSection } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
@@ -439,7 +439,7 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: MODULE_FORM_NAME,
-})(connect(mapStateToProps, { initialize, resetLogoutCounter })(ModuleForm));
+})(connect(mapStateToProps, { resetLogoutCounter })(ModuleForm));
 
 ModuleForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

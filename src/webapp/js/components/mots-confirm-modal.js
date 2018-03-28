@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import { initialize } from 'redux-form';
 import { connect } from 'react-redux';
 import { resetLogoutCounter } from '../actions/index';
 
@@ -59,7 +58,7 @@ class MotsConfirmModal extends Component {
   }
 }
 
-export default connect(null, { initialize, resetLogoutCounter })(MotsConfirmModal);
+export default connect(null, { resetLogoutCounter })(MotsConfirmModal);
 
 MotsConfirmModal.propTypes = {
   showModal: PropTypes.bool,
