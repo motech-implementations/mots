@@ -37,13 +37,16 @@ export default function (state = initialTablesData, action) {
       };
     }
     case FETCH_USERS:
-      return {
-        ...state,
-        userList: action.payload.map(user => ({
-          ...user,
-          roleName: user.roles ? user.roles[0].name : '',
-        })) || [],
-      };
+      if (action.payload && action.payload.content) {
+        return {
+          ...state,
+          userList: action.payload.content.map(user => ({
+            ...user,
+            roleName: user.roles ? user.roles[0].name : '',
+          })) || [],
+        };
+      }
+      return state;
     case FETCH_ROLES:
       return {
         ...state,

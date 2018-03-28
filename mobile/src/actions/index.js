@@ -165,7 +165,7 @@ export function fetchRoles() {
 }
 
 export function fetchUsers() {
-  const url = `${BASE_URL}/user`;
+  const url = `${BASE_URL}/user/search?size=10000`;
   const request = apiClient.get(url);
 
   return {

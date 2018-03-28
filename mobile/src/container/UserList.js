@@ -7,7 +7,11 @@ import Button from '../components/Button';
 
 import ListItem from '../components/ListItem';
 import { fetchUsers } from '../actions/index';
-import { MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
+import {
+  MANAGE_USERS_AUTHORITY,
+  MANAGE_INCHARGE_USERS_AUTHORITY,
+  hasAuthority,
+} from '../utils/authorization';
 
 const COLUMNS = [
   {
@@ -54,7 +58,7 @@ class UserList extends Component {
   }
 
   componentWillMount() {
-    hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
+    hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
       if (result) { this.setState({ MANAGE_USERS_AUTHORITY: true }); }
     });
     this.props.fetchUsers();
