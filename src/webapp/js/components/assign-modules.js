@@ -125,7 +125,7 @@ class AssignModules extends Component {
 
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Assign Modules</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules</h1>
         <div className="col-md-8 col-md-offset-2">
           <Async
             name="form-field-name"
@@ -146,7 +146,7 @@ class AssignModules extends Component {
             disabled={this.state.selectedChw === ''}
           />
           <form
-            className="form-horizontal"
+            className="form-horizontal col-md-12"
             onSubmit={this.sendAssignedModules}
           >
             <button
