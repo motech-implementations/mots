@@ -36,8 +36,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.Unique;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
@@ -196,20 +194,36 @@ public class CommunityHealthWorkerService {
 
     Map<String, Object> csvRow;
     Set<String> phoneNumberSet = new HashSet<>();
+    Set<String> chwIdSet = new HashSet<>();
     Map<Integer, String> errorMap = new HashMap<>();
 
     while ((csvRow = csvMapReader.read(header, processors)) != null) {
       LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
-      String phoneNumber = Objects.toString(csvRow.get("Mobile"), null);
 
+      String phoneNumber = Objects.toString(csvRow.get("Mobile"), null);
+      String chwId = Objects.toString(csvRow.get("CHW ID"), null);
+
+      // Validate
       if (phoneNumberSet.contains(phoneNumber)) {
         errorMap.put(csvMapReader.getLineNumber(), "Phone number is duplicated in CSV");
         continue;
       }
+      if (chwIdSet.contains(chwId)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Health Worker ID is duplicated in CSV");
+        continue;
+      }
 
+      if (validateBlankFieldsInCsv(csvMapReader, csvRow, errorMap)) {
+        continue;
+      }
+
+      // Add to collections
       if (phoneNumber != null) {
         phoneNumberSet.add(phoneNumber);
+      }
+      if (chwId != null) {
+        chwIdSet.add(chwId);
       }
 
       String community = Objects.toString(csvRow.get("Community"), null);
@@ -272,6 +286,74 @@ public class CommunityHealthWorkerService {
     return errorMap;
   }
 
+  @SuppressWarnings("PMD.CyclomaticComplexity")
+  private boolean validateBlankFieldsInCsv(ICsvMapReader csvMapReader, Map<String, Object> csvRow,
+      Map<Integer, String> errorMap) {
+
+    String chwId = Objects.toString(csvRow.get("CHW ID"), null);
+    if (StringUtils.isBlank(chwId)) {
+      errorMap.put(csvMapReader.getLineNumber(), "CHW ID is empty");
+      return true;
+    }
+    String district = Objects.toString(csvRow.get("District"), null);
+    if (StringUtils.isBlank(district)) {
+      errorMap.put(csvMapReader.getLineNumber(), "District is empty");
+      return true;
+    }
+    String chiefdom = Objects.toString(csvRow.get("Chiefdom"), null);
+    if (StringUtils.isBlank(chiefdom)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Chiefdom is empty");
+      return true;
+    }
+    String working = Objects.toString(csvRow.get("Working"), null);
+    if (StringUtils.isBlank(working)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Working is empty");
+      return true;
+    }
+    String firstName = Objects.toString(csvRow.get("First_Name"), null);
+    if (StringUtils.isBlank(firstName)) {
+      errorMap.put(csvMapReader.getLineNumber(), "First Name is empty");
+      return true;
+    }
+    String secondName = Objects.toString(csvRow.get("Second_Name"), null);
+    if (StringUtils.isBlank(secondName)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Second Name is empty");
+      return true;
+    }
+    String gender = Objects.toString(csvRow.get("Gender"), null);
+    if (StringUtils.isBlank(gender)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Gender is empty");
+      return true;
+    }
+    String readWrite = Objects.toString(csvRow.get("Read_Write"), null);
+    if (StringUtils.isBlank(readWrite)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Read Write is empty");
+      return true;
+    }
+    String education = Objects.toString(csvRow.get("Education"), null);
+    if (StringUtils.isBlank(education)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Education is empty");
+      return true;
+    }
+    String phu = Objects.toString(csvRow.get("PHU"), null);
+    if (StringUtils.isBlank(phu)) {
+      errorMap.put(csvMapReader.getLineNumber(), "PHU is empty");
+      return true;
+    }
+    String phuSupervisor = Objects.toString(csvRow.get("PHU_Supervisor"), null);
+    if (StringUtils.isBlank(phuSupervisor)) {
+      errorMap.put(csvMapReader.getLineNumber(), "PHU Supervisor is empty");
+      return true;
+    }
+    String peerSupervisor = Objects.toString(csvRow.get("Peer_Supervisor"), null);
+    if (StringUtils.isBlank(peerSupervisor)) {
+      errorMap.put(csvMapReader.getLineNumber(), "Peer Supervisor is empty");
+      return true;
+    }
+
+    return false;
+  }
+
   /**
    * Sets up the processors used for the CSV with CHW list. Empty columns are read as null
    * (hence the NotNull() for mandatory columns).
@@ -281,22 +363,22 @@ public class CommunityHealthWorkerService {
   private CellProcessor[] getProcessors() {
 
     final CellProcessor[] processors = new CellProcessor[] {
-        new Unique(), // chwId (must be unique)
-        new NotNull(), // district
-        new NotNull(), // chiefdom
-        new NotNull(), // working?
-        new NotNull(), // firstName
-        new NotNull(), // secondName
+        null, // chwId (must be unique)
+        null, // district
+        null, // chiefdom
+        null, // working?
+        null, // firstName
+        null, // secondName
         null, // otherName
         null, // age
-        new NotNull(), // gender
-        new NotNull(), // readWrite
-        new NotNull(), // educationLevel
+        null, // gender
+        null, // readWrite
+        null, // educationLevel
         null, // phoneNumber
         null, // community
-        new NotNull(), // phu
-        new NotNull(), // PHU_suppervisor
-        new NotNull() // peer_supervisor
+        null, // phu
+        null, // PHU_suppervisor
+        null // peer_supervisor
     };
     return processors;
   }
