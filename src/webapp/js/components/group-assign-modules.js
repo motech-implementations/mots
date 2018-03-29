@@ -125,7 +125,7 @@ class DistrictAssignModules extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Assign Modules to a District</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules to a District</h1>
         <div className="col-md-8 col-md-offset-2">
 
           <Async
@@ -135,7 +135,7 @@ class DistrictAssignModules extends Component {
             onChange={this.handleDistrictChange}
             onFocus={() => this.props.resetLogoutCounter()}
             placeholder="Select a District"
-            className="margin-bottom-sm col-md-12"
+            className="margin-bottom-md col-md-12"
             menuContainerStyle={{ zIndex: 5 }}
           />
           <Async
@@ -146,10 +146,10 @@ class DistrictAssignModules extends Component {
             disabled={this.state.selectedDistrict === ''}
             placeholder="Select Modules assignment"
             multi
-            className="margin-bottom-sm col-md-12"
+            className="margin-bottom-md col-md-12"
             menuContainerStyle={{ zIndex: 5 }}
           />
-          <div className="col-md-6 margin-bottom-md">
+          <div className="col-md-6">
             <label htmlFor="start-date">Start date</label>
             <div className="input-group">
               <span className="input-group-addon"><i className="fa fa-calendar" /></span>
@@ -165,7 +165,7 @@ class DistrictAssignModules extends Component {
               />
             </div>
           </div>
-          <div className="col-md-6 margin-bottom-md">
+          <div className="col-md-6">
             <label htmlFor="end-date">End date</label>
             <div className="input-group">
               <span className="input-group-addon"><i className="fa fa-calendar" /></span>
@@ -182,7 +182,7 @@ class DistrictAssignModules extends Component {
             </div>
           </div>
           <form
-            className="form-horizontal"
+            className="form-horizontal col-md-12"
             onSubmit={this.sendAssignedModules}
           >
             <button
