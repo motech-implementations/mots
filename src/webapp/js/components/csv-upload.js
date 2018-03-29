@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import apiClient from '../utils/api-client';
 import { resetLogoutCounter } from '../actions/index';
+import { hasAuthority, UPLOAD_CSV_AUTHORITY } from '../utils/authorization';
 
 class CsvUpload extends Component {
   constructor(props) {
@@ -20,6 +21,12 @@ class CsvUpload extends Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
+  }
+
+  componentWillMount() {
+    if (!hasAuthority(UPLOAD_CSV_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
   }
 
   onFormSubmit(e) {
@@ -132,4 +139,7 @@ CsvUpload.propTypes = {
   uploadUrl: PropTypes.string.isRequired,
   selectText: PropTypes.string.isRequired,
   resetLogoutCounter: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };

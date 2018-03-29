@@ -73,7 +73,7 @@ public class CommunityHealthWorkerService {
    * Gets selected CHWs and returns their short representation using mapper.
    * @return List of CHWs short representation
    */
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public List<ChwInfoDto> getHealthWorkersInfoDtos() {
     Iterable<CommunityHealthWorker> healthWorkers =
         healthWorkerRepository.findBySelectedOrderByChwId(true);
@@ -102,7 +102,7 @@ public class CommunityHealthWorkerService {
    * Finds CommunityHealthWorkers matching all of the provided parameters.
    * If there are no parameters, return all CommunityHealthWorkers.
    */
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
@@ -184,6 +184,7 @@ public class CommunityHealthWorkerService {
    * @throws IOException in case of file issues
    */
   @SuppressWarnings("PMD.CyclomaticComplexity")
+  @PreAuthorize(RoleNames.HAS_UPLOAD_CSV_ROLE)
   public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile, Boolean selected)
       throws IOException {
     ICsvMapReader csvMapReader;

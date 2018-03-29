@@ -15,6 +15,7 @@ export const ASSIGN_MODULES_AUTHORITY = 'ROLE_ASSIGN_MODULES';
 export const MANAGE_USERS_AUTHORITY = 'ROLE_MANAGE_USERS';
 export const MANAGE_INCHARGE_USERS_AUTHORITY = 'ROLE_MANAGE_INCHARGE_USERS';
 export const DISPLAY_REPORTS_AUTHORITY = 'ROLE_DISPLAY_REPORTS';
+export const UPLOAD_CSV_AUTHORITY = 'ROLE_UPLOAD_CSV';
 
 export function hasAuthority(...authorities) {
   const token = localStorage.getItem('token');

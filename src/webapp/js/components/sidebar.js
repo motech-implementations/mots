@@ -10,7 +10,7 @@ import {
   MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
   CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
-  MANAGE_INCHARGE_USERS_AUTHORITY,
+  MANAGE_INCHARGE_USERS_AUTHORITY, UPLOAD_CSV_AUTHORITY,
 } from '../utils/authorization';
 import apiClient from '../utils/api-client';
 
@@ -111,7 +111,7 @@ export default class SideBar extends Component {
             </Link>
           </li>
         }
-        {
+        { hasAuthority(UPLOAD_CSV_AUTHORITY) &&
           <li>
             <Link to="/chw/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
@@ -179,7 +179,7 @@ export default class SideBar extends Component {
             </Link>
           </li>
         }
-        {
+        { hasAuthority(UPLOAD_CSV_AUTHORITY) &&
           <li>
             <Link to="/incharge/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
