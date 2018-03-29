@@ -88,6 +88,7 @@ public class InchargeService {
    * @throws IOException in case of file issues
    */
   @SuppressWarnings("PMD.CyclomaticComplexity")
+  @PreAuthorize(RoleNames.HAS_UPLOAD_CSV_ROLE)
   public Map<Integer, String> processInchageCsv(MultipartFile inchargeCsvFile, Boolean selected)
       throws IOException {
     ICsvMapReader csvMapReader;
