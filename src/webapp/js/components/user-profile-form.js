@@ -31,8 +31,8 @@ const FIELDS = {
       className: 'form-control',
     }),
     getDynamicAttributes: ({ newPassword }) => ({
-      disabled: !newPassword,
-      required: true,
+      hidden: !newPassword,
+      required: newPassword,
     }),
   },
   password: {
@@ -43,8 +43,8 @@ const FIELDS = {
       className: 'form-control',
     }),
     getDynamicAttributes: ({ confirmNewPassword }) => ({
-      disabled: !confirmNewPassword,
-      required: true,
+      hidden: !confirmNewPassword,
+      required: confirmNewPassword,
     }),
   },
 };
