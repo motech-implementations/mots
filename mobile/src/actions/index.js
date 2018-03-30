@@ -4,7 +4,7 @@ import AuthClient from '../utils/auth-client';
 import parseJwt from '../utils/encodeUtils';
 
 import {
-  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, CREATE_HEALTH_WORKER,
+  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
   SET_COUNTER_LOGOUT_TIME, FETCH_USERS, CREATE_USER, SAVE_USER, FETCH_ROLES, SAVE_PROFILE,
 } from './types';
@@ -104,12 +104,12 @@ export function fetchIncharges(selected) {
   };
 }
 
-export function createHealthWorker(values, callback) {
-  const request = apiClient.post(`${BASE_URL}/chw`, values);
+export function selectHealthWorker(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/chw/${values.id}/select`, values);
   request.then(result => callback(result));
 
   return {
-    type: CREATE_HEALTH_WORKER,
+    type: SAVE_HEALTH_WORKER,
     payload: request,
   };
 }

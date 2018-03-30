@@ -17,11 +17,14 @@ const ListItem = ({
     {columns.map(column => (
       <View key={column.Header} style={styles.cardLine}>
         <Text style={[styles.bold, lightThemeText]}>{!column.hide && `${column.Header}: `}
-          {(!column.Cell && !column.hide) &&
+          {(!(column.Cell || column.TextCell) && !column.hide) &&
             <Text style={[styles.normal, lightThemeText]}>
               {row[column.accessor]}
             </Text>
-            }
+          }
+          { column.TextCell &&
+            column.TextCell({ value: row[column.accessor] })
+          }
         </Text>
         <View>
           { (column.Cell && !column.hide) &&

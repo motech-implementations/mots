@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,6 +12,9 @@ import {
   hasAuthority } from '../utils/authorization';
 
 import styles from '../styles/listsStyles';
+import commonStyles from '../styles/commonStyles';
+
+const { lightThemeText } = commonStyles;
 
 class HealthWorkersList extends Component {
   constructor(props) {
@@ -76,6 +79,14 @@ class HealthWorkersList extends Component {
       }, {
         Header: 'Phone number',
         accessor: 'phoneNumber',
+      }, {
+        Header: 'Working',
+        accessor: 'working',
+        TextCell: cell => (
+          <Text style={[styles.normal, lightThemeText]}>
+            {cell.value ? 'Yes' : 'No'}
+          </Text>
+        ),
       },
       {
         Header: 'Actions',

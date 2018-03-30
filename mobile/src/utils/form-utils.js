@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import { change, untouch } from 'redux-form';
+import { change, initialize, untouch } from 'redux-form';
 import { dispatch } from '../App';
 import styles from '../styles/inputsStyles';
 import commonStyles from '../styles/commonStyles';
+import apiClient from './api-client';
 
 const { labelSelectFieldStyle, optionListStyle } = styles;
 const { lightThemeText } = commonStyles;
@@ -54,6 +55,10 @@ export function untouchFields(formName, ...fields) {
   });
 }
 
+function initializeForm(formName, formValues) {
+  dispatch(initialize(formName, formValues));
+}
+
 export function getAttributesForSelect(input, availableLocations) {
   let defaultText = input.value;
   const location = getLocationById(availableLocations, input.value);
@@ -103,4 +108,15 @@ export function getAttributesForInput() {
 
 export function getSupervisorNameFromFacility(list, facilityId) {
   return getLocationById(list, facilityId).inchargeFullName;
+}
+
+export function fetchDataAndInitializeFrom(formName, baseUrl, value) {
+  if (value && value !== '') {
+    const url = `${baseUrl}/${value}`;
+
+    apiClient.get(url)
+      .then((response) => {
+        initializeForm(formName, response);
+      });
+  }
 }
