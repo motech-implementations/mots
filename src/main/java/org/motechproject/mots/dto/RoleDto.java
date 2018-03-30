@@ -10,7 +10,7 @@ public class RoleDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter

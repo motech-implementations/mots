@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class ModuleSimpleDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter

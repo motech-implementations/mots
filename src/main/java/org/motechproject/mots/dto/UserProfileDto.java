@@ -1,9 +1,11 @@
 package org.motechproject.mots.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.NewPasswordsMatch;
 import org.motechproject.mots.validate.annotations.Uuid;
 
@@ -12,16 +14,18 @@ public class UserProfileDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter
   @Setter
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String name;
 
   @Getter
   @Setter
   @Email(message = ValidationMessages.INVALID_EMAIL)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String email;
 
   @Getter

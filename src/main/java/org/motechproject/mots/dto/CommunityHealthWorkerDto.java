@@ -1,10 +1,12 @@
 package org.motechproject.mots.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
 import org.motechproject.mots.validate.annotations.CommunityExistence;
 import org.motechproject.mots.validate.annotations.EducationLevel;
@@ -22,26 +24,30 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter
   @Setter
   @NotBlank(message = ValidationMessages.EMPTY_CHW_ID)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String chwId;
 
   @Getter
   @Setter
   @NotBlank(message = ValidationMessages.EMPTY_FIRST_NAME)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String firstName;
 
   @Getter
   @Setter
   @NotBlank(message = ValidationMessages.EMPTY_SECOND_NAME)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String secondName;
 
   @Getter
   @Setter
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String otherName;
 
   @Getter

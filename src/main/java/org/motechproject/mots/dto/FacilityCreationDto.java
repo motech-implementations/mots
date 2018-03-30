@@ -1,9 +1,11 @@
 package org.motechproject.mots.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.FacilityType;
 import org.motechproject.mots.validate.annotations.FacilityUniqueness;
@@ -22,6 +24,7 @@ public class FacilityCreationDto {
   @Getter
   @Setter
   @NotEmpty(message = ValidationMessages.EMPTY_LOCATION_NAME)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String name;
 
   @Setter
@@ -40,6 +43,7 @@ public class FacilityCreationDto {
   @Setter
   @Getter
   @NotEmpty(message = ValidationMessages.EMPTY_FACILITY_ID)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String facilityId;
 
   @Getter

@@ -4,15 +4,14 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class CourseDto extends IvrObjectDto {
 
-  @Uuid(message = ValidationMessages.INVALID_ID)
   @Getter
   @Setter
+  @Uuid
   private String id;
 
   @Getter
