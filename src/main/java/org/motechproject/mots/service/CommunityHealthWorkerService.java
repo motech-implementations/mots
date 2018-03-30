@@ -210,11 +210,11 @@ public class CommunityHealthWorkerService {
         continue;
       }
       if (chwIdSet.contains(chwId)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Health Worker ID is duplicated in CSV");
+        errorMap.put(csvMapReader.getLineNumber(), "CHW ID is duplicated in CSV");
         continue;
       }
 
-      if (validateBlankFieldsInCsv(csvMapReader, csvRow, errorMap)) {
+      if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap)) {
         continue;
       }
 
@@ -287,67 +287,67 @@ public class CommunityHealthWorkerService {
   }
 
   @SuppressWarnings("PMD.CyclomaticComplexity")
-  private boolean validateBlankFieldsInCsv(ICsvMapReader csvMapReader, Map<String, Object> csvRow,
+  private boolean validateBlankFieldsInCsv(int lineNumber, Map<String, Object> csvRow,
       Map<Integer, String> errorMap) {
 
     String chwId = Objects.toString(csvRow.get("CHW ID"), null);
     if (StringUtils.isBlank(chwId)) {
-      errorMap.put(csvMapReader.getLineNumber(), "CHW ID is empty");
+      errorMap.put(lineNumber, "CHW ID is empty");
       return true;
     }
     String district = Objects.toString(csvRow.get("District"), null);
     if (StringUtils.isBlank(district)) {
-      errorMap.put(csvMapReader.getLineNumber(), "District is empty");
+      errorMap.put(lineNumber, "District is empty");
       return true;
     }
     String chiefdom = Objects.toString(csvRow.get("Chiefdom"), null);
     if (StringUtils.isBlank(chiefdom)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Chiefdom is empty");
+      errorMap.put(lineNumber, "Chiefdom is empty");
       return true;
     }
     String working = Objects.toString(csvRow.get("Working"), null);
     if (StringUtils.isBlank(working)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Working is empty");
+      errorMap.put(lineNumber, "Working is empty");
       return true;
     }
     String firstName = Objects.toString(csvRow.get("First_Name"), null);
     if (StringUtils.isBlank(firstName)) {
-      errorMap.put(csvMapReader.getLineNumber(), "First Name is empty");
+      errorMap.put(lineNumber, "First Name is empty");
       return true;
     }
     String secondName = Objects.toString(csvRow.get("Second_Name"), null);
     if (StringUtils.isBlank(secondName)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Second Name is empty");
+      errorMap.put(lineNumber, "Second Name is empty");
       return true;
     }
     String gender = Objects.toString(csvRow.get("Gender"), null);
     if (StringUtils.isBlank(gender)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Gender is empty");
+      errorMap.put(lineNumber, "Gender is empty");
       return true;
     }
     String readWrite = Objects.toString(csvRow.get("Read_Write"), null);
     if (StringUtils.isBlank(readWrite)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Read Write is empty");
+      errorMap.put(lineNumber, "Read Write is empty");
       return true;
     }
     String education = Objects.toString(csvRow.get("Education"), null);
     if (StringUtils.isBlank(education)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Education is empty");
+      errorMap.put(lineNumber, "Education is empty");
       return true;
     }
     String phu = Objects.toString(csvRow.get("PHU"), null);
     if (StringUtils.isBlank(phu)) {
-      errorMap.put(csvMapReader.getLineNumber(), "PHU is empty");
+      errorMap.put(lineNumber, "PHU is empty");
       return true;
     }
     String phuSupervisor = Objects.toString(csvRow.get("PHU_Supervisor"), null);
     if (StringUtils.isBlank(phuSupervisor)) {
-      errorMap.put(csvMapReader.getLineNumber(), "PHU Supervisor is empty");
+      errorMap.put(lineNumber, "PHU Supervisor is empty");
       return true;
     }
     String peerSupervisor = Objects.toString(csvRow.get("Peer_Supervisor"), null);
     if (StringUtils.isBlank(peerSupervisor)) {
-      errorMap.put(csvMapReader.getLineNumber(), "Peer Supervisor is empty");
+      errorMap.put(lineNumber, "Peer Supervisor is empty");
       return true;
     }
 
