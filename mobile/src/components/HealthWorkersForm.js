@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Select } from 'react-native-chooser';
+import Autocomplete from 'react-native-autocomplete-input';
 import { CheckBox } from 'react-native-elements';
 
 import FormField from './FormField';
@@ -17,6 +18,7 @@ import {
   getAttributesForSelectWithClearOnChange,
   getAttributesForInput,
   getSupervisorNameFromFacility,
+  fetchDataAndInitializeFrom,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -26,11 +28,45 @@ export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
   chwId: {
     label: 'CHW Id',
+    type: Autocomplete,
     required: true,
     getDynamicAttributes: ({ isChwIdDisabled }) => ({
       editable: !isChwIdDisabled,
     }),
-    getAttributes: () => getAttributesForInput(),
+    getAttributes: (input, { notSelectedChwIds }) => {
+      const filter = (id) => {
+        if (id === '') {
+          return [];
+        }
+        const regex = new RegExp(`${id.trim()}`, 'i');
+        return notSelectedChwIds.filter(chwId => chwId.search(regex) >= 0);
+      };
+
+      const data = filter(input.value);
+      const compare = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
+
+      return {
+        data: data.length === 1 && compare(input.value, data[0]) ? [] : data,
+        inputContainerStyle: {
+          borderColor: '#ebebeb',
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+        placeholder: 'Select Community Health Worker ID',
+        underlineColorAndroid: 'rgba(0,0,0,0)',
+        style: styles.autoCompleteStyle,
+        onChangeText: text => input.onChange(text),
+        renderItem: item => (
+          <TouchableOpacity onPress={() => {
+            fetchDataAndInitializeFrom(CHW_FORM_NAME, '/api/chw/findByChwId', item);
+            input.onChange(item);
+          }}
+          >
+            <Text>{item}</Text>
+          </TouchableOpacity>
+        ),
+      };
+    },
   },
   firstName: {
     label: 'First Name',
@@ -263,6 +299,20 @@ const FIELDS = {
     }),
     getAttributes: input => (getAttributesForSelect(input)),
   },
+  working: {
+    label: 'Working',
+    type: CheckBox,
+    getAttributes: input => (
+      {
+        title: '',
+        checked: input.value === true,
+        onPress: () => {
+          input.onChange(!input.value);
+        },
+      }
+    ),
+    nonBorderField: true,
+  },
 };
 
 class HealthWorkersForm extends Component {
@@ -290,6 +340,7 @@ class HealthWorkersForm extends Component {
         facilityId={this.props.facilityId}
         isChwIdDisabled={this.props.isChwIdDisabled}
         yearOfBirth={this.props.yearOfBirth}
+        notSelectedChwIds={this.props.notSelectedChwIds}
       />
     );
   }
@@ -345,7 +396,7 @@ function isAgeHigherThan100(year) {
   return year >= new Date().getFullYear() - 100;
 }
 
-function validate(values) {
+function validate(values, props) {
   const errors = {};
   _.each(FIELDS, (fieldConfig, fieldName) => {
     if (fieldConfig.required && !values[fieldName]) {
@@ -358,6 +409,9 @@ function validate(values) {
   }
   if (values.yearOfBirth && !isAgeHigherThan100(values.yearOfBirth)) {
     errors.yearOfBirth = 'Maximum age is 100';
+  }
+  if (values.chwId && !props.notSelectedChwIds.includes(values.chwId)) {
+    errors.chwId = 'You have to select id from list to populate form';
   }
 
   return errors;
@@ -392,6 +446,7 @@ HealthWorkersForm.propTypes = {
   loading: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
   yearOfBirth: PropTypes.string,
+  notSelectedChwIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 HealthWorkersForm.defaultProps = {
@@ -402,4 +457,5 @@ HealthWorkersForm.defaultProps = {
   loading: false,
   isChwIdDisabled: false,
   yearOfBirth: null,
+  notSelectedChwIds: [],
 };

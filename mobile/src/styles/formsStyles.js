@@ -47,4 +47,13 @@ export default {
   formAddContainer: {
     paddingBottom: 20,
   },
+  autoCompleteStyle: {
+    flex: 1,
+    left: 0,
+    right: 0,
+    top: 0,
+    zIndex: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+  },
 };

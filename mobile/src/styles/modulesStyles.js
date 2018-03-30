@@ -20,6 +20,7 @@ export default {
     borderRadius: 4,
     marginLeft: 30,
     flex: 2,
+    justifyContent: 'center',
   },
   datePickerStyle: {
     marginLeft: 30,

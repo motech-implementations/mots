@@ -5,11 +5,12 @@ import { View, Text, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import HealthWorkersForm from './HealthWorkersForm';
-import { createHealthWorker } from '../actions';
+import { selectHealthWorker } from '../actions';
 import { CHW_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
 import commonStyles from '../styles/commonStyles';
+import apiClient from '../utils/api-client';
 
 const { formHeader } = formsStyles;
 const { lightThemeText } = commonStyles;
@@ -17,7 +18,10 @@ const { lightThemeText } = commonStyles;
 class HealthWorkersNew extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false };
+    this.state = {
+      loading: false,
+      notSelectedChwIds: [],
+    };
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -29,6 +33,7 @@ class HealthWorkersNew extends Component {
         Actions.home();
       }
     });
+    this.fetchNotSelectedChwIds();
   }
 
   onSubmitCancel() {
@@ -38,7 +43,7 @@ class HealthWorkersNew extends Component {
 
   onSubmit(values) {
     this.setState({ loading: true });
-    this.props.createHealthWorker(values, result => this.onSubmitSuccess(result));
+    this.props.selectHealthWorker(values, result => this.onSubmitSuccess(result));
   }
 
   onSubmitSuccess(result) {
@@ -51,6 +56,15 @@ class HealthWorkersNew extends Component {
     }
   }
 
+  fetchNotSelectedChwIds() {
+    const url = '/api/chw/notSelected';
+
+    apiClient.get(url)
+      .then((response) => {
+        this.setState({ notSelectedChwIds: response });
+      });
+  }
+
   render() {
     return (
       <View style={getContainerStyle()}>
@@ -60,6 +74,7 @@ class HealthWorkersNew extends Component {
             loading={this.state.loading}
             onSubmit={this.onSubmit}
             onSubmitCancel={this.onSubmitCancel}
+            notSelectedChwIds={this.state.notSelectedChwIds}
           />
         </ScrollView>
       </View>
@@ -67,8 +82,8 @@ class HealthWorkersNew extends Component {
   }
 }
 
-export default connect(null, { createHealthWorker })(HealthWorkersNew);
+export default connect(null, { selectHealthWorker })(HealthWorkersNew);
 
 HealthWorkersNew.propTypes = {
-  createHealthWorker: PropTypes.func.isRequired,
+  selectHealthWorker: PropTypes.func.isRequired,
 };

@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import styles from '../styles/inputsStyles';
 import commonStyles from '../styles/commonStyles';
 
-const FieldWithLabel = ({ label, children, nonBorderField }) => {
+const FieldWithLabel = ({
+  label, children, nonBorderField, editableStyle,
+}) => {
   const {
     labelFieldStyle,
     labelStyle,
@@ -19,7 +21,7 @@ const FieldWithLabel = ({ label, children, nonBorderField }) => {
       <Text style={[labelStyle, lightThemeText, PixelRatio.get() < 2 && labelStyleSmall]}>
         {label}
       </Text>
-      <View style={[labelFieldStyle, nonBorderField ? nonBorderFieldStyle : '']}>
+      <View style={[labelFieldStyle, editableStyle, nonBorderField ? nonBorderFieldStyle : '']}>
         {children}
       </View>
     </View>
@@ -35,6 +37,7 @@ FieldWithLabel.propTypes = {
     PropTypes.node,
   ]),
   nonBorderField: PropTypes.bool,
+  editableStyle: PropTypes.shape({}).isRequired,
 };
 
 FieldWithLabel.defaultProps = {
