@@ -56,6 +56,7 @@ const FIELDS = {
         underlineColorAndroid: 'rgba(0,0,0,0)',
         style: styles.autoCompleteStyle,
         onChangeText: text => input.onChange(text),
+        onBlur: event => input.onBlur(event.target.value),
         renderItem: item => (
           <TouchableOpacity onPress={() => {
             fetchDataAndInitializeFrom(CHW_FORM_NAME, '/api/chw/findByChwId', item);

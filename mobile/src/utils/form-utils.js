@@ -59,6 +59,18 @@ function initializeForm(formName, formValues) {
   dispatch(initialize(formName, formValues));
 }
 
+export function fetchDataAndInitializeFrom(formName, baseUrl, value) {
+  if (value && value !== '') {
+    const url = `${baseUrl}/${value}`;
+
+    apiClient.get(url)
+      .then((response) => {
+        initializeForm(formName, response);
+      });
+  }
+}
+
+
 export function getAttributesForSelect(input, availableLocations) {
   let defaultText = input.value;
   const location = getLocationById(availableLocations, input.value);
@@ -99,6 +111,27 @@ getAttributesForSelectWithClearOnChange(input, availableLocations, formName, ...
   };
 }
 
+export function
+getAttributesForSelectWithInitOnChange(input, availableLocations, formName, baseUrl) {
+  let defaultText = input.value;
+  const location = getLocationById(availableLocations, input.value);
+  if (input.value && availableLocations && location) {
+    defaultText = location.name;
+  }
+
+  return {
+    defaultText: defaultText || 'Click to Select',
+    onSelect: (value) => {
+      fetchDataAndInitializeFrom(formName, baseUrl, value);
+      input.onChange(value);
+    },
+    transparent: true,
+    optionListStyle,
+    style: labelSelectFieldStyle,
+    textStyle: lightThemeText,
+  };
+}
+
 export function getAttributesForInput() {
   return {
     underlineColorAndroid: 'rgba(0,0,0,0)',
@@ -108,15 +141,4 @@ export function getAttributesForInput() {
 
 export function getSupervisorNameFromFacility(list, facilityId) {
   return getLocationById(list, facilityId).inchargeFullName;
-}
-
-export function fetchDataAndInitializeFrom(formName, baseUrl, value) {
-  if (value && value !== '') {
-    const url = `${baseUrl}/${value}`;
-
-    apiClient.get(url)
-      .then((response) => {
-        initializeForm(formName, response);
-      });
-  }
 }

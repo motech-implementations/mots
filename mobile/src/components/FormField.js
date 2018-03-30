@@ -19,7 +19,9 @@ function renderSelectOptions(options) {
       const rawValue = valueKey ? value[valueKey] : value;
       const optionValue = typeof rawValue === 'string' ? rawValue : JSON.stringify(rawValue);
       const displayValue = displayNameKey ? value[displayNameKey] : value;
-
+      if (value.disabled) {
+        return null;
+      }
       return (
         <Option key={index} value={optionValue} styleText={lightThemeText}>
           { displayValue || '' }
