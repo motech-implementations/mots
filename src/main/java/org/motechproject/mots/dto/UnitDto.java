@@ -10,9 +10,9 @@ import org.motechproject.mots.validate.annotations.Uuid;
 
 public class UnitDto extends IvrObjectDto {
 
-  @Uuid(message = ValidationMessages.INVALID_ID)
   @Getter
   @Setter
+  @Uuid
   private String id;
 
   @Getter

@@ -13,7 +13,7 @@ public class FacilityDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter

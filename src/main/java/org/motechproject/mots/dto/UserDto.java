@@ -3,6 +3,7 @@ package org.motechproject.mots.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.UsernameUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
@@ -18,17 +20,19 @@ public class UserDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter
   @Setter
   @NotBlank(message = ValidationMessages.EMPTY_USERNAME)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String username;
 
   @Getter
   @Setter
   @Email(message = ValidationMessages.INVALID_EMAIL)
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String email;
 
   @Getter
@@ -43,6 +47,7 @@ public class UserDto {
 
   @Getter
   @Setter
+  @JsonDeserialize(using = TrimTextDeserializer.class)
   private String name;
 
   @Getter
