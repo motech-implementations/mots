@@ -47,9 +47,7 @@ export default class FormField extends Component {
       ...dynamicAttr,
     };
 
-    const editableStyle = (
-      attributes.editable === false || attributes.editable === false
-    ) ? { backgroundColor: '#dddddd' } : {};
+    const editableStyle = attributes.editable === false ? { backgroundColor: '#dddddd' } : {};
 
     if (FieldType === Autocomplete) {
       return (

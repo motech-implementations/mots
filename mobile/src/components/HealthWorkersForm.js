@@ -410,7 +410,9 @@ function validate(values, props) {
   if (values.yearOfBirth && !isAgeHigherThan100(values.yearOfBirth)) {
     errors.yearOfBirth = 'Maximum age is 100';
   }
-  if (values.chwId && !props.notSelectedChwIds.includes(values.chwId)) {
+  if (values.chwId &&
+      props.notSelectedChwIds &&
+      !props.notSelectedChwIds.includes(values.chwId)) {
     errors.chwId = 'You have to select id from list to populate form';
   }
 
