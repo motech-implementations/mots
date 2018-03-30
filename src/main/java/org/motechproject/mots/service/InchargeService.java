@@ -26,8 +26,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.constraint.Unique;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
@@ -189,10 +187,10 @@ public class InchargeService {
         null, // district
         null, // chiefdom
         null, // facility name
-        new Unique(), // facility id
+        null, // facility id
         null, // facility type
         null, // functional status
-        new NotNull(), // incharge name
+        null, // incharge name
         null // incharge number
     };
   }
