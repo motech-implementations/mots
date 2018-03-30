@@ -14,6 +14,7 @@ import {
   getSelectableLocations,
   getAttributesForSelectWithClearOnChange,
   getAttributesForInput,
+  getAttributesForSelectWithInitOnChange, getAttributesForSelect,
 } from '../utils/form-utils';
 import Button from './Button';
 import styles from '../styles/formsStyles';
@@ -21,29 +22,6 @@ import Spinner from './Spinner';
 
 export const INCHARGE_FORM_NAME = 'InchargesForm';
 const FIELDS = {
-  firstName: {
-    label: 'First Name',
-    required: true,
-    getAttributes: () => getAttributesForInput(),
-  },
-  secondName: {
-    label: 'Surname',
-    required: true,
-    getAttributes: () => getAttributesForInput(),
-  },
-  otherName: {
-    label: 'Other Name',
-    getAttributes: () => getAttributesForInput(),
-  },
-  phoneNumber: {
-    label: 'Phone Number',
-    required: true,
-    getAttributes: () => getAttributesForInput(),
-  },
-  email: {
-    label: 'Email address',
-    getAttributes: () => getAttributesForInput(),
-  },
   districtId: {
     type: Select,
     label: 'District',
@@ -98,18 +76,42 @@ const FIELDS = {
     type: Select,
     label: 'Facility',
     required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
-      values: getSelectableLocations(
+    getSelectOptions: ({
+      availableLocations, districtId, chiefdomId, addIncharge,
+    }) => ({
+      values: _.map(getSelectableLocations(
         'facilities',
         availableLocations,
         districtId,
         chiefdomId,
-      ),
+      ), (facility) => {
+        if (addIncharge && (_.isNull(facility.inchargeId) || facility.inchargeSelected)) {
+          return { ...facility, disabled: true };
+        } else if (!addIncharge && !_.isNull(facility.inchargeId)) {
+          return { ...facility, disabled: true };
+        }
+        return facility;
+      }),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: (input, { availableLocations, districtId, chiefdomId }) => (
-      getAttributesForSelectWithClearOnChange(
+    getAttributes: (input, {
+      availableLocations, districtId, chiefdomId, addIncharge,
+    }) => {
+      if (addIncharge) {
+        return getAttributesForSelectWithInitOnChange(
+          input,
+          getSelectableLocations(
+            'facilities',
+            availableLocations,
+            districtId,
+            chiefdomId,
+          ),
+          INCHARGE_FORM_NAME,
+          '/api/incharge/findByFacilityId',
+        );
+      }
+      return getAttributesForSelect(
         input,
         getSelectableLocations(
           'facilities',
@@ -117,13 +119,34 @@ const FIELDS = {
           districtId,
           chiefdomId,
         ),
-        INCHARGE_FORM_NAME,
-        'communityId',
-      )
-    ),
+      );
+    },
     getDynamicAttributes: ({ chiefdomId }) => ({
       hidden: !chiefdomId,
     }),
+  },
+  firstName: {
+    label: 'First Name',
+    required: true,
+    getAttributes: () => getAttributesForInput(),
+  },
+  secondName: {
+    label: 'Surname',
+    required: true,
+    getAttributes: () => getAttributesForInput(),
+  },
+  otherName: {
+    label: 'Other Name',
+    getAttributes: () => getAttributesForInput(),
+  },
+  phoneNumber: {
+    label: 'Phone Number',
+    required: true,
+    getAttributes: () => getAttributesForInput(),
+  },
+  email: {
+    label: 'Email address',
+    getAttributes: () => getAttributesForInput(),
   },
 };
 
@@ -149,6 +172,7 @@ class InchargesForm extends Component {
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
+        addIncharge={this.props.addIncharge}
       />
     );
   }
@@ -231,6 +255,7 @@ InchargesForm.propTypes = {
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   loading: PropTypes.bool,
+  addIncharge: PropTypes.bool,
 };
 
 InchargesForm.defaultProps = {
@@ -238,4 +263,5 @@ InchargesForm.defaultProps = {
   districtId: null,
   chiefdomId: null,
   loading: false,
+  addIncharge: false,
 };

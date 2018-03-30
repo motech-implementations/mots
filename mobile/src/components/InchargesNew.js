@@ -5,7 +5,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import InchargesForm from './InchargesForm';
-import { createIncharge } from '../actions';
+import { selectIncharge } from '../actions';
 import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
@@ -38,7 +38,7 @@ class InchargesNew extends Component {
 
   onSubmit(values) {
     this.setState({ loading: true });
-    this.props.createIncharge(values, result => this.onSubmitSuccess(result));
+    this.props.selectIncharge(values, result => this.onSubmitSuccess(result));
   }
 
   onSubmitSuccess(result) {
@@ -60,6 +60,7 @@ class InchargesNew extends Component {
             loading={this.state.loading}
             onSubmit={this.onSubmit}
             onSubmitCancel={this.onSubmitCancel}
+            addIncharge
           />
         </ScrollView>
       </View>
@@ -67,8 +68,8 @@ class InchargesNew extends Component {
   }
 }
 
-export default connect(null, { createIncharge })(InchargesNew);
+export default connect(null, { selectIncharge })(InchargesNew);
 
 InchargesNew.propTypes = {
-  createIncharge: PropTypes.func.isRequired,
+  selectIncharge: PropTypes.func.isRequired,
 };
