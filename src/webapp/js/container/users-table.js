@@ -54,12 +54,67 @@ class UsersTable extends Component {
     return mobileColumns;
   }
 
+  constructor() {
+    super();
+    // flag of someone is typing
+    this.filtering = false;
+
+    this.onFilteredChange = this.onFilteredChange.bind(this);
+    this.fetchStrategy = this.fetchStrategy.bind(this);
+
+    this.fetchData = this.fetchData.bind(this);
+    this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
+  }
+
   componentWillMount() {
     if (!hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.setState({ loading: true });
   }
+
+  onFilteredChange() {
+    // when the filter changes, someone is typing
+    this.filtering = true;
+  }
+
+  fetchStrategy(tableState) {
+    // if someone is typing use debounce
+    if (this.filtering) {
+      return this.fetchDataWithDebounce(tableState);
+    }
+    // if not typing (f.ex. sorting) fetch data without debounce
+    return this.fetchData(tableState);
+  }
+
+  fetchData(tableState) {
+    // filtering can be reset
+    this.filtering = false;
+
+    const filters = tableState.filtered.map(a => ({ ...a }));
+    let index = _.findIndex(filters, ['id', 'roles[0].name']);
+    if (index !== -1) {
+      filters[index].id = 'role';
+    }
+    const sorting = tableState.sorted.map(a => ({ ...a }));
+    index = _.findIndex(sorting, ['id', 'roles[0].name']);
+    if (index !== -1) {
+      sorting[index].id = 'role';
+    }
+    this.setState({ loading: true });
+    this.props.fetchUsers(buildSearchParams(
+      filters,
+      sorting,
+      tableState.page,
+      tableState.pageSize,
+    ))
+      .then(() => {
+        this.setState({ loading: false });
+      });
+
+    this.props.resetLogoutCounter();
+  }
+
 
   render() {
     return (
@@ -75,32 +130,11 @@ class UsersTable extends Component {
             manual
             filterable
             data={this.props.usersList}
+            pages={this.props.userListPages}
             columns={UsersTable.getTableColumns()}
             loading={this.state.loading}
-            pages={this.props.userListPages}
-            onFetchData={(state) => {
-              const filters = state.filtered.map(a => ({ ...a }));
-              let index = _.findIndex(filters, ['id', 'roles[0].name']);
-              if (index !== -1) {
-                filters[index].id = 'role';
-              }
-              const sorting = state.sorted.map(a => ({ ...a }));
-              index = _.findIndex(sorting, ['id', 'roles[0].name']);
-              if (index !== -1) {
-                sorting[index].id = 'role';
-              }
-              this.setState({ loading: true });
-              this.props.fetchUsers(buildSearchParams(
-                  filters,
-                  sorting,
-                  state.page,
-                  state.pageSize,
-              ))
-              .then(() => {
-                this.setState({ loading: false });
-              });
-              this.props.resetLogoutCounter();
-            }}
+            onFetchData={this.fetchStrategy}
+            onFilteredChange={this.onFilteredChange}
           />
         </div>
       </div>

@@ -22,11 +22,56 @@ class LocationsTable extends Component {
     return mobileColumns;
   }
 
+  constructor() {
+    super();
+    // flag of someone is typing
+    this.filtering = false;
+
+    this.onFilteredChange = this.onFilteredChange.bind(this);
+    this.fetchStrategy = this.fetchStrategy.bind(this);
+
+    this.fetchData = this.fetchData.bind(this);
+    this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
+  }
+
   componentWillMount() {
     if (!hasAuthority(DISPLAY_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.setState({ loading: true });
+  }
+
+  onFilteredChange() {
+    // when the filter changes, someone is typing
+    this.filtering = true;
+  }
+
+  fetchStrategy(tableState) {
+    // if someone is typing use debounce
+    if (this.filtering) {
+      return this.fetchDataWithDebounce(tableState);
+    }
+    // if not typing (f.ex. sorting) fetch data without debounce
+    return this.fetchData(tableState);
+  }
+
+  fetchData(tableState) {
+    // filtering can be reset
+    this.filtering = false;
+
+    this.setState({ loading: true });
+
+    this.props.fetchLocationsOfType(this.props.locationType, buildSearchParams(
+      tableState.filtered,
+      tableState.sorted,
+      tableState.page,
+      tableState.pageSize,
+    ))
+      .then(() => {
+        this.setState({ loading: false });
+      });
+
+    this.props.resetLogoutCounter();
   }
 
   render() {
@@ -43,22 +88,11 @@ class LocationsTable extends Component {
             manual
             filterable
             data={this.props.locationsList}
+            pages={this.props.locationListPages}
             columns={this.props.tableColumns}
             loading={this.state.loading}
-            pages={this.props.locationListPages}
-            onFetchData={(state) => {
-              this.setState({ loading: true });
-              this.props.fetchLocationsOfType(this.props.locationType, buildSearchParams(
-                  state.filtered,
-                  state.sorted,
-                  state.page,
-                  state.pageSize,
-              ))
-              .then(() => {
-                this.setState({ loading: false });
-              });
-              this.props.resetLogoutCounter();
-            }}
+            onFetchData={this.fetchStrategy}
+            onFilteredChange={this.onFilteredChange}
           />
         </div>
       </div>
