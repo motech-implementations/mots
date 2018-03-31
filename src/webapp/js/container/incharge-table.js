@@ -16,11 +16,28 @@ import {
 import { buildSearchParams } from '../utils/react-table-search-params';
 
 class InchargeTable extends Component {
+  constructor() {
+    super();
+    // flag of someone is typing
+    this.filtering = false;
+
+    this.onFilteredChange = this.onFilteredChange.bind(this);
+    this.fetchStrategy = this.fetchStrategy.bind(this);
+
+    this.fetchData = this.fetchData.bind(this);
+    this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
+  }
+
   componentWillMount() {
     if (!hasAuthority(INCHARGE_READ_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.setState({ loading: true });
+  }
+
+  onFilteredChange() {
+    // when the filter changes, someone is typing
+    this.filtering = true;
   }
 
   getTableColumns = () => [
@@ -71,6 +88,34 @@ class InchargeTable extends Component {
     return mobileColumns;
   }
 
+  fetchStrategy(tableState) {
+    // if someone is typing use debounce
+    if (this.filtering) {
+      return this.fetchDataWithDebounce(tableState);
+    }
+    // if not typing (f.ex. sorting) fetch data without debounce
+    return this.fetchData(tableState);
+  }
+
+  fetchData(tableState) {
+    // filtering can be reset
+    this.filtering = false;
+
+    this.setState({ loading: true });
+
+    this.props.fetchIncharges(buildSearchParams(
+      tableState.filtered,
+      tableState.sorted,
+      tableState.page,
+      tableState.pageSize,
+    ), this.props.selected)
+      .then(() => {
+        this.setState({ loading: false });
+      });
+
+    this.props.resetLogoutCounter();
+  }
+
   render() {
     return (
       <div>
@@ -85,22 +130,11 @@ class InchargeTable extends Component {
             manual
             filterable
             data={this.props.inchargesList}
+            pages={this.props.inchargeListPages}
             columns={this.getTableColumns()}
             loading={this.state.loading}
-            pages={this.props.inchargeListPages}
-            onFetchData={(state) => {
-              this.setState({ loading: true });
-              this.props.fetchIncharges(buildSearchParams(
-                  state.filtered,
-                  state.sorted,
-                  state.page,
-                  state.pageSize,
-              ), this.props.selected)
-              .then(() => {
-                this.setState({ loading: false });
-              });
-              this.props.resetLogoutCounter();
-            }}
+            onFetchData={this.fetchStrategy}
+            onFilteredChange={this.onFilteredChange}
           />
         </div>
       </div>
