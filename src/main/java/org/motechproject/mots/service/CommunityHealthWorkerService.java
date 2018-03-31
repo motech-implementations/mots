@@ -104,12 +104,12 @@ public class CommunityHealthWorkerService {
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, Boolean selected, Pageable pageable)
-      throws IllegalArgumentException {
+      String chiefdomName, String districtName, String phuSupervisor, Boolean selected,
+      Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
         chwId, firstName, secondName, otherName,
         phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, selected, pageable);
+        facilityName, chiefdomName, districtName, phuSupervisor, selected, pageable);
   }
 
   /**

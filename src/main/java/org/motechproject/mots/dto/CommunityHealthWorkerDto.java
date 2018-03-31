@@ -22,7 +22,7 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  @Uuid(message = ValidationMessages.INVALID_ID)
+  @Uuid
   private String id;
 
   @Getter
@@ -119,4 +119,8 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   private Boolean working;
+
+  @Getter
+  @Setter
+  private String phuSupervisor;
 }

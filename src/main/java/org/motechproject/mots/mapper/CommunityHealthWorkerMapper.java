@@ -24,7 +24,8 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "chiefdomName", source = "community.facility.chiefdom.name"),
       @Mapping(target = "chiefdomId", source = "community.facility.chiefdom.id"),
       @Mapping(target = "districtName", source = "community.facility.chiefdom.district.name"),
-      @Mapping(target = "districtId", source = "community.facility.chiefdom.district.id")
+      @Mapping(target = "districtId", source = "community.facility.chiefdom.district.id"),
+      @Mapping(target = "phuSupervisor", source = "community.facility.inchargeFullName")
   })
   CommunityHealthWorkerDto toDto(CommunityHealthWorker healthWorker);
 
