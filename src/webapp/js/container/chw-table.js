@@ -131,6 +131,9 @@ class ChwTable extends Component {
       Header: 'Community',
       accessor: 'communityName',
     }, {
+      Header: 'PHU Supervisor',
+      accessor: 'phuSupervisor',
+    }, {
       Header: 'Preferred language',
       accessor: 'preferredLanguage',
       filterable: false,

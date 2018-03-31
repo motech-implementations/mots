@@ -125,4 +125,8 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   private Boolean working;
+
+  @Getter
+  @Setter
+  private String phuSupervisor;
 }

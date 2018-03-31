@@ -165,7 +165,7 @@ const FIELDS = {
     getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId', 'supervisorName')),
   },
   supervisorName: {
-    label: 'Supervisor',
+    label: 'PHU Supervisor',
     getAttributes: () => ({
       disabled: true,
       className: 'form-control',
