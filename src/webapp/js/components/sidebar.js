@@ -104,7 +104,7 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         { hasAuthority(CHW_WRITE_AUTHORITY) &&
-          <li>
+          <li className="border-none">
             <Link to="/chw/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
               <span className="icon-text">Add CHW</span>
@@ -112,7 +112,7 @@ export default class SideBar extends Component {
           </li>
         }
         { hasAuthority(UPLOAD_CSV_AUTHORITY) &&
-          <li>
+          <li className="border-none">
             <Link to="/chw/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload CSV</span>
@@ -180,7 +180,7 @@ export default class SideBar extends Component {
           </li>
         }
         { hasAuthority(UPLOAD_CSV_AUTHORITY) &&
-          <li>
+          <li className="border-none">
             <Link to="/incharge/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload CSV</span>
@@ -277,7 +277,7 @@ export default class SideBar extends Component {
     return (
       <ul className="nav nav-second-level">
         {this.state.reportList.map(report => (
-          <li key={report.id}>
+          <li key={report.id} className="border-none">
             <Link
               to={{
                 pathname: `/report/${report.id}`,
