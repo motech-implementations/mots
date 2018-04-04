@@ -65,9 +65,7 @@ class CsvUpload extends Component {
   render() {
     return (
       <div>
-        <div className="padding-bottom-sm">
-          <h1>CSV File Upload</h1>
-        </div>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">CSV File Upload</h1>
         <div>
           <form className="form-horizontal" onSubmit={this.onFormSubmit} >
             <div className="row padding-bottom-xs">
