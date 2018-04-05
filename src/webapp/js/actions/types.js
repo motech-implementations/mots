@@ -35,3 +35,5 @@ export const SAVE_FACILITY = 'save_facility';
 export const CREATE_COMMUNITY = 'create_community';
 export const SAVE_COMMUNITY = 'save_community';
 
+
+export const FETCH_REPORTS = 'fetch_reports';

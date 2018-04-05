@@ -15,11 +15,6 @@ public class JasperTemplateParameterDto {
   private String displayName;
   private String defaultValue;
   private String dataType;
-  private String selectExpression;
-  private String selectMethod;
-  private String selectBody;
-  private String selectProperty;
-  private String displayProperty;
   private String description;
   private Boolean required;
   private List<String> options;
