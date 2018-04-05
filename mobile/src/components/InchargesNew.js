@@ -45,7 +45,7 @@ class InchargesNew extends Component {
     this.setState({ loading: false });
     if (result) {
       Actions.modalSuccess({
-        message: 'New Incharge has been created',
+        message: 'Incharge has been added',
         onClose: () => { Actions.incharges(); },
       });
     }
