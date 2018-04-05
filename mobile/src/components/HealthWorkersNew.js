@@ -50,7 +50,7 @@ class HealthWorkersNew extends Component {
     this.setState({ loading: false });
     if (result) {
       Actions.modalSuccess({
-        message: 'New Health Worker has been created',
+        message: 'Health Worker has been added',
         onClose: () => { Actions.chws(); },
       });
     }
