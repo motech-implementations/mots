@@ -36,7 +36,7 @@ const FIELDS = {
     getAttributes: (input, { notSelectedChwIds }) => {
       const filter = (id) => {
         if (id === '') {
-          return [];
+          return notSelectedChwIds;
         }
         const regex = new RegExp(`${id.trim()}`, 'i');
         return notSelectedChwIds.filter(chwId => chwId.search(regex) >= 0);
@@ -57,6 +57,11 @@ const FIELDS = {
         style: styles.autoCompleteStyle,
         onChangeText: text => input.onChange(text),
         onBlur: event => input.onBlur(event.target.value),
+        onFocus: () => {
+          if (!input.value) {
+            input.onChange('');
+          }
+        },
         renderItem: item => (
           <TouchableOpacity onPress={() => {
             fetchDataAndInitializeFrom(CHW_FORM_NAME, '/api/chw/findByChwId', item);
