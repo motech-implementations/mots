@@ -46,31 +46,6 @@ public class JasperTemplateParameter extends BaseTimestampedEntity {
   @Setter
   private String dataType;
 
-  @Column(name = "select_expression")
-  @Getter
-  @Setter
-  private String selectExpression;
-
-  @Column(name = "select_method")
-  @Getter
-  @Setter
-  private String selectMethod;
-
-  @Column(name = "select_body")
-  @Getter
-  @Setter
-  private String selectBody;
-
-  @Column(name = "select_property")
-  @Getter
-  @Setter
-  private String selectProperty;
-
-  @Column(name = "display_property")
-  @Getter
-  @Setter
-  private String displayProperty;
-
   @Column(name = "description")
   @Getter
   @Setter

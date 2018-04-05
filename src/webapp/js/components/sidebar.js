@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -12,9 +13,9 @@ import {
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
   MANAGE_INCHARGE_USERS_AUTHORITY, UPLOAD_CSV_AUTHORITY,
 } from '../utils/authorization';
-import apiClient from '../utils/api-client';
+import { fetchReports } from '../actions/index';
 
-export default class SideBar extends Component {
+class SideBar extends Component {
   static getSubmenuArrowClass(collapsed) {
     if (collapsed) {
       return 'fa fa-angle-left pull-right';
@@ -33,7 +34,6 @@ export default class SideBar extends Component {
       locationsMenuCollapsed: true,
       usersMenuCollapsed: true,
       reportsMenuCollapsed: true,
-      reportList: [],
     };
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
@@ -42,22 +42,12 @@ export default class SideBar extends Component {
     this.toggleLocationsMenu = this.toggleLocationsMenu.bind(this);
     this.toggleUsersMenu = this.toggleUsersMenu.bind(this);
     this.toggleReportsMenu = this.toggleReportsMenu.bind(this);
-    this.fetchReports = this.fetchReports.bind(this);
   }
 
   componentWillMount() {
     if (hasAuthority(DISPLAY_REPORTS_AUTHORITY)) {
-      this.fetchReports();
+      this.props.fetchReports();
     }
-  }
-
-  fetchReports() {
-    const url = '/api/reports/templates/';
-
-    apiClient.get(url)
-      .then((response) => {
-        this.setState({ reportList: response.data });
-      });
   }
 
   toggleHealthWorkersMenu(event) {
@@ -276,7 +266,7 @@ export default class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        {this.state.reportList.map(report => (
+        {this.props.reportList.map(report => (
           <li key={report.id} className="border-none">
             <Link
               to={{
@@ -402,12 +392,23 @@ export default class SideBar extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    reportList: state.reports,
+  };
+}
+
+export default connect(mapStateToProps, { fetchReports })(SideBar);
+
 SideBar.propTypes = {
   signoutUser: PropTypes.func.isRequired,
   showMenuSmart: PropTypes.bool,
   hideMenuSmart: PropTypes.func.isRequired,
+  fetchReports: PropTypes.func.isRequired,
+  reportList: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 SideBar.defaultProps = {
   showMenuSmart: false,
+  reportList: [],
 };

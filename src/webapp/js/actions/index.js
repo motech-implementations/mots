@@ -11,7 +11,7 @@ import {
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
   FETCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
-  SAVE_FACILITY, SAVE_USER_PROFILE,
+  SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS,
 } from './types';
 
 const BASE_URL = '/api';
@@ -297,6 +297,16 @@ export function fetchLocationsOfType(type, searchParams) {
 
   return {
     type,
+    payload: request,
+  };
+}
+
+export function fetchReports() {
+  const url = '/api/reports/templates/';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_REPORTS,
     payload: request,
   };
 }

@@ -1,9 +1,7 @@
 package org.motechproject.mots.service;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_FILE_INVALID;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_PARAMETER_INCORRECT_TYPE;
 import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_PARAMETER_MISSING;
 import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_TEMPLATE_EXIST;
 
@@ -208,15 +206,11 @@ public class JasperTemplateService {
       throw new ReportingException(ERROR_REPORTING_PARAMETER_MISSING, "displayName");
     }
 
-    String dataType = jrParameter.getValueClassName();
-    if (isNotBlank(dataType)) {
-      try {
-        Class.forName(dataType);
-      } catch (ClassNotFoundException err) {
-        throw new ReportingException(err, ERROR_REPORTING_PARAMETER_INCORRECT_TYPE,
-            jrParameter.getName(), dataType);
-      }
+    if (isBlank(displayName)) {
+      throw new ReportingException(ERROR_REPORTING_PARAMETER_MISSING, "dataType");
     }
+
+    String dataType = jrParameter.getPropertiesMap().getProperty("dataType");
 
     // Set parameters.
     JasperTemplateParameter jasperTemplateParameter = new JasperTemplateParameter();
@@ -224,16 +218,9 @@ public class JasperTemplateService {
     jasperTemplateParameter.setDisplayName(displayName);
     jasperTemplateParameter.setDescription(jrParameter.getDescription());
     jasperTemplateParameter.setDataType(dataType);
-    jasperTemplateParameter.setSelectExpression(
-        jrParameter.getPropertiesMap().getProperty("selectExpression"));
-    jasperTemplateParameter.setSelectProperty(
-        jrParameter.getPropertiesMap().getProperty("selectProperty"));
-    jasperTemplateParameter.setDisplayProperty(
-        jrParameter.getPropertiesMap().getProperty("displayProperty"));
     String required = jrParameter.getPropertiesMap().getProperty("required");
     if (required != null) {
-      jasperTemplateParameter.setRequired(Boolean.parseBoolean(
-          jrParameter.getPropertiesMap().getProperty("required")));
+      jasperTemplateParameter.setRequired(Boolean.parseBoolean(required));
     }
 
     if (jrParameter.getDefaultValueExpression() != null) {

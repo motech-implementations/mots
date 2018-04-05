@@ -76,6 +76,76 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="firstName" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="secondName" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="otherName" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="phoneNumber" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="email" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements
+ FROM in_charge
+ JOIN facility ON in_charge.facility_id = facility.id
+ WHERE ($P{firstName} IS NULL OR in_charge.first_name LIKE CONCAT('%',$P{firstName},'%'))
+  AND ($P{secondName} IS NULL OR in_charge.second_name LIKE CONCAT('%',$P{secondName},'%'))
+  AND ($P{otherName} IS NULL OR in_charge.other_name LIKE CONCAT('%',$P{otherName},'%'))
+  AND ($P{phoneNumber} IS NULL OR in_charge.phone_number LIKE CONCAT('%',$P{phoneNumber},'%'))
+  AND ($P{email} IS NULL OR in_charge.email LIKE CONCAT('%',$P{email},'%'))
+  AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="firstName" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="First Name"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="secondName" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Surname"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="otherName" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Other Name"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="phoneNumber" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Phone Number"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="email" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Email"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="facility" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Facility"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["firstName"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT 
   in_charge.first_name AS firstName,
@@ -86,7 +156,14 @@
   facility.name AS facility
  FROM in_charge
  JOIN facility ON in_charge.facility_id = facility.id
- ORDER BY firstName]]>
+ WHERE ($P{firstName} IS NULL OR in_charge.first_name LIKE CONCAT('%',$P{firstName},'%'))
+  AND ($P{secondName} IS NULL OR in_charge.second_name LIKE CONCAT('%',$P{secondName},'%'))
+  AND ($P{otherName} IS NULL OR in_charge.other_name LIKE CONCAT('%',$P{otherName},'%'))
+  AND ($P{phoneNumber} IS NULL OR in_charge.phone_number LIKE CONCAT('%',$P{phoneNumber},'%'))
+  AND ($P{email} IS NULL OR in_charge.email LIKE CONCAT('%',$P{email},'%'))
+  AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="firstName" class="java.lang.String"/>
 	<field name="secondName" class="java.lang.String"/>
@@ -181,6 +258,55 @@
 					<property name="net.sf.jasperreports.export.json.data" value="5"/>
 				</reportElement>
 			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="firstName">
+							<datasetParameterExpression><![CDATA[$P{firstName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="secondName">
+							<datasetParameterExpression><![CDATA[$P{secondName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="otherName">
+							<datasetParameterExpression><![CDATA[$P{otherName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="phoneNumber">
+							<datasetParameterExpression><![CDATA[$P{phoneNumber}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="email">
+							<datasetParameterExpression><![CDATA[$P{email}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="facility">
+							<datasetParameterExpression><![CDATA[$P{facility}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<columnHeader>
