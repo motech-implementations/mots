@@ -58,7 +58,8 @@ const FIELDS = {
         onChangeText: text => input.onChange(text),
         onBlur: event => input.onBlur(event.target.value),
         onFocus: () => {
-          if (!input.value) {
+          if (!input.value && notSelectedChwIds) {
+            input.onChange(notSelectedChwIds[0]);
             input.onChange('');
           }
         },
