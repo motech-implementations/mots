@@ -26,6 +26,7 @@ export default class Report extends Component {
       currentPage: 1,
       totalPages: 1,
       pageSize: 20,
+      maxPageSize: 2147483647,
     };
 
     this.checkPageCount = this.checkPageCount.bind(this);
@@ -109,12 +110,12 @@ export default class Report extends Component {
   }
 
   fetchPdf() {
-    const url = `/api/reports/templates/${this.state.reportId}/pdf`;
+    const url = `/api/reports/templates/${this.state.reportId}/pdf?pageSize=${this.state.maxPageSize}`;
     apiClient.downloadReport(url, this.state.reportName, 'pdf');
   }
 
   fetchXls() {
-    const url = `/api/reports/templates/${this.state.reportId}/xls`;
+    const url = `/api/reports/templates/${this.state.reportId}/xls?pageSize=${this.state.maxPageSize}`;
     apiClient.downloadReport(url, this.state.reportName, 'xls');
   }
 
