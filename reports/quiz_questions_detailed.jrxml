@@ -76,6 +76,102 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="module" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="unit" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="questionId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="question" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="phone" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements
+ FROM multiple_choice_question_log
+ JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
+ JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
+ JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
+ JOIN unit ON unit.id = unit_progress.unit_id
+ JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
+ JOIN course_module ON course_module.id = module_progress.course_module_id
+ JOIN module ON module.id = course_module.module_id
+ JOIN community_health_worker chw ON module_progress.chw_id = chw.id
+ JOIN community ON chw.community_id = community.id
+ JOIN facility ON community.facility_id = facility.id
+ JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
+ JOIN district ON chiefdom.district_id = district.id
+ LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
+ WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
+  AND ($P{unit} IS NULL OR unit.name LIKE CONCAT('%',$P{unit},'%'))
+  AND ($P{questionId} IS NULL OR question.name LIKE CONCAT('%',$P{questionId},'%'))
+  AND ($P{question} IS NULL OR question.content LIKE CONCAT('%',$P{question},'%'))
+  AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
+  AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
+  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="module" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Module ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="unit" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Unit ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="questionId" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Question ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="question" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Question"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chwId" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="CHW ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="phone" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Phone"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chiefdom" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Chiefdom"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="district" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="District"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["module, unit, questionId, chwId"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT 
   module.name AS module,
@@ -106,7 +202,16 @@
  JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
  JOIN district ON chiefdom.district_id = district.id
  LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
- ORDER BY module, unit, questionId, chwId]]>
+ WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
+  AND ($P{unit} IS NULL OR unit.name LIKE CONCAT('%',$P{unit},'%'))
+  AND ($P{questionId} IS NULL OR question.name LIKE CONCAT('%',$P{questionId},'%'))
+  AND ($P{question} IS NULL OR question.content LIKE CONCAT('%',$P{question},'%'))
+  AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
+  AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
+  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="module" class="java.lang.String"/>
 	<field name="unit" class="java.lang.String"/>
@@ -253,6 +358,61 @@
 					<property name="net.sf.jasperreports.export.json.data" value="9"/>
 				</reportElement>
 			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="module">
+							<datasetParameterExpression><![CDATA[$P{module}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="unit">
+							<datasetParameterExpression><![CDATA[$P{unit}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="questionId">
+							<datasetParameterExpression><![CDATA[$P{questionId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="question">
+							<datasetParameterExpression><![CDATA[$P{question}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chwId">
+							<datasetParameterExpression><![CDATA[$P{chwId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="phone">
+							<datasetParameterExpression><![CDATA[$P{phone}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chiefdom">
+							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="district">
+							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<columnHeader>

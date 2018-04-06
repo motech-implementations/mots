@@ -76,6 +76,71 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="module" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="unit" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="questionId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="question" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements FROM
+  (SELECT module.name
+   FROM multiple_choice_question_log
+   JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
+   JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
+   JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
+   JOIN unit ON unit.id = unit_progress.unit_id
+   JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
+   JOIN course_module ON course_module.id = module_progress.course_module_id
+   JOIN module ON module.id = course_module.module_id
+   JOIN choice ON choice.id = multiple_choice_question_log.response_id
+   WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
+    AND ($P{unit} IS NULL OR unit.name LIKE CONCAT('%',$P{unit},'%'))
+    AND ($P{questionId} IS NULL OR question.name LIKE CONCAT('%',$P{questionId},'%'))
+    AND ($P{question} IS NULL OR question.content LIKE CONCAT('%',$P{question},'%'))
+   GROUP BY module.name, unit.name, question.name, question.content) AS t]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="module" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Module ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="unit" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Unit ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="questionId" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Question ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="question" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Question"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["module, unit, questionId"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT 
   module.name AS module,
@@ -84,7 +149,8 @@
   question.content AS question,
   COUNT(*) AS total,
   SUM(is_correct = TRUE) AS correct,
-  SUM(is_correct = FALSE) AS wrong
+  SUM(is_correct = FALSE) AS wrong,
+  (SUM(is_correct = TRUE) * 100 / COUNT(*)) AS correctlyAnswered
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
  JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
@@ -94,8 +160,13 @@
  JOIN course_module ON course_module.id = module_progress.course_module_id
  JOIN module ON module.id = course_module.module_id
  JOIN choice ON choice.id = multiple_choice_question_log.response_id
+ WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
+  AND ($P{unit} IS NULL OR unit.name LIKE CONCAT('%',$P{unit},'%'))
+  AND ($P{questionId} IS NULL OR question.name LIKE CONCAT('%',$P{questionId},'%'))
+  AND ($P{question} IS NULL OR question.content LIKE CONCAT('%',$P{question},'%'))
  GROUP BY module, unit, questionId, question
- ORDER BY module, unit, questionId]]>
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="module" class="java.lang.String"/>
 	<field name="unit" class="java.lang.String"/>
@@ -104,6 +175,7 @@
 	<field name="total" class="java.lang.Integer"/>
 	<field name="correct" class="java.lang.Integer"/>
 	<field name="wrong" class="java.lang.Integer"/>
+	<field name="correctlyAnswered" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -215,6 +287,49 @@
 					<property name="net.sf.jasperreports.export.json.data" value="7"/>
 				</reportElement>
 			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="module">
+							<datasetParameterExpression><![CDATA[$P{module}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="unit">
+							<datasetParameterExpression><![CDATA[$P{unit}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="questionId">
+							<datasetParameterExpression><![CDATA[$P{questionId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="question">
+							<datasetParameterExpression><![CDATA[$P{question}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<columnHeader>
@@ -425,7 +540,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[String.format("%.0f%%", $F{correct} * 100 / (double) $F{total})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[String.format("%.0f%%", $F{correctlyAnswered})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="50" height="30" uuid="10c5240a-7420-4818-bd2f-d714b2057603">

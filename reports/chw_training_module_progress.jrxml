@@ -76,14 +76,98 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chwName" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="phone" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="moduleId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="status" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements
+ FROM module_progress
+ JOIN course_module ON course_module.id = module_progress.course_module_id
+ JOIN module ON module.id = course_module.module_id
+ JOIN community_health_worker chw ON module_progress.chw_id = chw.id
+ JOIN community ON chw.community_id = community.id
+ JOIN facility ON community.facility_id = facility.id
+ JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
+ JOIN district ON chiefdom.district_id = district.id
+ WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
+  AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
+  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
+  AND ($P{moduleId} IS NULL OR module.name LIKE CONCAT('%',$P{moduleId},'%'))
+  AND ($P{status} IS NULL OR module_progress.status = $P{status})
+  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="chwId" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="CHW ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chwName" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="CHW Name"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="phone" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Phone"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chiefdom" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Chiefdom"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="district" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="District"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="moduleId" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Module ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="status" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Enum"/>
+		<property name="displayName" value="Status"/>
+		<property name="options" value="NOT_STARTED:Not started,IN_PROGRESS:In progress,COMPLETED:Completed"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["chwName, moduleId"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
   chw.chw_id as chwId,
-  CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) AS name,
+  CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) AS chwName,
   chw.phone_number AS phone,
   chiefdom.name AS chiefdom,
   district.name AS district,
-  module.name AS module,
+  module.name AS moduleId,
   CASE module_progress.status
     WHEN 'NOT_STARTED' THEN 'Not Started'
     WHEN 'IN_PROGRESS' THEN 'In Progress'
@@ -98,14 +182,22 @@
  JOIN facility ON community.facility_id = facility.id
  JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
  JOIN district ON chiefdom.district_id = district.id
- ORDER BY name, module]]>
+ WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
+  AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
+  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
+  AND ($P{moduleId} IS NULL OR module.name LIKE CONCAT('%',$P{moduleId},'%'))
+  AND ($P{status} IS NULL OR module_progress.status = $P{status})
+  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="chwId" class="java.lang.String"/>
-	<field name="name" class="java.lang.String"/>
+	<field name="chwName" class="java.lang.String"/>
 	<field name="phone" class="java.lang.String"/>
 	<field name="chiefdom" class="java.lang.String"/>
 	<field name="district" class="java.lang.String"/>
-	<field name="module" class="java.lang.String"/>
+	<field name="moduleId" class="java.lang.String"/>
 	<field name="status" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -206,6 +298,58 @@
 					<property name="net.sf.jasperreports.export.json.data" value="6"/>
 				</reportElement>
 			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="chwId">
+							<datasetParameterExpression><![CDATA[$P{chwId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chwName">
+							<datasetParameterExpression><![CDATA[$P{chwName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="phone">
+							<datasetParameterExpression><![CDATA[$P{phone}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chiefdom">
+							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="district">
+							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="moduleId">
+							<datasetParameterExpression><![CDATA[$P{moduleId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="status">
+							<datasetParameterExpression><![CDATA[$P{status}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<columnHeader>
@@ -335,7 +479,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{chwName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="160" y="0" width="80" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
@@ -391,7 +535,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{module}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{moduleId}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="480" y="0" width="80" height="25" uuid="ba48f274-2222-44d2-a190-0116192044f9">
