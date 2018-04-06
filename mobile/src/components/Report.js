@@ -23,9 +23,18 @@ export default class Report extends Component {
       reportHtml: '',
       reportId: '',
       reportName: '',
+      currentPage: 1,
+      totalPages: 1,
+      pageSize: 20,
+      maxPageSize: 2147483647,
     };
 
+    this.checkPageCount = this.checkPageCount.bind(this);
     this.fetchReport = this.fetchReport.bind(this);
+    this.fetchNextPage = this.fetchNextPage.bind(this);
+    this.fetchPrevPage = this.fetchPrevPage.bind(this);
+    this.fetchFirstPage = this.fetchFirstPage.bind(this);
+    this.fetchLastPage = this.fetchLastPage.bind(this);
     this.fetchPdf = this.fetchPdf.bind(this);
     this.fetchXls = this.fetchXls.bind(this);
   }
@@ -34,7 +43,10 @@ export default class Report extends Component {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
         this.setState({ reportName: this.props.reportName });
-        this.setState({ reportId: this.props.reportId }, () => this.fetchReport());
+        this.setState({ reportId: this.props.reportId }, () => {
+          this.checkPageCount();
+          this.fetchReport(1);
+        });
       } else {
         Actions.home();
       }
@@ -42,61 +54,148 @@ export default class Report extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ reportId: nextProps.reportId }, () => this.fetchReport());
+    this.setState({ reportId: nextProps.reportId }, () => this.fetchReport(1));
   }
 
-    fetchReport = () => {
-      const url = `/api/reports/templates/${this.state.reportId}/html`;
+  checkPageCount() {
+    const url = `/api/reports/templates/${this.state.reportId}/json?pageSize=1`;
 
-      apiClient.getText(url)
-        .then((response) => {
-          this.setState({ reportHtml: response });
-        });
-    };
+    apiClient.get(url)
+      .then((response) => {
+        this.setState({ totalPages: Math.ceil(response[0].totalPages / this.state.pageSize) || 1 });
+      });
+  }
 
-    fetchPdf() {
-      const url = `/api/reports/templates/${this.state.reportId}/pdf`;
-      apiClient.downloadReport(url, this.state.reportName, 'pdf');
+  fetchReport = (pageNumber) => {
+    this.setState({ reportHtml: '' });
+    const offset = (pageNumber - 1) * this.state.pageSize;
+    const url = `/api/reports/templates/${this.state.reportId}/html?pageSize=20&offset=${offset}`;
+
+    apiClient.getText(url)
+      .then((response) => {
+        this.setState({ reportHtml: response });
+      });
+  };
+
+  fetchNextPage() {
+    const { currentPage } = this.state;
+    if (currentPage + 1 <= this.state.totalPages) {
+      this.fetchReport(currentPage + 1);
+      this.setState({ currentPage: currentPage + 1 });
     }
+  }
 
-    fetchXls() {
-      const url = `/api/reports/templates/${this.state.reportId}/xls`;
-      apiClient.downloadReport(url, this.state.reportName, 'xls');
+  fetchPrevPage() {
+    const { currentPage } = this.state;
+    if (currentPage - 1 >= 1) {
+      this.fetchReport(currentPage - 1);
+      this.setState({ currentPage: currentPage - 1 });
     }
+  }
 
-    render() {
-      return (
-        <View style={getContainerStyle()}>
-          <Text style={[styles.formHeader, lightThemeText]}>{this.state.reportName}</Text>
+  fetchFirstPage() {
+    const { currentPage } = this.state;
+    if (currentPage !== 1) {
+      this.fetchReport(1);
+      this.setState({ currentPage: 1 });
+    }
+  }
 
-          <View style={styles.buttonContainer}>
-            <Button
-              onPress={() => this.fetchPdf()}
-              iconName="download"
-              iconColor="#FFF"
-              buttonColor="#337ab7"
-            >
-                        Download PDF
-            </Button>
-            <Button
-              onPress={() => this.fetchXls()}
-              iconName="download"
-              iconColor="#FFF"
-              buttonColor="#449C44"
-              marginLeft={10}
-            >
-                        Download XLS
-            </Button>
-          </View>
-          <View style={reportStyles.reportHtmlStyle}>
-            <WebView
-              source={{ html: this.state.reportHtml }}
-              style={{ flex: 1 }}
-            />
-          </View>
+  fetchLastPage() {
+    const { currentPage } = this.state;
+    if (currentPage !== this.state.totalPages) {
+      this.fetchReport(this.state.totalPages);
+      this.setState({ currentPage: this.state.totalPages });
+    }
+  }
+
+  fetchPdf() {
+    const url = `/api/reports/templates/${this.state.reportId}/pdf?pageSize=${this.state.maxPageSize}`;
+    apiClient.downloadReport(url, this.state.reportName, 'pdf');
+  }
+
+  fetchXls() {
+    const url = `/api/reports/templates/${this.state.reportId}/xls?pageSize=${this.state.maxPageSize}`;
+    apiClient.downloadReport(url, this.state.reportName, 'xls');
+  }
+
+  prevDisabled() {
+    return this.state.currentPage === 1;
+  }
+
+  nextDisabled() {
+    return this.state.currentPage === this.state.totalPages;
+  }
+
+  render() {
+    return (
+      <View style={getContainerStyle()}>
+        <Text style={[styles.formHeader, lightThemeText]}>{this.state.reportName}</Text>
+
+        <View style={styles.buttonContainer}>
+          <Button
+            onPress={() => this.fetchPdf()}
+            iconName="download"
+            iconColor="#FFF"
+            buttonColor="#337ab7"
+          >
+                      Download PDF
+          </Button>
+          <Button
+            onPress={() => this.fetchXls()}
+            iconName="download"
+            iconColor="#FFF"
+            buttonColor="#449C44"
+            marginLeft={10}
+          >
+                      Download XLS
+          </Button>
         </View>
-      );
-    }
+        <View style={reportStyles.reportHtmlStyle}>
+          <WebView
+            source={{ html: this.state.reportHtml }}
+            style={{ flex: 1 }}
+          />
+        </View>
+
+        <View style={[styles.buttonContainer, { paddingVertical: 10, alignItems: 'center' }]}>
+          <Button
+            onPress={() => this.fetchFirstPage()}
+            iconName="angle-double-left"
+            iconColor="#FFF"
+            buttonColor={this.prevDisabled() ? '#c3c3c3' : '#337ab7'}
+            disabled={this.prevDisabled()}
+          />
+          <Button
+            onPress={() => this.fetchPrevPage()}
+            iconName="angle-left"
+            iconColor="#FFF"
+            buttonColor={this.prevDisabled() ? '#c3c3c3' : '#337ab7'}
+            disabled={this.prevDisabled()}
+            marginLeft={5}
+          />
+          <Text style={{ marginHorizontal: 10 }}>
+            {`${this.state.currentPage} / ${this.state.totalPages}`}
+          </Text>
+          <Button
+            onPress={() => this.fetchNextPage()}
+            iconName="angle-right"
+            iconColor="#FFF"
+            buttonColor={this.nextDisabled() ? '#c3c3c3' : '#337ab7'}
+            disabled={this.nextDisabled()}
+          />
+          <Button
+            onPress={() => this.fetchLastPage()}
+            iconName="angle-double-right"
+            iconColor="#FFF"
+            buttonColor={this.nextDisabled() ? '#c3c3c3' : '#337ab7'}
+            disabled={this.nextDisabled()}
+            marginLeft={5}
+          />
+        </View>
+      </View>
+    );
+  }
 }
 
 Report.propTypes = {

@@ -20,14 +20,14 @@ const styles = {
 };
 
 const Button = ({
-  onPress, children, iconName, iconColor, buttonColor, marginLeft,
+  onPress, children, iconName, iconColor, buttonColor, marginLeft, disabled,
 }) => {
   const { actionButton, buttonLabel } = styles;
-
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[actionButton, { backgroundColor: buttonColor, marginLeft }]}
+      disabled={disabled}
     >
       <Icon name={iconName} size={16} color={iconColor} />
       <Text style={buttonLabel}>
@@ -46,9 +46,11 @@ Button.propTypes = {
   children: PropTypes.string,
   onPress: PropTypes.func.isRequired,
   marginLeft: PropTypes.number,
+  disabled: PropTypes.bool,
 };
 
 Button.defaultProps = {
   children: '',
   marginLeft: 0,
+  disabled: false,
 };

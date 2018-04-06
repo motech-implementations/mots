@@ -57,12 +57,7 @@ const FIELDS = {
         style: styles.autoCompleteStyle,
         onChangeText: text => input.onChange(text),
         onBlur: event => input.onBlur(event.target.value),
-        onFocus: () => {
-          if (!input.value && notSelectedChwIds) {
-            input.onChange(notSelectedChwIds[0]);
-            input.onChange('');
-          }
-        },
+        onFocus: event => input.onFocus(event.target.value),
         renderItem: item => (
           <TouchableOpacity onPress={() => {
             fetchDataAndInitializeFrom(CHW_FORM_NAME, '/api/chw/findByChwId', item);
