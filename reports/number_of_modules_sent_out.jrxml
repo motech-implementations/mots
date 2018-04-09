@@ -76,6 +76,78 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="username" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="module" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="dateOfPush" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="startDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements
+ FROM district_assignment_log dal
+ JOIN module ON module.id = dal.module_id
+ JOIN user ON user.id = dal.owner_id
+ JOIN district ON dal.district_id = district.id
+ WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
+  AND ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
+  AND ($P{dateOfPush} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPush},'%'))
+  AND ($P{startDate} IS NULL OR dal.start_date LIKE CONCAT($P{startDate},'%'))
+  AND ($P{endDate} IS NULL OR dal.end_date LIKE CONCAT($P{endDate},'%'))
+  AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="username" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="User ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="module" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Module Pushed"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="dateOfPush" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Date of Push"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="startDate" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Start Date"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="endDate" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="End Date"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="district" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="District"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["dateOfPush DESC"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT 
   user.username AS username,
@@ -88,7 +160,14 @@
  JOIN module ON module.id = dal.module_id
  JOIN user ON user.id = dal.owner_id
  JOIN district ON dal.district_id = district.id
- ORDER BY dateOfPush DESC]]>
+ WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
+  AND ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
+  AND ($P{dateOfPush} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPush},'%'))
+  AND ($P{startDate} IS NULL OR dal.start_date LIKE CONCAT($P{startDate},'%'))
+  AND ($P{endDate} IS NULL OR dal.end_date LIKE CONCAT($P{endDate},'%'))
+  AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="district" class="java.lang.String"/>
 	<field name="username" class="java.lang.String"/>
@@ -183,6 +262,55 @@
 					<property name="net.sf.jasperreports.export.json.data" value="5"/>
 				</reportElement>
 			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="username">
+							<datasetParameterExpression><![CDATA[$P{username}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="module">
+							<datasetParameterExpression><![CDATA[$P{module}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="dateOfPush">
+							<datasetParameterExpression><![CDATA[$P{dateOfPush}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="startDate">
+							<datasetParameterExpression><![CDATA[$P{startDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="endDate">
+							<datasetParameterExpression><![CDATA[$P{endDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="district">
+							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<columnHeader>

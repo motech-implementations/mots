@@ -76,6 +76,55 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="username" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="loginDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="logoutDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements
+ FROM user_log
+ JOIN user ON user_log.user_id = user.id
+ WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
+  AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
+  AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="username" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="User ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="loginDate" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="loginDate"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="logoutDate" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="logoutDate"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["loginDate DESC"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT 
   user.username AS username,
@@ -83,7 +132,11 @@
   DATE_FORMAT(user_log.logout_date, '%Y-%m-%d %H:%i:%S') AS logoutDate
  FROM user_log
  JOIN user ON user_log.user_id = user.id
- ORDER BY loginDate DESC]]>
+ WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
+  AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
+  AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="username" class="java.lang.String"/>
 	<field name="loginDate" class="java.lang.String"/>
@@ -139,6 +192,46 @@
 					<property name="net.sf.jasperreports.export.json.data" value="2"/>
 				</reportElement>
 			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="username">
+							<datasetParameterExpression><![CDATA[$P{username}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="loginDate">
+							<datasetParameterExpression><![CDATA[$P{loginDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="logoutDate">
+							<datasetParameterExpression><![CDATA[$P{logoutDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</title>
 	<columnHeader>

@@ -89,7 +89,8 @@
   COUNT(*) AS totalElements
  FROM in_charge
  JOIN facility ON in_charge.facility_id = facility.id
- WHERE ($P{firstName} IS NULL OR in_charge.first_name LIKE CONCAT('%',$P{firstName},'%'))
+ WHERE in_charge.selected = TRUE
+  AND ($P{firstName} IS NULL OR in_charge.first_name LIKE CONCAT('%',$P{firstName},'%'))
   AND ($P{secondName} IS NULL OR in_charge.second_name LIKE CONCAT('%',$P{secondName},'%'))
   AND ($P{otherName} IS NULL OR in_charge.other_name LIKE CONCAT('%',$P{otherName},'%'))
   AND ($P{phoneNumber} IS NULL OR in_charge.phone_number LIKE CONCAT('%',$P{phoneNumber},'%'))
