@@ -98,6 +98,7 @@ public class InchargeService {
 
     Map<String, Object> csvRow;
     Set<String> phoneNumberSet = new HashSet<>();
+    Set<String> facilityIdSet = new HashSet<>();
     Map<Integer, String> errorMap = new HashMap<>();
 
     while ((csvRow = csvMapReader.read(header, processors)) != null) {
@@ -105,6 +106,18 @@ public class InchargeService {
           csvMapReader.getRowNumber(), csvRow));
 
       String facilityId = Objects.toString(csvRow.get("FACILITY_ID"), null);
+
+      if (StringUtils.isBlank(facilityId)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Facility Id is empty");
+        continue;
+      }
+
+      if (facilityIdSet.contains(facilityId)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Facility Id is duplicated in CSV");
+        continue;
+      }
+
+      facilityIdSet.add(facilityId);
 
       Optional<Facility> existingFacility = facilityRepository.findByFacilityId(facilityId);
 
