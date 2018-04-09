@@ -42,7 +42,12 @@ export default class Report extends Component {
   componentWillMount() {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
-        this.setState({ reportName: this.props.reportName });
+        const size = this.props.reportName.includes('CHW List') ||
+          this.props.reportName.includes('Selected CHWs') ? 10 : 20;
+        this.setState({
+          reportName: this.props.reportName,
+          pageSize: size,
+        });
         this.setState({ reportId: this.props.reportId }, () => {
           this.checkPageCount();
           this.fetchReport(1);
@@ -69,7 +74,7 @@ export default class Report extends Component {
   fetchReport = (pageNumber) => {
     this.setState({ reportHtml: '' });
     const offset = (pageNumber - 1) * this.state.pageSize;
-    const url = `/api/reports/templates/${this.state.reportId}/html?pageSize=20&offset=${offset}`;
+    const url = `/api/reports/templates/${this.state.reportId}/html?pageSize=${this.state.pageSize}&offset=${offset}`;
 
     apiClient.getText(url)
       .then((response) => {
