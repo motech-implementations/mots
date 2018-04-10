@@ -87,12 +87,6 @@ class Report extends Component {
     this.fetchPdf = this.fetchPdf.bind(this);
     this.fetchXls = this.fetchXls.bind(this);
 
-    // flag of someone is typing
-    this.filtering = false;
-
-    this.onFilteredChange = this.onFilteredChange.bind(this);
-    this.fetchStrategy = this.fetchStrategy.bind(this);
-
     this.fetchData = this.fetchData.bind(this);
     this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
   }
@@ -129,12 +123,6 @@ class Report extends Component {
     );
   }
 
-  onFilteredChange(filtered) {
-    // when the filter changes, someone is typing
-    this.filtering = true;
-    this.setState({ filtered });
-  }
-
   getExportParams() {
     const filters = this.state.exportWithFilters ? Report.convertFilters(this.state.filtered) : {};
     const orderBy = this.state.exportWithOrder ? Report.convertOrder(this.state.sorted) : null;
@@ -145,15 +133,6 @@ class Report extends Component {
       orderBy,
       ...filters,
     };
-  }
-
-  fetchStrategy(tableState) {
-    // if someone is typing use debounce
-    if (this.filtering) {
-      return this.fetchDataWithDebounce(tableState);
-    }
-    // if not typing (f.ex. sorting) fetch data without debounce
-    return this.fetchData(tableState);
   }
 
   fetchReport() {
@@ -249,17 +228,15 @@ class Report extends Component {
     this.props.resetLogoutCounter();
   };
 
-  fetchData(state) {
-    // filtering can be reset
-    this.filtering = false;
-    const offset = state.page * state.pageSize;
-    const orderBy = Report.convertOrder(state.sorted);
-    const filters = Report.convertFilters(state.filtered);
+  fetchData() {
+    const offset = this.state.page * this.state.pageSize;
+    const orderBy = Report.convertOrder(this.state.sorted);
+    const filters = Report.convertFilters(this.state.filtered);
 
     this.setState({ loading: true });
 
     const searchParams = {
-      pageSize: state.pageSize,
+      pageSize: this.state.pageSize,
       offset,
       ...filters,
       orderBy,
@@ -334,11 +311,10 @@ class Report extends Component {
               sorted={this.state.sorted}
               page={this.state.page}
               pageSize={this.state.pageSize}
-              onFetchData={this.fetchStrategy}
-              onFilteredChange={this.onFilteredChange}
-              onSortedChange={sorted => this.setState({ sorted })}
-              onPageChange={page => this.setState({ page })}
-              onPageSizeChange={pageSize => this.setState({ pageSize })}
+              onFilteredChange={filtered => this.setState({ filtered }, this.fetchDataWithDebounce)}
+              onSortedChange={sorted => this.setState({ sorted }, this.fetchData)}
+              onPageChange={page => this.setState({ page }, this.fetchData)}
+              onPageSizeChange={pageSize => this.setState({ pageSize, page: 0 }, this.fetchData)}
               getTheadFilterThProps={() => ({ style: { position: 'inherit', overflow: 'inherit' } })}
             />
           </div>
