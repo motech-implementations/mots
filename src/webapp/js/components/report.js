@@ -59,6 +59,15 @@ class Report extends Component {
     }
   }
 
+  static convertFilters(filtered) {
+    return _.reduce(filtered, (acc, { id, value }) => _.assign(acc, { [id]: value }), {});
+  }
+
+  static convertOrder(sorted) {
+    const orders = sorted.map(order => (`${order.id} ${order.desc ? 'DESC' : 'ASC'}`));
+    return orders.join(', ');
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -67,8 +76,10 @@ class Report extends Component {
       reportId: '',
       loading: true,
       totalPages: 0,
-      orderBy: null,
-      filters: {},
+      filtered: [],
+      sorted: [],
+      page: 0,
+      pageSize: 20,
       exportWithFilters: false,
       exportWithOrder: false,
     };
@@ -91,7 +102,14 @@ class Report extends Component {
       this.props.history.push('/home');
     } else {
       this.setState(
-        { reportId: this.props.match.params.reportId, loading: true },
+        {
+          reportId: this.props.match.params.reportId,
+          loading: true,
+          filtered: [],
+          sorted: [],
+          page: 0,
+          pageSize: 20,
+        },
         () => this.fetchReport(),
       );
     }
@@ -99,23 +117,32 @@ class Report extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState(
-      { reportId: nextProps.match.params.reportId, loading: true },
+      {
+        reportId: nextProps.match.params.reportId,
+        loading: true,
+        filtered: [],
+        sorted: [],
+        page: 0,
+        pageSize: 20,
+      },
       () => this.fetchReport(),
     );
   }
 
-  onFilteredChange() {
+  onFilteredChange(filtered) {
     // when the filter changes, someone is typing
     this.filtering = true;
+    this.setState({ filtered });
   }
 
   getExportParams() {
-    const filters = this.state.exportWithFilters ? this.state.filters : {};
+    const filters = this.state.exportWithFilters ? Report.convertFilters(this.state.filtered) : {};
+    const orderBy = this.state.exportWithOrder ? Report.convertOrder(this.state.sorted) : null;
 
     return {
       pageSize: 2147483647,
       offset: 0,
-      orderBy: this.state.exportWithOrder ? this.state.orderBy : null,
+      orderBy,
       ...filters,
     };
   }
@@ -226,16 +253,10 @@ class Report extends Component {
     // filtering can be reset
     this.filtering = false;
     const offset = state.page * state.pageSize;
-    const sorted = state.sorted.map(order => (`${order.id} ${order.desc ? 'DESC' : 'ASC'}`));
-    const orderBy = sorted.join(', ');
-    const filters = _.reduce(state.filtered, (acc, { id, value }) =>
-      _.assign(acc, { [id]: value }), {});
+    const orderBy = Report.convertOrder(state.sorted);
+    const filters = Report.convertFilters(state.filtered);
 
-    this.setState({
-      loading: true,
-      orderBy,
-      filters,
-    });
+    this.setState({ loading: true });
 
     const searchParams = {
       pageSize: state.pageSize,
@@ -309,8 +330,15 @@ class Report extends Component {
               data={this.state.reportData}
               columns={this.state.reportModel}
               pages={this.state.totalPages}
+              filtered={this.state.filtered}
+              sorted={this.state.sorted}
+              page={this.state.page}
+              pageSize={this.state.pageSize}
               onFetchData={this.fetchStrategy}
               onFilteredChange={this.onFilteredChange}
+              onSortedChange={sorted => this.setState({ sorted })}
+              onPageChange={page => this.setState({ page })}
+              onPageSizeChange={pageSize => this.setState({ pageSize })}
               getTheadFilterThProps={() => ({ style: { position: 'inherit', overflow: 'inherit' } })}
             />
           </div>
