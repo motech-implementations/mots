@@ -149,15 +149,15 @@ public class ModuleProgressService {
 
       // main menu on Voto should start with a tree that checks if any module is available for CHW
       if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-        throw new CourseProgressException("Invalid first main menu block");
+        LOGGER.debug("Invalid first main menu block");
+      } else {
+        // skip the check modules availability logic blocks
+        blockDto = getVotoBlock(blockIterator);
       }
-
-      // skip the check modules availability logic blocks
-      blockDto = getVotoBlock(blockIterator);
 
       // skip the "No modules available" or "Choose module" message
       if (blockDto == null || !MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-        throw new CourseProgressException("Invalid main menu block");
+        LOGGER.debug("Main menu did not had choose module/no modules available message");
       }
 
       String chwIvrId = callLog.getChwIvrId();
