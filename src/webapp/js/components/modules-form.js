@@ -8,6 +8,7 @@ import { Tooltip } from 'react-tippy';
 import 'react-tippy/dist/tippy.css';
 
 import { resetLogoutCounter } from '../actions/index';
+import { hasAuthority, MANAGE_MODULES_AUTHORITY } from '../utils/authorization';
 
 export const MODULE_FORM_NAME = 'ModuleForm';
 
@@ -347,7 +348,7 @@ class ModuleForm extends Component {
     return (
       <div>
         {
-          this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE' ?
+          hasAuthority(MANAGE_MODULES_AUTHORITY) && (this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE') ?
             <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
               { _.map(ModuleForm.getFields(this.props.nodeType), (fieldConfig, fieldName) =>
                 ModuleForm.renderField(fieldConfig, fieldName, fieldName, this.props)) }
