@@ -84,6 +84,8 @@ public class UnitProgress extends BaseTimestampedEntity {
   public void previousElement() {
     if (currentCallFlowElementNumber > 0) {
       currentCallFlowElementNumber--;
+      callFlowElementLogs.removeIf(callLog ->
+          callLog.getCallFlowElement().getListOrder().equals(currentCallFlowElementNumber));
     }
   }
 
