@@ -214,7 +214,7 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
-      if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap)) {
+      if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap, selected)) {
         continue;
       }
 
@@ -248,7 +248,6 @@ public class CommunityHealthWorkerService {
         communityHealthWorker = existingHealthWorker.get();
       } else {
         communityHealthWorker = new CommunityHealthWorker();
-        communityHealthWorker.setPreferredLanguage(Language.ENGLISH);
         communityHealthWorker.setSelected(false);
       }
 
@@ -276,6 +275,8 @@ public class CommunityHealthWorkerService {
       communityHealthWorker.setHasPeerSupervisor(
           csvRow.get("Peer_Supervisor").equals("Yes"));
       communityHealthWorker.setWorking(csvRow.get("Working").equals("Yes"));
+      communityHealthWorker.setPreferredLanguage(Language.getByDisplayName(
+          Objects.toString(csvRow.get("Preferred_Language"), "English")));
 
       if (selected && !communityHealthWorker.getSelected()) {
         selectHealthWorker(communityHealthWorker);
@@ -288,7 +289,7 @@ public class CommunityHealthWorkerService {
 
   @SuppressWarnings("PMD.CyclomaticComplexity")
   private boolean validateBlankFieldsInCsv(int lineNumber, Map<String, Object> csvRow,
-      Map<Integer, String> errorMap) {
+      Map<Integer, String> errorMap, Boolean selected) {
 
     String chwId = Objects.toString(csvRow.get("CHW ID"), null);
     if (StringUtils.isBlank(chwId)) {
@@ -350,6 +351,13 @@ public class CommunityHealthWorkerService {
       errorMap.put(lineNumber, "Peer Supervisor is empty");
       return true;
     }
+    if (selected) {
+      String language = Objects.toString(csvRow.get("Preferred_Language"), null);
+      if (StringUtils.isBlank(language)) {
+        errorMap.put(lineNumber, "Preferred language is empty");
+        return true;
+      }
+    }
 
     return false;
   }
@@ -377,8 +385,9 @@ public class CommunityHealthWorkerService {
         null, // phoneNumber
         null, // community
         null, // phu
-        null, // PHU_suppervisor
-        null // peer_supervisor
+        null, // PHU_supervisor
+        null, // peer_supervisor
+        null // preferred_language
     };
     return processors;
   }
