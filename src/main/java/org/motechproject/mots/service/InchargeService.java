@@ -128,6 +128,11 @@ public class InchargeService {
 
       String phoneNumber = Objects.toString(csvRow.get("PHU in-charge number"), null);
 
+      if (selected && StringUtils.isBlank(phoneNumber)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Phone number is empty");
+        continue;
+      }
+
       if (phoneNumberSet.contains(phoneNumber)) {
         errorMap.put(csvMapReader.getLineNumber(), "Phone number is duplicated in CSV");
         continue;
