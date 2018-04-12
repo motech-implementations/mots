@@ -185,7 +185,7 @@
   chiefdom.name AS chiefdom,
   district.name AS district,
   facility.name AS phu,
-  (SUM(is_correct = TRUE) * 100 / COUNT(*)) AS correctlyAnswered
+  (SUM(is_correct IS TRUE) * 100 / COUNT(*)) AS correctlyAnswered
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
  JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
