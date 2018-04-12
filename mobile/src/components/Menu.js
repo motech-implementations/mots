@@ -131,6 +131,7 @@ class Menu extends Component {
                 onPress={() => this.openReportSection({
                   reportName: report.name,
                   reportId: report.id,
+                  templateParameters: report.templateParameters,
                 })}
                 style={styles.menuItem}
                 key={report.id}
