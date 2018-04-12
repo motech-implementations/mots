@@ -38,6 +38,10 @@ public class InchargeService {
 
   private static final Integer MIN_NAME_PARTS_NUMBER = 2;
 
+  private static final String FACILITY_ID_CSV_HEADER = "facility_id";
+  private static final String PHU_INCHARGE_NAME_CSV_HEADER = "phu in-charge name";
+  private static final String PHU_INCHARGE_NUMBER_CSV_HEADER = "phu in-charge number";
+
   @Autowired
   private InchargeRepository inchargeRepository;
 
@@ -93,7 +97,9 @@ public class InchargeService {
     csvMapReader = new CsvMapReader(new InputStreamReader(inchargeCsvFile.getInputStream()),
         CsvPreference.STANDARD_PREFERENCE);
 
-    final String[] header = csvMapReader.getHeader(true);
+    String[] header = csvMapReader.getHeader(true);
+    header = Arrays.stream(header).map(String::toLowerCase).toArray(String[]::new);
+
     final CellProcessor[] processors = getProcessors();
 
     Map<String, Object> csvRow;
@@ -105,7 +111,7 @@ public class InchargeService {
       LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
 
-      String facilityId = Objects.toString(csvRow.get("FACILITY_ID"), null);
+      String facilityId = Objects.toString(csvRow.get(FACILITY_ID_CSV_HEADER), null);
 
       if (StringUtils.isBlank(facilityId)) {
         errorMap.put(csvMapReader.getLineNumber(), "Facility Id is empty");
@@ -126,7 +132,7 @@ public class InchargeService {
         continue;
       }
 
-      String phoneNumber = Objects.toString(csvRow.get("PHU in-charge number"), null);
+      String phoneNumber = Objects.toString(csvRow.get(PHU_INCHARGE_NUMBER_CSV_HEADER), null);
 
       if (selected && StringUtils.isBlank(phoneNumber)) {
         errorMap.put(csvMapReader.getLineNumber(), "Phone number is empty");
@@ -142,7 +148,7 @@ public class InchargeService {
         phoneNumberSet.add(phoneNumber);
       }
 
-      String name = Objects.toString(csvRow.get("PHU in-charge name"), null);
+      String name = Objects.toString(csvRow.get(PHU_INCHARGE_NAME_CSV_HEADER), null);
 
       if (StringUtils.isBlank(name)) {
         errorMap.put(csvMapReader.getLineNumber(), "Incharge name is empty");
