@@ -94,17 +94,17 @@
 	</subDataset>
 	<parameter name="username" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="User ID"/>
+		<property name="displayName" value="Username"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="loginDate" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="Date"/>
-		<property name="displayName" value="loginDate"/>
+		<property name="displayName" value="Login Date"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="logoutDate" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="Date"/>
-		<property name="displayName" value="logoutDate"/>
+		<property name="displayName" value="Logout Date"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
