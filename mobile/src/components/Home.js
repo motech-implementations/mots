@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, Text, StyleSheet } from 'react-native';
 import commonStyles from '../styles/commonStyles';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
     backgroundColor: '#FFF',
     padding: 20,
     marginTop: 80,
@@ -20,7 +18,7 @@ const styles = StyleSheet.create({
 const { lightThemeText } = commonStyles;
 
 const Home = () => (
-  <View style={styles.container}>
+  <ScrollView style={styles.container}>
     <Text style={[styles.title, lightThemeText]}>Home Page</Text>
     <Text style={lightThemeText}>As in many African countries, the Community Health Worker (CHW) is
       the backbone of the healthcare system, and the focus and objective
@@ -33,7 +31,7 @@ const Home = () => (
       basic requirement. The MOTS service will provide training modules that
       include units and quizzes, and allow monitoring by management.
     </Text>
-  </View>
+  </ScrollView>
 );
 
 export default Home;

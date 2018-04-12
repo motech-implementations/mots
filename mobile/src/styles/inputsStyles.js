@@ -3,6 +3,7 @@ export default {
     color: '#000',
     paddingRight: 5,
     paddingLeft: 5,
+    marginLeft: 35,
     flex: 2,
     borderColor: '#ebebeb',
     borderWidth: 1,
