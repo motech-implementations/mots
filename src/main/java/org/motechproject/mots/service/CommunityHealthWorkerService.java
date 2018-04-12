@@ -3,6 +3,7 @@ package org.motechproject.mots.service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -61,6 +62,24 @@ public class CommunityHealthWorkerService {
 
   private static final Logger LOGGER =
       Logger.getLogger(CommunityHealthWorkerService.class);
+
+  private static final String CHW_ID_CSV_HEADER = "chw id";
+  private static final String DISTRICT_CSV_HEADER = "district";
+  private static final String CHIEFDOM_CSV_HEADER = "chiefdom";
+  private static final String WORKING_CSV_HEADER = "working";
+  private static final String FIRST_NAME_CSV_HEADER = "first_name";
+  private static final String SECOND_NAME_CSV_HEADER = "second_name";
+  private static final String OTHER_NAME_CSV_HEADER = "other_name";
+  private static final String AGE_CSV_HEADER = "age";
+  private static final String GENDER_CSV_HEADER = "gender";
+  private static final String READ_WRITE_CSV_HEADER = "read_write";
+  private static final String EDUCATION_CSV_HEADER = "education";
+  private static final String MOBILE_CSV_HEADER = "mobile";
+  private static final String COMMUNITY_CSV_HEADER = "community";
+  private static final String PHU_CSV_HEADER = "phu";
+  private static final String PHU_SUPERVISOR_CSV_HEADER = "phu_supervisor";
+  private static final String PEER_SUPERVISOR_CSV_HEADER = "peer_supervisor";
+  private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
 
   @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
@@ -189,7 +208,9 @@ public class CommunityHealthWorkerService {
     csvMapReader = new CsvMapReader(new InputStreamReader(chwCsvFile.getInputStream()),
         CsvPreference.STANDARD_PREFERENCE);
 
-    final String[] header = csvMapReader.getHeader(true);
+    String[] header = csvMapReader.getHeader(true);
+    header = Arrays.stream(header).map(String::toLowerCase).toArray(String[]::new);
+
     final CellProcessor[] processors = getProcessors();
 
     Map<String, Object> csvRow;
@@ -201,8 +222,8 @@ public class CommunityHealthWorkerService {
       LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
 
-      String phoneNumber = Objects.toString(csvRow.get("Mobile"), null);
-      String chwId = Objects.toString(csvRow.get("CHW ID"), null);
+      String phoneNumber = Objects.toString(csvRow.get(MOBILE_CSV_HEADER), null);
+      String chwId = Objects.toString(csvRow.get(CHW_ID_CSV_HEADER), null);
 
       // Validate
       if (phoneNumberSet.contains(phoneNumber)) {
@@ -226,8 +247,8 @@ public class CommunityHealthWorkerService {
         chwIdSet.add(chwId);
       }
 
-      String community = Objects.toString(csvRow.get("Community"), null);
-      String facility = Objects.toString(csvRow.get("PHU"), null);
+      String community = Objects.toString(csvRow.get(COMMUNITY_CSV_HEADER), null);
+      String facility = Objects.toString(csvRow.get(PHU_CSV_HEADER), null);
 
       Community chwCommunity = communityRepository
           .findByNameAndFacilityName(community, facility);
@@ -240,7 +261,7 @@ public class CommunityHealthWorkerService {
       }
 
       Optional<CommunityHealthWorker> existingHealthWorker = healthWorkerRepository
-          .findByChwId(csvRow.get("CHW ID").toString());
+          .findByChwId(csvRow.get(CHW_ID_CSV_HEADER).toString());
 
       CommunityHealthWorker communityHealthWorker;
 
@@ -256,27 +277,27 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
-      communityHealthWorker.setChwId(csvRow.get("CHW ID").toString());
-      communityHealthWorker.setFirstName(csvRow.get("First_Name").toString());
-      communityHealthWorker.setSecondName(csvRow.get("Second_Name").toString());
+      communityHealthWorker.setChwId(csvRow.get(CHW_ID_CSV_HEADER).toString());
+      communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER).toString());
+      communityHealthWorker.setSecondName(csvRow.get(SECOND_NAME_CSV_HEADER).toString());
       communityHealthWorker.setOtherName(Objects.toString(
-          csvRow.get("Other_Name"), null));
-      communityHealthWorker.setYearOfBirth(csvRow.get("Age") != null
-          ? LocalDate.now().getYear() - Integer.valueOf(Objects.toString(csvRow.get("Age"),
+          csvRow.get(OTHER_NAME_CSV_HEADER), null));
+      communityHealthWorker.setYearOfBirth(csvRow.get(AGE_CSV_HEADER) != null
+          ? LocalDate.now().getYear() - Integer.valueOf(Objects.toString(csvRow.get(AGE_CSV_HEADER),
           null)) : null);
       communityHealthWorker.setGender(Gender.getByDisplayName(
-          csvRow.get("Gender").toString()));
+          csvRow.get(GENDER_CSV_HEADER).toString()));
       communityHealthWorker.setLiteracy(Literacy.getByDisplayName(
-          csvRow.get("Read_Write").toString()));
+          csvRow.get(READ_WRITE_CSV_HEADER).toString()));
       communityHealthWorker.setEducationLevel(EducationLevel.getByDisplayName(
-          csvRow.get("Education").toString()));
+          csvRow.get(EDUCATION_CSV_HEADER).toString()));
       communityHealthWorker.setPhoneNumber(phoneNumber);
       communityHealthWorker.setCommunity(chwCommunity);
       communityHealthWorker.setHasPeerSupervisor(
-          csvRow.get("Peer_Supervisor").equals("Yes"));
-      communityHealthWorker.setWorking(csvRow.get("Working").equals("Yes"));
+          csvRow.get(PEER_SUPERVISOR_CSV_HEADER).equals("Yes"));
+      communityHealthWorker.setWorking(csvRow.get(WORKING_CSV_HEADER).equals("Yes"));
       communityHealthWorker.setPreferredLanguage(Language.getByDisplayName(
-          Objects.toString(csvRow.get("Preferred_Language"), "English")));
+          Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER), "English")));
 
       if (selected && !communityHealthWorker.getSelected()) {
         selectHealthWorker(communityHealthWorker);
@@ -291,68 +312,68 @@ public class CommunityHealthWorkerService {
   private boolean validateBlankFieldsInCsv(int lineNumber, Map<String, Object> csvRow,
       Map<Integer, String> errorMap, Boolean selected) {
 
-    String chwId = Objects.toString(csvRow.get("CHW ID"), null);
+    String chwId = Objects.toString(csvRow.get(CHW_ID_CSV_HEADER), null);
     if (StringUtils.isBlank(chwId)) {
       errorMap.put(lineNumber, "CHW ID is empty");
       return true;
     }
-    String district = Objects.toString(csvRow.get("District"), null);
+    String district = Objects.toString(csvRow.get(DISTRICT_CSV_HEADER), null);
     if (StringUtils.isBlank(district)) {
       errorMap.put(lineNumber, "District is empty");
       return true;
     }
-    String chiefdom = Objects.toString(csvRow.get("Chiefdom"), null);
+    String chiefdom = Objects.toString(csvRow.get(CHIEFDOM_CSV_HEADER), null);
     if (StringUtils.isBlank(chiefdom)) {
       errorMap.put(lineNumber, "Chiefdom is empty");
       return true;
     }
-    String working = Objects.toString(csvRow.get("Working"), null);
+    String working = Objects.toString(csvRow.get(WORKING_CSV_HEADER), null);
     if (StringUtils.isBlank(working)) {
       errorMap.put(lineNumber, "Working is empty");
       return true;
     }
-    String firstName = Objects.toString(csvRow.get("First_Name"), null);
+    String firstName = Objects.toString(csvRow.get(FIRST_NAME_CSV_HEADER), null);
     if (StringUtils.isBlank(firstName)) {
       errorMap.put(lineNumber, "First Name is empty");
       return true;
     }
-    String secondName = Objects.toString(csvRow.get("Second_Name"), null);
+    String secondName = Objects.toString(csvRow.get(SECOND_NAME_CSV_HEADER), null);
     if (StringUtils.isBlank(secondName)) {
       errorMap.put(lineNumber, "Second Name is empty");
       return true;
     }
-    String gender = Objects.toString(csvRow.get("Gender"), null);
+    String gender = Objects.toString(csvRow.get(GENDER_CSV_HEADER), null);
     if (StringUtils.isBlank(gender)) {
       errorMap.put(lineNumber, "Gender is empty");
       return true;
     }
-    String readWrite = Objects.toString(csvRow.get("Read_Write"), null);
+    String readWrite = Objects.toString(csvRow.get(READ_WRITE_CSV_HEADER), null);
     if (StringUtils.isBlank(readWrite)) {
       errorMap.put(lineNumber, "Read Write is empty");
       return true;
     }
-    String education = Objects.toString(csvRow.get("Education"), null);
+    String education = Objects.toString(csvRow.get(EDUCATION_CSV_HEADER), null);
     if (StringUtils.isBlank(education)) {
       errorMap.put(lineNumber, "Education is empty");
       return true;
     }
-    String phu = Objects.toString(csvRow.get("PHU"), null);
+    String phu = Objects.toString(csvRow.get(PHU_CSV_HEADER), null);
     if (StringUtils.isBlank(phu)) {
       errorMap.put(lineNumber, "PHU is empty");
       return true;
     }
-    String phuSupervisor = Objects.toString(csvRow.get("PHU_Supervisor"), null);
+    String phuSupervisor = Objects.toString(csvRow.get(PHU_SUPERVISOR_CSV_HEADER), null);
     if (StringUtils.isBlank(phuSupervisor)) {
       errorMap.put(lineNumber, "PHU Supervisor is empty");
       return true;
     }
-    String peerSupervisor = Objects.toString(csvRow.get("Peer_Supervisor"), null);
+    String peerSupervisor = Objects.toString(csvRow.get(PEER_SUPERVISOR_CSV_HEADER), null);
     if (StringUtils.isBlank(peerSupervisor)) {
       errorMap.put(lineNumber, "Peer Supervisor is empty");
       return true;
     }
     if (selected) {
-      String language = Objects.toString(csvRow.get("Preferred_Language"), null);
+      String language = Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER), null);
       if (StringUtils.isBlank(language)) {
         errorMap.put(lineNumber, "Preferred language is empty");
         return true;
