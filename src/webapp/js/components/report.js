@@ -311,8 +311,9 @@ class Report extends Component {
               sorted={this.state.sorted}
               page={this.state.page}
               pageSize={this.state.pageSize}
-              onFilteredChange={filtered => this.setState({ filtered }, this.fetchDataWithDebounce)}
-              onSortedChange={sorted => this.setState({ sorted }, this.fetchData)}
+              onFilteredChange={
+                filtered => this.setState({ filtered, page: 0 }, this.fetchDataWithDebounce)}
+              onSortedChange={sorted => this.setState({ sorted, page: 0 }, this.fetchData)}
               onPageChange={page => this.setState({ page }, this.fetchData)}
               onPageSizeChange={pageSize => this.setState({ pageSize, page: 0 }, this.fetchData)}
               getTheadFilterThProps={() => ({ style: { position: 'inherit', overflow: 'inherit' } })}
