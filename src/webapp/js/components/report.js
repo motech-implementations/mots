@@ -103,6 +103,8 @@ class Report extends Component {
           sorted: [],
           page: 0,
           pageSize: 20,
+          exportWithFilters: false,
+          exportWithOrder: false,
         },
         () => this.fetchReport(),
       );
@@ -118,6 +120,8 @@ class Report extends Component {
         sorted: [],
         page: 0,
         pageSize: 20,
+        exportWithFilters: false,
+        exportWithOrder: false,
       },
       () => this.fetchReport(),
     );
