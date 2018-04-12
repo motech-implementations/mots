@@ -16,6 +16,11 @@ token:
 
 server:
     port: ${tomcatServerPort}
+    ssl:
+        enabled: ${sslEnabled:false}
+        key-alias: ${keyAlias:""}
+        key-store: ${keyStore:""}
+        key-store-password: ${keyStorePassword:""}
 
 logging:
     pattern:
