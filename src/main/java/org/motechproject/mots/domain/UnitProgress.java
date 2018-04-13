@@ -67,13 +67,20 @@ public class UnitProgress extends BaseTimestampedEntity {
     status = ProgressStatus.IN_PROGRESS;
   }
 
+  public void endUnit() {
+    status = ProgressStatus.COMPLETED;
+  }
+
+  public boolean isCompleted() {
+    return ProgressStatus.COMPLETED.equals(status);
+  }
+
   /**
    * Change current call flow element, if no more elements change status to completed.
    */
   public void nextElement() {
-    if (currentCallFlowElementNumber < unit.getCallFlowElements().size() - 1) {
-      currentCallFlowElementNumber++;
-    } else {
+    currentCallFlowElementNumber++;
+    if (currentCallFlowElementNumber >= unit.getCallFlowElements().size()) {
       status = ProgressStatus.COMPLETED;
     }
   }
@@ -86,6 +93,7 @@ public class UnitProgress extends BaseTimestampedEntity {
       currentCallFlowElementNumber--;
       callFlowElementLogs.removeIf(callLog ->
           callLog.getCallFlowElement().getListOrder().equals(currentCallFlowElementNumber));
+      status = ProgressStatus.IN_PROGRESS;
     }
   }
 
