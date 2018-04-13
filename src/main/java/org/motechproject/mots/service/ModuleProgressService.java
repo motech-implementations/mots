@@ -223,8 +223,10 @@ public class ModuleProgressService {
     while (!moduleProgress.isCompleted()) {
       UnitProgress unitProgress = moduleProgress.getCurrentUnitProgress();
 
-      if (parseVotoUnitBlocks(unitProgress, blockIterator, callInterrupted)
-          || !blockIterator.hasNext()) {
+      if (!unitProgress.isCompleted()
+          && (parseVotoUnitBlocks(unitProgress, blockIterator, callInterrupted)
+          || !blockIterator.hasNext())) {
+        unitProgress.previousElement();
         moduleProgress.setInterrupted(true);
         moduleProgressRepository.save(moduleProgress);
         return true;
@@ -251,6 +253,12 @@ public class ModuleProgressService {
 
     // no response was chosen - should end the call
     if (choiceId == null) {
+      if (blockIterator.hasNext()) {
+        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()));
+      } else {
+        moduleProgress.setInterrupted(true);
+      }
+
       return true;
     }
 
@@ -316,13 +324,14 @@ public class ModuleProgressService {
         unitProgress.nextElement();
       } else {
         if (callInterrupted) {
-          unitProgress.previousElement();
           return true;
         }
 
         throw new CourseProgressException("Unexpected end of IVR Call Log");
       }
     }
+
+    unitProgress.endUnit();
 
     return false;
   }
