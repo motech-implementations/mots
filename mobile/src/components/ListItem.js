@@ -16,7 +16,9 @@ const ListItem = ({
   >
     {columns.map(column => (
       <View key={column.Header} style={styles.cardLine}>
-        <Text style={[styles.bold, lightThemeText]}>{!column.hide && `${column.Header}: `}
+        <Text
+          style={[styles.bold, lightThemeText, { textAlign: 'center' }]}
+        >{!column.hide && `${column.Header}: `}
           {(!(column.Cell || column.TextCell) && !column.hide) &&
             <Text style={[styles.normal, lightThemeText]}>
               {row[column.accessor]}
