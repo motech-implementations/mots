@@ -182,11 +182,6 @@ export default class Report extends Component {
     return (
       <View style={getContainerStyle()}>
         <Text style={[styles.formHeader, lightThemeText]}>{this.state.reportName}</Text>
-        <Filters
-          availableFilters={this.state.templateParameters}
-          onFilter={filters => this.onFilter(filters)}
-          onReset={() => this.onReset()}
-        />
 
         <View style={styles.buttonContainer}>
           <Button
@@ -249,6 +244,14 @@ export default class Report extends Component {
             marginLeft={5}
           />
         </View>
+
+        <Filters
+          availableFilters={this.state.templateParameters}
+          onFilter={filters => this.onFilter(filters)}
+          onReset={() => this.onReset()}
+          iconBottom={10}
+          iconRight={20}
+        />
       </View>
     );
   }

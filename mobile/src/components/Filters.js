@@ -176,13 +176,27 @@ export default class Filters extends Component {
     const {
       transparent,
       animationType,
+      iconTop,
+      iconRight,
+      iconBottom,
+      iconLeft,
     } = this.props;
+
+    const iconPosition = {
+      top: iconTop,
+      right: iconRight,
+      bottom: iconBottom,
+      left: iconLeft,
+    };
 
     return (
       <View>
-        <TouchableOpacity style={filtersStyles.iconContainer} onPress={this.onPress}>
+        <TouchableOpacity
+          style={[filtersStyles.iconContainer, iconPosition]}
+          onPress={this.onPress}
+        >
           <View style={filtersStyles.icon}>
-            <Icon name="filter" size={16} color="#B4B7C0" />
+            <Icon name="filter" size={16} color="#000" />
           </View>
         </TouchableOpacity>
 
@@ -233,6 +247,10 @@ Filters.propTypes = {
   transparent: PropTypes.bool,
   animationType: PropTypes.string,
   availableFilters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  iconTop: PropTypes.number,
+  iconRight: PropTypes.number,
+  iconBottom: PropTypes.number,
+  iconLeft: PropTypes.number,
 };
 
 Filters.defaultProps = {
@@ -240,4 +258,8 @@ Filters.defaultProps = {
   onReset: () => {},
   transparent: false,
   animationType: 'slide',
+  iconTop: null,
+  iconRight: null,
+  iconBottom: null,
+  iconLeft: null,
 };
