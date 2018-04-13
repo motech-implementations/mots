@@ -154,7 +154,7 @@ public class UnitProgress extends BaseTimestampedEntity {
   public void resetProgressForUnitRepeat() {
     currentCallFlowElementNumber = 0;
     callFlowElementLogs.clear();
-    status = ProgressStatus.IN_PROGRESS;
+    status = ProgressStatus.NOT_STARTED;
     numberOfReplays++;
   }
 }

@@ -67,16 +67,27 @@ public class ModuleProgressService {
 
     Iterator<VotoBlockDto> blockIterator = votoCallLogDto.getInteractions().iterator();
 
-    try {
-      if (interruptedModuleProgress.isPresent()) {
-        ModuleProgress moduleProgress = interruptedModuleProgress.get();
+    if (interruptedModuleProgress.isPresent()) {
+      ModuleProgress moduleProgress = interruptedModuleProgress.get();
 
+      try {
         if (parseVotoModuleBlocks(votoCallLogDto, blockIterator,
             moduleProgress.getCourseModule().getIvrId(), callInterrupted)) {
           return;
         }
-      }
+      } catch (MotsException ex) {
+        LOGGER.warn("Call continuation failed for CallLog with id: " + votoCallLogDto.getLogId()
+            + ", starting from main menu", ex);
 
+        moduleProgress.getCurrentUnitProgress().resetProgressForUnitRepeat();
+        moduleProgress.setInterrupted(false);
+        moduleProgressRepository.save(moduleProgress);
+
+        blockIterator = votoCallLogDto.getInteractions().iterator();
+      }
+    }
+
+    try {
       parseVotoMainMenuBlocks(votoCallLogDto, blockIterator, callInterrupted);
     } catch (MotsException ex) {
       LOGGER.error("Could not parse CallLog with id: " + votoCallLogDto.getLogId(), ex);
