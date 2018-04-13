@@ -26,7 +26,7 @@ const FacilityTypeFilter = ({ onChange }) => (
   >
     <option value="">Show All</option>
     <option value="CHC">CHC</option>
-    <option value={hasAuthority(MANAGE_FACILITIES_AUTHORITY)}>CHP</option>
+    <option value="CHP">CHP</option>
     <option value="MCHP">MCHP</option>
     <option value="clinic">Clinic</option>
     <option value="hospital">Hospital</option>
