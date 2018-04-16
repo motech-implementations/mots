@@ -9,6 +9,15 @@ import FormField from './form-field';
 export const USER_PROFILE_FORM_NAME = 'UserProfileForm';
 
 const FIELDS = {
+  username: {
+    label: 'Username',
+    getAttributes: input => ({
+      disabled: true,
+      type: 'text',
+      className: 'form-control',
+      ...input,
+    }),
+  },
   name: {
     label: 'Name',
   },

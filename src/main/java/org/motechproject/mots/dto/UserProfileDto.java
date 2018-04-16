@@ -19,6 +19,10 @@ public class UserProfileDto {
 
   @Getter
   @Setter
+  private String username;
+
+  @Getter
+  @Setter
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String name;
 
