@@ -44,15 +44,18 @@ class Report extends Component {
           const dateFormat = 'YYYY-MM-DD';
 
           return (
-            <div className="input-group">
-              <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-              <DateTime
-                dateFormat={dateFormat}
-                timeFormat={false}
-                closeOnSelect
-                onChange={date => onChange(!date || typeof date === 'string' ? date : date.format(dateFormat))}
-              />
-            </div>);
+            <DateTime
+              dateFormat={dateFormat}
+              timeFormat={false}
+              closeOnSelect
+              onChange={date => onChange(!date || typeof date === 'string' ? date : date.format(dateFormat))}
+              renderInput={props => (
+                <div className="input-group">
+                  <span className="input-group-addon"><i className="fa fa-calendar" /></span>
+                  <input {...props} />
+                </div>
+              )}
+            />);
         };
       default:
         return null;
@@ -163,6 +166,7 @@ class Report extends Component {
                 order: parseInt(value[0].order, 10),
                 accessor: key,
                 filterable: !!parameter,
+                minWidth: parameter && parameter.dataType === 'Date' ? 150 : 100,
                 Filter,
               });
             });
