@@ -182,6 +182,7 @@ class Report extends Component {
             });
 
             _.sortBy(reportModel, ['order']);
+            reportModel.sort((o1, o2) => o1.order - o2.order);
 
             this.setState({
               reportModel,
