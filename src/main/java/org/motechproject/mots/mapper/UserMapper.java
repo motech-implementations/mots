@@ -34,9 +34,6 @@ public interface UserMapper {
   @Mapping(target = "id", ignore = true)
   User fromDto(UserDto userDto);
 
-  @Mapping(target = "id", ignore = true)
-  User fromUserProfileDto(UserProfileDto userProfileDto);
-
   List<UserDto> toDtos(Iterable<User> users);
 
   /**
@@ -57,10 +54,10 @@ public interface UserMapper {
   })
   void updateFromDto(UserDto userDto, @MappingTarget User user);
 
-
   @Mappings({
       @Mapping(target = "id", ignore = true),
       @Mapping(target = PASSWORD, ignore = true),
+      @Mapping(target = "username", ignore = true),
   })
   void updateFromUserProfileDto(UserProfileDto userProfileDto, @MappingTarget User user);
 
