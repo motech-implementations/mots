@@ -25,7 +25,7 @@ class CommunityNew extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/');
+    this.props.history.push('/locations');
   }
 
   onSubmit(values) {

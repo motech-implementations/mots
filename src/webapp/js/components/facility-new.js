@@ -25,7 +25,7 @@ class FacilityNew extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/');
+    this.props.history.push('/locations/1');
   }
 
   onSubmit(values) {
