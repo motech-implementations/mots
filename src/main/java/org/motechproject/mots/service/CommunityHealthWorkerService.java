@@ -230,6 +230,7 @@ public class CommunityHealthWorkerService {
         errorMap.put(csvMapReader.getLineNumber(), "Phone number is duplicated in CSV");
         continue;
       }
+
       if (chwIdSet.contains(chwId)) {
         errorMap.put(csvMapReader.getLineNumber(), "CHW ID is duplicated in CSV");
         continue;
@@ -243,8 +244,16 @@ public class CommunityHealthWorkerService {
       if (phoneNumber != null) {
         phoneNumberSet.add(phoneNumber);
       }
+
       if (chwId != null) {
         chwIdSet.add(chwId);
+      }
+
+      Optional<CommunityHealthWorker> chw = healthWorkerRepository.findByPhoneNumber(phoneNumber);
+
+      if (chw.isPresent() && !chw.get().getChwId().equals(chwId)) {
+        errorMap.put(csvMapReader.getLineNumber(), "CHW with this phone number already exists");
+        continue;
       }
 
       String community = Objects.toString(csvRow.get(COMMUNITY_CSV_HEADER), null);
