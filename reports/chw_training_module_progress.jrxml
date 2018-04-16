@@ -283,7 +283,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.moduleId.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="7"/>
+					<property name="net.sf.jasperreports.export.json.data" value="5"/>
 				</reportElement>
 			</staticText>
 			<staticText>

@@ -123,7 +123,7 @@
 	</subDataset>
 	<parameter name="chwId" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="CHW ID"/>
+		<property name="displayName" value="ID"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="firstName" class="java.lang.String" isForPrompting="true">
