@@ -7,7 +7,8 @@ import { signoutUser } from '../actions/index';
 
 class CounterLogout extends Component {
   static minTwoDigits(n) {
-    return (n < 10 ? '0' : '') + n;
+    const str = `${n}`;
+    return (str.length < 2 ? '0' : '') + str;
   }
 
   static renderCountdown({ minutes, seconds }) {
