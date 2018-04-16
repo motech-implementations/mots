@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.supercsv.exception.SuperCsvException;
 
 @ControllerAdvice
 public class GlobalErrorHandling extends AbstractErrorHandling {
@@ -43,6 +44,14 @@ public class GlobalErrorHandling extends AbstractErrorHandling {
   @ResponseBody
   public ErrorResponse handleIllegalArgumentException(IllegalArgumentException ex) {
     return new ErrorResponse(ex.getMessage());
+  }
+
+  @ExceptionHandler(SuperCsvException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public ErrorResponse handleSuperCsvException(SuperCsvException ex) {
+    return logAndGetErrorResponse("The CSV file structure is invalid,"
+        + " check if column number in every row is correct", ex);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)

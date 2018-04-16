@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -26,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
@@ -41,6 +39,9 @@ public class InchargeService {
   private static final String FACILITY_ID_CSV_HEADER = "facility_id";
   private static final String PHU_INCHARGE_NAME_CSV_HEADER = "phu in-charge name";
   private static final String PHU_INCHARGE_NUMBER_CSV_HEADER = "phu in-charge number";
+
+  private static final List<String> CSV_HEADERS = Arrays.asList(FACILITY_ID_CSV_HEADER,
+      PHU_INCHARGE_NAME_CSV_HEADER, PHU_INCHARGE_NUMBER_CSV_HEADER);
 
   @Autowired
   private InchargeRepository inchargeRepository;
@@ -100,18 +101,23 @@ public class InchargeService {
     String[] header = csvMapReader.getHeader(true);
     header = Arrays.stream(header).map(String::toLowerCase).toArray(String[]::new);
 
-    final CellProcessor[] processors = getProcessors();
+    for (String headerName : CSV_HEADERS) {
+      if (Arrays.stream(header).noneMatch(h -> h.equals(headerName))) {
+        throw new IllegalArgumentException("Column with name: \"" + headerName
+            + "\" is missing in the CSV file");
+      }
+    }
 
-    Map<String, Object> csvRow;
+    Map<String, String> csvRow;
     Set<String> phoneNumberSet = new HashSet<>();
     Set<String> facilityIdSet = new HashSet<>();
     Map<Integer, String> errorMap = new HashMap<>();
 
-    while ((csvRow = csvMapReader.read(header, processors)) != null) {
+    while ((csvRow = csvMapReader.read(header)) != null) {
       LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
 
-      String facilityId = Objects.toString(csvRow.get(FACILITY_ID_CSV_HEADER), null);
+      String facilityId = csvRow.get(FACILITY_ID_CSV_HEADER);
 
       if (StringUtils.isBlank(facilityId)) {
         errorMap.put(csvMapReader.getLineNumber(), "Facility Id is empty");
@@ -132,7 +138,7 @@ public class InchargeService {
         continue;
       }
 
-      String phoneNumber = Objects.toString(csvRow.get(PHU_INCHARGE_NUMBER_CSV_HEADER), null);
+      String phoneNumber = csvRow.get(PHU_INCHARGE_NUMBER_CSV_HEADER);
 
       if (selected && StringUtils.isBlank(phoneNumber)) {
         errorMap.put(csvMapReader.getLineNumber(), "Phone number is empty");
@@ -148,7 +154,7 @@ public class InchargeService {
         phoneNumberSet.add(phoneNumber);
       }
 
-      String name = Objects.toString(csvRow.get(PHU_INCHARGE_NAME_CSV_HEADER), null);
+      String name = csvRow.get(PHU_INCHARGE_NAME_CSV_HEADER);
 
       if (StringUtils.isBlank(name)) {
         errorMap.put(csvMapReader.getLineNumber(), "Incharge name is empty");
@@ -206,25 +212,7 @@ public class InchargeService {
       inchargeRepository.save(new Incharge(firstName, secondName, otherName,
           phoneNumber, null, facility, selected));
     }
-    return errorMap;
-  }
 
-  /**
-   * Sets up the processors used for the CSV with inchage list. Empty columns are read as null
-   * (hence the NotNull() for mandatory columns).
-   *
-   * @return the cell processors
-   */
-  private CellProcessor[] getProcessors() {
-    return new CellProcessor[] {
-        null, // district
-        null, // chiefdom
-        null, // facility name
-        null, // facility id
-        null, // facility type
-        null, // functional status
-        null, // incharge name
-        null // incharge number
-    };
+    return errorMap;
   }
 }

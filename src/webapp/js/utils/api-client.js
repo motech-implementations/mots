@@ -22,6 +22,13 @@ const apiClient = axios.create({});
 
 const getErrorMessage = (errorResponse) => {
   if (errorResponse.status === 400) {
+    const error = errorResponse.data;
+
+    // eslint-disable-next-line no-prototype-builtins
+    if (error.hasOwnProperty('message') && error.hasOwnProperty('stacktrace')) {
+      return error.message;
+    }
+
     return _.values(errorResponse.data).join('\n');
   }
 
