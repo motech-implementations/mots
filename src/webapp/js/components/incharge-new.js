@@ -22,7 +22,7 @@ class InchargeNew extends Component {
   }
 
   onSubmitCancel() {
-    this.props.history.push('/');
+    this.props.history.push('/incharge/selected');
   }
 
   onSubmit(values) {
