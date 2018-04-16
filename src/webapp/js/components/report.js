@@ -16,13 +16,21 @@ import {
 
 class Report extends Component {
   static prepareFilter(parameter) {
-    if (!parameter || parameter.dataType === 'String') {
+    if (!parameter) {
       return null;
     }
 
     switch (parameter.dataType) {
+      case 'String':
+        return ({ filter, onChange }) => (
+          <input
+            className="form-control"
+            onChange={event => onChange(event.target.value)}
+            value={filter ? filter.value : ''}
+          />
+        );
       case 'Enum':
-        return ({ onChange }) => {
+        return ({ filter, onChange }) => {
           const options = parameter.options.map((option) => {
             const parts = option.split(':');
             return { value: parts[0], displayName: parts.length > 1 ? parts[1] : parts[0] };
@@ -32,6 +40,7 @@ class Report extends Component {
             <select
               onChange={event => onChange(event.target.value)}
               style={{ width: '100%' }}
+              value={filter ? filter.value : ''}
             >
               <option value="">Show All</option>
               { options.map(option => (
@@ -40,7 +49,7 @@ class Report extends Component {
             </select>);
         };
       case 'Date':
-        return ({ onChange }) => {
+        return ({ filter, onChange }) => {
           const dateFormat = 'YYYY-MM-DD';
 
           return (
@@ -49,6 +58,7 @@ class Report extends Component {
               timeFormat={false}
               closeOnSelect
               onChange={date => onChange(!date || typeof date === 'string' ? date : date.format(dateFormat))}
+              value={filter ? filter.value : null}
               renderInput={props => (
                 <div className="input-group">
                   <span className="input-group-addon"><i className="fa fa-calendar" /></span>
