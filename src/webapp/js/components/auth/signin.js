@@ -48,39 +48,50 @@ class Signin extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <div className="margin-top-xl mainbox col-md-4 col-md-offset-4
+
+      <div className="mainbox col-md-6 col-md-offset-3
         col-sm-8 col-sm-offset-2"
       >
-        <div className="panel panel-info" >
-          <div className="panel-heading">
-            <div className="panel-title">Sign In</div>
+        <div className="row">
+          <div className="col-md-8 col-md-offset-2">
+            <img className="img-responsive" alt="test" src="/GF_VertLogo_CMYK.jpg" />
           </div>
-          <div className="panel-body padding-top-lg">
-            { this.renderAlert() }
+        </div>
 
-            <form className="form-horizontal" onSubmit={handleSubmit(this.onSubmit)}>
-              <Field
-                placeholder="Username"
-                type="text"
-                name="username"
-                icon="user"
-                component={Signin.renderField}
-                className="form-control"
-              />
-              <Field
-                placeholder="Password"
-                type="password"
-                name="password"
-                icon="lock"
-                component={Signin.renderField}
-                className="form-control"
-              />
-              <div className="form-group">
-                <div className="col-sm-12 controls">
-                  <button type="submit" className="btn btn-success">Login</button>
-                </div>
+        <div className="row">
+          <div className="col-md-8 col-md-offset-2">
+            <div className="panel panel-info">
+              <div className="panel-heading">
+                <div className="panel-title">Sign In</div>
               </div>
-            </form>
+              <div className="panel-body padding-top-lg">
+                { this.renderAlert() }
+
+                <form className="form-horizontal" onSubmit={handleSubmit(this.onSubmit)}>
+                  <Field
+                    placeholder="Username"
+                    type="text"
+                    name="username"
+                    icon="user"
+                    component={Signin.renderField}
+                    className="form-control"
+                  />
+                  <Field
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    icon="lock"
+                    component={Signin.renderField}
+                    className="form-control"
+                  />
+                  <div className="form-group">
+                    <div className="col-sm-12 controls">
+                      <button type="submit" className="btn btn-success">Login</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>

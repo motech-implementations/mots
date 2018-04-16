@@ -37,6 +37,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         ).permitAll()
         .antMatchers(HttpMethod.POST, "/api/ivrCallback/*").permitAll()
         .antMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
+        .antMatchers(HttpMethod.GET, "/GF_VertLogo_CMYK.jpg").permitAll()
         .antMatchers("/**").fullyAuthenticated();
   }
 }
