@@ -37,7 +37,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
@@ -80,6 +79,13 @@ public class CommunityHealthWorkerService {
   private static final String PHU_SUPERVISOR_CSV_HEADER = "phu_supervisor";
   private static final String PEER_SUPERVISOR_CSV_HEADER = "peer_supervisor";
   private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
+
+  private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
+      DISTRICT_CSV_HEADER, CHIEFDOM_CSV_HEADER, WORKING_CSV_HEADER, FIRST_NAME_CSV_HEADER,
+      SECOND_NAME_CSV_HEADER, OTHER_NAME_CSV_HEADER, AGE_CSV_HEADER, GENDER_CSV_HEADER,
+      READ_WRITE_CSV_HEADER, EDUCATION_CSV_HEADER, MOBILE_CSV_HEADER, COMMUNITY_CSV_HEADER,
+      PHU_CSV_HEADER, PHU_SUPERVISOR_CSV_HEADER, PEER_SUPERVISOR_CSV_HEADER,
+      PREFERRED_LANGUAGE_CSV_HEADER);
 
   @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
@@ -211,19 +217,24 @@ public class CommunityHealthWorkerService {
     String[] header = csvMapReader.getHeader(true);
     header = Arrays.stream(header).map(String::toLowerCase).toArray(String[]::new);
 
-    final CellProcessor[] processors = getProcessors();
+    for (String headerName : CSV_HEADERS) {
+      if (Arrays.stream(header).noneMatch(h -> h.equals(headerName))) {
+        throw new IllegalArgumentException("Column with name: \"" + headerName
+            + "\" is missing in the CSV file");
+      }
+    }
 
-    Map<String, Object> csvRow;
+    Map<String, String> csvRow;
     Set<String> phoneNumberSet = new HashSet<>();
     Set<String> chwIdSet = new HashSet<>();
     Map<Integer, String> errorMap = new HashMap<>();
 
-    while ((csvRow = csvMapReader.read(header, processors)) != null) {
+    while ((csvRow = csvMapReader.read(header)) != null) {
       LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chw=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
 
-      String phoneNumber = Objects.toString(csvRow.get(MOBILE_CSV_HEADER), null);
-      String chwId = Objects.toString(csvRow.get(CHW_ID_CSV_HEADER), null);
+      String phoneNumber = csvRow.get(MOBILE_CSV_HEADER);
+      String chwId = csvRow.get(CHW_ID_CSV_HEADER);
 
       // Validate
       if (phoneNumberSet.contains(phoneNumber)) {
@@ -256,8 +267,8 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
-      String community = Objects.toString(csvRow.get(COMMUNITY_CSV_HEADER), null);
-      String facility = Objects.toString(csvRow.get(PHU_CSV_HEADER), null);
+      String community = csvRow.get(COMMUNITY_CSV_HEADER);
+      String facility = csvRow.get(PHU_CSV_HEADER);
 
       Community chwCommunity = communityRepository
           .findByNameAndFacilityName(community, facility);
@@ -270,7 +281,7 @@ public class CommunityHealthWorkerService {
       }
 
       Optional<CommunityHealthWorker> existingHealthWorker = healthWorkerRepository
-          .findByChwId(csvRow.get(CHW_ID_CSV_HEADER).toString());
+          .findByChwId(chwId);
 
       CommunityHealthWorker communityHealthWorker;
 
@@ -286,20 +297,17 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
-      communityHealthWorker.setChwId(csvRow.get(CHW_ID_CSV_HEADER).toString());
-      communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER).toString());
-      communityHealthWorker.setSecondName(csvRow.get(SECOND_NAME_CSV_HEADER).toString());
-      communityHealthWorker.setOtherName(Objects.toString(
-          csvRow.get(OTHER_NAME_CSV_HEADER), null));
+      communityHealthWorker.setChwId(chwId);
+      communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER));
+      communityHealthWorker.setSecondName(csvRow.get(SECOND_NAME_CSV_HEADER));
+      communityHealthWorker.setOtherName(csvRow.get(OTHER_NAME_CSV_HEADER));
       communityHealthWorker.setYearOfBirth(csvRow.get(AGE_CSV_HEADER) != null
-          ? LocalDate.now().getYear() - Integer.valueOf(Objects.toString(csvRow.get(AGE_CSV_HEADER),
-          null)) : null);
-      communityHealthWorker.setGender(Gender.getByDisplayName(
-          csvRow.get(GENDER_CSV_HEADER).toString()));
+          ? LocalDate.now().getYear() - Integer.valueOf(csvRow.get(AGE_CSV_HEADER)) : null);
+      communityHealthWorker.setGender(Gender.getByDisplayName(csvRow.get(GENDER_CSV_HEADER)));
       communityHealthWorker.setLiteracy(Literacy.getByDisplayName(
-          csvRow.get(READ_WRITE_CSV_HEADER).toString()));
+          csvRow.get(READ_WRITE_CSV_HEADER)));
       communityHealthWorker.setEducationLevel(EducationLevel.getByDisplayName(
-          csvRow.get(EDUCATION_CSV_HEADER).toString()));
+          csvRow.get(EDUCATION_CSV_HEADER)));
       communityHealthWorker.setPhoneNumber(phoneNumber);
       communityHealthWorker.setCommunity(chwCommunity);
       communityHealthWorker.setHasPeerSupervisor(
@@ -314,112 +322,79 @@ public class CommunityHealthWorkerService {
         healthWorkerRepository.save(communityHealthWorker);
       }
     }
+
     return errorMap;
   }
 
   @SuppressWarnings("PMD.CyclomaticComplexity")
-  private boolean validateBlankFieldsInCsv(int lineNumber, Map<String, Object> csvRow,
+  private boolean validateBlankFieldsInCsv(int lineNumber, Map<String, String> csvRow,
       Map<Integer, String> errorMap, Boolean selected) {
 
-    String chwId = Objects.toString(csvRow.get(CHW_ID_CSV_HEADER), null);
-    if (StringUtils.isBlank(chwId)) {
+    if (StringUtils.isBlank(csvRow.get(CHW_ID_CSV_HEADER))) {
       errorMap.put(lineNumber, "CHW ID is empty");
       return true;
     }
-    String district = Objects.toString(csvRow.get(DISTRICT_CSV_HEADER), null);
-    if (StringUtils.isBlank(district)) {
+
+    if (StringUtils.isBlank(csvRow.get(DISTRICT_CSV_HEADER))) {
       errorMap.put(lineNumber, "District is empty");
       return true;
     }
-    String chiefdom = Objects.toString(csvRow.get(CHIEFDOM_CSV_HEADER), null);
-    if (StringUtils.isBlank(chiefdom)) {
+
+    if (StringUtils.isBlank(csvRow.get(CHIEFDOM_CSV_HEADER))) {
       errorMap.put(lineNumber, "Chiefdom is empty");
       return true;
     }
-    String working = Objects.toString(csvRow.get(WORKING_CSV_HEADER), null);
-    if (StringUtils.isBlank(working)) {
+
+    if (StringUtils.isBlank(csvRow.get(WORKING_CSV_HEADER))) {
       errorMap.put(lineNumber, "Working is empty");
       return true;
     }
-    String firstName = Objects.toString(csvRow.get(FIRST_NAME_CSV_HEADER), null);
-    if (StringUtils.isBlank(firstName)) {
+
+    if (StringUtils.isBlank(csvRow.get(FIRST_NAME_CSV_HEADER))) {
       errorMap.put(lineNumber, "First Name is empty");
       return true;
     }
-    String secondName = Objects.toString(csvRow.get(SECOND_NAME_CSV_HEADER), null);
-    if (StringUtils.isBlank(secondName)) {
+
+    if (StringUtils.isBlank(csvRow.get(SECOND_NAME_CSV_HEADER))) {
       errorMap.put(lineNumber, "Second Name is empty");
       return true;
     }
-    String gender = Objects.toString(csvRow.get(GENDER_CSV_HEADER), null);
-    if (StringUtils.isBlank(gender)) {
+
+    if (StringUtils.isBlank(csvRow.get(GENDER_CSV_HEADER))) {
       errorMap.put(lineNumber, "Gender is empty");
       return true;
     }
-    String readWrite = Objects.toString(csvRow.get(READ_WRITE_CSV_HEADER), null);
-    if (StringUtils.isBlank(readWrite)) {
+
+    if (StringUtils.isBlank(csvRow.get(READ_WRITE_CSV_HEADER))) {
       errorMap.put(lineNumber, "Read Write is empty");
       return true;
     }
-    String education = Objects.toString(csvRow.get(EDUCATION_CSV_HEADER), null);
-    if (StringUtils.isBlank(education)) {
+
+    if (StringUtils.isBlank(csvRow.get(EDUCATION_CSV_HEADER))) {
       errorMap.put(lineNumber, "Education is empty");
       return true;
     }
-    String phu = Objects.toString(csvRow.get(PHU_CSV_HEADER), null);
-    if (StringUtils.isBlank(phu)) {
+
+    if (StringUtils.isBlank(csvRow.get(PHU_CSV_HEADER))) {
       errorMap.put(lineNumber, "PHU is empty");
       return true;
     }
-    String phuSupervisor = Objects.toString(csvRow.get(PHU_SUPERVISOR_CSV_HEADER), null);
-    if (StringUtils.isBlank(phuSupervisor)) {
+
+    if (StringUtils.isBlank(csvRow.get(PHU_SUPERVISOR_CSV_HEADER))) {
       errorMap.put(lineNumber, "PHU Supervisor is empty");
       return true;
     }
-    String peerSupervisor = Objects.toString(csvRow.get(PEER_SUPERVISOR_CSV_HEADER), null);
-    if (StringUtils.isBlank(peerSupervisor)) {
+
+    if (StringUtils.isBlank(csvRow.get(PEER_SUPERVISOR_CSV_HEADER))) {
       errorMap.put(lineNumber, "Peer Supervisor is empty");
       return true;
     }
-    if (selected) {
-      String language = Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER), null);
-      if (StringUtils.isBlank(language)) {
-        errorMap.put(lineNumber, "Preferred language is empty");
-        return true;
-      }
+
+    if (selected && StringUtils.isBlank(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER))) {
+      errorMap.put(lineNumber, "Preferred language is empty");
+      return true;
     }
 
     return false;
   }
-
-  /**
-   * Sets up the processors used for the CSV with CHW list. Empty columns are read as null
-   * (hence the NotNull() for mandatory columns).
-   *
-   * @return the cell processors
-   */
-  private CellProcessor[] getProcessors() {
-
-    final CellProcessor[] processors = new CellProcessor[] {
-        null, // chwId (must be unique)
-        null, // district
-        null, // chiefdom
-        null, // working?
-        null, // firstName
-        null, // secondName
-        null, // otherName
-        null, // age
-        null, // gender
-        null, // readWrite
-        null, // educationLevel
-        null, // phoneNumber
-        null, // community
-        null, // phu
-        null, // PHU_supervisor
-        null, // peer_supervisor
-        null // preferred_language
-    };
-    return processors;
-  }
-
 }
