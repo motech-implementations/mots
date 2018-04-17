@@ -17,6 +17,13 @@ import Spinner from './Spinner';
 
 export const PROFILE_FORM_NAME = 'ProfileForm';
 const FIELDS = {
+  username: {
+    label: 'Username',
+    getAttributes: () => ({
+      ...getAttributesForInput(),
+      editable: false,
+    }),
+  },
   name: {
     label: 'Name',
     getAttributes: () => getAttributesForInput(),
