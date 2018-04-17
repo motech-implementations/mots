@@ -115,13 +115,12 @@ export default class Report extends Component {
             if (parameter) {
               templateParameters.push({
                 ...parameter,
-                order,
+                order: parseInt(order, 10),
               });
             }
           });
           this.setState({
-            templateParameters: templateParameters.sort((a, b) =>
-              parseInt(a.order, 10) - parseInt(b.order, 10)),
+            templateParameters: templateParameters.sort((a, b) => a.order - b.order),
             totalPages: Math.ceil(totalPages / this.state.pageSize) || 1,
           });
         }
