@@ -106,8 +106,22 @@ export default class Report extends Component {
     apiClient.get(url)
       .then((response) => {
         if (response) {
+          const { colModel, totalPages } = response[0];
+          const templateParameters = [];
+          Object.keys(colModel[0]).forEach((colName) => {
+            const { order } = colModel[0][colName][0];
+            const parameter = this.state.templateParameters.find(param =>
+              param.name === colName);
+            if (parameter) {
+              templateParameters.push({
+                ...parameter,
+                order: parseInt(order, 10),
+              });
+            }
+          });
           this.setState({
-            totalPages: Math.ceil(response[0].totalPages / this.state.pageSize) || 1,
+            templateParameters: templateParameters.sort((a, b) => a.order - b.order),
+            totalPages: Math.ceil(totalPages / this.state.pageSize) || 1,
           });
         }
       });
