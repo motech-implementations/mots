@@ -42,7 +42,7 @@ export default function (state = initialTablesData, action) {
           ...state,
           userList: action.payload.content.map(user => ({
             ...user,
-            roleName: user.roles ? user.roles[0].name : '',
+            role: user.roles ? user.roles[0].name : '',
           })) || [],
         };
       }

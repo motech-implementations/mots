@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from '../components/Button';
+import Spinner from '../components/Spinner';
 
 import ListItem from '../components/ListItem';
+import Filters from '../components/Filters';
 import { fetchIncharges } from '../actions/index';
 import { INCHARGE_WRITE_AUTHORITY, hasAuthority } from '../utils/authorization';
+import styles from '../styles/listsStyles';
+import commonStyles from '../styles/commonStyles';
+import buildSearchParams from '../utils/search-params';
+
+const { lightThemeText } = commonStyles;
 
 class InchargeList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       INCHARGE_WRITE_AUTHORITY: false,
+      templateParams: this.getColumnDefinitions(),
+      loading: false,
+      noDataMessage: 'No data found',
     };
   }
 
@@ -21,34 +31,61 @@ class InchargeList extends Component {
     hasAuthority(INCHARGE_WRITE_AUTHORITY).then((result) => {
       if (result) { this.setState({ INCHARGE_WRITE_AUTHORITY: true }); }
     });
-    this.props.fetchIncharges(this.props.selected);
+    this.fetchData();
+  }
+
+  onFilter(filters) {
+    this.setState({
+      templateParams: filters,
+    }, () => this.fetchData());
+  }
+
+  onReset() {
+    this.setState({
+      templateParams: this.state.templateParams.map(param => ({
+        ...param,
+        defaultValue: null,
+      })),
+    }, () => this.fetchData());
   }
 
   getColumnDefinitions() {
     return [
       {
-        Header: 'First name',
-        accessor: 'firstName',
+        displayName: 'First name',
+        name: 'firstName',
+        dataType: 'String',
+        defaultValue: null,
       }, {
-        Header: 'Surname',
-        accessor: 'secondName',
+        displayName: 'Surname',
+        name: 'secondName',
+        dataType: 'String',
+        defaultValue: null,
       }, {
-        Header: 'Other name',
-        accessor: 'otherName',
+        displayName: 'Other name',
+        name: 'otherName',
+        dataType: 'String',
+        defaultValue: null,
       }, {
-        Header: 'Phone number',
-        accessor: 'phoneNumber',
+        displayName: 'Phone number',
+        name: 'phoneNumber',
+        dataType: 'String',
+        defaultValue: null,
       }, {
-        Header: 'Email',
-        accessor: 'email',
+        displayName: 'Email',
+        name: 'email',
+        dataType: 'String',
+        defaultValue: null,
       }, {
-        Header: 'Facility',
-        accessor: 'facilityName',
+        displayName: 'Facility',
+        name: 'facilityName',
+        dataType: 'String',
+        defaultValue: null,
       },
       {
-        Header: 'Actions',
+        displayName: 'Actions',
         minWidth: 50,
-        accessor: 'id',
+        name: 'id',
         Cell: cell => (
           <View>
             { cell.canWrite &&
@@ -68,19 +105,58 @@ class InchargeList extends Component {
     ];
   }
 
+  fetchData() {
+    this.setState({ loading: true });
+    const params = !this.props.selected ? this.state.templateParams : [
+      ...this.state.templateParams,
+      { name: 'selected', defaultValue: this.props.selected },
+    ];
+    this.props.fetchIncharges(buildSearchParams(params))
+      .then(() => {
+        this.setState({ loading: false, noDataMessage: 'No data Found' });
+      })
+      .catch(() => {
+        this.setState({ loading: false, noDataMessage: 'Error occurred' });
+      });
+  }
+
   render() {
     return (
-      <FlatList
-        data={this.props.incharges}
-        renderItem={
+      <View style={{ flex: 1 }}>
+        <Filters
+          availableFilters={this.state.templateParams}
+          onFilter={filters => this.onFilter(filters)}
+          onReset={() => this.onReset()}
+          iconTop={3}
+          iconRight={3}
+        />
+        <Text style={[styles.title, lightThemeText]}>
+          {this.props.title}
+        </Text>
+        { (this.props.incharges.length > 0 && !this.state.loading) &&
+        <FlatList
+          data={this.props.incharges}
+          renderItem={
           ({ item }) =>
             (<ListItem
               row={item}
               columns={this.getColumnDefinitions()}
               canWrite={this.state.INCHARGE_WRITE_AUTHORITY}
             />)}
-        keyExtractor={(item, index) => index}
-      />
+          keyExtractor={(item, index) => index}
+        />
+        }
+        { (this.props.incharges.length === 0 && !this.state.loading) &&
+          <Text style={styles.noDataMessage}>
+            {this.state.noDataMessage}
+          </Text>
+        }
+        { this.state.loading &&
+          <View style={{ paddingTop: 60 }}>
+            <Spinner />
+          </View>
+        }
+      </View>
     );
   }
 }
@@ -98,6 +174,7 @@ InchargeList.propTypes = {
   incharges: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
   selected: PropTypes.bool,
+  title: PropTypes.string.isRequired,
 };
 
 InchargeList.defaultProps = {

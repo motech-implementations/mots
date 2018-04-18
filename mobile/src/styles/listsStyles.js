@@ -31,4 +31,10 @@ export default {
   normal: {
     fontWeight: 'normal',
   },
+  noDataMessage: {
+    paddingTop: 40,
+    color: 'black',
+    fontSize: 16,
+    textAlign: 'center',
+  },
 };
