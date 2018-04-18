@@ -83,9 +83,8 @@ export function signoutUser() {
   return { type: UNAUTH_USER };
 }
 
-export function fetchChws(selected) {
-  const param = selected ? `&selected=${selected}` : '';
-  const url = `${BASE_URL}/chw/search?size=100000${param}`;
+export function fetchChws(parameters) {
+  const url = `${BASE_URL}/chw/search?size=100000${parameters}`;
   const request = apiClient.get(url);
 
   return {
@@ -94,9 +93,8 @@ export function fetchChws(selected) {
   };
 }
 
-export function fetchIncharges(selected) {
-  const param = selected ? `&selected=${selected}` : '';
-  const url = `${BASE_URL}/incharge/search?&size=10000${param}`;
+export function fetchIncharges(parameters) {
+  const url = `${BASE_URL}/incharge/search?&size=10000${parameters}`;
   const request = apiClient.get(url);
   return {
     type: FETCH_INCHARGES,
@@ -164,8 +162,8 @@ export function fetchRoles() {
   };
 }
 
-export function fetchUsers() {
-  const url = `${BASE_URL}/user/search?size=10000`;
+export function fetchUsers(parameters) {
+  const url = `${BASE_URL}/user/search?size=10000${parameters}`;
   const request = apiClient.get(url);
 
   return {

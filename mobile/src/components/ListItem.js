@@ -15,23 +15,23 @@ const ListItem = ({
     style={styles.card}
   >
     {columns.map(column => (
-      <View key={column.Header} style={styles.cardLine}>
+      <View key={column.displayName} style={styles.cardLine}>
         <Text
           style={[styles.bold, lightThemeText, { textAlign: 'center' }]}
-        >{!column.hide && `${column.Header}: `}
+        >{!column.hide && `${column.displayName}: `}
           {(!(column.Cell || column.TextCell) && !column.hide) &&
             <Text style={[styles.normal, lightThemeText]}>
-              {row[column.accessor]}
+              {row[column.name]}
             </Text>
           }
           { column.TextCell &&
-            column.TextCell({ value: row[column.accessor] })
+            column.TextCell({ value: row[column.name] })
           }
         </Text>
         <View>
           { (column.Cell && !column.hide) &&
             column.Cell({
-              value: row[column.accessor], canWrite, canAssign,
+              value: row[column.name], canWrite, canAssign,
             })
           }
         </View>
