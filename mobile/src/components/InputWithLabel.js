@@ -2,15 +2,17 @@ import React from 'react';
 import { TextInput, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from '../styles/inputsStyles';
+import commonStyles from '../styles/commonStyles';
 
 const InputWithLabel = ({
   label, value, onChangeText, placeholder, secureTextEntry,
 }) => {
   const { labelInputStyle, labelStyle, containerStyle } = styles;
+  const { lightThemeText } = commonStyles;
 
   return (
     <View style={containerStyle}>
-      <Text style={labelStyle}>{label}</Text>
+      <Text style={[labelStyle, lightThemeText]}>{label}</Text>
       <TextInput
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}

@@ -107,7 +107,7 @@ export default class Filters extends Component {
       } else if (field.dataType === 'Date') {
         return (
           <View key={field.name} style={containerStyle}>
-            <Text style={labelStyle}>{field.displayName}</Text>
+            <Text style={[labelStyle, lightThemeText]}>{field.displayName}</Text>
             <DatePicker
               style={datePickerStyle}
               format="YYYY-MM-DD"
@@ -134,7 +134,7 @@ export default class Filters extends Component {
         const selected = availableOptions.find(option => option.value === field.defaultValue);
         return (
           <View key={field.name} style={[containerStyle, { marginBottom: 1 }]}>
-            <Text style={labelStyle}>{field.displayName}</Text>
+            <Text style={[labelStyle, lightThemeText]}>{field.displayName}</Text>
             <View style={[labelFieldStyle, filtersStyles.selectContainer]}>
               <Select
                 transparent
