@@ -43,9 +43,13 @@ mysql -uroot -p mots < src/main/resources/test_ivr_config.sql
 3. Add `ivrApiKey=<voto-api-key>` to set VOTO communication.
 
 ## Load locations locally when starting the server
-1. Run `./gradlew clean bootRun -PloadLocations=true`, once your DB has been initialized with 
+- Download .xlsx file with location data and save it as `SL_Locations.xlsx` in your MOTS `/src/main/resources/`:
+```shell 
+wget -O ~/mots/src/main/resources/SL_Locations.xlsx https://docs.google.com/spreadsheets/d/[FILE_ID]/export?format=xlsx
+```
+- Run `./gradlew clean bootRun -PloadLocations=true`, but only AFTER your DB has been initialized with 
 liquibase.
-2. After starting the server locations from xlsx should be added, 
+- After starting the server locations from xlsx file should be added, 
 and info message displayed in console.
 
 ## Stopping the Service
