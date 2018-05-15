@@ -32,7 +32,6 @@
     "react-native-rest-client": "^0.1.1",
     "react-native-router-flux": "^3.37.0",
     "react-native-selectme": "^1.2.3",
-    "react-native-sentry": "^0.32.1",
     "react-native-tag-select": "^1.0.14",
     "react-native-vector-icons": "^4.5.0",
     "react-redux": "^5.0.6",
