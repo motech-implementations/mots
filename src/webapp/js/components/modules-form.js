@@ -167,6 +167,23 @@ const COURSE_FIELDS = {
 };
 
 class ModuleForm extends Component {
+  static getFields(nodeType) {
+    switch (nodeType) {
+      case 'COURSE':
+        return COURSE_FIELDS;
+      case 'MODULE':
+        return MODULE_FIELDS;
+      case 'UNIT':
+        return UNIT_FIELDS;
+      case 'MESSAGE':
+        return MESSAGE_FIELDS;
+      case 'QUESTION':
+        return QUESTION_FIELDS;
+      default:
+        return [];
+    }
+  }
+
   static renderSection({ fieldConfig, children }) {
     return (
       <div className="panel panel-default margin-bottom-lg">
@@ -318,23 +335,6 @@ class ModuleForm extends Component {
         </div>
       </div>
     );
-  }
-
-  static getFields(nodeType) {
-    switch (nodeType) {
-      case 'COURSE':
-        return COURSE_FIELDS;
-      case 'MODULE':
-        return MODULE_FIELDS;
-      case 'UNIT':
-        return UNIT_FIELDS;
-      case 'MESSAGE':
-        return MESSAGE_FIELDS;
-      case 'QUESTION':
-        return QUESTION_FIELDS;
-      default:
-        return [];
-    }
   }
 
   render() {

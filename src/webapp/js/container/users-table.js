@@ -13,6 +13,36 @@ import { fetchUsers, resetLogoutCounter } from '../actions/index';
 import { buildSearchParams } from '../utils/react-table-search-params';
 
 class UsersTable extends Component {
+  static prepareMobileColumns() {
+    const mobileColumns = _.clone(UsersTable.getTableColumns());
+    mobileColumns.push(mobileColumns.shift());
+    return mobileColumns;
+  }
+
+  constructor() {
+    super();
+    // flag of someone is typing
+    this.filtering = false;
+
+    this.onFilteredChange = this.onFilteredChange.bind(this);
+    this.fetchStrategy = this.fetchStrategy.bind(this);
+
+    this.fetchData = this.fetchData.bind(this);
+    this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
+  }
+
+  componentWillMount() {
+    if (!hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY)) {
+      this.props.history.push('/home');
+    }
+    this.setState({ loading: true });
+  }
+
+  onFilteredChange() {
+    // when the filter changes, someone is typing
+    this.filtering = true;
+  }
+
   static getTableColumns = () => [
     {
       Header: 'Actions',
@@ -47,36 +77,6 @@ class UsersTable extends Component {
       Header: 'Role',
       accessor: 'roles[0].name',
     }];
-
-  static prepareMobileColumns() {
-    const mobileColumns = _.clone(UsersTable.getTableColumns());
-    mobileColumns.push(mobileColumns.shift());
-    return mobileColumns;
-  }
-
-  constructor() {
-    super();
-    // flag of someone is typing
-    this.filtering = false;
-
-    this.onFilteredChange = this.onFilteredChange.bind(this);
-    this.fetchStrategy = this.fetchStrategy.bind(this);
-
-    this.fetchData = this.fetchData.bind(this);
-    this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
-  }
-
-  componentWillMount() {
-    if (!hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY)) {
-      this.props.history.push('/home');
-    }
-    this.setState({ loading: true });
-  }
-
-  onFilteredChange() {
-    // when the filter changes, someone is typing
-    this.filtering = true;
-  }
 
   fetchStrategy(tableState) {
     // if someone is typing use debounce
