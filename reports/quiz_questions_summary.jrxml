@@ -149,7 +149,8 @@
   question.content AS question,
   COUNT(*) AS total,
   SUM(is_correct IS TRUE) AS correct,
-  SUM(is_correct IS NOT TRUE) AS wrong,
+  SUM(is_correct IS FALSE) AS wrong,
+  SUM(is_correct IS NULL) AS skipped,
   (SUM(is_correct IS TRUE) * 100 / COUNT(*)) AS correctlyAnswered
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
@@ -159,7 +160,7 @@
  JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
  JOIN course_module ON course_module.id = module_progress.course_module_id
  JOIN module ON module.id = course_module.module_id
- JOIN choice ON choice.id = multiple_choice_question_log.response_id
+ LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
  WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
   AND ($P{unit} IS NULL OR unit.name LIKE CONCAT('%',$P{unit},'%'))
   AND ($P{questionId} IS NULL OR question.name LIKE CONCAT('%',$P{questionId},'%'))
@@ -175,6 +176,7 @@
 	<field name="total" class="java.lang.Integer"/>
 	<field name="correct" class="java.lang.Integer"/>
 	<field name="wrong" class="java.lang.Integer"/>
+	<field name="skipped" class="java.lang.Integer"/>
 	<field name="correctlyAnswered" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -265,6 +267,18 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.skipped.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="No. of Skipped Response"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.skipped.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="6"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.total.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Total No. of Response"/>
 				</reportElement>
@@ -272,7 +286,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.total.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="6"/>
+					<property name="net.sf.jasperreports.export.json.data" value="7"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -284,7 +298,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.correctlyAnswered.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="7"/>
+					<property name="net.sf.jasperreports.export.json.data" value="8"/>
 				</reportElement>
 			</staticText>
 			<componentElement>
@@ -351,7 +365,7 @@
 				<text><![CDATA[Module ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="50" y="0" width="50" height="30" uuid="738bb7d3-eef0-4079-b77c-341dd3d7eba5">
+				<reportElement x="50" y="0" width="45" height="30" uuid="738bb7d3-eef0-4079-b77c-341dd3d7eba5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -366,7 +380,7 @@
 				<text><![CDATA[Unit ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="60" height="30" uuid="8ace29f0-6b2a-467d-a453-71d111a2517b">
+				<reportElement x="95" y="0" width="55" height="30" uuid="8ace29f0-6b2a-467d-a453-71d111a2517b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -381,7 +395,7 @@
 				<text><![CDATA[Question ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="160" y="0" width="115" height="30" uuid="dfed400b-7b20-46b3-8d76-0f2c1886b707">
+				<reportElement x="150" y="0" width="55" height="30" uuid="dfed400b-7b20-46b3-8d76-0f2c1886b707">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -396,7 +410,7 @@
 				<text><![CDATA[Question]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="0" width="75" height="30" uuid="b0b30812-a804-430f-bb96-2a1e3e99ae52">
+				<reportElement x="205" y="0" width="75" height="30" uuid="b0b30812-a804-430f-bb96-2a1e3e99ae52">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -411,7 +425,7 @@
 				<text><![CDATA[No. of Correct Response]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="350" y="0" width="70" height="30" uuid="babcb0bd-e116-4736-93f6-73dc1dcfe8f2">
+				<reportElement x="280" y="0" width="70" height="30" uuid="babcb0bd-e116-4736-93f6-73dc1dcfe8f2">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -426,7 +440,22 @@
 				<text><![CDATA[No. of Wrong Response]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="420" y="0" width="70" height="30" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
+				<reportElement x="350" y="0" width="75" height="30" uuid="babcb0bd-e116-4736-93f6-73dc1dcfe8f2">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[No. of Skipped Response]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="0" width="65" height="30" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -462,7 +491,7 @@
 		<band height="30" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="350" y="0" width="70" height="30" uuid="9c52d567-647a-4698-abd8-e310b4e134b6">
+				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="70" height="30" uuid="9c52d567-647a-4698-abd8-e310b4e134b6">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.wrong"/>
 				</reportElement>
@@ -478,7 +507,23 @@
 				<textFieldExpression><![CDATA[$F{wrong}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="275" y="0" width="75" height="30" uuid="48574108-1d6b-4b61-9de9-0955e127b36a">
+				<reportElement stretchType="RelativeToTallestObject" x="350" y="0" width="75" height="30" uuid="9c52d567-647a-4698-abd8-e310b4e134b6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.skipped"/>
+				</reportElement>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{skipped}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="205" y="0" width="75" height="30" uuid="48574108-1d6b-4b61-9de9-0955e127b36a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.correct"/>
 				</reportElement>
@@ -494,7 +539,7 @@
 				<textFieldExpression><![CDATA[$F{correct}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="160" y="0" width="115" height="30" uuid="acd6a8d4-1537-4fbe-a00e-7c6c14d43afd">
+				<reportElement stretchType="RelativeToTallestObject" x="150" y="0" width="55" height="30" uuid="acd6a8d4-1537-4fbe-a00e-7c6c14d43afd">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.question"/>
 				</reportElement>
@@ -510,7 +555,7 @@
 				<textFieldExpression><![CDATA[$F{question}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="100" y="0" width="60" height="30" uuid="e8b60bc2-6bda-4f4c-a82b-825a373ccca7">
+				<reportElement stretchType="RelativeToTallestObject" x="95" y="0" width="55" height="30" uuid="e8b60bc2-6bda-4f4c-a82b-825a373ccca7">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.questionId"/>
 				</reportElement>
@@ -559,7 +604,7 @@
 				<textFieldExpression><![CDATA[$F{module}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="50" y="0" width="50" height="30" uuid="6b15937e-8ff0-4433-bca7-f6b3dbd341e7">
+				<reportElement stretchType="RelativeToTallestObject" x="50" y="0" width="45" height="30" uuid="6b15937e-8ff0-4433-bca7-f6b3dbd341e7">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.unit"/>
 				</reportElement>
@@ -575,7 +620,7 @@
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="420" y="0" width="70" height="30" uuid="c3052fd8-de59-43d2-b301-e018de58a45d">
+				<reportElement stretchType="RelativeToTallestObject" x="425" y="0" width="65" height="30" uuid="c3052fd8-de59-43d2-b301-e018de58a45d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.total"/>
 				</reportElement>
