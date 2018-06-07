@@ -24,6 +24,7 @@ import org.motechproject.mots.dto.VotoCallLogDto;
 import org.motechproject.mots.exception.CourseProgressException;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
+import org.motechproject.mots.exception.WrongModuleException;
 import org.motechproject.mots.repository.ModuleProgressRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,8 +207,12 @@ public class ModuleProgressService {
 
       String moduleIvrId = blockDto.getBlockId();
 
-      if (parseVotoModuleBlocks(callLog, blockIterator, moduleIvrId, callInterrupted)) {
-        return;
+      try {
+        if (parseVotoModuleBlocks(callLog, blockIterator, moduleIvrId, callInterrupted)) {
+          return;
+        }
+      } catch (WrongModuleException ex) {
+        LOGGER.info("Wrong module chosen in CallLog with id: " + callLog.getLogId());
       }
     }
   }
@@ -218,11 +223,11 @@ public class ModuleProgressService {
 
     ModuleProgress moduleProgress =
         moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndCourseModuleIvrId(chwIvrId,
-            moduleId).orElseThrow(() -> new CourseProgressException("No module progress found for"
+            moduleId).orElseThrow(() -> new WrongModuleException("No module progress found for"
             + " CHW with IVR Id: {0} and module with IVR Id: {1}", chwIvrId, moduleId));
 
     if (ProgressStatus.COMPLETED.equals(moduleProgress.getStatus())) {
-      throw new CourseProgressException("Module already completed for CHW with IVR Id: {0} "
+      throw new WrongModuleException("Module already completed for CHW with IVR Id: {0} "
           + "and module with IVR Id: {1}", chwIvrId, moduleId);
     }
 
