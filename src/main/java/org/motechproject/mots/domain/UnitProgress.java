@@ -3,6 +3,7 @@ package org.motechproject.mots.domain;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -98,17 +99,13 @@ public class UnitProgress extends BaseTimestampedEntity {
   }
 
   /**
-   * Get call flow elements starting from current element.
-   * @return sublist of call flow elements
+   * Get call flow elements list iterator starting from current element.
+   * @return call flow elements list iterator
    */
-  public List<CallFlowElement> getNotProcessedCallFlowElements() {
+  public ListIterator<CallFlowElement> getCallFlowElementsIterator() {
     List<CallFlowElement> callFlowElements = unit.getCallFlowElements();
 
-    if (currentCallFlowElementNumber == 0) {
-      return callFlowElements;
-    }
-
-    return callFlowElements.subList(currentCallFlowElementNumber, callFlowElements.size());
+    return callFlowElements.listIterator(currentCallFlowElementNumber);
   }
 
   /**

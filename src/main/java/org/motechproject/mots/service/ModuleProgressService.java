@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -313,15 +314,31 @@ public class ModuleProgressService {
   private boolean parseVotoUnitBlocks(UnitProgress unitProgress,
       Iterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
     unitProgress.startUnit();
-    List<CallFlowElement> callFlowElements = unitProgress.getNotProcessedCallFlowElements();
+    ListIterator<CallFlowElement> callFlowElementsIterator =
+        unitProgress.getCallFlowElementsIterator();
 
-    for (CallFlowElement callFlowElement: callFlowElements) {
+    while (callFlowElementsIterator.hasNext()) {
+      CallFlowElement callFlowElement = callFlowElementsIterator.next();
+
       if (blockIterator.hasNext()) {
         VotoBlockDto blockDto = blockIterator.next();
 
         if (!callFlowElement.getIvrId().equals(blockDto.getBlockId())) {
-          throw new CourseProgressException("IVR Block Id: {0} did not match CallFlowElement IVRId",
-              blockDto.getBlockId());
+          callFlowElementsIterator.previous();
+          if (callFlowElementsIterator.hasPrevious()) {
+            callFlowElement = callFlowElementsIterator.previous();
+
+            if (!callFlowElement.getIvrId().equals(blockDto.getBlockId())) {
+              throw new CourseProgressException("IVR Block Id: {0} did not match CallFlowElement "
+                  + "IVRId: {1}", blockDto.getBlockId(), callFlowElement.getIvrId());
+            }
+
+            unitProgress.previousElement();
+            callFlowElementsIterator.next();
+          } else {
+            throw new CourseProgressException("IVR Block Id: {0} did not match CallFlowElement "
+                + "IVRId: {1}", blockDto.getBlockId(), callFlowElement.getIvrId());
+          }
         }
 
         LocalDateTime startDate = parseDate(blockDto.getEntryAt());
