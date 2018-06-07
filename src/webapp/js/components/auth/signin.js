@@ -6,6 +6,18 @@ import { connect } from 'react-redux';
 import { signinUser } from '../../actions';
 
 class Signin extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(values) {
+    this.props.signinUser(values, () => {
+      this.props.history.push('/');
+    });
+  }
+
   static renderField(field) {
     const {
       placeholder, type, input, icon, meta: { touched, error },
@@ -18,18 +30,6 @@ class Signin extends Component {
         <input className="form-control" type={type} placeholder={placeholder} {...input} />
       </div>
     );
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  onSubmit(values) {
-    this.props.signinUser(values, () => {
-      this.props.history.push('/');
-    });
   }
 
   renderAlert() {

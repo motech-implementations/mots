@@ -11,15 +11,6 @@ class CounterLogout extends Component {
     return (str.length < 2 ? '0' : '') + str;
   }
 
-  static renderCountdown({ minutes, seconds }) {
-    return (
-      <div>
-        {CounterLogout.minTwoDigits(minutes)}:
-        {CounterLogout.minTwoDigits(seconds)}
-      </div>
-    );
-  }
-
   constructor(props) {
     super(props);
     this.logoutUser = this.logoutUser.bind(this);
@@ -27,6 +18,15 @@ class CounterLogout extends Component {
 
   logoutUser() {
     this.props.signoutUser();
+  }
+
+  static renderCountdown({ minutes, seconds }) {
+    return (
+      <div>
+        {CounterLogout.minTwoDigits(minutes)}:
+        {CounterLogout.minTwoDigits(seconds)}
+      </div>
+    );
   }
 
   render() {

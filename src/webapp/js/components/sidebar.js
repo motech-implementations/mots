@@ -16,14 +16,6 @@ import {
 import { fetchReports } from '../actions/index';
 
 class SideBar extends Component {
-  static getSubmenuArrowClass(collapsed) {
-    if (collapsed) {
-      return 'fa fa-angle-left pull-right';
-    }
-
-    return 'fa fa-angle-down pull-right';
-  }
-
   constructor(props) {
     super(props);
 
@@ -48,6 +40,14 @@ class SideBar extends Component {
     if (hasAuthority(DISPLAY_REPORTS_AUTHORITY)) {
       this.props.fetchReports();
     }
+  }
+
+  static getSubmenuArrowClass(collapsed) {
+    if (collapsed) {
+      return 'fa fa-angle-left pull-right';
+    }
+
+    return 'fa fa-angle-down pull-right';
   }
 
   toggleHealthWorkersMenu(event) {

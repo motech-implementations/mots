@@ -17,14 +17,6 @@ import MotsConfirmModal from './mots-confirm-modal';
 import { resetLogoutCounter } from '../actions/index';
 
 class ModulesManage extends Component {
-  static getNodeKey(node) {
-    if (node.treeId !== undefined && node.treeId !== null) {
-      return node.treeId;
-    }
-
-    return node.uiId;
-  }
-
   static areEqual(nodeA, nodeB) {
     if (nodeA === null || nodeA === undefined) {
       return nodeB === null || nodeB === undefined;
@@ -48,15 +40,6 @@ class ModulesManage extends Component {
 
   static findNode(array, id) {
     return _.find(array, node => ModulesManage.getNodeKey(node) === id);
-  }
-
-  static getNodeTypeForUrl(node) {
-    switch (node.type) {
-      case 'COURSE':
-        return 'courses';
-      default:
-        return 'modules';
-    }
   }
 
   static showSaveSuccessMessage(type) {
@@ -97,6 +80,23 @@ class ModulesManage extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     this.canAddCourse(nextState.treeData);
+  }
+
+  static getNodeKey(node) {
+    if (node.treeId !== undefined && node.treeId !== null) {
+      return node.treeId;
+    }
+
+    return node.uiId;
+  }
+
+  static getNodeTypeForUrl(node) {
+    switch (node.type) {
+      case 'COURSE':
+        return 'courses';
+      default:
+        return 'modules';
+    }
   }
 
   getNodeClassName(node) {

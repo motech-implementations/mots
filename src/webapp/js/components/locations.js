@@ -33,6 +33,21 @@ const FacilityTypeFilter = ({ onChange }) => (
   </select>);
 
 class Locations extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIndex: 0,
+    };
+
+    this.handleTabSelect = this.handleTabSelect.bind(this);
+  }
+
+  componentWillMount() {
+    if (this.props.match.params.tabIndex) {
+      this.setState({ selectedIndex: Number.parseInt(this.props.match.params.tabIndex, 10) });
+    }
+  }
+
   static getCommunityColumns = () => [
     {
       Header: 'Actions',
@@ -41,15 +56,15 @@ class Locations extends Component {
       Cell: cellInfo => (
         <div className="actions-buttons-container">
           { canEditLocation(cellInfo.original) &&
-            <Link
-              to={`/locations/community/${cellInfo.value}`}
-              type="button"
-              className="btn btn-primary margin-right-sm"
-              title="Edit"
-            >
-              <span className="glyphicon glyphicon-edit" />
-              <span className="hide-min-r-small-min next-button-text">Edit</span>
-            </Link>
+          <Link
+            to={`/locations/community/${cellInfo.value}`}
+            type="button"
+            className="btn btn-primary margin-right-sm"
+            title="Edit"
+          >
+            <span className="glyphicon glyphicon-edit" />
+            <span className="hide-min-r-small-min next-button-text">Edit</span>
+          </Link>
           }
         </div>
       ),
@@ -80,15 +95,15 @@ class Locations extends Component {
       Cell: cellInfo => (
         <div className="actions-buttons-container">
           { canEditLocation(cellInfo.original) &&
-            <Link
-              to={`/locations/facility/${cellInfo.value}`}
-              type="button"
-              className="btn btn-primary margin-right-sm"
-              title="Edit"
-            >
-              <span className="glyphicon glyphicon-edit" />
-              <span className="hide-min-r-small-min next-button-text">Edit</span>
-            </Link>
+          <Link
+            to={`/locations/facility/${cellInfo.value}`}
+            type="button"
+            className="btn btn-primary margin-right-sm"
+            title="Edit"
+          >
+            <span className="glyphicon glyphicon-edit" />
+            <span className="hide-min-r-small-min next-button-text">Edit</span>
+          </Link>
           }
         </div>
       ),
@@ -134,21 +149,6 @@ class Locations extends Component {
       accessor: 'name',
     },
   ];
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedIndex: 0,
-    };
-
-    this.handleTabSelect = this.handleTabSelect.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.props.match.params.tabIndex) {
-      this.setState({ selectedIndex: Number.parseInt(this.props.match.params.tabIndex, 10) });
-    }
-  }
 
   handleTabSelect(index) {
     this.setState({ selectedIndex: index });
