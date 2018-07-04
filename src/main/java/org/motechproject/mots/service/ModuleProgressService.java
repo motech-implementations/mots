@@ -49,6 +49,8 @@ public class ModuleProgressService {
   private static final int CONTINUE_RESPONSE = 2;
   private static final int REPEAT_RESPONSE = 3;
 
+  private static final int MAX_NUMBER_OF_ATTEMPTS = 4;
+
   private static final String VOTO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
   @Autowired
@@ -418,6 +420,9 @@ public class ModuleProgressService {
 
     if (StringUtils.isNotBlank(blockDto.getNumberOfRepeats())) {
       numberOfAttempts = Integer.valueOf(blockDto.getNumberOfRepeats()) + 1;
+      if (numberOfAttempts > MAX_NUMBER_OF_ATTEMPTS) {
+        numberOfAttempts = MAX_NUMBER_OF_ATTEMPTS;
+      }
     }
 
     return numberOfAttempts;
