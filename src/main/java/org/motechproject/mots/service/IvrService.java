@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.BooleanUtils;
@@ -170,11 +171,34 @@ public class IvrService {
     CallStatus callStatus = callDetailRecord.getCallStatus();
     boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
 
-    if (CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted) {
+    if ((CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted)
+        && noCallsStartedDuringCall(callDetailRecord)) {
       VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord);
 
       moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
     }
+  }
+
+  /**
+   * This method checks if another call was started during this one for the same CHW.
+   *
+   * @param callDetailRecord of call that is going to be parsed.
+   * @return true if there was no calls in progress during this one.
+   */
+  private boolean noCallsStartedDuringCall(CallDetailRecord callDetailRecord) {
+    CallDetailRecord callDetailRecordInProgress = callDetailRecordRepository
+        .findByCallLogIdAndCallStatus(callDetailRecord.getCallLogId(), CallStatus.IN_PROGRESS);
+
+    Date startDate = callDetailRecordInProgress.getCreatedDate();
+    Date endDate = callDetailRecord.getCreatedDate();
+
+    List<CallDetailRecord> callDetailRecords = callDetailRecordRepository
+        .findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanAndCallStatusAndChwIvrId(
+            startDate, endDate, CallStatus.IN_PROGRESS, callDetailRecord.getChwIvrId());
+
+    // There is always callDetailRecordInProgress included in this list.
+    // We have to check if there is anything else.
+    return callDetailRecords.size() == 1;
   }
 
   private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord) throws IvrException {
