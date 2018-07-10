@@ -6,6 +6,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 
 import Navbar from './navbar';
+import FooterInfo from './footerInfo';
 import Home from './home';
 import InchargesOverall from './incharges-overall';
 import InchargesSelected from './incharges-selected';
@@ -92,6 +93,7 @@ export default class App extends Component {
                 <Route path="/" component={Home} />
               </Switch>
             </div>
+            <FooterInfo />
           </div>
         </div>
 
