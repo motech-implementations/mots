@@ -54,7 +54,7 @@ class Signin extends Component {
       >
         <div className="row">
           <div className="col-md-8 col-md-offset-2">
-            <img className="img-responsive" alt="test" src="/GF_VertLogo_CMYK.jpg" />
+            <img className="img-responsive" alt="test" src="/EBODAClogo-RGB-with.jpg" />
           </div>
         </div>
 
