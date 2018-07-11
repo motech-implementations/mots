@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -17,8 +18,6 @@ import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.service.LocationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -31,7 +30,7 @@ public class LocationImporter implements ApplicationRunner {
 
   private LocationService locationService;
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(LocationImporter.class);
+  private static final Logger LOGGER = Logger.getLogger(LocationImporter.class);
 
   @Value("${mots.loadLocations}")
   private boolean loadLocations;

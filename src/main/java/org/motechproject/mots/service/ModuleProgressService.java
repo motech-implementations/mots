@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.CallFlowElement;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Course;
@@ -27,8 +28,6 @@ import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.exception.WrongModuleException;
 import org.motechproject.mots.repository.ModuleProgressRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,7 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("PMD.TooManyMethods")
 public class ModuleProgressService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ModuleProgressService.class);
+  private static final Logger LOGGER = Logger.getLogger(ModuleProgressService.class);
 
   private static final String MESSAGE_BLOCK_TYPE = "Message";
   private static final String QUESTION_BLOCK_TYPE = "Multiple Choice Question";
@@ -178,7 +177,7 @@ public class ModuleProgressService {
       String chwIvrId = callLog.getChwIvrId();
 
       if (!blockIterator.hasNext()) {
-        LOGGER.debug("No modules available for CHW with IVR Id: ", chwIvrId);
+        LOGGER.debug(String.format("No modules available for CHW with IVR Id: %s", chwIvrId));
         return;
       }
 
@@ -187,7 +186,7 @@ public class ModuleProgressService {
         blockDto = getVotoBlock(blockIterator);
 
         if (blockDto == null) {
-          LOGGER.debug("No module chosen by CHW with IVR Id: ", chwIvrId);
+          LOGGER.debug(String.format("No module chosen by CHW with IVR Id: %s", chwIvrId));
           return;
         }
 
@@ -204,7 +203,7 @@ public class ModuleProgressService {
       }
 
       if (!blockIterator.hasNext()) {
-        LOGGER.debug("No module chosen by CHW with IVR Id: ", chwIvrId);
+        LOGGER.debug(String.format("No module chosen by CHW with IVR Id: %s", chwIvrId));
         return;
       }
 
