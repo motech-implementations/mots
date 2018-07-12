@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Header from './header';
+
 import SideBar from './sidebar';
 import { signoutUser } from '../actions';
 

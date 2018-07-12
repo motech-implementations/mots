@@ -24,7 +24,7 @@ body {
   overflow: hidden;
 }
 .btn-file input[type=file] {
-  position: absolute;
+  position: relative;
   top: 0;
   right: 0;
   min-width: 100%;
@@ -41,6 +41,7 @@ body {
 
 #wrapper {
   padding-left: 0;
+  position: relative;
 }
 
 #page-wrapper {
@@ -52,6 +53,7 @@ body {
 
   .page-header {
     border-bottom: 1px solid $gray-mid;
+
   }
 
   .container-wrapper {
@@ -64,6 +66,27 @@ body {
       margin-right: 2em;
     }
   }
+}
+
+.panel-footer {
+  background: $gray-mid;
+  float: left;
+  padding: 30px 0px 30px 0px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+
+  .footer-text {
+    vertical-align: center;
+    margin-right: 15%;
+    margin-left: 15%;
+  }
+}
+
+.footer-home {
+  margin-left: -42px;
 }
 
 @media(min-width: $r-small-min) {
@@ -141,6 +164,14 @@ a, a:hover, a:focus, a:active, a:visited {
       padding-left: 0;
     }
   }
+
+  .panel-footer {
+    padding: 1em;
+    .footer-text {
+      margin-right: 5%;
+      margin-left: 5%;
+    }
+  }
 }
 
 .navbar-inverse {
@@ -210,6 +241,7 @@ a, a:hover, a:focus, a:active, a:visited {
     }
   }
 }
+
 
 .side-nav {
   background-color: $gray-lighter;
@@ -371,4 +403,8 @@ select.form-control {
   background: url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIPnI+py+0/hJzz0IruwjsVADs=);
   background-repeat: no-repeat;
   background-position: 96% 42%;
+}
+
+.img-responsive {
+  margin-bottom: 10px;
 }
