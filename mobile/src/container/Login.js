@@ -9,9 +9,10 @@ import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import styles from '../styles/formsStyles';
 import commonStyles from '../styles/commonStyles';
+import Footer from '../components/Footer'
 
 const { lightThemeText } = commonStyles;
-const image = require('../img/GF_Logo.png');
+const image = require('../img/EBODAClogo.jpg');
 
 class Login extends Component {
   constructor(props) {
@@ -69,79 +70,81 @@ class Login extends Component {
     }
 
     return (
-      <Button
-        onPress={this.onButtonPress}
-        iconName="sign-in"
-        iconColor="#FFF"
-        buttonColor="#449C44"
-      >
-        Log in
-      </Button>
+        <Button
+            onPress={this.onButtonPress}
+            iconName="sign-in"
+            iconColor="#FFF"
+            buttonColor="#449C44"
+        >
+          Log in
+        </Button>
     );
   }
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        { this.state.dim.height > 320 &&
-        <Image
-          resizeMode="center"
-          style={{
-            width: this.state.dim.width > 400 ? 400 : this.state.dim.width,
-            // height = width / 3.5 <= 3.5 is approx image ratio
-            height: parseInt((this.state.dim.width > 300 ? 300 : this.state.dim.width) / 3.5, 10),
-            paddingHorizontal: 10,
-          }}
-          source={image}
-        />
-        }
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          { this.state.dim.height > 320 &&
+          <Image
+              resizeMode="center"
+              style={{
+                width: this.state.dim.width > 400 ? 400 : this.state.dim.width,
+                // height = width / 3.5 <= 3.5 is approx image ratio
+                height: parseInt((this.state.dim.width > 300 ? 300 : this.state.dim.width) / 3.5, 10),
+                paddingHorizontal: 10,
+              }}
+              source={image}
+          />
+          }
 
-        <View style={[
+          <View style={[
             styles.mainCard,
             {
               width: this.state.dim.width - 10,
               marginTop: this.state.dim.height > 320 ? 0 : 10,
             },
           ]}
-        >
-          <View style={styles.headerRow}>
-            <Text style={lightThemeText}>MOTS Login</Text>
-          </View>
+          >
+            <View style={styles.headerRow}>
+              <Text style={lightThemeText}>MOTS Login</Text>
+            </View>
 
-          <View style={styles.cardRow}>
-            <InputWithIcon
-              iconName="user"
-              iconColor="#555"
-              iconSize={20}
-              placeholder="username"
-              label="Username"
-              value={this.state.username}
-              onChangeText={username => this.setState({ username })}
-            />
-          </View>
+            <View style={styles.cardRow}>
+              <InputWithIcon
+                  iconName="user"
+                  iconColor="#555"
+                  iconSize={20}
+                  placeholder="username"
+                  label="Username"
+                  value={this.state.username}
+                  onChangeText={username => this.setState({ username })}
+              />
+            </View>
 
-          <View style={styles.cardRow}>
-            <InputWithIcon
-              iconName="lock"
-              iconColor="#555"
-              iconSize={20}
-              secureTextEntry
-              placeholder="password"
-              label="Password"
-              value={this.state.password}
-              onChangeText={password => this.setState({ password })}
-            />
-          </View>
+            <View style={styles.cardRow}>
+              <InputWithIcon
+                  iconName="lock"
+                  iconColor="#555"
+                  iconSize={20}
+                  secureTextEntry
+                  placeholder="password"
+                  label="Password"
+                  value={this.state.password}
+                  onChangeText={password => this.setState({ password })}
+              />
+            </View>
 
-          <Text style={styles.errorTextStyle}>
-            {this.state.error}
-          </Text>
+            <Text style={styles.errorTextStyle}>
+              {this.state.error}
+            </Text>
 
-          <View style={styles.cardRow}>
-            {this.renderButton()}
+            <View style={styles.cardRow}>
+              {this.renderButton()}
+            </View>
+
           </View>
+          <Footer />
         </View>
-      </View>
     );
   }
 }

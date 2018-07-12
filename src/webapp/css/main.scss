@@ -24,7 +24,7 @@ body {
   overflow: hidden;
 }
 .btn-file input[type=file] {
-  position: absolute;
+  position: relative;
   top: 0;
   right: 0;
   min-width: 100%;
@@ -41,6 +41,7 @@ body {
 
 #wrapper {
   padding-left: 0;
+  position: relative;
 }
 
 #page-wrapper {
@@ -52,6 +53,7 @@ body {
 
   .page-header {
     border-bottom: 1px solid $gray-mid;
+
   }
 
   .container-wrapper {
@@ -66,6 +68,27 @@ body {
   }
 }
 
+.panel-footer {
+  background: $gray-mid;
+  float: left;
+  padding: 30px 0px 30px 0px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+
+  .footer-text {
+    vertical-align: center;
+    margin-right: 15%;
+    margin-left: 15%;
+  }
+}
+
+.footer-home {
+  margin-left: -42px;
+}
+
 @media(min-width: $r-small-min) {
   #wrapper {
     padding-left: 16em;
@@ -74,14 +97,6 @@ body {
   .container-fluid {
     padding: 1em;
   }
-
-  .prefooter {
-    padding: 1em;
-  }
-
-  .prefootertext {
-     padding: 1em;
-   }
 }
 
 p {
@@ -134,32 +149,12 @@ a, a:hover, a:focus, a:active, a:visited {
   }
 }
 
-.prefooter {
-  background: $gray-mid;
-  padding: 40px 0px 40px 0px;
-  overflow: hidden;
-  position: absolute;
-  bottom: 0;
-
-}
-
-.prefootertext {
-  float: left;
-  width: 60%;
-  margin-left: 2em;
-}
-
 @media(min-width: $r-big-min) {
   .navbar {
     .glyphicon, .fa {
       width: 1.4em;
       font-size: 1.2em;
     }
-  }
-
-  .prefootertext {
-    padding: 1em;
-    width:85%;
   }
 }
 
@@ -170,9 +165,12 @@ a, a:hover, a:focus, a:active, a:visited {
     }
   }
 
-  .prefootertext {
+  .panel-footer {
     padding: 1em;
-    width:85%;
+    .footer-text {
+      margin-right: 5%;
+      margin-left: 5%;
+    }
   }
 }
 
@@ -242,12 +240,8 @@ a, a:hover, a:focus, a:active, a:visited {
       }
     }
   }
-
-  .prefootertext {
-    padding: 1em;
-    width:55%;
-  }
 }
+
 
 .side-nav {
   background-color: $gray-lighter;
@@ -409,4 +403,8 @@ select.form-control {
   background: url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIPnI+py+0/hJzz0IruwjsVADs=);
   background-repeat: no-repeat;
   background-position: 96% 42%;
+}
+
+.img-responsive {
+  margin-bottom: 10px;
 }
