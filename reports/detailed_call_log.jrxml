@@ -85,7 +85,6 @@
     <parameter name="moduleId" class="java.lang.String" isForPrompting="false"/>
     <parameter name="unitId" class="java.lang.String" isForPrompting="false"/>
     <parameter name="elementId" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="messageId" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="sentDate" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
