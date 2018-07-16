@@ -1,94 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detailed_call_log" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="65c8410e-247e-479f-a51e-ef8de4c8f7e7">
-  <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-  <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-  <property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
-  <property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
-  <property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
-  <property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
-  <property name="net.sf.jasperreports.export.csv.one.page.per.sheet" value="false"/>
-  <property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
-  <property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
-  <property name="net.sf.jasperreports.export.csv.remove.empty.space.between.rows" value="true"/>
-  <property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageHeader"/>
-  <property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageFooter"/>
-  <property name="net.sf.jasperreports.export.xls.exclude.origin.band.3" value="title"/>
-  <property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="summary"/>
-  <property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
-  <property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
-  <property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
-  <property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="summary"/>
-  <property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
-  <property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
-  <property name="reportType" value="Detailed Call Log"/>
-  <style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
-    <box>
-      <pen lineWidth="0.5" lineColor="#000000"/>
-      <topPen lineWidth="0.5" lineColor="#000000"/>
-      <leftPen lineWidth="0.5" lineColor="#000000"/>
-      <bottomPen lineWidth="0.5" lineColor="#000000"/>
-      <rightPen lineWidth="0.5" lineColor="#000000"/>
-    </box>
-  </style>
-  <style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
-    <box>
-      <pen lineWidth="0.5" lineColor="#000000"/>
-      <topPen lineWidth="0.5" lineColor="#000000"/>
-      <leftPen lineWidth="0.5" lineColor="#000000"/>
-      <bottomPen lineWidth="0.5" lineColor="#000000"/>
-      <rightPen lineWidth="0.5" lineColor="#000000"/>
-    </box>
-  </style>
-  <style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
-    <box>
-      <pen lineWidth="0.5" lineColor="#000000"/>
-      <topPen lineWidth="0.5" lineColor="#000000"/>
-      <leftPen lineWidth="0.5" lineColor="#000000"/>
-      <bottomPen lineWidth="0.5" lineColor="#000000"/>
-      <rightPen lineWidth="0.5" lineColor="#000000"/>
-    </box>
-  </style>
-  <style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
-    <box>
-      <pen lineWidth="0.5" lineColor="#000000"/>
-      <topPen lineWidth="0.5" lineColor="#000000"/>
-      <leftPen lineWidth="0.5" lineColor="#000000"/>
-      <bottomPen lineWidth="0.5" lineColor="#000000"/>
-      <rightPen lineWidth="0.5" lineColor="#000000"/>
-    </box>
-  </style>
-  <style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
-    <box>
-      <pen lineWidth="0.5" lineColor="#000000"/>
-      <topPen lineWidth="0.5" lineColor="#000000"/>
-      <leftPen lineWidth="0.5" lineColor="#000000"/>
-      <bottomPen lineWidth="0.5" lineColor="#000000"/>
-      <rightPen lineWidth="0.5" lineColor="#000000"/>
-    </box>
-  </style>
-  <style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
-    <box>
-      <pen lineWidth="0.5" lineColor="#000000"/>
-      <topPen lineWidth="0.5" lineColor="#000000"/>
-      <leftPen lineWidth="0.5" lineColor="#000000"/>
-      <bottomPen lineWidth="0.5" lineColor="#000000"/>
-      <rightPen lineWidth="0.5" lineColor="#000000"/>
-    </box>
-  </style>
-  <subDataset name="RecordsCount" uuid="a43a9e1c-f936-4474-acad-29de183b34d3">
-    <parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="chwName" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="phone" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="district" class="java.lang.String" isForPrompting="false"/>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detailed_call_log"  pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LocalDataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.csv.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.csv.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="summary"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="summary"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="reportType" value="Detailed Call Log"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="RecordsCount">
+		<parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chwName" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="phone" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
     <parameter name="moduleId" class="java.lang.String" isForPrompting="false"/>
     <parameter name="unitId" class="java.lang.String" isForPrompting="false"/>
     <parameter name="elementId" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="sentDate" class="java.lang.String" isForPrompting="false"/>
-    <parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
-    <queryString>
-      <![CDATA[SELECT
+		<parameter name="messageId" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="sentDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
   COUNT(*) AS totalElements
  FROM call_flow_element_log
  JOIN call_flow_element element ON element.id = call_flow_element_log.call_flow_element_id
@@ -111,77 +112,79 @@
   AND ($P{elementId} IS NULL OR element.name LIKE CONCAT('%',$P{elementId},'%'))
   AND ($P{sentDate} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDate},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
-    </queryString>
-    <field name="totalElements" class="java.lang.Integer"/>
-  </subDataset>
-  <parameter name="chwId" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="CHW ID"/>
-    <property name="required" value="false"/>
-  </parameter>
-  <parameter name="chwName" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="CHW Name"/>
-    <property name="required" value="false"/>
-  </parameter>
-  <parameter name="phone" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="Phone"/>
-    <property name="required" value="false"/>
-  </parameter>
-  <parameter name="chiefdom" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="Chiefdom"/>
-    <property name="required" value="false"/>
-  </parameter>
-  <parameter name="district" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="District"/>
-    <property name="required" value="false"/>
-  </parameter>
-  <parameter name="moduleId" class="java.lang.String">
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="chwId" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="CHW ID"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chwName" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="CHW Name"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="phone" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Phone"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chiefdom" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Chiefdom"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="district" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="District"/>
+		<property name="required" value="false"/>
+	</parameter>
+  <parameter name="moduleId" class="java.lang.String" isForPrompting="true">
     <property name="dataType" value="String"/>
     <property name="displayName" value="Module ID"/>
     <property name="required" value="false"/>
   </parameter>
-  <parameter name="unitId" class="java.lang.String">
+  <parameter name="unitId" class="java.lang.String" isForPrompting="true">
     <property name="dataType" value="String"/>
     <property name="displayName" value="Unit ID"/>
     <property name="required" value="false"/>
   </parameter>
-  <parameter name="elementId" class="java.lang.String">
+  <parameter name="elementId" class="java.lang.String" isForPrompting="true">
     <property name="dataType" value="String"/>
     <property name="displayName" value="Element ID"/>
     <property name="required" value="false"/>
   </parameter>
-  <parameter name="sentDate" class="java.lang.String">
-    <property name="dataType" value="Date"/>
-    <property name="displayName" value="Sent Date"/>
-    <property name="required" value="false"/>
-  </parameter>
-  <parameter name="orderBy" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="Order By"/>
-    <property name="required" value="true"/>
-    <defaultValueExpression><![CDATA["chwId, sentDate"]]></defaultValueExpression>
-  </parameter>
-  <parameter name="pageSize" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="Limit"/>
-    <property name="required" value="true"/>
-    <defaultValueExpression><![CDATA[20]]></defaultValueExpression>
-  </parameter>
-  <parameter name="offset" class="java.lang.String">
-    <property name="dataType" value="String"/>
-    <property name="displayName" value="Offset"/>
-    <property name="required" value="true"/>
-    <defaultValueExpression><![CDATA[0]]></defaultValueExpression>
-  </parameter>
-  <queryString>
-    <![CDATA[SELECT
- DATE_FORMAT(TIMEDIFF(call_flow_element_log.end_date, call_flow_element_log.start_date), '%H:%i:%S') AS timeListened,
- DATE_FORMAT(call_flow_element_log.start_date, '%Y-%m-%d %H:%i:%S') AS sentDate,
+	<parameter name="sentDate" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Sent Date"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["chwId, sentDate"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  DATE_FORMAT(TIMEDIFF(call_flow_element_log.end_date, call_flow_element_log.start_date), '%H:%i:%S') AS timeListened,
+  DATE_FORMAT(call_flow_element_log.start_date, '%Y-%m-%d %H:%i:%S') AS sentDate,
   element.name AS elementId,
+  module.name AS moduleId,
+  unit.name AS unitId,
   chw.chw_id as chwId,
   CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) AS chwName,
   chw.phone_number AS phone,
@@ -189,8 +192,6 @@
     WHEN 'MALE' THEN 'Male'
     WHEN 'FEMALE' THEN 'Female'
   END AS gender,
-  module.name AS moduleId,
-  unit.name AS unitId,
   chiefdom.name AS chiefdom,
   district.name AS district
  FROM call_flow_element_log
@@ -216,105 +217,105 @@
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
-  </queryString>
-  <field name="timeListened" class="java.lang.String"/>
-  <field name="sentDate" class="java.lang.String"/>
+	</queryString>
+	<field name="timeListened" class="java.lang.String"/>
+	<field name="sentDate" class="java.lang.String"/>
   <field name="moduleId" class="java.lang.String"/>
   <field name="unitId" class="java.lang.String"/>
   <field name="elementId" class="java.lang.String"/>
-  <field name="chwId" class="java.lang.String"/>
-  <field name="chwName" class="java.lang.String"/>
-  <field name="phone" class="java.lang.String"/>
-  <field name="gender" class="java.lang.String"/>
-  <field name="chiefdom" class="java.lang.String"/>
-  <field name="district" class="java.lang.String"/>
-  <background>
-    <band splitType="Stretch"/>
-  </background>
-  <title>
-    <band height="50" splitType="Stretch">
-      <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-      <staticText>
-        <reportElement x="0" y="0" width="350" height="50" uuid="ea3b8fe8-c288-4c62-9e48-704660ec59ec">
-          <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-        </reportElement>
-        <textElement verticalAlignment="Middle">
-          <font size="16"/>
-        </textElement>
-        <text><![CDATA[Detailed Call Log Report]]></text>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="202f5866-4f5e-4c65-999f-968d8c6da597">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.chwId.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="CHW ID"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="7d50f5d0-3188-4b61-98c2-83b695e6615b">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.chwId.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="0"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="bb1cc2f8-672c-4a54-ae95-4f4bdb1d8a0e">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.chwName.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="CHW Name"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="98c15403-c04b-4d4d-8cf0-cd2b4cf4ecc7">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.chwName.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="1"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="bc1e3f65-0cb6-4759-9678-08a2de6a3e1a">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="19aabe86-f21c-494f-93ee-bbe279ef1af8">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="2"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="64a33692-48e1-4254-acbb-8dff38cc79a3">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.district.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="District"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="a483f9b0-3ecf-4cb3-af37-b9ea6f687dba">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.district.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="3"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="bae20401-96b7-45a0-a63e-9a520dcb8869">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.phone.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="Phone"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="1c0597e4-1bf6-4a37-b981-6384bbd93f61">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.phone.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="4"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="536809a2-8c65-4514-b151-5201a53a6d85">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.gender.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="Gender"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="a03b36b6-bf4f-45a2-8171-001a9719f8b0">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.gender.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="5"/>
-        </reportElement>
-      </staticText>
+	<field name="chwId" class="java.lang.String"/>
+	<field name="chwName" class="java.lang.String"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="gender" class="java.lang.String"/>
+	<field name="chiefdom" class="java.lang.String"/>
+	<field name="district" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="0" width="350" height="50" uuid="ea3b8fe8-c288-4c62-9e48-704660ec59ec">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Detailed Call Log Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwId.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="CHW ID"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwId.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="0"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwName.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="CHW Name"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwName.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="1"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="2"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="District"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="3"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.phone.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Phone"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.phone.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="4"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.gender.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Gender"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.gender.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="5"/>
+				</reportElement>
+			</staticText>
       <staticText>
         <reportElement x="0" y="0" width="0" height="0" uuid="a08fa503-4f63-401c-b1cc-c93a512ec1d5">
           <property name="net.sf.jasperreports.export.json.path" value="colModel.moduleId.Header"/>
@@ -351,54 +352,54 @@
           <property name="net.sf.jasperreports.export.json.data" value="8"/>
         </reportElement>
       </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="f6b71c21-0831-41b7-b163-a4e245a79a27">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.sentDate.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="Sent Date"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="e6e1b1d3-50c0-4346-95bd-f4872195f2e7">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.sentDate.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="9"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="12614790-aed5-4f6f-ba92-3bcacd248b3c">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.timeListened.Header"/>
-          <property name="net.sf.jasperreports.export.json.data" value="Time Listened"/>
-        </reportElement>
-      </staticText>
-      <staticText>
-        <reportElement x="0" y="0" width="0" height="0" uuid="766aca00-bc4b-494c-8cd3-979bc62a8886">
-          <property name="net.sf.jasperreports.export.json.path" value="colModel.timeListened.order"/>
-          <property name="net.sf.jasperreports.export.json.data" value="10"/>
-        </reportElement>
-      </staticText>
-      <componentElement>
-        <reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
-          <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
-          <property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
-          <property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
-          <property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
-        </reportElement>
-        <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-          <datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
-            <datasetParameter name="chwId">
-              <datasetParameterExpression><![CDATA[$P{chwId}]]></datasetParameterExpression>
-            </datasetParameter>
-            <datasetParameter name="chwName">
-              <datasetParameterExpression><![CDATA[$P{chwName}]]></datasetParameterExpression>
-            </datasetParameter>
-            <datasetParameter name="phone">
-              <datasetParameterExpression><![CDATA[$P{phone}]]></datasetParameterExpression>
-            </datasetParameter>
-            <datasetParameter name="chiefdom">
-              <datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
-            </datasetParameter>
-            <datasetParameter name="district">
-              <datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
-            </datasetParameter>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sentDate.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Sent Date"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sentDate.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="9"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.timeListened.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Time Listened"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.timeListened.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="10"/>
+				</reportElement>
+			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="chwId">
+							<datasetParameterExpression><![CDATA[$P{chwId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chwName">
+							<datasetParameterExpression><![CDATA[$P{chwName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="phone">
+							<datasetParameterExpression><![CDATA[$P{phone}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chiefdom">
+							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="district">
+							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
+						</datasetParameter>
             <datasetParameter name="moduleId">
               <datasetParameterExpression><![CDATA[$P{moduleId}]]></datasetParameterExpression>
             </datasetParameter>
@@ -408,34 +409,34 @@
             <datasetParameter name="elementId">
               <datasetParameterExpression><![CDATA[$P{elementId}]]></datasetParameterExpression>
             </datasetParameter>
-            <datasetParameter name="sentDate">
-              <datasetParameterExpression><![CDATA[$P{sentDate}]]></datasetParameterExpression>
-            </datasetParameter>
-            <datasetParameter name="pageSize">
-              <datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
-            </datasetParameter>
-            <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-          </datasetRun>
-          <jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
-            <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-            <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-            <jr:detailCell style="Table_TD" height="0">
-              <property name="com.jaspersoft.studio.unit.width" value="px"/>
-              <property name="com.jaspersoft.studio.unit.height" value="px"/>
-              <textField isBlankWhenNull="true">
-                <reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
-                  <property name="com.jaspersoft.studio.unit.width" value="px"/>
-                  <property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
-                </reportElement>
-                <textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
-              </textField>
-            </jr:detailCell>
-          </jr:column>
-        </jr:table>
-      </componentElement>
-    </band>
-  </title>
-  <columnHeader>
+						<datasetParameter name="sentDate">
+							<datasetParameterExpression><![CDATA[$P{sentDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</title>
+	<columnHeader>
     <band height="30">
       <property name="com.jaspersoft.studio.unit.height" value="px"/>
       <staticText>
@@ -603,8 +604,8 @@
         <text><![CDATA[Time Listened]]></text>
       </staticText>
     </band>
-  </columnHeader>
-  <detail>
+	</columnHeader>
+	<detail>
     <band height="30" splitType="Prevent">
       <property name="com.jaspersoft.studio.unit.height" value="px"/>
       <textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -779,5 +780,5 @@
         <textFieldExpression><![CDATA[$F{timeListened}]]></textFieldExpression>
       </textField>
     </band>
-  </detail>
+	</detail>
 </jasperReport>
