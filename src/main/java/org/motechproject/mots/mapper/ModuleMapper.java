@@ -30,7 +30,7 @@ import org.motechproject.mots.dto.MultipleChoiceQuestionDto;
 import org.motechproject.mots.dto.UnitDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 
-@Mapper(uses = { UuidMapper.class },
+@Mapper(uses = { UuidMapper.class, EnumsMapper.class },
     unmappedTargetPolicy = ReportingPolicy.IGNORE)
 @SuppressWarnings("PMD.TooManyMethods")
 public abstract class ModuleMapper {

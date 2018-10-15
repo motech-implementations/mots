@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector, Field, FieldArray, FormSection } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
+import Select from 'react-select';
 
 import 'react-tippy/dist/tippy.css';
 
@@ -29,6 +30,27 @@ const QUESTION_FIELDS = {
   ivrName: {
     label: 'IVR Name',
     tooltip: 'Enter the IVR Name of the question which you can find on Voto. <br /> This field is optional.',
+  },
+  questionType: {
+    label: 'Question type',
+    required: true,
+    type: Select,
+    tooltip: 'Whether this question belongs to pre- or post-test',
+    getAttributes: (input) => {
+      const options = [
+        { value: 'Pre-test', label: 'Pre-test' },
+        { value: 'Post-test', label: 'Post-test' },
+      ];
+      return {
+        name: input.name,
+        value: input.value,
+        onChange: (value) => {
+          input.onChange(value);
+        },
+        options,
+        simpleValue: true,
+      };
+    },
   },
   choices: {
     type: 'array',
@@ -282,25 +304,26 @@ class ModuleForm extends Component {
           </li>))}
       </ul>
     </div>
-  )
+  );
 
   static renderFieldInput({
     fieldConfig, disabled, input, meta: { touched, error },
   }) {
-    const { label, type, attributes } = fieldConfig;
+    const {
+      label, type, attributes, getAttributes,
+    } = fieldConfig;
 
     if (attributes && attributes.type === 'checkbox') {
       attributes.checked = input.value;
     }
+    const dynamicAttr = getAttributes ? getAttributes(input) : { type: 'text', className: 'form-control', ...input };
 
     const FieldType = type || 'input';
     const attr = {
-      ...input,
       id: input.name,
-      type: 'text',
-      className: 'form-control',
       disabled,
       ...attributes,
+      ...dynamicAttr,
     };
 
     const className = `form-group ${fieldConfig.required ? 'required' : ''} ${touched && error ? 'has-error' : ''}`;

@@ -6,8 +6,10 @@ import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
+import org.motechproject.mots.domain.enums.QuestionType;
 
 @Mapper(componentModel = "spring")
+@SuppressWarnings("PMD.TooManyMethods")
 public class EnumsMapper {
 
   /**
@@ -133,5 +135,30 @@ public class EnumsMapper {
     }
 
     return type.getDisplayName();
+  }
+
+  /**
+   * Get QuestionType object from display name.
+   * @param displayName display name of QuestionType
+   * @return QuestionType object
+   */
+  public QuestionType toQuestionType(String displayName) {
+    if (displayName == null || displayName.isEmpty()) {
+      return null;
+    }
+
+    return QuestionType.getByDisplayName(displayName);
+  }
+
+  /**
+   * Get display name from QuestionType.
+   * @return display name of QuestionType
+   */
+  public String fromQuestionType(QuestionType questionType) {
+    if (questionType == null) {
+      return null;
+    }
+
+    return questionType.getDisplayName();
   }
 }

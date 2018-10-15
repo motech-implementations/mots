@@ -11,4 +11,8 @@ public class MultipleChoiceQuestionDto extends CallFlowElementDto {
   @Getter
   @Setter
   private List<ChoiceDto> choices;
+
+  @Getter
+  @Setter
+  private String questionType;
 }
