@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chw_pre_test" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chw_post_test" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="mysql-mots.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
@@ -21,7 +21,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="summary"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
-	<property name="reportType" value="CHW Pre-Test"/>
+	<property name="reportType" value="CHW Post-Test"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -106,7 +106,7 @@
    JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
    JOIN district ON chiefdom.district_id = district.id
    LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
-   WHERE question.question_type = 'PRE_TEST'
+ WHERE question.question_type = 'POST_TEST'
     AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
     AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
     AND ($P{education} IS NULL OR chw.education_level = $P{education})
@@ -219,7 +219,7 @@
  JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
  JOIN district ON chiefdom.district_id = district.id
  LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
- WHERE question.question_type = 'PRE_TEST'
+ WHERE question.question_type = 'POST_TEST'
   AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
   AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
   AND ($P{education} IS NULL OR chw.education_level = $P{education})
@@ -259,7 +259,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="16"/>
 				</textElement>
-				<text><![CDATA[CHW Pre-Test Report]]></text>
+				<text><![CDATA[CHW Post-Test Report]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="4ee57c2f-6a5c-479d-b643-d33cd9c744e9">
