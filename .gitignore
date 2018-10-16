@@ -54,6 +54,8 @@ mobile/yarn-error.log*
 
 mobile/config.js
 
+local.properties
+
 # Jasper files
 reports/*.jasper
 reports/*.jasper.hex

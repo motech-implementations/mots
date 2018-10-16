@@ -21,6 +21,8 @@ Installing
 ### Installing Android SDK:
 - Android Studio should install the latest Android SDK by default.
 - The SDK Manager can be accessed from the "Welcome to Android Studio" screen. Click on "Configure", then select "SDK Manager".
+- If the build tools are missing, add them with the following command:
+` android update sdk -u -a -t build-tools-23.0.1`
 
 ### Configuring SDK:
 - Android 6.0 (API 23)
@@ -69,6 +71,12 @@ sudo sysctl -w fs.inotify.max_user_instances=1024
 - Android Studio > Tools > Android > AVD Manager
 - click ```+ Create Virtual Device...``` button
 - set desired AVD configuration
+
+### Adding config
+In `mobile` directory, copy the example config:
+```sh
+cp config.example.js config.js
+```
 
 ### Starting up application:
 - Start Android Virtual Machine from AVD Manager
