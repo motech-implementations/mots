@@ -24,6 +24,12 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
   @NonNull
   private District district;
 
+  @ManyToOne
+  @JoinColumn(name = "chiefdom_id", nullable = true)
+  @Getter
+  @Setter
+  private Chiefdom chiefdom;
+
   @Column(name = "start_date", nullable = false)
   @Getter
   @Setter
@@ -46,14 +52,16 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
   /**
    * Constructor to build DistrictAssignmentLog.
    * @param district a district
+   * @param chiefdom a chiefdom
    * @param startDate a startDate
    * @param endDate an endDate
    * @param module a module
    * @param owner an owner
    */
-  public DistrictAssignmentLog(District district, LocalDate startDate, LocalDate endDate,
-      Module module, User owner) {
+  public DistrictAssignmentLog(District district, Chiefdom chiefdom, LocalDate startDate,
+      LocalDate endDate, Module module, User owner) {
     this.district = district;
+    this.chiefdom = chiefdom;
     this.startDate = startDate;
     this.endDate = endDate;
     this.module = module;

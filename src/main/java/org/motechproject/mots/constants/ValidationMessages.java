@@ -31,6 +31,7 @@ public final class ValidationMessages {
   public static final String INVALID_ID = "Invalid ID (UUID)";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
   public static final String INVALID_DISTRICT_ID = "Invalid district UUID";
+  public static final String INVALID_CHIEFDOM_ID = "Invalid chiefdom UUID";
   public static final String INVALID_COMMUNITY_ID = "Invalid community UUID";
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
   public static final String INVALID_DATE = "Invalid format of date";
