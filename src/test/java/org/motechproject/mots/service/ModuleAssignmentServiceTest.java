@@ -24,6 +24,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.motechproject.mots.domain.AssignedModules;
+import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
@@ -37,11 +38,13 @@ import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
+import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.testbuilder.AssignedModulesDataBuilder;
+import org.motechproject.mots.testbuilder.ChiefdomDataBuilder;
 import org.motechproject.mots.testbuilder.CommunityHealthWorkerDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictAssignmentDtoDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
@@ -76,6 +79,9 @@ public class ModuleAssignmentServiceTest {
   private DistrictRepository districtRepository;
 
   @Mock
+  private ChiefdomRepository chiefdomRepository;
+
+  @Mock
   private DistrictAssignmentLogRepository districtAssignmentLogRepository;
 
   @Mock
@@ -105,6 +111,8 @@ public class ModuleAssignmentServiceTest {
       .build();
 
   private static final District DISTRICT = new DistrictDataBuilder().build();
+
+  private static final Chiefdom CHIEFDOM = new ChiefdomDataBuilder().build();
 
   private AssignedModules existingAssignedModules;
 
@@ -142,6 +150,8 @@ public class ModuleAssignmentServiceTest {
         .thenReturn(Optional.of(existingAssignedModules));
     when(districtRepository.findOne(eq((DISTRICT.getId()))))
         .thenReturn(DISTRICT);
+    when(chiefdomRepository.findOne(eq((CHIEFDOM.getId()))))
+        .thenReturn(CHIEFDOM);
     mockModuleInModuleRepository(MODULE_2);
     mockModuleInModuleRepository(MODULE_3);
   }
@@ -241,6 +251,45 @@ public class ModuleAssignmentServiceTest {
 
     for (DistrictAssignmentLog log : districtAssignmentLogs) {
       assertEquals(DISTRICT, log.getDistrict());
+      assertEquals(districtAssignmentDto.getStartDate(), log.getStartDate().toString());
+      assertEquals(districtAssignmentDto.getEndDate(), log.getEndDate().toString());
+      assertEquals(user, log.getOwner());
+    }
+
+    ArgumentCaptor<AssignedModules> assignedModulesCaptor =
+        ArgumentCaptor.forClass(AssignedModules.class);
+    verify(assignedModulesRepository).save(assignedModulesCaptor.capture());
+    final Set<Module> allModules = new HashSet<>(Arrays.asList(MODULE_1, MODULE_2, MODULE_3));
+    assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
+
+    verify(ivrService)
+        .addSubscriberToGroups(eq(CHW.getIvrId()), eq(Collections.singletonList(IVR_GROUP)));
+    verify(moduleProgressService)
+        .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
+  }
+
+  @Test
+  public void shouldAssignModulesToAChiefdom() throws Exception {
+    when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
+    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomIdAndSelected(
+        eq(CHIEFDOM.getId()), any())).thenReturn(Collections.singletonList(CHW));
+
+    districtAssignmentDto.setChiefdomId(CHIEFDOM.getId().toString());
+
+    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+
+    ArgumentCaptor<DistrictAssignmentLog> districtAssignmentLogCaptor =
+        ArgumentCaptor.forClass(DistrictAssignmentLog.class);
+    verify(districtAssignmentLogRepository, times(2)).save(districtAssignmentLogCaptor.capture());
+    List<DistrictAssignmentLog> districtAssignmentLogs = districtAssignmentLogCaptor.getAllValues();
+
+    final Set<Module> passedModules = new HashSet<>(Arrays.asList(MODULE_2, MODULE_3));
+    assertTrue(districtAssignmentLogs.stream()
+        .allMatch(l -> passedModules.contains(l.getModule())));
+
+    for (DistrictAssignmentLog log : districtAssignmentLogs) {
+      assertEquals(DISTRICT, log.getDistrict());
+      assertEquals(CHIEFDOM, log.getChiefdom());
       assertEquals(districtAssignmentDto.getStartDate(), log.getStartDate().toString());
       assertEquals(districtAssignmentDto.getEndDate(), log.getEndDate().toString());
       assertEquals(user, log.getOwner());

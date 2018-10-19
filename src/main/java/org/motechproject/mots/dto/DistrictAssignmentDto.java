@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.DateFormat;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
 import org.motechproject.mots.validate.annotations.EndDateAfterStartDate;
@@ -21,6 +22,12 @@ public class DistrictAssignmentDto {
   @Uuid(message = ValidationMessages.INVALID_DISTRICT_ID)
   @NotEmpty(message = ValidationMessages.EMPTY_DISTRICT_ID)
   private String districtId;
+
+  @Getter
+  @Setter
+  @ChiefdomExistence
+  @Uuid(message = ValidationMessages.INVALID_CHIEFDOM_ID)
+  private String chiefdomId;
 
   @Getter
   @Setter

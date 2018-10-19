@@ -24,6 +24,7 @@ import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
+import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
@@ -60,6 +61,9 @@ public class ModuleAssignmentService {
 
   @Autowired
   private DistrictRepository districtRepository;
+
+  @Autowired
+  private ChiefdomRepository chiefdomRepository;
 
   @Autowired
   private UserService userService;
@@ -182,11 +186,21 @@ public class ModuleAssignmentService {
   @Transactional
   @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
   public void assignModulesToDistrict(DistrictAssignmentDto assignmentDto) {
-    List<CommunityHealthWorker> communityHealthWorkers =
-        communityHealthWorkerRepository
-            .findByCommunityFacilityChiefdomDistrictIdAndSelected(
-                UUID.fromString(assignmentDto.getDistrictId()), true);
+    UUID districtId = UUID.fromString(assignmentDto.getDistrictId());
+    UUID chiefdomId = assignmentDto.getChiefdomId() != null
+        ? UUID.fromString(assignmentDto.getChiefdomId()) : null;
 
+    List<CommunityHealthWorker> communityHealthWorkers;
+    if (chiefdomId != null) {
+      communityHealthWorkers = communityHealthWorkerRepository
+          .findByCommunityFacilityChiefdomIdAndSelected(
+              chiefdomId, true);
+
+    } else {
+      communityHealthWorkers = communityHealthWorkerRepository
+          .findByCommunityFacilityChiefdomDistrictIdAndSelected(
+              districtId, true);
+    }
     Set<Module> newChwModules = new HashSet<>();
     String userName = (String) SecurityContextHolder.getContext().getAuthentication()
         .getPrincipal();
@@ -200,7 +214,8 @@ public class ModuleAssignmentService {
       newChwModules.add(moduleToAssign);
 
       assignmentLogRepository.save(new DistrictAssignmentLog(
-          districtRepository.findOne(UUID.fromString(assignmentDto.getDistrictId())),
+          districtRepository.findOne(districtId),
+          chiefdomId != null ? chiefdomRepository.findOne(chiefdomId) : null,
           LocalDate.parse(assignmentDto.getStartDate()),
           LocalDate.parse(assignmentDto.getEndDate()),
           moduleToAssign,
