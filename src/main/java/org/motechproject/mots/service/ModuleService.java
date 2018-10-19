@@ -3,11 +3,11 @@ package org.motechproject.mots.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.Course;
 import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.enums.Status;
-import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.CourseDto;
 import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
@@ -34,7 +34,7 @@ public class ModuleService {
 
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
-  @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public List<Course> getCourses() {
     return courseRepository.findAllByOrderByVersionAsc();
   }
@@ -43,7 +43,7 @@ public class ModuleService {
    * Get modules from released course.
    * @return released modules
    */
-  @PreAuthorize(RoleNames.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public Iterable<Module> getReleasedModules() {
     Course course = getReleasedCourseIfExists();
 
@@ -60,7 +60,7 @@ public class ModuleService {
    * @return Created Module
    */
   @Transactional
-  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto createModule(ModuleDto moduleDto) {
     Course course = getDraftCourse();
     CourseModule courseModule = new CourseModule(course, Module.initialize(),
@@ -79,7 +79,7 @@ public class ModuleService {
    * @param moduleDto Module DTO
    * @return updated Module
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto updateModule(UUID id, ModuleDto moduleDto) {
     Course course = getDraftCourse();
     CourseModule courseModule = course.findCourseModuleByModuleId(id);
@@ -102,7 +102,7 @@ public class ModuleService {
    * @param id id of module to be copied
    * @return copied module draft
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto copyModule(UUID id) {
     Course course = getDraftCourse();
     CourseModule courseModule = course.findCourseModuleByModuleId(id);
@@ -124,7 +124,7 @@ public class ModuleService {
    * @return Created Course
    */
   @Transactional
-  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
   public Course createCourse() {
     List<Course> courses = courseRepository.findByStatus(Status.DRAFT);
 
@@ -150,7 +150,7 @@ public class ModuleService {
    * @param courseDto Course DTO
    * @return updated Course
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
   public Course updateCourse(UUID id, CourseDto courseDto) {
     Course course = findCourseById(id);
 
@@ -167,7 +167,7 @@ public class ModuleService {
    * Release Course.
    * @param course Course to be released
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
   public Course releaseCourse(Course course) {
     List<Module> newVersionModules = course.getNewVersionModules();
     List<CourseModule> releasedCourseModules = course.getReleasedCourseModules();

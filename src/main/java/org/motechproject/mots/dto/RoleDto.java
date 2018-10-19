@@ -1,5 +1,7 @@
 package org.motechproject.mots.dto;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
@@ -17,4 +19,12 @@ public class RoleDto {
   @Setter
   @NotBlank(message = ValidationMessages.EMPTY_ROLE_NAME)
   private String name;
+
+  @Getter
+  @Setter
+  private Boolean readonly = false;
+
+  @Getter
+  @Setter
+  private Set<PermissionDto> permissions = new HashSet<>();
 }

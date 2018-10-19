@@ -6,10 +6,13 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.security.User;
+import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserRole;
+import org.motechproject.mots.dto.PermissionDto;
 import org.motechproject.mots.dto.RoleDto;
 import org.motechproject.mots.dto.UserDto;
 import org.motechproject.mots.dto.UserProfileDto;
+import org.motechproject.mots.mapper.PermissionMapper;
 import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.service.UserService;
@@ -39,6 +42,8 @@ public class UserController extends BaseController {
   private UserMapper userMapper = UserMapper.INSTANCE;
 
   private RoleMapper roleMapper = RoleMapper.INSTANCE;
+
+  private PermissionMapper permissionMapper = PermissionMapper.INSTANCE;
 
   /**
    * Get list of users.
@@ -184,5 +189,18 @@ public class UserController extends BaseController {
     Iterable<UserRole> roles = userService.getRoles();
 
     return roleMapper.toDtos(roles);
+  }
+
+  /**
+   * Get list of permissions.
+   * @return list of all permissions
+   */
+  @RequestMapping(value = "/permission", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<PermissionDto> getPermissions() {
+    Iterable<UserPermission> permissions = userService.getPermissions();
+
+    return permissionMapper.toDtos(permissions);
   }
 }
