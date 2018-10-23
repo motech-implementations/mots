@@ -92,4 +92,5 @@
   <include file="20181016_1348_insert_post_test_report.mysql.sql" relativeToChangelogFile="true" />
   <include file="20181017_1901_update_module_report.mysql.sql" relativeToChangelogFile="true" />
   <include file="20181018_1831.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20181023_1402_update_number_of_modules_sent_out.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
