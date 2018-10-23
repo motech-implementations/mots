@@ -74,10 +74,12 @@ class DistrictAssignModules extends Component {
       const payload = {
         modules: _.map(this.state.selectedModules, module => module.value),
         districtId: this.state.selectedDistrict.value,
-        chiefdomId: this.state.selectedChiefdom.value,
         startDate: this.state.startDate,
         endDate: this.state.endDate,
       };
+      if (this.state.selectedChiefdom !== null) {
+        payload.chiefdomId = this.state.selectedChiefdom.value;
+      }
 
       const callback = () => {
         this.props.history.push('/chw/selected');
