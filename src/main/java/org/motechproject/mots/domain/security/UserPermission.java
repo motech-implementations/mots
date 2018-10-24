@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

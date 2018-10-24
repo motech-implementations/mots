@@ -7,11 +7,11 @@ import apiClient from '../utils/api-client';
 import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES,
-  SAVE_INCHARGE,
+  SAVE_INCHARGE, SAVE_ROLE, CREATE_ROLE,
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
-  FETCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
-  SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS,
+  FETCH_ROLES, SEARCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
+  SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS, FETCH_PERMISSIONS,
 } from './types';
 
 const BASE_URL = '/api';
@@ -198,6 +198,48 @@ export function fetchRoles() {
 
   return {
     type: FETCH_ROLES,
+    payload: request,
+  };
+}
+
+export function searchRoles(searchParams) {
+  const url = '/api/role/search';
+  const request = apiClient.get(url, {
+    params: searchParams,
+  });
+
+  return {
+    type: SEARCH_ROLES,
+    payload: request,
+  };
+}
+
+export function fetchPermissions() {
+  const url = '/api/permission';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_PERMISSIONS,
+    payload: request,
+  };
+}
+
+export function createRole(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/role`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_ROLE,
+    payload: request,
+  };
+}
+
+export function saveRole(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/role/${values.id}`, values);
+  request.then(result => callback(result));
+
+  return {
+    type: SAVE_ROLE,
     payload: request,
   };
 }

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-  public static final String INCHARGE_USER_ROLE = "Incharge";
+  private static final String INCHARGE_USER_ROLE = "Incharge";
 
   @Autowired
   private UserRepository userRepository;
@@ -95,6 +95,23 @@ public class UserService {
   @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
   public Iterable<UserPermission> getPermissions() {
     return permissionRepository.findAll();
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public UserRole getRole(UUID id) {
+    return roleRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("Role with id: {0} not found", id.toString()));
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public UserRole saveRole(UserRole role) {
+    return roleRepository.save(role);
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public Page<UserRole> searchRoles(String name, Pageable pageable)
+      throws IllegalArgumentException {
+    return roleRepository.search(name, pageable);
   }
 
   @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)

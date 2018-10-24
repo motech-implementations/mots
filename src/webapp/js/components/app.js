@@ -22,6 +22,9 @@ import ModulesManage from './modules-manage';
 import Users from './users';
 import UserNew from './user-new';
 import UserEdit from './user-edit';
+import Roles from './roles';
+import RoleNew from './role-new';
+import RoleEdit from './role-edit';
 import Locations from './locations';
 import FacilityNew from './facility-new';
 import FacilityEdit from './facility-edit';
@@ -83,6 +86,9 @@ export default class App extends Component {
                 <Route path="/users/new" component={UserNew} />
                 <Route path="/users/:userId" component={UserEdit} />
                 <Route path="/users" component={Users} />
+                <Route path="/roles/new" component={RoleNew} />
+                <Route path="/roles/:roleId" component={RoleEdit} />
+                <Route path="/roles" component={Roles} />
                 <Route path="/locations/facility/new" component={FacilityNew} />
                 <Route path="/locations/facility/:facilityId" component={FacilityEdit} />
                 <Route path="/locations/community/new" component={CommunityNew} />
