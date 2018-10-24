@@ -86,7 +86,7 @@
 		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="moduleId" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="phu" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[SELECT
@@ -115,7 +115,7 @@
     AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
     AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
     AND ($P{moduleId} IS NULL OR module.name LIKE CONCAT('%',$P{moduleId},'%'))
-    AND ($P{phu} IS NULL OR facility.name LIKE CONCAT('%',$P{phu},'%'))
+    AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
     AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))
    GROUP BY chw.chw_id, chw.phone_number, module.name, chiefdom.name, facility.name) AS t]]>
 		</queryString>
@@ -168,9 +168,9 @@
 		<property name="displayName" value="Module ID"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="phu" class="java.lang.String">
+	<parameter name="facility" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="PHU"/>
+		<property name="displayName" value="Facility"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="orderBy" class="java.lang.String">
@@ -203,7 +203,7 @@
   COUNT(*) AS questionsNumber,
   chiefdom.name AS chiefdom,
   district.name AS district,
-  facility.name AS phu,
+  facility.name AS facility,
   (SUM(is_correct IS TRUE) * 100 / COUNT(*)) AS correctlyAnswered
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
@@ -228,7 +228,7 @@
   AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{moduleId} IS NULL OR module.name LIKE CONCAT('%',$P{moduleId},'%'))
-  AND ($P{phu} IS NULL OR facility.name LIKE CONCAT('%',$P{phu},'%'))
+  AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))
  GROUP BY chwId, phone, moduleId, chiefdom, district
  ORDER BY $P!{orderBy}
@@ -244,7 +244,7 @@
 	<field name="yob" class="java.lang.Integer"/>
 	<field name="chiefdom" class="java.lang.String"/>
 	<field name="district" class="java.lang.String"/>
-	<field name="phu" class="java.lang.String"/>
+	<field name="facility" class="java.lang.String"/>
 	<field name="correctlyAnswered" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -371,13 +371,13 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="de89a31f-f31c-4e8d-9e62-d1debbd4d6d8">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.phu.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="PHU"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Facility"/>
 				</reportElement>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="04c51c7d-6f36-49b0-83ad-ec03d87c046d">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.phu.order"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="9"/>
 				</reportElement>
 			</staticText>
@@ -441,8 +441,8 @@
 						<datasetParameter name="moduleId">
 							<datasetParameterExpression><![CDATA[$P{moduleId}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="phu">
-							<datasetParameterExpression><![CDATA[$P{phu}]]></datasetParameterExpression>
+						<datasetParameter name="facility">
+							<datasetParameterExpression><![CDATA[$P{facility}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="pageSize">
 							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
@@ -619,7 +619,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[PHU]]></text>
+				<text><![CDATA[Facility]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="685" y="0" width="60" height="30" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
@@ -798,7 +798,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="625" y="0" width="60" height="30" uuid="9c52d567-647a-4698-abd8-e310b4e134b6">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="net.sf.jasperreports.export.json.path" value="values.phu"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.facility"/>
 				</reportElement>
 				<box leftPadding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -809,7 +809,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{phu}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{facility}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="685" y="0" width="60" height="30" uuid="c3052fd8-de59-43d2-b301-e018de58a45d">
