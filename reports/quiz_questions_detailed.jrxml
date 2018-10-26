@@ -192,9 +192,10 @@
   chiefdom.name AS chiefdom,
   district.name AS district,
   CASE
-    WHEN (is_correct IS NULL) THEN 'Skipped'
-    WHEN is_correct THEN 'Correct'
-    ELSE 'Incorrect'
+    WHEN (choice.type IS NULL) THEN "Skipped"
+    WHEN choice.type = 'CORRECT' THEN "Correct"
+    WHEN choice.type = 'INCORRECT' THEN "Incorrect"
+    ELSE "I don't know"
   END AS response
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
