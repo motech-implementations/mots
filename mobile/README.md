@@ -22,7 +22,7 @@ Installing
 - Android Studio should install the latest Android SDK by default.
 - The SDK Manager can be accessed from the "Welcome to Android Studio" screen. Click on "Configure", then select "SDK Manager".
 - If the build tools are missing, add them with the following command:
-` android update sdk -u -a -t build-tools-23.0.3`
+` android update sdk -u -a -t build-tools-28.0.3`
 
 ### Configuring SDK:
 - Android 6.0 (API 23)
@@ -46,7 +46,7 @@ Installing
 ### Updating npm & node:
 ```sh
 sudo npm install -g npm
-sudo npm install
+npm install
 ```
 
 ### Installing React Native:
@@ -82,6 +82,7 @@ cp config.example.js config.js
 - Start Android Virtual Machine from AVD Manager
 ```sh
 react-native start --reset-cache
+react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
 react-native run-android
 ```
 

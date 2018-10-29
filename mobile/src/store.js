@@ -3,8 +3,8 @@ import reduxThunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { offline } from 'redux-offline';
-import defaultConfig from 'redux-offline/lib/defaults';
+import { offline } from '@redux-offline/redux-offline';
+import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 import apiClient from './utils/api-client';
 
 import reducers from './reducers';
