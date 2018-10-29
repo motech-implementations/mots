@@ -1,6 +1,7 @@
 package org.motechproject.mots.mapper;
 
 import org.mapstruct.Mapper;
+import org.motechproject.mots.domain.enums.ChoiceType;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.enums.Gender;
@@ -160,5 +161,30 @@ public class EnumsMapper {
     }
 
     return questionType.getDisplayName();
+  }
+
+  /**
+   * Get ChoiceType object from display name.
+   * @param displayName display name of ChoiceType
+   * @return ChoiceType object
+   */
+  public ChoiceType toChoiceType(String displayName) {
+    if (displayName == null || displayName.isEmpty()) {
+      return null;
+    }
+
+    return ChoiceType.getByDisplayName(displayName);
+  }
+
+  /**
+   * Get display name from ChoiceType.
+   * @return display name of ChoiceType
+   */
+  public String fromChoiceType(ChoiceType choiceType) {
+    if (choiceType == null) {
+      return null;
+    }
+
+    return choiceType.getDisplayName();
   }
 }

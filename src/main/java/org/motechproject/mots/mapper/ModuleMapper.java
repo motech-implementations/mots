@@ -251,7 +251,6 @@ public abstract class ModuleMapper {
     if (choiceDtos != null) {
       for (int i = 0; i < choiceDtos.size(); i++) {
         Choice choice = fromDto(choiceDtos.get(i));
-        choice.setIsCorrect(BooleanUtils.isTrue(choice.getIsCorrect()));
         choice.setChoiceId(i + 1);
         choices.add(choice);
       }

@@ -17,7 +17,7 @@ public class ChoiceDto {
 
   @Getter
   @Setter
-  private Boolean isCorrect;
+  private String type;
 
   @Getter
   @Setter

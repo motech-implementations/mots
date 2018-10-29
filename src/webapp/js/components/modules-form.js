@@ -56,19 +56,29 @@ const QUESTION_FIELDS = {
     type: 'array',
     addLabel: 'Add Choice',
     fieldLabel: 'Choice',
-    defaultValue: { isCorrect: false },
     fields: {
       ivrName: {
         label: 'IVR Name',
         tooltip: 'Enter the IVR Name of the choice which you can find on Voto. <br /> This field is optional.',
       },
-      isCorrect: {
+      type: {
         label: 'Is Correct',
-        attributes: {
-          type: 'checkbox',
-          className: '',
-        },
+        required: true,
+        type: Select,
         tooltip: 'Check this field if this answer is the correct one out of the list of options.',
+        getAttributes: input => ({
+          name: input.name,
+          value: input.value,
+          onChange: (value) => {
+            input.onChange(value);
+          },
+          options: [
+            { value: 'Correct', label: 'Correct' },
+            { value: 'Incorrect', label: 'Incorrect' },
+            { value: 'I don\'t know', label: 'I don\'t know' },
+          ],
+          simpleValue: true,
+        }),
       },
       description: {
         label: 'Description',

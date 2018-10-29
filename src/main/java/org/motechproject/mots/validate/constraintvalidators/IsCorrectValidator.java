@@ -4,6 +4,7 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.motechproject.mots.domain.Choice;
+import org.motechproject.mots.domain.enums.ChoiceType;
 import org.motechproject.mots.validate.annotations.IsCorrect;
 
 public class IsCorrectValidator
@@ -17,7 +18,7 @@ public class IsCorrectValidator
   public boolean isValid(List<Choice> values, ConstraintValidatorContext context) {
     int correct = 0;
     for (Choice choice : values) {
-      if (choice.getIsCorrect()) {
+      if (ChoiceType.CORRECT.equals(choice.getType())) {
         correct++;
       }
     }
