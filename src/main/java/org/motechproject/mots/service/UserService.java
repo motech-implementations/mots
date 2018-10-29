@@ -4,14 +4,15 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission;
-import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.dto.UserProfileDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
 import org.motechproject.mots.mapper.UserMapper;
+import org.motechproject.mots.repository.PermissionRepository;
 import org.motechproject.mots.repository.RoleRepository;
 import org.motechproject.mots.repository.UserRepository;
 import org.motechproject.mots.utils.AuthenticationHelper;
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-  public static final String INCHARGE_USER_ROLE = "Incharge";
+  private static final String INCHARGE_USER_ROLE = "Incharge";
 
   @Autowired
   private UserRepository userRepository;
@@ -35,7 +36,10 @@ public class UserService {
   private RoleRepository roleRepository;
 
   @Autowired
-  AuthenticationHelper authenticationHelper;
+  private PermissionRepository permissionRepository;
+
+  @Autowired
+  private AuthenticationHelper authenticationHelper;
 
   private UserMapper userMapper = UserMapper.INSTANCE;
 
@@ -44,7 +48,7 @@ public class UserService {
         new EntityNotFoundException("User with username: {0} not found", userName));
   }
 
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
   public Iterable<User> getUsers() {
     return userRepository.findAll();
   }
@@ -53,10 +57,10 @@ public class UserService {
    * Finds users matching all of the provided parameters. If there are no parameters, return all
    * users.
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
   public Page<User> searchUsers(String username, String email, String name, String role,
       Pageable pageable) throws IllegalArgumentException {
-    if (authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_USERS)) {
+    if (authenticationHelper.getCurrentUser().hasPermission(DefaultPermissions.MANAGE_USERS)) {
       return userRepository.search(username, email, name, role, pageable);
     }
 
@@ -71,9 +75,9 @@ public class UserService {
   /**
    * Returns UserRoles.
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
   public Iterable<UserRole> getRoles() {
-    if (authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_USERS)) {
+    if (authenticationHelper.getCurrentUser().hasPermission(DefaultPermissions.MANAGE_USERS)) {
       return roleRepository.findAll();
     }
 
@@ -85,7 +89,32 @@ public class UserService {
     return Collections.EMPTY_LIST;
   }
 
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
+  /**
+   * Returns UserPermissions.
+   */
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public Iterable<UserPermission> getPermissions() {
+    return permissionRepository.findAll();
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public UserRole getRole(UUID id) {
+    return roleRepository.findById(id).orElseThrow(() ->
+        new EntityNotFoundException("Role with id: {0} not found", id.toString()));
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public UserRole saveRole(UserRole role) {
+    return roleRepository.save(role);
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  public Page<UserRole> searchRoles(String name, Pageable pageable)
+      throws IllegalArgumentException {
+    return roleRepository.search(name, pageable);
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
   public User getUser(UUID id) {
     return userRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("User with id: {0} not found", id.toString()));
@@ -97,7 +126,7 @@ public class UserService {
    * @param user User to be created.
    * @return saved User
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
   public User saveUser(User user, boolean encodeNewPassword) {
     if (encodeNewPassword) {
       String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
@@ -113,7 +142,7 @@ public class UserService {
    * @param user User to be created.
    * @return created User
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE)
   public User registerNewUser(User user) {
 
     String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
@@ -165,7 +194,8 @@ public class UserService {
   }
 
   private User validateAndSave(User user) {
-    if (authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_INCHARGE_USERS)
+    if (authenticationHelper.getCurrentUser()
+        .hasPermission(DefaultPermissions.MANAGE_INCHARGE_USERS)
         && !user.hasOnlyRole(getInchargeRole().get().getId())) {
       throw new MotsAccessDeniedException("You can manage only Incharge users");
     }

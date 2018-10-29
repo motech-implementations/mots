@@ -255,6 +255,22 @@ class SideBar extends Component {
           </Link>
         </li>
         }
+        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/roles/new" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-plus" />
+            <span className="icon-text">Add role</span>
+          </Link>
+        </li>
+        }
+        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/roles" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">Role list</span>
+          </Link>
+        </li>
+        }
       </ul>
     );
   }
@@ -369,7 +385,7 @@ class SideBar extends Component {
             {this.renderLocationsMenu()}
           </li>
           }
-          { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY) &&
+          { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY) &&
           <li>
             <a href="" onClick={this.toggleUsersMenu}>
               <span className="glyphicon glyphicon-user" />

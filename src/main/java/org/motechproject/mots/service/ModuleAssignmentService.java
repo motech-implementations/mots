@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -17,7 +18,6 @@ import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.security.User;
-import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
@@ -73,7 +73,7 @@ public class ModuleAssignmentService {
    * @param chwId Id of CHW
    * @return modules assigned to CHW with given Id
    */
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
   public AssignedModules getAssignedModules(UUID chwId) {
     return repository.findByHealthWorkerId(chwId).orElseThrow(() ->
         new EntityNotFoundException("No assigned modules found for CHW with Id: {0}",
@@ -86,7 +86,7 @@ public class ModuleAssignmentService {
    */
   @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   @Transactional
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
   public void assignModules(AssignedModules assignedModules) {
     AssignedModules existingAssignedModules =
         getAssignedModules(assignedModules.getHealthWorker().getId());
@@ -184,7 +184,7 @@ public class ModuleAssignmentService {
    *     and start and end dates
    */
   @Transactional
-  @PreAuthorize(RoleNames.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
   public void assignModulesToDistrict(DistrictAssignmentDto assignmentDto) {
     UUID districtId = UUID.fromString(assignmentDto.getDistrictId());
     UUID chiefdomId = assignmentDto.getChiefdomId() != null

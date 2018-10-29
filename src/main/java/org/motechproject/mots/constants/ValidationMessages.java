@@ -14,6 +14,7 @@ public final class ValidationMessages {
   public static final String EMPTY_LOCATION_NAME = "Location name cannot be empty";
   public static final String EMPTY_MODULE_NAME = "Module Name cannot be empty";
   public static final String EMPTY_ROLE_NAME = "Role Name cannot be empty";
+  public static final String EMPTY_PERMISSION_NAME = "Permission Name cannot be empty";
   public static final String EMPTY_UNIT_NAME = "Unit Name cannot be empty";
   public static final String EMPTY_USERNAME = "Username cannot be empty";
   public static final String EMPTY_CALL_FLOW_ELEMENT_TYPE

@@ -75,11 +75,11 @@ public class User extends BaseTimestampedEntity implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return AuthorityUtils.createAuthorityList(roles.stream()
         .flatMap(userRole -> userRole.getPermissions().stream())
-        .map(UserPermission::getRoleName).toArray(String[]::new));
+        .map(UserPermission::getName).toArray(String[]::new));
   }
 
-  public boolean hasPermission(UserPermission permission) {
-    return roles.stream().anyMatch(role -> role.hasPermission(permission));
+  public boolean hasPermission(String permissionName) {
+    return roles.stream().anyMatch(role -> role.hasPermission(permissionName));
   }
 
   /**

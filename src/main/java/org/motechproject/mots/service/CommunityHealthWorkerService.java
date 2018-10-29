@@ -15,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -22,7 +23,6 @@ import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.Literacy;
-import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.exception.ChwException;
 import org.motechproject.mots.exception.EntityNotFoundException;
@@ -87,7 +87,7 @@ public class CommunityHealthWorkerService {
       PHU_CSV_HEADER, PHU_SUPERVISOR_CSV_HEADER, PEER_SUPERVISOR_CSV_HEADER,
       PREFERRED_LANGUAGE_CSV_HEADER);
 
-  @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
     return healthWorkerRepository.findAll();
   }
@@ -96,7 +96,7 @@ public class CommunityHealthWorkerService {
    * Gets selected CHWs and returns their short representation using mapper.
    * @return List of CHWs short representation
    */
-  @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public List<ChwInfoDto> getHealthWorkersInfoDtos() {
     Iterable<CommunityHealthWorker> healthWorkers =
         healthWorkerRepository.findBySelectedOrderByChwId(true);
@@ -125,7 +125,7 @@ public class CommunityHealthWorkerService {
    * Finds CommunityHealthWorkers matching all of the provided parameters.
    * If there are no parameters, return all CommunityHealthWorkers.
    */
-  @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
@@ -143,7 +143,7 @@ public class CommunityHealthWorkerService {
    * @param healthWorker CHW to be selected
    * @return saved CHW
    */
-  @PreAuthorize(RoleNames.HAS_CHW_WRITE_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CHW_WRITE_ROLE)
   public CommunityHealthWorker selectHealthWorker(CommunityHealthWorker healthWorker) {
     if (healthWorker.getSelected()) {
       throw new ChwException("Could not select CHW, because already selected");
@@ -172,7 +172,7 @@ public class CommunityHealthWorkerService {
     return healthWorker;
   }
 
-  @PreAuthorize(RoleNames.HAS_CHW_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public CommunityHealthWorker getHealthWorker(UUID id) {
     return healthWorkerRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("CHW with id: {0} not found", id.toString()));
@@ -183,7 +183,7 @@ public class CommunityHealthWorkerService {
    * @param chw CHW to update
    * @return saved CHW
    */
-  @PreAuthorize(RoleNames.HAS_CHW_WRITE_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CHW_WRITE_ROLE)
   public CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw) {
     String ivrId = chw.getIvrId();
     String phoneNumber = chw.getPhoneNumber();
@@ -207,7 +207,7 @@ public class CommunityHealthWorkerService {
    * @throws IOException in case of file issues
    */
   @SuppressWarnings("PMD.CyclomaticComplexity")
-  @PreAuthorize(RoleNames.HAS_UPLOAD_CSV_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_CSV_ROLE)
   public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile, Boolean selected)
       throws IOException {
     ICsvMapReader csvMapReader;

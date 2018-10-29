@@ -13,9 +13,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Incharge;
-import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.repository.FacilityRepository;
 import org.motechproject.mots.repository.InchargeRepository;
@@ -49,23 +49,23 @@ public class InchargeService {
   @Autowired
   private FacilityRepository facilityRepository;
 
-  @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_INCHARGE_READ_ROLE)
   public Iterable<Incharge> getIncharges() {
     return inchargeRepository.findAll();
   }
 
-  @PreAuthorize(RoleNames.HAS_INCHARGE_WRITE_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_INCHARGE_WRITE_ROLE)
   public Incharge saveIncharge(Incharge incharge) {
     return inchargeRepository.save(incharge);
   }
 
-  @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_INCHARGE_READ_ROLE)
   public Incharge getIncharge(UUID id) {
     return inchargeRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("Incharge with id: {0} not found", id.toString()));
   }
 
-  @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_INCHARGE_READ_ROLE)
   public Incharge findByFacilityId(UUID id) {
     return inchargeRepository.findByFacilityId(id).orElseThrow(() ->
         new EntityNotFoundException("Incharge with Facility Id: {0} not found", id.toString()));
@@ -75,7 +75,7 @@ public class InchargeService {
    * Finds Incharges matching all of the provided parameters.
    * If there are no parameters, return all Incharges.
    */
-  @PreAuthorize(RoleNames.HAS_INCHARGE_READ_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_INCHARGE_READ_ROLE)
   public Page<Incharge> searchIncharges(String firstName, String secondName, String otherName,
       String phoneNumber, String email, String facilityName, Boolean selected, Pageable pageable)
       throws IllegalArgumentException {
@@ -91,7 +91,7 @@ public class InchargeService {
    * @throws IOException in case of file issues
    */
   @SuppressWarnings("PMD.CyclomaticComplexity")
-  @PreAuthorize(RoleNames.HAS_UPLOAD_CSV_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_CSV_ROLE)
   public Map<Integer, String> processInchageCsv(MultipartFile inchargeCsvFile, Boolean selected)
       throws IOException {
     ICsvMapReader csvMapReader;

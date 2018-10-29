@@ -8,4 +8,6 @@ export default {
   locationListPages: 1,
   userListPages: 1,
   roles: [],
+  filteredRoles: [],
+  rolesTotalPages: 1,
 };

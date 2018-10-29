@@ -2,15 +2,14 @@ package org.motechproject.mots.domain.security;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +30,29 @@ public class UserRole extends BaseTimestampedEntity {
   @NotBlank(message = ValidationMessages.EMPTY_ROLE_NAME)
   private String name;
 
-  @ElementCollection(targetClass = UserPermission.class, fetch = FetchType.EAGER)
-  @CollectionTable(name = "user_role_permissions",
-      joinColumns = @JoinColumn(name = "user_role_id", referencedColumnName = "id"))
-  @Enumerated(EnumType.STRING)
+  @Column(name = "readonly", nullable = false, columnDefinition = "BIT DEFAULT 0")
   @Getter
   @Setter
+  private Boolean readonly = false;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "user_role_permissions",
+      joinColumns = @JoinColumn(
+          name = "role_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(
+          name = "permission_id", referencedColumnName = "id"))
+  @Getter
+  @Setter
+  @Valid
   private Set<UserPermission> permissions = new HashSet<>();
 
-  public boolean hasPermission(UserPermission permission) {
-    return permissions.contains(permission);
+  public UserRole(String name, Set<UserPermission> permissions) {
+    this.name = name;
+    this.permissions = permissions;
+  }
+
+  public boolean hasPermission(String permissionName) {
+    return permissions.stream().anyMatch(permission -> permission.getName().equals(permissionName));
   }
 }

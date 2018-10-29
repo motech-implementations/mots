@@ -6,10 +6,13 @@ import java.util.UUID;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.security.User;
+import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserRole;
+import org.motechproject.mots.dto.PermissionDto;
 import org.motechproject.mots.dto.RoleDto;
 import org.motechproject.mots.dto.UserDto;
 import org.motechproject.mots.dto.UserProfileDto;
+import org.motechproject.mots.mapper.PermissionMapper;
 import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.service.UserService;
@@ -39,6 +42,8 @@ public class UserController extends BaseController {
   private UserMapper userMapper = UserMapper.INSTANCE;
 
   private RoleMapper roleMapper = RoleMapper.INSTANCE;
+
+  private PermissionMapper permissionMapper = PermissionMapper.INSTANCE;
 
   /**
    * Get list of users.
@@ -184,5 +189,89 @@ public class UserController extends BaseController {
     Iterable<UserRole> roles = userService.getRoles();
 
     return roleMapper.toDtos(roles);
+  }
+
+  /**
+   * Get list of permissions.
+   * @return list of all permissions
+   */
+  @RequestMapping(value = "/permission", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public List<PermissionDto> getPermissions() {
+    Iterable<UserPermission> permissions = userService.getPermissions();
+
+    return permissionMapper.toDtos(permissions);
+  }
+
+  /**
+   * Get Role with given id.
+   * @param id id of Role to find
+   * @return Role with given id
+   */
+  @RequestMapping(value = "/role/{id}", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public RoleDto getRole(@PathVariable("id") UUID id) {
+
+    UserRole role = userService.getRole(id);
+    return roleMapper.toDto(role);
+  }
+
+  /**
+   * Finds roles matching all of the provided parameters.
+   * If there are no parameters, return all roles.
+   * @param name name of the role
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @return page with roles matching provided parameters
+   */
+  @RequestMapping(value = "/role/search", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Page<RoleDto> searchRoles(@RequestParam(value = "name", required = false) String name,
+      Pageable pageable) throws IllegalArgumentException {
+
+    Page<UserRole> roles = userService.searchRoles(name, pageable);
+    List<RoleDto> roleDtos = roleMapper.toDtos(roles.getContent());
+
+    return new PageImpl<>(roleDtos, pageable, roles.getTotalElements());
+  }
+
+  /**
+   * Create Role.
+   * @param roleDto DTO of Role to be created
+   * @return created Role
+   */
+  @RequestMapping(value = "/role", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public RoleDto createRole(@RequestBody @Valid RoleDto roleDto, BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+
+    UserRole role = roleMapper.fromDto(roleDto);
+    return roleMapper.toDto(userService.saveRole(role));
+  }
+
+  /**
+   * Update Role.
+   * @param id id of Role to update
+   * @param roleDto DTO of Role to be updated
+   * @return updated Role
+   */
+  @RequestMapping(value = "/role/{id}", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public RoleDto saveRole(@PathVariable("id") UUID id, @RequestBody @Valid RoleDto roleDto,
+      BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+
+    UserRole role = userService.getRole(id);
+
+    if (role.getReadonly()) {
+      throw new IllegalArgumentException("Readonly role cannot be edited");
+    }
+
+    roleMapper.updateFromDto(roleDto, role);
+    return roleMapper.toDto(userService.saveRole(role));
   }
 }

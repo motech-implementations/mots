@@ -10,6 +10,10 @@ export const SAVE_USER = 'save_user';
 export const SAVE_USER_PROFILE = 'save_user_profile';
 export const FETCH_USERS = 'fetch_users';
 export const FETCH_ROLES = 'fetch_roles';
+export const SEARCH_ROLES = 'search_roles';
+export const FETCH_PERMISSIONS = 'fetch_permissions';
+export const CREATE_ROLE = 'create_role';
+export const SAVE_ROLE = 'save_role';
 
 
 export const CREATE_INCHARGE = 'create_incharge';

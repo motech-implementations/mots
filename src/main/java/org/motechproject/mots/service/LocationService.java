@@ -2,13 +2,12 @@ package org.motechproject.mots.service;
 
 import java.util.List;
 import java.util.UUID;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
-import org.motechproject.mots.domain.security.UserPermission;
-import org.motechproject.mots.domain.security.UserPermission.RoleNames;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
 import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityRepository;
@@ -79,7 +78,7 @@ public class LocationService {
    * Finds districts matching all of the provided parameters.
    * If there are no parameters, return all districts.
    */
-  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
   public Page<District> searchDistricts(String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
@@ -90,7 +89,7 @@ public class LocationService {
    * Finds chiefdoms matching all of the provided parameters.
    * If there are no parameters, return all chiefdoms.
    */
-  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
   public Page<Chiefdom> searchChiefdoms(String chiefdomName,
       String parentDistrict, Pageable pageable)
       throws IllegalArgumentException {
@@ -102,7 +101,7 @@ public class LocationService {
    * Finds communities matching all of the provided parameters.
    * If there are no parameters, return all communities.
    */
-  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
   public Page<Community> searchCommunities(String communityName,
       String parentFacility, String chiefdomName, String districtName, Pageable pageable)
       throws IllegalArgumentException {
@@ -115,7 +114,7 @@ public class LocationService {
    * Finds facilities matching all of the provided parameters.
    * If there are no parameters, return all facilities.
    */
-  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityId, String facilityName,
       String facilityType, String inchargeFullName, String parentChiefdom, String districtName,
       Pageable pageable) throws IllegalArgumentException {
@@ -124,12 +123,12 @@ public class LocationService {
         inchargeFullName, parentChiefdom, districtName, pageable);
   }
 
-  @PreAuthorize(RoleNames.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
   public Facility createFacility(Facility facility) {
     return facilityRepository.save(facility);
   }
 
-  @PreAuthorize(RoleNames.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
   public Community createCommunity(Community community) {
     return communityRepository.save(community);
   }
@@ -139,7 +138,7 @@ public class LocationService {
    * @param facility facility to update
    * @return updated Facility
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Facility saveFacility(Facility facility) {
     if (!canEditLocation(facility)) {
       throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
@@ -153,7 +152,7 @@ public class LocationService {
    * @param community community to update
    * @return updated Community
    */
-  @PreAuthorize(RoleNames.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Community saveCommunity(Community community) {
     if (!canEditLocation(community)) {
       throw new MotsAccessDeniedException(
@@ -169,22 +168,23 @@ public class LocationService {
   }
 
   private boolean canEditAllLocations() {
-    return authenticationHelper.getCurrentUser().hasPermission(UserPermission.MANAGE_FACILITIES);
+    return authenticationHelper.getCurrentUser()
+        .hasPermission(DefaultPermissions.MANAGE_FACILITIES);
   }
 
   private boolean canEditOwnLocation(Location location) {
     return authenticationHelper.getCurrentUser().hasPermission(
-        UserPermission.MANAGE_OWN_FACILITIES)
+        DefaultPermissions.MANAGE_OWN_FACILITIES)
       && authenticationHelper.getCurrentUser().getUsername().equals(
           location.getOwner().getUsername());
   }
 
-  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
   public Community getCommunity(UUID id) {
     return communityRepository.findOne(id);
   }
 
-  @PreAuthorize(RoleNames.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
   public Facility getFacility(UUID id) {
     return facilityRepository.findOne(id);
   }
