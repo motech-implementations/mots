@@ -22,7 +22,7 @@ Installing
 - Android Studio should install the latest Android SDK by default.
 - The SDK Manager can be accessed from the "Welcome to Android Studio" screen. Click on "Configure", then select "SDK Manager".
 - If the build tools are missing, add them with the following command:
-` android update sdk -u -a -t build-tools-23.0.1`
+` android update sdk -u -a -t build-tools-23.0.3`
 
 ### Configuring SDK:
 - Android 6.0 (API 23)
