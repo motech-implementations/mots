@@ -78,6 +78,7 @@
 	</style>
 	<subDataset name="RecordsCount">
 		<parameter name="username" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="userRole" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="loginDate" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="logoutDate" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
@@ -86,7 +87,10 @@
   COUNT(*) AS totalElements
  FROM user_log
  JOIN user ON user_log.user_id = user.id
+ JOIN users_roles ON users_roles.user_id = user.id
+ JOIN user_role ON users_roles.role_id = user_role.id
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
+  AND ($P{loginDate} IS NULL OR user_role.name LIKE CONCAT('%',$P{userRole},'%'))
   AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
   AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))]]>
 		</queryString>
@@ -95,6 +99,11 @@
 	<parameter name="username" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Username"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="userRole" class="java.lang.String" isForPrompting="true">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="User Role"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="loginDate" class="java.lang.String" isForPrompting="true">
@@ -128,17 +137,22 @@
 	<queryString>
 		<![CDATA[SELECT 
   user.username AS username,
+  user_role.name AS userRole,
   DATE_FORMAT(user_log.login_date, '%Y-%m-%d %H:%i:%S') AS loginDate,
   DATE_FORMAT(user_log.logout_date, '%Y-%m-%d %H:%i:%S') AS logoutDate
  FROM user_log
  JOIN user ON user_log.user_id = user.id
+ JOIN users_roles ON users_roles.user_id = user.id
+ JOIN user_role ON users_roles.role_id = user_role.id
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
+  AND ($P{loginDate} IS NULL OR user_role.name LIKE CONCAT('%',$P{userRole},'%'))
   AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
   AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="username" class="java.lang.String"/>
+	<field name="userRole" class="java.lang.String"/>
 	<field name="loginDate" class="java.lang.String"/>
 	<field name="logoutDate" class="java.lang.String"/>
 	<background>
@@ -170,6 +184,18 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.userRole.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="User Role"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.userRole.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="1"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.loginDate.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Login Date"/>
 				</reportElement>
@@ -177,7 +203,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.loginDate.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="1"/>
+					<property name="net.sf.jasperreports.export.json.data" value="2"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -189,7 +215,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.logoutDate.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="2"/>
+					<property name="net.sf.jasperreports.export.json.data" value="3"/>
 				</reportElement>
 			</staticText>
 			<componentElement>
@@ -203,6 +229,9 @@
 					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
 						<datasetParameter name="username">
 							<datasetParameterExpression><![CDATA[$P{username}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="userRole">
+							<datasetParameterExpression><![CDATA[$P{userRole}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="loginDate">
 							<datasetParameterExpression><![CDATA[$P{loginDate}]]></datasetParameterExpression>
@@ -238,7 +267,7 @@
 		<band height="25">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement x="0" y="0" width="185" height="25" uuid="cf6b0abd-3327-4263-b2db-96a319f5ed65">
+				<reportElement x="0" y="0" width="140" height="25" uuid="cf6b0abd-3327-4263-b2db-96a319f5ed65">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -253,7 +282,22 @@
 				<text><![CDATA[Username]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="185" y="0" width="185" height="25" uuid="3bd954fa-6c67-4813-9dcc-a611f69b0c40">
+				<reportElement x="140" y="0" width="140" height="25" uuid="738bb7d3-eef0-4079-b77c-341dd3d7eba5">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[User Role]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="140" height="25" uuid="3bd954fa-6c67-4813-9dcc-a611f69b0c40">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -270,7 +314,7 @@
 				<text><![CDATA[Login Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="370" y="0" width="185" height="25" uuid="58e77562-d2e7-462e-83ac-ab7910945117">
+				<reportElement x="420" y="0" width="140" height="25" uuid="58e77562-d2e7-462e-83ac-ab7910945117">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -290,7 +334,7 @@
 		<band height="25" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="185" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="140" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.username"/>
 				</reportElement>
@@ -304,7 +348,21 @@
 				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="185" y="0" width="185" height="25" uuid="f675d757-a01f-427f-97e2-1be2e26b612a">
+				<reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="140" height="25" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.userRole"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{userRole}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="140" height="25" uuid="f675d757-a01f-427f-97e2-1be2e26b612a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.loginDate"/>
@@ -319,7 +377,7 @@
 				<textFieldExpression><![CDATA[$F{loginDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="370" y="0" width="185" height="25" uuid="48f57fda-3046-40f3-b951-c8f10c915ac3">
+				<reportElement stretchType="RelativeToTallestObject" x="420" y="0" width="140" height="25" uuid="48f57fda-3046-40f3-b951-c8f10c915ac3">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.logoutDate"/>
 				</reportElement>
