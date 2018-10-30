@@ -98,4 +98,5 @@
   <include file="20181019_1503_add_admin_role.mysql.sql" relativeToChangelogFile="true" />
   <include file="20181026_1509.mysql.sql" relativeToChangelogFile="true" />
   <include file="20181026_1621.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20181029_1827.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>
