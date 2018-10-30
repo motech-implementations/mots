@@ -194,8 +194,8 @@ public class UserService {
   }
 
   private User validateAndSave(User user) {
-    if (authenticationHelper.getCurrentUser()
-        .hasPermission(DefaultPermissions.MANAGE_INCHARGE_USERS)
+    if (!authenticationHelper.getCurrentUser()
+        .hasPermission(DefaultPermissions.MANAGE_USERS)
         && !user.hasOnlyRole(getInchargeRole().get().getId())) {
       throw new MotsAccessDeniedException("You can manage only Incharge users");
     }
