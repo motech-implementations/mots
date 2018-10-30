@@ -145,7 +145,7 @@
  JOIN users_roles ON users_roles.user_id = user.id
  JOIN user_role ON users_roles.role_id = user_role.id
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
-  AND ($P{loginDate} IS NULL OR user_role.name LIKE CONCAT('%',$P{userRole},'%'))
+  AND ($P{userRole} IS NULL OR user_role.name LIKE CONCAT('%',$P{userRole},'%'))
   AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
   AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))
  ORDER BY $P!{orderBy}
