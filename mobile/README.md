@@ -78,8 +78,16 @@ In `mobile` directory, copy the example config:
 cp config.example.js config.js
 ```
 
+### Starting the emulator
+- Add the following to your `~/.bashrc`:
+```sh
+function emulator { cd "$(dirname "$(which emulator)")" && ./emulator "$@"; }
+```
+- Open a new terminal window or `source ~/.bashrc`
+- List the available AVDs: `emulator -list-avds`
+- Start up the Virtual Machine:`emulator -avd AVD_NAME`
+
 ### Starting up application:
-- Start Android Virtual Machine from AVD Manager
 ```sh
 react-native start --reset-cache
 react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res

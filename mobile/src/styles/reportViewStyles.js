@@ -1,14 +1,24 @@
 export default {
-  reportPreviewTitle: {
-    marginTop: 20,
-    marginLeft: 20,
-    fontWeight: '500',
-  },
-  reportHtmlStyle: {
+  container: {
     flex: 1,
-    marginTop: 20,
-    marginHorizontal: 20,
-    borderWidth: 1,
-    borderColor: 'grey',
+    paddingTop: 10,
+    backgroundColor: '#fff',
+  },
+  header: {
+    height: 30,
+  },
+  text: {
+    textAlign: 'center', fontWeight: '100', fontFamily: 'monospace', fontSize: 12,
+  },
+  dataWrapper: {
+    marginTop: -1,
+  },
+  row: {
+    backgroundColor: '#dee2e6',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingTop: 10,
   },
 };
