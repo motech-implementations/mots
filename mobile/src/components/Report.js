@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, WebView } from 'react-native';
+import { View, ScrollView, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
+import { Table, Row } from 'react-native-table-component';
 import apiClient from '../utils/api-client';
 
 import {
@@ -16,23 +17,60 @@ import getContainerStyle from '../utils/styleUtils';
 import commonStyles from '../styles/commonStyles';
 
 const { lightThemeText } = commonStyles;
+const fontWidth = 8;
+const rowHeight = 24;
 
 export default class Report extends Component {
+  static getTableData(values) {
+    const tableData = [];
+    values.forEach((row) => {
+      const rowData = [];
+      Object.keys(row).forEach((colName) => {
+        rowData.push(row[colName]);
+      });
+      tableData.push(rowData);
+    });
+    return tableData;
+  }
+
+  static getTableHeaders(colModel) {
+    const columns = [];
+    Object.keys(colModel).forEach((colName) => {
+      columns.push(colModel[colName][0]);
+    });
+    columns.sort((a, b) => a.order - b.order);
+    return columns.map(column => column.Header);
+  }
+
+  static getColumnWidths(headers, tableData) {
+    const widths = headers.map(header => Math.max(50, (header.length * fontWidth)));
+    tableData.forEach((rowData) => {
+      rowData.forEach((value, i) => {
+        const len = (value.length * fontWidth);
+        if (len > widths[i]) {
+          widths[i] = len;
+        }
+      });
+    });
+    return widths;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      reportHtml: '',
       reportId: '',
       reportName: '',
       templateParameters: [],
       currentPage: 1,
       totalPages: 1,
-      pageSize: 20,
+      pageSize: null,
       maxPageSize: 2147483647,
       staticParams: ['pageSize', 'offset', 'orderBy'],
+      tableHeaders: [],
+      columnWidths: [],
+      tableData: [],
     };
 
-    this.checkPageCount = this.checkPageCount.bind(this);
     this.fetchReport = this.fetchReport.bind(this);
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.fetchPrevPage = this.fetchPrevPage.bind(this);
@@ -45,15 +83,11 @@ export default class Report extends Component {
   componentWillMount() {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
-        const size = this.props.reportName.includes('CHW List') ||
-          this.props.reportName.includes('Selected CHWs') ? 10 : 20;
         this.setState({
           reportName: this.props.reportName,
           templateParameters: this.props.templateParameters,
-          pageSize: size,
         });
         this.setState({ reportId: this.props.reportId }, () => {
-          this.checkPageCount();
           this.fetchReport(1);
         });
       } else {
@@ -98,49 +132,6 @@ export default class Report extends Component {
     });
     return stringParams;
   }
-
-  checkPageCount() {
-    const params = this.getParams(1);
-    const url = `/api/reports/templates/${this.state.reportId}/json?${params}`;
-
-    apiClient.get(url)
-      .then((response) => {
-        if (response) {
-          const { colModel, totalPages } = response[0];
-          const templateParameters = [];
-          Object.keys(colModel[0]).forEach((colName) => {
-            const { order } = colModel[0][colName][0];
-            const parameter = this.state.templateParameters.find(param =>
-              param.name === colName);
-            if (parameter) {
-              templateParameters.push({
-                ...parameter,
-                order: parseInt(order, 10),
-              });
-            }
-          });
-          this.setState({
-            templateParameters: templateParameters.sort((a, b) => a.order - b.order),
-            totalPages: Math.ceil(totalPages / this.state.pageSize) || 1,
-          });
-        }
-      });
-  }
-
-  fetchReport = (pageNumber) => {
-    this.setState({ reportHtml: '' });
-    const offset = (pageNumber - 1) * this.state.pageSize;
-    const params = this.getParams(this.state.pageSize);
-    const url = `/api/reports/templates/${this.state.reportId}/html?${params}&offset=${offset}`;
-
-    apiClient.getText(url)
-      .then((response) => {
-        this.setState({
-          reportHtml: response,
-        });
-        this.checkPageCount();
-      });
-  };
 
   fetchNextPage() {
     const { currentPage } = this.state;
@@ -192,12 +183,53 @@ export default class Report extends Component {
     return this.state.currentPage === this.state.totalPages;
   }
 
+  fetchReport = (pageNumber, size) => {
+    const pageSize = size || this.state.pageSize;
+    if (!pageSize) return;
+    this.setState({
+      pageSize,
+    });
+    const offset = (pageNumber - 1) * pageSize;
+    const params = this.getParams(pageSize);
+    const url = `/api/reports/templates/${this.state.reportId}/json?${params}&offset=${offset}`;
+
+    apiClient.get(url)
+      .then((response) => {
+        const { colModel, totalPages, values } = response[0];
+
+        const templateParameters = [];
+        Object.keys(colModel[0]).forEach((colName) => {
+          const { order } = colModel[0][colName][0];
+          const parameter = this.state.templateParameters.find(param =>
+            param.name === colName);
+          if (parameter) {
+            templateParameters.push({
+              ...parameter,
+              order: parseInt(order, 10),
+            });
+          }
+        });
+        const tableHeaders = Report.getTableHeaders(colModel[0]);
+        const tableData = Report.getTableData(values);
+        const columnWidths = Report.getColumnWidths(tableHeaders, tableData);
+
+        this.setState({
+          tableHeaders,
+          tableData,
+          columnWidths,
+          templateParameters: templateParameters.sort((a, b) => a.order - b.order),
+          totalPages,
+        });
+      });
+  };
+
   render() {
+    const { tableHeaders, columnWidths, tableData } = this.state;
     return (
       <View style={getContainerStyle()}>
         <Text style={[styles.formHeader, lightThemeText]}>{this.state.reportName}</Text>
 
-        <View style={styles.buttonContainer}>
+        <View style={reportStyles.buttonContainer}>
           <Button
             onPress={() => this.fetchPdf()}
             iconName="download"
@@ -216,14 +248,43 @@ export default class Report extends Component {
                       Download XLS
           </Button>
         </View>
-        <View style={reportStyles.reportHtmlStyle}>
-          <WebView
-            source={{ html: this.state.reportHtml }}
-            style={{ flex: 1 }}
-          />
-        </View>
+        <ScrollView horizontal>
+          <View style={reportStyles.container}>
+            <Table borderStyle={{ borderColor: '#c1c0b9' }}>
+              <Row
+                data={tableHeaders}
+                widthArr={columnWidths}
+                style={reportStyles.header}
+                textStyle={reportStyles.text}
+              />
+            </Table>
+            <ScrollView
+              style={reportStyles.dataWrapper}
+              onLayout={(event) => {
+              const { height } = event.nativeEvent.layout;
+              if (!this.state.pageSize) {
+                this.fetchReport(1, Math.floor(height / rowHeight));
+              }
+            }}
+            >
+              <Table borderStyle={{ borderColor: '#c1c0b9' }}>
+                {
+                  tableData.map((rowData, index) => (
+                    <Row
+                      key={index}
+                      data={rowData}
+                      widthArr={columnWidths}
+                      style={[reportStyles.row, { height: rowHeight }, index % 2 && { backgroundColor: '#fff' }]}
+                      textStyle={reportStyles.text}
+                    />
+                  ))
+                }
+              </Table>
+            </ScrollView>
+          </View>
+        </ScrollView>
 
-        <View style={[styles.buttonContainer, { paddingVertical: 10, alignItems: 'center' }]}>
+        <View style={[reportStyles.buttonContainer, { paddingVertical: 5, alignItems: 'center' }]}>
           <Button
             onPress={() => this.fetchFirstPage()}
             iconName="angle-double-left"
