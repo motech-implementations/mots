@@ -21,25 +21,29 @@ const fontWidth = 8;
 const rowHeight = 24;
 
 export default class Report extends Component {
-  static getTableData(values) {
+  static getTableData(columns, values) {
     const tableData = [];
     values.forEach((row) => {
       const rowData = [];
-      Object.keys(row).forEach((colName) => {
-        rowData.push(row[colName]);
-      });
+      columns.forEach(((column) => {
+        rowData.push(row[column.key]);
+      }));
       tableData.push(rowData);
     });
     return tableData;
   }
 
-  static getTableHeaders(colModel) {
+  static getTableColumns(colModel) {
     const columns = [];
     Object.keys(colModel).forEach((colName) => {
-      columns.push(colModel[colName][0]);
+      const column = colModel[colName][0];
+      columns.push({
+        order: column.order,
+        label: column.Header,
+        key: colName,
+      });
     });
-    columns.sort((a, b) => a.order - b.order);
-    return columns.map(column => column.Header);
+    return columns.sort((a, b) => a.order - b.order);
   }
 
   static getColumnWidths(headers, tableData) {
@@ -209,8 +213,9 @@ export default class Report extends Component {
             });
           }
         });
-        const tableHeaders = Report.getTableHeaders(colModel[0]);
-        const tableData = Report.getTableData(values);
+        const columns = Report.getTableColumns(colModel[0]);
+        const tableHeaders = columns.map(column => column.label);
+        const tableData = Report.getTableData(columns, values);
         const columnWidths = Report.getColumnWidths(tableHeaders, tableData);
 
         this.setState({
