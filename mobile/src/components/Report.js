@@ -325,13 +325,6 @@ export default class Report extends Component {
           />
         </View>
 
-        <Filters
-          availableFilters={this.state.templateParameters}
-          onFilter={filters => this.onFilter(filters)}
-          onReset={() => this.onReset()}
-          iconBottom={10}
-          iconRight={20}
-        />
       </View>
     );
   }
