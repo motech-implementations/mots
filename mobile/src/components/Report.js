@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, ScrollView, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { Table, Row } from 'react-native-table-component';
+import { fetchReport } from '../actions/index';
 import apiClient from '../utils/api-client';
 
 import {
@@ -10,7 +12,6 @@ import {
   hasAuthority,
 } from '../utils/authorization';
 import Button from './Button';
-import Filters from './Filters';
 import styles from '../styles/formsStyles';
 import reportStyles from '../styles/reportViewStyles';
 import getContainerStyle from '../utils/styleUtils';
@@ -20,17 +21,17 @@ const { lightThemeText } = commonStyles;
 const fontWidth = 8;
 const rowHeight = 24;
 
-export default class Report extends Component {
-  static getTableData(columns, values) {
-    const tableData = [];
+class Report extends Component {
+  static getTableRows(columns, values) {
+    const tableRows = [];
     values.forEach((row) => {
       const rowData = [];
-      columns.forEach(((column) => {
-        rowData.push(row[column.key]);
-      }));
-      tableData.push(rowData);
+      Object.keys(row).forEach((colName) => {
+        rowData.push(row[colName]);
+      });
+      tableRows.push(rowData);
     });
-    return tableData;
+    return tableRows;
   }
 
   static getTableColumns(colModel) {
@@ -46,9 +47,9 @@ export default class Report extends Component {
     return columns.sort((a, b) => a.order - b.order);
   }
 
-  static getColumnWidths(headers, tableData) {
+  static getColumnWidths(headers, tableRows) {
     const widths = headers.map(header => Math.max(50, (header.length * fontWidth)));
-    tableData.forEach((rowData) => {
+    tableRows.forEach((rowData) => {
       rowData.forEach((value, i) => {
         const len = (value.length * fontWidth);
         if (len > widths[i]) {
@@ -62,73 +63,50 @@ export default class Report extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reportId: '',
-      reportName: '',
-      templateParameters: [],
-      currentPage: 1,
-      totalPages: 1,
-      pageSize: null,
-      maxPageSize: 2147483647,
       staticParams: ['pageSize', 'offset', 'orderBy'],
       tableHeaders: [],
       columnWidths: [],
-      tableData: [],
+      tableRows: [],
+      reportJson: null,
+      pageSize: 10,
+      currentPage: 1,
+      totalPages: 1,
+      totalValues: 0,
     };
 
-    this.fetchReport = this.fetchReport.bind(this);
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.fetchPrevPage = this.fetchPrevPage.bind(this);
     this.fetchFirstPage = this.fetchFirstPage.bind(this);
     this.fetchLastPage = this.fetchLastPage.bind(this);
     this.fetchPdf = this.fetchPdf.bind(this);
     this.fetchXls = this.fetchXls.bind(this);
+    this.setTableData = this.setTableData.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
-      if (result) {
-        this.setState({
-          reportName: this.props.reportName,
-          templateParameters: this.props.templateParameters,
-        });
-        this.setState({ reportId: this.props.reportId }, () => {
-          this.fetchReport(1);
-        });
-      } else {
+      if (!result) {
         Actions.home();
+      } else {
+        this.setTableData();
+        this.props.fetchReport(this.props.reportId);
       }
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ reportId: nextProps.reportId }, () => this.fetchReport(1));
-  }
-
-  onFilter(filters) {
-    this.setState({
-      templateParameters: filters,
-      currentPage: 1,
-    }, () => this.fetchReport(1));
-  }
-
-  onReset() {
-    this.setState({
-      templateParameters: this.state.templateParameters.map((param) => {
-        if (!this.state.staticParams.includes(param.name)) {
-          return {
-            ...param,
-            defaultValue: null,
-          };
-        }
-        return param;
-      }),
-      currentPage: 1,
-    }, () => this.fetchReport(1));
+  componentDidUpdate(prevProps) {
+    if (this.state.reportJson !== this.props.reports[this.props.reportId]) {
+      this.setTableData();
+    }
+    if (this.props.reportId !== prevProps.reportId) {
+      this.props.fetchReport(this.props.reportId);
+      this.resetPagination();
+    }
   }
 
   getParams(pageSize) {
     let stringParams = `pageSize=${pageSize}`;
-    const params = this.state.templateParameters.map(param => param);
+    const params = this.props.templateParameters.map(param => param);
     params.forEach((param) => {
       if (param.defaultValue && !this.state.staticParams.includes(param.name)) {
         stringParams += `&${param.name}=${param.defaultValue}`;
@@ -137,46 +115,98 @@ export default class Report extends Component {
     return stringParams;
   }
 
+  setPageSize(newPageSize) {
+    const { pageSize, currentPage, totalValues } = this.state;
+    if (pageSize !== newPageSize) {
+      const currentIndex = pageSize * (currentPage - 1);
+      this.setState({
+        pageSize: newPageSize,
+        currentPage: Math.floor(currentIndex / newPageSize) + 1,
+        totalPages: Math.ceil(totalValues / newPageSize),
+      }, () => {
+        this.setTableData();
+      });
+    }
+  }
+
+  setTableData() {
+    const reportJson = this.props.reports[this.props.reportId];
+    const newState = {
+      reportJson,
+    };
+    if (reportJson && reportJson.length) {
+      const { colModel, values } = reportJson[0];
+      // get data for current page
+      const { pageSize, currentPage } = this.state;
+      const totalValues = values.length;
+      const totalPages = Math.ceil(totalValues / pageSize);
+      const currentValues = values.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+      // prepare arrays for table-component: headers, rows and column widths
+      const columns = Report.getTableColumns(colModel[0]);
+      const tableHeaders = columns.map(column => column.label);
+      const tableRows = Report.getTableRows(columns, currentValues);
+      const columnWidths = Report.getColumnWidths(tableHeaders, tableRows);
+      Object.assign(newState, {
+        tableHeaders,
+        tableRows,
+        columnWidths,
+        totalPages,
+        totalValues,
+      });
+    }
+    this.setState(newState);
+  };
+
+  resetPagination() {
+    this.setState({
+      currentPage: 1,
+    });
+  }
+
   fetchNextPage() {
     const { currentPage } = this.state;
     if (currentPage + 1 <= this.state.totalPages) {
-      this.fetchReport(currentPage + 1);
-      this.setState({ currentPage: currentPage + 1 });
+      this.setState({ currentPage: currentPage + 1 }, () => {
+        this.setTableData();
+      });
     }
   }
 
   fetchPrevPage() {
     const { currentPage } = this.state;
     if (currentPage - 1 >= 1) {
-      this.fetchReport(currentPage - 1);
-      this.setState({ currentPage: currentPage - 1 });
+      this.setState({ currentPage: currentPage - 1 }, () => {
+        this.setTableData();
+      });
     }
   }
 
   fetchFirstPage() {
     const { currentPage } = this.state;
     if (currentPage !== 1) {
-      this.fetchReport(1);
-      this.setState({ currentPage: 1 });
+      this.setState({ currentPage: 1 }, () => {
+        this.setTableData();
+      });
     }
   }
 
   fetchLastPage() {
     const { currentPage } = this.state;
     if (currentPage !== this.state.totalPages) {
-      this.fetchReport(this.state.totalPages);
-      this.setState({ currentPage: this.state.totalPages });
+      this.setState({ currentPage: this.state.totalPages }, () => {
+        this.setTableData();
+      });
     }
   }
 
   fetchPdf() {
-    const url = `/api/reports/templates/${this.state.reportId}/pdf?pageSize=${this.state.maxPageSize}`;
-    apiClient.downloadReport(url, this.state.reportName, 'pdf');
+    const url = `/api/reports/templates/${this.props.reportId}/pdf?pageSize=${this.state.maxPageSize}`;
+    apiClient.downloadReport(url, this.props.reportName, 'pdf');
   }
 
   fetchXls() {
-    const url = `/api/reports/templates/${this.state.reportId}/xls?pageSize=${this.state.maxPageSize}`;
-    apiClient.downloadReport(url, this.state.reportName, 'xls');
+    const url = `/api/reports/templates/${this.props.reportId}/xls?pageSize=${this.state.maxPageSize}`;
+    apiClient.downloadReport(url, this.props.reportName, 'xls');
   }
 
   prevDisabled() {
@@ -187,52 +217,11 @@ export default class Report extends Component {
     return this.state.currentPage === this.state.totalPages;
   }
 
-  fetchReport = (pageNumber, size) => {
-    const pageSize = size || this.state.pageSize;
-    if (!pageSize) return;
-    this.setState({
-      pageSize,
-    });
-    const offset = (pageNumber - 1) * pageSize;
-    const params = this.getParams(pageSize);
-    const url = `/api/reports/templates/${this.state.reportId}/json?${params}&offset=${offset}`;
-
-    apiClient.get(url)
-      .then((response) => {
-        const { colModel, totalPages, values } = response[0];
-
-        const templateParameters = [];
-        Object.keys(colModel[0]).forEach((colName) => {
-          const { order } = colModel[0][colName][0];
-          const parameter = this.state.templateParameters.find(param =>
-            param.name === colName);
-          if (parameter) {
-            templateParameters.push({
-              ...parameter,
-              order: parseInt(order, 10),
-            });
-          }
-        });
-        const columns = Report.getTableColumns(colModel[0]);
-        const tableHeaders = columns.map(column => column.label);
-        const tableData = Report.getTableData(columns, values);
-        const columnWidths = Report.getColumnWidths(tableHeaders, tableData);
-
-        this.setState({
-          tableHeaders,
-          tableData,
-          columnWidths,
-          templateParameters: templateParameters.sort((a, b) => a.order - b.order),
-          totalPages,
-        });
-      });
-  };
-
   render() {
-    const { tableHeaders, columnWidths, tableData } = this.state;
+    const { tableHeaders, columnWidths, tableRows } = this.state;
     return (
       <View style={getContainerStyle()}>
-        <Text style={[styles.formHeader, lightThemeText]}>{this.state.reportName}</Text>
+        <Text style={[styles.formHeader, lightThemeText]}>{this.props.reportName}</Text>
 
         <View style={reportStyles.buttonContainer}>
           <Button
@@ -267,14 +256,12 @@ export default class Report extends Component {
               style={reportStyles.dataWrapper}
               onLayout={(event) => {
               const { height } = event.nativeEvent.layout;
-              if (!this.state.pageSize) {
-                this.fetchReport(1, Math.floor(height / rowHeight));
-              }
+              this.setPageSize(Math.floor(height / rowHeight));
             }}
             >
               <Table borderStyle={{ borderColor: '#c1c0b9' }}>
                 {
-                  tableData.map((rowData, index) => (
+                  tableRows.map((rowData, index) => (
                     <Row
                       key={index}
                       data={rowData}
@@ -324,13 +311,22 @@ export default class Report extends Component {
             marginLeft={5}
           />
         </View>
-
       </View>
     );
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    reports: state.reportReducer,
+  };
+}
+
+export default connect(mapStateToProps, { fetchReport })(Report);
+
 Report.propTypes = {
+  reports: PropTypes.shape({}).isRequired,
+  fetchReport: PropTypes.func.isRequired,
   reportName: PropTypes.string.isRequired,
   reportId: PropTypes.string.isRequired,
   templateParameters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

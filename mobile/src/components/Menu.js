@@ -64,6 +64,7 @@ class Menu extends Component {
       MANAGE_USERS_AUTHORITY: false,
       MANAGE_INCHARGE_USERS_AUTHORITY: false,
       reportList: [],
+      currentScene: null,
     };
   }
 
@@ -100,16 +101,23 @@ class Menu extends Component {
   openSection(sectionKey) {
     Actions[sectionKey].call();
     this.context.drawer.close();
+    this.setState({ currentScene: sectionKey });
   }
 
   openReportSection(props) {
-    Actions.report(props);
+    if (this.state.currentScene === 'report') {
+      Actions.refresh(props);
+    } else {
+      Actions.report(props);
+      this.setState({ currentScene: 'report' });
+    }
     this.context.drawer.close();
   }
 
   logout() {
     this.props.signoutUser();
     Actions.auth({ type: ActionConst.RESET });
+    this.setState({ currentScene: 'auth' });
   }
 
   fetchReportList() {
