@@ -6,7 +6,7 @@ import parseJwt from '../utils/encodeUtils';
 import {
   AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS,
   SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME, FETCH_USERS, CREATE_USER, SAVE_USER, FETCH_ROLES, SAVE_PROFILE,
+  SET_COUNTER_LOGOUT_TIME, FETCH_USERS, CREATE_USER, SAVE_USER, FETCH_ROLES, SAVE_PROFILE, FETCH_REPORT,
 } from './types';
 
 const BASE_URL = '/api';
@@ -199,5 +199,16 @@ export function saveProfile(values, callback) {
   return {
     type: SAVE_PROFILE,
     payload: request,
+  };
+}
+
+export function fetchReport(templateId) {
+  const url = `/api/reports/templates/${templateId}/json?pageSize=2147483647`;
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_REPORT,
+    payload: request,
+    meta: { templateId },
   };
 }

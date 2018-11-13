@@ -59,7 +59,3 @@ local.properties
 # Jasper files
 reports/*.jasper
 reports/*.jasper.hex
-
-# bundle
-mobile/android/app/src/main/assets/index.android.bundle
-mobile/android/app/src/main/res/drawable*
