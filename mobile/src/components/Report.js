@@ -60,19 +60,21 @@ class Report extends Component {
     return widths;
   }
 
+  static INITIAL_STATE = {
+    staticParams: ['pageSize', 'offset', 'orderBy'],
+    tableHeaders: [],
+    columnWidths: [],
+    tableRows: [],
+    reportJson: null,
+    pageSize: 10,
+    currentPage: 1,
+    totalPages: 1,
+    totalValues: 0,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      staticParams: ['pageSize', 'offset', 'orderBy'],
-      tableHeaders: [],
-      columnWidths: [],
-      tableRows: [],
-      reportJson: null,
-      pageSize: 10,
-      currentPage: 1,
-      totalPages: 1,
-      totalValues: 0,
-    };
+    this.state = Report.INITIAL_STATE;
 
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.fetchPrevPage = this.fetchPrevPage.bind(this);
@@ -95,12 +97,12 @@ class Report extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.reportId !== prevProps.reportId) {
+      this.resetState();
+      this.props.fetchReport(this.props.reportId);
+    }
     if (this.state.reportJson !== this.props.reports[this.props.reportId]) {
       this.setTableData();
-    }
-    if (this.props.reportId !== prevProps.reportId) {
-      this.props.fetchReport(this.props.reportId);
-      this.resetPagination();
     }
   }
 
@@ -131,9 +133,6 @@ class Report extends Component {
 
   setTableData() {
     const reportJson = this.props.reports[this.props.reportId];
-    const newState = {
-      reportJson,
-    };
     if (reportJson && reportJson.length) {
       const { colModel, values } = reportJson[0];
       // get data for current page
@@ -146,21 +145,19 @@ class Report extends Component {
       const tableHeaders = columns.map(column => column.label);
       const tableRows = Report.getTableRows(columns, currentValues);
       const columnWidths = Report.getColumnWidths(tableHeaders, tableRows);
-      Object.assign(newState, {
+      this.setState({
         tableHeaders,
         tableRows,
         columnWidths,
         totalPages,
         totalValues,
+        reportJson,
       });
     }
-    this.setState(newState);
-  };
+  }
 
-  resetPagination() {
-    this.setState({
-      currentPage: 1,
-    });
+  resetState() {
+    this.setState(Report.INITIAL_STATE);
   }
 
   fetchNextPage() {
