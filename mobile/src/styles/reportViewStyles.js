@@ -8,7 +8,7 @@ export default {
     height: 30,
   },
   text: {
-    textAlign: 'center', fontWeight: '100', fontFamily: 'monospace', fontSize: 12,
+    textAlign: 'center', fontWeight: '100', fontFamily: 'monospace', fontSize: 12, flex: 1,
   },
   dataWrapper: {
     marginTop: -1,
@@ -20,5 +20,14 @@ export default {
     flexDirection: 'row',
     justifyContent: 'center',
     paddingTop: 10,
+  },
+  headerCell: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  icon: {
+    marginRight: 4,
+    marginLeft: 'auto',
   },
 };
