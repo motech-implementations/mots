@@ -4,9 +4,9 @@ import AuthClient from '../utils/auth-client';
 import parseJwt from '../utils/encodeUtils';
 
 import {
-  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS,
-  SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME, FETCH_USERS, CREATE_USER, SAVE_USER, FETCH_ROLES, SAVE_PROFILE, FETCH_REPORT,
+  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, SAVE_HEALTH_WORKER, FETCH_LOCATIONS,
+  CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE, SET_COUNTER_LOGOUT_TIME, FETCH_USERS,
+  CREATE_USER, SAVE_USER, FETCH_ROLES, SAVE_PROFILE, FETCH_REPORT, FETCH_REPORT_TEMPLATES,
 } from './types';
 
 const BASE_URL = '/api';
@@ -210,5 +210,15 @@ export function fetchReport(templateId) {
     type: FETCH_REPORT,
     payload: request,
     meta: { templateId },
+  };
+}
+
+export function fetchReportTemplates() {
+  const url = '/api/reports/templates/';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_REPORT_TEMPLATES,
+    payload: request,
   };
 }

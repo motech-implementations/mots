@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Collapsible from './Collapsible';
-import { signoutUser } from '../actions';
-import { CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
+import { fetchReportTemplates, signoutUser } from '../actions';
+import {
+  CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
   DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
   MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY, hasAuthority,
 } from '../utils/authorization';
-import apiClient from '../utils/api-client';
 
 const HIDE_NOT_IMPLEMENTED = true;
 
@@ -63,7 +63,6 @@ class Menu extends Component {
       DISPLAY_REPORTS_AUTHORITY: false,
       MANAGE_USERS_AUTHORITY: false,
       MANAGE_INCHARGE_USERS_AUTHORITY: false,
-      reportList: [],
       currentScene: null,
     };
   }
@@ -87,7 +86,7 @@ class Menu extends Component {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
         this.setState({ DISPLAY_REPORTS_AUTHORITY: true });
-        this.fetchReportList();
+        this.props.fetchReportTemplates();
       }
     });
     hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
@@ -120,21 +119,12 @@ class Menu extends Component {
     this.setState({ currentScene: 'auth' });
   }
 
-  fetchReportList() {
-    const url = '/api/reports/templates/';
-
-    apiClient.get(url)
-      .then((response) => {
-        this.setState({ reportList: response });
-      });
-  }
-
   renderReports() {
-    if (this.state.reportList) {
+    if (this.props.reportTemplates) {
       return (
         <View>
           {
-            this.state.reportList.map(report => (
+            this.props.reportTemplates.map(report => (
               <TouchableOpacity
                 onPress={() => this.openReportSection({
                   reportName: report.name,
@@ -340,8 +330,16 @@ class Menu extends Component {
   }
 }
 
-export default connect(null, { signoutUser })(Menu);
+function mapStateToProps(state) {
+  return {
+    reportTemplates: state.reportReducer.templates,
+  };
+}
+
+export default connect(mapStateToProps, { signoutUser, fetchReportTemplates })(Menu);
 
 Menu.propTypes = {
+  reportTemplates: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   signoutUser: PropTypes.func.isRequired,
+  fetchReportTemplates: PropTypes.func.isRequired,
 };
