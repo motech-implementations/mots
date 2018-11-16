@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
 import { Table, Row } from 'react-native-table-component';
+import Filters, { STATIC_FILTERS } from './Filters';
 import { fetchReport } from '../actions/index';
 import apiClient from '../utils/api-client';
+import createFilter from '../utils/filter';
+import createSorter from '../utils/sort';
 
 import {
   DISPLAY_REPORTS_AUTHORITY,
@@ -20,9 +24,10 @@ import commonStyles from '../styles/commonStyles';
 const { lightThemeText } = commonStyles;
 const fontWidth = 8;
 const rowHeight = 24;
+const sortIconSize = 16;
 
 class Report extends Component {
-  static getTableRows(columns, values) {
+  static getTableRows(values) {
     const tableRows = [];
     values.forEach((row) => {
       const rowData = [];
@@ -47,8 +52,9 @@ class Report extends Component {
     return columns.sort((a, b) => a.order - b.order);
   }
 
-  static getColumnWidths(headers, tableRows) {
-    const widths = headers.map(header => Math.max(50, (header.length * fontWidth)));
+  static getColumnWidths(columns, tableRows) {
+    const widths = columns.map(column => Math.max(50, (
+      column.label.length * fontWidth) + sortIconSize));
     tableRows.forEach((rowData) => {
       rowData.forEach((value, i) => {
         const len = (value.length * fontWidth);
@@ -60,21 +66,9 @@ class Report extends Component {
     return widths;
   }
 
-  static INITIAL_STATE = {
-    staticParams: ['pageSize', 'offset', 'orderBy'],
-    tableHeaders: [],
-    columnWidths: [],
-    tableRows: [],
-    reportJson: null,
-    pageSize: 10,
-    currentPage: 1,
-    totalPages: 1,
-    totalValues: 0,
-  };
-
   constructor(props) {
     super(props);
-    this.state = Report.INITIAL_STATE;
+    this.state = this.getInitialState();
 
     this.fetchNextPage = this.fetchNextPage.bind(this);
     this.fetchPrevPage = this.fetchPrevPage.bind(this);
@@ -85,11 +79,31 @@ class Report extends Component {
     this.setTableData = this.setTableData.bind(this);
   }
 
+  getInitialState() {
+    return {
+      staticParams: ['pageSize', 'offset', 'orderBy'],
+      tableColumns: [],
+      tableHeaders: [],
+      columnWidths: [],
+      tableRows: [],
+      reportJson: null,
+      pageSize: 10,
+      currentPage: 1,
+      totalPages: 1,
+      totalValues: 0,
+      filters: [],
+      sorters: [],
+      templateParameters: this.props.templateParameters,
+    };
+  }
+
+
   componentDidMount() {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (!result) {
         Actions.home();
       } else {
+        this.resetState();
         this.setTableData();
         this.props.fetchReport(this.props.reportId);
       }
@@ -106,15 +120,34 @@ class Report extends Component {
     }
   }
 
-  getParams(pageSize) {
-    let stringParams = `pageSize=${pageSize}`;
-    const params = this.props.templateParameters.map(param => param);
-    params.forEach((param) => {
-      if (param.defaultValue && !this.state.staticParams.includes(param.name)) {
-        stringParams += `&${param.name}=${param.defaultValue}`;
-      }
-    });
-    return stringParams;
+  onFilter(templateParameters) {
+    const filters = templateParameters
+      .filter(param => param.defaultValue !== null && STATIC_FILTERS.indexOf(param.name) === -1)
+      .map(param => ({
+        property: param.name,
+        value: param.defaultValue,
+      }));
+    this.setState({
+      templateParameters,
+      filters,
+      currentPage: 1,
+    }, () => this.setTableData());
+  }
+
+  onReset() {
+    this.setState({
+      templateParameters: this.state.templateParameters.map((param) => {
+        if (!this.state.staticParams.includes(param.name)) {
+          return {
+            ...param,
+            defaultValue: null,
+          };
+        }
+        return param;
+      }),
+      filters: [],
+      currentPage: 1,
+    }, () => this.setTableData());
   }
 
   setPageSize(newPageSize) {
@@ -124,27 +157,50 @@ class Report extends Component {
       this.setState({
         pageSize: newPageSize,
         currentPage: Math.floor(currentIndex / newPageSize) + 1,
-        totalPages: Math.ceil(totalValues / newPageSize),
+        totalPages: Math.max(Math.ceil(totalValues / newPageSize), 1),
       }, () => {
         this.setTableData();
       });
     }
   }
 
+  getHeaderCell(column) {
+    const sorter = this.findSorter(column.key);
+    let icon = 'sort';
+    let color = '#ced4da';
+    if (sorter) {
+      color = '#495057';
+      icon = (sorter.direction === 'asc') ? 'sort-up' : 'sort-down';
+    }
+    return (
+      <TouchableOpacity onPress={() => this.sortBy(column.key)}>
+        <View style={reportStyles.headerCell}>
+          <Text style={reportStyles.text}>{column.label}</Text>
+          <Icon style={reportStyles.icon} name={icon} size={sortIconSize} color={color} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   setTableData() {
     const reportJson = this.props.reports[this.props.reportId];
     if (reportJson && reportJson.length) {
-      const { colModel, values } = reportJson[0];
+      const { colModel } = reportJson[0];
+      const { filters, sorters } = this.state;
+      let { values } = reportJson[0];
+      // filter and sort values
+      values = values.filter(createFilter(...filters));
+      values.sort(createSorter(...sorters));
       // get data for current page
       const { pageSize, currentPage } = this.state;
       const totalValues = values.length;
       const totalPages = Math.ceil(totalValues / pageSize);
       const currentValues = values.slice((currentPage - 1) * pageSize, currentPage * pageSize);
       // prepare arrays for table-component: headers, rows and column widths
-      const columns = Report.getTableColumns(colModel[0]);
-      const tableHeaders = columns.map(column => column.label);
-      const tableRows = Report.getTableRows(columns, currentValues);
-      const columnWidths = Report.getColumnWidths(tableHeaders, tableRows);
+      const tableColumns = Report.getTableColumns(colModel[0]);
+      const tableHeaders = tableColumns.map(column => this.getHeaderCell(column));
+      const tableRows = Report.getTableRows(currentValues);
+      const columnWidths = Report.getColumnWidths(tableColumns, tableRows);
       this.setState({
         tableHeaders,
         tableRows,
@@ -156,8 +212,30 @@ class Report extends Component {
     }
   }
 
+  findSorter(columnKey) {
+    return this.state.sorters.find(s => s.property === columnKey);
+  }
+
+  sortBy(columnKey) {
+    let sorter = this.findSorter(columnKey);
+    if (sorter) {
+      sorter.direction = (sorter.direction === 'asc') ? 'desc' : 'asc';
+    } else {
+      sorter = {
+        property: columnKey,
+        direction: 'asc',
+      };
+    }
+    this.setState({
+      currentPage: 1,
+      sorters: [sorter],
+    }, () => {
+      this.setTableData();
+    });
+  }
+
   resetState() {
-    this.setState(Report.INITIAL_STATE);
+    this.setState(this.getInitialState());
   }
 
   fetchNextPage() {
@@ -246,7 +324,6 @@ class Report extends Component {
                 data={tableHeaders}
                 widthArr={columnWidths}
                 style={reportStyles.header}
-                textStyle={reportStyles.text}
               />
             </Table>
             <ScrollView
@@ -308,6 +385,13 @@ class Report extends Component {
             marginLeft={5}
           />
         </View>
+        <Filters
+          availableFilters={this.state.templateParameters}
+          onFilter={filters => this.onFilter(filters)}
+          onReset={() => this.onReset()}
+          iconBottom={7}
+          iconRight={20}
+        />
       </View>
     );
   }

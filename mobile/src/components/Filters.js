@@ -24,6 +24,7 @@ const {
   containerStyle, labelStyle, labelSelectFieldStyle, optionListStyle, labelFieldStyle,
 } = inputsStyles;
 const { lightThemeText } = commonStyles;
+export const STATIC_FILTERS = ['pageSize', 'offset', 'orderBy'];
 
 export default class Filters extends Component {
   constructor(props) {
@@ -31,7 +32,7 @@ export default class Filters extends Component {
     this.state = {
       modalVisible: false,
       availableFilters: [],
-      staticFilters: ['pageSize', 'offset', 'orderBy'],
+      staticFilters: STATIC_FILTERS,
     };
 
     this.onFilter = this.onFilter.bind(this);
