@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
@@ -70,10 +70,10 @@ class Report extends Component {
     super(props);
     this.state = this.getInitialState();
 
-    this.fetchNextPage = this.fetchNextPage.bind(this);
-    this.fetchPrevPage = this.fetchPrevPage.bind(this);
-    this.fetchFirstPage = this.fetchFirstPage.bind(this);
-    this.fetchLastPage = this.fetchLastPage.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
+    this.firstPage = this.firstPage.bind(this);
+    this.lastPage = this.lastPage.bind(this);
     this.fetchPdf = this.fetchPdf.bind(this);
     this.fetchXls = this.fetchXls.bind(this);
     this.setTableData = this.setTableData.bind(this);
@@ -94,6 +94,8 @@ class Report extends Component {
       filters: [],
       sorters: [],
       templateParameters: this.props.templateParameters,
+      syncDate: null,
+      syncing: false,
     };
   }
 
@@ -105,18 +107,17 @@ class Report extends Component {
       } else {
         this.resetState();
         this.setTableData();
-        this.props.fetchReport(this.props.reportId);
       }
     });
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.reportId !== prevProps.reportId) {
+      // switched to another report
       this.resetState();
-      this.props.fetchReport(this.props.reportId);
-    }
-    if (this.state.reportJson !== this.props.reports[this.props.reportId]) {
-      this.setTableData();
+    } else if (this.state.syncDate !== this.getCurrentReport().syncDate) {
+      // syncing complete
+      this.onSyncComplete();
     }
   }
 
@@ -150,40 +151,19 @@ class Report extends Component {
     }, () => this.setTableData());
   }
 
-  setPageSize(newPageSize) {
-    const { pageSize, currentPage, totalValues } = this.state;
-    if (pageSize !== newPageSize) {
-      const currentIndex = pageSize * (currentPage - 1);
-      this.setState({
-        pageSize: newPageSize,
-        currentPage: Math.floor(currentIndex / newPageSize) + 1,
-        totalPages: Math.max(Math.ceil(totalValues / newPageSize), 1),
-      }, () => {
-        this.setTableData();
-      });
+  onSyncComplete() {
+    this.setState({
+      syncing: false,
+      syncDate: this.getCurrentReport().syncDate,
+    });
+    if (this.state.reportJson !== this.getCurrentReport().jsonData) {
+      // the report has updated
+      this.setTableData();
     }
-  }
-
-  getHeaderCell(column) {
-    const sorter = this.findSorter(column.key);
-    let icon = 'sort';
-    let color = '#ced4da';
-    if (sorter) {
-      color = '#495057';
-      icon = (sorter.direction === 'asc') ? 'sort-up' : 'sort-down';
-    }
-    return (
-      <TouchableOpacity onPress={() => this.sortBy(column.key)}>
-        <View style={reportStyles.headerCell}>
-          <Text style={reportStyles.text}>{column.label}</Text>
-          <Icon style={reportStyles.icon} name={icon} size={sortIconSize} color={color} />
-        </View>
-      </TouchableOpacity>
-    );
   }
 
   setTableData() {
-    const reportJson = this.props.reports[this.props.reportId];
+    const reportJson = this.getCurrentReport().jsonData;
     if (reportJson && reportJson.length) {
       const { colModel } = reportJson[0];
       const { filters, sorters } = this.state;
@@ -212,6 +192,43 @@ class Report extends Component {
     }
   }
 
+  getHeaderCell(column) {
+    const sorter = this.findSorter(column.key);
+    let icon = 'sort';
+    let color = '#ced4da';
+    if (sorter) {
+      color = '#495057';
+      icon = (sorter.direction === 'asc') ? 'sort-up' : 'sort-down';
+    }
+    return (
+      <TouchableOpacity onPress={() => this.sortBy(column.key)}>
+        <View style={reportStyles.headerCell}>
+          <Text style={reportStyles.text}>{column.label}</Text>
+          <Icon style={reportStyles.icon} name={icon} size={sortIconSize} color={color} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+
+  setPageSize(newPageSize) {
+    const { pageSize, currentPage, totalValues } = this.state;
+    if (pageSize !== newPageSize) {
+      const currentIndex = pageSize * (currentPage - 1);
+      this.setState({
+        pageSize: newPageSize,
+        currentPage: Math.floor(currentIndex / newPageSize) + 1,
+        totalPages: Math.max(Math.ceil(totalValues / newPageSize), 1),
+      }, () => {
+        this.setTableData();
+      });
+    }
+  }
+
+  getCurrentReport() {
+    return this.props.reports[this.props.reportId] || {};
+  }
+
   findSorter(columnKey) {
     return this.state.sorters.find(s => s.property === columnKey);
   }
@@ -238,7 +255,7 @@ class Report extends Component {
     this.setState(this.getInitialState());
   }
 
-  fetchNextPage() {
+  nextPage() {
     const { currentPage } = this.state;
     if (currentPage + 1 <= this.state.totalPages) {
       this.setState({ currentPage: currentPage + 1 }, () => {
@@ -247,7 +264,7 @@ class Report extends Component {
     }
   }
 
-  fetchPrevPage() {
+  prevPage() {
     const { currentPage } = this.state;
     if (currentPage - 1 >= 1) {
       this.setState({ currentPage: currentPage - 1 }, () => {
@@ -256,7 +273,7 @@ class Report extends Component {
     }
   }
 
-  fetchFirstPage() {
+  firstPage() {
     const { currentPage } = this.state;
     if (currentPage !== 1) {
       this.setState({ currentPage: 1 }, () => {
@@ -265,13 +282,20 @@ class Report extends Component {
     }
   }
 
-  fetchLastPage() {
+  lastPage() {
     const { currentPage } = this.state;
     if (currentPage !== this.state.totalPages) {
       this.setState({ currentPage: this.state.totalPages }, () => {
         this.setTableData();
       });
     }
+  }
+
+  synchronize() {
+    this.props.fetchReport(this.props.reportId);
+    this.setState({
+      syncing: true,
+    });
   }
 
   fetchPdf() {
@@ -300,23 +324,41 @@ class Report extends Component {
 
         <View style={reportStyles.buttonContainer}>
           <Button
-            onPress={() => this.fetchPdf()}
-            iconName="download"
+            onPress={() => this.synchronize()}
+            iconName="refresh"
             iconColor="#FFF"
             buttonColor="#337ab7"
+            disabled={this.state.syncing}
+            spinning={this.state.syncing}
+            style={reportStyles.synchronizeButton}
           >
-                      Download PDF
+            Synchronize
           </Button>
-          <Button
-            onPress={() => this.fetchXls()}
-            iconName="download"
-            iconColor="#FFF"
-            buttonColor="#449C44"
-            marginLeft={10}
-          >
-                      Download XLS
-          </Button>
+          <View style={reportStyles.downloadButtons}>
+            <Button
+              onPress={() => this.fetchPdf()}
+              iconName="download"
+              iconColor="#FFF"
+              buttonColor="#337ab7"
+            >
+              PDF
+            </Button>
+            <Button
+              onPress={() => this.fetchXls()}
+              iconName="download"
+              iconColor="#FFF"
+              buttonColor="#449C44"
+              style={{ marginLeft: 10 }}
+            >
+              XLS
+            </Button>
+          </View>
         </View>
+        {!this.state.syncDate &&
+        <Text style={{ margin: 10 }}>
+          This report has not yet been synchronized.
+        </Text>
+        }
         <ScrollView horizontal>
           <View style={reportStyles.container}>
             <Table borderStyle={{ borderColor: '#c1c0b9' }}>
@@ -350,39 +392,39 @@ class Report extends Component {
           </View>
         </ScrollView>
 
-        <View style={[reportStyles.buttonContainer, { paddingVertical: 5, alignItems: 'center' }]}>
+        <View style={[reportStyles.buttonContainer, { paddingVertical: 5, alignItems: 'center', justifyContent: 'center' }]}>
           <Button
-            onPress={() => this.fetchFirstPage()}
+            onPress={() => this.firstPage()}
             iconName="angle-double-left"
             iconColor="#FFF"
             buttonColor={this.prevDisabled() ? '#c3c3c3' : '#337ab7'}
             disabled={this.prevDisabled()}
           />
           <Button
-            onPress={() => this.fetchPrevPage()}
+            onPress={() => this.prevPage()}
             iconName="angle-left"
             iconColor="#FFF"
             buttonColor={this.prevDisabled() ? '#c3c3c3' : '#337ab7'}
             disabled={this.prevDisabled()}
-            marginLeft={5}
+            style={{ marginLeft: 5 }}
           />
           <Text style={{ marginHorizontal: 10 }}>
             {`${this.state.currentPage} / ${this.state.totalPages}`}
           </Text>
           <Button
-            onPress={() => this.fetchNextPage()}
+            onPress={() => this.nextPage()}
             iconName="angle-right"
             iconColor="#FFF"
             buttonColor={this.nextDisabled() ? '#c3c3c3' : '#337ab7'}
             disabled={this.nextDisabled()}
           />
           <Button
-            onPress={() => this.fetchLastPage()}
+            onPress={() => this.lastPage()}
             iconName="angle-double-right"
             iconColor="#FFF"
             buttonColor={this.nextDisabled() ? '#c3c3c3' : '#337ab7'}
             disabled={this.nextDisabled()}
-            marginLeft={5}
+            style={{ marginLeft: 5 }}
           />
         </View>
         <Filters
