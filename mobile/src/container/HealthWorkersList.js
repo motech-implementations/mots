@@ -156,7 +156,7 @@ class HealthWorkersList extends Component {
               iconName="arrow-circle-o-right"
               iconColor="#FFF"
               buttonColor="#449C44"
-              marginLeft={5}
+              style={{ marginLeft: 5 }}
             >
               Assign Modules
             </Button>

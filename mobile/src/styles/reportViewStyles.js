@@ -18,8 +18,15 @@ export default {
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
     paddingTop: 10,
+  },
+  downloadButtons: {
+    flexDirection: 'row',
+    marginRight: 10,
+    marginLeft: 'auto',
+  },
+  synchronizeButton: {
+    marginLeft: 10
   },
   headerCell: {
     display: 'flex',

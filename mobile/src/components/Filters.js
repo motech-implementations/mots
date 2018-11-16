@@ -230,7 +230,7 @@ export default class Filters extends Component {
                 iconName="check"
                 iconColor="#FFF"
                 buttonColor="#337ab7"
-                marginLeft={10}
+                style={{ marginLeft: 10 }}
               >
                 Filter
               </Button>

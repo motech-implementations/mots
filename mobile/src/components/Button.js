@@ -2,8 +2,9 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
+import SpinningIcon from './SpinningIcon';
 
-const styles = {
+const defaultStyles = {
   actionButton: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -20,16 +21,24 @@ const styles = {
 };
 
 const Button = ({
-  onPress, children, iconName, iconColor, buttonColor, marginLeft, disabled,
+  onPress, children, iconName, iconColor, buttonColor, style, disabled, spinning,
 }) => {
-  const { actionButton, buttonLabel } = styles;
+  const { actionButton, buttonLabel } = defaultStyles;
+  const buttonStyles = {
+    backgroundColor: (disabled) ? '#c3c3c3' : buttonColor,
+    ...style,
+  };
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[actionButton, { backgroundColor: buttonColor, marginLeft }]}
+      style={[actionButton, buttonStyles]}
       disabled={disabled}
     >
-      <Icon name={iconName} size={16} color={iconColor} />
+      {spinning ? (
+        <SpinningIcon name={iconName} size={16} color={iconColor} />
+      ) : (
+        <Icon name={iconName} size={16} color={iconColor} />
+      )}
       <Text style={buttonLabel}>
         {children}
       </Text>
@@ -45,12 +54,14 @@ Button.propTypes = {
   buttonColor: PropTypes.string.isRequired,
   children: PropTypes.string,
   onPress: PropTypes.func.isRequired,
-  marginLeft: PropTypes.number,
   disabled: PropTypes.bool,
+  spinning: PropTypes.bool,
+  style: PropTypes.shape({}),
 };
 
 Button.defaultProps = {
   children: '',
-  marginLeft: 0,
   disabled: false,
+  style: {},
+  spinning: false,
 };

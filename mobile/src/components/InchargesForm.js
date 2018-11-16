@@ -202,7 +202,7 @@ class InchargesForm extends Component {
           iconName="ban"
           iconColor="#FFF"
           buttonColor="grey"
-          marginLeft={10}
+          style={{ marginLeft: 10 }}
         >
                 Cancel
         </Button>

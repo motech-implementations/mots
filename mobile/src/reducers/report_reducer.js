@@ -7,7 +7,10 @@ export default function (state = initialState, action) {
     case FETCH_REPORT:
       if (action.payload && action.payload.length) {
         const newState = Object.assign({}, state);
-        newState[action.meta.templateId] = action.payload || [];
+        newState[action.meta.templateId] = {
+          jsonData: action.payload,
+          syncDate: new Date(),
+        };
         return newState;
       }
       return state;
