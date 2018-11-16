@@ -441,7 +441,7 @@ class Report extends Component {
 
 function mapStateToProps(state) {
   return {
-    reports: state.reportReducer,
+    reports: state.reportReducer.reports,
   };
 }
 
