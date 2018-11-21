@@ -5,28 +5,53 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
 import jwtDecode from 'jwt-decode';
 
-import { AUTH_USER, SET_COUNTER_LOGOUT_TIME, UNAUTH_USER } from '../../actions/types';
+import { AUTH_USER, UNAUTH_USER } from '../../actions/types';
 import { useRefreshToken } from '../../actions';
 import { dispatch } from '../../App';
 
 export default (ComposedComponent) => {
   class Authentication extends Component {
-    componentWillMount() {
-      this.checkIfAuthenticated();
+    constructor(props) {
+      super(props);
+      this.state = {
+        logoutInterval: null,
+      };
     }
-
+    componentWillMount() {
+      this.checkIfAuthenticated(this.props);
+    }
     componentWillUpdate(nextProps) {
       this.checkIfAuthenticated(nextProps);
+    }
+    componentWillUnmount() {
+      clearInterval(this.state.logoutInterval);
+    }
+
+    logoutIfExpired = () => {
+      const isExpired = this.props.expirationDate < new Date();
+      if (isExpired) {
+        dispatch({ type: UNAUTH_USER });
+        clearInterval(this.state.logoutInterval);
+      }
+      return isExpired;
+    };
+
+    createLogoutInterval() {
+      if (this.state.logoutInterval === null) {
+        this.setState({
+          logoutInterval: setInterval(this.logoutIfExpired, 1000),
+        });
+      }
     }
 
     checkIfAuthenticated(nextProps) {
       AsyncStorage.getItem('token', (err, token) => {
         if (token) {
-          const decoded = jwtDecode(token);
-          const currentTime = Date.now() / 1000;
-          if (decoded.exp < currentTime) {
-            AsyncStorage.getItem('refresh_token', (errRef, refreshToken) => {
-              if (refreshToken) {
+          AsyncStorage.getItem('refresh_token', (errRef, refreshToken) => {
+            const decoded = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+            if (refreshToken) {
+              if (decoded.exp < currentTime) {
                 const refreshDecoded = jwtDecode(refreshToken);
 
                 if (refreshDecoded.exp < currentTime) {
@@ -35,16 +60,12 @@ export default (ComposedComponent) => {
                   dispatch(useRefreshToken(refreshToken));
                 }
               } else {
-                dispatch({ type: UNAUTH_USER });
+                dispatch({ type: AUTH_USER });
               }
-            });
-          } else {
-            dispatch({ type: AUTH_USER });
-            dispatch({
-              type: SET_COUNTER_LOGOUT_TIME,
-              payload: decoded.exp_period,
-            });
-          }
+            } else if (nextProps.expirationDate && nextProps.authenticated) {
+              this.createLogoutInterval();
+            }
+          });
         } else {
           dispatch({ type: UNAUTH_USER });
         }
@@ -61,11 +82,19 @@ export default (ComposedComponent) => {
   }
 
   function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated };
+    return {
+      authenticated: state.auth.authenticated,
+      expirationDate: state.auth.expirationDate,
+    };
   }
 
   Authentication.propTypes = {
     authenticated: PropTypes.bool.isRequired,
+    expirationDate: PropTypes.instanceOf(Date),
+  };
+
+  Authentication.defaultProps = {
+    expirationDate: null,
   };
 
   return connect(mapStateToProps)(Authentication);

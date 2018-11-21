@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, NetInfo } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
@@ -86,7 +86,11 @@ class Menu extends Component {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
         this.setState({ DISPLAY_REPORTS_AUTHORITY: true });
-        this.props.fetchReportTemplates();
+        NetInfo.isConnected.fetch().then((isConnected) => {
+          if (isConnected) {
+            this.props.fetchReportTemplates();
+          }
+        });
       }
     });
     hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
