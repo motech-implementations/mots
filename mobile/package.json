@@ -40,6 +40,8 @@
     "redux-persist": "^5.5.0",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
-    "react-native-table-component": "^1.1.8"
+    "react-native-table-component": "^1.1.8",
+    "react-native-bcrypt": "^2.4.0",
+    "react-native-securerandom": "motech-implementations/react-native-securerandom#061f8a837af407cd437930d73a8faeca2eb6e22f"
   }
 }

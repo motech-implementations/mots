@@ -1,7 +1,7 @@
 export const AUTH_USER = 'auth_user';
 export const UNAUTH_USER = 'unauth_user';
 export const AUTH_ERROR = 'auth_error';
-export const SET_COUNTER_LOGOUT_TIME = 'set_counter_logout_time';
+export const STORE_LOGIN = 'store_login';
 
 export const CREATE_USER = 'create_users';
 export const SAVE_USER = 'save_users';

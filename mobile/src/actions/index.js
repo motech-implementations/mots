@@ -1,12 +1,28 @@
-import { AsyncStorage } from 'react-native';
+import { NetInfo, AsyncStorage } from 'react-native';
 import apiClient from '../utils/api-client';
 import AuthClient from '../utils/auth-client';
 import parseJwt from '../utils/encodeUtils';
+import { getHash, checkHash } from '../utils/authorization';
 
 import {
-  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS, SAVE_HEALTH_WORKER, FETCH_LOCATIONS,
-  CREATE_INCHARGE, FETCH_INCHARGES, SAVE_INCHARGE, SET_COUNTER_LOGOUT_TIME, FETCH_USERS,
-  CREATE_USER, SAVE_USER, FETCH_ROLES, SAVE_PROFILE, FETCH_REPORT, FETCH_REPORT_TEMPLATES,
+  AUTH_USER,
+  UNAUTH_USER,
+  AUTH_ERROR,
+  FETCH_CHWS,
+  SAVE_HEALTH_WORKER,
+  FETCH_LOCATIONS,
+  CREATE_INCHARGE,
+  FETCH_INCHARGES,
+  SAVE_INCHARGE,
+  SET_COUNTER_LOGOUT_TIME,
+  FETCH_USERS,
+  CREATE_USER,
+  SAVE_USER,
+  FETCH_ROLES,
+  SAVE_PROFILE,
+  FETCH_REPORT,
+  FETCH_REPORT_TEMPLATES,
+  STORE_LOGIN,
 } from './types';
 
 const BASE_URL = '/api';
@@ -26,28 +42,64 @@ export function authError(error) {
   };
 }
 
-export function signinUser({ username, password }, callback, errorCallback) {
-  return (dispatch) => {
-    authClient.getToken(username, password)
-      .then((response) => {
-        response.json().then((data) => {
-          dispatch({ type: AUTH_USER });
-          const tokenDecoded = parseJwt(data.access_token);
-          dispatch({
-            type: SET_COUNTER_LOGOUT_TIME,
-            payload: tokenDecoded.exp_period,
-          });
-          AsyncStorage.setItem('token', data.access_token);
-          AsyncStorage.setItem('refresh_token', data.refresh_token);
-          callback();
-        }).catch(() => {
-          errorCallback();
-        });
-      })
-      .catch(() => {
+function signInOffline(dispatch, username, password, savedLogin, callback, errorCallback) {
+  if (savedLogin) {
+    checkHash(password, savedLogin.hash, (result) => {
+      if (result) {
+        const tokenDecoded = parseJwt(savedLogin.token);
+        dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
+        AsyncStorage.setItem('token', savedLogin.token);
+        callback();
+      } else {
         dispatch(authError('Wrong username or password. Please try again.'));
         errorCallback();
-      });
+      }
+    });
+  } else {
+    dispatch(authError('Please try again in online mode.'));
+    errorCallback();
+  }
+}
+
+function storeLogin(dispatch, username, password, token) {
+  getHash(password, (hash) => {
+    dispatch({
+      type: STORE_LOGIN,
+      payload: {
+        username,
+        hash,
+        token,
+      },
+    });
+  });
+}
+
+export function signinUser({ username, password, savedLogin }, callback, errorCallback) {
+  return (dispatch) => {
+    NetInfo.isConnected.fetch().then((isConnected) => {
+      if (isConnected) {
+        authClient.getToken(username, password)
+          .then((response) => {
+            response.json().then((data) => {
+              const tokenDecoded = parseJwt(data.access_token);
+              dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
+              AsyncStorage.setItem('token', data.access_token);
+              AsyncStorage.setItem('refresh_token', data.refresh_token);
+              storeLogin(dispatch, username, password, data.access_token);
+              callback();
+            }).catch(() => {
+              dispatch(authError('Wrong username or password. Please try again.'));
+              errorCallback();
+            });
+          })
+          .catch(() => {
+            // could not get response from the server. try signing in offline
+            signInOffline(dispatch, username, password, savedLogin, callback, errorCallback);
+          });
+      } else {
+        signInOffline(dispatch, username, password, savedLogin, callback, errorCallback);
+      }
+    });
   };
 }
 
@@ -57,10 +109,9 @@ export function useRefreshToken(refreshToken, callback) {
       .then(response =>
         response.json())
       .then((data) => {
-        dispatch({ type: AUTH_USER });
         const tokenDecoded = parseJwt(data.access_token);
         dispatch({
-          type: SET_COUNTER_LOGOUT_TIME,
+          type: AUTH_USER,
           payload: tokenDecoded.exp_period,
         });
         AsyncStorage.setItem('token', data.access_token);
