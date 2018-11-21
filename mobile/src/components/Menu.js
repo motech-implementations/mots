@@ -64,7 +64,9 @@ class Menu extends Component {
       MANAGE_USERS_AUTHORITY: false,
       MANAGE_INCHARGE_USERS_AUTHORITY: false,
       currentScene: null,
+      isConnected: false,
     };
+    this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
   }
 
   componentWillMount() {
@@ -98,6 +100,26 @@ class Menu extends Component {
     });
     hasAuthority(MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
       if (result) { this.setState({ MANAGE_INCHARGE_USERS_AUTHORITY: true }); }
+    });
+    NetInfo.getConnectionInfo().then(this.handleConnectivityChange);
+    NetInfo.addEventListener(
+      'connectionChange',
+      this.handleConnectivityChange,
+    );
+  }
+
+  componentWillUnmount() {
+    NetInfo.removeEventListener(
+      'connectionChange',
+      this.handleConnectivityChange,
+    );
+  }
+
+  handleConnectivityChange(connectionInfo) {
+    const { type } = connectionInfo;
+    const isConnected = (type !== 'none' && type !== 'unknown');
+    this.setState({
+      isConnected,
     });
   }
 
@@ -159,6 +181,7 @@ class Menu extends Component {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>Menu</Text>
         <ScrollView style={styles.container}>
+          {this.state.isConnected &&
           <TouchableOpacity
             onPress={() => this.openSection('profile')}
             style={styles.menuItem}
@@ -168,6 +191,7 @@ class Menu extends Component {
             </View>
             <Text style={styles.menuItemText}>Profile</Text>
           </TouchableOpacity>
+          }
 
           <TouchableOpacity
             onPress={() => this.openSection('home')}
@@ -179,7 +203,8 @@ class Menu extends Component {
             <Text style={styles.menuItemText}>Home</Text>
           </TouchableOpacity>
 
-          { (this.state.CHW_READ_AUTHORITY || this.state.CHW_WRITE_AUTHORITY) &&
+          { this.state.isConnected
+          && (this.state.CHW_READ_AUTHORITY || this.state.CHW_WRITE_AUTHORITY) &&
           <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
             <View>
               { this.state.CHW_WRITE_AUTHORITY &&
@@ -219,7 +244,7 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { this.state.ASSIGN_MODULES_AUTHORITY &&
+          { this.state.isConnected && this.state.ASSIGN_MODULES_AUTHORITY &&
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
             <TouchableOpacity
               onPress={() => this.openSection('modulesToDistrict')}
@@ -233,7 +258,8 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { (this.state.INCHARGE_WRITE_AUTHORITY || this.state.INCHARGE_READ_AUTHORITY) &&
+          { this.state.isConnected
+          && (this.state.INCHARGE_WRITE_AUTHORITY || this.state.INCHARGE_READ_AUTHORITY) &&
           <Collapsible title="Incharge" headerIcon="user-md" style={styles.menuItem}>
             <View>
               { this.state.INCHARGE_WRITE_AUTHORITY &&
@@ -248,7 +274,7 @@ class Menu extends Component {
               </TouchableOpacity>
               }
 
-              { this.state.INCHARGE_READ_AUTHORITY &&
+              { this.state.isConnected && this.state.INCHARGE_READ_AUTHORITY &&
               <View>
                 <TouchableOpacity
                   onPress={() => this.openSection('allIncharges')}
@@ -280,7 +306,8 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { (this.state.MANAGE_USERS_AUTHORITY || this.state.MANAGE_INCHARGE_USERS_AUTHORITY) &&
+          { this.state.isConnected
+          && (this.state.MANAGE_USERS_AUTHORITY || this.state.MANAGE_INCHARGE_USERS_AUTHORITY) &&
             <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
               <View>
                 <TouchableOpacity
