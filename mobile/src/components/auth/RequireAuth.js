@@ -18,7 +18,7 @@ export default (ComposedComponent) => {
       };
     }
     componentWillMount() {
-      this.checkIfAuthenticated(this.props);
+      this.checkIfAuthenticated();
     }
     componentWillUpdate(nextProps) {
       this.checkIfAuthenticated(nextProps);
@@ -28,7 +28,7 @@ export default (ComposedComponent) => {
     }
 
     logoutIfExpired = () => {
-      const isExpired = this.props.expirationDate < new Date();
+      const isExpired = this.props.expirationTime < new Date().getTime();
       if (isExpired) {
         dispatch({ type: UNAUTH_USER });
         clearInterval(this.state.logoutInterval);
@@ -46,8 +46,8 @@ export default (ComposedComponent) => {
 
     checkIfAuthenticated(nextProps) {
       AsyncStorage.getItem('token', (err, token) => {
-        if (token) {
-          AsyncStorage.getItem('refresh_token', (errRef, refreshToken) => {
+        AsyncStorage.getItem('refresh_token', (errRef, refreshToken) => {
+          if (token) {
             const decoded = jwtDecode(token);
             const currentTime = Date.now() / 1000;
             if (refreshToken) {
@@ -62,17 +62,17 @@ export default (ComposedComponent) => {
               } else {
                 dispatch({ type: AUTH_USER });
               }
-            } else if (nextProps.expirationDate && nextProps.authenticated) {
+            } else if (this.props.expirationTime && this.props.authenticated) {
               this.createLogoutInterval();
             }
-          });
-        } else {
-          dispatch({ type: UNAUTH_USER });
-        }
+          } else {
+            dispatch({ type: UNAUTH_USER });
+          }
 
-        if ((nextProps && !nextProps.authenticated) || !this.props.authenticated) {
-          Actions.auth({ type: ActionConst.RESET });
-        }
+          if ((nextProps && !nextProps.authenticated) || !this.props.authenticated) {
+            Actions.auth({ type: ActionConst.RESET });
+          }
+        });
       });
     }
 
@@ -84,17 +84,17 @@ export default (ComposedComponent) => {
   function mapStateToProps(state) {
     return {
       authenticated: state.auth.authenticated,
-      expirationDate: state.auth.expirationDate,
+      expirationTime: state.auth.expirationTime,
     };
   }
 
   Authentication.propTypes = {
     authenticated: PropTypes.bool.isRequired,
-    expirationDate: PropTypes.instanceOf(Date),
+    expirationTime: PropTypes.number,
   };
 
   Authentication.defaultProps = {
-    expirationDate: null,
+    expirationTime: null,
   };
 
   return connect(mapStateToProps)(Authentication);
