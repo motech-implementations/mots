@@ -16,14 +16,13 @@ import {
   hasAuthority,
 } from '../utils/authorization';
 import Button from './Button';
-import styles from '../styles/formsStyles';
 import reportStyles from '../styles/reportViewStyles';
 import getContainerStyle from '../utils/styleUtils';
 import commonStyles from '../styles/commonStyles';
 
 const { lightThemeText } = commonStyles;
 const fontWidth = 8;
-const rowHeight = 24;
+const rowHeight = 22;
 const sortIconSize = 16;
 
 class Report extends Component {
@@ -64,6 +63,12 @@ class Report extends Component {
       });
     });
     return widths;
+  }
+
+  static formatDate(date) {
+    const dateAndTime = new Date(date).toISOString().split('T');
+    const time = dateAndTime[1].split('.')[0];
+    return `${dateAndTime[0]} ${time}`;
   }
 
   constructor(props) {
@@ -320,7 +325,18 @@ class Report extends Component {
     const { tableHeaders, columnWidths, tableRows } = this.state;
     return (
       <View style={getContainerStyle()}>
-        <Text style={[styles.formHeader, lightThemeText]}>{this.props.reportName}</Text>
+        <View style={[reportStyles.pageHeader, lightThemeText]}>
+          <Text style={[reportStyles.reportName,
+            this.state.syncDate ? [] : reportStyles.additionalPadding]}
+          >
+            { this.props.reportName }
+          </Text>
+          {this.state.syncDate &&
+          <Text style={reportStyles.syncDate}>
+            Synchronized at {Report.formatDate(this.state.syncDate)}
+          </Text>
+          }
+        </View>
 
         <View style={reportStyles.buttonContainer}>
           <Button
