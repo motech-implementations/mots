@@ -24,3 +24,5 @@ export const FETCH_LOCATIONS = 'fetch_locations';
 
 export const FETCH_REPORT = 'FETCH_REPORT';
 export const FETCH_REPORT_TEMPLATES = 'FETCH_REPORT_TEMPLATES';
+
+export const SET_CONNECTION_STATE = 'SET_CONNECTION_STATE';

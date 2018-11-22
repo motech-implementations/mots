@@ -344,7 +344,7 @@ class Report extends Component {
             iconName="refresh"
             iconColor="#FFF"
             buttonColor="#337ab7"
-            disabled={this.state.syncing}
+            disabled={this.state.syncing || !this.props.isConnected}
             spinning={this.state.syncing}
             style={reportStyles.synchronizeButton}
           >
@@ -356,6 +356,7 @@ class Report extends Component {
               iconName="download"
               iconColor="#FFF"
               buttonColor="#337ab7"
+              disabled={!this.props.isConnected}
             >
               PDF
             </Button>
@@ -365,6 +366,7 @@ class Report extends Component {
               iconColor="#FFF"
               buttonColor="#449C44"
               style={{ marginLeft: 10 }}
+              disabled={!this.props.isConnected}
             >
               XLS
             </Button>
@@ -458,6 +460,7 @@ class Report extends Component {
 function mapStateToProps(state) {
   return {
     reports: state.reportReducer.reports,
+    isConnected: state.connectionReducer.isConnected,
   };
 }
 
@@ -465,6 +468,7 @@ export default connect(mapStateToProps, { fetchReport })(Report);
 
 Report.propTypes = {
   reports: PropTypes.shape({}).isRequired,
+  isConnected: PropTypes.bool.isRequired,
   fetchReport: PropTypes.func.isRequired,
   reportName: PropTypes.string.isRequired,
   reportId: PropTypes.string.isRequired,

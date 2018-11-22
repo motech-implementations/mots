@@ -14,7 +14,6 @@ import {
   CREATE_INCHARGE,
   FETCH_INCHARGES,
   SAVE_INCHARGE,
-  SET_COUNTER_LOGOUT_TIME,
   FETCH_USERS,
   CREATE_USER,
   SAVE_USER,
@@ -23,6 +22,7 @@ import {
   FETCH_REPORT,
   FETCH_REPORT_TEMPLATES,
   STORE_LOGIN,
+  SET_CONNECTION_STATE,
 } from './types';
 
 const BASE_URL = '/api';
@@ -271,5 +271,12 @@ export function fetchReportTemplates() {
   return {
     type: FETCH_REPORT_TEMPLATES,
     payload: request,
+  };
+}
+
+export function setConnectionState(connectionInfo) {
+  return {
+    type: SET_CONNECTION_STATE,
+    payload: connectionInfo,
   };
 }
