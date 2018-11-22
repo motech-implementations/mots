@@ -4,6 +4,22 @@ export default {
     paddingTop: 10,
     backgroundColor: '#fff',
   },
+  pageHeader: {
+    paddingVertical: 5,
+    backgroundColor: '#B4B7C0',
+    borderBottomWidth: 0.1,
+  },
+  additionalPadding: {
+    paddingVertical: 10,
+  },
+  reportName: {
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  syncDate: {
+    fontSize: 12,
+    textAlign: 'center',
+  },
   header: {
     height: 30,
   },
@@ -26,7 +42,7 @@ export default {
     marginLeft: 'auto',
   },
   synchronizeButton: {
-    marginLeft: 10
+    marginLeft: 10,
   },
   headerCell: {
     display: 'flex',
