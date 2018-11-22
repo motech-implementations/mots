@@ -5,26 +5,26 @@ import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, STORE_LOGIN } from '../actions/type
 const initialState = {
   error: null,
   authenticated: false,
-  expirationDate: null,
+  expirationTime: null,
   savedLogins: {},
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case AUTH_USER: {
-      const expirationDate = (action.payload) ?
-        new Date(new Date().getTime() + (action.payload * 1000)) : state.expirationDate;
+      const expirationTime = (action.payload) ?
+        new Date().getTime() + (action.payload * 1000) : state.expirationTime;
       return {
         ...state,
         error: null,
         authenticated: true,
-        expirationDate,
+        expirationTime,
       };
     }
     case UNAUTH_USER:
       AsyncStorage.removeItem('token');
       AsyncStorage.removeItem('refresh_token');
-      return { ...state, authenticated: false };
+      return { ...state, authenticated: false, expirationTime: null };
     case AUTH_ERROR:
       return { ...state, error: action.payload, authenticated: false };
     case STORE_LOGIN: {
