@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, TouchableOpacity, NetInfo } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
@@ -64,9 +64,7 @@ class Menu extends Component {
       MANAGE_USERS_AUTHORITY: false,
       MANAGE_INCHARGE_USERS_AUTHORITY: false,
       currentScene: null,
-      isConnected: false,
     };
-    this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
   }
 
   componentWillMount() {
@@ -88,11 +86,9 @@ class Menu extends Component {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
         this.setState({ DISPLAY_REPORTS_AUTHORITY: true });
-        NetInfo.isConnected.fetch().then((isConnected) => {
-          if (isConnected) {
-            this.props.fetchReportTemplates();
-          }
-        });
+        if (this.props.isConnected) {
+          this.props.fetchReportTemplates();
+        }
       }
     });
     hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
@@ -100,26 +96,6 @@ class Menu extends Component {
     });
     hasAuthority(MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
       if (result) { this.setState({ MANAGE_INCHARGE_USERS_AUTHORITY: true }); }
-    });
-    NetInfo.getConnectionInfo().then(this.handleConnectivityChange);
-    NetInfo.addEventListener(
-      'connectionChange',
-      this.handleConnectivityChange,
-    );
-  }
-
-  componentWillUnmount() {
-    NetInfo.removeEventListener(
-      'connectionChange',
-      this.handleConnectivityChange,
-    );
-  }
-
-  handleConnectivityChange(connectionInfo) {
-    const { type } = connectionInfo;
-    const isConnected = (type !== 'none' && type !== 'unknown');
-    this.setState({
-      isConnected,
     });
   }
 
@@ -181,7 +157,7 @@ class Menu extends Component {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>Menu</Text>
         <ScrollView style={styles.container}>
-          {this.state.isConnected &&
+          {this.props.isConnected &&
           <TouchableOpacity
             onPress={() => this.openSection('profile')}
             style={styles.menuItem}
@@ -203,7 +179,7 @@ class Menu extends Component {
             <Text style={styles.menuItemText}>Home</Text>
           </TouchableOpacity>
 
-          { this.state.isConnected
+          { this.props.isConnected
           && (this.state.CHW_READ_AUTHORITY || this.state.CHW_WRITE_AUTHORITY) &&
           <Collapsible title="CHW" headerIcon="users" style={styles.menuItem}>
             <View>
@@ -244,7 +220,7 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { this.state.isConnected && this.state.ASSIGN_MODULES_AUTHORITY &&
+          { this.props.isConnected && this.state.ASSIGN_MODULES_AUTHORITY &&
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
             <TouchableOpacity
               onPress={() => this.openSection('modulesToDistrict')}
@@ -258,7 +234,7 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { this.state.isConnected
+          { this.props.isConnected
           && (this.state.INCHARGE_WRITE_AUTHORITY || this.state.INCHARGE_READ_AUTHORITY) &&
           <Collapsible title="Incharge" headerIcon="user-md" style={styles.menuItem}>
             <View>
@@ -274,7 +250,7 @@ class Menu extends Component {
               </TouchableOpacity>
               }
 
-              { this.state.isConnected && this.state.INCHARGE_READ_AUTHORITY &&
+              { this.props.isConnected && this.state.INCHARGE_READ_AUTHORITY &&
               <View>
                 <TouchableOpacity
                   onPress={() => this.openSection('allIncharges')}
@@ -306,7 +282,7 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { this.state.isConnected
+          { this.props.isConnected
           && (this.state.MANAGE_USERS_AUTHORITY || this.state.MANAGE_INCHARGE_USERS_AUTHORITY) &&
             <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
               <View>
@@ -364,6 +340,7 @@ class Menu extends Component {
 function mapStateToProps(state) {
   return {
     reportTemplates: state.reportReducer.templates,
+    isConnected: state.connectionReducer.isConnected,
   };
 }
 
@@ -371,6 +348,7 @@ export default connect(mapStateToProps, { signoutUser, fetchReportTemplates })(M
 
 Menu.propTypes = {
   reportTemplates: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  isConnected: PropTypes.bool.isRequired,
   signoutUser: PropTypes.func.isRequired,
   fetchReportTemplates: PropTypes.func.isRequired,
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Scene, Router, Modal } from 'react-native-router-flux';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, NetInfo } from 'react-native';
 
 import Header from './components/Header';
 import ModalInfo from './components/ModalInfo';
@@ -29,6 +29,7 @@ import Login from './container/Login';
 import requireAuth from './components/auth/RequireAuth';
 import Report from './components/Report';
 import ProfileEdit from './components/ProfileEdit';
+import { setConnectionState } from './actions';
 
 export const { dispatch } = Store;
 
@@ -70,6 +71,12 @@ const App = () => (
       </Router>
     </Provider>
   </View>
+);
+
+NetInfo.getConnectionInfo().then(connInfo => dispatch(setConnectionState(connInfo)));
+NetInfo.addEventListener(
+  'connectionChange',
+  connInfo => dispatch(setConnectionState(connInfo)),
 );
 
 export default App;
