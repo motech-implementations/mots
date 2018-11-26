@@ -8,8 +8,6 @@ const doFilter = (item, filter) => {
   return value.test(item[filter.property]);
 };
 
-const createFilter = (...filters) => {
-  return item => filters.every(filter => doFilter(item, filter));
-};
+const createFilter = (...filters) => item => filters.every(filter => doFilter(item, filter));
 
 export default createFilter;
