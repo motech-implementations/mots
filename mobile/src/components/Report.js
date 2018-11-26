@@ -476,6 +476,7 @@ class Report extends Component {
           onVisibilityToggle={isVisible => this.onFilterVisibilityToggle(isVisible)}
           iconBottom={7}
           iconRight={20}
+          useLabelsAsValues
         />
       </View>
     );

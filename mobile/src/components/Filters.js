@@ -132,7 +132,9 @@ export default class Filters extends Component {
         const emptyValue = '';
         const availableOptions = field.options.map((option) => {
           const split = option.split(':');
-          return { value: split[0], name: split[1] };
+          const name = split[1];
+          const value = (this.props.useLabelsAsValues) ? name : split[0];
+          return { value, name };
         });
         const selected = availableOptions.find(option => option.value === field.defaultValue);
         return (
@@ -255,6 +257,7 @@ Filters.propTypes = {
   iconRight: PropTypes.number,
   iconBottom: PropTypes.number,
   iconLeft: PropTypes.number,
+  useLabelsAsValues: PropTypes.bool,
 };
 
 Filters.defaultProps = {
@@ -267,4 +270,5 @@ Filters.defaultProps = {
   iconRight: null,
   iconBottom: null,
   iconLeft: null,
+  useLabelsAsValues: false,
 };
