@@ -101,6 +101,7 @@ class Report extends Component {
       templateParameters: this.props.templateParameters,
       syncDate: null,
       syncing: false,
+      filtersVisible: false,
     };
   }
 
@@ -220,8 +221,10 @@ class Report extends Component {
 
 
   setPageSize(newPageSize) {
-    const { pageSize, currentPage, totalValues } = this.state;
-    if (pageSize !== newPageSize) {
+    const {
+      pageSize, currentPage, totalValues, filtersVisible,
+    } = this.state;
+    if (pageSize !== newPageSize && !filtersVisible) {
       const currentIndex = pageSize * (currentPage - 1);
       this.setState({
         pageSize: newPageSize,
@@ -235,6 +238,12 @@ class Report extends Component {
 
   getCurrentReport() {
     return this.props.reports[this.props.reportId] || {};
+  }
+
+  onFilterVisibilityToggle(filtersVisible) {
+    this.setState({
+      filtersVisible,
+    });
   }
 
   getSortedTemplateParameters(tableColumns) {
@@ -464,6 +473,7 @@ class Report extends Component {
           availableFilters={this.state.templateParameters}
           onFilter={filters => this.onFilter(filters)}
           onReset={() => this.onReset()}
+          onVisibilityToggle={isVisible => this.onFilterVisibilityToggle(isVisible)}
           iconBottom={7}
           iconRight={20}
         />
