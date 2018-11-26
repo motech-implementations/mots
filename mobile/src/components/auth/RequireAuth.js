@@ -28,7 +28,8 @@ export default (ComposedComponent) => {
     }
 
     logoutIfExpired = () => {
-      const isExpired = this.props.expirationTime < new Date().getTime();
+      const isExpired = this.props.expirationTime
+        && this.props.expirationTime < new Date().getTime();
       if (isExpired) {
         dispatch({ type: UNAUTH_USER });
         clearInterval(this.state.logoutInterval);

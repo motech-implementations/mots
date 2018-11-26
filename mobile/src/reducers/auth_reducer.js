@@ -9,11 +9,13 @@ const initialState = {
   savedLogins: {},
 };
 
+const OFFLINE_LOGIN_DURATION = 1800;
+
 export default function (state = initialState, action) {
   switch (action.type) {
     case AUTH_USER: {
       const expirationTime = (action.payload) ?
-        new Date().getTime() + (action.payload * 1000) : state.expirationTime;
+        new Date().getTime() + (OFFLINE_LOGIN_DURATION * 1000) : state.expirationTime;
       return {
         ...state,
         error: null,
