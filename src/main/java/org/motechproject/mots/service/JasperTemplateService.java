@@ -8,6 +8,7 @@ import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -63,6 +64,22 @@ public class JasperTemplateService {
 
     validateFileAndSaveTemplate(jasperTemplate, file);
     return jasperTemplate;
+  }
+
+  /**
+   * Updates the json output and version in a report template.
+   *
+   * @param jasperTemplate the report's template
+   * @param jsonOutput the json output of given template
+   * @return saved report template
+   */
+  public JasperTemplate saveJsonOutput(
+      JasperTemplate jasperTemplate, String jsonOutput)
+      throws ReportingException {
+    jasperTemplate.setJsonOutput(jsonOutput);
+    long outputVersion = Instant.now().toEpochMilli();
+    jasperTemplate.setJsonOutputVersion(outputVersion);
+    return jasperTemplateRepository.save(jasperTemplate);
   }
 
   /**

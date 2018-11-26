@@ -120,7 +120,7 @@
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Order By"/>
 		<property name="required" value="true"/>
-		<defaultValueExpression><![CDATA["loginDate DESC"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["loginDate DESC, logoutDate DESC"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="String"/>

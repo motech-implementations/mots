@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 
 @Builder
 @Entity
@@ -51,6 +52,17 @@ public class JasperTemplate extends BaseTimestampedEntity {
   @Getter
   @Setter
   private String description;
+
+  @Column(name = "json_output")
+  @Type(type = "text")
+  @Getter
+  @Setter
+  private String jsonOutput;
+
+  @Column(name = "json_output_version")
+  @Getter
+  @Setter
+  private Long jsonOutputVersion;
 
   @Column(name = "supported_formats")
   @CollectionTable(name = "jasper_template_supported_formats",
