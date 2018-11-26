@@ -101,6 +101,7 @@ class Report extends Component {
       templateParameters: this.props.templateParameters,
       syncDate: null,
       syncing: false,
+      filtersVisible: false,
     };
   }
 
@@ -179,13 +180,15 @@ class Report extends Component {
       // get data for current page
       const { pageSize, currentPage } = this.state;
       const totalValues = values.length;
-      const totalPages = Math.ceil(totalValues / pageSize);
+      const totalPages = Math.ceil((totalValues || 1) / pageSize);
       const currentValues = values.slice((currentPage - 1) * pageSize, currentPage * pageSize);
       // prepare arrays for table-component: headers, rows and column widths
       const tableColumns = Report.getTableColumns(colModel[0]);
       const tableHeaders = tableColumns.map(column => this.getHeaderCell(column));
       const tableRows = Report.getTableRows(currentValues);
       const columnWidths = Report.getColumnWidths(tableColumns, tableRows);
+      // sort template parameters with the same order as columns
+      const templateParameters = this.getSortedTemplateParameters(tableColumns);
       this.setState({
         tableHeaders,
         tableRows,
@@ -193,6 +196,7 @@ class Report extends Component {
         totalPages,
         totalValues,
         reportJson,
+        templateParameters,
       });
     }
   }
@@ -217,8 +221,10 @@ class Report extends Component {
 
 
   setPageSize(newPageSize) {
-    const { pageSize, currentPage, totalValues } = this.state;
-    if (pageSize !== newPageSize) {
+    const {
+      pageSize, currentPage, totalValues, filtersVisible,
+    } = this.state;
+    if (pageSize !== newPageSize && !filtersVisible) {
       const currentIndex = pageSize * (currentPage - 1);
       this.setState({
         pageSize: newPageSize,
@@ -232,6 +238,24 @@ class Report extends Component {
 
   getCurrentReport() {
     return this.props.reports[this.props.reportId] || {};
+  }
+
+  onFilterVisibilityToggle(filtersVisible) {
+    this.setState({
+      filtersVisible,
+    });
+  }
+
+  getSortedTemplateParameters(tableColumns) {
+    const templateParameters = [];
+    tableColumns.forEach((column) => {
+      const parameter = this.state.templateParameters.find(param =>
+        param.name === column.key);
+      if (parameter) {
+        templateParameters.push(parameter);
+      }
+    });
+    return templateParameters;
   }
 
   findSorter(columnKey) {
@@ -449,6 +473,7 @@ class Report extends Component {
           availableFilters={this.state.templateParameters}
           onFilter={filters => this.onFilter(filters)}
           onReset={() => this.onReset()}
+          onVisibilityToggle={isVisible => this.onFilterVisibilityToggle(isVisible)}
           iconBottom={7}
           iconRight={20}
         />

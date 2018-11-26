@@ -68,8 +68,10 @@ export default class Filters extends Component {
   }
 
   onPress() {
+    const modalVisible = !this.state.modalVisible;
+    this.props.onVisibilityToggle(modalVisible);
     this.setState({
-      modalVisible: !this.state.modalVisible,
+      modalVisible,
     });
   }
 
@@ -245,6 +247,7 @@ export default class Filters extends Component {
 Filters.propTypes = {
   onFilter: PropTypes.func,
   onReset: PropTypes.func,
+  onVisibilityToggle: PropTypes.func,
   transparent: PropTypes.bool,
   animationType: PropTypes.string,
   availableFilters: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -257,6 +260,7 @@ Filters.propTypes = {
 Filters.defaultProps = {
   onFilter: () => {},
   onReset: () => {},
+  onVisibilityToggle: () => {},
   transparent: false,
   animationType: 'slide',
   iconTop: null,
