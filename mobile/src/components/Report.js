@@ -26,12 +26,12 @@ const rowHeight = 22;
 const sortIconSize = 16;
 
 class Report extends Component {
-  static getTableRows(values) {
+  static getTableRows(values, columns) {
     const tableRows = [];
     values.forEach((row) => {
       const rowData = [];
-      Object.keys(row).forEach((colName) => {
-        rowData.push(row[colName]);
+      columns.forEach((column) => {
+        rowData.push(row[column.key]);
       });
       tableRows.push(rowData);
     });
@@ -157,6 +157,12 @@ class Report extends Component {
     }, () => this.setTableData());
   }
 
+  onFilterVisibilityToggle(filtersVisible) {
+    this.setState({
+      filtersVisible,
+    });
+  }
+
   onSyncComplete() {
     this.setState({
       syncing: false,
@@ -185,7 +191,7 @@ class Report extends Component {
       // prepare arrays for table-component: headers, rows and column widths
       const tableColumns = Report.getTableColumns(colModel[0]);
       const tableHeaders = tableColumns.map(column => this.getHeaderCell(column));
-      const tableRows = Report.getTableRows(currentValues);
+      const tableRows = Report.getTableRows(currentValues, tableColumns);
       const columnWidths = Report.getColumnWidths(tableColumns, tableRows);
       // sort template parameters with the same order as columns
       const templateParameters = this.getSortedTemplateParameters(tableColumns);
@@ -238,12 +244,6 @@ class Report extends Component {
 
   getCurrentReport() {
     return this.props.reports[this.props.reportId] || {};
-  }
-
-  onFilterVisibilityToggle(filtersVisible) {
-    this.setState({
-      filtersVisible,
-    });
   }
 
   getSortedTemplateParameters(tableColumns) {
