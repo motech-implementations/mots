@@ -7,6 +7,7 @@ import tablesDataReducer from './tables-data/tables_data_reducer';
 import locationsReducer from './locations_reducer';
 import reportReducer from './report_reducer';
 import connectionReducer from './connection_reducer';
+import sceneReducer from './scene_reducer';
 
 const persistConfig = {
   key: 'root',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   form: formReducer,
   reportReducer,
   connectionReducer,
+  sceneReducer,
 });
 const persistedReducers = persistReducer(persistConfig, rootReducer);
 

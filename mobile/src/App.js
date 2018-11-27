@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import { Scene, Router, Modal } from 'react-native-router-flux';
 import { View, StatusBar, NetInfo } from 'react-native';
 
@@ -32,12 +32,13 @@ import ProfileEdit from './components/ProfileEdit';
 import { setConnectionState } from './actions';
 
 export const { dispatch } = Store;
+const ConnectedRouter = connect()(Router);
 
 const App = () => (
   <View style={{ flex: 1 }}>
     <StatusBar backgroundColor="black" barStyle="light-content" />
     <Provider store={Store}>
-      <Router>
+      <ConnectedRouter>
         <Scene key="modal" component={Modal}>
           <Scene key="auth">
             <Scene key="login" component={Login} hideNavBar />
@@ -68,7 +69,7 @@ const App = () => (
           <Scene key="modalConfirm" component={ModalConfirm} hideNavBar />
           <Scene key="modalSuccess" component={ModalSuccess} hideNavBar />
         </Scene>
-      </Router>
+      </ConnectedRouter>
     </Provider>
   </View>
 );

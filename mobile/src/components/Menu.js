@@ -63,7 +63,6 @@ class Menu extends Component {
       DISPLAY_REPORTS_AUTHORITY: false,
       MANAGE_USERS_AUTHORITY: false,
       MANAGE_INCHARGE_USERS_AUTHORITY: false,
-      currentScene: null,
     };
   }
 
@@ -102,15 +101,13 @@ class Menu extends Component {
   openSection(sectionKey) {
     Actions[sectionKey].call();
     this.context.drawer.close();
-    this.setState({ currentScene: sectionKey });
   }
 
   openReportSection(props) {
-    if (this.state.currentScene === 'report') {
+    if (this.props.currentScene.indexOf('report') !== -1) {
       Actions.refresh(props);
     } else {
       Actions.report(props);
-      this.setState({ currentScene: 'report' });
     }
     this.context.drawer.close();
   }
@@ -118,7 +115,6 @@ class Menu extends Component {
   logout() {
     this.props.signoutUser();
     Actions.auth({ type: ActionConst.RESET });
-    this.setState({ currentScene: 'auth' });
   }
 
   renderReports() {
@@ -341,6 +337,7 @@ function mapStateToProps(state) {
   return {
     reportTemplates: state.reportReducer.templates,
     isConnected: state.connectionReducer.isConnected,
+    currentScene: state.sceneReducer.currentScene,
   };
 }
 
@@ -351,4 +348,9 @@ Menu.propTypes = {
   isConnected: PropTypes.bool.isRequired,
   signoutUser: PropTypes.func.isRequired,
   fetchReportTemplates: PropTypes.func.isRequired,
+  currentScene: PropTypes.string,
+};
+
+Menu.defaultProps = {
+  currentScene: '',
 };
