@@ -11,6 +11,12 @@ const initialState = {
 
 const OFFLINE_LOGIN_DURATION = 1800;
 
+function clearLoginState() {
+  AsyncStorage.removeItem('token');
+  AsyncStorage.removeItem('refresh_token');
+  return { authenticated: false, expirationTime: null };
+}
+
 export default function (state = initialState, action) {
   switch (action.type) {
     case AUTH_USER: {
@@ -24,11 +30,9 @@ export default function (state = initialState, action) {
       };
     }
     case UNAUTH_USER:
-      AsyncStorage.removeItem('token');
-      AsyncStorage.removeItem('refresh_token');
-      return { ...state, authenticated: false, expirationTime: null };
+      return { ...state, ...clearLoginState() };
     case AUTH_ERROR:
-      return { ...state, error: action.payload, authenticated: false };
+      return { ...state, ...clearLoginState(), error: action.payload };
     case STORE_LOGIN: {
       const { username, hash, token } = action.payload;
       return {
