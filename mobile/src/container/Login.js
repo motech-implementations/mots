@@ -4,7 +4,7 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import InputWithIcon from '../components/InputWithIcon';
-import { signinUser } from '../actions';
+import { signIn, signInOffline } from '../actions';
 import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import styles from '../styles/formsStyles';
@@ -41,11 +41,14 @@ class Login extends Component {
     this.setState({ error: '', loading: true });
     const { username, password } = this.state;
     const savedLogin = this.props.savedLogins[username];
-    this.props.signinUser({
+    const signInFn = (this.props.isConnected) ? this.props.signIn : this.props.signInOffline;
+    signInFn(
       username,
       password,
       savedLogin,
-    }, (() => this.onLoginSuccess()), () => this.onLoginFail());
+      () => this.onLoginSuccess(),
+      () => this.onLoginFail(),
+    );
   }
 
   onLoginSuccess() {
@@ -155,14 +158,17 @@ class Login extends Component {
 function mapStateToProps(state) {
   return {
     savedLogins: state.auth.savedLogins,
+    isConnected: state.connectionReducer.isConnected,
     error: state.auth.error,
   };
 }
 
-export default connect(mapStateToProps, { signinUser })(Login);
+export default connect(mapStateToProps, { signIn, signInOffline })(Login);
 
 Login.propTypes = {
-  signinUser: PropTypes.func.isRequired,
+  signIn: PropTypes.func.isRequired,
+  signInOffline: PropTypes.func.isRequired,
+  isConnected: PropTypes.bool.isRequired,
   error: PropTypes.string,
   savedLogins: PropTypes.shape({}).isRequired,
 };

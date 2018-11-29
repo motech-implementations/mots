@@ -5,11 +5,12 @@ import { offline } from '@redux-offline/redux-offline';
 import defaultConfig from '@redux-offline/redux-offline/lib/defaults';
 import apiClient from './utils/api-client';
 
-import reducers from './reducers';
+import reducers, { persistOptions } from './reducers';
 
 const myOfflineConfig = {
   ...defaultConfig,
   effect: effect => apiClient.send(effect),
+  persistOptions,
 };
 
 const store = createStore(
