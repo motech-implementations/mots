@@ -50,6 +50,7 @@ export function signInOffline(username, password, savedLogin, callback, errorCal
           const tokenDecoded = parseJwt(savedLogin.token);
           dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
           AsyncStorage.setItem('token', savedLogin.token);
+          AsyncStorage.removeItem('refresh_token');
           callback();
         } else {
           dispatch(authError('Wrong username or password. Please try again.'));
