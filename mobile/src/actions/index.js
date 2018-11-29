@@ -1,4 +1,4 @@
-import { NetInfo, AsyncStorage } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import apiClient from '../utils/api-client';
 import AuthClient from '../utils/auth-client';
 import parseJwt from '../utils/encodeUtils';
@@ -42,23 +42,25 @@ export function authError(error) {
   };
 }
 
-function signInOffline(dispatch, username, password, savedLogin, callback, errorCallback) {
-  if (savedLogin) {
-    checkHash(password, savedLogin.hash, (result) => {
-      if (result) {
-        const tokenDecoded = parseJwt(savedLogin.token);
-        dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
-        AsyncStorage.setItem('token', savedLogin.token);
-        callback();
-      } else {
-        dispatch(authError('Wrong username or password. Please try again.'));
-        errorCallback();
-      }
-    });
-  } else {
-    dispatch(authError('Please try again in online mode.'));
-    errorCallback();
-  }
+export function signInOffline(username, password, savedLogin, callback, errorCallback) {
+  return (dispatch) => {
+    if (savedLogin) {
+      checkHash(password, savedLogin.hash, (result) => {
+        if (result) {
+          const tokenDecoded = parseJwt(savedLogin.token);
+          dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
+          AsyncStorage.setItem('token', savedLogin.token);
+          callback();
+        } else {
+          dispatch(authError('Wrong username or password. Please try again.'));
+          errorCallback();
+        }
+      });
+    } else {
+      dispatch(authError('Please try again in online mode.'));
+      errorCallback();
+    }
+  };
 }
 
 function storeLogin(dispatch, username, password, token) {
@@ -74,32 +76,26 @@ function storeLogin(dispatch, username, password, token) {
   });
 }
 
-export function signinUser({ username, password, savedLogin }, callback, errorCallback) {
+export function signIn(username, password, savedLogin, callback, errorCallback) {
   return (dispatch) => {
-    NetInfo.isConnected.fetch().then((isConnected) => {
-      if (isConnected) {
-        authClient.getToken(username, password)
-          .then((response) => {
-            response.json().then((data) => {
-              const tokenDecoded = parseJwt(data.access_token);
-              dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
-              AsyncStorage.setItem('token', data.access_token);
-              AsyncStorage.setItem('refresh_token', data.refresh_token);
-              storeLogin(dispatch, username, password, data.access_token);
-              callback();
-            }).catch(() => {
-              dispatch(authError('Wrong username or password. Please try again.'));
-              errorCallback();
-            });
-          })
-          .catch(() => {
-            // could not get response from the server. try signing in offline
-            signInOffline(dispatch, username, password, savedLogin, callback, errorCallback);
-          });
-      } else {
-        signInOffline(dispatch, username, password, savedLogin, callback, errorCallback);
-      }
-    });
+    authClient.getToken(username, password)
+      .then((response) => {
+        response.json().then((data) => {
+          const tokenDecoded = parseJwt(data.access_token);
+          dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
+          AsyncStorage.setItem('token', data.access_token);
+          AsyncStorage.setItem('refresh_token', data.refresh_token);
+          storeLogin(dispatch, username, password, data.access_token);
+          callback();
+        }).catch(() => {
+          dispatch(authError('Wrong username or password. Please try again.'));
+          errorCallback();
+        });
+      })
+      .catch(() => {
+        // could not get response from the server. try signing in offline
+        dispatch(signInOffline(username, password, savedLogin, callback, errorCallback));
+      });
   };
 }
 

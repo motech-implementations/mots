@@ -9,24 +9,27 @@ import reportReducer from './report_reducer';
 import connectionReducer from './connection_reducer';
 import sceneReducer from './scene_reducer';
 
+export const persistOptions = {
+  blacklist: ['connection'],
+};
+
 const persistConfig = {
   key: 'root',
   storage,
 };
 
-const authPersistConfig = {
-  key: 'auth',
+const connectionPersistConfig = {
+  key: 'connection',
   storage,
-  blacklist: ['error'],
 };
 
 const rootReducer = combineReducers({
-  auth: persistReducer(authPersistConfig, authReducer),
+  auth: authReducer,
   tablesReducer: tablesDataReducer,
   availableLocations: locationsReducer,
   form: formReducer,
   reportReducer,
-  connectionReducer,
+  connectionReducer: persistReducer(connectionPersistConfig, connectionReducer),
   sceneReducer,
 });
 const persistedReducers = persistReducer(persistConfig, rootReducer);
