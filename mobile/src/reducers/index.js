@@ -10,16 +10,11 @@ import connectionReducer from './connection_reducer';
 import sceneReducer from './scene_reducer';
 
 export const persistOptions = {
-  blacklist: ['connection'],
+  blacklist: ['connectionReducer'],
 };
 
 const persistConfig = {
   key: 'root',
-  storage,
-};
-
-const connectionPersistConfig = {
-  key: 'connection',
   storage,
 };
 
@@ -29,7 +24,7 @@ const rootReducer = combineReducers({
   availableLocations: locationsReducer,
   form: formReducer,
   reportReducer,
-  connectionReducer: persistReducer(connectionPersistConfig, connectionReducer),
+  connectionReducer,
   sceneReducer,
 });
 const persistedReducers = persistReducer(persistConfig, rootReducer);
