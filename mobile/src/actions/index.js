@@ -82,8 +82,7 @@ export function signIn(username, password, savedLogin, callback, errorCallback) 
     authClient.getToken(username, password)
       .then((response) => {
         response.json().then((data) => {
-          const tokenDecoded = parseJwt(data.access_token);
-          dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
+          dispatch({ type: AUTH_USER });
           AsyncStorage.setItem('token', data.access_token);
           AsyncStorage.setItem('refresh_token', data.refresh_token);
           storeLogin(dispatch, username, password, data.access_token);

@@ -85,7 +85,7 @@ class Menu extends Component {
     hasAuthority(DISPLAY_REPORTS_AUTHORITY).then((result) => {
       if (result) {
         this.setState({ DISPLAY_REPORTS_AUTHORITY: true });
-        if (this.props.isConnected) {
+        if (this.props.isConnected && this.props.expirationTime === null) {
           this.props.fetchReportTemplates();
         }
       }
@@ -338,6 +338,7 @@ function mapStateToProps(state) {
     reportTemplates: state.reportReducer.templates,
     isConnected: state.connectionReducer.isConnected,
     currentScene: state.sceneReducer.currentScene,
+    expirationTime: state.auth.expirationTime,
   };
 }
 
@@ -349,8 +350,10 @@ Menu.propTypes = {
   signoutUser: PropTypes.func.isRequired,
   fetchReportTemplates: PropTypes.func.isRequired,
   currentScene: PropTypes.string,
+  expirationTime: PropTypes.number,
 };
 
 Menu.defaultProps = {
   currentScene: '',
+  expirationTime: null,
 };

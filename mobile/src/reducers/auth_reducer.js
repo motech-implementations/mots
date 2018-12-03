@@ -21,7 +21,7 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case AUTH_USER: {
       const expirationTime = (action.payload) ?
-        new Date().getTime() + (OFFLINE_LOGIN_DURATION * 1000) : state.expirationTime;
+        new Date().getTime() + (OFFLINE_LOGIN_DURATION * 1000) : null;
       return {
         ...state,
         error: null,
