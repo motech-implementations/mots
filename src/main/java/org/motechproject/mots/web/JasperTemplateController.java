@@ -2,14 +2,19 @@ package org.motechproject.mots.web;
 
 import static org.motechproject.mots.constants.ReportingMessages.ERROR_JASPER_TEMPLATE_NOT_FOUND;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
+import net.sf.jasperreports.engine.JRException;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.JasperTemplate;
 import org.motechproject.mots.dto.JasperTemplateDto;
+import org.motechproject.mots.dto.VersionedReportDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.JasperReportViewException;
 import org.motechproject.mots.exception.ReportingException;
@@ -19,11 +24,13 @@ import org.motechproject.mots.service.JasperReportsViewService;
 import org.motechproject.mots.service.JasperTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -152,6 +159,45 @@ public class JasperTemplateController extends BaseController {
         .setProperty(format, contentDisposition.toLowerCase(Locale.ENGLISH));
 
     return new ModelAndView(jasperView, map);
+  }
+
+  /**
+   * Generate a report based on the template and request parameters.
+   * Return the generated report only if its version has changed
+   *
+   * @param request    request (to get the request parameters)
+   * @param templateId report template ID
+   * @param version     a version (timestamp) of the report
+   * @return the generated report along with its version
+   */
+  @RequestMapping(value = "/{id}/json/versioned", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseBody
+  public Object generateReportIfModified(
+      HttpServletRequest request, @PathVariable("id") UUID templateId,
+      @RequestParam(value = "version") long version) throws SQLException, JRException, IOException {
+    JasperTemplate template = jasperTemplateRepository.findOne(templateId);
+
+    if (template == null) {
+      throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);
+    }
+    Map<String, Object> reportParams = new HashMap<>();
+    reportParams.put("pageSize", String.valueOf(Integer.MAX_VALUE));
+    reportParams.put("format", "json");
+
+    String jsonOutput = jasperReportsViewService.generateJsonReport(template, reportParams);
+
+    if (jsonOutput.equals(template.getJsonOutput())) {
+      Long currentVersion = template.getJsonOutputVersion();
+      if (currentVersion > version) {
+        return new VersionedReportDto(template.getJsonOutput(), currentVersion);
+      } else {
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+      }
+    } else {
+      template = jasperTemplateService.saveJsonOutput(template, jsonOutput);
+      return new VersionedReportDto(jsonOutput, template.getJsonOutputVersion());
+    }
   }
 
 }

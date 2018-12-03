@@ -11,13 +11,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JsonMetadataExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import org.motechproject.mots.domain.JasperTemplate;
 import org.motechproject.mots.exception.JasperReportViewException;
 import org.motechproject.mots.utils.JasperReportsJsonView;
@@ -52,9 +61,9 @@ public class JasperReportsViewService {
   public JasperReportsMultiFormatView getJasperReportsView(
       JasperTemplate jasperTemplate, HttpServletRequest request) throws JasperReportViewException {
     JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
-    setExportParams(jasperView);
+    jasperView.setExporterParameters(getExportParams());
     setFormatMappings(jasperView);
-    jasperView.setUrl(getReportUrlForReportData(jasperTemplate));
+    jasperView.setUrl(getReportUrlForReportData(jasperTemplate).toString());
     jasperView.setJdbcDataSource(replicationDataSource);
 
     if (getApplicationContext(request) != null) {
@@ -64,12 +73,36 @@ public class JasperReportsViewService {
   }
 
   /**
-   * Set export parameters in jasper view.
+   * Generate Jasper Report in JSON format.
+   *
+   * @param jasperTemplate template that will be used to generate the report
+   * @return generated json
+   * @throws JRException if there will be any problem with creating the report.
    */
-  private void setExportParams(JasperReportsMultiFormatView jasperView) {
+  public String generateJsonReport(
+      JasperTemplate jasperTemplate, Map<String, Object> params)
+      throws JRException, SQLException {
+    JasperReport jasperReport = (JasperReport) JRLoader.loadObject(
+        getReportUrlForReportData(jasperTemplate));
+    JasperPrint jasperPrint = JasperFillManager.fillReport(
+        jasperReport, params, replicationDataSource.getConnection());
+
+    StringBuilder output = new StringBuilder();
+    JsonMetadataExporter jsonExporter = new JsonMetadataExporter();
+    jsonExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+    jsonExporter.setExporterOutput(new SimpleWriterExporterOutput(output));
+    jsonExporter.exportReport();
+
+    return output.toString();
+  }
+
+  /**
+   * Get export parameters.
+   */
+  private Map<JRExporterParameter, Object> getExportParams() {
     Map<JRExporterParameter, Object> reportFormatMap = new HashMap<>();
     reportFormatMap.put(IS_USING_IMAGES_TO_ALIGN, false);
-    jasperView.setExporterParameters(reportFormatMap);
+    return reportFormatMap;
   }
 
   /**
@@ -85,7 +118,7 @@ public class JasperReportsViewService {
    *
    * @return Url to ".jasper" file.
    */
-  private String getReportUrlForReportData(JasperTemplate jasperTemplate)
+  private URL getReportUrlForReportData(JasperTemplate jasperTemplate)
       throws JasperReportViewException {
     File tmpFile;
 
@@ -105,7 +138,7 @@ public class JasperReportsViewService {
         out.writeObject(jasperReport);
         writeByteArrayToFile(tmpFile, bos.toByteArray());
 
-        return tmpFile.toURI().toURL().toString();
+        return tmpFile.toURI().toURL();
       }
     } catch (IOException | ClassNotFoundException exp) {
       throw new JasperReportViewException(exp, exp.getMessage());
