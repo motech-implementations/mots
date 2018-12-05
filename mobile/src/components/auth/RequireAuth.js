@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import jwtDecode from 'jwt-decode';
 
-import { AUTH_USER, UNAUTH_USER } from '../../actions/types';
+import { UNAUTH_USER } from '../../actions/types';
 import { useRefreshToken } from '../../actions';
 import { dispatch } from '../../App';
 
@@ -59,13 +59,9 @@ export default (ComposedComponent) => {
             } else {
               dispatch(useRefreshToken(refreshToken));
             }
-          } else {
-            dispatch({ type: AUTH_USER, payload: { accessToken, refreshToken } });
           }
         } else if (this.props.expirationTime && this.props.authenticated) {
           this.createLogoutInterval();
-        } else {
-          dispatch({ type: UNAUTH_USER });
         }
       }
 

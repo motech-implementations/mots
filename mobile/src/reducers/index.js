@@ -8,6 +8,7 @@ import locationsReducer from './locations_reducer';
 import reportReducer from './report_reducer';
 import connectionReducer from './connection_reducer';
 import sceneReducer from './scene_reducer';
+import persistenceReducer from './persistence_reducer';
 
 export const persistOptions = {
   blacklist: ['connectionReducer'],
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   reportReducer,
   connectionReducer,
   sceneReducer,
+  persistenceReducer,
 });
 const persistedReducers = persistReducer(persistConfig, rootReducer);
 
