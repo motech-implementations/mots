@@ -1,7 +1,5 @@
-import { AsyncStorage } from 'react-native';
 import apiClient from '../utils/api-client';
 import AuthClient from '../utils/auth-client';
-import parseJwt from '../utils/encodeUtils';
 import { getHash, checkHash } from '../utils/authorization';
 
 import {
@@ -47,10 +45,14 @@ export function signInOffline(username, password, savedLogin, callback, errorCal
     if (savedLogin) {
       checkHash(password, savedLogin.hash, (result) => {
         if (result) {
-          const tokenDecoded = parseJwt(savedLogin.token);
-          dispatch({ type: AUTH_USER, payload: tokenDecoded.exp_period });
-          AsyncStorage.setItem('token', savedLogin.token);
-          AsyncStorage.removeItem('refresh_token');
+          dispatch({
+            type: AUTH_USER,
+            payload: {
+              isOffline: true,
+              accessToken: savedLogin.token,
+              refreshToken: null,
+            },
+          });
           callback();
         } else {
           dispatch(authError('Wrong username or password. Please try again.'));
@@ -82,9 +84,13 @@ export function signIn(username, password, savedLogin, callback, errorCallback) 
     authClient.getToken(username, password)
       .then((response) => {
         response.json().then((data) => {
-          dispatch({ type: AUTH_USER });
-          AsyncStorage.setItem('token', data.access_token);
-          AsyncStorage.setItem('refresh_token', data.refresh_token);
+          dispatch({
+            type: AUTH_USER,
+            payload: {
+              accessToken: data.access_token,
+              refreshToken: data.refresh_token,
+            },
+          });
           storeLogin(dispatch, username, password, data.access_token);
           callback();
         }).catch(() => {
@@ -105,14 +111,13 @@ export function useRefreshToken(refreshToken, callback) {
       .then(response =>
         response.json())
       .then((data) => {
-        const tokenDecoded = parseJwt(data.access_token);
         dispatch({
           type: AUTH_USER,
-          payload: tokenDecoded.exp_period,
+          payload: {
+            accessToken: data.access_token,
+            refreshToken: data.refresh_token,
+          },
         });
-        AsyncStorage.setItem('token', data.access_token);
-        AsyncStorage.setItem('refresh_token', data.refresh_token);
-        dispatch({ type: AUTH_USER });
 
         if (callback) {
           return callback();
