@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, NetInfo } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { dispatch } from '../App';
+
 import Collapsible from './Collapsible';
-import { fetchReportTemplates, signoutUser } from '../actions';
+import { fetchReportTemplates, signoutUser, setLastOnlineTime } from '../actions';
 import {
   CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
   DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
@@ -32,6 +34,10 @@ const styles = {
     fontSize: 19,
     color: '#337ab7',
     paddingLeft: 5,
+  },
+  lastOnlineText: {
+    color: '#B00020',
+    textAlign: 'center',
   },
   iconContainer: {
     justifyContent: 'center',
@@ -98,6 +104,24 @@ class Menu extends Component {
     });
   }
 
+  componentDidMount() {
+    NetInfo.isConnected.fetch().then((isConnected) => {
+      dispatch(setLastOnlineTime(isConnected));
+    });
+
+    NetInfo.isConnected.addEventListener(
+      'connectionChange',
+      isConnected => dispatch(setLastOnlineTime(isConnected)),
+    );
+  }
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      'connectionChange',
+      isConnected => dispatch(setLastOnlineTime(isConnected)),
+    );
+  }
+
   openSection(sectionKey) {
     Actions[sectionKey].call();
     this.context.drawer.close();
@@ -152,6 +176,13 @@ class Menu extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>Menu</Text>
+        {!this.props.isConnected && this.props.lastOnlineTime !== null &&
+          <Text style={[styles.lastOnlineText]}>
+            <Icon name="info-circle" />
+            {` Last online at ${new Date(this.props.lastOnlineTime).toLocaleTimeString()} ${new Date(this.props.lastOnlineTime).toLocaleDateString()}`}
+          </Text>
+        }
+
         <ScrollView style={styles.container}>
           {this.props.isConnected &&
           <TouchableOpacity
@@ -339,6 +370,7 @@ function mapStateToProps(state) {
     isConnected: state.connectionReducer.isConnected,
     currentScene: state.sceneReducer.currentScene,
     expirationTime: state.auth.expirationTime,
+    lastOnlineTime: state.lastOnlineReducer.lastOnlineTime,
   };
 }
 
@@ -347,6 +379,7 @@ export default connect(mapStateToProps, { signoutUser, fetchReportTemplates })(M
 Menu.propTypes = {
   reportTemplates: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   isConnected: PropTypes.bool.isRequired,
+  lastOnlineTime: PropTypes.number,
   signoutUser: PropTypes.func.isRequired,
   fetchReportTemplates: PropTypes.func.isRequired,
   currentScene: PropTypes.string,
@@ -356,4 +389,5 @@ Menu.propTypes = {
 Menu.defaultProps = {
   currentScene: '',
   expirationTime: null,
+  lastOnlineTime: null,
 };

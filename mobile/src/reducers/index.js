@@ -9,6 +9,7 @@ import reportReducer from './report_reducer';
 import connectionReducer from './connection_reducer';
 import sceneReducer from './scene_reducer';
 import persistenceReducer from './persistence_reducer';
+import lastOnlineReducer from './last_online_reducer';
 
 export const persistOptions = {
   blacklist: ['connectionReducer'],
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   connectionReducer,
   sceneReducer,
   persistenceReducer,
+  lastOnlineReducer,
 });
 const persistedReducers = persistReducer(persistConfig, rootReducer);
 
