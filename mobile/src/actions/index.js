@@ -21,6 +21,7 @@ import {
   FETCH_REPORT_TEMPLATES,
   STORE_LOGIN,
   SET_CONNECTION_STATE,
+  SET_LAST_ONLINE_TIME,
 } from './types';
 
 const BASE_URL = '/api';
@@ -278,6 +279,13 @@ export function fetchReportTemplates() {
 export function setConnectionState(connectionInfo) {
   return {
     type: SET_CONNECTION_STATE,
+    payload: connectionInfo,
+  };
+}
+
+export function setLastOnlineTime(connectionInfo) {
+  return {
+    type: SET_LAST_ONLINE_TIME,
     payload: connectionInfo,
   };
 }
