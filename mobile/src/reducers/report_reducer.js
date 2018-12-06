@@ -7,18 +7,25 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case FETCH_REPORT:
-      if (action.payload && action.payload.length) {
+    case FETCH_REPORT: {
+      const { payload, meta } = action;
+      if (payload && (payload.data || payload.status === 204)) {
         const newState = Object.assign({}, state);
         const reports = Object.assign({}, state.reports);
-        reports[action.meta.templateId] = {
-          jsonData: action.payload,
+        const updatedReport = {
+          ...reports[meta.templateId],
           syncDate: new Date(),
         };
+        if (payload.data) {
+          updatedReport.jsonData = payload.data;
+          updatedReport.version = payload.version;
+        }
+        reports[meta.templateId] = updatedReport;
         newState.reports = reports;
         return newState;
       }
       return state;
+    }
     case FETCH_REPORT_TEMPLATES:
       if (action.payload && action.payload.length) {
         const newState = Object.assign({}, state);
