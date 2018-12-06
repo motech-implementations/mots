@@ -9,7 +9,7 @@ import { dispatch } from '../App';
 import { FETCH_ERROR } from '../actions/types';
 
 const CLIENT_URL = Config.api[Config.backend.instance];
-const VALID_STATUSES = [200, 201];
+const VALID_STATUSES = [200, 201, 204];
 
 const getErrorMessage = (errorResponse) => {
   if (errorResponse) {
@@ -72,6 +72,11 @@ export default class ApiClient {
             return response.text()
               .then(responseText => responseText)
               .catch(() => {});
+          }
+          if (response.status === 204) {
+            return {
+              status: response.status,
+            };
           }
           return response.json()
             .then(responseJson => responseJson)

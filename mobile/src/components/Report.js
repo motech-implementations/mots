@@ -321,7 +321,7 @@ class Report extends Component {
   }
 
   synchronize() {
-    this.props.fetchReport(this.props.reportId);
+    this.props.fetchReport(this.props.reportId, this.getCurrentReport().version);
     this.setState({
       syncing: true,
     });

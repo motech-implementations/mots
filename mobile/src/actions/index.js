@@ -254,8 +254,8 @@ export function saveProfile(values, callback) {
   };
 }
 
-export function fetchReport(templateId) {
-  const url = `/api/reports/templates/${templateId}/json?pageSize=2147483647`;
+export function fetchReport(templateId, version) {
+  const url = `/api/reports/templates/${templateId}/json/versioned?version=${version || 0}`;
   const request = apiClient.get(url);
 
   return {
