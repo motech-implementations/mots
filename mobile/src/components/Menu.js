@@ -179,7 +179,7 @@ class Menu extends Component {
         {!this.props.isConnected && this.props.lastOnlineTime !== null &&
           <Text style={[styles.lastOnlineText]}>
             <Icon name="info-circle" />
-            {` Last online at ${new Date(this.props.lastOnlineTime).toLocaleTimeString()} ${new Date(this.props.lastOnlineTime).toLocaleDateString()}`}
+            {` Offline since ${new Date(this.props.lastOnlineTime).toLocaleTimeString()} ${new Date(this.props.lastOnlineTime).toLocaleDateString()}`}
           </Text>
         }
 
