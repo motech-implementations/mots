@@ -24,6 +24,7 @@ const { lightThemeText } = commonStyles;
 const fontWidth = 8;
 const rowHeight = 22;
 const sortIconSize = 16;
+const maxPageSize = 2147483647;
 
 class Report extends Component {
   static getTableRows(values, columns) {
@@ -328,12 +329,12 @@ class Report extends Component {
   }
 
   fetchPdf() {
-    const url = `/api/reports/templates/${this.props.reportId}/pdf?pageSize=${this.state.maxPageSize}`;
+    const url = `/api/reports/templates/${this.props.reportId}/pdf?pageSize=${maxPageSize}`;
     apiClient.downloadReport(url, this.props.reportName, 'pdf');
   }
 
   fetchXls() {
-    const url = `/api/reports/templates/${this.props.reportId}/xls?pageSize=${this.state.maxPageSize}`;
+    const url = `/api/reports/templates/${this.props.reportId}/xls?pageSize=${maxPageSize}`;
     apiClient.downloadReport(url, this.props.reportName, 'xls');
   }
 
