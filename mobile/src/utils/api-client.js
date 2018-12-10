@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import Config from '../../config';
 import { signoutUser, useRefreshToken } from '../actions';
