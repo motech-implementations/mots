@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,16 +83,19 @@ public class JasperReportsViewService {
   public String generateJsonReport(
       JasperTemplate jasperTemplate, Map<String, Object> params)
       throws JRException, SQLException {
+    Connection connection = replicationDataSource.getConnection();
     JasperReport jasperReport = (JasperReport) JRLoader.loadObject(
         getReportUrlForReportData(jasperTemplate));
     JasperPrint jasperPrint = JasperFillManager.fillReport(
-        jasperReport, params, replicationDataSource.getConnection());
+        jasperReport, params, connection);
 
     StringBuilder output = new StringBuilder();
     JsonMetadataExporter jsonExporter = new JsonMetadataExporter();
     jsonExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
     jsonExporter.setExporterOutput(new SimpleWriterExporterOutput(output));
     jsonExporter.exportReport();
+
+    connection.close();
 
     return output.toString();
   }
