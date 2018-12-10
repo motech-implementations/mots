@@ -28,6 +28,7 @@ const BASE_URL = '/api';
 
 const CLIENT_ID = 'trusted-client';
 const CLIENT_SECRET = 'secret';
+const ERROR_INVALID_CREDENTIALS = 'Wrong username or password. Please try again.';
 
 const authClient = new AuthClient({
   clientId: CLIENT_ID,
@@ -56,7 +57,7 @@ export function signInOffline(username, password, savedLogin, callback, errorCal
           });
           callback();
         } else {
-          dispatch(authError('Wrong username or password. Please try again.'));
+          dispatch(authError(ERROR_INVALID_CREDENTIALS));
           errorCallback();
         }
       });
@@ -85,17 +86,22 @@ export function signIn(username, password, savedLogin, callback, errorCallback) 
     authClient.getToken(username, password)
       .then((response) => {
         response.json().then((data) => {
-          dispatch({
-            type: AUTH_USER,
-            payload: {
-              accessToken: data.access_token,
-              refreshToken: data.refresh_token,
-            },
-          });
-          storeLogin(dispatch, username, password, data.access_token);
-          callback();
+          if (data.access_token) {
+            dispatch({
+              type: AUTH_USER,
+              payload: {
+                accessToken: data.access_token,
+                refreshToken: data.refresh_token,
+              },
+            });
+            storeLogin(dispatch, username, password, data.access_token);
+            callback();
+          } else {
+            dispatch(authError(ERROR_INVALID_CREDENTIALS));
+            errorCallback();
+          }
         }).catch(() => {
-          dispatch(authError('Wrong username or password. Please try again.'));
+          dispatch(authError(ERROR_INVALID_CREDENTIALS));
           errorCallback();
         });
       })
