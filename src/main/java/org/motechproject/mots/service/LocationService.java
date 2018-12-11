@@ -78,7 +78,7 @@ public class LocationService {
    * Finds districts matching all of the provided parameters.
    * If there are no parameters, return all districts.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<District> searchDistricts(String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
@@ -89,7 +89,7 @@ public class LocationService {
    * Finds chiefdoms matching all of the provided parameters.
    * If there are no parameters, return all chiefdoms.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Chiefdom> searchChiefdoms(String chiefdomName,
       String parentDistrict, Pageable pageable)
       throws IllegalArgumentException {
@@ -101,7 +101,7 @@ public class LocationService {
    * Finds communities matching all of the provided parameters.
    * If there are no parameters, return all communities.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Community> searchCommunities(String communityName,
       String parentFacility, String chiefdomName, String districtName, Pageable pageable)
       throws IllegalArgumentException {
@@ -114,7 +114,7 @@ public class LocationService {
    * Finds facilities matching all of the provided parameters.
    * If there are no parameters, return all facilities.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityId, String facilityName,
       String facilityType, String inchargeFullName, String parentChiefdom, String districtName,
       Pageable pageable) throws IllegalArgumentException {
@@ -179,12 +179,12 @@ public class LocationService {
           location.getOwner().getUsername());
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Community getCommunity(UUID id) {
     return communityRepository.findOne(id);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Facility getFacility(UUID id) {
     return facilityRepository.findOne(id);
   }

@@ -220,7 +220,11 @@ class SideBar extends Component {
             </Link>
           </li>
           }
-        { hasAuthority(DISPLAY_FACILITIES_AUTHORITY) &&
+        { hasAuthority(
+            DISPLAY_FACILITIES_AUTHORITY,
+            MANAGE_FACILITIES_AUTHORITY,
+            MANAGE_OWN_FACILITIES_AUTHORITY,
+          ) &&
           <li className="border-none">
             <Link to="/locations/0" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-list-alt" />
@@ -316,7 +320,7 @@ class SideBar extends Component {
               <span className="icon-text">{this.props.showMenuSmart} Home</span>
             </Link>
           </li>
-          { hasAuthority(CHW_READ_AUTHORITY, CHW_WRITE_AUTHORITY) &&
+          { hasAuthority(CHW_READ_AUTHORITY, CHW_WRITE_AUTHORITY, UPLOAD_CSV_AUTHORITY) &&
             <li>
               <a href="" onClick={this.toggleHealthWorkersMenu}>
                 <span className="fa fa-users" />
@@ -344,7 +348,7 @@ class SideBar extends Component {
               { this.renderModulesMenu() }
             </li>
           }
-          { hasAuthority(INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY) &&
+          { hasAuthority(INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY, UPLOAD_CSV_AUTHORITY) &&
             <li>
               <a href="" onClick={this.toggleInchargeMenu}>
                 <span className="fa fa-user-md" />

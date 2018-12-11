@@ -27,8 +27,9 @@ public class DefaultPermissions {
   public static final String HAS_DISPLAY_MODULES_ROLE = "hasRole('" + DISPLAY_MODULES + "')";
   public static final String HAS_MANAGE_FACILITIES_ROLE = "hasRole('" + MANAGE_FACILITIES + "')";
   public static final String HAS_CREATE_FACILITIES_ROLE = "hasRole('" + CREATE_FACILITIES + "')";
-  public static final String HAS_DISPLAY_FACILITIES_ROLE =
-      "hasRole('" + DISPLAY_FACILITIES + "')";
+  public static final String HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE =
+      "hasAnyRole('" + DISPLAY_FACILITIES + "','"
+          + MANAGE_FACILITIES + "','" + MANAGE_OWN_FACILITIES + "')";
   public static final String HAS_ASSIGN_MODULES_ROLE = "hasRole('" + ASSIGN_MODULES + "')";
   public static final String HAS_MANAGE_USERS_ROLE = "hasRole('" + MANAGE_USERS + "')";
   public static final String HAS_MANAGE_INCHARGE_USERS_ROLE =

@@ -9,7 +9,7 @@ import 'react-table/react-table.css';
 
 import MobileTable from '../components/mobile-table';
 import {
-  DISPLAY_FACILITIES_AUTHORITY,
+  DISPLAY_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY,
   hasAuthority,
 } from '../utils/authorization';
 import { fetchLocationsOfType, resetLogoutCounter } from '../actions/index';
@@ -35,7 +35,11 @@ class LocationsTable extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(DISPLAY_FACILITIES_AUTHORITY)) {
+    if (!hasAuthority(
+      DISPLAY_FACILITIES_AUTHORITY,
+      MANAGE_FACILITIES_AUTHORITY,
+      MANAGE_OWN_FACILITIES_AUTHORITY,
+    )) {
       this.props.history.push('/home');
     }
     this.setState({ loading: true });
