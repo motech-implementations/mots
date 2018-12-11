@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 import { AsyncStorage } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
+import jwtDecode from 'jwt-decode';
 
 import Config from '../../config';
 import { signoutUser, useRefreshToken } from '../actions';
@@ -26,15 +27,18 @@ const getAlert = (title, message) => {
 };
 
 export default class ApiClient {
-  static async handleError(error) {
+  static async handleError(error, callback) {
     const refreshToken = await AsyncStorage.getItem('refresh_token');
 
     switch (error.status) {
-      case 401:
-        if (refreshToken) {
-          return dispatch(useRefreshToken(refreshToken));
+      case 401: {
+        const refreshDecoded = (refreshToken) ? jwtDecode(refreshToken) : null;
+        const currentTime = Date.now() / 1000;
+        if (refreshDecoded && refreshDecoded.exp > currentTime) {
+          return useRefreshToken(refreshToken, dispatch, callback);
         }
         return dispatch(signoutUser());
+      }
       case 403:
         getAlert('Access denied.', 'You don\'t have permissions to fetch this data');
         break;
@@ -60,36 +64,40 @@ export default class ApiClient {
     return error;
   }
 
+  static async handleResponse(response, type) {
+    if (VALID_STATUSES.indexOf(response.status) !== -1) {
+      if (type === 'text') {
+        return response.text()
+          .then(responseText => responseText)
+          .catch(() => {});
+      }
+      if (response.status === 204) {
+        return {
+          status: response.status,
+        };
+      }
+      return response.json()
+        .then(responseJson => responseJson)
+        .catch(() => {});
+    }
+    throw response;
+  }
+
   static async chooseMethod(method, route, type, body) {
-    return ApiClient.motsFetch({
+    const fetchOptions = {
       method,
       url: route,
       body: JSON.stringify(body) || undefined,
-    })
-      .then((response) => {
-        if (VALID_STATUSES.indexOf(response.status) !== -1) {
-          if (type === 'text') {
-            return response.text()
-              .then(responseText => responseText)
-              .catch(() => {});
-          }
-          if (response.status === 204) {
-            return {
-              status: response.status,
-            };
-          }
-          return response.json()
-            .then(responseJson => responseJson)
-            .catch(() => {});
-        }
-        throw response;
-      })
+    };
+    return ApiClient.motsFetch(fetchOptions)
+      .then(response => this.handleResponse(response, type))
       .catch((obj) => {
         dispatch({
           type: FETCH_ERROR,
           payload: true,
         });
-        ApiClient.handleError(obj);
+        return ApiClient.handleError(obj, () => ApiClient.motsFetch(fetchOptions)
+          .then(response => this.handleResponse(response, type)));
       });
   }
 

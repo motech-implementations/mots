@@ -57,7 +57,7 @@ export default (ComposedComponent) => {
             if (refreshDecoded.exp < currentTime) {
               dispatch({ type: UNAUTH_USER });
             } else {
-              dispatch(useRefreshToken(refreshToken));
+              useRefreshToken(refreshToken, dispatch);
             }
           }
         } else if (this.props.expirationTime && this.props.authenticated) {
