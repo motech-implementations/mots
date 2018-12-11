@@ -112,30 +112,28 @@ export function signIn(username, password, savedLogin, callback, errorCallback) 
   };
 }
 
-export function useRefreshToken(refreshToken, callback) {
-  return (dispatch) => {
-    authClient.refreshToken(refreshToken)
-      .then(response =>
-        response.json())
-      .then((data) => {
-        dispatch({
-          type: AUTH_USER,
-          payload: {
-            accessToken: data.access_token,
-            refreshToken: data.refresh_token,
-          },
-        });
-
-        if (callback) {
-          return callback();
-        }
-
-        return null;
-      })
-      .catch(() => {
-        dispatch(authError('Error occurred when refreshing token'));
+export function useRefreshToken(refreshToken, dispatch, callback) {
+  return authClient.refreshToken(refreshToken)
+    .then(response =>
+      response.json())
+    .then((data) => {
+      dispatch({
+        type: AUTH_USER,
+        payload: {
+          accessToken: data.access_token,
+          refreshToken: data.refresh_token,
+        },
       });
-  };
+
+      if (callback) {
+        return callback();
+      }
+
+      return null;
+    })
+    .catch(() => {
+      dispatch(authError('Error occurred when refreshing token'));
+    });
 }
 
 export function signoutUser() {
