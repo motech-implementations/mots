@@ -40,4 +40,8 @@ export const CREATE_COMMUNITY = 'create_community';
 export const SAVE_COMMUNITY = 'save_community';
 
 
+export const CREATE_CHIEFDOM = 'create_chiefdom';
+export const SAVE_CHIEFDOM = 'save_chiefdom';
+
+
 export const FETCH_REPORTS = 'fetch_reports';

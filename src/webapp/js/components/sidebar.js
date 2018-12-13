@@ -211,7 +211,7 @@ class SideBar extends Component {
               <span className="icon-text">Add Community</span>
             </Link>
           </li>
-          }
+        }
         { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/facility/new" onClick={this.props.hideMenuSmart}>
@@ -219,7 +219,15 @@ class SideBar extends Component {
               <span className="icon-text">Add Facility</span>
             </Link>
           </li>
-          }
+        }
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/chiefdom/new" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-plus" />
+              <span className="icon-text">Add Chiefdom</span>
+            </Link>
+          </li>
+        }
         { hasAuthority(
             DISPLAY_FACILITIES_AUTHORITY,
             MANAGE_FACILITIES_AUTHORITY,
@@ -231,7 +239,7 @@ class SideBar extends Component {
               <span className="icon-text">Location list</span>
             </Link>
           </li>
-          }
+        }
       </ul>
     );
   }

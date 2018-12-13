@@ -1,6 +1,8 @@
 package org.motechproject.mots.domain;
 
 import java.util.Set;
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -12,8 +14,7 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "district", uniqueConstraints =
-    @UniqueConstraint(columnNames = {"name"}))
+@Table(name = "district", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
 public class District extends Location {
 
   @OneToMany(mappedBy = "district")
@@ -21,6 +22,10 @@ public class District extends Location {
   @Setter
   @OrderBy("name ASC")
   private Set<Chiefdom> chiefdoms;
+
+  public District(UUID id) {
+    super(id);
+  }
 
   public District(String name) {
     super(name);

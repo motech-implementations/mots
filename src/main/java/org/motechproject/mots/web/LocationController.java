@@ -3,11 +3,14 @@ package org.motechproject.mots.web;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
 import javax.validation.Valid;
+
 import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
+import org.motechproject.mots.dto.ChiefdomCreationDto;
 import org.motechproject.mots.dto.CommunityCreationDto;
 import org.motechproject.mots.dto.CommunityExtendedInfoDto;
 import org.motechproject.mots.dto.DistrictDto;
@@ -48,6 +51,23 @@ public class LocationController extends BaseController {
   private LocationMapper locationMapper = LocationMapper.INSTANCE;
 
   /**
+   * Creates Chiefdom.
+   * @param chiefdomCreationDto DTO of chiefdom to be created
+   * @return created Chiefdom
+   */
+  @RequestMapping(value = "/chiefdom", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.CREATED)
+  @ResponseBody
+  public ChiefdomCreationDto createChiefdom(
+      @RequestBody @Valid ChiefdomCreationDto chiefdomCreationDto,
+      BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+    Chiefdom chiefdom = locationMapper.fromDtoToChiefdom(chiefdomCreationDto);
+
+    return locationMapper.toChiefdomCreationDto(locationService.createChiefdom(chiefdom));
+  }
+
+  /**
    * Creates Facility.
    * @param facilityCreationDto DTO of facility to be created
    * @return created Facility
@@ -80,6 +100,26 @@ public class LocationController extends BaseController {
     Community community = locationMapper.fromDtoToCommunity(communityCreationDto);
 
     return locationMapper.toCommunityCreationDto(locationService.createCommunity(community));
+  }
+
+  /**
+   * Update Chiefdom.
+   * @param id                   id of Chiefdom to update
+   * @param chiefdomCreationDto DTO of Chiefdom to be updated
+   * @return updated Chiefdom
+   */
+  @RequestMapping(value = "/chiefdom/{id}", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public ChiefdomCreationDto saveChiefdom(@PathVariable("id") UUID id,
+      @RequestBody @Valid ChiefdomCreationDto chiefdomCreationDto, BindingResult bindingResult) {
+
+    checkBindingResult(bindingResult);
+
+    Chiefdom chiefdom = locationService.getChiefdom(id);
+    locationMapper.updateChiefdomFromDto(chiefdomCreationDto, chiefdom);
+
+    return locationMapper.toChiefdomCreationDto(locationService.saveChiefdom(chiefdom));
   }
 
   /**
@@ -122,6 +162,20 @@ public class LocationController extends BaseController {
     locationMapper.updateFacilityFromDto(facilityCreationDto, facility);
 
     return locationMapper.toFacilityCreationDto(locationService.saveFacility(facility));
+  }
+
+  /**
+   * Get Chiefdom with given id.
+   * @param id id of Chiefdom to find
+   * @return ChiefdomCreationDto with given id
+   */
+  @RequestMapping(value = "/chiefdom/{id}", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public ChiefdomCreationDto getChiefdom(@PathVariable("id") UUID id) {
+    Chiefdom chiefdom = locationService.getChiefdom(id);
+
+    return locationMapper.toChiefdomCreationDto(chiefdom);
   }
 
   /**
