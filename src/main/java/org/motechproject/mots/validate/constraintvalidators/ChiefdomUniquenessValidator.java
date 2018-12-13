@@ -42,9 +42,9 @@ public class ChiefdomUniquenessValidator implements
 
       Optional<Chiefdom> existing = chiefdomRepository.findByNameAndDistrict(name, district);
 
-      if (existing.isPresent() // when edit community allows change
+      if (existing.isPresent() // when edit chiefdom allows change
           && !existing.get().getId().toString().equals(chiefdomCreationDto.getId())) {
-        String message = String.format(ValidationMessages.NOT_UNIQUE_COMMUNITY,
+        String message = String.format(ValidationMessages.NOT_UNIQUE_CHIEFDOM,
             existing.get().getName());
 
         context.disableDefaultConstraintViolation();
