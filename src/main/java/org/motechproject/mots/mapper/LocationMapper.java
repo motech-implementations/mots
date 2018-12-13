@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -18,6 +19,7 @@ import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
+import org.motechproject.mots.dto.ChiefdomCreationDto;
 import org.motechproject.mots.dto.CommunityCreationDto;
 import org.motechproject.mots.dto.CommunityExtendedInfoDto;
 import org.motechproject.mots.dto.DistrictDto;
@@ -116,6 +118,13 @@ public interface LocationMapper {
   })
   FacilityExtendedInfoDto toFacilityExtendedInfoDto(Facility facility);
 
+  @Named("createChiefdom")
+  @Mappings({
+      @Mapping(target = "districtId", source = "district.id"),
+      @Mapping(target = "ownerUsername", source = "owner.username")
+  })
+  ChiefdomCreationDto toChiefdomCreationDto(Chiefdom chiefdom);
+
   @Mappings({
       @Mapping(target = "facility", source = "facilityId"),
       @Mapping(target = "owner", ignore = true)
@@ -128,6 +137,12 @@ public interface LocationMapper {
       @Mapping(target = "owner", ignore = true)
   })
   Facility fromDtoToFacility(FacilityCreationDto facilityCreationDto);
+
+  @Mappings({
+      @Mapping(target = "district", source = "districtId"),
+      @Mapping(target = "owner", ignore = true)
+  })
+  Chiefdom fromDtoToChiefdom(ChiefdomCreationDto chiefdomCreationDto);
 
   /**
    * Create Facility object with given id. This is to bind Incharge to Facility during creation.
@@ -143,9 +158,9 @@ public interface LocationMapper {
   }
 
   /**
-   * Create Facility object with given id. This is to bind Incharge to Facility during creation.
-   * @param chiefdomId id of Facility to create
-   * @return Facility object with given id
+   * Create Chiefdom object with given id. This is to bind Incharge to Chiefdom during creation.
+   * @param chiefdomId id of Chiefdom to create
+   * @return Chiefdom object with given id
    */
   default Chiefdom toChiefdom(String chiefdomId) {
     if (chiefdomId == null || chiefdomId.isEmpty()) {
@@ -153,6 +168,20 @@ public interface LocationMapper {
     }
 
     return new Chiefdom(UUID.fromString(chiefdomId));
+  }
+
+  /**
+   * Create Chiefdom object with given id. This is to bind Incharge to Chiefdom
+   * during creation.
+   * @param districtId id of Chiefdom to create
+   * @return Chiefdom object with given id
+   */
+  default District toDistrict(String districtId) {
+    if (districtId == null || districtId.isEmpty()) {
+      return null;
+    }
+
+    return new District(UUID.fromString(districtId));
   }
 
   @Mappings({
@@ -169,4 +198,11 @@ public interface LocationMapper {
   })
   void updateFacilityFromDto(FacilityCreationDto facilityCreationDto,
       @MappingTarget Facility facility);
+
+  @Mappings({
+      @Mapping(target = "district", source = "districtId"),
+      @Mapping(target = "owner", ignore = true)
+  })
+  void updateChiefdomFromDto(ChiefdomCreationDto chiefdomCreationDto,
+      @MappingTarget Chiefdom chiefdom);
 }

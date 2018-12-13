@@ -135,6 +135,29 @@ class Locations extends Component {
 
   static getChiefdomColumns = () => [
     {
+      Header: 'Actions',
+      minWidth: 50,
+      accessor: 'id',
+      Cell: cellInfo => (
+        <div className="actions-buttons-container">
+          {canEditLocation(cellInfo.original) &&
+            <Link
+              to={`/locations/chiefdom/${cellInfo.value}`}
+              type="button"
+              className="btn btn-primary margin-right-sm"
+              title="Edit"
+            >
+              <span className="glyphicon glyphicon-edit" />
+              <span className="hide-min-r-small-min next-button-text">Edit</span>
+            </Link>
+          }
+        </div>
+      ),
+      filterable: false,
+      sortable: false,
+      show: hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY),
+    },
+    {
       Header: 'Name',
       accessor: 'name',
     }, {

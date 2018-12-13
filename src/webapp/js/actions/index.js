@@ -11,7 +11,8 @@ import {
   SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
   FETCH_ROLES, SEARCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
-  SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS, FETCH_PERMISSIONS,
+  SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS, FETCH_PERMISSIONS, SAVE_CHIEFDOM,
+  CREATE_CHIEFDOM,
 } from './types';
 
 const BASE_URL = '/api';
@@ -300,6 +301,26 @@ export function saveCommunity(values, callback) {
 
   return {
     type: SAVE_COMMUNITY,
+    payload: request,
+  };
+}
+
+export function createChiefdom(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/chiefdom`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_CHIEFDOM,
+    payload: request,
+  };
+}
+
+export function saveChiefdom(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/chiefdom/${values.id}`, values);
+  request.then(() => callback());
+
+  return {
+    type: SAVE_CHIEFDOM,
     payload: request,
   };
 }

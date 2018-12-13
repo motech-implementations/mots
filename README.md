@@ -13,14 +13,14 @@ run it with `Debug` option.
 and accept a prompt asking about reloading changed classes.
 
 ## Frontend Hot-Reload with Webpack watch
-1. Start Java server with `gradle bootRun` or `./gradlew bootRun`.
-2. Run `gradle webpackWatch` or `./gradlew webpackWatch` in separate terminal (or ideally in IntelliJ Idea)
+1. Start Java server with `./gradlew bootRun` or `gradle bootRun` (if you want run local environment gradle).
+2. Run `./gradlew webpackWatch` or `gradle webpackWatch` in separate terminal (or ideally in IntelliJ Idea)
 3. Profit - your .scss, and .js files are reloaded automatically. Refresh your browser.
 
 ## IntelliJ Idea development
 1. Install Lombok, MapStruct nad NodeJS plugins under File -> Settings -> Plugins -> Browse repositories... search for the Lombok, MapStruct support and NodeJS plugins and install them all.
 2. Check the Enable annotation processing checkbox under File -> Settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors.
-3. Download the intellij-java-google-style.xml file from the http://code.google.com/p/google-styleguide/ repo. 
+3. Download the `intellij-java-google-style.xml` file from the http://code.google.com/p/google-styleguide/ repo. 
 Under File -> Settings -> Editor -> Code Style import the google-styleguide (gear icon -> Import Scheme -> Intellij IDEA code style XML) and choose it as current code style for the project.
 4. Enable ESLint under File -> Settings -> Languages and Frameworks -> JavaScript -> Code Quality Tools -> ESLint and set "Node interpreter" to `~/mots/.gradle/nodejs/node-v6.11.4-linux-x64/bin/node` and "ESLint package" to `~/mots/node_modules/eslint`
 (you need to run `gradle build` or `./gradlew build` before this to install gradle and npm dependencies)
