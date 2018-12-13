@@ -12,7 +12,7 @@ import {
   FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
   FETCH_ROLES, SEARCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
   SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS, FETCH_PERMISSIONS, SAVE_CHIEFDOM,
-  CREATE_CHIEFDOM,
+  CREATE_CHIEFDOM, SAVE_DISTRICT, CREATE_DISTRICT,
 } from './types';
 
 const BASE_URL = '/api';
@@ -321,6 +321,26 @@ export function saveChiefdom(values, callback) {
 
   return {
     type: SAVE_CHIEFDOM,
+    payload: request,
+  };
+}
+
+export function createDistrict(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/district`, values);
+  request.then(() => callback());
+
+  return {
+    type: CREATE_DISTRICT,
+    payload: request,
+  };
+}
+
+export function saveDistrict(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/district/${values.id}`, values);
+  request.then(() => callback());
+
+  return {
+    type: SAVE_DISTRICT,
     payload: request,
   };
 }

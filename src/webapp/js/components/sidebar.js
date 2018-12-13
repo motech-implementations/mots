@@ -228,6 +228,14 @@ class SideBar extends Component {
             </Link>
           </li>
         }
+        {hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/district/new" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-plus" />
+              <span className="icon-text">Add District</span>
+            </Link>
+          </li>
+        }
         { hasAuthority(
             DISPLAY_FACILITIES_AUTHORITY,
             MANAGE_FACILITIES_AUTHORITY,

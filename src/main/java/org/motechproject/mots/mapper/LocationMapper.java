@@ -22,6 +22,7 @@ import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.dto.ChiefdomCreationDto;
 import org.motechproject.mots.dto.CommunityCreationDto;
 import org.motechproject.mots.dto.CommunityExtendedInfoDto;
+import org.motechproject.mots.dto.DistrictCreationDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
 import org.motechproject.mots.dto.FacilityDto;
@@ -125,6 +126,10 @@ public interface LocationMapper {
   })
   ChiefdomCreationDto toChiefdomCreationDto(Chiefdom chiefdom);
 
+  @Named("createDistrict")
+  @Mapping(target = "ownerUsername", source = "owner.username")
+  DistrictCreationDto toDistrictCreationDto(District district);
+
   @Mappings({
       @Mapping(target = "facility", source = "facilityId"),
       @Mapping(target = "owner", ignore = true)
@@ -143,6 +148,9 @@ public interface LocationMapper {
       @Mapping(target = "owner", ignore = true)
   })
   Chiefdom fromDtoToChiefdom(ChiefdomCreationDto chiefdomCreationDto);
+
+  @Mapping(target = "owner", ignore = true)
+  District fromDtoToDistrict(DistrictCreationDto districtCreationDto);
 
   /**
    * Create Facility object with given id. This is to bind Incharge to Facility during creation.
@@ -205,4 +213,8 @@ public interface LocationMapper {
   })
   void updateChiefdomFromDto(ChiefdomCreationDto chiefdomCreationDto,
       @MappingTarget Chiefdom chiefdom);
+
+  @Mapping(target = "owner", ignore = true)
+  void updateDistrictFromDto(DistrictCreationDto districtCreationDto, 
+      @MappingTarget District district);
 }

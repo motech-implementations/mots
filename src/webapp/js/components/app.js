@@ -32,6 +32,8 @@ import CommunityNew from './community-new';
 import CommunityEdit from './community-edit';
 import ChiefdomNew from './chiefdom-new';
 import ChiefdomEdit from './chiefdom-edit';
+import DistrictNew from './district-new';
+import DistrictEdit from './district-edit';
 import UserProfileEdit from './user-profile-edit';
 import GroupAssignModules from './group-assign-modules';
 import Report from './report';
@@ -97,6 +99,8 @@ export default class App extends Component {
                 <Route path="/locations/community/:communityId" component={CommunityEdit} />
                 <Route path="/locations/chiefdom/new" component={ChiefdomNew} />
                 <Route path="/locations/chiefdom/:chiefdomId" component={ChiefdomEdit} />
+                <Route path="/locations/district/new" component={DistrictNew} />
+                <Route path="/locations/district/:districtId" component={DistrictEdit} />
                 <Route path="/locations/:tabIndex?" component={Locations} />
                 <Route path="/profile" component={UserProfileEdit} />
                 <Route path="/" component={Home} />
