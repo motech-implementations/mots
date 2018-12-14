@@ -134,6 +134,21 @@ public class LocationService {
   }
 
   /**
+   * Update District.
+   * 
+   * @param district District to update
+   * @return updated District
+   */
+  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  public District saveDistrict(District district) {
+    if (!canEditLocation(district)) {
+      throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
+    }
+
+    return districtRepository.save(district);
+  }
+
+  /**
    * Update Chiefdom.
    * @param chiefdom chiefdom to update
    * @return updated Chiefdom
@@ -206,5 +221,10 @@ public class LocationService {
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Chiefdom getChiefdom(UUID id) {
     return chiefdomRepository.findOne(id);
+  }
+
+  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  public District getDistrict(UUID id) {
+    return districtRepository.findOne(id);
   }
 }

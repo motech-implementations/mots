@@ -13,6 +13,7 @@ import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.dto.ChiefdomCreationDto;
 import org.motechproject.mots.dto.CommunityCreationDto;
 import org.motechproject.mots.dto.CommunityExtendedInfoDto;
+import org.motechproject.mots.dto.DistrictCreationDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
 import org.motechproject.mots.dto.FacilityExtendedInfoDto;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
+@SuppressWarnings("PMD.TooManyMethods")
 public class LocationController extends BaseController {
 
   public static final String NAME_PARAM = "name";
@@ -49,6 +51,23 @@ public class LocationController extends BaseController {
   private LocationService locationService;
 
   private LocationMapper locationMapper = LocationMapper.INSTANCE;
+
+  /**
+   * Creates District.
+   * 
+   * @param districtCreationDto DTO of District to be created
+   * @return created District
+   */
+  @RequestMapping(value = "/district", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.CREATED)
+  @ResponseBody
+  public DistrictCreationDto createDistrict(
+      @RequestBody @Valid DistrictCreationDto districtCreationDto, BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+    District district = locationMapper.fromDtoToDistrict(districtCreationDto);
+
+    return locationMapper.toDistrictCreationDto(locationService.createDistrict(district));
+  }
 
   /**
    * Creates Chiefdom.
@@ -100,6 +119,27 @@ public class LocationController extends BaseController {
     Community community = locationMapper.fromDtoToCommunity(communityCreationDto);
 
     return locationMapper.toCommunityCreationDto(locationService.createCommunity(community));
+  }
+
+  /**
+   * Update District.
+
+   * @param id                  id of District to update
+   * @param districtCreationDto DTO of District to be updated
+   * @return updated District
+   */
+  @RequestMapping(value = "/district/{id}", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public DistrictCreationDto saveDistrict(@PathVariable("id") UUID id,
+      @RequestBody @Valid DistrictCreationDto districtCreationDto, BindingResult bindingResult) {
+
+    checkBindingResult(bindingResult);
+
+    District district = locationService.getDistrict(id);
+    locationMapper.updateDistrictFromDto(districtCreationDto, district);
+
+    return locationMapper.toDistrictCreationDto(locationService.saveDistrict(district));
   }
 
   /**
@@ -162,6 +202,21 @@ public class LocationController extends BaseController {
     locationMapper.updateFacilityFromDto(facilityCreationDto, facility);
 
     return locationMapper.toFacilityCreationDto(locationService.saveFacility(facility));
+  }
+
+  /**
+   * Get District with given id.
+   * 
+   * @param id id of District to find
+   * @return DistrictCreationDto with given id
+   */
+  @RequestMapping(value = "/district/{id}", method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public DistrictCreationDto getDistrict(@PathVariable("id") UUID id) {
+    District district = locationService.getDistrict(id);
+
+    return locationMapper.toDistrictCreationDto(district);
   }
 
   /**

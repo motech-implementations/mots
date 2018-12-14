@@ -1,6 +1,7 @@
 package org.motechproject.mots.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.repository.custom.DistrictRepositoryCustom;
@@ -10,4 +11,6 @@ public interface DistrictRepository extends JpaRepository<District, UUID>,
     DistrictRepositoryCustom {
 
   List<District> findAllByOrderByNameAsc();
+
+  Optional<District> findByName(String name);
 }

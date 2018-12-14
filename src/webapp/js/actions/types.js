@@ -44,4 +44,7 @@ export const CREATE_CHIEFDOM = 'create_chiefdom';
 export const SAVE_CHIEFDOM = 'save_chiefdom';
 
 
+export const CREATE_DISTRICT = 'create_district';
+export const SAVE_DISTRICT = 'save_district';
+
 export const FETCH_REPORTS = 'fetch_reports';
