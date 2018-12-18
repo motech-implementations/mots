@@ -41,7 +41,6 @@ export default class ModalInfo extends Component {
                 iconName="check"
                 iconColor="#FFF"
                 buttonColor={this.props.confirmColor}
-                style={{ width: 50 }}
               >
                 {this.props.confirmButtonText}
               </Button>
@@ -54,7 +53,6 @@ export default class ModalInfo extends Component {
               iconName="times-circle"
               iconColor="#FFF"
               buttonColor={this.props.closeColor}
-              style={{ width: 50 }}
             >
               {this.props.closeButtonText}
             </Button>
