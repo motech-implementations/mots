@@ -73,6 +73,20 @@ public class Facility extends Location {
     this.facilityId = facilityId;
   }
 
+  /**
+   * Construct new facility with given parameters.
+   * @param name name of the facility
+   * @param type type of the facility
+   * @param facilityId id of the facility
+   * @param chiefdom parent chiefdom of the facility
+   */
+  public Facility(String name, FacilityType type, String facilityId, Chiefdom chiefdom) {
+    super(name);
+    this.type = type;
+    this.facilityId = facilityId;
+    this.chiefdom = chiefdom;
+  }
+
   @Override
   public String getParentName() {
     return chiefdom.getName();

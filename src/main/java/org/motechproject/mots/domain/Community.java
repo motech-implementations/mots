@@ -32,6 +32,11 @@ public class Community extends Location {
     super(name);
   }
 
+  public Community(String name, Facility facility) {
+    super(name);
+    this.facility = facility;
+  }
+
   @Override
   public String getParentName() {
     return facility.getName();

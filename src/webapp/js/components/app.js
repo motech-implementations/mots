@@ -37,6 +37,9 @@ import DistrictEdit from './district-edit';
 import UserProfileEdit from './user-profile-edit';
 import GroupAssignModules from './group-assign-modules';
 import Report from './report';
+import ChiefdomUpload from './chiefdom-upload';
+import FacilityUpload from './facility-upload';
+import CommunityUpload from './community-upload';
 
 export default class App extends Component {
   constructor(props) {
@@ -93,10 +96,13 @@ export default class App extends Component {
                 <Route path="/roles/new" component={RoleNew} />
                 <Route path="/roles/:roleId" component={RoleEdit} />
                 <Route path="/roles" component={Roles} />
+                <Route path="/locations/facility/upload" component={FacilityUpload} />
                 <Route path="/locations/facility/new" component={FacilityNew} />
                 <Route path="/locations/facility/:facilityId" component={FacilityEdit} />
+                <Route path="/locations/community/upload" component={CommunityUpload} />
                 <Route path="/locations/community/new" component={CommunityNew} />
                 <Route path="/locations/community/:communityId" component={CommunityEdit} />
+                <Route path="/locations/chiefdom/upload" component={ChiefdomUpload} />
                 <Route path="/locations/chiefdom/new" component={ChiefdomNew} />
                 <Route path="/locations/chiefdom/:chiefdomId" component={ChiefdomEdit} />
                 <Route path="/locations/district/new" component={DistrictNew} />
