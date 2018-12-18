@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.CallDetailRecord;
@@ -137,8 +138,6 @@ public class IvrService {
 
       sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), params,
           new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
-
-      sendModuleAssignedMessage(subscriberId);
     }
   }
 
@@ -179,6 +178,34 @@ public class IvrService {
 
       moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
     }
+  }
+
+  /**
+   * Send module assignment message to a list of subscribers.]
+   * @param subscriberIds a list of subscribers
+   */
+  public void sendModuleAssignedMessage(Set<String> subscriberIds) throws IvrException {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+    String messageId = ivrConfig.getModuleAssignedMessageId();
+    String sendSmsIfVoiceFails = boolToIntAsString(ivrConfig.getSendSmsIfVoiceFails());
+    String detectVoiceMailAction = boolToIntAsString(ivrConfig.getDetectVoicemailAction());
+    String retryAttemptsShort = Integer.toString(ivrConfig.getRetryAttemptsShort());
+    String retryDelayShort = Integer.toString(ivrConfig.getRetryDelayShort());
+    String retryAttemptsLong = Integer.toString(ivrConfig.getRetryAttemptsLong());
+    String retryDelayLong = Integer.toString(ivrConfig.getRetryDelayLong());
+
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(SEND_TO_SUBSCRIBERS, StringUtils.join(subscriberIds, ","));
+    params.add(MESSAGE_ID, messageId);
+    params.add(SEND_SMS_IF_VOICE_FAILS, sendSmsIfVoiceFails);
+    params.add(DETECT_VOICEMAIL_ACTION, detectVoiceMailAction);
+    params.add(RETRY_ATTEMPTS_SHORT, retryAttemptsShort);
+    params.add(RETRY_DELAY_SHORT, retryDelayShort);
+    params.add(RETRY_ATTEMPTS_LONG, retryAttemptsLong);
+    params.add(RETRY_DELAY_LONG, retryDelayLong);
+
+    sendVotoRequest(getAbsoluteUrl(SEND_MESSAGE_URL), params,
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
   }
 
   /**
@@ -227,30 +254,6 @@ public class IvrService {
       params.add(NAME_PROPERTY, name);
     }
     return params;
-  }
-
-  private void sendModuleAssignedMessage(String subscriberId) throws IvrException {
-    IvrConfig ivrConfig = ivrConfigService.getConfig();
-    String messageId = ivrConfig.getModuleAssignedMessageId();
-    String sendSmsIfVoiceFails = boolToIntAsString(ivrConfig.getSendSmsIfVoiceFails());
-    String detectVoiceMailAction = boolToIntAsString(ivrConfig.getDetectVoicemailAction());
-    String retryAttemptsShort = Integer.toString(ivrConfig.getRetryAttemptsShort());
-    String retryDelayShort = Integer.toString(ivrConfig.getRetryDelayShort());
-    String retryAttemptsLong = Integer.toString(ivrConfig.getRetryAttemptsLong());
-    String retryDelayLong = Integer.toString(ivrConfig.getRetryDelayLong());
-
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add(SEND_TO_SUBSCRIBERS, subscriberId);
-    params.add(MESSAGE_ID, messageId);
-    params.add(SEND_SMS_IF_VOICE_FAILS, sendSmsIfVoiceFails);
-    params.add(DETECT_VOICEMAIL_ACTION, detectVoiceMailAction);
-    params.add(RETRY_ATTEMPTS_SHORT, retryAttemptsShort);
-    params.add(RETRY_DELAY_SHORT, retryDelayShort);
-    params.add(RETRY_ATTEMPTS_LONG, retryAttemptsLong);
-    params.add(RETRY_DELAY_LONG, retryDelayLong);
-
-    sendVotoRequest(getAbsoluteUrl(SEND_MESSAGE_URL), params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
   }
 
   private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,

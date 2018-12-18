@@ -36,6 +36,8 @@ class DistrictAssignModules extends Component {
       selectedChiefdom: '',
       startDate: '',
       endDate: '',
+      delayNotification: false,
+      notificationTime: '',
     };
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
@@ -43,6 +45,7 @@ class DistrictAssignModules extends Component {
     this.handleChiefdomChange = this.handleChiefdomChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    this.handleNotificationTimeChange = this.handleNotificationTimeChange.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
     this.validate = this.validate.bind(this);
     this.validateDates = this.validateDates.bind(this);
@@ -80,7 +83,9 @@ class DistrictAssignModules extends Component {
       if (this.state.selectedChiefdom !== null) {
         payload.chiefdomId = this.state.selectedChiefdom.value;
       }
-
+      if (this.state.delayNotification && this.state.notificationTime) {
+        payload.notificationTime = this.state.notificationTime;
+      }
       const callback = () => {
         this.props.history.push('/chw/selected');
         Alert.success('Modules have been assigned!');
@@ -121,6 +126,13 @@ class DistrictAssignModules extends Component {
     this.props.resetLogoutCounter();
   }
 
+  handleNotificationTimeChange(notificationTime) {
+    const dateFormat = 'YYYY-MM-DD HH:mm';
+    const formattedTime = !notificationTime || typeof endDate === 'string' ? notificationTime : notificationTime.format(dateFormat);
+    this.setState({ notificationTime: formattedTime });
+    this.props.resetLogoutCounter();
+  }
+
   validateDates() {
     const start = new Date(this.state.startDate);
     const end = new Date(this.state.endDate);
@@ -135,13 +147,14 @@ class DistrictAssignModules extends Component {
     const nullable = !this.state.selectedDistrict || !this.state.selectedModules
       || !this.state.startDate || !this.state.endDate;
     const empty = !this.state.selectedDistrict || !this.state.selectedModules
-      || this.state.selectedModules.length === 0 || !this.state.startDate || !this.state.endDate;
+      || this.state.selectedModules.length === 0 || !this.state.startDate || !this.state.endDate
+      || (this.state.delayNotification && this.state.notificationTime.length === 0);
     return !nullable && !empty;
   }
 
   render() {
     return (
-      <div>
+      <div className="form-horizontal">
         <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules to a location</h1>
         <div className="col-md-8 col-md-offset-2">
 
@@ -177,7 +190,7 @@ class DistrictAssignModules extends Component {
             className="margin-bottom-md col-md-12"
             menuContainerStyle={{ zIndex: 5 }}
           />
-          <div className="col-md-6">
+          <div className="col-md-6 margin-bottom-md">
             <label htmlFor="start-date">Start date</label>
             <div className="input-group">
               <span className="input-group-addon"><i className="fa fa-calendar" /></span>
@@ -192,7 +205,7 @@ class DistrictAssignModules extends Component {
               />
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 margin-bottom-md">
             <label htmlFor="end-date">End date</label>
             <div className="input-group">
               <span className="input-group-addon"><i className="fa fa-calendar" /></span>
@@ -207,6 +220,36 @@ class DistrictAssignModules extends Component {
               />
             </div>
           </div>
+          <div className="col-md-12 margin-top-xs margin-bottom-xs">
+            <input
+              id="delay-notification"
+              type="checkbox"
+              className="checkbox-inline"
+              checked={this.state.delayNotification}
+              onChange={event => this.setState({ delayNotification: event.target.checked })}
+            />
+            <label htmlFor="delay-notification" className="margin-left-sm margin-bottom-sm">
+              Delay the notification
+            </label>
+          </div>
+          {this.state.delayNotification &&
+          <div className="col-md-12 margin-top-sm">
+            <label htmlFor="notification-time">Notification date</label>
+            <div className="input-group">
+              <span className="input-group-addon">
+                <i className="fa fa-calendar" />
+              </span>
+              <DateTime
+                dateFormat="YYYY-MM-DD"
+                timeFormat="HH:mm"
+                closeOnSelect
+                value={this.state.notificationTime}
+                onChange={this.handleNotificationTimeChange}
+                id="notification-time"
+              />
+            </div>
+          </div>
+          }
           <form
             className="form-horizontal col-md-12"
             onSubmit={this.sendAssignedModules}
