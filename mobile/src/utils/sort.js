@@ -6,9 +6,14 @@ const dirMap = {
 };
 
 const doSort = (A, B, property, direction = 'ASC') => {
-  const a = A[property];
-  const b = B[property];
-
+  let a = A[property];
+  let b = B[property];
+  if (a && typeof a === 'string') {
+    a = a.toLowerCase();
+  }
+  if (b && typeof b === 'string') {
+    b = b.toLowerCase();
+  }
   if (a < b) {
     return dirMap.lt[direction.toLowerCase()];
   }
