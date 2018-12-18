@@ -1,5 +1,5 @@
 INSERT INTO `ivr_config` (`id`, `created_date`, `updated_date`, `name`, `base_url`, `default_users_group_id`, `detect_voicemail_action`, `module_assigned_message_id`, `retry_attempts_long`, `retry_attempts_short`, `retry_delay_long`, `retry_delay_short`, `send_sms_if_voice_fails`, `call_id_field`, `chw_ivr_id_field`, `call_log_id_field`, `call_status_field`)
-VALUES ('70638cc4-4c33-4899-8480-a4ef1607273b', '2018-05-08 16:07:22.745000', '2018-05-08 16:07:22.745000', 'Voto', 'https://go.votomobile.org/api/v1', '302970', true, '2669570', 1, 3, 60, 15, true, 'incoming_call_id', 'subscriber_id', 'delivery_log_id', 'delivery_status');
+VALUES ('70638cc4-4c33-4899-8480-a4ef1607273b', '2018-05-08 16:07:22.745000', '2018-05-08 16:07:22.745000', 'Voto', 'https://go.votomobile.org/api/v1', '302970', true, '2669570', 1, 3, 60, 15, false, 'incoming_call_id', 'subscriber_id', 'delivery_log_id', 'delivery_status');
 
 INSERT INTO `mots`.`ivr_config_languages` (`ivr_config_id`, `ivr_language_id`, `language`) VALUES ('70638cc4-4c33-4899-8480-a4ef1607273b', '206946', 'ENGLISH');
 INSERT INTO `mots`.`ivr_config_languages` (`ivr_config_id`, `ivr_language_id`, `language`) VALUES ('70638cc4-4c33-4899-8480-a4ef1607273b', '207548', 'KRIO');

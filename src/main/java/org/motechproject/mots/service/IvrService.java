@@ -41,6 +41,7 @@ public class IvrService {
   private static final String PHONE = "phone";
   private static final String PREFERRED_LANGUAGE = "preferred_language";
   private static final String GROUPS = "groups";
+  private static final String RECEIVE_SMS = "receive_sms";
   private static final String NAME_PROPERTY = "property[name]";
   private static final String SUBSCRIBER_IDS = "subscriber_ids";
   private static final String SEND_TO_SUBSCRIBERS = "send_to_subscribers";
@@ -92,6 +93,7 @@ public class IvrService {
 
     String groups = ivrConfigService.getConfig().getDefaultUsersGroupId();
     params.add(GROUPS, groups);
+    params.add(RECEIVE_SMS, "1");
 
     VotoResponseDto<String> votoResponse = sendVotoRequest(getAbsoluteUrl(SUBSCRIBERS_URL), params,
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
