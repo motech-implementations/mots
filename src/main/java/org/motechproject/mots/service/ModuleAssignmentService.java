@@ -1,9 +1,12 @@
 package org.motechproject.mots.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.MotsConstants;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -29,6 +33,7 @@ import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.ModuleRepository;
+import org.motechproject.mots.task.ModuleAssignmentNotificationScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +42,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ModuleAssignmentService {
-
   @Autowired
   private AssignedModulesRepository repository;
 
@@ -67,6 +71,9 @@ public class ModuleAssignmentService {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  private ModuleAssignmentNotificationScheduler moduleAssignmentNotificationScheduler;
 
   /**
    * Get modules assinged to CHW.
@@ -116,6 +123,7 @@ public class ModuleAssignmentService {
 
     try {
       ivrService.addSubscriberToGroups(ivrId, getIvrGroupsFromModules(modulesToAdd));
+      ivrService.sendModuleAssignedMessage(Collections.singleton(ivrId));
       ivrService.removeSubscriberFromGroups(ivrId, getIvrGroupsFromModules(modulesToRemove));
     } catch (IvrException ex) {
       String message = "Could not assign or delete module for CHW, "
@@ -222,6 +230,7 @@ public class ModuleAssignmentService {
           currentUser
       ));
     }
+    Set<String> newIvrSubscribers = new HashSet<>();
 
     for (CommunityHealthWorker chw : communityHealthWorkers) {
 
@@ -254,7 +263,31 @@ public class ModuleAssignmentService {
         throw new ModuleAssignmentException(message, ex);
       }
       moduleProgressService.createModuleProgresses(chw, modulesToAdd);
+      if (modulesToAdd.size() > 0) {
+        newIvrSubscribers.add(ivrId);
+      }
+    }
+    sendModuleAssignmentNotification(newIvrSubscribers, assignmentDto.getNotificationTime());
+  }
 
+  private void sendModuleAssignmentNotification(Set<String> subscribers, String notificationTime) {
+    if (notificationTime != null) {
+      SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.DATE_TIME_PATTERN);
+      try {
+        Date time = sdf.parse(notificationTime);
+        moduleAssignmentNotificationScheduler.schedule(subscribers, time);
+      } catch (ParseException e) {
+        String message = "Invalid notification time format: " + notificationTime;
+        throw new ModuleAssignmentException(message, e);
+      }
+    } else {
+      try {
+        ivrService.sendModuleAssignedMessage(subscribers);
+      } catch (IvrException ex) {
+        String message = "Could not send the module assignment notification to CHWs.\n"
+            + ex.getClearVotoInfo();
+        throw new ModuleAssignmentException(message, ex);
+      }
     }
   }
 

@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.DateFormat;
+import org.motechproject.mots.validate.annotations.DateTimeFormat;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
 import org.motechproject.mots.validate.annotations.EndDateAfterStartDate;
 import org.motechproject.mots.validate.annotations.ModulesExistence;
@@ -47,4 +48,9 @@ public class DistrictAssignmentDto {
   @DateFormat
   @NotEmpty(message = ValidationMessages.EMPTY_END_DATE)
   private String endDate;
+
+  @Getter
+  @Setter
+  @DateTimeFormat
+  private String notificationTime;
 }
