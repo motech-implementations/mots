@@ -13,6 +13,11 @@ const FIELDS = {
   username: {
     label: 'Username',
     required: true,
+    getAttributes: input => ({
+      ...input,
+      className: 'form-control',
+      autoComplete: 'username',
+    }),
   },
   email: {
     label: 'Email',
@@ -36,6 +41,7 @@ const FIELDS = {
       ...input,
       type: 'password',
       className: 'form-control',
+      autoComplete: 'new-password',
     }),
     getDynamicAttributes: ({ isPasswordRequired }) => ({
       required: isPasswordRequired,
@@ -47,6 +53,7 @@ const FIELDS = {
       ...input,
       type: 'password',
       className: 'form-control',
+      autoComplete: 'new-password',
     }),
     getDynamicAttributes: ({ password, isPasswordRequired }) => ({
       hidden: !password,
