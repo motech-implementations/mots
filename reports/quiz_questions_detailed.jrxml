@@ -786,7 +786,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{phone}.replaceAll("([0-9])(?=([0-9]{3})+(?![0-9]))", "$1 ")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
