@@ -47,6 +47,7 @@ class RolesTable extends Component {
     {
       Header: 'Actions',
       minWidth: 50,
+      maxWidth: 75,
       accessor: 'id',
       Cell: cell => (
         <div className="actions-buttons-container disabled">
@@ -67,16 +68,19 @@ class RolesTable extends Component {
     {
       Header: 'Name',
       accessor: 'name',
+      minWidth: 50,
+      maxWidth: 150,
     }, {
       Header: 'Permissions',
       accessor: 'permissions',
       Cell: cell => (
-        <div className="actions-buttons-container">
+        <span>
           {_.join(_.map(cell.value, val => val.displayName), ', ')}
-        </div>
+        </span>
       ),
       filterable: false,
       sortable: false,
+      style: { whiteSpace: 'unset' },
     }];
 
   fetchStrategy(tableState) {
