@@ -128,7 +128,8 @@ class DistrictAssignModules extends Component {
 
   handleNotificationTimeChange(notificationTime) {
     const dateFormat = 'YYYY-MM-DD HH:mm';
-    const formattedTime = !notificationTime || typeof endDate === 'string' ? notificationTime : notificationTime.format(dateFormat);
+    const formattedTime = (notificationTime)
+      ? notificationTime.utc().format(dateFormat) : notificationTime;
     this.setState({ notificationTime: formattedTime });
     this.props.resetLogoutCounter();
   }
@@ -243,7 +244,6 @@ class DistrictAssignModules extends Component {
                 dateFormat="YYYY-MM-DD"
                 timeFormat="HH:mm"
                 closeOnSelect
-                value={this.state.notificationTime}
                 onChange={this.handleNotificationTimeChange}
                 id="notification-time"
               />
