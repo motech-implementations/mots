@@ -15,6 +15,7 @@ const FIELDS = {
       disabled: true,
       type: 'text',
       className: 'form-control',
+      autoComplete: 'username',
       ...input,
     }),
   },
@@ -30,6 +31,7 @@ const FIELDS = {
       ...input,
       type: 'password',
       className: 'form-control',
+      autoComplete: 'new-password',
     }),
   },
   confirmNewPassword: {
@@ -38,6 +40,7 @@ const FIELDS = {
       ...input,
       type: 'password',
       className: 'form-control',
+      autoComplete: 'new-password',
     }),
     getDynamicAttributes: ({ newPassword }) => ({
       hidden: !newPassword,
@@ -50,6 +53,7 @@ const FIELDS = {
       ...input,
       type: 'password',
       className: 'form-control',
+      autoComplete: 'current-password',
     }),
     getDynamicAttributes: ({ confirmNewPassword }) => ({
       hidden: !confirmNewPassword,
