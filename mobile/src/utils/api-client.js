@@ -61,7 +61,7 @@ export default class ApiClient {
         }).catch(err => getAlert('Error occurred.', err));
       }
     }
-    return error;
+    return null;
   }
 
   static async handleResponse(response, type) {
