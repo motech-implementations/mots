@@ -2,6 +2,7 @@ package org.motechproject.mots.task;
 
 import java.util.Date;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.service.IvrService;
@@ -30,8 +31,12 @@ public class ModuleAssignmentNotificationScheduler  {
    * @param time when to fire the task
    */
   public void schedule(Set<String> subscribers, Date time) {
+    LOGGER.info("Scheduling a notification task for the following subscribers: "
+        + StringUtils.join(subscribers, ",") + ", time: " + time);
     taskScheduler.schedule(() -> {
       try {
+        LOGGER.info("Firing the notification task, subscribers: "
+            + StringUtils.join(subscribers, ",") + ", time: " + time);
         ivrService.sendModuleAssignedMessage(subscribers);
       } catch (IvrException e) {
         LOGGER.error("Could not send the module assignment notification to CHWs.\n\n"
