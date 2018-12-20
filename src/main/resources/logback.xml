@@ -22,4 +22,12 @@
     <appender-ref ref="CONSOLE" />
   </logger>
 
+  <logger name="org.motechproject.mots.service.ModuleAssignmentService" level="INFO" additivity="false">
+    <appender-ref ref="CONSOLE" />
+  </logger>
+
+  <logger name="org.motechproject.mots.task.ModuleAssignmentNotificationScheduler" level="INFO" additivity="false">
+    <appender-ref ref="CONSOLE" />
+  </logger>
+
 </configuration>

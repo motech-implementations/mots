@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.constants.MotsConstants;
 import org.motechproject.mots.domain.AssignedModules;
@@ -42,6 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ModuleAssignmentService {
+  private static final Logger LOGGER = Logger
+      .getLogger(ModuleAssignmentNotificationScheduler.class);
+
   @Autowired
   private AssignedModulesRepository repository;
 
@@ -282,6 +287,8 @@ public class ModuleAssignmentService {
       }
     } else {
       try {
+        LOGGER.info("Sending module assignment notifications right away, subscribers: "
+            + StringUtils.join(subscribers, ","));
         ivrService.sendModuleAssignedMessage(subscribers);
       } catch (IvrException ex) {
         String message = "Could not send the module assignment notification to CHWs.\n"
