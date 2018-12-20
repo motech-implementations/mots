@@ -27,6 +27,15 @@ class DistrictAssignModules extends Component {
       });
   }
 
+  static getDefaultNotificationDate() {
+    const notificationDate = new Date();
+    if (notificationDate.getHours() >= 12) {
+      notificationDate.setDate(notificationDate.getDate() + 1);
+    }
+    notificationDate.setHours(12, 0, 0, 0);
+    return notificationDate;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -129,7 +138,7 @@ class DistrictAssignModules extends Component {
   handleNotificationTimeChange(notificationTime) {
     const dateFormat = 'YYYY-MM-DD HH:mm';
     const formattedTime = (notificationTime)
-      ? notificationTime.utc().format(dateFormat) : notificationTime;
+      ? notificationTime.clone().utc().format(dateFormat) : notificationTime;
     this.setState({ notificationTime: formattedTime });
     this.props.resetLogoutCounter();
   }
@@ -246,6 +255,8 @@ class DistrictAssignModules extends Component {
                 closeOnSelect
                 onChange={this.handleNotificationTimeChange}
                 id="notification-time"
+                defaultValue={DistrictAssignModules.getDefaultNotificationDate()}
+                isValidDate={current => current.isSameOrAfter(new Date(), 'day')}
               />
             </div>
           </div>
