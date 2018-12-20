@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
@@ -27,6 +28,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -36,6 +38,7 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@SuppressWarnings("PMD.TooManyMethods")
 @Service
 public class IvrService {
 
@@ -177,6 +180,28 @@ public class IvrService {
       VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord);
 
       moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+    }
+  }
+
+  /**
+   * Manually send Voto call log to Mots, this should be used only when call log is incorrect and
+   * must be manually changed before it can be successfully processed in Mots.
+   * @param votoCallLogDto it contains information about module progress (which trees were
+   *     listened by user and what answers were chosen)
+   */
+  @PreAuthorize(DefaultPermissions.HAS_ADMIN_ROLE)
+  public void manuallySendVotoCallLog(VotoCallLogDto votoCallLogDto) throws IvrException {
+    IvrConfig ivrConfig = ivrConfigService.getConfig();
+    CallStatus callStatus = getCallStatus(ivrConfig, votoCallLogDto.getStatus());
+
+    boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
+
+    if (CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted) {
+      moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+    } else {
+      throw new IllegalArgumentException("Wrong call status send: " + callStatus
+          + ", only " + CallStatus.FINISHED_COMPLETE + " or "
+          + CallStatus.FINISHED_INCOMPLETE + " allowed");
     }
   }
 
