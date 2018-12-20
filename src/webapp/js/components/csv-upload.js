@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { ClimbingBoxLoader } from 'react-spinners';
 import PropTypes from 'prop-types';
@@ -49,7 +50,7 @@ class CsvUpload extends Component {
       },
     };
 
-    const url = `${this.props.uploadUrl}/${this.state.selected}`;
+    const url = this.props.selectText ? `${this.props.uploadUrl}/${this.state.selected}` : this.props.uploadUrl;
 
     apiClient.post(url, formData, config).then((response) => {
       let content = `Your upload has been successful! \nThere were ${_.size(response.data)} issue/s with your file. \n`;
@@ -91,6 +92,7 @@ class CsvUpload extends Component {
                 />
               </div>
             </div>
+            { this.props.selectText &&
             <div className="row">
               <div className="input-group margin-top-md margin-bottom-md">
                 <input
@@ -105,7 +107,7 @@ class CsvUpload extends Component {
                   {this.props.selectText}
                 </label>
               </div>
-            </div>
+            </div> }
             <div className="row">
               <button
                 type="submit"
@@ -131,13 +133,17 @@ class CsvUpload extends Component {
   }
 }
 
-export default connect(null, { resetLogoutCounter })(CsvUpload);
+export default withRouter(connect(null, { resetLogoutCounter })(CsvUpload));
 
 CsvUpload.propTypes = {
   uploadUrl: PropTypes.string.isRequired,
-  selectText: PropTypes.string.isRequired,
   resetLogoutCounter: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  selectText: PropTypes.string,
+};
+
+CsvUpload.defaultProps = {
+  selectText: null,
 };

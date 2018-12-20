@@ -41,6 +41,11 @@ public class Chiefdom extends Location {
     super(name);
   }
 
+  public Chiefdom(String name, District district) {
+    super(name);
+    this.district = district;
+  }
+
   @Override
   public String getParentName() {
     return district.getName();

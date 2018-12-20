@@ -228,7 +228,7 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        {hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/district/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
@@ -245,6 +245,30 @@ class SideBar extends Component {
             <Link to="/locations/0" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-list-alt" />
               <span className="icon-text">Location list</span>
+            </Link>
+          </li>
+        }
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/community/upload" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-save-file" />
+              <span className="icon-text">Upload Community CSV</span>
+            </Link>
+          </li>
+        }
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/facility/upload" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-save-file" />
+              <span className="icon-text">Upload Facility CSV</span>
+            </Link>
+          </li>
+        }
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+          <li className="border-none">
+            <Link to="/locations/chiefdom/upload" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-save-file" />
+              <span className="icon-text">Upload Chiefdom CSV</span>
             </Link>
           </li>
         }

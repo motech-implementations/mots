@@ -1,11 +1,11 @@
 package org.motechproject.mots.web;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import javax.validation.Valid;
-
 import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
@@ -32,8 +32,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @SuppressWarnings("PMD.TooManyMethods")
@@ -408,5 +410,41 @@ public class LocationController extends BaseController {
         locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
 
     return new PageImpl<>(locationPreviewDtos, pageable, facilities.getTotalElements());
+  }
+
+  /**
+   * Import list of Chiefdoms in ".csv" format to mots, parse it and save records in DB.
+   * @param file File in ".csv" format to upload
+   */
+  @RequestMapping(value = "/chiefdom/import", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Map<Integer, String> importChiefdomCsv(@RequestPart("file") MultipartFile file)
+      throws IOException {
+    return locationService.importChiefdomsFromCsv(file);
+  }
+
+  /**
+   * Import list of Communities in ".csv" format to mots, parse it and save records in DB.
+   * @param file File in ".csv" format to upload
+   */
+  @RequestMapping(value = "/community/import", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Map<Integer, String> importCommunityCsv(@RequestPart("file") MultipartFile file)
+      throws IOException {
+    return locationService.importCommunitiesFromCsv(file);
+  }
+
+  /**
+   * Import list of Facilities in ".csv" format to mots, parse it and save records in DB.
+   * @param file File in ".csv" format to upload
+   */
+  @RequestMapping(value = "/facility/import", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public Map<Integer, String> importFacilityCsv(@RequestPart("file") MultipartFile file)
+      throws IOException {
+    return locationService.importFacilitiesFromCsv(file);
   }
 }
