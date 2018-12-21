@@ -18,6 +18,7 @@ public class DefaultPermissions {
   public static final String MANAGE_INCHARGE_USERS = "ROLE_MANAGE_INCHARGE_USERS";
   public static final String DISPLAY_REPORTS = "ROLE_DISPLAY_REPORTS";
   public static final String UPLOAD_CSV = "ROLE_UPLOAD_CSV";
+  public static final String ADMIN = "ROLE_ADMIN";
 
   public static final String HAS_CHW_READ_ROLE = "hasRole('" + CHW_READ + "')";
   public static final String HAS_CHW_WRITE_ROLE = "hasRole('" + CHW_WRITE + "')";
@@ -47,4 +48,5 @@ public class DefaultPermissions {
 
   public static final String HAS_MANAGE_USERS_OR_MANAGE_INCHARGE_USERS_ROLE =
       "hasAnyRole('" + MANAGE_USERS + "','" + MANAGE_INCHARGE_USERS + "')";
+  public static final String HAS_ADMIN_ROLE = "hasRole('" + ADMIN + "')";
 }

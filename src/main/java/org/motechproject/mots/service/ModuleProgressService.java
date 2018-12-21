@@ -214,7 +214,7 @@ public class ModuleProgressService {
           return;
         }
       } catch (WrongModuleException ex) {
-        LOGGER.info("Wrong module chosen in CallLog with id: " + callLog.getLogId());
+        LOGGER.info("Wrong module chosen in CallLog with id: " + callLog.getLogId(), ex);
       }
     }
   }

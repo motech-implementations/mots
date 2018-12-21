@@ -3,6 +3,8 @@ package org.motechproject.mots.web;
 import java.util.Map;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.dto.CallDetailRecordDto;
+import org.motechproject.mots.dto.VotoCallLogDto;
+import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.CallDetailRecordMapper;
 import org.motechproject.mots.service.IvrService;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +41,18 @@ public class IvrController extends BaseController {
     CallDetailRecord callDetailRecord = callDetailRecordMapper.fromDto(recordDto);
 
     ivrService.saveCallDetailRecord(callDetailRecord, configName);
+  }
+
+  /**
+   * Manually send Voto call log to Mots, this should be used only when call log is incorrect and
+   * must be manually changed before it can be successfully processed in Mots.
+   * @param votoResponseDto voto response containing call log
+   */
+  @RequestMapping(value = "/votoCallLog/send", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public void manuallySendVotoCallLog(@RequestBody VotoResponseDto<VotoCallLogDto> votoResponseDto)
+      throws IvrException {
+    ivrService.manuallySendVotoCallLog(votoResponseDto.getData());
   }
 
 }
