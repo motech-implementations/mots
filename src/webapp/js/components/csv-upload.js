@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import apiClient from '../utils/api-client';
 import { resetLogoutCounter } from '../actions/index';
-import { hasAuthority, UPLOAD_CSV_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY } from '../utils/authorization';
 
 class CsvUpload extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class CsvUpload extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(UPLOAD_CSV_AUTHORITY)) {
+    if (!hasAuthority(UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY)) {
       this.props.history.push('/home');
     }
   }

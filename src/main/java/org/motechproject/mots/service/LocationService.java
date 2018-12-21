@@ -232,7 +232,7 @@ public class LocationService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
   public Map<Integer, String> importChiefdomsFromCsv(MultipartFile chiefdomsCsvFile)
       throws IOException {
     ICsvMapReader csvMapReader = createCsvMapReader(chiefdomsCsvFile.getInputStream());
@@ -284,7 +284,7 @@ public class LocationService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
   public Map<Integer, String> importCommunitiesFromCsv(MultipartFile communitiesCsvFile)
       throws IOException {
     ICsvMapReader csvMapReader = createCsvMapReader(communitiesCsvFile.getInputStream());
@@ -370,7 +370,7 @@ public class LocationService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
   public Map<Integer, String> importFacilitiesFromCsv(MultipartFile facilitiesCsvFile)
       throws IOException {
     ICsvMapReader csvMapReader = createCsvMapReader(facilitiesCsvFile.getInputStream());
@@ -433,11 +433,12 @@ public class LocationService {
         continue;
       }
 
-      Optional<Facility> facility = facilityRepository.findByNameAndChiefdom(facilityName,
-          chiefdom.get());
+      Optional<Facility> facility = facilityRepository
+          .findByFacilityIdOrChiefdomAndName(facilityId, chiefdom.get(), facilityName);
 
       if (facility.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "Facility with this name already exists");
+        errorMap.put(csvMapReader.getLineNumber(),
+            "Facility with this name of facility id already exists");
         continue;
       }
 
