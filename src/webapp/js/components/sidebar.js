@@ -11,7 +11,8 @@ import {
   MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
   CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
-  MANAGE_INCHARGE_USERS_AUTHORITY, UPLOAD_CSV_AUTHORITY,
+  MANAGE_INCHARGE_USERS_AUTHORITY, UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
+  UPLOAD_LOCATION_CSV_AUTHORITY,
 } from '../utils/authorization';
 import { fetchReports } from '../actions/index';
 
@@ -101,7 +102,7 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        { hasAuthority(UPLOAD_CSV_AUTHORITY) &&
+        { hasAuthority(UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY) &&
           <li className="border-none">
             <Link to="/chw/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
@@ -169,7 +170,7 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        { hasAuthority(UPLOAD_CSV_AUTHORITY) &&
+        { hasAuthority(UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY) &&
           <li className="border-none">
             <Link to="/incharge/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
@@ -236,19 +237,7 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        { hasAuthority(
-            DISPLAY_FACILITIES_AUTHORITY,
-            MANAGE_FACILITIES_AUTHORITY,
-            MANAGE_OWN_FACILITIES_AUTHORITY,
-          ) &&
-          <li className="border-none">
-            <Link to="/locations/0" onClick={this.props.hideMenuSmart}>
-              <span className="glyphicon glyphicon-list-alt" />
-              <span className="icon-text">Location list</span>
-            </Link>
-          </li>
-        }
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/community/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
@@ -256,7 +245,7 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/facility/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
@@ -264,13 +253,25 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
           <li className="border-none">
             <Link to="/locations/chiefdom/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload Chiefdom CSV</span>
             </Link>
           </li>
+        }
+        { hasAuthority(
+          DISPLAY_FACILITIES_AUTHORITY,
+          MANAGE_FACILITIES_AUTHORITY,
+          MANAGE_OWN_FACILITIES_AUTHORITY,
+        ) &&
+        <li className="border-none">
+          <Link to="/locations/0" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">Location list</span>
+          </Link>
+        </li>
         }
       </ul>
     );
@@ -360,7 +361,11 @@ class SideBar extends Component {
               <span className="icon-text">{this.props.showMenuSmart} Home</span>
             </Link>
           </li>
-          { hasAuthority(CHW_READ_AUTHORITY, CHW_WRITE_AUTHORITY, UPLOAD_CSV_AUTHORITY) &&
+          { hasAuthority(
+              CHW_READ_AUTHORITY,
+              CHW_WRITE_AUTHORITY,
+              UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
+            ) &&
             <li>
               <a href="" onClick={this.toggleHealthWorkersMenu}>
                 <span className="fa fa-users" />
@@ -388,7 +393,11 @@ class SideBar extends Component {
               { this.renderModulesMenu() }
             </li>
           }
-          { hasAuthority(INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY, UPLOAD_CSV_AUTHORITY) &&
+          { hasAuthority(
+              INCHARGE_READ_AUTHORITY,
+              INCHARGE_WRITE_AUTHORITY,
+              UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
+            ) &&
             <li>
               <a href="" onClick={this.toggleInchargeMenu}>
                 <span className="fa fa-user-md" />
@@ -417,6 +426,7 @@ class SideBar extends Component {
             MANAGE_FACILITIES_AUTHORITY,
             MANAGE_OWN_FACILITIES_AUTHORITY,
             CREATE_FACILITIES_AUTHORITY,
+            UPLOAD_LOCATION_CSV_AUTHORITY,
           ) &&
           <li>
             <a href="" onClick={this.toggleLocationsMenu}>
