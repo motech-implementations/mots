@@ -7,6 +7,7 @@ const InchargesUpload = () => (
     <CsvUpload
       uploadUrl="/api/incharge/upload"
       selectText="Select uploaded Incharges"
+      uploadLabel="CSV File Upload for Incharges"
     />
   </div>
 );

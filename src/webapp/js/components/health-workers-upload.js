@@ -7,6 +7,7 @@ const HealthWorkersUpload = () => (
     <CsvUpload
       uploadUrl="/api/chw/upload"
       selectText="Select uploaded CHWs"
+      uploadLabel="CSV File Upload for CHWs"
     />
   </div>
 );

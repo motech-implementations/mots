@@ -6,6 +6,7 @@ const ChiefdomUpload = () => (
   <div>
     <CsvUpload
       uploadUrl="/api/chiefdom/import"
+      uploadLabel="CSV File Upload for Chiefdoms"
     />
   </div>
 );
