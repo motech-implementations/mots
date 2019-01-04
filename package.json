@@ -6,7 +6,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.0",
     "client-oauth2": "^4.1.0",
     "dompurify": "^1.0.3",
     "font-awesome": "^4.7.0",
