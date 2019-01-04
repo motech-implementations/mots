@@ -66,7 +66,7 @@ class CsvUpload extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">CSV File Upload</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">{this.props.uploadLabel}</h1>
         <div>
           <form className="form-horizontal" onSubmit={this.onFormSubmit} >
             <div className="row padding-bottom-xs">
@@ -137,6 +137,7 @@ export default withRouter(connect(null, { resetLogoutCounter })(CsvUpload));
 
 CsvUpload.propTypes = {
   uploadUrl: PropTypes.string.isRequired,
+  uploadLabel: PropTypes.string.isRequired,
   resetLogoutCounter: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,

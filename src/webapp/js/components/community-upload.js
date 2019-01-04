@@ -6,6 +6,7 @@ const CommunityUpload = () => (
   <div>
     <CsvUpload
       uploadUrl="/api/community/import"
+      uploadLabel="CSV File Upload for Communities"
     />
   </div>
 );
