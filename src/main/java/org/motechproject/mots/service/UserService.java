@@ -1,5 +1,6 @@
 package org.motechproject.mots.service;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.dto.UserProfileDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
+import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.repository.PermissionRepository;
 import org.motechproject.mots.repository.RoleRepository;
@@ -103,8 +105,22 @@ public class UserService {
         new EntityNotFoundException("Role with id: {0} not found", id.toString()));
   }
 
+  /**
+   * Saves a UserRole. Checks if role has id assigned (ie. if it is an update action),
+   * if not it checks for name uniqueness. If the name is not unique it throws MotsException.
+   *
+   * @param role UserRole to be created or updated.
+   * @throws MotsException if trying to create a new role with already existing name.
+   * @return saved UserRole
+   */
   @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
   public UserRole saveRole(UserRole role) {
+    if (role.getId() == null) {
+      roleRepository.findByName(role.getName()).ifPresent(r -> {
+        throw new MotsException(MessageFormat.format("The role with {0} name already exists. "
+        + "Rename new role or edit the existing one.", r.getName()));
+      });
+    }
     return roleRepository.save(role);
   }
 
