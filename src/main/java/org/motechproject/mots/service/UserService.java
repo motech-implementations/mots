@@ -115,12 +115,12 @@ public class UserService {
    */
   @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
   public UserRole saveRole(UserRole role) {
-    if (role.getId() == null) {
-      roleRepository.findByName(role.getName()).ifPresent(r -> {
+    roleRepository.findByName(role.getName()).ifPresent(r -> {
+      if (role.getId() == null || !role.getId().equals(r.getId())) {
         throw new MotsException(MessageFormat.format("The role with {0} name already exists. "
-        + "Rename new role or edit the existing one.", r.getName()));
-      });
-    }
+        + "Change the name.", r.getName()));
+      }
+    });
     return roleRepository.save(role);
   }
 
