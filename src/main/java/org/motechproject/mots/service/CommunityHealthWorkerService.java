@@ -2,7 +2,9 @@ package org.motechproject.mots.service;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -214,15 +216,19 @@ public class CommunityHealthWorkerService {
     csvMapReader = new CsvMapReader(new InputStreamReader(chwCsvFile.getInputStream()),
         CsvPreference.STANDARD_PREFERENCE);
 
-    String[] header = csvMapReader.getHeader(true);
-    header = Arrays.stream(header).map(String::toLowerCase).toArray(String[]::new);
+    String[] header = Arrays.stream(csvMapReader.getHeader(true))
+      .map(String::trim)
+      .map(String::toLowerCase)
+      .toArray(String[]::new);
 
-    for (String headerName : CSV_HEADERS) {
+    CSV_HEADERS.forEach(headerName -> {
       if (Arrays.stream(header).noneMatch(h -> h.equals(headerName))) {
-        throw new IllegalArgumentException("Column with name: \"" + headerName
-            + "\" is missing in the CSV file");
+        List<String> unmappedHeaders = new ArrayList<String>(Arrays.asList(header));
+        unmappedHeaders.removeAll(CSV_HEADERS);
+        throw new IllegalArgumentException(MessageFormat.format("Column with name: \"" + headerName
+            + "\" is missing in the CSV file. Ignored CSV headers: {0}", unmappedHeaders));
       }
-    }
+    });
 
     Map<String, String> csvRow;
     Set<String> phoneNumberSet = new HashSet<>();
@@ -322,6 +328,8 @@ public class CommunityHealthWorkerService {
         healthWorkerRepository.save(communityHealthWorker);
       }
     }
+
+    csvMapReader.close();
 
     return errorMap;
   }
