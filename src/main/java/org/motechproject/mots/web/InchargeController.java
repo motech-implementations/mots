@@ -122,7 +122,8 @@ public class InchargeController extends BaseController {
 
     inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
     existingIncharge.setSelected(true);
-    return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
+    return inchargeMapper.toDto(
+        inchargeService.saveIncharge(existingIncharge, inchargeDto.isCreateUser()));
   }
 
   /**
@@ -139,7 +140,7 @@ public class InchargeController extends BaseController {
     checkBindingResult(bindingResult);
     Incharge existingIncharge = inchargeService.getIncharge(id);
     inchargeMapper.updateFromDto(inchargeDto, existingIncharge);
-    return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge));
+    return inchargeMapper.toDto(inchargeService.saveIncharge(existingIncharge, false));
   }
 
   /**

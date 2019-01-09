@@ -13,6 +13,7 @@ import requireAuth from './components/auth/require_auth';
 import authenticateToken from './components/auth/authenticate_token';
 
 import Store from './store';
+import Registration from './components/registration';
 
 // eslint-disable-next-line import/prefer-default-export
 export const { dispatch } = Store;
@@ -25,6 +26,7 @@ ReactDOM.render(
       <div>
         <Switch>
           <Route path="/login" component={Signin} />
+          <Route path="/register/:token" component={Registration} />
           <Route path="/" component={requireAuth(App)} />
         </Switch>
       </div>

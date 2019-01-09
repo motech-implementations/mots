@@ -5,14 +5,40 @@ import jwtDecode from 'jwt-decode';
 import apiClient from '../utils/api-client';
 
 import {
-  AUTH_USER, UNAUTH_USER, AUTH_ERROR, FETCH_CHWS,
-  SAVE_HEALTH_WORKER, FETCH_LOCATIONS, CREATE_INCHARGE, FETCH_INCHARGES,
-  SAVE_INCHARGE, SAVE_ROLE, CREATE_ROLE,
-  SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER, FETCH_USERS, FETCH_CHIEFDOMS,
-  FETCH_DISTRICTS, FETCH_FACILITIES, FETCH_COMMUNITIES, CREATE_USER,
-  FETCH_ROLES, SEARCH_ROLES, SAVE_USER, CREATE_FACILITY, CREATE_COMMUNITY, SAVE_COMMUNITY,
-  SAVE_FACILITY, SAVE_USER_PROFILE, FETCH_REPORTS, FETCH_PERMISSIONS, SAVE_CHIEFDOM,
-  CREATE_CHIEFDOM, SAVE_DISTRICT, CREATE_DISTRICT,
+  AUTH_USER,
+  UNAUTH_USER,
+  AUTH_ERROR,
+  FETCH_CHWS,
+  SAVE_HEALTH_WORKER,
+  FETCH_LOCATIONS,
+  CREATE_INCHARGE,
+  FETCH_INCHARGES,
+  SAVE_INCHARGE,
+  SAVE_ROLE,
+  CREATE_ROLE,
+  SET_COUNTER_LOGOUT_TIME,
+  RESET_LOGOUT_COUNTER,
+  FETCH_USERS,
+  FETCH_CHIEFDOMS,
+  FETCH_DISTRICTS,
+  FETCH_FACILITIES,
+  FETCH_COMMUNITIES,
+  CREATE_USER,
+  FETCH_ROLES,
+  SEARCH_ROLES,
+  SAVE_USER,
+  CREATE_FACILITY,
+  CREATE_COMMUNITY,
+  SAVE_COMMUNITY,
+  SAVE_FACILITY,
+  SAVE_USER_PROFILE,
+  FETCH_REPORTS,
+  FETCH_PERMISSIONS,
+  SAVE_CHIEFDOM,
+  CREATE_CHIEFDOM,
+  SAVE_DISTRICT,
+  CREATE_DISTRICT,
+  FETCH_TOKEN, REGISTER_USER,
 } from './types';
 
 const BASE_URL = '/api';
@@ -390,6 +416,27 @@ export function fetchReports() {
 
   return {
     type: FETCH_REPORTS,
+    payload: request,
+  };
+}
+
+
+export function fetchToken(token) {
+  const url = `/api/token/${token}`;
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_TOKEN,
+    payload: request,
+  };
+}
+
+export function registerUser(values, token, callback) {
+  const request = apiClient.post(`${BASE_URL}/register/${token}`, values);
+  request.then(result => callback(result));
+
+  return {
+    type: REGISTER_USER,
     payload: request,
   };
 }

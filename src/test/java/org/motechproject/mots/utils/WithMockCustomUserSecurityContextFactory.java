@@ -31,6 +31,7 @@ public class WithMockCustomUserSecurityContextFactory
         customUser.password(),
         customUser.email(),
         customUser.name(),
+        null,
         grantedAuthorities,
         customUser.enabled()
     );
