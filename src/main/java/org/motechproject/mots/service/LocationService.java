@@ -3,6 +3,8 @@ package org.motechproject.mots.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -457,15 +459,20 @@ public class LocationService {
 
   private String[] getAndValidateCsvHeader(ICsvMapReader csvMapReader,
       List<String> requiredColumns) throws IOException {
-    String[] header = csvMapReader.getHeader(true);
-    header = Arrays.stream(header).map(String::toLowerCase).toArray(String[]::new);
+    String[] header = Arrays.stream(csvMapReader.getHeader(true))
+      .map(String::trim)
+      .map(String::toLowerCase)
+      .toArray(String[]::new);
 
-    for (String columnName : requiredColumns) {
+    requiredColumns.forEach(columnName -> {
       if (Arrays.stream(header).noneMatch(h -> h.equals(columnName))) {
-        throw new IllegalArgumentException("Column with name: \"" + columnName
-            + "\" is missing in the CSV file");
+        List<String> unmappedHeaders = new ArrayList<String>(Arrays.asList(header));
+        unmappedHeaders.removeAll(requiredColumns);
+        throw new IllegalArgumentException(MessageFormat.format(
+            "Column with name: \"" + columnName + "\" is missing in the CSV file. "
+            + "Ignored CSV headers: {0}", unmappedHeaders));
       }
-    }
+    });
 
     return header;
   }
