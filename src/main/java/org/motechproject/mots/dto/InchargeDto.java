@@ -70,4 +70,8 @@ public class InchargeDto {
   @Getter
   @Setter
   private String facilityName;
+
+  @Getter
+  @Setter
+  private boolean createUser;
 }

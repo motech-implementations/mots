@@ -107,4 +107,6 @@
   <include file="20181218_1832_unify_phone_numbers_in_reports.mysql.sql" relativeToChangelogFile="true" />
   <include file="20181220_0415.mysql.sql" relativeToChangelogFile="true" />
   <include file="20181221_1418.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20190107_1352.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20190108_1640.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>

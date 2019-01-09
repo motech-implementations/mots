@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.motechproject.mots.domain.security.User;
 
 @Entity
 @Table(name = "in_charge")
@@ -49,6 +50,12 @@ public class Incharge extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Facility facility;
+
+  @OneToOne
+  @JoinColumn(name = "user_id", unique = true)
+  @Getter
+  @Setter
+  private User user;
 
   @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
   @Getter

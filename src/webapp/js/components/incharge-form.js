@@ -88,6 +88,17 @@ const FIELDS = {
   },
   email: {
     label: 'Email address',
+    getDynamicAttributes: ({ createUser }) => ({
+      required: createUser,
+    }),
+  },
+  createUser: {
+    getAttributes: input => ({
+      ...input,
+      type: 'checkbox',
+      checked: input.value,
+    }),
+    label: 'Create user',
   },
 };
 
@@ -113,6 +124,7 @@ class InchargeForm extends Component {
         districtId={this.props.districtId}
         chiefdomId={this.props.chiefdomId}
         addIncharge={this.props.addIncharge}
+        createUser={this.props.createUser}
       />
     );
   }
@@ -150,6 +162,7 @@ function mapStateToProps(state) {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
+    createUser: selector(state, 'createUser'),
   };
 }
 
@@ -167,6 +180,7 @@ InchargeForm.propTypes = {
   districtId: PropTypes.string,
   chiefdomId: PropTypes.string,
   addIncharge: PropTypes.bool,
+  createUser: PropTypes.bool,
 };
 
 InchargeForm.defaultProps = {
@@ -174,4 +188,5 @@ InchargeForm.defaultProps = {
   districtId: null,
   chiefdomId: null,
   addIncharge: false,
+  createUser: false,
 };

@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
@@ -51,13 +52,26 @@ public class InchargeService {
   @Autowired
   private FacilityRepository facilityRepository;
 
+  @Autowired
+  private RegistrationTokenService registrationTokenService;
+
   @PreAuthorize(DefaultPermissions.HAS_INCHARGE_READ_ROLE)
   public Iterable<Incharge> getIncharges() {
     return inchargeRepository.findAll();
   }
 
+  /**
+   * Save incharge and create a registration token when the option is checked.
+   * @param incharge the incharge to save
+   * @param createUser whether to create a registration token
+   * @return saved incharge
+   */
+  @Transactional
   @PreAuthorize(DefaultPermissions.HAS_INCHARGE_WRITE_ROLE)
-  public Incharge saveIncharge(Incharge incharge) {
+  public Incharge saveIncharge(Incharge incharge, boolean createUser) {
+    if (createUser) {
+      registrationTokenService.createRegistrationToken(incharge);
+    }
     return inchargeRepository.save(incharge);
   }
 
@@ -217,7 +231,7 @@ public class InchargeService {
       }
 
       inchargeRepository.save(new Incharge(firstName, secondName, otherName,
-          phoneNumber, null, facility, selected));
+          phoneNumber, null, facility, null, selected));
     }
 
     csvMapReader.close();
