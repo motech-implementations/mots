@@ -76,6 +76,7 @@ const QUESTION_FIELDS = {
             { value: 'Correct', label: 'Correct' },
             { value: 'Incorrect', label: 'Incorrect' },
             { value: 'I don\'t know', label: 'I don\'t know' },
+            { value: 'Repeat', label: 'Repeat' },
           ],
           simpleValue: true,
         }),
