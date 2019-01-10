@@ -86,6 +86,7 @@ const QUESTION_FIELDS = {
         tooltip: 'Enter here a short description of the answer. <br /> This field is optional.',
       },
     },
+    defaultValue: {},
   },
 };
 
