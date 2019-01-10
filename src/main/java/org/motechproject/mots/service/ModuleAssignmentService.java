@@ -162,7 +162,8 @@ public class ModuleAssignmentService {
           ivrService.removeSubscriberFromGroups(chwIvrId, Collections.singletonList(ivrGroup));
         } catch (IvrException ex) {
           throw new ModuleAssignmentException("Could not unassign old module version, "
-              + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo(), ex);
+              + "because of IVR module assignment error. IVR id: " + chwIvrId + "\n\n"
+              + ex.getClearVotoInfo(), ex);
         }
       });
 
