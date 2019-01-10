@@ -3,7 +3,6 @@ package org.motechproject.mots.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -12,13 +11,16 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.CallFlowElement;
+import org.motechproject.mots.domain.Choice;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Course;
 import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.ModuleProgress;
+import org.motechproject.mots.domain.MultipleChoiceQuestion;
 import org.motechproject.mots.domain.UnitProgress;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
+import org.motechproject.mots.domain.enums.ChoiceType;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.dto.VotoBlockDto;
 import org.motechproject.mots.dto.VotoBlockResponseDto;
@@ -48,8 +50,6 @@ public class ModuleProgressService {
   private static final int CONTINUE_RESPONSE = 2;
   private static final int REPEAT_RESPONSE = 3;
 
-  private static final int MAX_NUMBER_OF_ATTEMPTS = 4;
-
   private static final String VOTO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
   @Autowired
@@ -68,7 +68,7 @@ public class ModuleProgressService {
     Optional<ModuleProgress> interruptedModuleProgress =
         moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndInterrupted(chwIvrId, true);
 
-    Iterator<VotoBlockDto> blockIterator = votoCallLogDto.getInteractions().iterator();
+    ListIterator<VotoBlockDto> blockIterator = votoCallLogDto.getInteractions().listIterator();
 
     if (interruptedModuleProgress.isPresent()) {
       ModuleProgress moduleProgress = interruptedModuleProgress.get();
@@ -86,7 +86,7 @@ public class ModuleProgressService {
         moduleProgress.setInterrupted(false);
         moduleProgressRepository.save(moduleProgress);
 
-        blockIterator = votoCallLogDto.getInteractions().iterator();
+        blockIterator = votoCallLogDto.getInteractions().listIterator();
       }
     }
 
@@ -157,17 +157,9 @@ public class ModuleProgressService {
 
   @SuppressWarnings("PMD.CyclomaticComplexity")
   private void parseVotoMainMenuBlocks(VotoCallLogDto callLog,
-      Iterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
+      ListIterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
     while (blockIterator.hasNext()) {
       VotoBlockDto blockDto = getVotoBlock(blockIterator);
-
-      // main menu on Voto should start with a tree that checks if any module is available for CHW
-      if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-        LOGGER.debug("Invalid first main menu block");
-      } else {
-        // skip the check modules availability logic blocks
-        blockDto = getVotoBlock(blockIterator);
-      }
 
       // skip the "No modules available" or "Choose module" message
       if (blockDto == null || !MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
@@ -183,13 +175,6 @@ public class ModuleProgressService {
 
       // skip all choose module questions
       while (blockIterator.hasNext()) {
-        blockDto = getVotoBlock(blockIterator);
-
-        if (blockDto == null) {
-          LOGGER.debug(String.format("No module chosen by CHW with IVR Id: %s", chwIvrId));
-          return;
-        }
-
         if (RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
           break;
         }
@@ -200,6 +185,8 @@ public class ModuleProgressService {
           throw new CourseProgressException("Unexpected block type: \"{0}\" in main menu",
               blockDto.getBlockType());
         }
+
+        blockDto = getVotoBlock(blockIterator);
       }
 
       if (!blockIterator.hasNext()) {
@@ -220,7 +207,7 @@ public class ModuleProgressService {
   }
 
   private boolean parseVotoModuleBlocks(VotoCallLogDto callLog,
-      Iterator<VotoBlockDto> blockIterator, String moduleId, boolean callInterrupted) {
+      ListIterator<VotoBlockDto> blockIterator, String moduleId, boolean callInterrupted) {
     String chwIvrId = callLog.getChwIvrId();
 
     ModuleProgress moduleProgress =
@@ -262,7 +249,7 @@ public class ModuleProgressService {
     return false;
   }
 
-  private boolean parseUnitContinuationQuestion(Iterator<VotoBlockDto> blockIterator,
+  private boolean parseUnitContinuationQuestion(ListIterator<VotoBlockDto> blockIterator,
       ModuleProgress moduleProgress, UnitProgress unitProgress) {
 
     // unit continuation question block
@@ -312,8 +299,9 @@ public class ModuleProgressService {
    * Parse Voto Unit blocks.
    * @return returns true if call was interrupted
    */
+  @SuppressWarnings("PMD.CyclomaticComplexity")
   private boolean parseVotoUnitBlocks(UnitProgress unitProgress,
-      Iterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
+      ListIterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
     unitProgress.startUnit();
     ListIterator<CallFlowElement> callFlowElementsIterator =
         unitProgress.getCallFlowElementsIterator();
@@ -346,11 +334,29 @@ public class ModuleProgressService {
         LocalDateTime endDate = parseDate(blockDto.getExitAt());
 
         if (CallFlowElementType.QUESTION.equals(callFlowElement.getType())) {
-          Integer choiceId = getChoiceId(blockDto);
-          Integer numberOfAttempts = getNumberOfAttempts(blockDto);
+          Choice choice = getChoice((MultipleChoiceQuestion) callFlowElement, blockDto);
+          Integer numberOfAttempts = 0;
+
+          while (choice != null && ChoiceType.REPEAT.equals(choice.getType())) {
+            if (blockIterator.hasNext()) {
+              blockDto = blockIterator.next();
+            } else {
+              break;
+            }
+
+            if (!callFlowElement.getIvrId().equals(blockDto.getBlockId())) {
+              blockIterator.previous();
+              LOGGER.debug(String.format("Repeat question did not worked for block with id: %s",
+                  callFlowElement.getIvrId()));
+              break;
+            }
+
+            numberOfAttempts++;
+            choice = getChoice((MultipleChoiceQuestion) callFlowElement, blockDto);
+          }
 
           unitProgress.addMultipleChoiceQuestionLog(startDate, endDate, callFlowElement,
-              choiceId, numberOfAttempts);
+              choice, numberOfAttempts);
         } else {
           unitProgress.addMessageLog(startDate, endDate, callFlowElement);
         }
@@ -370,7 +376,7 @@ public class ModuleProgressService {
     return false;
   }
 
-  private VotoBlockDto checkRunUnitBlock(Iterator<VotoBlockDto> blockIterator,
+  private VotoBlockDto checkRunUnitBlock(ListIterator<VotoBlockDto> blockIterator,
       ModuleProgress moduleProgress) {
     VotoBlockDto blockDto = getVotoBlock(blockIterator);
 
@@ -389,7 +395,7 @@ public class ModuleProgressService {
     return blockDto;
   }
 
-  private VotoBlockDto getVotoBlock(Iterator<VotoBlockDto> blockIterator) {
+  private VotoBlockDto getVotoBlock(ListIterator<VotoBlockDto> blockIterator) {
     VotoBlockDto blockDto = blockIterator.next();
 
     while (IGNORED_VOTO_BLOCK_TYPES.contains(blockDto.getBlockType())) {
@@ -414,17 +420,14 @@ public class ModuleProgressService {
     return choiceId;
   }
 
-  private Integer getNumberOfAttempts(VotoBlockDto blockDto) {
-    Integer numberOfAttempts = 1;
+  private Choice getChoice(MultipleChoiceQuestion question, VotoBlockDto blockDto) {
+    Integer choiceId = getChoiceId(blockDto);
 
-    if (StringUtils.isNotBlank(blockDto.getNumberOfRepeats())) {
-      numberOfAttempts = Integer.valueOf(blockDto.getNumberOfRepeats()) + 1;
-      if (numberOfAttempts > MAX_NUMBER_OF_ATTEMPTS) {
-        numberOfAttempts = MAX_NUMBER_OF_ATTEMPTS;
-      }
+    if (choiceId == null) {
+      return null;
     }
 
-    return numberOfAttempts;
+    return question.getChoices().get(choiceId - 1);
   }
 
   private LocalDateTime parseDate(String date) {

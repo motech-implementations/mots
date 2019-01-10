@@ -113,13 +113,13 @@ public class UnitProgress extends BaseTimestampedEntity {
    * @param startDate question start date
    * @param endDate question end date
    * @param callFlowElement question that was responded to
-   * @param choiceId chosen response number, null if no answer was chosen
+   * @param choice chosen response, null if no answer was chosen
    * @param numberOfAttempts number of times this question was listened
    */
   public void addMultipleChoiceQuestionLog(LocalDateTime startDate, LocalDateTime endDate,
-      CallFlowElement callFlowElement, Integer choiceId, Integer numberOfAttempts) {
+      CallFlowElement callFlowElement, Choice choice, Integer numberOfAttempts) {
     MultipleChoiceQuestionLog multipleChoiceQuestionLog = new MultipleChoiceQuestionLog(startDate,
-        endDate, (MultipleChoiceQuestion) callFlowElement, choiceId, numberOfAttempts);
+        endDate, (MultipleChoiceQuestion) callFlowElement, choice, numberOfAttempts);
 
     if (callFlowElementLogs == null) {
       callFlowElementLogs = new HashSet<>();

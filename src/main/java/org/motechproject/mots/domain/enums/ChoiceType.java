@@ -5,7 +5,8 @@ import lombok.Getter;
 public enum ChoiceType {
   CORRECT("Correct"),
   INCORRECT("Incorrect"),
-  DONT_KNOW("I don't know");
+  DONT_KNOW("I don't know"),
+  REPEAT("Repeat");
 
   @Getter
   private String displayName;

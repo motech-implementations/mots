@@ -33,17 +33,14 @@ public class MultipleChoiceQuestionLog extends CallFlowElementLog {
    * @param startDate date when question started
    * @param endDate end date od the question
    * @param question question that was responded to
-   * @param choiceId chosen response number (starts from 1)
+   * @param choice chosen response
    * @param numberOfAttempts number of times this question was listened
    */
   public MultipleChoiceQuestionLog(LocalDateTime startDate, LocalDateTime endDate,
-      MultipleChoiceQuestion question, Integer choiceId, Integer numberOfAttempts) {
+      MultipleChoiceQuestion question, Choice choice, Integer numberOfAttempts) {
     super(startDate, endDate, question);
 
     this.numberOfAttempts = numberOfAttempts;
-
-    if (choiceId != null) {
-      this.chosenResponse = question.getChoices().get(choiceId - 1);
-    }
+    this.chosenResponse = choice;
   }
 }
