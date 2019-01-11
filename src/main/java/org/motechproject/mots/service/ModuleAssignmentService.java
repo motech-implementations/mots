@@ -127,8 +127,11 @@ public class ModuleAssignmentService {
     }
 
     try {
-      ivrService.addSubscriberToGroups(ivrId, getIvrGroupsFromModules(modulesToAdd));
-      ivrService.sendModuleAssignedMessage(Collections.singleton(ivrId));
+      List<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
+      ivrService.addSubscriberToGroups(ivrId, ivrGroups);
+      if (ivrGroups.size() > 0) {
+        ivrService.sendModuleAssignedMessage(Collections.singleton(ivrId));
+      }
       ivrService.removeSubscriberFromGroups(ivrId, getIvrGroupsFromModules(modulesToRemove));
     } catch (IvrException ex) {
       String message = "Could not assign or delete module for CHW, "
@@ -261,15 +264,16 @@ public class ModuleAssignmentService {
             "Could not assign module to CHW, because CHW has empty IVR id");
       }
 
+      List<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
       try {
-        ivrService.addSubscriberToGroups(ivrId, getIvrGroupsFromModules(modulesToAdd));
+        ivrService.addSubscriberToGroups(ivrId, ivrGroups);
       } catch (IvrException ex) {
         String message = "Could not assign or delete module for CHW, "
             + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
         throw new ModuleAssignmentException(message, ex);
       }
       moduleProgressService.createModuleProgresses(chw, modulesToAdd);
-      if (modulesToAdd.size() > 0) {
+      if (ivrGroups.size() > 0) {
         newIvrSubscribers.add(ivrId);
       }
     }
