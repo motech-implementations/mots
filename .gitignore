@@ -64,3 +64,6 @@ reports/*.jasper.hex
 
 # bin files
 bin/*
+
+# vs code files
+.vscode

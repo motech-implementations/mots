@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="communities" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1fd6ba5e-88f2-4024-83c8-21372e6faef9">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.csv.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.csv.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="summary"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.2" value="pageFooter"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value="title"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="summary"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="reportType" value="Communities"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="RecordsCount" uuid="d614af09-3384-42cc-940b-df22a533f85d">
+		<parameter name="community" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
+		<queryString>
+			<![CDATA[SELECT
+  COUNT(*) AS totalElements
+FROM community
+ JOIN facility ON community.facility_id = facility.id
+ JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
+ JOIN district ON chiefdom.district_id = district.id
+ WHERE ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
+  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
+  AND ($P{community} IS NULL OR community.name LIKE CONCAT('%',$P{community},'%'))]]>
+		</queryString>
+		<field name="totalElements" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="community" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Community"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="facility" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Facility"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="chiefdom" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Chiefdom"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="district" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="District"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Order By"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA["community"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pageSize" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Limit"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
+	</parameter>
+	<parameter name="offset" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Offset"/>
+		<property name="required" value="true"/>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+  community.name AS community,
+  facility.name AS facility,
+  chiefdom.name AS chiefdom,
+  district.name AS district
+ FROM community
+ JOIN facility ON community.facility_id = facility.id
+ JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
+ JOIN district ON chiefdom.district_id = district.id
+ WHERE ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
+  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
+  AND ($P{community} IS NULL OR community.name LIKE CONCAT('%',$P{community},'%'))
+ ORDER BY $P!{orderBy}
+ LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
+	</queryString>
+	<field name="community" class="java.lang.String"/>
+	<field name="facility" class="java.lang.String"/>
+	<field name="chiefdom" class="java.lang.String"/>
+	<field name="district" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="0" y="0" width="350" height="50" uuid="ea3b8fe8-c288-4c62-9e48-704660ec59ec">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Communities Report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="8abac13c-7930-446c-a2aa-d3a9eb1653ed">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Community"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="f8c9591c-00d2-4a38-ab38-7a5224fc938d">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="0"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="d7f916b0-b846-4070-aff4-c7a548ff7988">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Facility"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="7f4d8b32-691b-4275-affa-27fd5db94047">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="1"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="d712ff39-2114-4f82-91e1-53d775ca072c">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="b9ea0c64-d398-474c-bb4e-1b6abc5b384b">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="2"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="e4c0b3ea-5153-4096-9b7c-12b2711c5c23">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="District"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="245d3a76-f0cf-4301-88a8-8f7a175b486a">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="3"/>
+				</reportElement>
+			</staticText>
+			<componentElement>
+				<reportElement x="0" y="0" width="0" height="0" uuid="c598494f-4480-49c5-b2a1-eb26e69f498b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
+						<datasetParameter name="community">
+							<datasetParameterExpression><![CDATA[$P{community}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="facility">
+							<datasetParameterExpression><![CDATA[$P{facility}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="chiefdom">
+							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="district">
+							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="pageSize">
+							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="0" uuid="45dc533c-8c0c-41fd-837e-6a9d6956f038">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:detailCell style="Table_TD" height="0">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<textField isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
+									<property name="com.jaspersoft.studio.unit.width" value="px"/>
+									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
+								</reportElement>
+								<textFieldExpression><![CDATA[new BigDecimal($F{totalElements} / (double) $P{pageSize}).setScale(0, BigDecimal.ROUND_CEILING).toString()]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="25">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="0" width="140" height="25" uuid="cf6b0abd-3327-4263-b2db-96a319f5ed65">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Community]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="140" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Facility]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="140" height="25" uuid="9e572b39-b7d8-49b2-845b-2defa797cbd0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Chiefdom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="140" height="25" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[District]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Prevent">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="140" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.community"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{community}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="140" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.facility"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{facility}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="140" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.chiefdom"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="420" y="0" width="140" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.district"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
