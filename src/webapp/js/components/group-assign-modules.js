@@ -11,7 +11,10 @@ import 'react-datetime/css/react-datetime.css';
 import { resetLogoutCounter, fetchLocations } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { ASSIGN_MODULES_AUTHORITY, hasAuthority } from '../utils/authorization';
-import { getSelectableLocations } from '../utils/form-utils';
+import {
+  getDefaultNotificationDate,
+  getSelectableLocations,
+} from '../utils/form-utils';
 
 class DistrictAssignModules extends Component {
   static fetchAvailableModules() {
@@ -25,15 +28,6 @@ class DistrictAssignModules extends Component {
         );
         return { options: availableModulesList };
       });
-  }
-
-  static getDefaultNotificationDate() {
-    const notificationDate = new Date();
-    if (notificationDate.getHours() >= 12) {
-      notificationDate.setDate(notificationDate.getDate() + 1);
-    }
-    notificationDate.setHours(12, 0, 0, 0);
-    return notificationDate;
   }
 
   constructor(props) {
@@ -255,7 +249,7 @@ class DistrictAssignModules extends Component {
                 closeOnSelect
                 onChange={this.handleNotificationTimeChange}
                 id="notification-time"
-                defaultValue={DistrictAssignModules.getDefaultNotificationDate()}
+                defaultValue={getDefaultNotificationDate()}
                 isValidDate={current => current.isSameOrAfter(new Date(), 'day')}
               />
             </div>

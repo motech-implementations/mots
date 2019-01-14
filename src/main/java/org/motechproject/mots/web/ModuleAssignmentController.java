@@ -35,9 +35,7 @@ public class ModuleAssignmentController extends BaseController {
   @RequestMapping(value = "/module/assign", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public void assignModules(@RequestBody ModuleAssignmentDto moduleAssignmentDto) {
-    AssignedModules assignedModules = moduleAssignmentMapper.fromDto(moduleAssignmentDto);
-
-    moduleAssignmentService.assignModules(assignedModules);
+    moduleAssignmentService.assignModules(moduleAssignmentDto);
   }
 
   /**
