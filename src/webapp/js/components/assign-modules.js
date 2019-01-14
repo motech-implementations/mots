@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
 import { Async } from 'react-select';
+import DateTime from 'react-datetime';
 
 import 'react-select/dist/react-select.css';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
@@ -12,6 +13,7 @@ import 'react-dual-listbox/lib/react-dual-listbox.css';
 import { resetLogoutCounter } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { hasAuthority, ASSIGN_MODULES_AUTHORITY } from '../utils/authorization';
+import { getDefaultNotificationDate } from '../utils/form-utils';
 
 class AssignModules extends Component {
   constructor(props) {
@@ -21,6 +23,8 @@ class AssignModules extends Component {
       selectedModules: [],
       selectedChw: this.props.match.params.chwId || '',
       currentModules: [],
+      delayNotification: false,
+      notificationTime: '',
     };
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
@@ -28,6 +32,7 @@ class AssignModules extends Component {
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
     this.fetchChwModules = this.fetchChwModules.bind(this);
     this.areModulesEqual = this.areModulesEqual.bind(this);
+    this.handleNotificationTimeChange = this.handleNotificationTimeChange.bind(this);
   }
 
   componentWillMount() {
@@ -93,7 +98,9 @@ class AssignModules extends Component {
       modules: this.state.selectedModules,
       chwId: this.state.selectedChw,
     };
-
+    if (this.state.delayNotification && this.state.notificationTime) {
+      payload.notificationTime = this.state.notificationTime;
+    }
     const callback = () => {
       this.props.history.push('/chw/selected');
       Alert.success('Modules have been assigned!');
@@ -113,6 +120,14 @@ class AssignModules extends Component {
 
   handleModuleChange(selectedModules) {
     this.setState({ selectedModules });
+  }
+
+  handleNotificationTimeChange(notificationTime) {
+    const dateFormat = 'YYYY-MM-DD HH:mm';
+    const formattedTime = (notificationTime)
+      ? notificationTime.clone().utc().format(dateFormat) : notificationTime;
+    this.setState({ notificationTime: formattedTime });
+    this.props.resetLogoutCounter();
   }
 
   areModulesEqual() {
@@ -145,6 +160,37 @@ class AssignModules extends Component {
             onFocus={() => this.props.resetLogoutCounter()}
             disabled={this.state.selectedChw === ''}
           />
+          <div className="col-md-12 margin-top-sm margin-bottom-xs">
+            <input
+              id="delay-notification"
+              type="checkbox"
+              className="checkbox-inline"
+              checked={this.state.delayNotification}
+              onChange={event => this.setState({ delayNotification: event.target.checked })}
+            />
+            <label htmlFor="delay-notification" className="margin-left-sm margin-bottom-sm">
+              Delay the notification
+            </label>
+          </div>
+          {this.state.delayNotification &&
+          <div className="col-md-12 margin-top-sm">
+            <label htmlFor="notification-time">Notification date</label>
+            <div className="input-group">
+              <span className="input-group-addon">
+                <i className="fa fa-calendar" />
+              </span>
+              <DateTime
+                dateFormat="YYYY-MM-DD"
+                timeFormat="HH:mm"
+                closeOnSelect
+                onChange={this.handleNotificationTimeChange}
+                id="notification-time"
+                defaultValue={getDefaultNotificationDate()}
+                isValidDate={current => current.isSameOrAfter(new Date(), 'day')}
+              />
+            </div>
+          </div>
+          }
           <form
             className="form-horizontal col-md-12"
             onSubmit={this.sendAssignedModules}

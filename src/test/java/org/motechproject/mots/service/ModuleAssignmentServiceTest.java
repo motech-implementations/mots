@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,7 @@ import org.motechproject.mots.domain.ModuleProgress;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
+import org.motechproject.mots.dto.ModuleAssignmentDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
@@ -174,7 +176,7 @@ public class ModuleAssignmentServiceTest {
     when(moduleProgressService.getModuleProgress(any(), any()))
         .thenReturn(getModuleProgress(ProgressStatus.NOT_STARTED));
 
-    moduleAssignmentService.assignModules(newAssignedModules);
+    moduleAssignmentService.assignModules(toDto(newAssignedModules));
 
     ArgumentCaptor<AssignedModules> assignedModulesCaptor =
         ArgumentCaptor.forClass(AssignedModules.class);
@@ -196,7 +198,7 @@ public class ModuleAssignmentServiceTest {
     when(moduleProgressService.getModuleProgress(any(), any()))
         .thenReturn(getModuleProgress(ProgressStatus.IN_PROGRESS));
 
-    moduleAssignmentService.assignModules(newAssignedModules);
+    moduleAssignmentService.assignModules(toDto(newAssignedModules));
   }
 
   @Test(expected = MotsException.class)
@@ -204,7 +206,7 @@ public class ModuleAssignmentServiceTest {
     when(moduleProgressService.getModuleProgress(any(), any()))
         .thenReturn(getModuleProgress(ProgressStatus.COMPLETED));
 
-    moduleAssignmentService.assignModules(newAssignedModules);
+    moduleAssignmentService.assignModules(toDto(newAssignedModules));
   }
 
   @Test(expected = ModuleAssignmentException.class)
@@ -219,7 +221,7 @@ public class ModuleAssignmentServiceTest {
     when(assignedModulesRepository.findByHealthWorkerId(eq(chw.getId())))
         .thenReturn(Optional.of(assignedModules));
 
-    moduleAssignmentService.assignModules(assignedModules);
+    moduleAssignmentService.assignModules(toDto(assignedModules));
   }
 
   @Test(expected = ModuleAssignmentException.class)
@@ -229,7 +231,7 @@ public class ModuleAssignmentServiceTest {
 
     doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
 
-    moduleAssignmentService.assignModules(newAssignedModules);
+    moduleAssignmentService.assignModules(toDto(newAssignedModules));
   }
 
   @Test
@@ -355,5 +357,14 @@ public class ModuleAssignmentServiceTest {
 
   private void mockModuleInModuleRepository(Module module) {
     when(moduleRepository.findById(module.getId())).thenReturn(Optional.of(module));
+  }
+
+  private ModuleAssignmentDto toDto(AssignedModules assignedModules) {
+    ModuleAssignmentDto dto = new ModuleAssignmentDto();
+    dto.setChwId(assignedModules.getHealthWorker().getId().toString());
+    dto.setModules(assignedModules.getModules().stream()
+        .map(module -> module.getId().toString())
+        .collect(Collectors.toSet()));
+    return dto;
   }
 }

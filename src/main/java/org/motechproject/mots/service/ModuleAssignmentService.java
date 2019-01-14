@@ -25,6 +25,7 @@ import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
+import org.motechproject.mots.dto.ModuleAssignmentDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
@@ -94,19 +95,27 @@ public class ModuleAssignmentService {
 
   /**
    * Assign modules to CHW.
-   * @param assignedModules modules assigned for CHW
+   * @param assignmentDto modules assigned for CHW
    */
   @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   @Transactional
   @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
-  public void assignModules(AssignedModules assignedModules) {
+  public void assignModules(ModuleAssignmentDto assignmentDto) {
+    UUID chwId = UUID.fromString(assignmentDto.getChwId());
     AssignedModules existingAssignedModules =
-        getAssignedModules(assignedModules.getHealthWorker().getId());
+        getAssignedModules(chwId);
     CommunityHealthWorker assignedModulesChw = existingAssignedModules.getHealthWorker();
 
     Set<Module> oldModules = new HashSet<>(existingAssignedModules.getModules());
 
-    existingAssignedModules.setModules(assignedModules.getModules());
+    Set<Module> modules = new HashSet<>();
+    for (String moduleId : assignmentDto.getModules()) {
+      Module moduleToAssign = moduleRepository.findById(UUID.fromString(moduleId)).orElseThrow(() ->
+          new EntityNotFoundException("No module found for Id: {0}",
+              moduleId));
+      modules.add(moduleToAssign);
+    }
+    existingAssignedModules.setModules(modules);
 
     repository.save(existingAssignedModules);
 
@@ -130,7 +139,8 @@ public class ModuleAssignmentService {
       List<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
       ivrService.addSubscriberToGroups(ivrId, ivrGroups);
       if (ivrGroups.size() > 0) {
-        ivrService.sendModuleAssignedMessage(Collections.singleton(ivrId));
+        sendModuleAssignmentNotification(
+            Collections.singleton(ivrId), assignmentDto.getNotificationTime());
       }
       ivrService.removeSubscriberFromGroups(ivrId, getIvrGroupsFromModules(modulesToRemove));
     } catch (IvrException ex) {
