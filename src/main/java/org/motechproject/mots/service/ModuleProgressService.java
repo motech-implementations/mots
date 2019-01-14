@@ -335,7 +335,7 @@ public class ModuleProgressService {
 
         if (CallFlowElementType.QUESTION.equals(callFlowElement.getType())) {
           Choice choice = getChoice((MultipleChoiceQuestion) callFlowElement, blockDto);
-          Integer numberOfAttempts = 0;
+          Integer numberOfAttempts = 1;
 
           while (choice != null && ChoiceType.REPEAT.equals(choice.getType())) {
             if (blockIterator.hasNext()) {
