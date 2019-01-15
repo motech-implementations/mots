@@ -6,12 +6,13 @@ import { connect } from 'react-redux';
 
 import FormField from './form-field';
 import { fetchToken } from '../actions/index';
+import { initializeForm } from '../utils/form-utils';
 
 export const FORM_NAME = 'RegistrationForm';
 
 function getName(registrationToken) {
   let name = '';
-  const { incharge } = registrationToken;
+  const { incharge } = registrationToken || {};
   if (incharge) {
     name = incharge.firstName;
     if (incharge.otherName) {
@@ -43,12 +44,10 @@ const FIELDS = {
   },
   name: {
     label: 'Name',
-    getDynamicAttributes: ({ registrationToken }) => ({
-      value: (registrationToken) ? getName(registrationToken) : '',
-    }),
   },
   password: {
     label: 'Password',
+    required: true,
     getAttributes: input => ({
       ...input,
       type: 'password',
@@ -58,6 +57,7 @@ const FIELDS = {
   },
   passwordConfirm: {
     label: 'Confirm Password',
+    required: true,
     getAttributes: input => ({
       ...input,
       type: 'password',
@@ -81,6 +81,16 @@ class RegistrationForm extends Component {
     this.props.fetchToken(this.props.token);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { registrationToken } = nextProps;
+
+    if (registrationToken !== this.props.registrationToken) {
+      initializeForm(FORM_NAME, {
+        name: getName(registrationToken),
+      });
+    }
+  }
+
   renderField(fieldConfig, fieldName) {
     return (
       <FormField
@@ -96,7 +106,6 @@ class RegistrationForm extends Component {
 
   render() {
     const { handleSubmit, registrationToken } = this.props;
-    console.log(registrationToken);
 
     if (this.props.error) {
       return (
@@ -107,7 +116,7 @@ class RegistrationForm extends Component {
           <button className="btn btn-primary margin-bottom-md" onClick={this.props.onSubmitCancel}>Sign in</button>
         </div>
       );
-    } else if (this.props.registrationToken) {
+    } else if (registrationToken) {
       return (
         <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
           { _.map(FIELDS, this.renderField) }

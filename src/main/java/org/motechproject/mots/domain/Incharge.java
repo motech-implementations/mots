@@ -40,7 +40,7 @@ public class Incharge extends BaseTimestampedEntity {
   @Setter
   private String phoneNumber;
 
-  @Column(name = "email")
+  @Column(name = "email", unique = true)
   @Getter
   @Setter
   private String email;

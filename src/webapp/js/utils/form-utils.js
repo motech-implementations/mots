@@ -4,7 +4,7 @@ import { dispatch } from '../index';
 
 import apiClient from './api-client';
 
-function initializeForm(formName, formValues) {
+export function initializeForm(formName, formValues) {
   dispatch(initialize(formName, formValues));
 }
 

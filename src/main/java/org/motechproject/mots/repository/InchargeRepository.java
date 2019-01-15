@@ -13,5 +13,7 @@ public interface InchargeRepository extends JpaRepository<Incharge, UUID>,
 
   Optional<Incharge> findByPhoneNumber(String phoneNumber);
 
+  Optional<Incharge> findOneByEmail(String email);
+
   Optional<Incharge> findByFacilityId(UUID id);
 }

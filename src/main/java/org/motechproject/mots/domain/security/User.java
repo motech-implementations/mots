@@ -45,7 +45,7 @@ public class User extends BaseTimestampedEntity implements UserDetails {
   @Setter
   private String password;
 
-  @Column(name = "email")
+  @Column(name = "email", unique = true)
   @Getter
   @Setter
   @Email(message = ValidationMessages.INVALID_EMAIL)

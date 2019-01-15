@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Alert from 'react-s-alert';
-
-import 'react-s-alert/dist/s-alert-default.css';
-import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 
 import Navbar from './navbar';
 import Home from './home';
@@ -114,15 +110,6 @@ export default class App extends Component {
             </div>
           </div>
         </div>
-
-        <Alert
-          timeout="none"
-          stack={{ limit: 3 }}
-          offset={29.5}
-          html
-          position="top-right"
-          effect="bouncyflip"
-        />
       </div>
     );
   }

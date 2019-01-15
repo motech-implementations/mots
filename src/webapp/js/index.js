@@ -2,7 +2,10 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter, Route, Switch } from 'react-router-dom';
+import Alert from 'react-s-alert';
 
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import '../css/main.scss';
@@ -29,6 +32,14 @@ ReactDOM.render(
           <Route path="/register/:token" component={Registration} />
           <Route path="/" component={requireAuth(App)} />
         </Switch>
+        <Alert
+          timeout="none"
+          stack={{ limit: 3 }}
+          offset={29.5}
+          html
+          position="top-right"
+          effect="bouncyflip"
+        />
       </div>
     </HashRouter>
   </Provider>
