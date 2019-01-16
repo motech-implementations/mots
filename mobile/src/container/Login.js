@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Keyboard, Image, Dimensions } from 'react-native';
+import { View, ScrollView, Text, Keyboard, Image, Dimensions } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -103,7 +103,7 @@ class Login extends Component {
           />
           }
 
-        <View style={[
+        <ScrollView style={[
             styles.mainCard,
             {
               width: this.state.dim.width - 10,
@@ -144,12 +144,12 @@ class Login extends Component {
             {this.state.error}
           </Text>
 
-          <View style={styles.cardRow}>
+          <View style={[styles.cardRow]}>
             {this.renderButton()}
           </View>
 
-        </View>
-        <Footer />
+          <Footer />
+        </ScrollView>
       </View>
     );
   }

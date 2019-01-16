@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    padding: 20,
     marginTop: 80,
+    padding: 20,
   },
 
   title: {
@@ -20,11 +20,12 @@ const styles = StyleSheet.create({
 const { lightThemeText } = commonStyles;
 
 const Home = () => (
-    <View style={{ flex: 1, alignItems: 'center' }}>
+  <View style={{ flex: 1, alignItems: 'center' }}>
+    <ScrollView>
       <View style={styles.container}>
         <Text style={[styles.title, lightThemeText]}>Home Page</Text>
-        <ScrollView>
-          <Text style={lightThemeText}>
+        <View>
+          <Text style={[lightThemeText]}>
             As in many African countries, the Community Health Worker (CHW) is
             the backbone of the healthcare system, and the focus and objective
             of the Mobile Training and Support (MOTS) project will be strengthening
@@ -36,10 +37,11 @@ const Home = () => (
             basic requirement. The MOTS service will provide training modules that
             include units and quizzes, and allow monitoring by management.
           </Text>
-        </ScrollView>
+        </View>
       </View>
-      <Footer/>
-    </View>
+      <Footer />
+    </ScrollView>
+  </View>
 );
 
 export default Home;
