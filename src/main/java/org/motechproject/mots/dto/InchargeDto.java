@@ -10,12 +10,14 @@ import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.AssignFacilityToInchargeUniqueness;
 import org.motechproject.mots.validate.annotations.FacilityExistence;
+import org.motechproject.mots.validate.annotations.InchargeEmailUniqueness;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 @AssignFacilityToInchargeUniqueness
 @PhoneNumberUniqueness
+@InchargeEmailUniqueness
 public class InchargeDto {
 
   @Getter

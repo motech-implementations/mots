@@ -98,6 +98,9 @@ const FIELDS = {
       type: 'checkbox',
       checked: input.value,
     }),
+    getDynamicAttributes: ({ addIncharge }) => ({
+      disabled: !addIncharge,
+    }),
     label: 'Create user',
   },
 };
