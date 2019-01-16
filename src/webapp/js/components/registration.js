@@ -20,7 +20,6 @@ class Registration extends Component {
 
   onSubmit(values) {
     this.props.registerUser(values, this.props.match.params.token, (result) => {
-      console.log(result);
       if (result.data.id) {
         Alert.success('You have been registered successfully.');
         this.props.history.push('/');
