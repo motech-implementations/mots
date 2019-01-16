@@ -12,10 +12,12 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
+import org.motechproject.mots.validate.annotations.UserEmailUniqueness;
 import org.motechproject.mots.validate.annotations.UsernameUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 @UsernameUniqueness
+@UserEmailUniqueness
 public class UserDto {
 
   @Getter
