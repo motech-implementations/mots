@@ -98,7 +98,7 @@ FROM community
 	</subDataset>
 	<parameter name="community" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="Community"/>
+		<property name="displayName" value="Name"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="facility" class="java.lang.String">
@@ -173,7 +173,7 @@ FROM community
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="8abac13c-7930-446c-a2aa-d3a9eb1653ed">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Community"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Name"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -279,7 +279,7 @@ FROM community
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Community]]></text>
+				<text><![CDATA[Name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="140" y="0" width="140" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
