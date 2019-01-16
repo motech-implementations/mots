@@ -102,10 +102,5 @@ export function getSelectableLocations(
 }
 
 export function getDefaultNotificationDate() {
-  const notificationDate = new Date();
-  if (notificationDate.getHours() >= 12) {
-    notificationDate.setDate(notificationDate.getDate() + 1);
-  }
-  notificationDate.setHours(12, 0, 0, 0);
-  return notificationDate;
+  return new Date();
 }
