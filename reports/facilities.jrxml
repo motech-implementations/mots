@@ -113,7 +113,7 @@ FROM facility
 	<parameter name="type" class="java.lang.String">
 		<property name="dataType" value="Enum"/>
 		<property name="displayName" value="Type"/>
-		<property name="options" value="CHC,CHP,MCHP,CLINIC:Clinic,HOSPITAL:Hospital"/>
+		<property name="options" value="CHC:CHC,CHP:CHP,MCHP:MCHP,CLINIC:Clinic,HOSPITAL:Hospital"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="inchargeName" class="java.lang.String">
