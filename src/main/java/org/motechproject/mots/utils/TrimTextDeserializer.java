@@ -15,6 +15,7 @@ public class TrimTextDeserializer extends JsonDeserializer<String> {
   public String deserialize(JsonParser jsonParser, DeserializationContext context)
       throws IOException {
 
-    return jsonParser.hasToken(VALUE_STRING) ? jsonParser.getText().trim() : null;
+    return jsonParser.hasToken(VALUE_STRING) && jsonParser.getText().trim().length() > 0
+        ? jsonParser.getText().trim() : null;
   }
 }
