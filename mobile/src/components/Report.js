@@ -19,6 +19,7 @@ import Button from './Button';
 import reportStyles from '../styles/reportViewStyles';
 import getContainerStyle from '../utils/styleUtils';
 import commonStyles from '../styles/commonStyles';
+import fonts from '../styles/fonts'
 
 const { lightThemeText } = commonStyles;
 const fontWidth = 8;
@@ -426,7 +427,7 @@ class Report extends Component {
                       data={rowData}
                       widthArr={columnWidths}
                       style={[reportStyles.row, { height: rowHeight }, index % 2 && { backgroundColor: '#fff' }]}
-                      textStyle={reportStyles.text}
+                      textStyle={[reportStyles.text, fonts.fixedWidth]}
                     />
                   ))
                 }

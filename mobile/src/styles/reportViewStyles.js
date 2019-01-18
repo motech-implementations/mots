@@ -24,7 +24,7 @@ export default {
     height: 30,
   },
   text: {
-    textAlign: 'center', fontWeight: '100', fontFamily: 'monospace', fontSize: 12, flex: 1,
+    textAlign: 'center', fontWeight: '100', fontSize: 12, flex: 1,
   },
   dataWrapper: {
     marginTop: -1,
