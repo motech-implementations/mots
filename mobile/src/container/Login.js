@@ -91,12 +91,12 @@ class Login extends Component {
       <View style={{ flex: 1, alignItems: 'center' }}>
         { this.state.dim.height > 320 &&
           <Image
-            resizeMode="center"
+            resizeMode="contain"
             style={{
                 width: this.state.dim.width > 400 ? 400 : this.state.dim.width,
                 // height = width / 3.5 <= 3.5 is approx image ratio
                 height: parseInt((
-                    this.state.dim.width > 300 ? 300 : this.state.dim.width) / 3.5, 10),
+                    this.state.dim.width > 400 ? 300 : this.state.dim.width) / 3.5, 10),
                 paddingHorizontal: 10,
               }}
             source={image}
