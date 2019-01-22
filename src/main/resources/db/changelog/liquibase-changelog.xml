@@ -114,4 +114,5 @@
   <include file="20190116_1213.mysql.sql" relativeToChangelogFile="true" />
   <include file="20190116_1301_update_facilities_communities_reports.mysql.sql" relativeToChangelogFile="true" />
   <include file="20190117_1716.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20190122_1511.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>

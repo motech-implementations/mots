@@ -1,7 +1,7 @@
 package org.motechproject.mots.domain;
 
-import java.sql.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -54,13 +54,18 @@ public class RegistrationToken extends BaseTimestampedEntity {
   @Valid
   private Set<UserRole> roles = new HashSet<>();
 
+  @Column(name = "issue_date", nullable = false)
+  @Getter
+  @Setter
+  private Date issueDate;
+
   /**
    * Check if the Registration Token has expired.
    * @return whether the token is expired
    */
   public Boolean isExpired() {
     Calendar date = Calendar.getInstance();
-    Date expiryDate = new Date(getCreatedDate().getTime() + EXPIRATION_TIME);
+    Date expiryDate = new Date(getIssueDate().getTime() + EXPIRATION_TIME);
     return expiryDate.before(new Date(date.getTimeInMillis()));
   }
 

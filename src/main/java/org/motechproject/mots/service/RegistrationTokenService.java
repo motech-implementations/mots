@@ -1,6 +1,7 @@
 package org.motechproject.mots.service;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -47,6 +48,20 @@ public class RegistrationTokenService {
     registrationToken.setIncharge(incharge);
     registrationToken.setRoles(getInchargeUserRoles());
     registrationToken.setToken(UUID.randomUUID().toString());
+    registrationToken.setIssueDate(new Date());
+    registrationTokenRepository.save(registrationToken);
+    sendInvitationLink(registrationToken);
+  }
+
+  /**
+   * Refresh the expired registration token and re-send the invitation.
+   * @param registrationToken expired registration token
+   */
+  @Transactional
+  public void refreshRegistrationToken(RegistrationToken registrationToken) {
+    registrationToken.setCreatedDate(new Date());
+    registrationToken.setToken(UUID.randomUUID().toString());
+    registrationToken.setIssueDate(new Date());
     registrationTokenRepository.save(registrationToken);
     sendInvitationLink(registrationToken);
   }
