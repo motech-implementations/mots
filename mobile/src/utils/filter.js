@@ -2,7 +2,11 @@ const doFilter = (item, filter) => {
   let { value } = filter;
 
   if (!(value instanceof RegExp)) {
-    value = new RegExp(value, 'i');
+    if (filter.isExact) {
+      value = new RegExp(`^${value}$`, 'i');
+    } else {
+      value = new RegExp(value, 'i');
+    }
   }
 
   return value.test(item[filter.property]);
