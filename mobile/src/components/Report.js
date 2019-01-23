@@ -135,6 +135,7 @@ class Report extends Component {
       .map(param => ({
         property: param.name,
         value: param.defaultValue,
+        isExact: param.dataType === 'Enum',
       }));
     this.setState({
       templateParameters,
