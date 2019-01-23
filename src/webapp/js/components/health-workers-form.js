@@ -115,7 +115,7 @@ const FIELDS = {
     type: 'select',
     label: 'Educational Level',
     getSelectOptions: () => ({
-      values: ['Primary', 'Secondary', 'Higher', 'None'],
+      values: ['Pre-primary', 'Primary', 'Junior Secondary', 'Secondary', 'Senior Secondary', 'Higher', 'University', 'None'],
     }),
   },
   phoneNumber: {

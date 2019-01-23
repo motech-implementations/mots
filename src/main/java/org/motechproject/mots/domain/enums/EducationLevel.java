@@ -3,9 +3,13 @@ package org.motechproject.mots.domain.enums;
 import lombok.Getter;
 
 public enum EducationLevel {
+  PRE_PRIMARY("Pre-primary"),
   PRIMARY("Primary"),
+  JUNIOR_SECONDARY("Junior Secondary"),
   SECONDARY("Secondary"),
+  SENIOR_SECONDARY("Senior Secondary"),
   HIGHER("Higher"),
+  UNIVERSITY("University"),
   NONE("None");
 
   @Getter

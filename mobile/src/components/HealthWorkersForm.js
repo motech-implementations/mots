@@ -130,7 +130,7 @@ const FIELDS = {
     type: Select,
     label: 'Educational Level',
     getSelectOptions: () => ({
-      values: ['Primary', 'Secondary', 'Higher', 'None'],
+      values: ['Pre-primary', 'Primary', 'Junior Secondary', 'Secondary', 'Senior Secondary', 'Higher', 'University', 'None'],
     }),
     getAttributes: input => (getAttributesForSelect(input)),
   },
