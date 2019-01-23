@@ -21,6 +21,7 @@ import org.motechproject.mots.mapper.RegistrationTokenMapper;
 import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
 import org.motechproject.mots.repository.RegistrationTokenRepository;
+import org.motechproject.mots.service.RegistrationTokenService;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,6 +48,9 @@ public class UserController extends BaseController {
 
   @Autowired
   private RegistrationTokenRepository registrationTokenRepository;
+
+  @Autowired
+  private RegistrationTokenService registrationTokenService;
 
   private UserMapper userMapper = UserMapper.INSTANCE;
 
@@ -144,7 +148,7 @@ public class UserController extends BaseController {
 
       return userMapper.toDto(user);
     } else {
-      registrationTokenRepository.delete(registrationToken);
+      registrationTokenService.refreshRegistrationToken(registrationToken);
       return null;
     }
   }
@@ -330,7 +334,7 @@ public class UserController extends BaseController {
     if (token.isPresent()) {
       RegistrationToken registrationToken = token.get();
       if (registrationToken.isExpired()) {
-        registrationTokenRepository.delete(registrationToken);
+        registrationTokenService.refreshRegistrationToken(registrationToken);
       } else {
         return registrationTokenMapper.toDto(registrationToken);
       }

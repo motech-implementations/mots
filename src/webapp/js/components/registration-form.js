@@ -111,7 +111,9 @@ class RegistrationForm extends Component {
       return (
         <div>
           <div id="login-alert" className="alert alert-danger col-sm-12">
-            <strong>This registration link is expired or have already been used.</strong>
+            <strong>This registration link is expired or have already been used.
+              Please check your email for a new one.
+            </strong>
           </div>
           <button className="btn btn-primary margin-bottom-md" onClick={this.props.onSubmitCancel}>Sign in</button>
         </div>

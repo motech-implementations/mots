@@ -24,7 +24,7 @@ class Registration extends Component {
         Alert.success('You have been registered successfully.');
         this.props.history.push('/');
       } else {
-        Alert.error('The registration link has expired.');
+        Alert.error('The registration link has expired. Please check your email for a new one.');
         this.props.history.push('/');
       }
     });
