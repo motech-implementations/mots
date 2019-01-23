@@ -89,9 +89,13 @@ class HealthWorkersList extends Component {
         dataType: 'Enum',
         defaultValue: null,
         options: [
+          'PRE_PRIMARY:Pre-primary',
           'PRIMARY:Primary',
+          'JUNIOR_SECONDARY:Junior Secondary',
           'SECONDARY:Secondary',
+          'SENIOR_SECONDARY:Senior Secondary',
           'HIGHER:Higher',
+          'UNIVERSITY:University',
           'NONE:None',
         ],
       }, {

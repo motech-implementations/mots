@@ -109,9 +109,13 @@ class ChwTable extends Component {
           style={{ width: '100%' }}
         >
           <option value="">Show All</option>
+          <option value="pre_primary">Pre-primary</option>
           <option value="primary">Primary</option>
+          <option value="junior_secondary">Junior Secondary</option>
           <option value="secondary">Secondary</option>
+          <option value="senior_secondary">Senior Secondary</option>
           <option value="higher">Higher</option>
+          <option value="university">University</option>
           <option value="none">None</option>
         </select>),
     }, {

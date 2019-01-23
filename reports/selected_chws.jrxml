@@ -145,7 +145,7 @@
 	<parameter name="education" class="java.lang.String" isForPrompting="true">
 		<property name="dataType" value="Enum"/>
 		<property name="displayName" value="Education level"/>
-		<property name="options" value="PRIMARY:Primary,SECONDARY:Secondary,HIGHER:Higher,NONE:None"/>
+		<property name="options" value="PRE_PRIMARY:Pre-primary,PRIMARY:Primary,JUNIOR_SECONDARY:Junior Secondary,SECONDARY:Secondary,SENIOR_SECONDARY:Senior Secondary,HIGHER:Higher,UNIVERSITY:University,NONE:None"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String" isForPrompting="true">
