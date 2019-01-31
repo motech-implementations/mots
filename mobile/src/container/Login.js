@@ -104,7 +104,7 @@ class Login extends Component {
           }
 
         <ScrollView style={[
-            styles.mainCard,
+            styles.scrollableCard,
             {
               width: this.state.dim.width - 10,
               marginTop: this.state.dim.height > 320 ? 0 : 10,
