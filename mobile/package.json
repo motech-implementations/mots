@@ -31,7 +31,7 @@
     "react-native-datepicker": "^1.6.0",
     "react-native-drawer": "^2.5.0",
     "react-native-elements": "^0.19.0",
-    "rn-fetch-blob": "motech-implementations/rn-fetch-blob#1d17e9c0711b49e4dc832ebdb16fe6fdb704da84",
+    "rn-fetch-blob": "motech-implementations/rn-fetch-blob#bbc4416f16c9b5ec0ebf587a1dbdb5441608e8cd",
     "react-native-rest-client": "^0.1.1",
     "react-native-router-flux": "^3.37.0",
     "react-native-securerandom": "motech-implementations/react-native-securerandom#061f8a837af407cd437930d73a8faeca2eb6e22f",
