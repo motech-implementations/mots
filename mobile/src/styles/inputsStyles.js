@@ -44,7 +44,7 @@ export default {
     width: 50,
   },
   containerStyle: {
-    height: 40,
+    minHeight: 40,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
