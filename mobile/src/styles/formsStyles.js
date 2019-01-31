@@ -23,6 +23,13 @@ export default {
     marginLeft: 5,
     marginRight: 5,
   },
+  scrollableCard: {
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: '#d9edf7',
+    marginLeft: 5,
+    marginRight: 5,
+  },
   cardRow: {
     padding: 5,
     backgroundColor: '#fff',
