@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
-import { AsyncStorage, PermissionsAndroid } from 'react-native';
+import { AsyncStorage, PermissionsAndroid, Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import jwtDecode from 'jwt-decode';
 
@@ -152,21 +152,27 @@ export default class ApiClient {
     return result === PermissionsAndroid.RESULTS.GRANTED;
   }
 
-  static async downloadReport(url, fileName, fileExtention) {
+  static async downloadReport(url, name, extension) {
+    const isIos = Platform.OS === 'ios';
     const token = await AsyncStorage.getItem('token');
-    const mimeType = fileExtention === 'xls' ? 'application/vnd.ms-excel' : 'application/pdf';
-    const hasPermission = await this.requestWritePermission();
+    const mimeType = extension === 'xls' ? 'application/vnd.ms-excel' : 'application/pdf';
+    const hasPermission = isIos || await this.requestWritePermission();
+    const fileName = `${name.replace(/ /g, '_')}.${extension}`;
     if (hasPermission) {
       return RNFetchBlob
         .config({
           fileCache: true,
-          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName.replace(/ /g, '_')}.${fileExtention}`,
+          path: `${RNFetchBlob.fs.dirs.DocumentDir}/${fileName}`,
         })
         .fetch('GET', CLIENT_URL + url, {
           Authorization: `Bearer ${token}`,
         })
         .then((res) => {
-          RNFetchBlob.android.actionViewIntent(res.path(), mimeType);
+          if (isIos) {
+            RNFetchBlob.ios.previewDocument(res.path());
+          } else {
+            RNFetchBlob.android.actionViewIntent(res.path(), mimeType);
+          }
         });
     }
     return null;
