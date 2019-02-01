@@ -197,7 +197,12 @@
   chw.chw_id as chwId,
   CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) AS chwName,
   chw.phone_number AS phone,
-  CONCAT(LEFT(chw.education_level, 1), LOWER(SUBSTRING(chw.education_level, 2))) AS education,
+  CASE chw.education_level
+    WHEN 'PRE_PRIMARY' THEN 'Pre-primary'
+    WHEN 'JUNIOR_SECONDARY' THEN 'Junior Secondary'
+    WHEN 'SENIOR_SECONDARY' THEN 'Senior Secondary'
+    ELSE CONCAT(LEFT(chw.education_level, 1), LOWER(SUBSTRING(chw.education_level, 2)))
+  END AS education,
   CONCAT(LEFT(chw.gender, 1), LOWER(SUBSTRING(chw.gender, 2))) AS gender,
   chw.year_of_birth AS yob,
   chiefdom.name AS chiefdom,

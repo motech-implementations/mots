@@ -203,7 +203,12 @@
   chw.other_name AS otherName,
   chw.year_of_birth AS yob,
   CONCAT(LEFT(chw.gender, 1), LOWER(SUBSTRING(chw.gender, 2))) AS gender,
-  CONCAT(LEFT(chw.education_level, 1), LOWER(SUBSTRING(chw.education_level, 2))) AS education,
+  CASE chw.education_level
+    WHEN 'PRE_PRIMARY' THEN 'Pre-primary'
+    WHEN 'JUNIOR_SECONDARY' THEN 'Junior Secondary'
+    WHEN 'SENIOR_SECONDARY' THEN 'Senior Secondary'
+    ELSE CONCAT(LEFT(chw.education_level, 1), LOWER(SUBSTRING(chw.education_level, 2)))
+  END AS education,
   REPLACE(CONCAT(LEFT(chw.literacy, 1), LOWER(SUBSTRING(chw.literacy, 2))), '_', ' ') AS literacy,
   district.name AS district,
   chiefdom.name AS chiefdom,
