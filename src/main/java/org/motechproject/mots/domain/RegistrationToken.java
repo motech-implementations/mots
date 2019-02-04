@@ -24,7 +24,7 @@ import org.motechproject.mots.domain.security.UserRole;
 @NoArgsConstructor
 public class RegistrationToken extends BaseTimestampedEntity {
 
-  private static final int EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;
+  private static final int EXPIRATION_TIME = 1000 * 60 * 10;
 
   @Column(name = "token", nullable = false)
   @Getter
