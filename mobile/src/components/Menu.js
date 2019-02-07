@@ -4,6 +4,7 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import { dispatch } from '../App';
 
@@ -174,7 +175,7 @@ class Menu extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingTop: getStatusBarHeight(true) }}>
         <Text style={styles.title}>Menu</Text>
         {!this.props.isConnected && this.props.lastOnlineTime !== null &&
           <Text style={[styles.lastOnlineText]}>
