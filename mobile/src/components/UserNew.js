@@ -60,7 +60,7 @@ class UserNew extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Add User</Text>
           <UserForm
             loading={this.state.loading}

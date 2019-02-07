@@ -147,7 +147,7 @@ class AssignModulesToChw extends Component {
     return (
       <View style={getContainerStyle()}>
         <Text style={[formHeader, lightThemeText]}>Assign Modules to a CHW</Text>
-        <ScrollView style={modulesContainer}>
+        <ScrollView style={modulesContainer} alwaysBounceVertical={false}>
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText, PixelRatio.get() < 2 && labelStyleSmall]}>
               Health Worker:

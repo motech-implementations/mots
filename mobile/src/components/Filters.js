@@ -170,7 +170,7 @@ export default class Filters extends Component {
     });
     return (
       <View style={{ flex: 1 }}>
-        <ScrollView style={{ paddingRight: 10 }}>
+        <ScrollView style={{ paddingRight: 10 }} alwaysBounceVertical={false}>
           {fields}
         </ScrollView>
       </View>

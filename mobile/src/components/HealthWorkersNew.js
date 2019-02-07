@@ -68,7 +68,7 @@ class HealthWorkersNew extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Add Community Health Worker</Text>
           <HealthWorkersForm
             loading={this.state.loading}

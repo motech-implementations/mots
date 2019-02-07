@@ -54,7 +54,7 @@ class InchargesNew extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Add Incharge</Text>
           <InchargesForm
             loading={this.state.loading}

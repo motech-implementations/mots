@@ -183,7 +183,7 @@ class Menu extends Component {
           </Text>
         }
 
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} alwaysBounceVertical={false}>
           {this.props.isConnected &&
           <TouchableOpacity
             onPress={() => this.openSection('profile')}

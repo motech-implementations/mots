@@ -66,7 +66,7 @@ class ProfileEdit extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Edit Profile</Text>
           <ProfileForm
             loading={this.state.loading}

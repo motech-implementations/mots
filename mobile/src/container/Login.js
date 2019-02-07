@@ -103,13 +103,15 @@ class Login extends Component {
           />
           }
 
-        <ScrollView style={[
+        <ScrollView
+          style={[
             styles.scrollableCard,
             {
               width: this.state.dim.width - 10,
               marginTop: this.state.dim.height > 320 ? 0 : 10,
             },
           ]}
+          alwaysBounceVertical={false}
         >
           <View style={styles.headerRow}>
             <Text style={lightThemeText}>MOTS Login</Text>
