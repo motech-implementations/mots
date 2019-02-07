@@ -162,7 +162,7 @@ export default class ApiClient {
       return RNFetchBlob
         .config({
           fileCache: true,
-          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`,
+          path: `${isIos ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.DownloadDir}/${fileName}`,
         })
         .fetch('GET', CLIENT_URL + url, {
           Authorization: `Bearer ${token}`,
