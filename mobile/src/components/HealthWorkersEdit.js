@@ -70,7 +70,7 @@ class HealthWorkersEdit extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Edit Community Health Worker</Text>
           <HealthWorkersForm
             loading={this.state.loading}

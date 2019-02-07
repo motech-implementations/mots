@@ -80,7 +80,7 @@ class UserEdit extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Edit User</Text>
           <UserForm
             loading={this.state.loading}

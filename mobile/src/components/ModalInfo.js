@@ -27,7 +27,7 @@ export default class ModalInfo extends Component {
             {this.props.title}
           </Text>
           }
-          <ScrollView style={{ maxHeight: 250 }} >
+          <ScrollView style={{ maxHeight: 250 }} alwaysBounceVertical={false}>
             <Text style={[message, lightThemeText]}>{this.props.message}</Text>
           </ScrollView>
           <View style={buttonsRow}>

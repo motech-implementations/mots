@@ -119,7 +119,7 @@ class AssignModulesToDistrict extends Component {
     return (
       <View style={getContainerStyle()}>
         <Text style={[formHeader, lightThemeText]}>Assign Modules to a District</Text>
-        <ScrollView style={modulesContainer}>
+        <ScrollView style={modulesContainer} alwaysBounceVertical={false}>
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText, PixelRatio.get() < 2 && labelStyleSmall]}>
               District:

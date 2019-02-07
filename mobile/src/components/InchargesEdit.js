@@ -70,7 +70,7 @@ class InchargesEdit extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <ScrollView>
+        <ScrollView alwaysBounceVertical={false}>
           <Text style={[formHeader, lightThemeText]}>Edit Incharge</Text>
           <InchargesForm
             loading={this.state.loading}

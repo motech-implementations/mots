@@ -21,7 +21,7 @@ const { lightThemeText } = commonStyles;
 
 const Home = () => (
   <View style={{ flex: 1, alignItems: 'center' }}>
-    <ScrollView>
+    <ScrollView alwaysBounceVertical={false}>
       <View style={styles.container}>
         <Text style={[styles.title, lightThemeText]}>Home Page</Text>
         <View>

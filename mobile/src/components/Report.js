@@ -418,7 +418,8 @@ class Report extends Component {
               onLayout={(event) => {
               const { height } = event.nativeEvent.layout;
               this.setPageSize(Math.floor(height / rowHeight));
-            }}
+              }}
+              alwaysBounceVertical={false}
             >
               <Table borderStyle={{ borderColor: '#c1c0b9' }}>
                 {
