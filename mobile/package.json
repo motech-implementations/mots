@@ -44,6 +44,7 @@
     "redux-form": "^7.2.1",
     "redux-persist": "^5.5.0",
     "redux-promise": "^0.5.3",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "react-native-status-bar-height": "^2.2.0"
   }
 }

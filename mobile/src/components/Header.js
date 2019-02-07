@@ -4,11 +4,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Animatable from 'react-native-animatable';
 
 import commonStyles from '../styles/commonStyles';
 
 const AnimatableMaterialIcon = Animatable.createAnimatableComponent(MaterialIcon);
+const statusBarHeight = getStatusBarHeight(true);
+const { lightThemeText } = commonStyles;
+const screen = Dimensions.get('screen');
 
 const styles = {
   viewStyle: {
@@ -20,14 +24,15 @@ const styles = {
     backgroundColor: '#e1e1e1',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 40,
+    height: 40 + statusBarHeight,
+    paddingTop: statusBarHeight,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
   },
   viewStyleHighResolution: {
-    height: 60,
+    height: 60 + statusBarHeight,
   },
   textStyle: {
     fontSize: 20,
@@ -42,16 +47,13 @@ const styles = {
   },
 };
 
-const { lightThemeText } = commonStyles;
-const screen = Dimensions.get('screen');
-
 class Header extends Component {
   static contextTypes = {
     drawer: PropTypes.object,
   };
 
   state = {
-    highResolution: screen.height >= 800 || screen.width >= 800,
+    highResolution: screen.height >= 800 && screen.width >= 800,
   };
 
   getViewStyle() {
