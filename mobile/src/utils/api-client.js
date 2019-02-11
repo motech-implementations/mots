@@ -37,7 +37,8 @@ export default class ApiClient {
         if (refreshDecoded && refreshDecoded.exp > currentTime) {
           return useRefreshToken(refreshToken, dispatch, callback);
         }
-        return dispatch(signoutUser());
+        dispatch(signoutUser());
+        break;
       }
       case 403:
         getAlert('Access denied.', 'You don\'t have permissions to fetch this data');
