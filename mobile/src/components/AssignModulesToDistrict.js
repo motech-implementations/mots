@@ -155,6 +155,8 @@ class AssignModulesToDistrict extends Component {
               timeFormat={false}
               closeOnSelect
               placeholder="Select a date"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
               customStyles={{
                 placeholderText: lightThemeText,
                 dateInput,
@@ -177,6 +179,8 @@ class AssignModulesToDistrict extends Component {
               timeFormat={false}
               closeOnSelect
               placeholder="Select a date"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
               customStyles={{
                 placeholderText: lightThemeText,
                 dateInput,
