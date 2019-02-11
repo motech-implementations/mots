@@ -152,7 +152,7 @@ export default class ApiClient {
     return result === PermissionsAndroid.RESULTS.GRANTED;
   }
 
-  static async downloadReport(url, name, extension) {
+  static async downloadReport(url, name, extension, isRetry) {
     const isIos = Platform.OS === 'ios';
     const token = await AsyncStorage.getItem('token');
     const mimeType = extension === 'xls' ? 'application/vnd.ms-excel' : 'application/pdf';
@@ -168,7 +168,10 @@ export default class ApiClient {
           Authorization: `Bearer ${token}`,
         })
         .then((res) => {
-          if (isIos) {
+          if (res.respInfo.status === 401 && !isRetry) {
+            ApiClient.handleError(res.respInfo, () => this
+              .downloadReport(url, name, extension, true));
+          } else if (isIos) {
             RNFetchBlob.ios.previewDocument(res.path());
           } else {
             RNFetchBlob.android.actionViewIntent(res.path(), mimeType);
