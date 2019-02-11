@@ -1,3 +1,7 @@
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+const statusBarHeight = getStatusBarHeight(true);
+
 export default {
   buttonContainer: {
     marginBottom: 20,
@@ -8,7 +12,8 @@ export default {
     textAlignVertical: 'center',
   },
   headerContainer: {
-    height: 50,
+    paddingTop: statusBarHeight,
+    height: 50 + statusBarHeight,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
