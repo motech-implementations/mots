@@ -47,7 +47,7 @@ export default class ApiClient {
         getAlert('Resource not found.', 'There were some problems with data fetching.');
         break;
       case 500:
-        error.json().then((data) => {
+        ApiClient.safeJson(error).then((data) => {
           const errorMessage = data.message ? data.message : getErrorMessage(data);
           const message = errorMessage || data;
           getAlert('Error occurred.', message);
@@ -55,14 +55,22 @@ export default class ApiClient {
           getAlert('Error occurred.', 'There was an internal server error.'));
         break;
       default: {
-        error.json().then((data) => {
+        ApiClient.safeJson(error).then((data) => {
           const errorMessage = getErrorMessage(data);
           const message = errorMessage || data;
           getAlert('Error occurred.', message);
-        }).catch(err => getAlert('Error occurred.', err));
+        }).catch(() => getAlert('Error occurred.', 'Unable to get a valid response from the server. Please check your internet connection before continuing.'));
       }
     }
     return null;
+  }
+
+  static async safeJson(data) {
+    try {
+      data.json().then(json => json);
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   static async handleResponse(response, type) {
