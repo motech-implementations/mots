@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
+  Platform,
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   Modal,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
@@ -24,6 +26,7 @@ const {
   containerStyle, labelStyle, labelSelectFieldStyle, optionListStyle, labelFieldStyle,
 } = inputsStyles;
 const { lightThemeText } = commonStyles;
+const isIos = Platform.OS === 'ios';
 export const STATIC_FILTERS = ['pageSize', 'offset', 'orderBy'];
 
 export default class Filters extends Component {
@@ -171,11 +174,11 @@ export default class Filters extends Component {
       return null;
     });
     return (
-      <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={(isIos) ? 'padding' : ''}>
         <ScrollView style={{ paddingRight: 10 }} alwaysBounceVertical={false}>
           {fields}
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { View, StatusBar, NetInfo } from 'react-native';
+import { Platform, View, KeyboardAvoidingView, StatusBar, NetInfo } from 'react-native';
 
 import Store from './store';
 import { setConnectionState } from './actions';
 import AppRouter from './components/AppRouter';
 
 export const { dispatch } = Store;
+const isIos = Platform.OS === 'ios';
 
 export default class App extends Component {
   componentDidMount() {
@@ -26,12 +27,12 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={(isIos) ? 'padding' : ''}>
         <StatusBar backgroundColor="black" barStyle="light-content" />
         <Provider store={Store}>
           <AppRouter />
         </Provider>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
