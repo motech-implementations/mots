@@ -27,7 +27,9 @@ export default function (state = initialState, action) {
     case AUTH_USER: {
       const { isOffline, accessToken, refreshToken } = action.payload;
       AsyncStorage.setItem('token', accessToken);
-      AsyncStorage.setItem('refresh_token', refreshToken);
+      if (refreshToken) {
+        AsyncStorage.setItem('refresh_token', refreshToken);
+      }
       const expirationTime = (isOffline) ?
         new Date().getTime() + (OFFLINE_LOGIN_DURATION * 1000) : null;
       return {
