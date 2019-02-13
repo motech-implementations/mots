@@ -67,7 +67,7 @@ export default class ApiClient {
 
   static async safeJson(data) {
     try {
-      data.json().then(json => json);
+      return data.json().then(json => json);
     } catch (err) {
       throw new Error(err);
     }
