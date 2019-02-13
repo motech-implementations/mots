@@ -19,6 +19,7 @@ class ModalError extends Component {
         titleColor={this.state.titleColor}
         message={this.props.message}
         closeColor={this.state.closeColor}
+        supportedOrientations={['portrait', 'landscape']}
         sceneKey="modalError"
       />
     );
