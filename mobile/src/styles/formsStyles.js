@@ -54,7 +54,7 @@ export default {
   formAddContainer: {
     paddingBottom: 20,
   },
-  autoCompleteStyle: {
+  autocompleteStyle: {
     flex: 1,
     left: 0,
     right: 0,
@@ -72,4 +72,14 @@ export default {
     padding: 2,
     color: 'lightgray',
   },
+  autocompleteListStyle: {
+    position: 'relative',
+    margin: 10,
+    marginTop: 0,
+  },
+  autocompleteInputContainerStyle: {
+    borderColor: '#ebebeb',
+    borderWidth: 1,
+    borderRadius: 4,
+  }
 };
