@@ -19,6 +19,7 @@ class ModalConfirm extends Component {
         closeColor={this.state.closeColor}
         closeButtonText={this.state.closeButtonText}
         onConfirm={this.props.onConfirm}
+        supportedOrientations={['portrait', 'landscape']}
         sceneKey="modalConfirm"
       />
     );

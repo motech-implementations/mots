@@ -215,6 +215,7 @@ export default class Filters extends Component {
           animationType={animationType}
           visible={this.state.modalVisible}
           onRequestClose={this.onClose}
+          supportedOrientations={['portrait', 'landscape']}
         >
           <View style={{ flex: 1 }}>
             <View style={filtersStyles.headerContainer}>
