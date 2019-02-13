@@ -21,6 +21,8 @@ export default {
     marginLeft: 30,
     flex: 2,
     justifyContent: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 0,
   },
   datePickerStyle: {
     marginLeft: 30,
