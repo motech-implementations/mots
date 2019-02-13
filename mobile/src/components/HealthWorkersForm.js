@@ -24,6 +24,8 @@ import Button from './Button';
 import styles from '../styles/formsStyles';
 import Spinner from './Spinner';
 
+const { autocompleteItemStyle, autocompleteHintStyle } = styles;
+
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
   chwId: {
@@ -45,8 +47,15 @@ const FIELDS = {
       const data = filter(input.value);
       const compare = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
 
+      const sortedData = data.length === 1 && compare(input.value, data[0]) ? [] : data;
+      const slicedMessage = `Showing first 10 out of ${data.length} results`;
+      const slicedData = sortedData.slice(0, 10);
+      if (data.length > 10) {
+        slicedData.push(slicedMessage);
+      }
+
       return {
-        data: data.length === 1 && compare(input.value, data[0]) ? [] : data,
+        data: slicedData,
         inputContainerStyle: {
           borderColor: '#ebebeb',
           borderWidth: 1,
@@ -58,15 +67,28 @@ const FIELDS = {
         onChangeText: text => input.onChange(text),
         onBlur: event => input.onBlur(event.target.value),
         onFocus: event => input.onFocus(event.target.value),
-        renderItem: item => (
-          <TouchableOpacity onPress={() => {
-            fetchDataAndInitializeFrom(CHW_FORM_NAME, '/api/chw/findByChwId', item);
-            input.onChange(item);
-          }}
-          >
-            <Text>{item}</Text>
-          </TouchableOpacity>
-        ),
+        renderItem(item) {
+          if (item !== slicedMessage) {
+            return (
+              <TouchableOpacity
+                style={autocompleteItemStyle}
+                onPress={() => {
+                fetchDataAndInitializeFrom(
+                    CHW_FORM_NAME,
+                    '/api/chw/findByChwId',
+                    item,
+                );
+                input.onChange(item);
+              }}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            );
+          }
+          return (
+            <Text style={autocompleteHintStyle}>{item}</Text>
+          );
+        },
       };
     },
   },

@@ -63,4 +63,13 @@ export default {
     paddingHorizontal: 5,
     paddingVertical: 5,
   },
+  autocompleteItemStyle: {
+    paddingRight: 5,
+    paddingLeft: 5,
+    paddingVertical: 5,
+  },
+  autocompleteHintStyle: {
+    padding: 2,
+    color: 'lightgray',
+  },
 };
