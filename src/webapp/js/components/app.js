@@ -36,6 +36,9 @@ import Report from './report';
 import ChiefdomUpload from './chiefdom-upload';
 import FacilityUpload from './facility-upload';
 import CommunityUpload from './community-upload';
+import Groups from './groups';
+import GroupNew from './group-new';
+import GroupEdit from './group-edit';
 
 export default class App extends Component {
   constructor(props) {
@@ -105,6 +108,9 @@ export default class App extends Component {
                 <Route path="/locations/district/:districtId" component={DistrictEdit} />
                 <Route path="/locations/:tabIndex?" component={Locations} />
                 <Route path="/profile" component={UserProfileEdit} />
+                <Route path="/groups/new" component={GroupNew} />
+                <Route path="/groups/:groupId" component={GroupEdit} />
+                <Route path="/groups" component={Groups} />
                 <Route path="/" component={Home} />
               </Switch>
             </div>

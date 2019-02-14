@@ -13,6 +13,7 @@ import {
   getAttributesForSelectWithClearOnChange, getSelectableLocations,
   getSupervisorNameFromFacility, fetchDataAndInitializeFrom,
 } from '../utils/form-utils';
+import apiClient from '../utils/api-client';
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -224,13 +225,14 @@ const FIELDS = {
       values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
     }),
   },
-  working: {
-    getAttributes: input => ({
-      ...input,
-      type: 'checkbox',
-      checked: input.value,
+  groupId: {
+    type: 'select',
+    label: 'Group',
+    getSelectOptions: ({ groups }) => ({
+      values: groups,
+      displayNameKey: 'name',
+      valueKey: 'id',
     }),
-    label: 'Working',
   },
 };
 
@@ -238,11 +240,25 @@ class HealthWorkersForm extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      groups: [],
+    };
+
     this.renderField = this.renderField.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchLocations();
+    this.fetchData();
+  }
+
+  fetchData() {
+    apiClient.get('/api/group')
+      .then((response) => {
+        if (response) {
+          this.setState({ groups: response.data });
+        }
+      });
   }
 
   renderField(fieldConfig, fieldName) {
@@ -262,6 +278,7 @@ class HealthWorkersForm extends Component {
         facilityId={this.props.facilityId}
         yearOfBirth={this.props.yearOfBirth}
         addChw={this.props.addChw}
+        groups={this.state.groups}
       />
     );
   }

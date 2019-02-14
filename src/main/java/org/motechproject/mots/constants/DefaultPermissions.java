@@ -20,6 +20,8 @@ public class DefaultPermissions {
   public static final String UPLOAD_CHW_OR_INCHARGE_CSV = "ROLE_UPLOAD_CHW_OR_INCHARGE_CSV";
   public static final String ADMIN = "ROLE_ADMIN";
   public static final String UPLOAD_LOCATION_CSV = "ROLE_UPLOAD_LOCATION_CSV";
+  public static final String GROUP_READ = "ROLE_GROUP_READ";
+  public static final String GROUP_WRITE = "ROLE_GROUP_WRITE";
 
   public static final String HAS_CHW_READ_ROLE = "hasRole('" + CHW_READ + "')";
   public static final String HAS_CHW_WRITE_ROLE = "hasRole('" + CHW_WRITE + "')";
@@ -53,4 +55,6 @@ public class DefaultPermissions {
   public static final String HAS_ADMIN_ROLE = "hasRole('" + ADMIN + "')";
   public static final String HAS_UPLOAD_LOCATION_CSV_ROLE =
       "hasRole('" + UPLOAD_LOCATION_CSV + "')";
+  public static final String HAS_GROUP_READ_ROLE = "hasRole('" + GROUP_READ + "')";
+  public static final String HAS_GROUP_WRITE_ROLE = "hasRole('" + GROUP_WRITE + "')";
 }

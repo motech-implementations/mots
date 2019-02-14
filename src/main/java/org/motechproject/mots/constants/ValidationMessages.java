@@ -75,6 +75,9 @@ public final class ValidationMessages {
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
   public static final String ONE_CHOICE_CORRECT = "One choice must be correct.";
 
+  public static final String EMPTY_GROUP_NAME = "Group name cannot be empty";
+  public static final String NOT_UNIQUE_GROUP_NAME = "The Group with name '%s' already exists";
+
   private ValidationMessages() {
   }
 }

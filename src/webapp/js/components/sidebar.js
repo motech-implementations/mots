@@ -12,7 +12,7 @@ import {
   CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
   MANAGE_INCHARGE_USERS_AUTHORITY, UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
-  UPLOAD_LOCATION_CSV_AUTHORITY,
+  UPLOAD_LOCATION_CSV_AUTHORITY, GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY,
 } from '../utils/authorization';
 import { fetchReports } from '../actions/index';
 
@@ -27,6 +27,7 @@ class SideBar extends Component {
       locationsMenuCollapsed: true,
       usersMenuCollapsed: true,
       reportsMenuCollapsed: true,
+      groupsMenuCollapsed: true,
     };
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
@@ -35,6 +36,7 @@ class SideBar extends Component {
     this.toggleLocationsMenu = this.toggleLocationsMenu.bind(this);
     this.toggleUsersMenu = this.toggleUsersMenu.bind(this);
     this.toggleReportsMenu = this.toggleReportsMenu.bind(this);
+    this.toggleGroupsMenu = this.toggleGroupsMenu.bind(this);
   }
 
   componentWillMount() {
@@ -87,6 +89,12 @@ class SideBar extends Component {
     return false;
   }
 
+  toggleGroupsMenu(event) {
+    event.preventDefault();
+    this.setState({ groupsMenuCollapsed: !this.state.groupsMenuCollapsed });
+    return false;
+  }
+
   renderHealthWorkersMenu() {
     if (this.state.healthWorkersMenuCollapsed) {
       return '';
@@ -112,14 +120,16 @@ class SideBar extends Component {
         }
         { hasAuthority(CHW_READ_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/chw/overall" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" />
+            <Link to="/chw/overall" onClick={this.props.hideMenuSmart}>
+              <span className="glyphicon glyphicon-list-alt" />
               <span className="icon-text">CHW List</span>
             </Link>
           </li>
         }
         { hasAuthority(CHW_READ_AUTHORITY) &&
         <li className="border-none">
-          <Link to="/chw/selected" onClick={this.props.hideMenuSmart}><span className="glyphicon glyphicon-list-alt" />
+          <Link to="/chw/selected" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-list-alt" />
             <span className="icon-text">Selected CHW List</span>
           </Link>
         </li>
@@ -345,6 +355,33 @@ class SideBar extends Component {
     );
   }
 
+  renderGroupsMenu() {
+    if (this.state.groupsMenuCollapsed) {
+      return '';
+    }
+
+    return (
+      <ul className="nav nav-second-level">
+        { hasAuthority(GROUP_WRITE_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/groups/new" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-plus" />
+            <span className="icon-text">Add Group</span>
+          </Link>
+        </li>
+        }
+        { hasAuthority(GROUP_READ_AUTHORITY) &&
+        <li className="border-none">
+          <Link to="/groups" onClick={this.props.hideMenuSmart}>
+            <span className="glyphicon glyphicon-list-alt" />
+            <span className="icon-text">Group List</span>
+          </Link>
+        </li>
+        }
+      </ul>
+    );
+  }
+
   render() {
     return (
       <div className={`navbar-collapse ${this.props.showMenuSmart ? '' : 'collapse'}`}>
@@ -449,6 +486,18 @@ class SideBar extends Component {
               />
             </a>
             {this.renderUsersMenu()}
+          </li>
+          }
+          { hasAuthority(GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY) &&
+          <li>
+            <a href="" onClick={this.toggleGroupsMenu}>
+              <span className="fa fa-group" />
+              <span className="icon-text">Group</span>
+              <span
+                className={SideBar.getSubmenuArrowClass(this.state.groupsMenuCollapsed)}
+              />
+            </a>
+            {this.renderGroupsMenu()}
           </li>
           }
           <li className="hide-min-r-small-min">

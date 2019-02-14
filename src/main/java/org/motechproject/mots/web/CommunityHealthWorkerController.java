@@ -36,6 +36,7 @@ public class CommunityHealthWorkerController extends BaseController {
   public static final String CHIEFDOM_NAME_PARAM = "chiefdomName";
   public static final String DISTRICT_NAME_PARAM = "districtName";
   public static final String PHU_SUPERVISOR_PARAM = "phuSupervisor";
+  public static final String GROUP_NAME_PARAM = "groupName";
 
   @Autowired
   private CommunityHealthWorkerService healthWorkerService;
@@ -76,14 +77,15 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdomName,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String districtName,
       @RequestParam(value = PHU_SUPERVISOR_PARAM, required = false) String phuSupervisor,
+      @RequestParam(value = GROUP_NAME_PARAM, required = false) String groupName,
       @RequestParam(value = "selected", required = false) Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
-            chwId, firstName, secondName, otherName,
-            phoneNumber, educationLevel, communityName,
-            facilityName, chiefdomName, districtName, phuSupervisor, selected, pageable);
+            chwId, firstName, secondName, otherName, phoneNumber,
+            educationLevel, communityName, facilityName, chiefdomName,
+            districtName, phuSupervisor, groupName, selected, pageable);
 
     List<CommunityHealthWorkerDto> healthWorkersDto =
         healthWorkerMapper.toDtos(healthWorkers.getContent());

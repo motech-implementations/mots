@@ -9,6 +9,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.Group;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 
 @Mapper(uses = { UuidMapper.class, EnumsMapper.class },
@@ -25,7 +26,9 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "chiefdomId", source = "community.facility.chiefdom.id"),
       @Mapping(target = "districtName", source = "community.facility.chiefdom.district.name"),
       @Mapping(target = "districtId", source = "community.facility.chiefdom.district.id"),
-      @Mapping(target = "phuSupervisor", source = "community.facility.inchargeFullName")
+      @Mapping(target = "phuSupervisor", source = "community.facility.inchargeFullName"),
+      @Mapping(target = "groupId", source = "group.id"),
+      @Mapping(target = "groupName", source = "group.name")
   })
   CommunityHealthWorkerDto toDto(CommunityHealthWorker healthWorker);
 
@@ -35,6 +38,7 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "chwId", ignore = true),
       @Mapping(target = "community", source = "communityId"),
+      @Mapping(target = "group", source = "groupId"),
       @Mapping(target = "yearOfBirth",
           expression = "java(healthWorkerDto.getYearOfBirth() == null ? null : "
               + "Integer.parseInt(healthWorkerDto.getYearOfBirth()))")
@@ -53,5 +57,18 @@ public interface CommunityHealthWorkerMapper {
     }
 
     return new Community(UUID.fromString(communityId));
+  }
+
+  /**
+   * Create group object with given id.
+   * @param groupId id of group to create
+   * @return Group object with given id
+   */
+  default Group toGroup(String groupId) {
+    if (groupId == null || groupId.isEmpty()) {
+      return null;
+    }
+
+    return new Group(UUID.fromString(groupId));
   }
 }

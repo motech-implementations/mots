@@ -130,13 +130,10 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Working',
-        name: 'working',
-        TextCell: cell => (
-          <Text style={[styles.normal, lightThemeText]}>
-            {cell.value ? 'Yes' : 'No'}
-          </Text>
-        ),
+        displayName: 'Group',
+        name: 'groupName',
+        dataType: 'String',
+        defaultValue: null,
       },
       {
         displayName: 'Actions',
