@@ -5,23 +5,24 @@ import { Platform, View, KeyboardAvoidingView, StatusBar, NetInfo } from 'react-
 import Store from './store';
 import { setConnectionState } from './actions';
 import AppRouter from './components/AppRouter';
+import { handleConnectivityChange, setConnection } from './utils/connection';
 
 export const { dispatch } = Store;
 const isIos = Platform.OS === 'ios';
 
 export default class App extends Component {
   componentDidMount() {
-    NetInfo.getConnectionInfo().then(connInfo => dispatch(setConnectionState(connInfo)));
+    NetInfo.getConnectionInfo().then(connInfo => setConnection(connInfo));
     NetInfo.addEventListener(
       'connectionChange',
-      connInfo => dispatch(setConnectionState(connInfo)),
+      connInfo => handleConnectivityChange(connInfo),
     );
   }
 
   componentWillUnmount() {
     NetInfo.removeEventListener(
       'connectionChange',
-      connInfo => dispatch(setConnectionState(connInfo)),
+      connInfo => handleConnectivityChange(connInfo),
     );
   }
 
