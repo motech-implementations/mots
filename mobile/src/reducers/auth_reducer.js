@@ -26,7 +26,9 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case AUTH_USER: {
       const { isOffline, accessToken, refreshToken } = action.payload;
-      AsyncStorage.setItem('token', accessToken);
+      if (accessToken) {
+        AsyncStorage.setItem('token', accessToken);
+      }
       if (refreshToken) {
         AsyncStorage.setItem('refresh_token', refreshToken);
       }
