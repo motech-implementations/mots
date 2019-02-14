@@ -24,7 +24,8 @@ import Button from './Button';
 import styles from '../styles/formsStyles';
 import Spinner from './Spinner';
 
-const { autocompleteItemStyle, autocompleteHintStyle } = styles;
+const { autocompleteStyle, autocompleteItemStyle, autocompleteHintStyle, 
+  autocompleteListStyle, autocompleteInputContainerStyle } = styles;
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {
@@ -56,14 +57,11 @@ const FIELDS = {
 
       return {
         data: slicedData,
-        inputContainerStyle: {
-          borderColor: '#ebebeb',
-          borderWidth: 1,
-          borderRadius: 4,
-        },
+        inputContainerStyle: autocompleteInputContainerStyle,
+        listStyle: autocompleteListStyle,
         placeholder: 'Select Community Health Worker ID',
         underlineColorAndroid: 'rgba(0,0,0,0)',
-        style: styles.autoCompleteStyle,
+        style: autocompleteStyle,
         onChangeText: text => input.onChange(text),
         onBlur: event => input.onBlur(event.target.value),
         onFocus: event => input.onFocus(event.target.value),
