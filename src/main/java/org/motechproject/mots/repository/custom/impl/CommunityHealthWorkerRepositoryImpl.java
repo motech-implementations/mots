@@ -25,23 +25,23 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, String phuSupervisor, Boolean selected,
+      String chwId, String firstName, String secondName, String otherName, String phoneNumber,
+      String educationLevel, String communityName, String facilityName, String chiefdomName,
+      String districtName, String phuSupervisor, String groupName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
     query = prepareQuery(query, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, phuSupervisor, selected, false, pageable);
+        otherName, phoneNumber, educationLevel, communityName, facilityName,
+        chiefdomName, districtName, phuSupervisor, groupName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, phuSupervisor, selected, true, pageable);
+        otherName, phoneNumber, educationLevel, communityName, facilityName,
+        chiefdomName, districtName, phuSupervisor, groupName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -57,8 +57,8 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityName,
-      String facilityName, String chiefdomName, String districtName, String phuSupervisor,
+      String phoneNumber, String educationLevel, String communityName, String facilityName,
+      String chiefdomName, String districtName, String phuSupervisor, String groupName,
       Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -124,6 +124,10 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
       predicate = builder.and(predicate, localPredicate);
     }
+    if (groupName != null) {
+      predicate = builder.and(predicate, builder.like(
+          root.get(GROUP).get(NAME), '%' + groupName + '%'));
+    }
 
     if (selected != null) {
       predicate = builder.and(predicate, builder.equal(
@@ -152,6 +156,8 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
         return root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME);
       case CommunityHealthWorkerController.PHU_SUPERVISOR_PARAM:
         return root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(FIRST_NAME);
+      case CommunityHealthWorkerController.GROUP_NAME_PARAM:
+        return root.get(GROUP).get(NAME);
       default:
         return root.get(order.getProperty());
     }

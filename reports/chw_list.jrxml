@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="chw_list" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="LocalDataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="mysql-mots.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
 	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
@@ -85,7 +85,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="RecordsCount">
+	<subDataset name="RecordsCount" uuid="cdc79b35-b4a8-4892-8861-b795f43f118a">
 		<parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="firstName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="secondName" class="java.lang.String" isForPrompting="false"/>
@@ -97,6 +97,7 @@
 		<parameter name="community" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="supervisor" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="phone" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="groupName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[SELECT
@@ -106,7 +107,8 @@
  JOIN facility ON community.facility_id = facility.id
  JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
  JOIN district ON chiefdom.district_id = district.id
- JOIN in_charge ON in_charge.facility_id = facility.id
+ LEFT JOIN in_charge ON in_charge.facility_id = facility.id
+ LEFT JOIN chw_group ON chw_group.id = chw.group_id
  WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
   AND ($P{firstName} IS NULL OR chw.first_name LIKE CONCAT('%',$P{firstName},'%'))
   AND ($P{secondName} IS NULL OR chw.second_name LIKE CONCAT('%',$P{secondName},'%'))
@@ -117,79 +119,85 @@
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{community} IS NULL OR community.name LIKE CONCAT('%',$P{community},'%'))
   AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
+  AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{supervisor} IS NULL OR CONCAT_WS(" ", in_charge.first_name, in_charge.other_name, in_charge.second_name) LIKE CONCAT('%',$P{supervisor},'%'))]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
 	</subDataset>
-	<parameter name="chwId" class="java.lang.String" isForPrompting="true">
+	<parameter name="chwId" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="ID"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="firstName" class="java.lang.String" isForPrompting="true">
+	<parameter name="firstName" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="First Name"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="secondName" class="java.lang.String" isForPrompting="true">
+	<parameter name="secondName" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Surname"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="otherName" class="java.lang.String" isForPrompting="true">
+	<parameter name="otherName" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Other Name"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="education" class="java.lang.String" isForPrompting="true">
+	<parameter name="education" class="java.lang.String">
 		<property name="dataType" value="Enum"/>
 		<property name="displayName" value="Education level"/>
 		<property name="options" value="PRE_PRIMARY:Pre-primary,PRIMARY:Primary,JUNIOR_SECONDARY:Junior Secondary,SECONDARY:Secondary,SENIOR_SECONDARY:Senior Secondary,HIGHER:Higher,UNIVERSITY:University,NONE:None"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="district" class="java.lang.String" isForPrompting="true">
+	<parameter name="district" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="District"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="chiefdom" class="java.lang.String" isForPrompting="true">
+	<parameter name="chiefdom" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Chiefdom"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="facility" class="java.lang.String" isForPrompting="true">
+	<parameter name="facility" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Facility"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="community" class="java.lang.String" isForPrompting="true">
+	<parameter name="community" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Community"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="supervisor" class="java.lang.String" isForPrompting="true">
+	<parameter name="supervisor" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="PHU Supervisor"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="phone" class="java.lang.String" isForPrompting="true">
+	<parameter name="phone" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Phone number"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="orderBy" class="java.lang.String" isForPrompting="true">
+	<parameter name="groupName" class="java.lang.String">
+		<property name="dataType" value="String"/>
+		<property name="displayName" value="Group"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="orderBy" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Order By"/>
 		<property name="required" value="true"/>
 		<defaultValueExpression><![CDATA["chwId"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="pageSize" class="java.lang.String" isForPrompting="true">
+	<parameter name="pageSize" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Limit"/>
 		<property name="required" value="true"/>
 		<defaultValueExpression><![CDATA[20]]></defaultValueExpression>
 	</parameter>
-	<parameter name="offset" class="java.lang.String" isForPrompting="true">
+	<parameter name="offset" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Offset"/>
 		<property name="required" value="true"/>
@@ -216,17 +224,15 @@
   community.name AS community,
   CONCAT(LEFT(chw.preferred_language, 1), LOWER(SUBSTRING(chw.preferred_language, 2))) AS language,
   chw.phone_number AS phone,
-  CASE
-    WHEN (chw.working IS TRUE) THEN 'Yes'
-    ELSE 'No'
-  END AS working,
+  chw_group.name AS groupName,
   CONCAT_WS(" ", in_charge.first_name, in_charge.other_name, in_charge.second_name) AS supervisor
  FROM community_health_worker AS chw
  JOIN community ON chw.community_id = community.id
  JOIN facility ON community.facility_id = facility.id
  JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
  JOIN district ON chiefdom.district_id = district.id
- JOIN in_charge ON in_charge.facility_id = facility.id
+ LEFT JOIN in_charge ON in_charge.facility_id = facility.id
+ LEFT JOIN chw_group ON chw_group.id = chw.group_id
  WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
   AND ($P{firstName} IS NULL OR chw.first_name LIKE CONCAT('%',$P{firstName},'%'))
   AND ($P{secondName} IS NULL OR chw.second_name LIKE CONCAT('%',$P{secondName},'%'))
@@ -237,6 +243,7 @@
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{community} IS NULL OR community.name LIKE CONCAT('%',$P{community},'%'))
   AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
+  AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{supervisor} IS NULL OR CONCAT_WS(" ", in_charge.first_name, in_charge.other_name, in_charge.second_name) LIKE CONCAT('%',$P{supervisor},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
@@ -256,7 +263,7 @@
 	<field name="supervisor" class="java.lang.String"/>
 	<field name="language" class="java.lang.String"/>
 	<field name="phone" class="java.lang.String"/>
-	<field name="working" class="java.lang.String"/>
+	<field name="groupName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -273,194 +280,194 @@
 				<text><![CDATA[CHW List Report]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="9d8107d7-b21e-4ff0-9c58-b7d8b078f47c">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwId.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="ID"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="c53192f6-ed64-4c91-816d-43a9dfc13620">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwId.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="0"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="5f34e949-b07f-4a7b-97dc-33a1508fe084">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.firstName.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="First Name"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="5f63dd8a-2106-4865-af58-24f7cb50b852">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.firstName.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="1"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="48901e8e-be08-4b81-b9f5-7902bbdc400e">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.secondName.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Surname"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="a0f32db5-4e41-45fc-9089-5820fc4eda4f">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.secondName.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="2"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="567ffe80-1c81-48c4-beea-18f76e83626c">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.otherName.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Other Name"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="96289ec5-83f1-4d35-a7cc-c2a44af20ac7">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.otherName.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="3"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="2a3f69c9-2523-4093-b2d6-03a3bcb898a0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.yob.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="YOB"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="5f1d0058-d505-406d-a834-28605765bd66">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.yob.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="4"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="6fadc980-ef13-4037-b874-51c0935fa6cc">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.gender.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Gender"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="05068712-201b-4abc-90d9-66b49b049cb4">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.gender.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="5"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="542baea3-ee08-41c9-9d72-a04962739fdd">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.education.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Education Level"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="ffa589d7-f774-49ac-aa73-ddf3dca3d008">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.education.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="6"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="811ca848-98bf-4607-b59b-47e740c21e3a">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.literacy.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Literacy"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="9b65c471-6415-43dc-9cc7-e666787fcbd8">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.literacy.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="7"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="01553727-91a8-4875-bbbe-fa0ee33513fc">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="District"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="16b6471b-5eca-45b2-8aeb-18b35d05d7d5">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="8"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="dc29c153-bfb9-4d1c-82c4-e4e750689188">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="f2169341-1f32-4282-94ae-4b091ce57a76">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="9"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="43bf39e9-561c-417b-90b9-c56e1945334a">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Facility"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="46ce2c3a-88a8-4c48-b8b2-685b9e1273c2">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="10"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="bad3b1e2-fdd0-4109-b184-7e6b0c88e831">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Community"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="7799a666-b8b7-4013-a886-4ec7757f21cb">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="11"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="efeb1013-6213-4b39-95c7-e0c9aa54dfcd">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.supervisor.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="PHU Supervisor"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="9b0eb288-f530-49d5-8a2a-94a6a1da5595">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.supervisor.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="12"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="bc40d5c3-ef80-46a5-b44e-789af1d2a03b">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.language.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Preferred Language"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="360588f9-f4ca-43a7-a652-64a6db6cb31d">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.language.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="13"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="c2b4064b-5280-4d37-8dc0-d366aa371e3c">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.phone.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Phone Number"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
+				<reportElement x="0" y="0" width="0" height="0" uuid="b7eb3121-f8c4-40f2-8ce1-5e4bf088fd1a">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.phone.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="14"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.working.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Working"/>
+				<reportElement x="0" y="0" width="0" height="0" uuid="476790b2-2556-4547-bded-b2bbae3a192b">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.groupName.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Group"/>
 				</reportElement>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="0" height="0">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.working.order"/>
+				<reportElement x="0" y="0" width="0" height="0" uuid="a805275a-c33f-4174-be3e-8654631d4c02">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.groupName.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="15"/>
 				</reportElement>
 			</staticText>
@@ -506,6 +513,9 @@
 						<datasetParameter name="phone">
 							<datasetParameterExpression><![CDATA[$P{phone}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="groupName">
+							<datasetParameterExpression><![CDATA[$P{groupName}]]></datasetParameterExpression>
+						</datasetParameter>
 						<datasetParameter name="pageSize">
 							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>
 						</datasetParameter>
@@ -517,7 +527,7 @@
 						<jr:detailCell style="Table_TD" height="0">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							<textField isStretchWithOverflow="false" isBlankWhenNull="true">
+							<textField isBlankWhenNull="true">
 								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="0" height="0" uuid="c7498722-1b32-4bed-8c4e-a1b04f907326">
 									<property name="com.jaspersoft.studio.unit.width" value="px"/>
 									<property name="net.sf.jasperreports.export.json.path" value="totalPages"/>
@@ -544,7 +554,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[ID]]></text>
 			</staticText>
@@ -559,7 +569,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[First Name]]></text>
 			</staticText>
@@ -574,7 +584,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Surname]]></text>
 			</staticText>
@@ -589,7 +599,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Other Name]]></text>
 			</staticText>
@@ -604,7 +614,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[YOB]]></text>
 			</staticText>
@@ -619,7 +629,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Gender]]></text>
 			</staticText>
@@ -634,7 +644,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Education Level]]></text>
 			</staticText>
@@ -649,7 +659,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Literacy]]></text>
 			</staticText>
@@ -664,7 +674,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[District]]></text>
 			</staticText>
@@ -679,7 +689,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Chiefdom]]></text>
 			</staticText>
@@ -694,7 +704,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Facility]]></text>
 			</staticText>
@@ -709,12 +719,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Community]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="580" y="0" width="70" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="580" y="0" width="65" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -724,13 +734,14 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[PHU Supervisor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="650" y="0" width="65" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="645" y="0" width="55" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -739,13 +750,14 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Preferred Language]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="715" y="0" width="55" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="700" y="0" width="55" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -754,13 +766,14 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
 				<text><![CDATA[Phone Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="770" y="0" width="30" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="755" y="0" width="45" height="30" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -769,9 +782,9 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="10"/>
 				</textElement>
-				<text><![CDATA[Working]]></text>
+				<text><![CDATA[Group]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -947,7 +960,7 @@
 				<textFieldExpression><![CDATA[$F{community}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="580" y="0" width="70" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="580" y="0" width="65" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.supervisor"/>
 				</reportElement>
@@ -961,9 +974,10 @@
 				<textFieldExpression><![CDATA[$F{supervisor}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="650" y="0" width="65" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="645" y="0" width="55" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.language"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -975,9 +989,10 @@
 				<textFieldExpression><![CDATA[$F{language}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="715" y="0" width="55" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="700" y="0" width="55" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.phone"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -989,9 +1004,10 @@
 				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="770" y="0" width="30" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
+				<reportElement stretchType="RelativeToTallestObject" x="755" y="0" width="45" height="30" uuid="2d46b8a0-2f31-4732-ac71-960408c5581e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="net.sf.jasperreports.export.json.path" value="values.working"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.groupName"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1000,7 +1016,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{working}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{groupName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -23,6 +23,7 @@ import {
 import Button from './Button';
 import styles from '../styles/formsStyles';
 import Spinner from './Spinner';
+import apiClient from '../utils/api-client';
 
 const { autocompleteStyle, autocompleteItemStyle, autocompleteHintStyle, 
   autocompleteListStyle, autocompleteInputContainerStyle } = styles;
@@ -321,25 +322,25 @@ const FIELDS = {
     }),
     getAttributes: input => (getAttributesForSelect(input)),
   },
-  working: {
-    label: 'Working',
-    type: CheckBox,
-    getAttributes: input => (
-      {
-        title: '',
-        checked: input.value === true,
-        onPress: () => {
-          input.onChange(!input.value);
-        },
-      }
-    ),
-    nonBorderField: true,
+  groupId: {
+    type: Select,
+    label: 'Group',
+    getSelectOptions: ({ groups }) => ({
+      values: groups,
+      displayNameKey: 'name',
+      valueKey: 'id',
+    }),
+    getAttributes: input => (getAttributesForSelect(input)),
   },
 };
 
 class HealthWorkersForm extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      groups: [],
+    };
 
     this.renderField = this.renderField.bind(this);
   }
@@ -348,6 +349,16 @@ class HealthWorkersForm extends Component {
     clearFields(CHW_FORM_NAME, ...(_.keys(FIELDS)));
     untouchFields(CHW_FORM_NAME, ...(_.keys(FIELDS)));
     this.props.fetchLocations();
+    this.fetchData();
+  }
+
+  fetchData() {
+    apiClient.get('/api/group')
+      .then((response) => {
+        if (response) {
+          this.setState({ groups: response.data });
+        }
+      });
   }
 
   renderField(fieldConfig, fieldName) {
@@ -363,6 +374,7 @@ class HealthWorkersForm extends Component {
         isChwIdDisabled={this.props.isChwIdDisabled}
         yearOfBirth={this.props.yearOfBirth}
         notSelectedChwIds={this.props.notSelectedChwIds}
+        groups={this.state.groups}
       />
     );
   }

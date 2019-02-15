@@ -21,6 +21,7 @@ import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.Group;
 import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
@@ -33,6 +34,7 @@ import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.CommunityRepository;
+import org.motechproject.mots.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +59,9 @@ public class CommunityHealthWorkerService {
   private CommunityRepository communityRepository;
 
   @Autowired
+  private GroupRepository groupRepository;
+
+  @Autowired
   private IvrService ivrService;
 
   private ChwInfoMapper chwInfoMapper = ChwInfoMapper.INSTANCE;
@@ -67,7 +72,7 @@ public class CommunityHealthWorkerService {
   private static final String CHW_ID_CSV_HEADER = "chw id";
   private static final String DISTRICT_CSV_HEADER = "district";
   private static final String CHIEFDOM_CSV_HEADER = "chiefdom";
-  private static final String WORKING_CSV_HEADER = "working";
+  private static final String GROUP_CSV_HEADER = "group";
   private static final String FIRST_NAME_CSV_HEADER = "first_name";
   private static final String SECOND_NAME_CSV_HEADER = "second_name";
   private static final String OTHER_NAME_CSV_HEADER = "other_name";
@@ -83,7 +88,7 @@ public class CommunityHealthWorkerService {
   private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
-      DISTRICT_CSV_HEADER, CHIEFDOM_CSV_HEADER, WORKING_CSV_HEADER, FIRST_NAME_CSV_HEADER,
+      DISTRICT_CSV_HEADER, CHIEFDOM_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
       SECOND_NAME_CSV_HEADER, OTHER_NAME_CSV_HEADER, AGE_CSV_HEADER, GENDER_CSV_HEADER,
       READ_WRITE_CSV_HEADER, EDUCATION_CSV_HEADER, MOBILE_CSV_HEADER, COMMUNITY_CSV_HEADER,
       PHU_CSV_HEADER, PHU_SUPERVISOR_CSV_HEADER, PEER_SUPERVISOR_CSV_HEADER,
@@ -131,12 +136,11 @@ public class CommunityHealthWorkerService {
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, String phuSupervisor, Boolean selected,
-      Pageable pageable) throws IllegalArgumentException {
+      String chiefdomName, String districtName, String phuSupervisor, String groupName,
+      Boolean selected, Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
-        chwId, firstName, secondName, otherName,
-        phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, phuSupervisor, selected, pageable);
+        chwId, firstName, secondName, otherName, phoneNumber, educationLevel, communityName,
+        facilityName, chiefdomName, districtName, phuSupervisor, groupName, selected, pageable);
   }
 
   /**
@@ -286,6 +290,13 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
+      String groupName = csvRow.get(GROUP_CSV_HEADER);
+      Group group = null;
+
+      if (StringUtils.isNotBlank(groupName)) {
+        group = groupRepository.findByName(groupName);
+      }
+
       Optional<CommunityHealthWorker> existingHealthWorker = healthWorkerRepository
           .findByChwId(chwId);
 
@@ -318,9 +329,12 @@ public class CommunityHealthWorkerService {
       communityHealthWorker.setCommunity(chwCommunity);
       communityHealthWorker.setHasPeerSupervisor(
           csvRow.get(PEER_SUPERVISOR_CSV_HEADER).equals("Yes"));
-      communityHealthWorker.setWorking(csvRow.get(WORKING_CSV_HEADER).equals("Yes"));
       communityHealthWorker.setPreferredLanguage(Language.getByDisplayName(
           Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER), "English")));
+
+      if (group != null) {
+        communityHealthWorker.setGroup(group);
+      }
 
       if (selected && !communityHealthWorker.getSelected()) {
         selectHealthWorker(communityHealthWorker);
@@ -350,11 +364,6 @@ public class CommunityHealthWorkerService {
 
     if (StringUtils.isBlank(csvRow.get(CHIEFDOM_CSV_HEADER))) {
       errorMap.put(lineNumber, "Chiefdom is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(WORKING_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Working is empty");
       return true;
     }
 

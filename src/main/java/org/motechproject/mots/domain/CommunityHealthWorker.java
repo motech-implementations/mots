@@ -99,15 +99,16 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Setter
   private Language preferredLanguage;
 
-  @Column(name = "working")
-  @Getter
-  @Setter
-  private Boolean working;
-
   @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
   @Getter
   @Setter
   private Boolean selected = false;
+
+  @ManyToOne
+  @JoinColumn(name = "group_id")
+  @Getter
+  @Setter
+  private Group group;
 
   public CommunityHealthWorker(UUID id) {
     super(id);

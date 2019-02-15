@@ -124,7 +124,12 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  private Boolean working;
+  private String groupName;
+
+  @Getter
+  @Setter
+  @Uuid
+  private String groupId;
 
   @Getter
   @Setter
