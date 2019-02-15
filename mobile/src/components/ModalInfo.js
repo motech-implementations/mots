@@ -12,6 +12,19 @@ const {
 const { lightThemeText } = commonStyles;
 
 export default class ModalInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: true,
+    };
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (!nextState.open) {
+      Actions.pop({ key: this.props.sceneKey });
+    }
+  }
+
   componentWillUnmount() {
     if (this.props.onClose) {
       this.props.onClose();
@@ -36,7 +49,10 @@ export default class ModalInfo extends Component {
               <Button
                 onPress={() => {
                   this.props.onConfirm();
-                  Actions.pop({ key: this.props.sceneKey });
+                  this.setState({
+                    open: false,
+                  });
+                  Actions.refresh({ key: this.props.sceneKey });
                 }}
                 iconName="check"
                 iconColor="#FFF"
@@ -48,7 +64,10 @@ export default class ModalInfo extends Component {
           }
             <Button
               onPress={() => {
-                Actions.pop({ key: this.props.sceneKey });
+                this.setState({
+                  open: false,
+                });
+                Actions.refresh({ key: this.props.sceneKey });
               }}
               iconName="times-circle"
               iconColor="#FFF"
