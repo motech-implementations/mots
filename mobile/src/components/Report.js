@@ -58,7 +58,7 @@ class Report extends Component {
       column.label.length * fontWidth) + sortIconSize));
     tableRows.forEach((rowData) => {
       rowData.forEach((value, i) => {
-        const len = (value.length * fontWidth);
+        const len = (value === null) ? 0 : (value.length * fontWidth);
         if (len > widths[i]) {
           widths[i] = len;
         }
