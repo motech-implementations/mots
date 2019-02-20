@@ -36,7 +36,7 @@ const ConnectedRouter = connect()(Router);
 const scenes = Actions.create(
   <Scene key="modal" component={Modal}>
     <Scene key="auth">
-      <Scene key="login" component={Login} hideNavBar />
+      <Scene key="login" component={keyboardAvoiding(Login)} hideNavBar />
     </Scene>
     <Scene key="drawer" component={requireAuth(AppDrawer)} initial open={false}>
       <Scene key="main">
