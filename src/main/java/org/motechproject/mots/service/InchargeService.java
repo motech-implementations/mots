@@ -42,6 +42,7 @@ public class InchargeService {
   private static final String FACILITY_ID_CSV_HEADER = "facility_id";
   private static final String PHU_INCHARGE_NAME_CSV_HEADER = "phu in-charge name";
   private static final String PHU_INCHARGE_NUMBER_CSV_HEADER = "phu in-charge number";
+  private static final String INCHARGE_EMAIL_HEADER = "e-mail";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(FACILITY_ID_CSV_HEADER,
       PHU_INCHARGE_NAME_CSV_HEADER, PHU_INCHARGE_NUMBER_CSV_HEADER);
@@ -131,6 +132,7 @@ public class InchargeService {
 
     Map<String, String> csvRow;
     Set<String> phoneNumberSet = new HashSet<>();
+    Set<String> emailSet = new HashSet<>();
     Set<String> facilityIdSet = new HashSet<>();
     Map<Integer, String> errorMap = new HashMap<>();
 
@@ -173,6 +175,17 @@ public class InchargeService {
 
       if (phoneNumber != null) {
         phoneNumberSet.add(phoneNumber);
+      }
+
+      String email = csvRow.get(INCHARGE_EMAIL_HEADER);
+
+      if (emailSet.contains(email)) {
+        errorMap.put(csvMapReader.getLineNumber(), "E-mail is duplicated in CSV");
+        continue;
+      }
+
+      if (StringUtils.isNotBlank(email)) {
+        emailSet.add(email);
       }
 
       String name = csvRow.get(PHU_INCHARGE_NAME_CSV_HEADER);
@@ -221,6 +234,9 @@ public class InchargeService {
         incharge.setSecondName(secondName);
         incharge.setOtherName(otherName);
         incharge.setPhoneNumber(phoneNumber);
+        if (StringUtils.isNotBlank(email)) {
+          incharge.setEmail(email);
+        }
 
         if (selected) {
           incharge.setSelected(true);
