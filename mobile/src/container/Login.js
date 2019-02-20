@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Keyboard, Image, Dimensions } from 'react-native';
+import { Platform, View, KeyboardAvoidingView, ScrollView, Text, Keyboard, Image, Dimensions } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 
 const { lightThemeText } = commonStyles;
 const image = require('../img/EBODAClogo.jpg');
+const isIos = Platform.OS === 'ios';
 
 class Login extends Component {
   constructor(props) {
@@ -88,7 +89,7 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center' }}>
+      <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center' }} behavior={(isIos) ? 'padding' : ''}>
         { this.state.dim.height > 320 &&
           <Image
             resizeMode="contain"
@@ -152,7 +153,7 @@ class Login extends Component {
 
           <Footer />
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
