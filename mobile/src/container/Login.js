@@ -89,7 +89,7 @@ class Login extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center' }} behavior={(isIos) ? 'padding' : ''}>
+      <View style={{ flex: 1, alignItems: 'center' }}>
         { this.state.dim.height > 320 &&
           <Image
             resizeMode="contain"
@@ -153,7 +153,7 @@ class Login extends Component {
 
           <Footer />
         </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }
