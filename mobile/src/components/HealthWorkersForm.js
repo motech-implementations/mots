@@ -330,7 +330,9 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelect(input)),
+    getAttributes: (input, {
+      groups,
+    }) => (getAttributesForSelect(input, groups)),
   },
 };
 
@@ -356,7 +358,7 @@ class HealthWorkersForm extends Component {
     apiClient.get('/api/group')
       .then((response) => {
         if (response) {
-          this.setState({ groups: response.data });
+          this.setState({ groups: response });
         }
       });
   }

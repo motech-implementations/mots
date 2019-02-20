@@ -8,11 +8,15 @@ import apiClient from './api-client';
 const { labelSelectFieldStyle, optionListStyle } = styles;
 const { lightThemeText } = commonStyles;
 
-function getLocationById(list, id) {
+function getItemByKey(list, keyName, value) {
   if (list) {
-    return list.find(location => location.id === id);
+    return list.find(item => item[keyName] === value);
   }
   return {};
+}
+
+function getLocationById(list, id) {
+  return getItemByKey(list, 'id', id);
 }
 
 export function getSelectableLocations(
@@ -71,11 +75,11 @@ export function fetchDataAndInitializeFrom(formName, baseUrl, value) {
 }
 
 
-export function getAttributesForSelect(input, availableLocations) {
+export function getAttributesForSelect(input, items, valueKey = 'id', displayNameKey = 'name') {
   let defaultText = input.value;
-  const location = getLocationById(availableLocations, input.value);
-  if (input.value && availableLocations && location) {
-    defaultText = location.name;
+  const item = getItemByKey(items, valueKey, input.value);
+  if (input.value && items && item) {
+    defaultText = item[displayNameKey];
   }
 
   return {
