@@ -108,7 +108,7 @@ public class InchargeRepositoryIntegrationTest extends
   }
 
   /**
-   * Generate a Incharge.
+   * Generate an Incharge.
    *
    * @return Incharge
    */
