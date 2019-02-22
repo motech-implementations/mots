@@ -462,7 +462,7 @@
 				<text><![CDATA[CHW Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="730" y="0" width="70" height="25" uuid="472f5ff1-38ef-4974-95dc-234159a9e47a">
+				<reportElement x="180" y="0" width="70" height="25" uuid="472f5ff1-38ef-4974-95dc-234159a9e47a">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -478,7 +478,9 @@
 				<text><![CDATA[Group]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="0" width="100" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348"/>
+				<reportElement x="250" y="0" width="100" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -491,8 +493,9 @@
 				<text><![CDATA[Module ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="0" width="90" height="25" uuid="9e572b39-b7d8-49b2-845b-2defa797cbd0">
+				<reportElement x="350" y="0" width="90" height="25" uuid="9e572b39-b7d8-49b2-845b-2defa797cbd0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -506,8 +509,9 @@
 				<text><![CDATA[Date Received]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="370" y="0" width="70" height="25" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">
+				<reportElement x="440" y="0" width="70" height="25" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -521,7 +525,7 @@
 				<text><![CDATA[Start Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="0" width="65" height="25" uuid="ece61ced-7409-4f8c-8c05-ba304746d28c">
+				<reportElement x="510" y="0" width="65" height="25" uuid="ece61ced-7409-4f8c-8c05-ba304746d28c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -537,7 +541,7 @@
 				<text><![CDATA[End Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="505" y="0" width="70" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
+				<reportElement x="575" y="0" width="70" height="25" uuid="0176ef1a-9b06-4ac2-a394-77b69cd3c721">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -553,7 +557,7 @@
 				<text><![CDATA[District]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="575" y="0" width="75" height="25" uuid="6a4c9216-c370-4caa-bc73-03810ce626b5">
+				<reportElement x="645" y="0" width="75" height="25" uuid="6a4c9216-c370-4caa-bc73-03810ce626b5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -569,7 +573,7 @@
 				<text><![CDATA[Chiefdom]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="650" y="0" width="80" height="25" uuid="4154eb0a-bc86-4302-9817-c3e7c8f2c201">
+				<reportElement x="720" y="0" width="80" height="25" uuid="4154eb0a-bc86-4302-9817-c3e7c8f2c201">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
@@ -618,7 +622,7 @@
 				<textFieldExpression><![CDATA[$F{chwName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="730" y="0" width="70" height="25" uuid="73e500aa-b351-44ae-bcb8-0f21d28355a5">
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="70" height="25" uuid="73e500aa-b351-44ae-bcb8-0f21d28355a5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.groupName"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -633,9 +637,10 @@
 				<textFieldExpression><![CDATA[$F{groupName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="100" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
+				<reportElement stretchType="RelativeToTallestObject" x="250" y="0" width="100" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.moduleId"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -647,9 +652,10 @@
 				<textFieldExpression><![CDATA[$F{moduleId}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="90" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
+				<reportElement stretchType="RelativeToTallestObject" x="350" y="0" width="90" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.dateReceived"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -661,9 +667,10 @@
 				<textFieldExpression><![CDATA[$F{dateReceived}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="370" y="0" width="70" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
+				<reportElement stretchType="RelativeToTallestObject" x="440" y="0" width="70" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.startDate"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="5">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -675,7 +682,7 @@
 				<textFieldExpression><![CDATA[$F{startDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="440" y="0" width="65" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
+				<reportElement stretchType="RelativeToTallestObject" x="510" y="0" width="65" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.endDate"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -690,7 +697,7 @@
 				<textFieldExpression><![CDATA[$F{endDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="505" y="0" width="70" height="25" uuid="ba48f274-2222-44d2-a190-0116192044f9">
+				<reportElement stretchType="RelativeToTallestObject" x="575" y="0" width="70" height="25" uuid="ba48f274-2222-44d2-a190-0116192044f9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.district"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -705,7 +712,7 @@
 				<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="575" y="0" width="75" height="25" uuid="94cc3c9f-9684-4b2a-a7d3-0fc87819ae9e">
+				<reportElement stretchType="RelativeToTallestObject" x="645" y="0" width="75" height="25" uuid="94cc3c9f-9684-4b2a-a7d3-0fc87819ae9e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.chiefdom"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -720,7 +727,7 @@
 				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="650" y="0" width="80" height="25" uuid="77760477-7311-4e18-84a0-53618badbbaf">
+				<reportElement stretchType="RelativeToTallestObject" x="720" y="0" width="80" height="25" uuid="77760477-7311-4e18-84a0-53618badbbaf">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="net.sf.jasperreports.export.json.path" value="values.facility"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
