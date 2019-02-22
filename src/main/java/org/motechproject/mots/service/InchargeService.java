@@ -16,12 +16,15 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.repository.FacilityRepository;
 import org.motechproject.mots.repository.InchargeRepository;
+import org.motechproject.mots.validate.constraintvalidators.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -175,17 +178,40 @@ public class InchargeService {
 
       if (phoneNumber != null) {
         phoneNumberSet.add(phoneNumber);
+
+        PhoneNumberValidator validator = new PhoneNumberValidator();
+        if (!validator.isValid(phoneNumber, null)) {
+          errorMap.put(csvMapReader.getLineNumber(), ValidationMessages.INVALID_PHONE_NUMBER);
+          continue;
+        }
       }
 
       String email = csvRow.get(INCHARGE_EMAIL_HEADER);
 
       if (emailSet.contains(email)) {
-        errorMap.put(csvMapReader.getLineNumber(), "E-mail is duplicated in CSV");
+        errorMap.put(csvMapReader.getLineNumber(), ValidationMessages.DUPLICATE_EMAIL_IN_CSV);
         continue;
       }
 
+      Facility facility = existingFacility.get();
+
       if (StringUtils.isNotBlank(email)) {
         emailSet.add(email);
+
+        EmailValidator emailValidator = new EmailValidator();
+        if (!emailValidator.isValid(email, null)) {
+          errorMap.put(csvMapReader.getLineNumber(), ValidationMessages.INVALID_EMAIL);
+          continue;
+        }
+
+        Optional<Incharge> duplicatedIncharge = inchargeRepository.findOneByEmail(email);
+
+        if (duplicatedIncharge.isPresent()
+            && !duplicatedIncharge.get().getFacility().getId().equals(facility.getId())) {
+          errorMap.put(csvMapReader.getLineNumber(),
+              String.format(ValidationMessages.INCHARGE_DUPLICATE_EMAIL, email));
+          continue;
+        }
       }
 
       String name = csvRow.get(PHU_INCHARGE_NAME_CSV_HEADER);
@@ -203,8 +229,6 @@ public class InchargeService {
         errorMap.put(csvMapReader.getLineNumber(), "Incharge second name is empty");
         continue;
       }
-
-      Facility facility = existingFacility.get();
 
       Optional<Incharge> duplicatedIncharge = inchargeRepository.findByPhoneNumber(phoneNumber);
 

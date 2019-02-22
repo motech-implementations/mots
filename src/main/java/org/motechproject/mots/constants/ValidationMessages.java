@@ -26,7 +26,6 @@ public final class ValidationMessages {
   public static final String EMPTY_START_DATE = "Start date cannot be empty";
   public static final String EMPTY_END_DATE = "End date cannot be empty";
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
-  public static final String EMPTY = "Cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
@@ -48,7 +47,7 @@ public final class ValidationMessages {
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
   public static final String NOT_UNIQUE_ASSIGN_FACILITY_TO_INCHARGE = "Facility is not unique";
   public static final String NOT_UNIQUE_CHW_ID
-      = "The Community Health Worker with id %s already exists";
+      = "A Community Health Worker with id %s already exists";
 
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
   public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";
@@ -58,25 +57,28 @@ public final class ValidationMessages {
 
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
-  public static final String NOT_UNIQUE_USERNAME = "The User with username '%s' already exists";
+  public static final String NOT_UNIQUE_USERNAME = "A User with username '%s' already exists";
   public static final String INCHARGE_DUPLICATE_EMAIL
-      = "The Incharge with email '%s' already exists";
-  public static final String USER_DUPLICATE_EMAIL = "The User with email '%s' already exists";
-  public static final String NOT_UNIQUE_FACILITY_ID = "The Facility with this ID already exists";
+      = "An Incharge with email '%s' already exists";
+  public static final String USER_DUPLICATE_EMAIL = "A User with email '%s' already exists";
+  public static final String NOT_UNIQUE_FACILITY_ID = "A Facility with this ID already exists";
   public static final String NOT_UNIQUE_FACILITY =
-      "The Facility with name: '%s' within chiefdom already exists";
+      "A Facility with name: '%s' within chiefdom already exists";
   public static final String NOT_UNIQUE_COMMUNITY =
-      "The Community with name: '%s' within facility already exists";
+      "A Community with name: '%s' within facility already exists";
   public static final String NOT_UNIQUE_CHIEFDOM = 
-       "The Chiefdom with name: '%s' within district already exists";
+       "A Chiefdom with name: '%s' within district already exists";
   public static final String NOT_UNIQUE_DISTRICT = 
-       "The District with name: '%s' already exists";
+       "A District with name: '%s' already exists";
 
   public static final String PASSWORDS_NOT_MATCH = "New Passwords don't match.";
   public static final String ONE_CHOICE_CORRECT = "One choice must be correct.";
 
   public static final String EMPTY_GROUP_NAME = "Group name cannot be empty";
-  public static final String NOT_UNIQUE_GROUP_NAME = "The Group with name '%s' already exists";
+  public static final String NOT_UNIQUE_GROUP_NAME = "A Group with name '%s' already exists";
+
+  public static final String DUPLICATE_EMAIL_IN_CSV
+      = "There is a duplicate e-mail in this CSV file";
 
   private ValidationMessages() {
   }
