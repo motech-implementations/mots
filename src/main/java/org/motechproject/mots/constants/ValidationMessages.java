@@ -26,12 +26,14 @@ public final class ValidationMessages {
   public static final String EMPTY_START_DATE = "Start date cannot be empty";
   public static final String EMPTY_END_DATE = "End date cannot be empty";
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
+  public static final String EMPTY_GROUP_ID = "Group Id cannot be empty";
 
   public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";
   public static final String INVALID_DISTRICT_ID = "Invalid district UUID";
   public static final String INVALID_CHIEFDOM_ID = "Invalid chiefdom UUID";
+  public static final String INVALID_GROUP_ID = "Invalid group UUID";
   public static final String INVALID_COMMUNITY_ID = "Invalid community UUID";
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
   public static final String INVALID_DATE = "Invalid format of date";
@@ -54,6 +56,7 @@ public final class ValidationMessages {
   public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
   public static final String NOT_EXISTING_CHIEFDOM = "Chiefdom doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
+  public static final String NOT_EXISTING_GROUP = "Group doesn't exist";
 
   public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 

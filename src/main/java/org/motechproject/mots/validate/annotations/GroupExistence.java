@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.BulkAssignmentDtoEndDateAfterStartDateValidator;
+import org.motechproject.mots.validate.constraintvalidators.GroupExistenceValidator;
 
-@Target(ElementType.TYPE)
-@Constraint(validatedBy = BulkAssignmentDtoEndDateAfterStartDateValidator.class)
+@Target(ElementType.FIELD)
+@Constraint(validatedBy = {GroupExistenceValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EndDateAfterStartDate {
+public @interface GroupExistence {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.END_DATE_AFTER_START_DATE;
+  String message() default ValidationMessages.NOT_EXISTING_GROUP;
 
   /**
    * Specify validation groups, to which this constraint belongs

@@ -24,7 +24,9 @@ import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.security.User;
+import org.motechproject.mots.dto.BulkAssignmentDto;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
+import org.motechproject.mots.dto.GroupAssignmentDto;
 import org.motechproject.mots.dto.ModuleAssignmentDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
@@ -35,6 +37,7 @@ import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
+import org.motechproject.mots.repository.GroupRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.task.ModuleAssignmentNotificationScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +77,9 @@ public class ModuleAssignmentService {
 
   @Autowired
   private ChiefdomRepository chiefdomRepository;
+
+  @Autowired
+  private GroupRepository groupRepository;
 
   @Autowired
   private UserService userService;
@@ -228,6 +234,28 @@ public class ModuleAssignmentService {
           .findByCommunityFacilityChiefdomDistrictIdAndSelected(
               districtId, true);
     }
+
+    bulkAssignModules(assignmentDto, communityHealthWorkers, districtId, chiefdomId, null);
+  }
+
+  /**
+   * Assigns modules to each CHW from a group.
+   * @param assignmentDto dto with group id, list of modules assigned to it
+   *     and start and end dates
+   */
+  @Transactional
+  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
+  public void assignModulesToGroup(GroupAssignmentDto assignmentDto) {
+    UUID groupId = UUID.fromString(assignmentDto.getGroupId());
+    List<CommunityHealthWorker> communityHealthWorkers =
+        communityHealthWorkerRepository.findByGroupIdAndSelected(groupId, true);
+
+    bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, groupId);
+  }
+
+  private void bulkAssignModules(BulkAssignmentDto assignmentDto,
+      List<CommunityHealthWorker> communityHealthWorkers, UUID districtId,
+      UUID chiefdomId, UUID groupId) {
     Set<Module> newChwModules = new HashSet<>();
     String userName = (String) SecurityContextHolder.getContext().getAuthentication()
         .getPrincipal();
@@ -241,8 +269,9 @@ public class ModuleAssignmentService {
       newChwModules.add(moduleToAssign);
 
       assignmentLogRepository.save(new DistrictAssignmentLog(
-          districtRepository.findOne(districtId),
+          districtId != null ? districtRepository.findOne(districtId) : null,
           chiefdomId != null ? chiefdomRepository.findOne(chiefdomId) : null,
+          groupId != null ? groupRepository.findOne(groupId) : null,
           LocalDate.parse(assignmentDto.getStartDate()),
           LocalDate.parse(assignmentDto.getEndDate()),
           moduleToAssign,

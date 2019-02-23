@@ -1,46 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import Select, { Async } from 'react-select';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
-import DateTime from 'react-datetime';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import 'react-datetime/css/react-datetime.css';
 
 import { resetLogoutCounter, fetchLocations } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { ASSIGN_MODULES_AUTHORITY, hasAuthority } from '../utils/authorization';
-import {
-  getDefaultNotificationDate,
-  getSelectableLocations,
-} from '../utils/form-utils';
+import { getSelectableLocations } from '../utils/form-utils';
+import GroupAssignFrom from './group-assign-form';
 
 class DistrictAssignModules extends Component {
-  static fetchAvailableModules() {
-    const url = '/api/modules/simple';
-
-    return apiClient.get(url)
-      .then((response) => {
-        const availableModulesList = _.map(
-          response.data,
-          module => ({ value: module.id, label: module.name }),
-        );
-        return { options: availableModulesList };
-      });
-  }
-
   constructor(props) {
     super(props);
     this.state = {
       chiefdomOptions: [],
-      selectedModules: '',
-      selectedDistrict: '',
-      selectedChiefdom: '',
+      selectedModules: null,
+      selectedDistrict: null,
+      selectedChiefdom: null,
       startDate: '',
       endDate: '',
       delayNotification: false,
       notificationTime: '',
+      groups: [],
+      selectedGroup: null,
+      selectedIndex: 0,
     };
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
@@ -48,10 +36,13 @@ class DistrictAssignModules extends Component {
     this.handleChiefdomChange = this.handleChiefdomChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    this.handleDelayNotificationChange = this.handleDelayNotificationChange.bind(this);
     this.handleNotificationTimeChange = this.handleNotificationTimeChange.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
-    this.validate = this.validate.bind(this);
-    this.validateDates = this.validateDates.bind(this);
+    this.validateGroup = this.validateGroup.bind(this);
+    this.validateLocation = this.validateLocation.bind(this);
+    this.handleGroupChange = this.handleGroupChange.bind(this);
+    this.handleTabSelect = this.handleTabSelect.bind(this);
   }
 
   componentWillMount() {
@@ -59,6 +50,7 @@ class DistrictAssignModules extends Component {
       this.props.history.push('/home');
     }
     this.props.fetchLocations();
+    this.fetchGroups();
   }
 
   getChiefdomOptions(selectedDistrict) {
@@ -73,22 +65,40 @@ class DistrictAssignModules extends Component {
     );
   }
 
+  fetchGroups() {
+    apiClient.get('/api/group')
+      .then((response) => {
+        if (response) {
+          const groups = _.map(response.data, group => ({ value: group.id, label: group.name }));
+          this.setState({ groups });
+        }
+      });
+  }
+
   sendAssignedModules() {
     if (this.validateDates()) {
-      const url = '/api/module/district/assign';
+      const url = `/api/module/${this.state.selectedIndex === 0 ? 'district' : 'group'}/assign`;
 
       const payload = {
         modules: _.map(this.state.selectedModules, module => module.value),
-        districtId: this.state.selectedDistrict.value,
         startDate: this.state.startDate,
         endDate: this.state.endDate,
       };
-      if (this.state.selectedChiefdom !== null) {
-        payload.chiefdomId = this.state.selectedChiefdom.value;
+
+      if (this.state.selectedIndex === 0) {
+        payload.districtId = this.state.selectedDistrict.value;
+
+        if (this.state.selectedChiefdom !== null) {
+          payload.chiefdomId = this.state.selectedChiefdom.value;
+        }
+      } else {
+        payload.groupId = this.state.selectedGroup.value;
       }
+
       if (this.state.delayNotification && this.state.notificationTime) {
         payload.notificationTime = this.state.notificationTime;
       }
+
       const callback = () => {
         this.props.history.push('/chw/selected');
         Alert.success('Modules have been assigned!');
@@ -129,11 +139,24 @@ class DistrictAssignModules extends Component {
     this.props.resetLogoutCounter();
   }
 
+  handleDelayNotificationChange(event) {
+    this.setState({ delayNotification: event.target.checked });
+  }
+
   handleNotificationTimeChange(notificationTime) {
     const dateFormat = 'YYYY-MM-DD HH:mm';
     const formattedTime = (notificationTime)
       ? notificationTime.clone().utc().format(dateFormat) : notificationTime;
     this.setState({ notificationTime: formattedTime });
+    this.props.resetLogoutCounter();
+  }
+
+  handleGroupChange(selectedGroup) {
+    this.setState({ selectedGroup });
+  }
+
+  handleTabSelect(index) {
+    this.setState({ selectedIndex: index });
     this.props.resetLogoutCounter();
   }
 
@@ -148,126 +171,103 @@ class DistrictAssignModules extends Component {
   }
 
   validate() {
-    const nullable = !this.state.selectedDistrict || !this.state.selectedModules
-      || !this.state.startDate || !this.state.endDate;
-    const empty = !this.state.selectedDistrict || !this.state.selectedModules
+    const empty = !this.state.selectedModules
       || this.state.selectedModules.length === 0 || !this.state.startDate || !this.state.endDate
       || (this.state.delayNotification && this.state.notificationTime.length === 0);
-    return !nullable && !empty;
+    return !empty;
+  }
+
+  validateGroup() {
+    return this.state.selectedGroup && this.validate();
+  }
+
+  validateLocation() {
+    return this.state.selectedDistrict && this.validate();
   }
 
   render() {
     return (
       <div className="form-horizontal">
-        <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules to a location</h1>
-        <div className="col-md-8 col-md-offset-2">
+        <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules</h1>
+        <Tabs selectedIndex={this.state.selectedIndex} onSelect={this.handleTabSelect}>
+          <TabList>
+            <Tab>Location assignment</Tab>
+            <Tab>Group assignment</Tab>
+          </TabList>
 
-          <Select
-            name="district"
-            value={this.state.selectedDistrict}
-            options={this.props.districtOptions}
-            onChange={this.handleDistrictChange}
-            onFocus={() => this.props.resetLogoutCounter()}
-            placeholder="Select a District"
-            className="margin-bottom-md col-md-12"
-            menuContainerStyle={{ zIndex: 5 }}
-          />
-          <Select
-            name="chiefdom"
-            value={this.state.selectedChiefdom}
-            options={this.state.chiefdomOptions}
-            disabled={!this.state.selectedDistrict}
-            onChange={this.handleChiefdomChange}
-            onFocus={() => this.props.resetLogoutCounter()}
-            placeholder="Select a Chiefdom (optional)"
-            className="margin-bottom-md col-md-12"
-            menuContainerStyle={{ zIndex: 5 }}
-          />
-          <Async
-            value={this.state.selectedModules}
-            loadOptions={DistrictAssignModules.fetchAvailableModules}
-            onChange={this.handleModuleChange}
-            onFocus={() => this.props.resetLogoutCounter()}
-            disabled={!this.state.selectedDistrict}
-            placeholder="Select Modules assignment"
-            multi
-            className="margin-bottom-md col-md-12"
-            menuContainerStyle={{ zIndex: 5 }}
-          />
-          <div className="col-md-6 margin-bottom-md">
-            <label htmlFor="start-date">Start date</label>
-            <div className="input-group">
-              <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-              <DateTime
-                dateFormat="YYYY-MM-DD"
-                timeFormat={false}
-                closeOnSelect
-                inputProps={{ disabled: !this.state.selectedModules }}
-                value={this.state.startDate}
-                onChange={this.handleStartDateChange}
-                id="start-date"
+          <TabPanel>
+            <div className="col-md-8 col-md-offset-2">
+              <Select
+                name="district"
+                value={this.state.selectedDistrict}
+                options={this.props.districtOptions}
+                onChange={this.handleDistrictChange}
+                onFocus={() => this.props.resetLogoutCounter()}
+                placeholder="Select a District"
+                className="margin-bottom-md col-md-12"
+                menuContainerStyle={{ zIndex: 5 }}
+              />
+              <Select
+                name="chiefdom"
+                value={this.state.selectedChiefdom}
+                options={this.state.chiefdomOptions}
+                disabled={!this.state.selectedDistrict}
+                onChange={this.handleChiefdomChange}
+                onFocus={() => this.props.resetLogoutCounter()}
+                placeholder="Select a Chiefdom (optional)"
+                className="margin-bottom-md col-md-12"
+                menuContainerStyle={{ zIndex: 5 }}
+              />
+
+              <GroupAssignFrom
+                resetLogoutCounter={() => this.props.resetLogoutCounter()}
+                sendAssignedModules={this.sendAssignedModules}
+                validate={this.validateLocation}
+                handleModuleChange={this.handleModuleChange}
+                handleStartDateChange={this.handleStartDateChange}
+                handleEndDateChange={this.handleEndDateChange}
+                handleDelayNotificationChange={this.handleDelayNotificationChange}
+                handleNotificationTimeChange={this.handleNotificationTimeChange}
+                selectedModules={this.state.selectedModules}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                delayNotification={this.state.delayNotification}
+                disableModuleSelect={!this.state.selectedDistrict}
               />
             </div>
-          </div>
-          <div className="col-md-6 margin-bottom-md">
-            <label htmlFor="end-date">End date</label>
-            <div className="input-group">
-              <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-              <DateTime
-                dateFormat="YYYY-MM-DD"
-                timeFormat={false}
-                closeOnSelect
-                inputProps={{ disabled: !this.state.selectedModules }}
-                value={this.state.endDate}
-                onChange={this.handleEndDateChange}
-                id="end-date"
+          </TabPanel>
+          <TabPanel>
+            <div className="col-md-8 col-md-offset-2">
+
+              <Select
+                name="group"
+                value={this.state.selectedGroup}
+                options={this.state.groups}
+                onChange={this.handleGroupChange}
+                onFocus={() => this.props.resetLogoutCounter()}
+                placeholder="Select a Group"
+                className="margin-bottom-md col-md-12"
+                menuContainerStyle={{ zIndex: 5 }}
+              />
+
+              <GroupAssignFrom
+                resetLogoutCounter={() => this.props.resetLogoutCounter()}
+                sendAssignedModules={this.sendAssignedModules}
+                validate={this.validateGroup}
+                handleModuleChange={this.handleModuleChange}
+                handleStartDateChange={this.handleStartDateChange}
+                handleEndDateChange={this.handleEndDateChange}
+                handleDelayNotificationChange={this.handleDelayNotificationChange}
+                handleNotificationTimeChange={this.handleNotificationTimeChange}
+                selectedModules={this.state.selectedModules}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                delayNotification={this.state.delayNotification}
+                disableModuleSelect={!this.state.selectedGroup}
               />
             </div>
-          </div>
-          <div className="col-md-12 margin-top-xs margin-bottom-xs">
-            <input
-              id="delay-notification"
-              type="checkbox"
-              className="checkbox-inline"
-              checked={this.state.delayNotification}
-              onChange={event => this.setState({ delayNotification: event.target.checked })}
-            />
-            <label htmlFor="delay-notification" className="margin-left-sm margin-bottom-sm">
-              Delay the notification
-            </label>
-          </div>
-          {this.state.delayNotification &&
-          <div className="col-md-12 margin-top-sm">
-            <label htmlFor="notification-time">Notification date</label>
-            <div className="input-group">
-              <span className="input-group-addon">
-                <i className="fa fa-calendar" />
-              </span>
-              <DateTime
-                dateFormat="YYYY-MM-DD"
-                timeFormat="HH:mm"
-                closeOnSelect
-                onChange={this.handleNotificationTimeChange}
-                id="notification-time"
-                defaultValue={getDefaultNotificationDate()}
-                isValidDate={current => current.isSameOrAfter(new Date(), 'day')}
-              />
-            </div>
-          </div>
-          }
-          <form
-            className="form-horizontal col-md-12"
-            onSubmit={this.sendAssignedModules}
-          >
-            <button
-              type="submit"
-              className="btn btn-primary btn-block margin-x-md padding-x-sm"
-              disabled={!this.validate()}
-            >
-              <h4>Assign!</h4>
-            </button>
-          </form>
-        </div>
+          </TabPanel>
+        </Tabs>
       </div>
     );
   }

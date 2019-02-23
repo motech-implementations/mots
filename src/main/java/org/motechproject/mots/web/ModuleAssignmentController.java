@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.dto.ChwModulesDto;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
+import org.motechproject.mots.dto.GroupAssignmentDto;
 import org.motechproject.mots.dto.ModuleAssignmentDto;
 import org.motechproject.mots.mapper.ModuleAssignmentMapper;
 import org.motechproject.mots.service.ModuleAssignmentService;
@@ -50,6 +51,20 @@ public class ModuleAssignmentController extends BaseController {
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
     moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+  }
+
+  /**
+   * Assign modules to all CHWs in a group.
+   * @param groupAssignmentDto dto with group id, list of modules assigned to it
+   *     and start and end dates
+   */
+  @RequestMapping(value = "/module/group/assign", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public void assignModulesToGroup(
+      @RequestBody @Valid GroupAssignmentDto groupAssignmentDto,
+      BindingResult bindingResult) {
+    checkBindingResult(bindingResult);
+    moduleAssignmentService.assignModulesToGroup(groupAssignmentDto);
   }
 
   /**

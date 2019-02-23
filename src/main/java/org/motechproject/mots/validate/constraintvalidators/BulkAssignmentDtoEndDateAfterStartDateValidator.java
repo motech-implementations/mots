@@ -10,12 +10,12 @@ import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.mots.constants.MotsConstants;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.dto.DistrictAssignmentDto;
+import org.motechproject.mots.dto.BulkAssignmentDto;
 import org.motechproject.mots.validate.ValidationUtils;
 import org.motechproject.mots.validate.annotations.EndDateAfterStartDate;
 
-public class DistrictAssignmentDtoEndDateAfterStartDateValidator implements
-    ConstraintValidator<EndDateAfterStartDate, DistrictAssignmentDto> {
+public class BulkAssignmentDtoEndDateAfterStartDateValidator implements
+    ConstraintValidator<EndDateAfterStartDate, BulkAssignmentDto> {
 
   private static final String END_DATE = "endDate";
 
@@ -24,10 +24,10 @@ public class DistrictAssignmentDtoEndDateAfterStartDateValidator implements
   }
 
   @Override
-  public boolean isValid(DistrictAssignmentDto districtAssignmentDto,
+  public boolean isValid(BulkAssignmentDto bulkAssignmentDto,
       ConstraintValidatorContext context) {
-    String start = districtAssignmentDto.getStartDate();
-    String end = districtAssignmentDto.getEndDate();
+    String start = bulkAssignmentDto.getStartDate();
+    String end = bulkAssignmentDto.getEndDate();
     if (!StringUtils.isEmpty(start) && !StringUtils.isEmpty(end)
         && isValidDateFormat(MotsConstants.SIMPLE_DATE_FORMAT, start)
         && isValidDateFormat(MotsConstants.SIMPLE_DATE_FORMAT, end)) {

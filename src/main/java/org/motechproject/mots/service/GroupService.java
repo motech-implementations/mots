@@ -15,7 +15,7 @@ public class GroupService {
   @Autowired
   private GroupRepository groupRepository;
 
-  @PreAuthorize(DefaultPermissions.HAS_GROUP_READ_OR_CHW_WRITE_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_GROUP_READ_OR_CHW_WRITE_OR_ASSIGN_MODULES_ROLE)
   public Iterable<Group> getGroups() {
     return groupRepository.findAll();
   }

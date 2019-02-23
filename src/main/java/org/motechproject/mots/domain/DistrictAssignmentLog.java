@@ -18,17 +18,23 @@ import org.motechproject.mots.domain.security.User;
 public class DistrictAssignmentLog extends BaseOwnershipEntity {
 
   @ManyToOne
-  @JoinColumn(name = "district_id", nullable = false)
+  @JoinColumn(name = "district_id")
   @Getter
   @Setter
   @NonNull
   private District district;
 
   @ManyToOne
-  @JoinColumn(name = "chiefdom_id", nullable = true)
+  @JoinColumn(name = "chiefdom_id")
   @Getter
   @Setter
   private Chiefdom chiefdom;
+
+  @ManyToOne
+  @JoinColumn(name = "group_id")
+  @Getter
+  @Setter
+  private Group group;
 
   @Column(name = "start_date", nullable = false)
   @Getter
@@ -53,15 +59,17 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
    * Constructor to build DistrictAssignmentLog.
    * @param district a district
    * @param chiefdom a chiefdom
+   * @param group a group
    * @param startDate a startDate
    * @param endDate an endDate
    * @param module a module
    * @param owner an owner
    */
-  public DistrictAssignmentLog(District district, Chiefdom chiefdom, LocalDate startDate,
-      LocalDate endDate, Module module, User owner) {
+  public DistrictAssignmentLog(District district, Chiefdom chiefdom, Group group,
+      LocalDate startDate, LocalDate endDate, Module module, User owner) {
     this.district = district;
     this.chiefdom = chiefdom;
+    this.group = group;
     this.startDate = startDate;
     this.endDate = endDate;
     this.module = module;
