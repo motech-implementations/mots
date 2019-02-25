@@ -21,7 +21,7 @@ class ModalSuccess extends Component {
         message={this.props.message}
         closeColor={this.state.closeColor}
         onClose={this.props.onClose}
-        sceneKey="modalError"
+        sceneKey="modalSuccess"
       />
     );
   }
