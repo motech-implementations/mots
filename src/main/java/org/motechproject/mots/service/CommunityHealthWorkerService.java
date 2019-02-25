@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
@@ -35,6 +36,7 @@ import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.GroupRepository;
+import org.motechproject.mots.validate.constraintvalidators.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -252,29 +254,36 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
+      if (!StringUtils.isBlank(phoneNumber)) {
+        phoneNumberSet.add(phoneNumber);
+
+        PhoneNumberValidator validator = new PhoneNumberValidator();
+        if (!validator.isValid(phoneNumber, null)) {
+          errorMap.put(csvMapReader.getLineNumber(), ValidationMessages.INVALID_PHONE_NUMBER);
+          continue;
+        }
+      }
+
       if (chwIdSet.contains(chwId)) {
         errorMap.put(csvMapReader.getLineNumber(), "CHW ID is duplicated in CSV");
         continue;
-      }
-
-      if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap, selected)) {
-        continue;
-      }
-
-      // Add to collections
-      if (phoneNumber != null) {
-        phoneNumberSet.add(phoneNumber);
       }
 
       if (chwId != null) {
         chwIdSet.add(chwId);
       }
 
-      Optional<CommunityHealthWorker> chw = healthWorkerRepository.findByPhoneNumber(phoneNumber);
-
-      if (chw.isPresent() && !chw.get().getChwId().equals(chwId)) {
-        errorMap.put(csvMapReader.getLineNumber(), "CHW with this phone number already exists");
+      if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap, selected)) {
         continue;
+      }
+
+      if (!StringUtils.isBlank(phoneNumber)) {
+        Optional<CommunityHealthWorker> chw = healthWorkerRepository.findByPhoneNumber(phoneNumber);
+
+        if (chw.isPresent() && !chw.get().getChwId().equals(chwId)) {
+          errorMap.put(csvMapReader.getLineNumber(), "CHW with this phone number already exists");
+          continue;
+        }
       }
 
       String community = csvRow.get(COMMUNITY_CSV_HEADER);
