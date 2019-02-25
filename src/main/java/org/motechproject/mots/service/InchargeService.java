@@ -230,13 +230,15 @@ public class InchargeService {
         continue;
       }
 
-      Optional<Incharge> duplicatedIncharge = inchargeRepository.findByPhoneNumber(phoneNumber);
+      if (!StringUtils.isBlank(phoneNumber)) {
+        Optional<Incharge> duplicatedIncharge = inchargeRepository.findByPhoneNumber(phoneNumber);
 
-      if (duplicatedIncharge.isPresent()
-          && !duplicatedIncharge.get().getFacility().getId().equals(facility.getId())) {
-        errorMap.put(csvMapReader.getLineNumber(),
-            "Incharge with this phone number already exists");
-        continue;
+        if (duplicatedIncharge.isPresent()
+            && !duplicatedIncharge.get().getFacility().getId().equals(facility.getId())) {
+          errorMap.put(csvMapReader.getLineNumber(),
+              "Incharge with this phone number already exists");
+          continue;
+        }
       }
 
       Optional<Incharge> existingIncharge = inchargeRepository
