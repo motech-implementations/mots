@@ -71,10 +71,8 @@ body {
 .panel-footer {
   background: $gray-mid;
   float: left;
-  padding: 30px 0px 30px 0px;
+  padding: 5px 0px 5px 0px;
   overflow: hidden;
-  position: absolute;
-  bottom: 0;
   width: 100%;
   text-align: center;
 
@@ -85,17 +83,26 @@ body {
   }
 }
 
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 50px);
+}
+
+.login-container {
+  min-height: 600px;
+}
+
 .footer-home {
   margin-left: -42px;
+  position: absolute;
+  bottom: 0;
 }
 
 @media(min-width: $r-small-min) {
   #wrapper {
     padding-left: 16em;
-  }
-
-  .container-fluid {
-    padding: 1em;
   }
 }
 
@@ -166,7 +173,6 @@ a, a:hover, a:focus, a:active, a:visited {
   }
 
   .panel-footer {
-    padding: 1em;
     .footer-text {
       margin-right: 5%;
       margin-left: 5%;
