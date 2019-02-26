@@ -50,7 +50,7 @@ public class ModuleAssignmentController extends BaseController {
       @RequestBody @Valid DistrictAssignmentDto districtAssignmentDto,
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+    moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
   }
 
   /**
