@@ -1,15 +1,19 @@
 package org.motechproject.mots.repository.custom.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import org.hibernate.jpa.criteria.path.SingularAttributePath;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -57,9 +61,27 @@ public abstract class BaseRepositoryImpl {
     while (iterator.hasNext()) {
       order = iterator.next();
       path = getPath(root, order);
-
-      Order mountedOrder = getSortDirection(builder, order, path);
-      orders.add(mountedOrder);
+      Path parentPath = path.getParentPath();
+      if (parentPath.getParentPath() != null) {
+        // if parent path still has a parent, this is a nested attribute
+        List<Path> parentPaths = new ArrayList<>();
+        while (parentPath.getParentPath() != null) {
+          parentPaths.add(parentPath);
+          parentPath = parentPath.getParentPath();
+        }
+        Collections.reverse(parentPaths);
+        From from = root;
+        // left join all tables leading to the attribute
+        for (Path pp : parentPaths) {
+          from = from.join(((SingularAttributePath) pp).getAttribute().getName(), JoinType.LEFT);
+        }
+        // so that we can sort it and preserve null values
+        Order mountedOrder = getSortDirection(builder, order, path);
+        orders.add(mountedOrder);
+      } else {
+        Order mountedOrder = getSortDirection(builder, order, path);
+        orders.add(mountedOrder);
+      }
     }
     return query.orderBy(orders);
   }
