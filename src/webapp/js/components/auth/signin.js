@@ -50,8 +50,8 @@ class Signin extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <div>
-        <div className="mainbox col-md-6 col-md-offset-3
+      <div className="page-container">
+        <div className="login-container mainbox col-md-6 col-md-offset-3
       col-sm-8 col-sm-offset-2"
         >
           <div className="row">
