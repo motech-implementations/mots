@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -124,6 +125,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else if (order.getProperty().equals(LocationController.INCHARGE_FULL_NAME_PARAM)) {
+        root.join(INCHARGE, JoinType.LEFT);
         path = root.get(INCHARGE).get(FIRST_NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
