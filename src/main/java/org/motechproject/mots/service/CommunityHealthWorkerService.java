@@ -406,11 +406,6 @@ public class CommunityHealthWorkerService {
       return true;
     }
 
-    if (StringUtils.isBlank(csvRow.get(PHU_SUPERVISOR_CSV_HEADER))) {
-      errorMap.put(lineNumber, "PHU Supervisor is empty");
-      return true;
-    }
-
     if (StringUtils.isBlank(csvRow.get(PEER_SUPERVISOR_CSV_HEADER))) {
       errorMap.put(lineNumber, "Peer Supervisor is empty");
       return true;
