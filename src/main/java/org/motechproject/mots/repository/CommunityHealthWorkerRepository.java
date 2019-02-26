@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.repository.custom.CommunityHealthWorkerRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CommunityHealthWorkerRepository extends
     JpaRepository<CommunityHealthWorker, UUID>, CommunityHealthWorkerRepositoryCustom {
@@ -20,6 +21,12 @@ public interface CommunityHealthWorkerRepository extends
       Boolean selected);
 
   List<CommunityHealthWorker> findByCommunityFacilityChiefdomIdAndSelected(UUID chiefdomId,
+      Boolean selected);
+
+  // Adding @Query as the JPA query doesn't work for this case for some reason
+  @Query("SELECT c FROM CommunityHealthWorker c WHERE c.community.facility.id = ?1 "
+      + "AND c.selected = ?2")
+  List<CommunityHealthWorker> findByCommunityFacilityIdAndSelected(UUID facilityId,
       Boolean selected);
 
   List<CommunityHealthWorker> findByGroupIdAndSelected(UUID groupId, Boolean selected);

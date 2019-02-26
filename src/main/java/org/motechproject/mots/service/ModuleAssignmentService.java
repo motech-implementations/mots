@@ -37,6 +37,7 @@ import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
+import org.motechproject.mots.repository.FacilityRepository;
 import org.motechproject.mots.repository.GroupRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.task.ModuleAssignmentNotificationScheduler;
@@ -77,6 +78,9 @@ public class ModuleAssignmentService {
 
   @Autowired
   private ChiefdomRepository chiefdomRepository;
+
+  @Autowired
+  private FacilityRepository facilityRepository;
 
   @Autowired
   private GroupRepository groupRepository;
@@ -211,20 +215,27 @@ public class ModuleAssignmentService {
   }
 
   /**
-   * Creates DistrictAssignmentLog for district assignment,
-   * and assigns modules to each CHW from a district.
+   * Creates DistrictAssignmentLog for district/chiefdom/facility assignment,
+   * and assigns modules to each CHW from a location: district/chiefdom/facility.
    * @param assignmentDto dto with district id, list of modules assigned to it
    *     and start and end dates
    */
   @Transactional
   @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
-  public void assignModulesToDistrict(DistrictAssignmentDto assignmentDto) {
+  public void assignModulesToChwsInLocation(DistrictAssignmentDto assignmentDto) {
     UUID districtId = UUID.fromString(assignmentDto.getDistrictId());
     UUID chiefdomId = assignmentDto.getChiefdomId() != null
         ? UUID.fromString(assignmentDto.getChiefdomId()) : null;
+    UUID facilityId = assignmentDto.getFacilityId() != null
+        ? UUID.fromString(assignmentDto.getFacilityId()) : null;
 
     List<CommunityHealthWorker> communityHealthWorkers;
-    if (chiefdomId != null) {
+    if (facilityId != null) {
+      communityHealthWorkers = communityHealthWorkerRepository
+          .findByCommunityFacilityIdAndSelected(
+              facilityId, true);
+
+    } else if (chiefdomId != null) {
       communityHealthWorkers = communityHealthWorkerRepository
           .findByCommunityFacilityChiefdomIdAndSelected(
               chiefdomId, true);
@@ -235,7 +246,8 @@ public class ModuleAssignmentService {
               districtId, true);
     }
 
-    bulkAssignModules(assignmentDto, communityHealthWorkers, districtId, chiefdomId, null);
+    bulkAssignModules(assignmentDto, communityHealthWorkers, districtId, chiefdomId, 
+        facilityId, null);
   }
 
   /**
@@ -250,12 +262,12 @@ public class ModuleAssignmentService {
     List<CommunityHealthWorker> communityHealthWorkers =
         communityHealthWorkerRepository.findByGroupIdAndSelected(groupId, true);
 
-    bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, groupId);
+    bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, null, groupId);
   }
 
   private void bulkAssignModules(BulkAssignmentDto assignmentDto,
       List<CommunityHealthWorker> communityHealthWorkers, UUID districtId,
-      UUID chiefdomId, UUID groupId) {
+      UUID chiefdomId, UUID facilityId, UUID groupId) {
     Set<Module> newChwModules = new HashSet<>();
     String userName = (String) SecurityContextHolder.getContext().getAuthentication()
         .getPrincipal();
@@ -271,6 +283,7 @@ public class ModuleAssignmentService {
       assignmentLogRepository.save(new DistrictAssignmentLog(
           districtId != null ? districtRepository.findOne(districtId) : null,
           chiefdomId != null ? chiefdomRepository.findOne(chiefdomId) : null,
+          facilityId != null ? facilityRepository.findOne(facilityId) : null,
           groupId != null ? groupRepository.findOne(groupId) : null,
           LocalDate.parse(assignmentDto.getStartDate()),
           LocalDate.parse(assignmentDto.getEndDate()),

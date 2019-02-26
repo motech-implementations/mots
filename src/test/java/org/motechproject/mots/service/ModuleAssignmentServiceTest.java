@@ -240,7 +240,7 @@ public class ModuleAssignmentServiceTest {
     when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
-    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+    moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
 
     ArgumentCaptor<DistrictAssignmentLog> districtAssignmentLogCaptor =
         ArgumentCaptor.forClass(DistrictAssignmentLog.class);
@@ -278,7 +278,7 @@ public class ModuleAssignmentServiceTest {
 
     districtAssignmentDto.setChiefdomId(CHIEFDOM.getId().toString());
 
-    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+    moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
 
     ArgumentCaptor<DistrictAssignmentLog> districtAssignmentLogCaptor =
         ArgumentCaptor.forClass(DistrictAssignmentLog.class);
@@ -323,7 +323,7 @@ public class ModuleAssignmentServiceTest {
     when(assignedModulesRepository.findByHealthWorkerId(eq(chw.getId())))
         .thenReturn(Optional.of(assignedModules));
 
-    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+    moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
   }
 
   @Test(expected = ModuleAssignmentException.class)
@@ -334,7 +334,7 @@ public class ModuleAssignmentServiceTest {
 
     doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
 
-    moduleAssignmentService.assignModulesToDistrict(districtAssignmentDto);
+    moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
   }
 
   @Test(expected = EntityNotFoundException.class)
@@ -346,7 +346,7 @@ public class ModuleAssignmentServiceTest {
         .build();
     when(moduleRepository.findById(moduleId)).thenReturn(Optional.empty());
 
-    moduleAssignmentService.assignModulesToDistrict(customDistrictAssignmentDto);
+    moduleAssignmentService.assignModulesToChwsInLocation(customDistrictAssignmentDto);
   }
 
   private ModuleProgress getModuleProgress(ProgressStatus status) {

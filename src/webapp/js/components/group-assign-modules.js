@@ -19,9 +19,11 @@ class DistrictAssignModules extends Component {
     super(props);
     this.state = {
       chiefdomOptions: [],
+      facilityOptions: [],
       selectedModules: null,
       selectedDistrict: null,
       selectedChiefdom: null,
+      selectedFacility: null,
       startDate: '',
       endDate: '',
       delayNotification: false,
@@ -65,6 +67,19 @@ class DistrictAssignModules extends Component {
     );
   }
 
+  getFacilityOptions(selectedChiefdom) {
+    const facilities = getSelectableLocations(
+      'facilities',
+      this.props.availableLocations,
+      this.state.selectedDistrict.value,
+      selectedChiefdom.value,
+    );
+    return _.map(
+      facilities,
+      facility => ({ value: facility.id, label: facility.name }),
+    );
+  }
+
   fetchGroups() {
     apiClient.get('/api/group')
       .then((response) => {
@@ -91,6 +106,9 @@ class DistrictAssignModules extends Component {
         if (this.state.selectedChiefdom !== null) {
           payload.chiefdomId = this.state.selectedChiefdom.value;
         }
+        if (this.state.selectedFacility !== null) {
+          payload.facilityId = this.state.selectedFacility.value;
+        }
       } else {
         payload.groupId = this.state.selectedGroup.value;
       }
@@ -113,12 +131,21 @@ class DistrictAssignModules extends Component {
     this.setState({
       selectedDistrict,
       selectedChiefdom: null,
+      selectedFacility: null,
       chiefdomOptions: this.getChiefdomOptions(selectedDistrict),
     });
   };
 
   handleChiefdomChange = (selectedChiefdom) => {
-    this.setState({ selectedChiefdom });
+    this.setState({
+      selectedChiefdom,
+      selectedFacility: null,
+      facilityOptions: this.getFacilityOptions(selectedChiefdom),
+    });
+  };
+
+  handleFacilityChange = (selectedFacility) => {
+    this.setState({ selectedFacility });
   };
 
   handleModuleChange(selectedModules) {
@@ -215,6 +242,17 @@ class DistrictAssignModules extends Component {
                 onChange={this.handleChiefdomChange}
                 onFocus={() => this.props.resetLogoutCounter()}
                 placeholder="Select a Chiefdom (optional)"
+                className="margin-bottom-md col-md-12"
+                menuContainerStyle={{ zIndex: 5 }}
+              />
+              <Select
+                name="facility"
+                value={this.state.selectedFacility}
+                options={this.state.facilityOptions}
+                disabled={!this.state.selectedChiefdom}
+                onChange={this.handleFacilityChange}
+                onFocus={() => this.props.resetLogoutCounter()}
+                placeholder="Select a Facility (optional)"
                 className="margin-bottom-md col-md-12"
                 menuContainerStyle={{ zIndex: 5 }}
               />
