@@ -56,7 +56,7 @@ public class DefaultPermissions {
   public static final String HAS_UPLOAD_LOCATION_CSV_ROLE =
       "hasRole('" + UPLOAD_LOCATION_CSV + "')";
   public static final String HAS_GROUP_READ_ROLE = "hasRole('" + GROUP_READ + "')";
-  public static final String HAS_GROUP_READ_OR_CHW_WRITE_ROLE =
-      "hasAnyRole('" + GROUP_READ + "','" + CHW_WRITE + "')";
+  public static final String HAS_GROUP_READ_OR_CHW_WRITE_OR_ASSIGN_MODULES_ROLE =
+      "hasAnyRole('" + GROUP_READ + "','" + CHW_WRITE + "','" + ASSIGN_MODULES + "')";
   public static final String HAS_GROUP_WRITE_ROLE = "hasRole('" + GROUP_WRITE + "')";
 }
