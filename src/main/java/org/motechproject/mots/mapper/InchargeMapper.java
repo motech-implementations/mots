@@ -22,6 +22,9 @@ public interface InchargeMapper {
       @Mapping(target = "chiefdomId", source = "facility.chiefdom.id"),
       @Mapping(target = "facilityId", source = "facility.id"),
       @Mapping(target = "facilityName", source = "facility.name"),
+      @Mapping(target = "facilityIdentifier", source = "facility.facilityId"),
+      @Mapping(target = "chiefdomName", source = "facility.chiefdom.name"),
+      @Mapping(target = "districtName", source = "facility.chiefdom.district.name"),
   })
   InchargeDto toDto(Incharge incharge);
 

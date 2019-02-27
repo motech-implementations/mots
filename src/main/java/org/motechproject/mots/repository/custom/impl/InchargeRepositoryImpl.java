@@ -24,19 +24,20 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<Incharge> searchIncharges(String firstName, String secondName,
-      String otherName, String phoneNumber, String email, String facilityName, Boolean selected,
+      String otherName, String phoneNumber, String email, String facilityName, String facilityId,
+      String chiefdomName, String districtName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Incharge> query = builder.createQuery(Incharge.class);
     query = prepareQuery(query, firstName, secondName, otherName, phoneNumber, email, facilityName,
-        selected, false, pageable);
+        facilityId, chiefdomName, districtName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, firstName, secondName, otherName, phoneNumber, email,
-        facilityName, selected, true, pageable);
+        facilityName, facilityId, chiefdomName, districtName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -52,8 +53,8 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String firstName, String secondName, String otherName, String phoneNumber, String email,
-      String facilityName, Boolean selected, boolean count, Pageable pageable)
-      throws IllegalArgumentException {
+      String facilityName, String facilityId, String chiefdomName, String districtName,
+      Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Incharge> root = query.from(Incharge.class);
@@ -88,6 +89,18 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(NAME),
           '%' + facilityName + '%'));
     }
+    if (facilityId != null) {
+      predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(FACILITY_ID),
+          '%' + facilityId + '%'));
+    }
+    if (chiefdomName != null) {
+      predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(CHIEFDOM).get(NAME),
+          '%' + chiefdomName + '%'));
+    }
+    if (districtName != null) {
+      predicate = builder.and(predicate, builder.like(
+          root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME), '%' + districtName + '%'));
+    }
 
     if (selected != null) {
       predicate = builder.and(predicate, builder.equal(root.get(SELECTED), selected));
@@ -107,6 +120,12 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
     Path path;
     if (order.getProperty().equals(InchargeController.FACILITY_NAME_PARAM)) {
       path = root.get(FACILITY).get(NAME);
+    } else if (order.getProperty().equals(InchargeController.FACILITY_ID_PARAM)) {
+      path = root.get(FACILITY).get(FACILITY_ID);
+    } else if (order.getProperty().equals(InchargeController.CHIEFDOM_NAME_PARAM)) {
+      path = root.get(FACILITY).get(CHIEFDOM).get(NAME);
+    } else if (order.getProperty().equals(InchargeController.DISTRICT_NAME_PARAM)) {
+      path = root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME);
     } else {
       path = root.get(order.getProperty());
     }

@@ -60,7 +60,15 @@ public class InchargeDto {
 
   @Getter
   @Setter
+  private String districtName;
+
+  @Getter
+  @Setter
   private String chiefdomId;
+
+  @Getter
+  @Setter
+  private String chiefdomName;
 
   @Getter
   @Setter
@@ -72,6 +80,10 @@ public class InchargeDto {
   @Getter
   @Setter
   private String facilityName;
+
+  @Getter
+  @Setter
+  private String facilityIdentifier;
 
   @Getter
   @Setter

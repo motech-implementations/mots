@@ -31,6 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class InchargeController extends BaseController {
 
   public static final String FACILITY_NAME_PARAM = "facilityName";
+  public static final String FACILITY_ID_PARAM = "facilityIdentifier";
+  public static final String CHIEFDOM_NAME_PARAM = "chiefdomName";
+  public static final String DISTRICT_NAME_PARAM = "districtName";
 
   @Autowired
   private InchargeService inchargeService;
@@ -64,11 +67,15 @@ public class InchargeController extends BaseController {
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
+      @RequestParam(value = FACILITY_ID_PARAM, required = false) String facilityIdentifier,
+      @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdomName,
+      @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String districtName,
       @RequestParam(value = "selected", required = false) Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
-    Page<Incharge> incharges = inchargeService.searchIncharges(firstName, secondName, otherName,
-        phoneNumber, email, facilityName, selected, pageable);
+    Page<Incharge> incharges = inchargeService.searchIncharges(
+        firstName, secondName, otherName, phoneNumber, email, facilityName,
+        facilityIdentifier, chiefdomName, districtName, selected, pageable);
     List<InchargeDto> inchargesDto = inchargeMapper.toDtos(incharges.getContent());
 
     return new PageImpl<>(inchargesDto, pageable, incharges.getTotalElements());
