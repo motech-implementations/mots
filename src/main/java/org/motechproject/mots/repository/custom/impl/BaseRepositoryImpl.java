@@ -73,10 +73,12 @@ public abstract class BaseRepositoryImpl {
         From from = root;
         // left join all tables leading to the attribute
         for (Path pp : parentPaths) {
-          from = from.join(((SingularAttributePath) pp).getAttribute().getName(), JoinType.LEFT);
+          String attributeName = ((SingularAttributePath) pp).getAttribute().getName();
+          from = from.join(attributeName, JoinType.LEFT);
         }
         // so that we can sort it and preserve null values
-        Order mountedOrder = getSortDirection(builder, order, path);
+        Order mountedOrder = getSortDirection(builder, order,
+            from.get(((SingularAttributePath) path).getAttribute().getName()));
         orders.add(mountedOrder);
       } else {
         Order mountedOrder = getSortDirection(builder, order, path);
