@@ -73,7 +73,7 @@ public class InchargeRepositoryIntegrationTest extends
   public void shouldFindInchargeByFirstName() {
     // when
     Page<Incharge> result = inchargeRepository.searchIncharges(incharge1.getFirstName(),
-        null, null, null, null, null, false, null);
+        null, null, null, null, null, null, null, null, false, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -85,7 +85,7 @@ public class InchargeRepositoryIntegrationTest extends
   public void shouldFindInchargeBySurName() {
     // when
     Page<Incharge> result = inchargeRepository.searchIncharges(null,
-        incharge1.getSecondName(), null, null, null, null, false, null);
+        incharge1.getSecondName(), null, null, null, null, null, null, null, false, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -97,7 +97,7 @@ public class InchargeRepositoryIntegrationTest extends
   public void shouldFindInchargeByFacility() {
     // when
     Page<Incharge> result = inchargeRepository.searchIncharges(null, null,
-        null, null, null, facility.getName(), false, null);
+        null, null, null, facility.getName(), null, null, null, false, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));

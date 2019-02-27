@@ -97,11 +97,13 @@ public class InchargeService {
    */
   @PreAuthorize(DefaultPermissions.HAS_INCHARGE_READ_ROLE)
   public Page<Incharge> searchIncharges(String firstName, String secondName, String otherName,
-      String phoneNumber, String email, String facilityName, Boolean selected, Pageable pageable)
+      String phoneNumber, String email, String facilityName, String facilityId,
+      String chiefdomName, String districtName, Boolean selected, Pageable pageable)
       throws IllegalArgumentException {
 
-    return inchargeRepository.searchIncharges(firstName, secondName, otherName,
-        phoneNumber, email, facilityName, selected, pageable);
+    return inchargeRepository.searchIncharges(
+        firstName, secondName, otherName, phoneNumber, email, facilityName,
+        facilityId, chiefdomName, districtName, selected, pageable);
   }
 
   /**.

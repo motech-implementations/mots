@@ -81,6 +81,21 @@ class InchargeList extends Component {
         name: 'facilityName',
         dataType: 'String',
         defaultValue: null,
+      }, {
+        displayName: 'Facility ID',
+        name: 'facilityIdentifier',
+        dataType: 'String',
+        defaultValue: null,
+      }, {
+        displayName: 'Chiefdom',
+        name: 'chiefdomName',
+        dataType: 'String',
+        defaultValue: null,
+      }, {
+        displayName: 'District',
+        name: 'districtName',
+        dataType: 'String',
+        defaultValue: null,
       },
       {
         displayName: 'Actions',

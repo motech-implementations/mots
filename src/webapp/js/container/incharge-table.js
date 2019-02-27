@@ -80,6 +80,15 @@ class InchargeTable extends Component {
     }, {
       Header: 'Facility',
       accessor: 'facilityName',
+    }, {
+      Header: 'Facility ID',
+      accessor: 'facilityIdentifier',
+    }, {
+      Header: 'Chiefdom',
+      accessor: 'chiefdomName',
+    }, {
+      Header: 'District',
+      accessor: 'districtName',
     }];
 
   prepareMobileColumns() {
