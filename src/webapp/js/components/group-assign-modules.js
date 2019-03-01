@@ -56,28 +56,34 @@ class DistrictAssignModules extends Component {
   }
 
   getChiefdomOptions(selectedDistrict) {
-    const chiefdoms = getSelectableLocations(
-      'chiefdoms',
-      this.props.availableLocations,
-      selectedDistrict.value,
-    );
-    return _.map(
-      chiefdoms,
-      chiefdom => ({ value: chiefdom.id, label: chiefdom.name }),
-    );
+    if (selectedDistrict != null) {
+      const chiefdoms = getSelectableLocations(
+        'chiefdoms',
+        this.props.availableLocations,
+        selectedDistrict.value,
+      );
+      return _.map(
+        chiefdoms,
+        chiefdom => ({ value: chiefdom.id, label: chiefdom.name }),
+      );
+    }
+    return [];
   }
 
   getFacilityOptions(selectedChiefdom) {
-    const facilities = getSelectableLocations(
-      'facilities',
-      this.props.availableLocations,
-      this.state.selectedDistrict.value,
-      selectedChiefdom.value,
-    );
-    return _.map(
-      facilities,
-      facility => ({ value: facility.id, label: facility.name }),
-    );
+    if (selectedChiefdom != null) {
+      const facilities = getSelectableLocations(
+        'facilities',
+        this.props.availableLocations,
+        this.state.selectedDistrict.value,
+        selectedChiefdom.value,
+      );
+      return _.map(
+        facilities,
+        facility => ({ value: facility.id, label: facility.name }),
+      );
+    }
+    return [];
   }
 
   fetchGroups() {
