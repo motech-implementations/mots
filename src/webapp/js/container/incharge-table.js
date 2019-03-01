@@ -43,7 +43,7 @@ class InchargeTable extends Component {
   getTableColumns = () => [
     {
       Header: 'Actions',
-      minWidth: 50,
+      minWidth: 70,
       accessor: 'id',
       Cell: cell => (
         <div className="actions-buttons-container">
