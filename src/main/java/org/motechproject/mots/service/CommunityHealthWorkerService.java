@@ -304,6 +304,12 @@ public class CommunityHealthWorkerService {
 
       if (StringUtils.isNotBlank(groupName)) {
         group = groupRepository.findByName(groupName);
+
+        if (group == null) {
+          errorMap.put(csvMapReader.getLineNumber(), String.format(
+              "Group with name %s doesn't exist",
+              groupName));
+        }
       }
 
       Optional<CommunityHealthWorker> existingHealthWorker = healthWorkerRepository
