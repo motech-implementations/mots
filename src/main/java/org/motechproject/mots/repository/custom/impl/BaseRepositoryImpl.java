@@ -13,7 +13,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
-import org.hibernate.jpa.criteria.path.SingularAttributePath;
+import org.hibernate.jpa.criteria.PathImplementor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
@@ -73,12 +73,12 @@ public abstract class BaseRepositoryImpl {
         From from = root;
         // left join all tables leading to the attribute
         for (Path pp : parentPaths) {
-          String attributeName = ((SingularAttributePath) pp).getAttribute().getName();
+          String attributeName = ((PathImplementor) pp).getAttribute().getName();
           from = from.join(attributeName, JoinType.LEFT);
         }
         // so that we can sort it and preserve null values
         Order mountedOrder = getSortDirection(builder, order,
-            from.get(((SingularAttributePath) path).getAttribute().getName()));
+            from.get(((PathImplementor) path).getAttribute().getName()));
         orders.add(mountedOrder);
       } else {
         Order mountedOrder = getSortDirection(builder, order, path);
