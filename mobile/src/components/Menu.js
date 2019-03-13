@@ -250,15 +250,26 @@ class Menu extends Component {
 
           { this.props.isConnected && this.state.ASSIGN_MODULES_AUTHORITY &&
           <Collapsible title="Modules" headerIcon="graduation-cap" style={styles.menuItem}>
-            <TouchableOpacity
-              onPress={() => this.openSection('modulesToDistrict')}
-              style={styles.menuItem}
-            >
-              <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-                <Icon name="check" size={20} color="#337ab7" />
-              </View>
-              <Text style={styles.menuItemText}>Assign</Text>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                onPress={() => this.openSection('modulesToLocation')}
+                style={styles.menuItem}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                  <Icon name="check" size={20} color="#337ab7" />
+                </View>
+                <Text style={styles.menuItemText}>Location assignment</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.openSection('modulesToGroup')}
+                style={styles.menuItem}
+              >
+                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
+                  <Icon name="check" size={20} color="#337ab7" />
+                </View>
+                <Text style={styles.menuItemText}>Group assignment</Text>
+              </TouchableOpacity>
+            </View>
           </Collapsible>
           }
 
