@@ -201,7 +201,7 @@ public class CommunityHealthWorkerService {
     try {
       ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage);
     } catch (IvrException ex) {
-      String message = "Could not update CHW, because of IVR subscriber update error. \n\n"
+      String message = "Could not update CHW, because of IVR subscriber update error. \n"
           + ex.getClearVotoInfo();
       throw new ChwException(message, ex);
     }
@@ -214,7 +214,7 @@ public class CommunityHealthWorkerService {
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @SuppressWarnings("PMD.CyclomaticComplexity")
+  @SuppressWarnings({"PMD.CyclomaticComplexity", "checkstyle:variableDeclarationUsageDistance"})
   @PreAuthorize(DefaultPermissions.HAS_UPLOAD_CHW_OR_INCHARGE_CSV_ROLE)
   public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile, Boolean selected)
       throws IOException {
@@ -329,6 +329,16 @@ public class CommunityHealthWorkerService {
         continue;
       }
 
+      Language preferredLanguage = Language.getByDisplayName(
+          Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER)));
+      preferredLanguage = preferredLanguage != null ? preferredLanguage : Language.ENGLISH;
+
+      String name = communityHealthWorker.getCombinedName();
+
+      boolean ivrDataChanged =
+          !preferredLanguage.equals(communityHealthWorker.getPreferredLanguage())
+              || !StringUtils.equals(phoneNumber, communityHealthWorker.getPhoneNumber());
+
       communityHealthWorker.setChwId(chwId);
       communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER));
       communityHealthWorker.setSecondName(csvRow.get(SECOND_NAME_CSV_HEADER));
@@ -344,15 +354,22 @@ public class CommunityHealthWorkerService {
       communityHealthWorker.setCommunity(chwCommunity);
       communityHealthWorker.setHasPeerSupervisor(
           csvRow.get(PEER_SUPERVISOR_CSV_HEADER).equals("Yes"));
-      communityHealthWorker.setPreferredLanguage(Language.getByDisplayName(
-          Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER), "English")));
+      communityHealthWorker.setPreferredLanguage(preferredLanguage);
 
       if (group != null) {
         communityHealthWorker.setGroup(group);
       }
 
+      ivrDataChanged = ivrDataChanged || !communityHealthWorker.getCombinedName().equals(name);
+
       if (selected && !communityHealthWorker.getSelected()) {
         selectHealthWorker(communityHealthWorker);
+      } else if (communityHealthWorker.getSelected() && ivrDataChanged) {
+        try {
+          saveHealthWorker(communityHealthWorker);
+        } catch (ChwException ex) {
+          errorMap.put(csvMapReader.getLineNumber(), ex.getDisplayMessage());
+        }
       } else {
         healthWorkerRepository.save(communityHealthWorker);
       }
