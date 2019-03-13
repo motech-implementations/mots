@@ -199,6 +199,7 @@ class AssignModules extends Component {
               type="submit"
               className="btn btn-primary btn-block
                       margin-x-md padding-x-sm"
+              style={{ marginBottom: '200px' }}
               disabled={this.areModulesEqual()}
             >
               <h4>Assign!</h4>
