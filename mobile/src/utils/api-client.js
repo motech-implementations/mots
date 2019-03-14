@@ -32,9 +32,11 @@ export default class ApiClient {
 
     switch (error.status) {
       case 401: {
+        console.log('401');
         const refreshDecoded = (refreshToken) ? jwtDecode(refreshToken) : null;
         const currentTime = Date.now() / 1000;
         if (refreshDecoded && refreshDecoded.exp > currentTime) {
+          console.log('rt');
           return useRefreshToken(refreshToken, dispatch, callback);
         }
         dispatch(signoutUser());

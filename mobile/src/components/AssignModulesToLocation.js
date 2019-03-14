@@ -203,9 +203,9 @@ class AssignModulesToLocation extends Component {
                 defaultText={this.state.selectedChiefdom.label
                 || 'Click to Select (optional)'}
                 textStyle={lightThemeText}
-                style={{borderWidth: 0}}
+                style={{ borderWidth: 0 }}
                 transparent
-                optionListStyle={{backgroundColor: '#FFF'}}
+                optionListStyle={{ backgroundColor: '#FFF' }}
               >
                 {AssignModulesToLocation.getOptions(this.state.chiefdomOptions)}
               </Select>
@@ -224,9 +224,9 @@ class AssignModulesToLocation extends Component {
                 defaultText={this.state.selectedFacility.label
                 || 'Click to Select (optional)'}
                 textStyle={lightThemeText}
-                style={{borderWidth: 0}}
+                style={{ borderWidth: 0 }}
                 transparent
-                optionListStyle={{backgroundColor: '#FFF'}}
+                optionListStyle={{ backgroundColor: '#FFF' }}
               >
                 {AssignModulesToLocation.getOptions(this.state.facilityOptions)}
               </Select>
@@ -328,6 +328,7 @@ class AssignModulesToLocation extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state.availableLocations);
   const districtOptions = (state.availableLocations) ? state.availableLocations
     .map(district => ({ value: district.id, label: district.name })) : [];
   return {
