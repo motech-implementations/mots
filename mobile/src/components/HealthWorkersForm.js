@@ -25,8 +25,10 @@ import styles from '../styles/formsStyles';
 import Spinner from './Spinner';
 import apiClient from '../utils/api-client';
 
-const { autocompleteStyle, autocompleteItemStyle, autocompleteHintStyle, 
-  autocompleteListStyle, autocompleteInputContainerStyle } = styles;
+const {
+  autocompleteStyle, autocompleteItemStyle, autocompleteHintStyle,
+  autocompleteListStyle, autocompleteInputContainerStyle,
+} = styles;
 
 export const CHW_FORM_NAME = 'HealthWorkersForm';
 const FIELDS = {

@@ -19,6 +19,8 @@ import inputsStyles from '../styles/inputsStyles';
 import Button from './Button';
 import getContainerStyle from '../utils/styleUtils';
 import commonStyles from '../styles/commonStyles';
+import { fetchLocations } from '../actions';
+import { getSelectableLocations } from '../utils/form-utils';
 
 const { formHeader, buttonContainer } = formsStyles;
 const { labelStyle, labelStyleSmall } = inputsStyles;
@@ -28,47 +30,93 @@ const {
 } = modulesStyles;
 const { lightThemeText } = commonStyles;
 
-class AssignModulesToDistrict extends Component {
+class AssignModulesToLocation extends Component {
   constructor(props) {
     super(props);
     this.state = {
       availableModulesList: [],
-      districts: [],
+      chiefdomOptions: [],
+      facilityOptions: [],
       selectedDistrict: {},
+      selectedChiefdom: {},
+      selectedFacility: {},
       startDate: '',
       endDate: '',
     };
 
-    this.onSelect = this.onSelect.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
+    this.handleDistrictChange = this.handleDistrictChange.bind(this);
+    this.handleChiefdomChange = this.handleChiefdomChange.bind(this);
+    this.handleFacilityChange = this.handleFacilityChange.bind(this);
+  }
+
+  static getOptions(locations) {
+    return locations.map(district => (
+      <Option key={district.value} value={district.value} styleText={lightThemeText}>
+        {district.label}
+      </Option>
+    ));
   }
 
   componentWillMount() {
-    this.fetchDistricts();
+    this.props.fetchLocations();
     this.fetchAvailableModules();
   }
 
-  onSelect(value, label) {
+
+  getChiefdomOptions(selectedDistrictId) {
+    if (selectedDistrictId != null) {
+      const chiefdoms = getSelectableLocations(
+        'chiefdoms',
+        this.props.availableLocations,
+        selectedDistrictId,
+      );
+      return chiefdoms.map(chiefdom => ({ value: chiefdom.id, label: chiefdom.name }));
+    }
+    return [];
+  }
+
+  getFacilityOptions(selectedChiefdomId) {
+    if (selectedChiefdomId != null) {
+      const facilities = getSelectableLocations(
+        'facilities',
+        this.props.availableLocations,
+        this.state.selectedDistrict.value,
+        selectedChiefdomId,
+      );
+      return facilities.map(facility => ({ value: facility.id, label: facility.name }));
+    }
+    return [];
+  }
+
+  handleDistrictChange = (value, label) => {
     this.setState({
       selectedDistrict: {
         value, label,
       },
+      selectedChiefdom: {},
+      selectedFacility: {},
+      chiefdomOptions: this.getChiefdomOptions(value),
     });
-  }
+  };
 
-  fetchDistricts() {
-    const url = '/api/districtsOnly';
+  handleChiefdomChange = (value, label) => {
+    this.setState({
+      selectedChiefdom: {
+        value, label,
+      },
+      selectedFacility: {},
+      facilityOptions: this.getFacilityOptions(value),
+    });
+  };
 
-    return apiClient.get(url)
-      .then((response) => {
-        if (response) {
-          const districts = response.map(district => (
-            { value: district.id, label: district.name }
-          ));
-          this.setState({ districts });
-        }
-      });
-  }
+  handleFacilityChange = (value, label) => {
+    this.setState({
+      selectedFacility: {
+        value, label,
+      },
+    });
+  };
 
   fetchAvailableModules() {
     const url = '/api/modules/simple';
@@ -95,6 +143,12 @@ class AssignModulesToDistrict extends Component {
         startDate: this.state.startDate,
         endDate: this.state.endDate,
       };
+      if (this.state.selectedChiefdom.value) {
+        payload.chiefdomId = this.state.selectedChiefdom.value;
+      }
+      if (this.state.selectedFacility.value) {
+        payload.facilityId = this.state.selectedFacility.value;
+      }
 
       const callback = () => {
         if (!this.props.fetchError) {
@@ -118,7 +172,7 @@ class AssignModulesToDistrict extends Component {
   render() {
     return (
       <View style={getContainerStyle()}>
-        <Text style={[formHeader, lightThemeText]}>Assign Modules to a District</Text>
+        <Text style={[formHeader, lightThemeText]}>Assign Modules to a location</Text>
         <ScrollView style={modulesContainer} alwaysBounceVertical={false}>
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText, PixelRatio.get() < 2 && labelStyleSmall]}>
@@ -126,21 +180,59 @@ class AssignModulesToDistrict extends Component {
             </Text>
             <View style={selectField}>
               <Select
-                onSelect={this.onSelect}
+                onSelect={this.handleDistrictChange}
                 defaultText={this.state.selectedDistrict.label || 'Click to Select'}
                 textStyle={lightThemeText}
                 style={{ borderWidth: 0 }}
                 transparent
                 optionListStyle={{ backgroundColor: '#FFF' }}
               >
-                {this.state.districts.map(district => (
-                  <Option key={district.value} value={district.value} styleText={lightThemeText}>
-                    {district.label}
-                  </Option>
-                ))}
+                {AssignModulesToLocation.getOptions(this.props.districtOptions)}
               </Select>
             </View>
           </View>
+          {this.state.selectedDistrict.value &&
+          <View style={fieldRow}>
+            <Text style={[labelStyle, lightThemeText,
+              PixelRatio.get() < 2 && labelStyleSmall]}>
+              Chiefdom:
+            </Text>
+            <View style={selectField}>
+              <Select
+                onSelect={this.handleChiefdomChange}
+                defaultText={this.state.selectedChiefdom.label
+                || 'Click to Select (optional)'}
+                textStyle={lightThemeText}
+                style={{borderWidth: 0}}
+                transparent
+                optionListStyle={{backgroundColor: '#FFF'}}
+              >
+                {AssignModulesToLocation.getOptions(this.state.chiefdomOptions)}
+              </Select>
+            </View>
+          </View>
+          }
+          {this.state.selectedChiefdom.value &&
+          <View style={fieldRow}>
+            <Text style={[labelStyle, lightThemeText,
+              PixelRatio.get() < 2 && labelStyleSmall]}>
+              Facility:
+            </Text>
+            <View style={selectField}>
+              <Select
+                onSelect={this.handleFacilityChange}
+                defaultText={this.state.selectedFacility.label
+                || 'Click to Select (optional)'}
+                textStyle={lightThemeText}
+                style={{borderWidth: 0}}
+                transparent
+                optionListStyle={{backgroundColor: '#FFF'}}
+              >
+                {AssignModulesToLocation.getOptions(this.state.facilityOptions)}
+              </Select>
+            </View>
+          </View>
+          }
           <View style={fieldRow}>
             <Text style={[
               labelStyle,
@@ -236,13 +328,25 @@ class AssignModulesToDistrict extends Component {
 }
 
 function mapStateToProps(state) {
+  const districtOptions = state.availableLocations
+    .map(district => ({ value: district.id, label: district.name }));
   return {
+    districtOptions,
+    availableLocations: state.availableLocations,
     fetchError: state.tablesReducer.fetchError,
   };
 }
 
-export default connect(mapStateToProps)(AssignModulesToDistrict);
+export default connect(mapStateToProps, { fetchLocations })(AssignModulesToLocation);
 
-AssignModulesToDistrict.propTypes = {
+AssignModulesToLocation.propTypes = {
   fetchError: PropTypes.bool.isRequired,
+  fetchLocations: PropTypes.func.isRequired,
+  availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
+  districtOptions: PropTypes.arrayOf(PropTypes.shape({})),
+};
+
+AssignModulesToLocation.defaultProps = {
+  availableLocations: [],
+  districtOptions: [],
 };

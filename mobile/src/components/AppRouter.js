@@ -12,7 +12,8 @@ import Home from './Home';
 import Incharges from './Incharges';
 import InchargesOverall from './InchargesOverall';
 import AssignModulesToChw from './AssignModulesToChw';
-import AssignModulesToDistrict from './AssignModulesToDistrict';
+import AssignModulesToLocation from './AssignModulesToLocation';
+import AssignModulesToGroup from './AssignModulesToGroup';
 import InchargesNew from './InchargesNew';
 import InchargesEdit from './InchargesEdit';
 import HealthWorkers from './HealthWorkers';
@@ -47,7 +48,8 @@ const scenes = Actions.create(
         <Scene key="inchargesNew" component={keyboardAvoiding(InchargesNew)} title="Add Incharge" navBar={Header} />
         <Scene key="inchargesEdit" component={keyboardAvoiding(InchargesEdit)} title="Edit Incharge" navBar={Header} />
         <Scene key="modulesToChw" component={AssignModulesToChw} title="Assign Modules" navBar={Header} />
-        <Scene key="modulesToDistrict" component={AssignModulesToDistrict} title="Assign Modules" navBar={Header} />
+        <Scene key="modulesToLocation" component={AssignModulesToLocation} title="Assign Modules to a location" navBar={Header} />
+        <Scene key="modulesToGroup" component={AssignModulesToGroup} title="Assign Modules to a Group" navBar={Header} />
         <Scene key="chws" component={HealthWorkers} title="Selected Community Health Workers" navBar={Header} />
         <Scene key="allChws" component={HealthWorkersOverall} title="Community Health Workers" navBar={Header} />
         <Scene key="chwsNew" component={keyboardAvoiding(HealthWorkersNew)} title="Add Community Health Worker" navBar={Header} />
