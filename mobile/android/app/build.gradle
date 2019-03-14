@@ -106,6 +106,17 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+// Uncomment to build a signed apk locally (run-android --variant=release)
+//    signingConfigs {
+//        release {
+//            if (project.hasProperty('MOTS_RELEASE_STORE_FILE')) {
+//                storeFile file(MOTS_RELEASE_STORE_FILE)
+//                storePassword MOTS_RELEASE_STORE_PASSWORD
+//                keyAlias MOTS_RELEASE_KEY_ALIAS
+//                keyPassword MOTS_RELEASE_KEY_PASSWORD
+//            }
+//        }
+//    }
     splits {
         abi {
             reset()
@@ -118,6 +129,8 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+// Uncomment to build a signed apk locally (run-android --variant=release)
+//            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
