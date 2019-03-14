@@ -235,7 +235,7 @@ const selector = formValueSelector(INCHARGE_FORM_NAME);
 
 function mapStateToProps(state) {
   return {
-    availableLocations: state.availableLocations,
+    availableLocations: state.availableLocations.districts,
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
   };
