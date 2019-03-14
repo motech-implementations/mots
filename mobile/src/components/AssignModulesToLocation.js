@@ -328,6 +328,7 @@ class AssignModulesToLocation extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state.availableLocations);
   const districtOptions = (state.availableLocations) ? state.availableLocations
     .map(district => ({ value: district.id, label: district.name })) : [];
   return {
