@@ -69,6 +69,9 @@ class Groups extends Component {
       });
   }
 
+  filterMethod = (filter, row) =>
+    (_.toString(row[filter.id]).toLowerCase().includes(filter.value.trim().toLowerCase()));
+
   render() {
     return (
       <div>
@@ -85,6 +88,7 @@ class Groups extends Component {
               filterable
               data={this.state.groupsData}
               columns={Groups.getTableColumns()}
+              defaultFilterMethod={this.filterMethod}
             />
           </div>
         </div>

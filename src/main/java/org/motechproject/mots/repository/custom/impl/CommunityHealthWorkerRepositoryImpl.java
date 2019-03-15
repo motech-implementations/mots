@@ -71,62 +71,62 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
     Predicate predicate = builder.conjunction();
     if (chwId != null) {
-      predicate = builder.and(predicate, builder.like(root.get(CHW_ID), '%' + chwId + '%'));
+      predicate = builder.and(predicate, builder.like(root.get(CHW_ID), '%' + chwId.trim() + '%'));
     }
     if (firstName != null) {
       predicate = builder.and(predicate, builder.like(root.get(FIRST_NAME),
-          '%' + firstName + '%'));
+          '%' + firstName.trim() + '%'));
     }
     if (secondName != null) {
       predicate = builder.and(predicate, builder.like(root.get(SECOND_NAME),
-          '%' + secondName + '%'));
+          '%' + secondName.trim() + '%'));
     }
     if (otherName != null) {
       predicate = builder.and(predicate, builder.like(root.get(OTHER_NAME),
-          '%' + otherName + '%'));
+          '%' + otherName.trim() + '%'));
     }
     if (phoneNumber != null) {
       predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),
-          '%' + phoneNumber + '%'));
+          '%' + phoneNumber.trim() + '%'));
     }
     if (educationLevel != null) {
-      EducationLevel validLevel = EducationLevel.valueOf(educationLevel.toUpperCase());
+      EducationLevel validLevel = EducationLevel.valueOf(educationLevel.trim().toUpperCase());
       predicate = builder.and(predicate, builder.equal(root.get(EDUCATION_LEVEL), validLevel));
     }
     if (communityName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(NAME), '%' + communityName + '%'));
+          root.get(COMMUNITY).get(NAME), '%' + communityName.trim() + '%'));
     }
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(NAME), '%' + facilityName + '%'));
+          root.get(COMMUNITY).get(FACILITY).get(NAME), '%' + facilityName.trim() + '%'));
     }
     if (chiefdomName != null) {
       predicate = builder.and(predicate, builder.like(
           root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(NAME),
-          '%' + chiefdomName  + '%'));
+          '%' + chiefdomName.trim()  + '%'));
     }
     if (districtName != null) {
       predicate = builder.and(predicate, builder.like(
           root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
-          '%' + districtName  + '%'));
+          '%' + districtName.trim()  + '%'));
     }
     if (phuSupervisor != null) {
       Predicate localPredicate = builder.like(
           root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(FIRST_NAME),
-          '%' + phuSupervisor + '%');
+          '%' + phuSupervisor.trim() + '%');
       localPredicate = builder.or(localPredicate, builder.like(
           root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(SECOND_NAME),
-          '%' + phuSupervisor + '%'));
+          '%' + phuSupervisor.trim() + '%'));
       localPredicate = builder.or(localPredicate, builder.like(
           root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(OTHER_NAME),
-          '%' + phuSupervisor + '%'));
+          '%' + phuSupervisor.trim() + '%'));
 
       predicate = builder.and(predicate, localPredicate);
     }
     if (groupName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(GROUP).get(NAME), '%' + groupName + '%'));
+          root.get(GROUP).get(NAME), '%' + groupName.trim() + '%'));
     }
 
     if (selected != null) {

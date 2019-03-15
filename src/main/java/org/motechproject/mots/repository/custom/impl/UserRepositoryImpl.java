@@ -61,20 +61,20 @@ public class UserRepositoryImpl extends BaseRepositoryImpl
     Predicate predicate = builder.conjunction();
     if (username != null) {
       predicate = builder.and(predicate, builder.like(root.get(USERNAME),
-          '%' + username + '%'));
+          '%' + username.trim() + '%'));
     }
     if (email != null) {
       predicate = builder.and(predicate, builder.like(root.get(EMAIL),
-          '%' + email + '%'));
+          '%' + email.trim() + '%'));
     }
     if (name != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + name + '%'));
+          '%' + name.trim() + '%'));
     }
     if (role != null) {
       Join<User, UserRole> roleJoin = root.join(ROLES);
       predicate = builder.and(predicate, builder.like(roleJoin.get(NAME),
-          '%' + role + '%'));
+          '%' + role.trim() + '%'));
     }
 
     query.where(predicate);

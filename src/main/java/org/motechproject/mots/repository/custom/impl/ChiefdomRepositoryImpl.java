@@ -59,11 +59,11 @@ public class ChiefdomRepositoryImpl extends BaseRepositoryImpl
     Predicate predicate = builder.conjunction();
     if (chiefdomName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + chiefdomName + '%'));
+          '%' + chiefdomName.trim() + '%'));
     }
     if (parentDistrict != null) {
       predicate = builder.and(predicate, builder.like(root.get(DISTRICT).get(NAME),
-          '%' + parentDistrict + '%'));
+          '%' + parentDistrict.trim() + '%'));
     }
 
     query.where(predicate);

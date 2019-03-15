@@ -54,7 +54,7 @@ public class RoleRepositoryImpl extends BaseRepositoryImpl implements RoleReposi
     Predicate predicate = builder.conjunction();
     if (name != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + name + '%'));
+          '%' + name.trim() + '%'));
     }
 
     query.where(predicate);
