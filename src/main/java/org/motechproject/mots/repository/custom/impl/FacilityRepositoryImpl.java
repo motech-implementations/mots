@@ -70,33 +70,33 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     Predicate predicate = builder.conjunction();
     if (facilityId != null) {
       predicate = builder.and(predicate,
-          builder.like(root.get(FACILITY_ID), '%' + facilityId + '%'));
+          builder.like(root.get(FACILITY_ID), '%' + facilityId.trim() + '%'));
     }
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + facilityName + '%'));
+          '%' + facilityName.trim() + '%'));
     }
     if (facilityType != null) {
-      FacilityType validFacilityType = FacilityType.valueOf(facilityType.toUpperCase());
+      FacilityType validFacilityType = FacilityType.valueOf(facilityType.trim().toUpperCase());
       predicate = builder.and(predicate,
           builder.equal(root.get(FACILITY_TYPE), validFacilityType));
     }
     if (inchargeFullName != null) {
       predicate = builder.and(predicate, builder.like(root.get(INCHARGE).get(FIRST_NAME),
-          '%' + inchargeFullName + '%'));
+          '%' + inchargeFullName.trim() + '%'));
       predicate = builder.or(predicate, builder.like(root.get(INCHARGE).get(SECOND_NAME),
-          '%' + inchargeFullName + '%'));
+          '%' + inchargeFullName.trim() + '%'));
       predicate = builder.or(predicate, builder.like(root.get(INCHARGE).get(OTHER_NAME),
-          '%' + inchargeFullName + '%'));
+          '%' + inchargeFullName.trim() + '%'));
     }
     if (parentChiefdom != null) {
       predicate = builder.and(predicate, builder.like(root.get(CHIEFDOM).get(NAME),
-          '%' + parentChiefdom + '%'));
+          '%' + parentChiefdom.trim() + '%'));
     }
     if (districtName != null) {
       predicate = builder.and(
           predicate, builder.like(root.get(CHIEFDOM).get(DISTRICT).get(NAME),
-              '%' + districtName + '%')
+              '%' + districtName.trim() + '%')
       );
     }
 

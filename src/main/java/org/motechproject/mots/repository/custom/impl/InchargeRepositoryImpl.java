@@ -67,39 +67,40 @@ public class InchargeRepositoryImpl extends BaseRepositoryImpl
     Predicate predicate = builder.conjunction();
     if (firstName != null) {
       predicate = builder.and(predicate, builder.like(root.get(FIRST_NAME),
-          '%' + firstName + '%'));
+          '%' + firstName.trim() + '%'));
     }
     if (secondName != null) {
       predicate = builder.and(predicate, builder.like(root.get(SECOND_NAME),
-          '%' + secondName + '%'));
+          '%' + secondName.trim() + '%'));
     }
     if (otherName != null) {
       predicate = builder.and(predicate, builder.like(root.get(OTHER_NAME),
-          '%' + otherName + '%'));
+          '%' + otherName.trim() + '%'));
     }
     if (phoneNumber != null) {
       predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),
-          '%' + phoneNumber + '%'));
+          '%' + phoneNumber.trim() + '%'));
     }
     if (email != null) {
       predicate = builder.and(predicate, builder.like(root.get(EMAIL),
-          '%' + email + '%'));
+          '%' + email.trim() + '%'));
     }
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(NAME),
-          '%' + facilityName + '%'));
+          '%' + facilityName.trim() + '%'));
     }
     if (facilityId != null) {
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(FACILITY_ID),
-          '%' + facilityId + '%'));
+          '%' + facilityId.trim() + '%'));
     }
     if (chiefdomName != null) {
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(CHIEFDOM).get(NAME),
-          '%' + chiefdomName + '%'));
+          '%' + chiefdomName.trim() + '%'));
     }
     if (districtName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME), '%' + districtName + '%'));
+          root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
+          '%' + districtName.trim() + '%'));
     }
 
     if (selected != null) {

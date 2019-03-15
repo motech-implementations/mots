@@ -56,7 +56,7 @@ public class DistrictRepositoryImpl extends BaseRepositoryImpl
     Predicate predicate = builder.conjunction();
     if (districtName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + districtName + '%'));
+          '%' + districtName.trim() + '%'));
     }
 
     query.where(predicate);

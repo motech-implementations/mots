@@ -63,22 +63,22 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
     Predicate predicate = builder.conjunction();
     if (communityName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + communityName + '%'));
+          '%' + communityName.trim() + '%'));
     }
     if (parentFacility != null) {
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(NAME),
-          '%' + parentFacility + '%'));
+          '%' + parentFacility.trim() + '%'));
     }
     if (chiefdomName != null) {
       predicate = builder.and(
           predicate, builder.like(root.get(FACILITY).get(CHIEFDOM).get(NAME),
-          '%' + chiefdomName + '%')
+          '%' + chiefdomName.trim() + '%')
       );
     }
     if (districtName != null) {
       predicate = builder.and(
           predicate, builder.like(root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
-          '%' + districtName + '%')
+          '%' + districtName.trim() + '%')
       );
     }
 

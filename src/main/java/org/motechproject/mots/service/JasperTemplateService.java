@@ -114,7 +114,7 @@ public class JasperTemplateService {
           if (!(isBlank(requestParamValue)
               || "null".equals(requestParamValue)
               || "undefined".equals(requestParamValue))) {
-            map.put(templateParameterName, requestParamValue);
+            map.put(templateParameterName, requestParamValue.trim());
           }
         }
       }
