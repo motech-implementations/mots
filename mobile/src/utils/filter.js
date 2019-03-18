@@ -2,6 +2,7 @@ const doFilter = (item, filter) => {
   let { value } = filter;
 
   if (!(value instanceof RegExp)) {
+    value = (value) ? value.trim() : value;
     if (filter.isExact) {
       value = new RegExp(`^${value}$`, 'i');
     } else {
