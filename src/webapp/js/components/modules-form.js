@@ -62,7 +62,7 @@ const QUESTION_FIELDS = {
         tooltip: 'Enter the IVR Name of the choice which you can find on Voto. <br /> This field is optional.',
       },
       type: {
-        label: 'Is Correct',
+        label: 'Type',
         required: true,
         type: Select,
         tooltip: 'Check this field if this answer is the correct one out of the list of options.',
@@ -334,8 +334,8 @@ class ModuleForm extends Component {
     const attr = {
       id: input.name,
       disabled,
-      ...attributes,
       ...dynamicAttr,
+      ...attributes,
     };
 
     const className = `form-group ${fieldConfig.required ? 'required' : ''} ${touched && error ? 'has-error' : ''}`;

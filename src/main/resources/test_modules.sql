@@ -82,22 +82,22 @@ INSERT INTO `message` (`call_flow_element_id`) VALUES ('1a427674-e07f-4df4-b5fd-
 INSERT INTO `message` (`call_flow_element_id`) VALUES ('1bb8c78f-bf44-40a0-847e-d2235c3ec193');
 
 
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('3850e964-6051-49a5-8abc-ae55e7859f38');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('70c9fc23-25a4-49ab-9bad-a6924cfbe1ea');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('cd9f5f93-7087-4ec6-becb-42304a626867');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('574eb952-1085-45b4-9d7a-24be63018d86');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('a9bd3976-3a40-468a-aa3e-89f93f67a2ff');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('751b3e62-bcf2-424f-a714-540d5918cd50');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('a667ecdc-5fe2-41b3-a8c4-b17ffb8ccce4');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('4ef64c74-76c6-459e-ba28-d6e6ec38883c');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('817c13de-5f06-493d-a7f3-aecfe815bb38');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('871c9580-8572-4aca-96f3-d0e0cd95a5ae');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('449d30da-19ca-42b6-8a8d-9e34ca9a9853');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('6b6e66b4-7646-45a3-8eaf-e1d1faf09f81');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('89b880fb-b18a-4a3c-a64c-8efe869183d4');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('c7be12ea-1f44-4aa0-8cbc-285d6993a859');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('22424adb-73f0-40d0-9f41-503bc02fe02f');
-INSERT INTO `multiple_choice_question` (`call_flow_element_id`) VALUES ('2ad4c88a-cb6a-4fbb-87e1-97a8716644bc');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('3850e964-6051-49a5-8abc-ae55e7859f38','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('70c9fc23-25a4-49ab-9bad-a6924cfbe1ea','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('cd9f5f93-7087-4ec6-becb-42304a626867','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('574eb952-1085-45b4-9d7a-24be63018d86','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('a9bd3976-3a40-468a-aa3e-89f93f67a2ff','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('751b3e62-bcf2-424f-a714-540d5918cd50','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('a667ecdc-5fe2-41b3-a8c4-b17ffb8ccce4','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('4ef64c74-76c6-459e-ba28-d6e6ec38883c','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('817c13de-5f06-493d-a7f3-aecfe815bb38','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('871c9580-8572-4aca-96f3-d0e0cd95a5ae','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('449d30da-19ca-42b6-8a8d-9e34ca9a9853','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('6b6e66b4-7646-45a3-8eaf-e1d1faf09f81','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('89b880fb-b18a-4a3c-a64c-8efe869183d4','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('c7be12ea-1f44-4aa0-8cbc-285d6993a859','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('22424adb-73f0-40d0-9f41-503bc02fe02f','PRE_TEST');
+INSERT INTO `multiple_choice_question` (`call_flow_element_id`,`question_type`) VALUES ('2ad4c88a-cb6a-4fbb-87e1-97a8716644bc','PRE_TEST');
 
 
 INSERT INTO `choice` (`id`,`created_date`,`updated_date`,`description`,`type`,`ivr_name`,`question_id`,`choice_id`) VALUES ('24f6a6bd-6eee-466c-87db-25d9cfc303ba', NULL, '2018-05-07 13:44:53', NULL, 'CORRECT', NULL, '3850e964-6051-49a5-8abc-ae55e7859f38', 1);
