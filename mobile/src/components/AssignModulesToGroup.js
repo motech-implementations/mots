@@ -92,17 +92,17 @@ class AssignModulesToGroup extends Component {
         endDate: this.state.endDate,
       };
 
-      const callback = () => {
+      const callback = (assigned) => {
         if (!this.props.fetchError) {
           Actions.modalSuccess({
-            message: 'Modules have been assigned!',
+            message: assigned ? 'Modules have been assigned!' : 'Module was already assigned!',
             onClose: () => { Actions.chws(); },
           });
         }
       };
 
       apiClient.post(url, payload)
-        .then(() => callback());
+        .then(response => callback(response));
     } else {
       Actions.modalInfo({
         message: 'You need to select group, start date, end date ' +
