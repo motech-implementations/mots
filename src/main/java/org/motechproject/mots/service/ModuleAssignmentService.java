@@ -50,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ModuleAssignmentService {
   private static final Logger LOGGER = Logger
-      .getLogger(ModuleAssignmentNotificationScheduler.class);
+      .getLogger(ModuleAssignmentService.class);
 
   @Autowired
   private AssignedModulesRepository repository;
@@ -222,7 +222,7 @@ public class ModuleAssignmentService {
    */
   @Transactional
   @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
-  public void assignModulesToChwsInLocation(DistrictAssignmentDto assignmentDto) {
+  public boolean assignModulesToChwsInLocation(DistrictAssignmentDto assignmentDto) {
     UUID districtId = UUID.fromString(assignmentDto.getDistrictId());
     UUID chiefdomId = assignmentDto.getChiefdomId() != null
         ? UUID.fromString(assignmentDto.getChiefdomId()) : null;
@@ -246,7 +246,7 @@ public class ModuleAssignmentService {
               districtId, true);
     }
 
-    bulkAssignModules(assignmentDto, communityHealthWorkers, districtId, chiefdomId, 
+    return bulkAssignModules(assignmentDto, communityHealthWorkers, districtId, chiefdomId,
         facilityId, null);
   }
 
@@ -257,15 +257,15 @@ public class ModuleAssignmentService {
    */
   @Transactional
   @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
-  public void assignModulesToGroup(GroupAssignmentDto assignmentDto) {
+  public boolean assignModulesToGroup(GroupAssignmentDto assignmentDto) {
     UUID groupId = UUID.fromString(assignmentDto.getGroupId());
     List<CommunityHealthWorker> communityHealthWorkers =
         communityHealthWorkerRepository.findByGroupIdAndSelected(groupId, true);
 
-    bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, null, groupId);
+    return bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, null, groupId);
   }
 
-  private void bulkAssignModules(BulkAssignmentDto assignmentDto,
+  private boolean bulkAssignModules(BulkAssignmentDto assignmentDto,
       List<CommunityHealthWorker> communityHealthWorkers, UUID districtId,
       UUID chiefdomId, UUID facilityId, UUID groupId) {
     Set<Module> newChwModules = new HashSet<>();
@@ -329,7 +329,13 @@ public class ModuleAssignmentService {
         newIvrSubscribers.add(ivrId);
       }
     }
-    sendModuleAssignmentNotification(newIvrSubscribers, assignmentDto.getNotificationTime());
+
+    if (newIvrSubscribers.size() > 0) {
+      sendModuleAssignmentNotification(newIvrSubscribers, assignmentDto.getNotificationTime());
+      return true;
+    }
+
+    return false;
   }
 
   private void sendModuleAssignmentNotification(Set<String> subscribers, String notificationTime) {

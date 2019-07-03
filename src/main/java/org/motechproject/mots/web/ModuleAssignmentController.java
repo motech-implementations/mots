@@ -46,11 +46,12 @@ public class ModuleAssignmentController extends BaseController {
    */
   @RequestMapping(value = "/module/district/assign", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void assignModulesToDistrict(
+  @ResponseBody
+  public boolean assignModulesToDistrict(
       @RequestBody @Valid DistrictAssignmentDto districtAssignmentDto,
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
+    return moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
   }
 
   /**
@@ -60,11 +61,12 @@ public class ModuleAssignmentController extends BaseController {
    */
   @RequestMapping(value = "/module/group/assign", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void assignModulesToGroup(
+  @ResponseBody
+  public boolean assignModulesToGroup(
       @RequestBody @Valid GroupAssignmentDto groupAssignmentDto,
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    moduleAssignmentService.assignModulesToGroup(groupAssignmentDto);
+    return moduleAssignmentService.assignModulesToGroup(groupAssignmentDto);
   }
 
   /**

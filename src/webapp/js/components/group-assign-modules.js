@@ -123,13 +123,17 @@ class DistrictAssignModules extends Component {
         payload.notificationTime = this.state.notificationTime;
       }
 
-      const callback = () => {
+      const callback = (assigned) => {
         this.props.history.push('/chw/selected');
-        Alert.success('Modules have been assigned!');
+        if (assigned) {
+          Alert.success('Modules have been assigned!');
+        } else {
+          Alert.success('Module was already assigned!');
+        }
       };
 
       apiClient.post(url, payload)
-        .then(() => callback());
+        .then(response => callback(response.data));
     }
   }
 
