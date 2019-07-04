@@ -152,10 +152,16 @@ class AssignModulesToLocation extends Component {
 
       const callback = (assigned) => {
         if (!this.props.fetchError) {
-          Actions.modalSuccess({
-            message: assigned ? 'Modules have been assigned!' : 'Module was already assigned!',
-            onClose: () => { Actions.chws(); },
-          });
+          if (assigned) {
+            Actions.modalSuccess({
+              message: 'Modules have been assigned!',
+              onClose: () => { Actions.chws(); },
+            });
+          } else {
+            Actions.modalSuccess({
+              message: 'Module was already assigned!',
+            });
+          }
         }
       };
 

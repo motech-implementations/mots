@@ -124,8 +124,8 @@ class DistrictAssignModules extends Component {
       }
 
       const callback = (assigned) => {
-        this.props.history.push('/chw/selected');
         if (assigned) {
+          this.props.history.push('/chw/selected');
           Alert.success('Modules have been assigned!');
         } else {
           Alert.success('Module was already assigned!');
