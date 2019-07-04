@@ -265,6 +265,7 @@ public class ModuleAssignmentService {
     return bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, null, groupId);
   }
 
+  @SuppressWarnings("PMD.CyclomaticComplexity")
   private boolean bulkAssignModules(BulkAssignmentDto assignmentDto,
       List<CommunityHealthWorker> communityHealthWorkers, UUID districtId,
       UUID chiefdomId, UUID facilityId, UUID groupId) {
@@ -275,21 +276,9 @@ public class ModuleAssignmentService {
 
     for (String moduleId : assignmentDto.getModules()) {
       Module moduleToAssign = moduleRepository.findById(UUID.fromString(moduleId)).orElseThrow(() ->
-          new EntityNotFoundException("No module found for Id: {0}",
-              moduleId));
+          new EntityNotFoundException("No module found for Id: {0}", moduleId));
 
       newChwModules.add(moduleToAssign);
-
-      assignmentLogRepository.save(new DistrictAssignmentLog(
-          districtId != null ? districtRepository.findOne(districtId) : null,
-          chiefdomId != null ? chiefdomRepository.findOne(chiefdomId) : null,
-          facilityId != null ? facilityRepository.findOne(facilityId) : null,
-          groupId != null ? groupRepository.findOne(groupId) : null,
-          LocalDate.parse(assignmentDto.getStartDate()),
-          LocalDate.parse(assignmentDto.getEndDate()),
-          moduleToAssign,
-          currentUser
-      ));
     }
     Set<String> newIvrSubscribers = new HashSet<>();
 
@@ -331,6 +320,19 @@ public class ModuleAssignmentService {
     }
 
     if (newIvrSubscribers.size() > 0) {
+      for (Module moduleToAssign : newChwModules) {
+        assignmentLogRepository.save(new DistrictAssignmentLog(
+            districtId != null ? districtRepository.findOne(districtId) : null,
+            chiefdomId != null ? chiefdomRepository.findOne(chiefdomId) : null,
+            facilityId != null ? facilityRepository.findOne(facilityId) : null,
+            groupId != null ? groupRepository.findOne(groupId) : null,
+            LocalDate.parse(assignmentDto.getStartDate()),
+            LocalDate.parse(assignmentDto.getEndDate()),
+            moduleToAssign,
+            currentUser
+        ));
+      }
+
       sendModuleAssignmentNotification(newIvrSubscribers, assignmentDto.getNotificationTime());
       return true;
     }
