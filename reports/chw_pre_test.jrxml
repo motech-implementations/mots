@@ -231,7 +231,7 @@
     WHEN 'IN_PROGRESS' THEN 'In Progress'
     WHEN 'COMPLETED' THEN 'Completed'
     ELSE module_progress.status
-  END AS status
+  END AS status,
   (SUM(CASE WHEN choice.type = 'CORRECT' THEN 1 ELSE 0 END) * 100 / COUNT(*)) AS correctlyAnswered
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
@@ -261,7 +261,7 @@
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))
- GROUP BY chwId, phone, moduleId, chiefdom, district
+ GROUP BY chwId, phone, moduleId, chiefdom, district, status
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
