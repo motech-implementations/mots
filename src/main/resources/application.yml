@@ -38,11 +38,3 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5Dialect
         show-sql: false
-    mail:
-        host: ${mailHost}
-        username: ${mailUsername}
-        password: ${mailPassword}
-        properties:
-            mail:
-                smtp:
-                    starttls.enable: true
