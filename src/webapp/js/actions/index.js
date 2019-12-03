@@ -35,7 +35,6 @@ import {
   CREATE_CHIEFDOM,
   SAVE_DISTRICT,
   CREATE_DISTRICT,
-  FETCH_TOKEN, REGISTER_USER,
 } from './types';
 
 const BASE_URL = '/api';
@@ -378,27 +377,6 @@ export function fetchReports() {
 
   return {
     type: FETCH_REPORTS,
-    payload: request,
-  };
-}
-
-
-export function fetchToken(token) {
-  const url = `/api/token/${token}`;
-  const request = apiClient.get(url);
-
-  return {
-    type: FETCH_TOKEN,
-    payload: request,
-  };
-}
-
-export function registerUser(values, token, callback) {
-  const request = apiClient.post(`${BASE_URL}/register/${token}`, values);
-  request.then(result => callback(result));
-
-  return {
-    type: REGISTER_USER,
     payload: request,
   };
 }

@@ -5,7 +5,6 @@ mots:
     ivrApiKey: ${ivrApiKey}
     resourceId: mots
     loadLocations: ${loadLocations}
-    serverUrl: ${serverUrl}
 
 security:
     oauth2:

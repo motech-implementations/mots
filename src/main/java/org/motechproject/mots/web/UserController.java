@@ -1,27 +1,20 @@
 package org.motechproject.mots.web;
 
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
-import org.motechproject.mots.domain.RegistrationToken;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.dto.PermissionDto;
-import org.motechproject.mots.dto.RegistrationTokenDto;
 import org.motechproject.mots.dto.RoleDto;
 import org.motechproject.mots.dto.UserDto;
 import org.motechproject.mots.dto.UserProfileDto;
 import org.motechproject.mots.mapper.PermissionMapper;
-import org.motechproject.mots.mapper.RegistrationTokenMapper;
 import org.motechproject.mots.mapper.RoleMapper;
 import org.motechproject.mots.mapper.UserMapper;
-import org.motechproject.mots.repository.RegistrationTokenRepository;
-import org.motechproject.mots.service.RegistrationTokenService;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,19 +39,11 @@ public class UserController extends BaseController {
   @Autowired
   private UserService userService;
 
-  @Autowired
-  private RegistrationTokenRepository registrationTokenRepository;
-
-  @Autowired
-  private RegistrationTokenService registrationTokenService;
-
   private UserMapper userMapper = UserMapper.INSTANCE;
 
   private RoleMapper roleMapper = RoleMapper.INSTANCE;
 
   private PermissionMapper permissionMapper = PermissionMapper.INSTANCE;
-
-  private RegistrationTokenMapper registrationTokenMapper = RegistrationTokenMapper.INSTANCE;
 
   /**
    * Get list of users.
@@ -121,36 +106,6 @@ public class UserController extends BaseController {
 
     User user = userMapper.fromDto(userDto);
     return userMapper.toDto(userService.registerNewUser(user));
-  }
-
-  /**
-   * Create a user with a registration token.
-   * @param userDto the user data
-   * @return created user
-   */
-  @RequestMapping(value = "/register/{token}", method = RequestMethod.POST)
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public UserDto createUser(@RequestBody @Valid UserDto userDto,
-      BindingResult bindingResult, @PathVariable("token") String key) {
-    Optional<RegistrationToken> token = registrationTokenRepository.findByToken(key);
-    RegistrationToken registrationToken = token.get();
-    if (!registrationToken.isExpired()) {
-      checkBindingResult(bindingResult);
-
-      User user = userMapper.fromDto(userDto);
-      user.setEmail(registrationToken.getEmail());
-      user.setRoles(new HashSet<>(registrationToken.getRoles()));
-      user.setName(registrationToken.getName());
-      user = userService.createUser(user);
-
-      registrationTokenRepository.delete(registrationToken);
-
-      return userMapper.toDto(user);
-    } else {
-      registrationTokenService.refreshRegistrationToken(registrationToken);
-      return null;
-    }
   }
 
   /**
@@ -318,27 +273,5 @@ public class UserController extends BaseController {
 
     roleMapper.updateFromDto(roleDto, role);
     return roleMapper.toDto(userService.saveRole(role));
-  }
-
-  /**
-   * Get Registration Token with given key.
-   * @param key key of Registration Token to find
-   * @return Registration Token with given key
-   */
-  @RequestMapping(value = "/token/{token}", method = RequestMethod.GET)
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public RegistrationTokenDto getToken(@PathVariable("token") String key) {
-
-    Optional<RegistrationToken> token = registrationTokenRepository.findByToken(key);
-    if (token.isPresent()) {
-      RegistrationToken registrationToken = token.get();
-      if (registrationToken.isExpired()) {
-        registrationTokenService.refreshRegistrationToken(registrationToken);
-      } else {
-        return registrationTokenMapper.toDto(registrationToken);
-      }
-    }
-    return null;
   }
 }

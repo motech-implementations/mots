@@ -43,6 +43,3 @@ export const CREATE_DISTRICT = 'create_district';
 export const SAVE_DISTRICT = 'save_district';
 
 export const FETCH_REPORTS = 'fetch_reports';
-
-export const FETCH_TOKEN = 'fetch_token';
-export const REGISTER_USER = 'register_user';

@@ -129,4 +129,5 @@
   <include file="20190705_1111.mysql.sql" relativeToChangelogFile="true" />
   <include file="20191203_1522.mysql.sql" relativeToChangelogFile="true" />
   <include file="20191203_1850.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20191203_2008.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>

@@ -125,18 +125,6 @@ public class UserService {
   }
 
   /**
-   * Allows to register a user from invite link. Skips permission checks.
-   *
-   * @param user User to be created.
-   * @return saved User
-   */
-  public User createUser(User user) {
-    String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
-    user.setPassword(newPasswordEncoded);
-    return userRepository.save(user);
-  }
-
-  /**
    * Create User with new encoded password.
    *
    * @param user User to be created.
