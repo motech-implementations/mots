@@ -7,11 +7,7 @@ import { initialize } from 'redux-form';
 
 import UserForm, { USER_FORM_NAME } from './UserForm';
 import { saveUser } from '../actions';
-import {
-  MANAGE_USERS_AUTHORITY,
-  MANAGE_INCHARGE_USERS_AUTHORITY,
-  hasAuthority,
-} from '../utils/authorization';
+import { MANAGE_USERS_AUTHORITY, hasAuthority } from '../utils/authorization';
 import formsStyles from '../styles/formsStyles';
 import getContainerStyle from '../utils/styleUtils';
 import apiClient from '../utils/api-client';
@@ -30,7 +26,7 @@ class UserEdit extends Component {
   }
 
   componentWillMount() {
-    hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
+    hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
       if (!result) {
         Actions.home();
       }

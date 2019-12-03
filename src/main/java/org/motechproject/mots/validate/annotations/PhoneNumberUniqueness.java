@@ -8,11 +8,9 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.constraintvalidators.chw.ChwDtoPhoneNumberUniquenessValidator;
-import org.motechproject.mots.validate.constraintvalidators.incharge.InchargeDtoPhoneNumberUniquenessValidator;
 
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = {InchargeDtoPhoneNumberUniquenessValidator.class,
-    ChwDtoPhoneNumberUniquenessValidator.class})
+@Constraint(validatedBy = {ChwDtoPhoneNumberUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneNumberUniqueness {
 

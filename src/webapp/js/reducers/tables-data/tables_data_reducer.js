@@ -1,7 +1,7 @@
 import {
   FETCH_CHIEFDOMS,
   FETCH_CHWS, FETCH_COMMUNITIES, FETCH_DISTRICTS, FETCH_FACILITIES,
-  FETCH_INCHARGES, FETCH_ROLES, SEARCH_ROLES, FETCH_PERMISSIONS,
+  FETCH_ROLES, SEARCH_ROLES, FETCH_PERMISSIONS,
   FETCH_USERS,
 } from '../../actions/types';
 import initialTablesData from './tables_data_initial_state';
@@ -14,16 +14,6 @@ export default function (state = initialTablesData, action) {
           ...state,
           chwList: action.payload.data.content,
           chwListPages: action.payload.data.totalPages,
-        };
-      }
-      return state;
-
-    case FETCH_INCHARGES:
-      if (action.payload.data !== undefined) {
-        return {
-          ...state,
-          inchargesList: action.payload.data.content,
-          inchargeListPages: action.payload.data.totalPages,
         };
       }
       return state;

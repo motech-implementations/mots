@@ -22,8 +22,8 @@ class LocationsTable extends Component {
     return mobileColumns;
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     // flag of someone is typing
     this.filtering = false;
 

@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -47,12 +46,12 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
 
     int pageSize = getPageSize(pageable);
     int firstResult = getFirstResult(pageable, pageSize);
-    List<Facility> incharges = entityManager.createQuery(query)
+    List<Facility> facilities = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
         .getResultList();
 
-    return new PageImpl<>(incharges, pageable, count);
+    return new PageImpl<>(facilities, pageable, count);
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String facilityId,
@@ -82,12 +81,8 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
           builder.equal(root.get(FACILITY_TYPE), validFacilityType));
     }
     if (inchargeFullName != null) {
-      predicate = builder.and(predicate, builder.like(root.get(INCHARGE).get(FIRST_NAME),
-          '%' + inchargeFullName.trim() + '%'));
-      predicate = builder.or(predicate, builder.like(root.get(INCHARGE).get(SECOND_NAME),
-          '%' + inchargeFullName.trim() + '%'));
-      predicate = builder.or(predicate, builder.like(root.get(INCHARGE).get(OTHER_NAME),
-          '%' + inchargeFullName.trim() + '%'));
+      predicate = builder.and(predicate,
+          builder.like(root.get(INCHARGE_FULL_NAME), '%' + facilityId.trim() + '%'));
     }
     if (parentChiefdom != null) {
       predicate = builder.and(predicate, builder.like(root.get(CHIEFDOM).get(NAME),
@@ -123,17 +118,6 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
       if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
         path = root.get(CHIEFDOM).get(NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
-        orders.add(mountedOrder);
-      } else if (order.getProperty().equals(LocationController.INCHARGE_FULL_NAME_PARAM)) {
-        root.join(INCHARGE, JoinType.LEFT);
-        path = root.get(INCHARGE).get(FIRST_NAME);
-        Order mountedOrder = getSortDirection(builder, order, path);
-        orders.add(mountedOrder);
-        path = root.get(INCHARGE).get(SECOND_NAME);
-        mountedOrder = getSortDirection(builder, order, path);
-        orders.add(mountedOrder);
-        path = root.get(INCHARGE).get(OTHER_NAME);
-        mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else if (order.getProperty().equals(LocationController.FACILITY_TYPE_PARAM)) {
         path = root.get(FACILITY_TYPE);

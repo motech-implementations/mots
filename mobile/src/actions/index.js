@@ -9,9 +9,6 @@ import {
   FETCH_CHWS,
   SAVE_HEALTH_WORKER,
   FETCH_LOCATIONS,
-  CREATE_INCHARGE,
-  FETCH_INCHARGES,
-  SAVE_INCHARGE,
   FETCH_USERS,
   CREATE_USER,
   SAVE_USER,
@@ -150,15 +147,6 @@ export function fetchChws(parameters) {
   };
 }
 
-export function fetchIncharges(parameters) {
-  const url = `${BASE_URL}/incharge/search?&size=10000${parameters}`;
-  const request = apiClient.get(url);
-  return {
-    type: FETCH_INCHARGES,
-    payload: request,
-  };
-}
-
 export function selectHealthWorker(values, callback) {
   const request = apiClient.put(`${BASE_URL}/chw/${values.id}/select`, values);
   request.then(result => callback(result));
@@ -175,26 +163,6 @@ export function saveHealthWorker(values, callback) {
 
   return {
     type: SAVE_HEALTH_WORKER,
-    payload: request,
-  };
-}
-
-export function selectIncharge(values, callback) {
-  const request = apiClient.put(`${BASE_URL}/incharge/${values.id}/select`, values);
-  request.then(result => callback(result));
-
-  return {
-    type: CREATE_INCHARGE,
-    payload: request,
-  };
-}
-
-export function saveIncharge(values, callback) {
-  const request = apiClient.put(`${BASE_URL}/incharge/${values.id}`, values);
-  request.then(result => callback(result));
-
-  return {
-    type: SAVE_INCHARGE,
     payload: request,
   };
 }

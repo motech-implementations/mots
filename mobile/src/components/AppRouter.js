@@ -9,13 +9,9 @@ import ModalError from './ModalError';
 import ModalConfirm from './ModalConfirm';
 import ModalSuccess from './ModalSuccess';
 import Home from './Home';
-import Incharges from './Incharges';
-import InchargesOverall from './InchargesOverall';
 import AssignModulesToChw from './AssignModulesToChw';
 import AssignModulesToLocation from './AssignModulesToLocation';
 import AssignModulesToGroup from './AssignModulesToGroup';
-import InchargesNew from './InchargesNew';
-import InchargesEdit from './InchargesEdit';
 import HealthWorkers from './HealthWorkers';
 import HealthWorkersOverall from './HealthWorkersOverall';
 import HealthWorkersNew from './HealthWorkersNew';
@@ -43,10 +39,6 @@ const scenes = Actions.create(
       <Scene key="main">
         <Scene key="home" component={Home} title="Home" hideNavBar={false} navBar={Header} initial />
         <Scene key="profile" component={keyboardAvoiding(ProfileEdit)} title="Edit profile" navBar={Header} />
-        <Scene key="incharges" component={Incharges} title="Selected Incharge List" hideNavBar={false} navBar={Header} />
-        <Scene key="allIncharges" component={InchargesOverall} title="Incharge List" hideNavBar={false} navBar={Header} />
-        <Scene key="inchargesNew" component={keyboardAvoiding(InchargesNew)} title="Add Incharge" navBar={Header} />
-        <Scene key="inchargesEdit" component={keyboardAvoiding(InchargesEdit)} title="Edit Incharge" navBar={Header} />
         <Scene key="modulesToChw" component={AssignModulesToChw} title="Assign Modules" navBar={Header} />
         <Scene key="modulesToLocation" component={AssignModulesToLocation} title="Assign Modules to a location" navBar={Header} />
         <Scene key="modulesToGroup" component={AssignModulesToGroup} title="Assign Modules to a Group" navBar={Header} />

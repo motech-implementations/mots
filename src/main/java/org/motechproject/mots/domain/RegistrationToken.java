@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.Getter;
@@ -36,11 +35,10 @@ public class RegistrationToken extends BaseTimestampedEntity {
   @Setter
   private String email;
 
-  @OneToOne
-  @JoinColumn(name = "incharge_id", unique = true)
+  @Column(name = "name")
   @Getter
   @Setter
-  private Incharge incharge;
+  private String name;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
   @JoinTable(

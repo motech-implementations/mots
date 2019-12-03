@@ -34,12 +34,12 @@ public class DistrictRepositoryImpl extends BaseRepositoryImpl
 
     int pageSize = getPageSize(pageable);
     int firstResult = getFirstResult(pageable, pageSize);
-    List<District> incharges = entityManager.createQuery(query)
+    List<District> districts = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
         .getResultList();
 
-    return new PageImpl<>(incharges, pageable, count);
+    return new PageImpl<>(districts, pageable, count);
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String districtName,

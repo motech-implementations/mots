@@ -141,7 +141,7 @@ public class UserController extends BaseController {
       User user = userMapper.fromDto(userDto);
       user.setEmail(registrationToken.getEmail());
       user.setRoles(new HashSet<>(registrationToken.getRoles()));
-      user.setIncharge(registrationToken.getIncharge());
+      user.setName(registrationToken.getName());
       user = userService.createUser(user);
 
       registrationTokenRepository.delete(registrationToken);

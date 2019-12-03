@@ -27,7 +27,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName, String phoneNumber,
       String educationLevel, String communityName, String facilityName, String chiefdomName,
-      String districtName, String phuSupervisor, String groupName, Boolean selected,
+      String districtName, String groupName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -35,13 +35,13 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
     query = prepareQuery(query, chwId, firstName, secondName,
         otherName, phoneNumber, educationLevel, communityName, facilityName,
-        chiefdomName, districtName, phuSupervisor, groupName, selected, false, pageable);
+        chiefdomName, districtName, groupName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
         otherName, phoneNumber, educationLevel, communityName, facilityName,
-        chiefdomName, districtName, phuSupervisor, groupName, selected, true, pageable);
+        chiefdomName, districtName, groupName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -58,7 +58,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, String phuSupervisor, String groupName,
+      String chiefdomName, String districtName, String groupName,
       Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -111,19 +111,6 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
           root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
           '%' + districtName.trim()  + '%'));
     }
-    if (phuSupervisor != null) {
-      Predicate localPredicate = builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(FIRST_NAME),
-          '%' + phuSupervisor.trim() + '%');
-      localPredicate = builder.or(localPredicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(SECOND_NAME),
-          '%' + phuSupervisor.trim() + '%'));
-      localPredicate = builder.or(localPredicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(OTHER_NAME),
-          '%' + phuSupervisor.trim() + '%'));
-
-      predicate = builder.and(predicate, localPredicate);
-    }
     if (groupName != null) {
       predicate = builder.and(predicate, builder.like(
           root.get(GROUP).get(NAME), '%' + groupName.trim() + '%'));
@@ -154,8 +141,6 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
         return root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(NAME);
       case CommunityHealthWorkerController.DISTRICT_NAME_PARAM:
         return root.get(COMMUNITY).get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME);
-      case CommunityHealthWorkerController.PHU_SUPERVISOR_PARAM:
-        return root.get(COMMUNITY).get(FACILITY).get(INCHARGE).get(FIRST_NAME);
       case CommunityHealthWorkerController.GROUP_NAME_PARAM:
         return root.get(GROUP).get(NAME);
       default:

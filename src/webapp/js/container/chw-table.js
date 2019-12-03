@@ -16,8 +16,8 @@ import {
 import { buildSearchParams } from '../utils/react-table-search-params';
 
 class ChwTable extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     // flag of someone is typing
     this.filtering = false;
 
@@ -134,9 +134,6 @@ class ChwTable extends Component {
     }, {
       Header: 'Community',
       accessor: 'communityName',
-    }, {
-      Header: 'PHU Supervisor',
-      accessor: 'phuSupervisor',
     }, {
       Header: 'Preferred language',
       accessor: 'preferredLanguage',

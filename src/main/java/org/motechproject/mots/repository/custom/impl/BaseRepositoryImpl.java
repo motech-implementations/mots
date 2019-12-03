@@ -21,6 +21,7 @@ public abstract class BaseRepositoryImpl {
 
   protected static final String CHW_ID = "chwId";
   protected static final String FACILITY_ID = "facilityId";
+  protected static final String INCHARGE_FULL_NAME = "inchargeFullName";
   protected static final String FIRST_NAME = "firstName";
   protected static final String SECOND_NAME = "secondName";
   protected static final String OTHER_NAME = "otherName";
@@ -32,7 +33,6 @@ public abstract class BaseRepositoryImpl {
   protected static final String CHIEFDOM = "chiefdom";
   protected static final String DISTRICT = "district";
   protected static final String COMMUNITY = "community";
-  protected static final String INCHARGE = "incharge";
   protected static final String EMAIL = "email";
   protected static final String USERNAME = "username";
   protected static final String ROLES = "roles";

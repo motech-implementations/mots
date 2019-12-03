@@ -2,11 +2,9 @@ package org.motechproject.mots.service;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.transaction.Transactional;
-import org.motechproject.mots.domain.Incharge;
 import org.motechproject.mots.domain.RegistrationToken;
 import org.motechproject.mots.domain.security.UserRole;
 import org.motechproject.mots.repository.RegistrationTokenRepository;
@@ -17,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegistrationTokenService {
-  private static final String INCHARGE_ROLE_NAME = "Incharge";
-
   private static final String INVITATION_MAIL_SUBJECT = "MOTS sign-up invitation";
   private static final String INVITATION_MAIL_TEMPLATE = "<p>Hi %1$s,</p>"
       + "<p>Please follow the link below to create your MOTS account:<br>"
@@ -38,15 +34,14 @@ public class RegistrationTokenService {
   private String serverUrl;
 
   /**
-   * Create a registration token for given incharge.
-   * @param incharge the incharge that's being signed up
+   * Create a registration token for given email.
+   * @param email the email of the user that's being signed up
    */
   @Transactional
-  public void createRegistrationToken(Incharge incharge) {
+  public void createRegistrationToken(String email) {
     RegistrationToken registrationToken = new RegistrationToken();
-    registrationToken.setEmail(incharge.getEmail());
-    registrationToken.setIncharge(incharge);
-    registrationToken.setRoles(getInchargeUserRoles());
+    registrationToken.setEmail(email);
+    registrationToken.setRoles(getUserRoles());
     registrationToken.setToken(UUID.randomUUID().toString());
     registrationToken.setIssueDate(new Date());
     registrationTokenRepository.save(registrationToken);
@@ -67,16 +62,15 @@ public class RegistrationTokenService {
   }
 
   private void sendInvitationLink(RegistrationToken registrationToken) {
-    String inchargeName = registrationToken.getIncharge().getFullName();
+    String fullName = registrationToken.getName();
     String invitationLink = String.format(INVITATION_LINK, serverUrl, registrationToken.getToken());
 
-    String content = String.format(INVITATION_MAIL_TEMPLATE, inchargeName, invitationLink);
+    String content = String.format(INVITATION_MAIL_TEMPLATE, fullName, invitationLink);
 
     mailService.sendHtmlMessage(registrationToken.getEmail(), INVITATION_MAIL_SUBJECT, content);
   }
 
-  private Set<UserRole> getInchargeUserRoles() {
-    Optional<UserRole> role = roleRepository.findByName(INCHARGE_ROLE_NAME);
-    return role.map(Collections::singleton).orElse(Collections.emptySet());
+  private Set<UserRole> getUserRoles() {
+    return Collections.emptySet();
   }
 }

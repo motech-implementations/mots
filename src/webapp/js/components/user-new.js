@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 
 import UserForm from './user-form';
-import { hasAuthority, MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
 import { createUser } from '../actions/index';
 
 class UserNew extends Component {
@@ -16,7 +16,7 @@ class UserNew extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }
   }

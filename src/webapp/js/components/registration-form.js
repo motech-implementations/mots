@@ -11,18 +11,7 @@ import { initializeForm } from '../utils/form-utils';
 export const FORM_NAME = 'RegistrationForm';
 
 function getName(registrationToken) {
-  let name = '';
-  const { incharge } = registrationToken || {};
-  if (incharge) {
-    name = incharge.firstName;
-    if (incharge.otherName) {
-      name += ` ${incharge.otherName}`;
-    }
-    if (incharge.secondName) {
-      name += ` ${incharge.secondName}`;
-    }
-  }
-  return name;
+  return registrationToken.name;
 }
 
 const FIELDS = {

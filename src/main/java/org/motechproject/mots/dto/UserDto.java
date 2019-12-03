@@ -58,10 +58,6 @@ public class UserDto {
 
   @Getter
   @Setter
-  private InchargeDto incharge;
-
-  @Getter
-  @Setter
   @JsonIgnore
   private Boolean enabled = true;
 }

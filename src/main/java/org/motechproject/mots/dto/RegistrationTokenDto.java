@@ -20,7 +20,7 @@ public class RegistrationTokenDto {
 
   @Getter
   @Setter
-  private InchargeDto incharge;
+  private String name;
 
   @Getter
   @Setter

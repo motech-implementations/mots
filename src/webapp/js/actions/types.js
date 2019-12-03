@@ -16,11 +16,6 @@ export const CREATE_ROLE = 'create_role';
 export const SAVE_ROLE = 'save_role';
 
 
-export const CREATE_INCHARGE = 'create_incharge';
-export const SAVE_INCHARGE = 'save_incharge';
-export const FETCH_INCHARGES = 'fetch_incharges';
-
-
 export const SAVE_HEALTH_WORKER = 'save_health_worker';
 export const FETCH_CHWS = 'fetch_chws';
 
