@@ -6,12 +6,10 @@ import { Link } from 'react-router-dom';
 import {
   ASSIGN_MODULES_AUTHORITY, CHW_READ_AUTHORITY, CHW_WRITE_AUTHORITY,
   hasAuthority,
-  INCHARGE_READ_AUTHORITY,
-  INCHARGE_WRITE_AUTHORITY,
   MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
   CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
-  MANAGE_INCHARGE_USERS_AUTHORITY, UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
+  UPLOAD_CHW_CSV_AUTHORITY,
   UPLOAD_LOCATION_CSV_AUTHORITY, GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY,
 } from '../utils/authorization';
 import { fetchReports } from '../actions/index';
@@ -23,7 +21,6 @@ class SideBar extends Component {
     this.state = {
       healthWorkersMenuCollapsed: true,
       modulesMenuCollapsed: true,
-      inchargeMenuCollapsed: true,
       locationsMenuCollapsed: true,
       usersMenuCollapsed: true,
       reportsMenuCollapsed: true,
@@ -32,7 +29,6 @@ class SideBar extends Component {
 
     this.toggleHealthWorkersMenu = this.toggleHealthWorkersMenu.bind(this);
     this.toggleModulesMenu = this.toggleModulesMenu.bind(this);
-    this.toggleInchargeMenu = this.toggleInchargeMenu.bind(this);
     this.toggleLocationsMenu = this.toggleLocationsMenu.bind(this);
     this.toggleUsersMenu = this.toggleUsersMenu.bind(this);
     this.toggleReportsMenu = this.toggleReportsMenu.bind(this);
@@ -62,12 +58,6 @@ class SideBar extends Component {
   toggleModulesMenu(event) {
     event.preventDefault();
     this.setState({ modulesMenuCollapsed: !this.state.modulesMenuCollapsed });
-    return false;
-  }
-
-  toggleInchargeMenu(event) {
-    event.preventDefault();
-    this.setState({ inchargeMenuCollapsed: !this.state.inchargeMenuCollapsed });
     return false;
   }
 
@@ -110,7 +100,7 @@ class SideBar extends Component {
             </Link>
           </li>
         }
-        { hasAuthority(UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY) &&
+        { hasAuthority(UPLOAD_CHW_CSV_AUTHORITY) &&
           <li className="border-none">
             <Link to="/chw/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
@@ -158,49 +148,6 @@ class SideBar extends Component {
             <Link to="/modules/manage" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-th-list" />
               <span className="icon-text">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</span>
-            </Link>
-          </li>
-        }
-      </ul>
-    );
-  }
-
-  renderInchargeMenu() {
-    if (this.state.inchargeMenuCollapsed) {
-      return '';
-    }
-
-    return (
-      <ul className="nav nav-second-level">
-        { hasAuthority(INCHARGE_WRITE_AUTHORITY) &&
-          <li className="border-none">
-            <Link to="/incharge/new" onClick={this.props.hideMenuSmart}>
-              <span className="glyphicon glyphicon-plus" />
-              <span className="icon-text">Add Incharge</span>
-            </Link>
-          </li>
-        }
-        { hasAuthority(UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY) &&
-          <li className="border-none">
-            <Link to="/incharge/upload" onClick={this.props.hideMenuSmart}>
-              <span className="glyphicon glyphicon-save-file" />
-              <span className="icon-text">Upload CSV</span>
-            </Link>
-          </li>
-        }
-        { hasAuthority(INCHARGE_READ_AUTHORITY) &&
-          <li className="border-none">
-            <Link to="/incharge/overall" onClick={this.props.hideMenuSmart}>
-              <span className="glyphicon glyphicon-list-alt" />
-              <span className="icon-text">Incharge list</span>
-            </Link>
-          </li>
-        }
-        { hasAuthority(INCHARGE_READ_AUTHORITY) &&
-          <li className="border-none">
-            <Link to="/incharge/selected" onClick={this.props.hideMenuSmart}>
-              <span className="glyphicon glyphicon-list-alt" />
-              <span className="icon-text">Selected Incharge list</span>
             </Link>
           </li>
         }
@@ -294,7 +241,7 @@ class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY) &&
+        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
         <li className="border-none">
           <Link to="/users/new" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-plus" />
@@ -302,7 +249,7 @@ class SideBar extends Component {
           </Link>
         </li>
         }
-        { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY) &&
+        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
         <li className="border-none">
           <Link to="/users" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
@@ -401,7 +348,7 @@ class SideBar extends Component {
           { hasAuthority(
               CHW_READ_AUTHORITY,
               CHW_WRITE_AUTHORITY,
-              UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
+              UPLOAD_CHW_CSV_AUTHORITY,
             ) &&
             <li>
               <a href="" onClick={this.toggleHealthWorkersMenu}>
@@ -428,22 +375,6 @@ class SideBar extends Component {
                 />
               </a>
               { this.renderModulesMenu() }
-            </li>
-          }
-          { hasAuthority(
-              INCHARGE_READ_AUTHORITY,
-              INCHARGE_WRITE_AUTHORITY,
-              UPLOAD_CHW_OR_INCHARGE_CSV_AUTHORITY,
-            ) &&
-            <li>
-              <a href="" onClick={this.toggleInchargeMenu}>
-                <span className="fa fa-user-md" />
-                <span className="icon-text">Incharge</span>
-                <span
-                  className={SideBar.getSubmenuArrowClass(this.state.inchargeMenuCollapsed)}
-                />
-              </a>
-              {this.renderInchargeMenu()}
             </li>
           }
           { hasAuthority(DISPLAY_REPORTS_AUTHORITY) &&
@@ -476,7 +407,7 @@ class SideBar extends Component {
             {this.renderLocationsMenu()}
           </li>
           }
-          { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY) &&
+          { hasAuthority(MANAGE_USERS_AUTHORITY) &&
           <li>
             <a href="" onClick={this.toggleUsersMenu}>
               <span className="glyphicon glyphicon-user" />

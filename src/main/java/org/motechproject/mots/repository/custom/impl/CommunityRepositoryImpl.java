@@ -40,12 +40,12 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
 
     int pageSize = getPageSize(pageable);
     int firstResult = getFirstResult(pageable, pageSize);
-    List<Community> incharges = entityManager.createQuery(query)
+    List<Community> communities = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
         .getResultList();
 
-    return new PageImpl<>(incharges, pageable, count);
+    return new PageImpl<>(communities, pageable, count);
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String communityName,

@@ -3,17 +3,12 @@ import { Route, Switch } from 'react-router-dom';
 
 import Navbar from './navbar';
 import Home from './home';
-import InchargesOverall from './incharges-overall';
-import InchargesSelected from './incharges-selected';
-import InchargesUpload from './incharge-upload';
 import HealthWorkersOverall from './health-workers-overall';
 import HealthWorkersSelected from './health-workers-selected';
 import HealthWorkersNew from './health-workers-new';
 import HealthWorkersEdit from './health-workers-edit';
 import HealthWorkersUpload from './health-workers-upload';
 import AssignModules from './assign-modules';
-import InchargeNew from './incharge-new';
-import InchargeEdit from './incharge-edit';
 import ModulesManage from './modules-manage';
 import Users from './users';
 import UserNew from './user-new';
@@ -78,11 +73,6 @@ export default class App extends Component {
                 <Route path="/modules/assign/:chwId?" component={AssignModules} />
                 <Route path="/modules/groupAssign" component={GroupAssignModules} />
                 <Route path="/modules/manage" component={ModulesManage} />
-                <Route path="/incharge/upload" component={InchargesUpload} />
-                <Route path="/incharge/new" component={InchargeNew} />
-                <Route path="/incharge/selected" component={InchargesSelected} />
-                <Route path="/incharge/overall" component={InchargesOverall} />
-                <Route path="/incharge/:inchargeId" component={InchargeEdit} />
                 <Route path="/chw/upload" component={HealthWorkersUpload} />
                 <Route path="/chw/new" component={HealthWorkersNew} />
                 <Route path="/chw/selected" component={HealthWorkersSelected} />

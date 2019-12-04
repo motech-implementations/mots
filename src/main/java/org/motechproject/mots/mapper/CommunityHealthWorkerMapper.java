@@ -26,7 +26,6 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "chiefdomId", source = "community.facility.chiefdom.id"),
       @Mapping(target = "districtName", source = "community.facility.chiefdom.district.name"),
       @Mapping(target = "districtId", source = "community.facility.chiefdom.district.id"),
-      @Mapping(target = "phuSupervisor", source = "community.facility.inchargeFullName"),
       @Mapping(target = "groupId", source = "group.id"),
       @Mapping(target = "groupName", source = "group.name")
   })

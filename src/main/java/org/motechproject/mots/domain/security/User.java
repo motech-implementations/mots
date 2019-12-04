@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
-import org.motechproject.mots.domain.Incharge;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,11 +53,6 @@ public class User extends BaseTimestampedEntity implements UserDetails {
   @Getter
   @Setter
   private String name;
-
-  @OneToOne(mappedBy = "user")
-  @Getter
-  @Setter
-  private Incharge incharge;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(

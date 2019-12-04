@@ -9,6 +9,6 @@ public interface CommunityHealthWorkerRepositoryCustom {
   Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName, String phoneNumber,
       String educationLevel, String communityId, String facilityId, String chiefdomId,
-      String districtId, String phuSupervisor, String groupName, Boolean selected,
+      String districtId, String groupName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException;
 }

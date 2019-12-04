@@ -130,8 +130,4 @@ public class CommunityHealthWorkerDto {
   @Setter
   @Uuid
   private String groupId;
-
-  @Getter
-  @Setter
-  private String phuSupervisor;
 }

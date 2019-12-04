@@ -5,7 +5,7 @@ import Alert from 'react-s-alert';
 import { initialize } from 'redux-form';
 
 import UserForm, { USER_FORM_NAME } from './user-form';
-import { hasAuthority, MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
 import { saveUser } from '../actions/index';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
@@ -27,7 +27,7 @@ class UserEdit extends Component {
   }
 
   componentWillMount() {
-    if (!hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.fetchUser();

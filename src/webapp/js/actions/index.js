@@ -11,9 +11,6 @@ import {
   FETCH_CHWS,
   SAVE_HEALTH_WORKER,
   FETCH_LOCATIONS,
-  CREATE_INCHARGE,
-  FETCH_INCHARGES,
-  SAVE_INCHARGE,
   SAVE_ROLE,
   CREATE_ROLE,
   SET_COUNTER_LOGOUT_TIME,
@@ -38,7 +35,6 @@ import {
   CREATE_CHIEFDOM,
   SAVE_DISTRICT,
   CREATE_DISTRICT,
-  FETCH_TOKEN, REGISTER_USER,
 } from './types';
 
 const BASE_URL = '/api';
@@ -142,21 +138,6 @@ export function fetchChws(searchParams, selected) {
   };
 }
 
-export function fetchIncharges(searchParams, selected) {
-  const url = `${BASE_URL}/incharge/search`;
-
-  searchParams.selected = selected;
-
-  const request = apiClient.get(url, {
-    params: searchParams,
-  });
-
-  return {
-    type: FETCH_INCHARGES,
-    payload: request,
-  };
-}
-
 export function saveHealthWorker(values, callback) {
   const request = apiClient.put(`${BASE_URL}/chw/${values.id}`, values);
   request.then(() => callback());
@@ -173,26 +154,6 @@ export function selectHealthWorker(values, callback) {
 
   return {
     type: SAVE_HEALTH_WORKER,
-    payload: request,
-  };
-}
-
-export function selectIncharge(values, callback) {
-  const request = apiClient.put(`${BASE_URL}/incharge/${values.id}/select`, values);
-  request.then(() => callback());
-
-  return {
-    type: CREATE_INCHARGE,
-    payload: request,
-  };
-}
-
-export function saveIncharge(values, callback) {
-  const request = apiClient.put(`${BASE_URL}/incharge/${values.id}`, values);
-  request.then(() => callback());
-
-  return {
-    type: SAVE_INCHARGE,
     payload: request,
   };
 }
@@ -416,27 +377,6 @@ export function fetchReports() {
 
   return {
     type: FETCH_REPORTS,
-    payload: request,
-  };
-}
-
-
-export function fetchToken(token) {
-  const url = `/api/token/${token}`;
-  const request = apiClient.get(url);
-
-  return {
-    type: FETCH_TOKEN,
-    payload: request,
-  };
-}
-
-export function registerUser(values, token, callback) {
-  const request = apiClient.post(`${BASE_URL}/register/${token}`, values);
-  request.then(result => callback(result));
-
-  return {
-    type: REGISTER_USER,
     payload: request,
   };
 }

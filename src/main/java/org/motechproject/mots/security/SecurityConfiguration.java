@@ -38,9 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/site/**",
             "/index.html",
             "/login",
-            "/",
-            "/api/token/**",
-            "/api/register/**"
+            "/"
       );
   }
 

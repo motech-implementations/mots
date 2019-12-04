@@ -138,11 +138,11 @@ public class CommunityHealthWorkerService {
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String secondName, String otherName,
       String phoneNumber, String educationLevel, String communityName, String facilityName,
-      String chiefdomName, String districtName, String phuSupervisor, String groupName,
+      String chiefdomName, String districtName, String groupName,
       Boolean selected, Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
         chwId, firstName, secondName, otherName, phoneNumber, educationLevel, communityName,
-        facilityName, chiefdomName, districtName, phuSupervisor, groupName, selected, pageable);
+        facilityName, chiefdomName, districtName, groupName, selected, pageable);
   }
 
   /**
@@ -215,7 +215,7 @@ public class CommunityHealthWorkerService {
    * @throws IOException in case of file issues
    */
   @SuppressWarnings({"PMD.CyclomaticComplexity", "checkstyle:variableDeclarationUsageDistance"})
-  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_CHW_OR_INCHARGE_CSV_ROLE)
+  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_CHW_ROLE)
   public Map<Integer, String> processChwCsv(MultipartFile chwCsvFile, Boolean selected)
       throws IOException {
     ICsvMapReader csvMapReader;

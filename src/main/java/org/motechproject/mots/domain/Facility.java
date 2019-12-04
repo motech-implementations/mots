@@ -9,7 +9,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -52,10 +51,10 @@ public class Facility extends Location {
   @Setter
   private Chiefdom chiefdom;
 
-  @OneToOne(mappedBy = "facility")
+  @Column(name = "incharge_full_name")
   @Getter
   @Setter
-  private Incharge incharge;
+  private String inchargeFullName;
 
   public Facility(UUID id) {
     super(id);
@@ -100,13 +99,5 @@ public class Facility extends Location {
   @Override
   public FacilityType getFacilityType() {
     return getType();
-  }
-
-  @Override
-  public String getInchargeFullName() {
-    if (incharge == null) {
-      return null;
-    }
-    return incharge.getFullName();
   }
 }

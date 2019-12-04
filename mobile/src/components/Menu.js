@@ -12,8 +12,7 @@ import Collapsible from './Collapsible';
 import { fetchReportTemplates, signoutUser, setLastOnlineTime } from '../actions';
 import {
   CHW_READ_AUTHORITY, ASSIGN_MODULES_AUTHORITY, CHW_WRITE_AUTHORITY,
-  DISPLAY_REPORTS_AUTHORITY, INCHARGE_READ_AUTHORITY, INCHARGE_WRITE_AUTHORITY,
-  MANAGE_USERS_AUTHORITY, MANAGE_INCHARGE_USERS_AUTHORITY, hasAuthority,
+  DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY, hasAuthority,
 } from '../utils/authorization';
 
 const HIDE_NOT_IMPLEMENTED = true;
@@ -64,12 +63,9 @@ class Menu extends Component {
     this.state = {
       CHW_READ_AUTHORITY: false,
       CHW_WRITE_AUTHORITY: false,
-      INCHARGE_READ_AUTHORITY: false,
-      INCHARGE_WRITE_AUTHORITY: false,
       ASSIGN_MODULES_AUTHORITY: false,
       DISPLAY_REPORTS_AUTHORITY: false,
       MANAGE_USERS_AUTHORITY: false,
-      MANAGE_INCHARGE_USERS_AUTHORITY: false,
     };
   }
 
@@ -79,12 +75,6 @@ class Menu extends Component {
     });
     hasAuthority(CHW_WRITE_AUTHORITY).then((result) => {
       if (result) { this.setState({ CHW_WRITE_AUTHORITY: true }); }
-    });
-    hasAuthority(INCHARGE_READ_AUTHORITY).then((result) => {
-      if (result) { this.setState({ INCHARGE_READ_AUTHORITY: true }); }
-    });
-    hasAuthority(INCHARGE_WRITE_AUTHORITY).then((result) => {
-      if (result) { this.setState({ INCHARGE_WRITE_AUTHORITY: true }); }
     });
     hasAuthority(ASSIGN_MODULES_AUTHORITY).then((result) => {
       if (result) { this.setState({ ASSIGN_MODULES_AUTHORITY: true }); }
@@ -99,9 +89,6 @@ class Menu extends Component {
     });
     hasAuthority(MANAGE_USERS_AUTHORITY).then((result) => {
       if (result) { this.setState({ MANAGE_USERS_AUTHORITY: true }); }
-    });
-    hasAuthority(MANAGE_INCHARGE_USERS_AUTHORITY).then((result) => {
-      if (result) { this.setState({ MANAGE_INCHARGE_USERS_AUTHORITY: true }); }
     });
   }
 
@@ -273,56 +260,13 @@ class Menu extends Component {
           </Collapsible>
           }
 
-          { this.props.isConnected
-          && (this.state.INCHARGE_WRITE_AUTHORITY || this.state.INCHARGE_READ_AUTHORITY) &&
-          <Collapsible title="Incharge" headerIcon="user-md" style={styles.menuItem}>
-            <View>
-              { this.state.INCHARGE_WRITE_AUTHORITY &&
-              <TouchableOpacity
-                onPress={() => this.openSection('inchargesNew')}
-                style={styles.menuItem}
-              >
-                <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-                  <Icon name="plus" size={20} color="#337ab7" />
-                </View>
-                <Text style={styles.menuItemText}>Add Incharge</Text>
-              </TouchableOpacity>
-              }
-
-              { this.props.isConnected && this.state.INCHARGE_READ_AUTHORITY &&
-              <View>
-                <TouchableOpacity
-                  onPress={() => this.openSection('allIncharges')}
-                  style={styles.menuItem}
-                >
-                  <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-                    <Icon name="list" size={20} color="#337ab7" />
-                  </View>
-                  <Text style={styles.menuItemText}>Incharge List</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => this.openSection('incharges')}
-                  style={styles.menuItem}
-                >
-                  <View style={[styles.iconContainer, { marginLeft: 30 }]}>
-                    <Icon name="list" size={20} color="#337ab7" />
-                  </View>
-                  <Text style={styles.menuItemText}>Selected Incharge List</Text>
-                </TouchableOpacity>
-              </View>
-              }
-            </View>
-          </Collapsible>
-          }
-
           { this.state.DISPLAY_REPORTS_AUTHORITY &&
           <Collapsible title="Reports" headerIcon="bar-chart" style={styles.menuItem}>
             {this.renderReports()}
           </Collapsible>
           }
 
-          { this.props.isConnected
-          && (this.state.MANAGE_USERS_AUTHORITY || this.state.MANAGE_INCHARGE_USERS_AUTHORITY) &&
+          { this.props.isConnected && this.state.MANAGE_USERS_AUTHORITY &&
             <Collapsible title="Users" headerIcon="user" style={styles.menuItem}>
               <View>
                 <TouchableOpacity

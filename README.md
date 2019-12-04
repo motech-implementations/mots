@@ -42,17 +42,6 @@ mysql -uroot -p mots < src/main/resources/test_ivr_config.sql
 2. Create gradle.properties file (it will overwrite project's properties)
 3. Add `ivrApiKey=<voto-api-key>` to set VOTO communication.
 
-## Set up email invitations
-1. Create or edit gradle.properties under ~/.gradle
-2. Provide your email credentials and the url of MOTS instance:
-```
-serverUrl=http://mots.soldevelo.com
-# When using gmail, enable less secure apps here: https://myaccount.google.com/lesssecureapps
-mailHost=
-mailUsername=
-mailPassword=
-```
-
 ## Load locations locally when starting the server
 - Download .xlsx file with location data and save it as `SL_Locations.xlsx` in your MOTS `/src/main/resources/`:
 ```shell 

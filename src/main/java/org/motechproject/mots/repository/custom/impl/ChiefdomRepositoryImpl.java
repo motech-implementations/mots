@@ -37,12 +37,12 @@ public class ChiefdomRepositoryImpl extends BaseRepositoryImpl
 
     int pageSize = getPageSize(pageable);
     int firstResult = getFirstResult(pageable, pageSize);
-    List<Chiefdom> incharges = entityManager.createQuery(query)
+    List<Chiefdom> chiefdoms = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
         .getResultList();
 
-    return new PageImpl<>(incharges, pageable, count);
+    return new PageImpl<>(chiefdoms, pageable, count);
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String chiefdomName,

@@ -43,10 +43,6 @@ public interface LocationMapper {
    */
   List<DistrictDto> toDistrictDtos(List<District> districts);
 
-  @Mappings({
-      @Mapping(target = "inchargeId", source = "incharge.id"),
-      @Mapping(target = "inchargeSelected", source = "incharge.selected")
-  })
   FacilityDto toDto(Facility facility);
 
   /**
@@ -153,7 +149,7 @@ public interface LocationMapper {
   District fromDtoToDistrict(DistrictCreationDto districtCreationDto);
 
   /**
-   * Create Facility object with given id. This is to bind Incharge to Facility during creation.
+   * Create Facility object with given id.
    * @param facilityId id of Facility to create
    * @return Facility object with given id
    */
@@ -166,7 +162,7 @@ public interface LocationMapper {
   }
 
   /**
-   * Create Chiefdom object with given id. This is to bind Incharge to Chiefdom during creation.
+   * Create Chiefdom object with given id.
    * @param chiefdomId id of Chiefdom to create
    * @return Chiefdom object with given id
    */
@@ -179,8 +175,7 @@ public interface LocationMapper {
   }
 
   /**
-   * Create Chiefdom object with given id. This is to bind Incharge to Chiefdom
-   * during creation.
+   * Create Chiefdom object with given id.
    * @param districtId id of Chiefdom to create
    * @return Chiefdom object with given id
    */
@@ -215,6 +210,6 @@ public interface LocationMapper {
       @MappingTarget Chiefdom chiefdom);
 
   @Mapping(target = "owner", ignore = true)
-  void updateDistrictFromDto(DistrictCreationDto districtCreationDto, 
+  void updateDistrictFromDto(DistrictCreationDto districtCreationDto,
       @MappingTarget District district);
 }
