@@ -142,7 +142,3 @@ export function getAttributesForInput() {
     style: { paddingVertical: 5, color: '#000' },
   };
 }
-
-export function getSupervisorNameFromFacility(list, facilityId) {
-  return getLocationById(list, facilityId).inchargeFullName;
-}

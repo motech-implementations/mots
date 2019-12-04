@@ -7,7 +7,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.motechproject.mots.domain.CommunityHealthWorker;
-import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.repository.custom.CommunityHealthWorkerRepositoryCustom;
 import org.motechproject.mots.web.CommunityHealthWorkerController;
 import org.springframework.data.domain.Page;
@@ -25,22 +24,22 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String secondName, String otherName, String phoneNumber,
-      String educationLevel, String communityName, String facilityName, String chiefdomName,
+      String chwId, String firstName, String familyName, String phoneNumber,
+      String communityName, String facilityName, String chiefdomName,
       String districtName, String groupName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
-    query = prepareQuery(query, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityName, facilityName,
+    query = prepareQuery(query, chwId, firstName, familyName,
+        phoneNumber, communityName, facilityName,
         chiefdomName, districtName, groupName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, chwId, firstName, secondName,
-        otherName, phoneNumber, educationLevel, communityName, facilityName,
+    countQuery = prepareQuery(countQuery, chwId, firstName, familyName,
+        phoneNumber, communityName, facilityName,
         chiefdomName, districtName, groupName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
@@ -56,8 +55,8 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
-      String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityName, String facilityName,
+      String chwId, String firstName, String familyName,
+      String phoneNumber, String communityName, String facilityName,
       String chiefdomName, String districtName, String groupName,
       Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
 
@@ -77,21 +76,13 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
       predicate = builder.and(predicate, builder.like(root.get(FIRST_NAME),
           '%' + firstName.trim() + '%'));
     }
-    if (secondName != null) {
-      predicate = builder.and(predicate, builder.like(root.get(SECOND_NAME),
-          '%' + secondName.trim() + '%'));
-    }
-    if (otherName != null) {
-      predicate = builder.and(predicate, builder.like(root.get(OTHER_NAME),
-          '%' + otherName.trim() + '%'));
+    if (familyName != null) {
+      predicate = builder.and(predicate, builder.like(root.get(FAMILY_NAME),
+          '%' + familyName.trim() + '%'));
     }
     if (phoneNumber != null) {
       predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),
           '%' + phoneNumber.trim() + '%'));
-    }
-    if (educationLevel != null) {
-      EducationLevel validLevel = EducationLevel.valueOf(educationLevel.trim().toUpperCase());
-      predicate = builder.and(predicate, builder.equal(root.get(EDUCATION_LEVEL), validLevel));
     }
     if (communityName != null) {
       predicate = builder.and(predicate, builder.like(

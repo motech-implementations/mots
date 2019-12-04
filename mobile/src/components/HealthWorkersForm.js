@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Select } from 'react-native-chooser';
 import Autocomplete from 'react-native-autocomplete-input';
-import { CheckBox } from 'react-native-elements';
 
 import FormField from './FormField';
 import { fetchLocations } from '../actions';
@@ -17,7 +16,6 @@ import {
   getAttributesForSelect,
   getAttributesForSelectWithClearOnChange,
   getAttributesForInput,
-  getSupervisorNameFromFacility,
   fetchDataAndInitializeFrom,
 } from '../utils/form-utils';
 import Button from './Button';
@@ -98,39 +96,10 @@ const FIELDS = {
     required: true,
     getAttributes: () => getAttributesForInput(),
   },
-  secondName: {
-    label: 'Surname',
+  familyName: {
+    label: 'Family Name',
     required: true,
     getAttributes: () => getAttributesForInput(),
-  },
-  otherName: {
-    label: 'Other Name',
-    getAttributes: () => getAttributesForInput(),
-  },
-  yearOfBirth: {
-    label: 'Year of Birth',
-    type: Select,
-    getSelectOptions: () => {
-      const values = [{ id: '', name: 'Click to Select' }];
-      for (let year = (new Date()).getFullYear(); year > 1899; year -= 1) {
-        values.push({ id: year, name: year.toString() });
-      }
-      return {
-        values,
-        displayNameKey: 'name',
-        valueKey: 'id',
-      };
-    },
-    getAttributes: input => getAttributesForSelect(input),
-  },
-  age: {
-    label: 'Age',
-    getAttributes: () => getAttributesForInput(),
-    getDynamicAttributes: ({ yearOfBirth }) => ({
-      editable: false,
-      hidden: !yearOfBirth,
-      value: yearOfBirth ? (new Date().getFullYear() - yearOfBirth).toString() : '',
-    }),
   },
   gender: {
     type: Select,
@@ -138,22 +107,6 @@ const FIELDS = {
     required: true,
     getSelectOptions: () => ({
       values: ['Male', 'Female'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
-  literacy: {
-    type: Select,
-    label: 'Literacy',
-    getSelectOptions: () => ({
-      values: ['Can read and write', 'Cannot read and write', 'Can only read'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
-  educationLevel: {
-    type: Select,
-    label: 'Educational Level',
-    getSelectOptions: () => ({
-      values: ['Pre-primary', 'Primary', 'Junior Secondary', 'Secondary', 'Senior Secondary', 'Higher', 'University', 'None'],
     }),
     getAttributes: input => (getAttributesForSelect(input)),
   },
@@ -243,29 +196,6 @@ const FIELDS = {
       hidden: !chiefdomId,
     }),
   },
-  supervisorName: {
-    label: 'Supervisor',
-    getAttributes: () => getAttributesForInput(),
-    getDynamicAttributes: ({
-      availableLocations, districtId, chiefdomId, facilityId,
-    }) => {
-      if (!facilityId) {
-        return { hidden: true };
-      }
-      const supervisorName =
-              getSupervisorNameFromFacility(
-                getSelectableLocations(
-                  'facilities',
-                  availableLocations,
-                  districtId,
-                  chiefdomId,
-                ),
-                facilityId,
-              );
-
-      return { value: supervisorName || 'Unassigned', editable: false };
-    },
-  },
   communityId: {
     type: Select,
     label: 'Community',
@@ -300,20 +230,6 @@ const FIELDS = {
     getDynamicAttributes: ({ facilityId }) => ({
       hidden: !facilityId,
     }),
-  },
-  hasPeerSupervisor: {
-    type: CheckBox,
-    label: 'Peer Supervisor',
-    getAttributes: input => (
-      {
-        title: '',
-        checked: input.value === true,
-        onPress: () => {
-          input.onChange(!input.value);
-        },
-      }
-    ),
-    nonBorderField: true,
   },
   preferredLanguage: {
     type: Select,
@@ -376,7 +292,6 @@ class HealthWorkersForm extends Component {
         chiefdomId={this.props.chiefdomId}
         facilityId={this.props.facilityId}
         isChwIdDisabled={this.props.isChwIdDisabled}
-        yearOfBirth={this.props.yearOfBirth}
         notSelectedChwIds={this.props.notSelectedChwIds}
         groups={this.state.groups}
       />
@@ -426,14 +341,6 @@ class HealthWorkersForm extends Component {
   }
 }
 
-function isAgeLowerThan15(year) {
-  return year <= new Date().getFullYear() - 15;
-}
-
-function isAgeHigherThan100(year) {
-  return year >= new Date().getFullYear() - 100;
-}
-
 function validate(values, props) {
   const errors = {};
   _.each(FIELDS, (fieldConfig, fieldName) => {
@@ -442,12 +349,6 @@ function validate(values, props) {
     }
   });
 
-  if (values.yearOfBirth && !isAgeLowerThan15(values.yearOfBirth)) {
-    errors.yearOfBirth = 'Minimum age is 15';
-  }
-  if (values.yearOfBirth && !isAgeHigherThan100(values.yearOfBirth)) {
-    errors.yearOfBirth = 'Maximum age is 100';
-  }
   if (values.chwId &&
       props.notSelectedChwIds &&
       !props.notSelectedChwIds.includes(values.chwId)) {
@@ -465,7 +366,6 @@ function mapStateToProps(state) {
     districtId: selector(state, 'districtId'),
     chiefdomId: selector(state, 'chiefdomId'),
     facilityId: selector(state, 'facilityId'),
-    yearOfBirth: selector(state, 'yearOfBirth'),
   };
 }
 
@@ -485,7 +385,6 @@ HealthWorkersForm.propTypes = {
   facilityId: PropTypes.string,
   loading: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
-  yearOfBirth: PropTypes.string,
   notSelectedChwIds: PropTypes.arrayOf(PropTypes.string),
 };
 
@@ -496,6 +395,5 @@ HealthWorkersForm.defaultProps = {
   facilityId: null,
   loading: false,
   isChwIdDisabled: false,
-  yearOfBirth: null,
   notSelectedChwIds: [],
 };

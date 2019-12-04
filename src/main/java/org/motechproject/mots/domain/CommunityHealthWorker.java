@@ -15,10 +15,8 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
-import org.motechproject.mots.domain.enums.Literacy;
 
 @Entity
 @Table(name = "community_health_worker")
@@ -43,39 +41,17 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @NotBlank(message = ValidationMessages.EMPTY_FIRST_NAME)
   private String firstName;
 
-  @Column(name = "second_name", nullable = false)
+  @Column(name = "family_name", nullable = false)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_SECOND_NAME)
-  private String secondName;
+  @NotBlank(message = ValidationMessages.EMPTY_FAMILY_NAME)
+  private String familyName;
 
-  @Column(name = "other_name")
-  @Getter
-  @Setter
-  private String otherName;
-
-  @Column(name = "year_of_birth")
-  @Getter
-  @Setter
-  private Integer yearOfBirth;
-
-  @Column(name = "gender", nullable = false)
+  @Column(name = "gender")
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private Gender gender;
-
-  @Column(name = "literacy")
-  @Enumerated(EnumType.STRING)
-  @Getter
-  @Setter
-  private Literacy literacy;
-
-  @Column(name = "education_level")
-  @Enumerated(EnumType.STRING)
-  @Getter
-  @Setter
-  private EducationLevel educationLevel;
 
   @Column(name = "phone_number", unique = true)
   @Getter
@@ -87,11 +63,6 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Getter
   @Setter
   private Community community;
-
-  @Column(name = "has_peer_supervisor")
-  @Getter
-  @Setter
-  private Boolean hasPeerSupervisor;
 
   @Column(name = "preferred_language", nullable = false)
   @Enumerated(EnumType.STRING)
@@ -125,12 +96,8 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
       name = getFirstName();
     }
 
-    if (StringUtils.isNotBlank(getOtherName())) {
-      name += " " + getOtherName();
-    }
-
-    if (StringUtils.isNotBlank(getSecondName())) {
-      name += " " + getSecondName();
+    if (StringUtils.isNotBlank(getFamilyName())) {
+      name += " " + getFamilyName();
     }
 
     return name.trim();

@@ -87,40 +87,11 @@ class ChwTable extends Component {
       Header: 'First name',
       accessor: 'firstName',
     }, {
-      Header: 'Surname',
-      accessor: 'secondName',
-    }, {
-      Header: 'Other name',
-      accessor: 'otherName',
-    }, {
-      Header: 'YOB',
-      accessor: 'yearOfBirth',
-      filterable: false,
+      Header: 'Family Name',
+      accessor: 'familyName',
     }, {
       Header: 'Gender',
       accessor: 'gender',
-      filterable: false,
-    }, {
-      Header: 'Education level',
-      accessor: 'educationLevel',
-      Filter: ({ onChange }) => (
-        <select
-          onChange={event => onChange(event.target.value)}
-          style={{ width: '100%' }}
-        >
-          <option value="">Show All</option>
-          <option value="pre_primary">Pre-primary</option>
-          <option value="primary">Primary</option>
-          <option value="junior_secondary">Junior Secondary</option>
-          <option value="secondary">Secondary</option>
-          <option value="senior_secondary">Senior Secondary</option>
-          <option value="higher">Higher</option>
-          <option value="university">University</option>
-          <option value="none">None</option>
-        </select>),
-    }, {
-      Header: 'Literacy',
-      accessor: 'literacy',
       filterable: false,
     }, {
       Header: 'District',

@@ -9,14 +9,11 @@ import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
 import org.motechproject.mots.validate.annotations.CommunityExistence;
-import org.motechproject.mots.validate.annotations.EducationLevel;
 import org.motechproject.mots.validate.annotations.Gender;
 import org.motechproject.mots.validate.annotations.Language;
-import org.motechproject.mots.validate.annotations.Literacy;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
-import org.motechproject.mots.validate.annotations.YearOfBirth;
 
 @PhoneNumberUniqueness
 @ChwIdUniqueness
@@ -41,35 +38,14 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_SECOND_NAME)
+  @NotBlank(message = ValidationMessages.EMPTY_FAMILY_NAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
-  private String secondName;
-
-  @Getter
-  @Setter
-  @JsonDeserialize(using = TrimTextDeserializer.class)
-  private String otherName;
-
-  @Getter
-  @Setter
-  @YearOfBirth
-  private String yearOfBirth;
+  private String familyName;
 
   @Getter
   @Setter
   @Gender
-  @NotEmpty(message = ValidationMessages.EMPTY_GENDER)
   private String gender;
-
-  @Getter
-  @Setter
-  @Literacy
-  private String literacy;
-
-  @Getter
-  @Setter
-  @EducationLevel
-  private String educationLevel;
 
   @Getter
   @Setter
@@ -111,10 +87,6 @@ public class CommunityHealthWorkerDto {
   @Uuid(message = ValidationMessages.INVALID_COMMUNITY_ID)
   @NotEmpty(message = ValidationMessages.EMPTY_COMMUNITY)
   private String communityId;
-
-  @Getter
-  @Setter
-  private Boolean hasPeerSupervisor;
 
   @Getter
   @Setter

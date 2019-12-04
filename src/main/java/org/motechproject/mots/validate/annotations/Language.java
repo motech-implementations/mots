@@ -19,7 +19,7 @@ public @interface Language {
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.INVALID_EDUCATIONAL_LEVEL;
+  String message() default ValidationMessages.INVALID_LANGUAGE;
 
   /**
    * Specify validation groups, to which this constraint belongs
