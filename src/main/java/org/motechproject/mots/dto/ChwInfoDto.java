@@ -25,10 +25,6 @@ public class ChwInfoDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_SECOND_NAME)
-  private String secondName;
-
-  @Getter
-  @Setter
-  private String otherName;
+  @NotBlank(message = ValidationMessages.EMPTY_FAMILY_NAME)
+  private String familyName;
 }

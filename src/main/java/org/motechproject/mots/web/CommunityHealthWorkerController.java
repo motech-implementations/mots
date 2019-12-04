@@ -67,10 +67,8 @@ public class CommunityHealthWorkerController extends BaseController {
   public Page<CommunityHealthWorkerDto> searchCommunityHealthWorkers(
       @RequestParam(value = "chwId", required = false) String chwId,
       @RequestParam(value = "firstName", required = false) String firstName,
-      @RequestParam(value = "secondName", required = false) String secondName,
-      @RequestParam(value = "otherName", required = false) String otherName,
+      @RequestParam(value = "familyName", required = false) String familyName,
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
-      @RequestParam(value = "educationLevel", required = false) String educationLevel,
       @RequestParam(value = COMMUNITY_NAME_PARAM, required = false) String communityName,
       @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
       @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdomName,
@@ -81,8 +79,8 @@ public class CommunityHealthWorkerController extends BaseController {
 
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
-            chwId, firstName, secondName, otherName, phoneNumber,
-            educationLevel, communityName, facilityName, chiefdomName,
+            chwId, firstName, familyName, phoneNumber,
+            communityName, facilityName, chiefdomName,
             districtName, groupName, selected, pageable);
 
     List<CommunityHealthWorkerDto> healthWorkersDto =

@@ -60,14 +60,6 @@ function getLocationById(list, id) {
   return {};
 }
 
-export function getSupervisorNameFromFacility(list, facilityId) {
-  const location = getLocationById(list, facilityId);
-  if (location) {
-    return location.inchargeFullName;
-  }
-  return {};
-}
-
 export function getSelectableLocations(
   requestedList, districts,
   districtId, chiefdomId, facilityId,

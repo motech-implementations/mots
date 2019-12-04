@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 public interface CommunityHealthWorkerRepositoryCustom {
 
   Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String secondName, String otherName, String phoneNumber,
-      String educationLevel, String communityId, String facilityId, String chiefdomId,
+      String chwId, String firstName, String familyName, String phoneNumber,
+      String communityId, String facilityId, String chiefdomId,
       String districtId, String groupName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException;
 }

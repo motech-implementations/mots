@@ -3,7 +3,6 @@ package org.motechproject.mots.service;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,10 +22,8 @@ import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Group;
-import org.motechproject.mots.domain.enums.EducationLevel;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
-import org.motechproject.mots.domain.enums.Literacy;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.exception.ChwException;
 import org.motechproject.mots.exception.EntityNotFoundException;
@@ -76,25 +73,18 @@ public class CommunityHealthWorkerService {
   private static final String CHIEFDOM_CSV_HEADER = "chiefdom";
   private static final String GROUP_CSV_HEADER = "group";
   private static final String FIRST_NAME_CSV_HEADER = "first_name";
-  private static final String SECOND_NAME_CSV_HEADER = "second_name";
-  private static final String OTHER_NAME_CSV_HEADER = "other_name";
-  private static final String AGE_CSV_HEADER = "age";
+  private static final String FAMILY_NAME_CSV_HEADER = "family_name";
   private static final String GENDER_CSV_HEADER = "gender";
-  private static final String READ_WRITE_CSV_HEADER = "read_write";
-  private static final String EDUCATION_CSV_HEADER = "education";
   private static final String MOBILE_CSV_HEADER = "mobile";
   private static final String COMMUNITY_CSV_HEADER = "community";
   private static final String PHU_CSV_HEADER = "phu";
-  private static final String PHU_SUPERVISOR_CSV_HEADER = "phu_supervisor";
-  private static final String PEER_SUPERVISOR_CSV_HEADER = "peer_supervisor";
   private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
       DISTRICT_CSV_HEADER, CHIEFDOM_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
-      SECOND_NAME_CSV_HEADER, OTHER_NAME_CSV_HEADER, AGE_CSV_HEADER, GENDER_CSV_HEADER,
-      READ_WRITE_CSV_HEADER, EDUCATION_CSV_HEADER, MOBILE_CSV_HEADER, COMMUNITY_CSV_HEADER,
-      PHU_CSV_HEADER, PHU_SUPERVISOR_CSV_HEADER, PEER_SUPERVISOR_CSV_HEADER,
-      PREFERRED_LANGUAGE_CSV_HEADER);
+      FAMILY_NAME_CSV_HEADER, GENDER_CSV_HEADER,
+      MOBILE_CSV_HEADER, COMMUNITY_CSV_HEADER,
+      PHU_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
 
   @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
@@ -136,12 +126,12 @@ public class CommunityHealthWorkerService {
    */
   @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String secondName, String otherName,
-      String phoneNumber, String educationLevel, String communityName, String facilityName,
+      String chwId, String firstName, String familyName,
+      String phoneNumber, String communityName, String facilityName,
       String chiefdomName, String districtName, String groupName,
       Boolean selected, Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
-        chwId, firstName, secondName, otherName, phoneNumber, educationLevel, communityName,
+        chwId, firstName, familyName, phoneNumber, communityName,
         facilityName, chiefdomName, districtName, groupName, selected, pageable);
   }
 
@@ -341,19 +331,10 @@ public class CommunityHealthWorkerService {
 
       communityHealthWorker.setChwId(chwId);
       communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER));
-      communityHealthWorker.setSecondName(csvRow.get(SECOND_NAME_CSV_HEADER));
-      communityHealthWorker.setOtherName(csvRow.get(OTHER_NAME_CSV_HEADER));
-      communityHealthWorker.setYearOfBirth(csvRow.get(AGE_CSV_HEADER) != null
-          ? LocalDate.now().getYear() - Integer.valueOf(csvRow.get(AGE_CSV_HEADER)) : null);
+      communityHealthWorker.setFamilyName(csvRow.get(FAMILY_NAME_CSV_HEADER));
       communityHealthWorker.setGender(Gender.getByDisplayName(csvRow.get(GENDER_CSV_HEADER)));
-      communityHealthWorker.setLiteracy(Literacy.getByDisplayName(
-          csvRow.get(READ_WRITE_CSV_HEADER)));
-      communityHealthWorker.setEducationLevel(EducationLevel.getByDisplayName(
-          csvRow.get(EDUCATION_CSV_HEADER)));
       communityHealthWorker.setPhoneNumber(phoneNumber);
       communityHealthWorker.setCommunity(chwCommunity);
-      communityHealthWorker.setHasPeerSupervisor(
-          csvRow.get(PEER_SUPERVISOR_CSV_HEADER).equals("Yes"));
       communityHealthWorker.setPreferredLanguage(preferredLanguage);
 
       if (group != null) {
@@ -394,43 +375,13 @@ public class CommunityHealthWorkerService {
       return true;
     }
 
-    if (StringUtils.isBlank(csvRow.get(CHIEFDOM_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Chiefdom is empty");
-      return true;
-    }
-
     if (StringUtils.isBlank(csvRow.get(FIRST_NAME_CSV_HEADER))) {
       errorMap.put(lineNumber, "First Name is empty");
       return true;
     }
 
-    if (StringUtils.isBlank(csvRow.get(SECOND_NAME_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Second Name is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(GENDER_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Gender is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(READ_WRITE_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Read Write is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(EDUCATION_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Education is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(PHU_CSV_HEADER))) {
-      errorMap.put(lineNumber, "PHU is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(PEER_SUPERVISOR_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Peer Supervisor is empty");
+    if (StringUtils.isBlank(csvRow.get(FAMILY_NAME_CSV_HEADER))) {
+      errorMap.put(lineNumber, "Family Name is empty");
       return true;
     }
 

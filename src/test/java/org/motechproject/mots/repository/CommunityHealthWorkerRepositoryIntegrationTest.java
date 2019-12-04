@@ -83,8 +83,8 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
   public void shouldFindChw() {
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(chw1.getChwId(),
-        chw1.getFirstName(), chw1.getSecondName(), chw1.getOtherName(), chw1.getPhoneNumber(),
-        chw1.getEducationLevel().toString(), community.getName(),
+        chw1.getFirstName(), chw1.getFamilyName(), chw1.getPhoneNumber(),
+        community.getName(),
         facility.getName(), chiefdom.getName(),
         district.getName(), null, false, null);
 
@@ -98,7 +98,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
   public void shouldFindChwByFirstName() {
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
-        chw2.getFirstName(), null, null, null, null,
+        chw2.getFirstName(), null, null,
         null, null, null, null, null, false, null);
 
     // then
@@ -111,7 +111,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
   public void shouldFindChwByDistrict() {
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
-        null, null, null, null, null,
+        null, null, null,
         null, null, null, district.getName(), null, false, null);
 
     // then

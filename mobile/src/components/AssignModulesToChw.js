@@ -109,7 +109,7 @@ class AssignModulesToChw extends Component {
           const chwList = response.map(chw => (
             {
               value: chw.id,
-              label: `${chw.chwId}: ${chw.firstName || ''} ${chw.otherName || ''} ${chw.secondName || ''}`,
+              label: `${chw.chwId}: ${chw.firstName || ''} ${chw.familyName || ''}`,
             }));
           this.setState({ chwList });
           if (this.props.chwId) {

@@ -38,9 +38,6 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "chwId", ignore = true),
       @Mapping(target = "community", source = "communityId"),
       @Mapping(target = "group", source = "groupId"),
-      @Mapping(target = "yearOfBirth",
-          expression = "java(healthWorkerDto.getYearOfBirth() == null ? null : "
-              + "Integer.parseInt(healthWorkerDto.getYearOfBirth()))")
   })
   void updateFromDto(CommunityHealthWorkerDto healthWorkerDto,
       @MappingTarget CommunityHealthWorker healthWorker);

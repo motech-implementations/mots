@@ -68,39 +68,13 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Surname',
-        name: 'secondName',
+        displayName: 'Family Name',
+        name: 'familyName',
         dataType: 'String',
         defaultValue: null,
-      }, {
-        displayName: 'Other name',
-        name: 'otherName',
-        dataType: 'String',
-        defaultValue: null,
-      }, {
-        displayName: 'YOB',
-        name: 'yearOfBirth',
       }, {
         displayName: 'Gender',
         name: 'gender',
-      }, {
-        displayName: 'Education level',
-        name: 'educationLevel',
-        dataType: 'Enum',
-        defaultValue: null,
-        options: [
-          'PRE_PRIMARY:Pre-primary',
-          'PRIMARY:Primary',
-          'JUNIOR_SECONDARY:Junior Secondary',
-          'SECONDARY:Secondary',
-          'SENIOR_SECONDARY:Senior Secondary',
-          'HIGHER:Higher',
-          'UNIVERSITY:University',
-          'NONE:None',
-        ],
-      }, {
-        displayName: 'Literacy',
-        name: 'literacy',
       }, {
         displayName: 'District',
         name: 'districtName',

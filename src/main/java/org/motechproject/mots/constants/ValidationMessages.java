@@ -5,8 +5,7 @@ public final class ValidationMessages {
   public static final String EMPTY_CHW_ID = "CHW Id cannot be empty";
   public static final String EMPTY_IVR_ID = "IVR Id cannot be empty";
   public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
-  public static final String EMPTY_SECOND_NAME = "Surname cannot be empty";
-  public static final String EMPTY_GENDER = "Gender cannot be empty";
+  public static final String EMPTY_FAMILY_NAME = "Family name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_COMMUNITY = "Community cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
@@ -38,10 +37,8 @@ public final class ValidationMessages {
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
   public static final String INVALID_DATE = "Invalid format of date";
   public static final String INVALID_PAST_DATE = "Date must be in the past";
-  public static final String INVALID_YEAR_OF_BIRTH = "Invalid year of birth";
   public static final String INVALID_GENDER = "Invalid gender";
-  public static final String INVALID_EDUCATIONAL_LEVEL = "Invalid education level";
-  public static final String INVALID_LITERACY = "Invalid literacy";
+  public static final String INVALID_LANGUAGE = "Invalid language";
   public static final String INVALID_CALL_FLOW_ELEMENT_TYPE = "Invalid call flow element type";
   public static final String INVALID_FACILITY_TYPE = "Invalid facility type";
   public static final String INVALID_IDS = "Invalid: %s UUID";
