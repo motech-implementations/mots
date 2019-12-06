@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import FormField from './form-field';
 import { fetchLocations } from '../actions/index';
 
-export const CHIEFDOM_FORM_NAME = 'ChiefdomForm';
+export const SECTOR_FORM_NAME = 'SectorForm';
 
 const FIELDS = {
   name: {
@@ -26,7 +26,7 @@ const FIELDS = {
   },
 };
 
-class ChiefdomForm extends Component {
+class SectorForm extends Component {
   constructor(props) {
     super(props);
 
@@ -83,10 +83,10 @@ function mapStateToProps(state) {
 
 export default reduxForm({
   validate,
-  form: CHIEFDOM_FORM_NAME,
-})(connect(mapStateToProps, { fetchLocations })(ChiefdomForm));
+  form: SECTOR_FORM_NAME,
+})(connect(mapStateToProps, { fetchLocations })(SectorForm));
 
-ChiefdomForm.propTypes = {
+SectorForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -95,7 +95,7 @@ ChiefdomForm.propTypes = {
   districtId: PropTypes.string,
 };
 
-ChiefdomForm.defaultProps = {
+SectorForm.defaultProps = {
   availableLocations: [],
   districtId: null,
 };

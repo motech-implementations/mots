@@ -63,11 +63,11 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  private String chiefdomName;
+  private String sectorName;
 
   @Getter
   @Setter
-  private String chiefdomId;
+  private String sectorId;
 
   @Getter
   @Setter

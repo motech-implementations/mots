@@ -33,7 +33,7 @@ public class CommunityHealthWorkerController extends BaseController {
 
   public static final String COMMUNITY_NAME_PARAM = "communityName";
   public static final String FACILITY_NAME_PARAM = "facilityName";
-  public static final String CHIEFDOM_NAME_PARAM = "chiefdomName";
+  public static final String SECTOR_NAME_PARAM = "sectorName";
   public static final String DISTRICT_NAME_PARAM = "districtName";
   public static final String GROUP_NAME_PARAM = "groupName";
 
@@ -71,7 +71,7 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
       @RequestParam(value = COMMUNITY_NAME_PARAM, required = false) String communityName,
       @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
-      @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdomName,
+      @RequestParam(value = SECTOR_NAME_PARAM, required = false) String sectorName,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String districtName,
       @RequestParam(value = GROUP_NAME_PARAM, required = false) String groupName,
       @RequestParam(value = "selected", required = false) Boolean selected,
@@ -80,7 +80,7 @@ public class CommunityHealthWorkerController extends BaseController {
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
             chwId, firstName, familyName, phoneNumber,
-            communityName, facilityName, chiefdomName,
+            communityName, facilityName, sectorName,
             districtName, groupName, selected, pageable);
 
     List<CommunityHealthWorkerDto> healthWorkersDto =

@@ -22,10 +22,10 @@ public interface CommunityHealthWorkerMapper {
       @Mapping(target = "communityName", source = "community.name"),
       @Mapping(target = "facilityName", source = "community.facility.name"),
       @Mapping(target = "facilityId", source = "community.facility.id"),
-      @Mapping(target = "chiefdomName", source = "community.facility.chiefdom.name"),
-      @Mapping(target = "chiefdomId", source = "community.facility.chiefdom.id"),
-      @Mapping(target = "districtName", source = "community.facility.chiefdom.district.name"),
-      @Mapping(target = "districtId", source = "community.facility.chiefdom.district.id"),
+      @Mapping(target = "sectorName", source = "community.facility.sector.name"),
+      @Mapping(target = "sectorId", source = "community.facility.sector.id"),
+      @Mapping(target = "districtName", source = "community.facility.sector.district.name"),
+      @Mapping(target = "districtId", source = "community.facility.sector.district.id"),
       @Mapping(target = "groupId", source = "group.id"),
       @Mapping(target = "groupName", source = "group.name")
   })

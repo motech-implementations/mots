@@ -2,8 +2,8 @@ package org.motechproject.mots.testbuilder;
 
 import java.util.Random;
 import java.util.UUID;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Facility;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.enums.FacilityType;
 
 public class FacilityDataBuilder {
@@ -15,10 +15,10 @@ public class FacilityDataBuilder {
   private String facilityId;
   private String name;
   private FacilityType facilityType;
-  private Chiefdom chiefdom;
+  private Sector sector;
 
   /**
-   * Returns instance of {@link ChiefdomDataBuilder} with sample data.
+   * Returns instance of {@link SectorDataBuilder} with sample data.
    */
   public FacilityDataBuilder() {
     instanceNumber++;
@@ -27,7 +27,7 @@ public class FacilityDataBuilder {
     facilityId = id.toString();
     name = "Facility #" + instanceNumber;
     facilityType = FacilityType.values()[RANDOM.nextInt(FacilityType.values().length)];
-    chiefdom = new ChiefdomDataBuilder().build();
+    sector = new SectorDataBuilder().build();
   }
 
   /**
@@ -39,7 +39,7 @@ public class FacilityDataBuilder {
     facility.setFacilityId(facilityId);
     facility.setName(name);
     facility.setType(facilityType);
-    facility.setChiefdom(chiefdom);
+    facility.setSector(sector);
 
     return facility;
   }
@@ -55,10 +55,10 @@ public class FacilityDataBuilder {
   }
 
   /**
-   * Adds Chiefdom for new {@link Facility}.
+   * Adds Sector for new {@link Facility}.
    */
-  public FacilityDataBuilder withChiefdom(Chiefdom chiefdom) {
-    this.chiefdom = chiefdom;
+  public FacilityDataBuilder withSector(Sector sector) {
+    this.sector = sector;
     return this;
   }
 }

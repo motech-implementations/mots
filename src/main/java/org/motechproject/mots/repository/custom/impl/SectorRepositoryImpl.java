@@ -6,50 +6,50 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.motechproject.mots.domain.Chiefdom;
-import org.motechproject.mots.repository.custom.ChiefdomRepositoryCustom;
+import org.motechproject.mots.domain.Sector;
+import org.motechproject.mots.repository.custom.SectorRepositoryCustom;
 import org.motechproject.mots.web.LocationController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public class ChiefdomRepositoryImpl extends BaseRepositoryImpl
-    implements ChiefdomRepositoryCustom {
+public class SectorRepositoryImpl extends BaseRepositoryImpl
+    implements SectorRepositoryCustom {
 
   /**
-   * Finds Chiefdoms matching all of the provided parameters.
-   * If there are no parameters, return all Chiefdoms.
+   * Finds Sectors matching all of the provided parameters.
+   * If there are no parameters, return all Sectors.
    */
   @Override
-  public Page<Chiefdom> search(String chiefdomName, String parentDistrict, Pageable pageable)
+  public Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable)
       throws IllegalArgumentException {
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-    CriteriaQuery<Chiefdom> query = builder.createQuery(Chiefdom.class);
-    query = prepareQuery(query, chiefdomName, parentDistrict, false, pageable);
+    CriteriaQuery<Sector> query = builder.createQuery(Sector.class);
+    query = prepareQuery(query, sectorName, parentDistrict, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, chiefdomName, parentDistrict, true, pageable);
+    countQuery = prepareQuery(countQuery, sectorName, parentDistrict, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
     int pageSize = getPageSize(pageable);
     int firstResult = getFirstResult(pageable, pageSize);
-    List<Chiefdom> chiefdoms = entityManager.createQuery(query)
+    List<Sector> sectors = entityManager.createQuery(query)
         .setMaxResults(pageSize)
         .setFirstResult(firstResult)
         .getResultList();
 
-    return new PageImpl<>(chiefdoms, pageable, count);
+    return new PageImpl<>(sectors, pageable, count);
   }
 
-  private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String chiefdomName,
+  private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String sectorName,
       String parentDistrict, boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-    Root<Chiefdom> root = query.from(Chiefdom.class);
+    Root<Sector> root = query.from(Sector.class);
 
     if (count) {
       CriteriaQuery<Long> countQuery = (CriteriaQuery<Long>) query;
@@ -57,9 +57,9 @@ public class ChiefdomRepositoryImpl extends BaseRepositoryImpl
     }
 
     Predicate predicate = builder.conjunction();
-    if (chiefdomName != null) {
+    if (sectorName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
-          '%' + chiefdomName.trim() + '%'));
+          '%' + sectorName.trim() + '%'));
     }
     if (parentDistrict != null) {
       predicate = builder.and(predicate, builder.like(root.get(DISTRICT).get(NAME),

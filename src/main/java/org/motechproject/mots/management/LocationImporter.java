@@ -12,10 +12,10 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +36,12 @@ public class LocationImporter implements ApplicationRunner {
   private boolean loadLocations;
 
   private static final String DISTRICT_HEADER = "District";
-  private static final String CHIEFDOM_HEADER = "Chiefdom";
+  private static final String SECTOR_HEADER = "Sector";
   private static final String FACILITY_HEADER = "FACILITY_NAME";
   private static final String COMMUNITY_HEADER = "Community";
 
   private static final int DISTRICT_COL_NUMBER = 0;
-  private static final int CHIEFDOM_COL_NUMBER = 1;
+  private static final int SECTOR_COL_NUMBER = 1;
   private static final int FACILITY_COL_NUMBER = 2;
   private static final int COMMUNITY_COL_NUMBER = 3;
 
@@ -52,7 +52,7 @@ public class LocationImporter implements ApplicationRunner {
   private static final int NAME_FACILITY_COL_NUMBER = 4;
 
   private List<District> currentDistrictList;
-  private List<Chiefdom> currentChiefdomList;
+  private List<Sector> currentSectorList;
   private List<Facility> currentFacilityList;
   private List<Community> currentCommunityList;
 
@@ -76,7 +76,7 @@ public class LocationImporter implements ApplicationRunner {
     }
 
     this.currentDistrictList = locationService.getDistricts();
-    this.currentChiefdomList = locationService.getChiefdoms();
+    this.currentSectorList = locationService.getSectors();
     this.currentFacilityList = locationService.getFacilites();
     this.currentCommunityList = locationService.getCommunities();
 
@@ -87,8 +87,8 @@ public class LocationImporter implements ApplicationRunner {
     parseDistricts(sheet);
     this.currentDistrictList = locationService.getDistricts();
 
-    parseChiefdoms(sheet);
-    this.currentChiefdomList = locationService.getChiefdoms();
+    parseSectors(sheet);
+    this.currentSectorList = locationService.getSectors();
 
     sheet = wb.getSheet(FACILITIES_SHEET);
     parseFacilities(sheet);
@@ -131,15 +131,15 @@ public class LocationImporter implements ApplicationRunner {
     });
   }
 
-  private void parseChiefdoms(XSSFSheet sheet) {
+  private void parseSectors(XSSFSheet sheet) {
     XSSFRow row;
     XSSFCell cell;
     Iterator rows = sheet.rowIterator();
-    HashSet<Chiefdom> newChiefdomSet = new HashSet<>();
+    HashSet<Sector> newSectorSet = new HashSet<>();
 
     while (rows.hasNext()) {
       row = (XSSFRow) rows.next();
-      cell = row.getCell(CHIEFDOM_COL_NUMBER);
+      cell = row.getCell(SECTOR_COL_NUMBER);
 
       if (cell == null) {
         continue;
@@ -147,25 +147,25 @@ public class LocationImporter implements ApplicationRunner {
 
       String cellText = cell.getStringCellValue();
 
-      if (cellText.equals(CHIEFDOM_HEADER) || StringUtils.isEmpty(cellText)) {
+      if (cellText.equals(SECTOR_HEADER) || StringUtils.isEmpty(cellText)) {
         continue;
       }
 
-      Chiefdom chiefdom = new Chiefdom(cellText);
+      Sector sector = new Sector(cellText);
       String parentName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 
       District parent = currentDistrictList.stream()
           .filter(district -> district.getName().equals(parentName))
-          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Chiefdom parent "
-              + "is not defined properly in spreadsheet", chiefdom.getName())));
+          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Sector parent "
+              + "is not defined properly in spreadsheet", sector.getName())));
 
-      chiefdom.setDistrict(parent);
-      newChiefdomSet.add(chiefdom);
+      sector.setDistrict(parent);
+      newSectorSet.add(sector);
     }
 
-    newChiefdomSet.forEach(newChiefdom ->  {
-      if (!currentChiefdomList.contains(newChiefdom)) {
-        locationService.createChiefdom(newChiefdom);
+    newSectorSet.forEach(newSector ->  {
+      if (!currentSectorList.contains(newSector)) {
+        locationService.createSector(newSector);
       }
     });
   }
@@ -197,16 +197,16 @@ public class LocationImporter implements ApplicationRunner {
           row.getCell(NAME_FACILITY_COL_NUMBER).getStringCellValue());
 
       Facility facility = new Facility(cellText, facilityType, facilityId);
-      String parentChiefdomName = row.getCell(CHIEFDOM_COL_NUMBER).getStringCellValue();
+      String parentSectorName = row.getCell(SECTOR_COL_NUMBER).getStringCellValue();
       String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 
-      Chiefdom parent = currentChiefdomList.stream()
-          .filter(chiefdom -> chiefdom.getName().equals(parentChiefdomName)
-              && chiefdom.getDistrict().getName().equals(parentDistrictName))
+      Sector parent = currentSectorList.stream()
+          .filter(sector -> sector.getName().equals(parentSectorName)
+              && sector.getDistrict().getName().equals(parentDistrictName))
           .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Facility parent "
               + "is not defined properly in spreadsheet", facility.getName())));
 
-      facility.setChiefdom(parent);
+      facility.setSector(parent);
       newFacilitySet.add(facility);
     }
 
@@ -239,13 +239,13 @@ public class LocationImporter implements ApplicationRunner {
 
       Community community = new Community(cellText);
       String parentFacilityName = row.getCell(FACILITY_COL_NUMBER).getStringCellValue();
-      String parentChiefdomName = row.getCell(CHIEFDOM_COL_NUMBER).getStringCellValue();
+      String parentSectorName = row.getCell(SECTOR_COL_NUMBER).getStringCellValue();
       String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 
       Facility parent = currentFacilityList.stream()
           .filter(facility -> facility.getName().equals(parentFacilityName)
-              && facility.getChiefdom().getName().equals(parentChiefdomName)
-              && facility.getChiefdom().getDistrict().getName().equals(parentDistrictName))
+              && facility.getSector().getName().equals(parentSectorName)
+              && facility.getSector().getDistrict().getName().equals(parentDistrictName))
           .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Community parent "
               + "is not defined properly in spreadsheet", community.getName())));
 

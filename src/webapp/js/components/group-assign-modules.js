@@ -18,11 +18,11 @@ class DistrictAssignModules extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chiefdomOptions: [],
+      sectorOptions: [],
       facilityOptions: [],
       selectedModules: null,
       selectedDistrict: null,
-      selectedChiefdom: null,
+      selectedSector: null,
       selectedFacility: null,
       startDate: '',
       endDate: '',
@@ -35,7 +35,7 @@ class DistrictAssignModules extends Component {
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
     this.handleDistrictChange = this.handleDistrictChange.bind(this);
-    this.handleChiefdomChange = this.handleChiefdomChange.bind(this);
+    this.handleSectorChange = this.handleSectorChange.bind(this);
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.handleDelayNotificationChange = this.handleDelayNotificationChange.bind(this);
@@ -55,28 +55,28 @@ class DistrictAssignModules extends Component {
     this.fetchGroups();
   }
 
-  getChiefdomOptions(selectedDistrict) {
+  getSectorOptions(selectedDistrict) {
     if (selectedDistrict != null) {
-      const chiefdoms = getSelectableLocations(
-        'chiefdoms',
+      const sectors = getSelectableLocations(
+        'sectors',
         this.props.availableLocations,
         selectedDistrict.value,
       );
       return _.map(
-        chiefdoms,
-        chiefdom => ({ value: chiefdom.id, label: chiefdom.name }),
+        sectors,
+        sector => ({ value: sector.id, label: sector.name }),
       );
     }
     return [];
   }
 
-  getFacilityOptions(selectedChiefdom) {
-    if (selectedChiefdom != null) {
+  getFacilityOptions(selectedSector) {
+    if (selectedSector != null) {
       const facilities = getSelectableLocations(
         'facilities',
         this.props.availableLocations,
         this.state.selectedDistrict.value,
-        selectedChiefdom.value,
+        selectedSector.value,
       );
       return _.map(
         facilities,
@@ -109,8 +109,8 @@ class DistrictAssignModules extends Component {
       if (this.state.selectedIndex === 0) {
         payload.districtId = this.state.selectedDistrict.value;
 
-        if (this.state.selectedChiefdom !== null) {
-          payload.chiefdomId = this.state.selectedChiefdom.value;
+        if (this.state.selectedSector !== null) {
+          payload.sectorId = this.state.selectedSector.value;
         }
         if (this.state.selectedFacility !== null) {
           payload.facilityId = this.state.selectedFacility.value;
@@ -140,17 +140,17 @@ class DistrictAssignModules extends Component {
   handleDistrictChange = (selectedDistrict) => {
     this.setState({
       selectedDistrict,
-      selectedChiefdom: null,
+      selectedSector: null,
       selectedFacility: null,
-      chiefdomOptions: this.getChiefdomOptions(selectedDistrict),
+      sectorOptions: this.getSectorOptions(selectedDistrict),
     });
   };
 
-  handleChiefdomChange = (selectedChiefdom) => {
+  handleSectorChange = (selectedSector) => {
     this.setState({
-      selectedChiefdom,
+      selectedSector,
       selectedFacility: null,
-      facilityOptions: this.getFacilityOptions(selectedChiefdom),
+      facilityOptions: this.getFacilityOptions(selectedSector),
     });
   };
 
@@ -245,13 +245,13 @@ class DistrictAssignModules extends Component {
                 menuContainerStyle={{ zIndex: 5 }}
               />
               <Select
-                name="chiefdom"
-                value={this.state.selectedChiefdom}
-                options={this.state.chiefdomOptions}
+                name="sector"
+                value={this.state.selectedSector}
+                options={this.state.sectorOptions}
                 disabled={!this.state.selectedDistrict}
-                onChange={this.handleChiefdomChange}
+                onChange={this.handleSectorChange}
                 onFocus={() => this.props.resetLogoutCounter()}
-                placeholder="Select a Chiefdom (optional)"
+                placeholder="Select a Sector (optional)"
                 className="margin-bottom-md col-md-12"
                 menuContainerStyle={{ zIndex: 5 }}
               />
@@ -259,7 +259,7 @@ class DistrictAssignModules extends Component {
                 name="facility"
                 value={this.state.selectedFacility}
                 options={this.state.facilityOptions}
-                disabled={!this.state.selectedChiefdom}
+                disabled={!this.state.selectedSector}
                 onChange={this.handleFacilityChange}
                 onFocus={() => this.props.resetLogoutCounter()}
                 placeholder="Select a Facility (optional)"

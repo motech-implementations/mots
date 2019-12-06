@@ -6,11 +6,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.Valid;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
-import org.motechproject.mots.dto.ChiefdomCreationDto;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.dto.CommunityCreationDto;
 import org.motechproject.mots.dto.CommunityExtendedInfoDto;
 import org.motechproject.mots.dto.DistrictCreationDto;
@@ -18,6 +17,7 @@ import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
 import org.motechproject.mots.dto.FacilityExtendedInfoDto;
 import org.motechproject.mots.dto.LocationPreviewDto;
+import org.motechproject.mots.dto.SectorCreationDto;
 import org.motechproject.mots.mapper.LocationMapper;
 import org.motechproject.mots.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class LocationController extends BaseController {
   public static final String FACILITY_TYPE_PARAM = "facilityType";
   public static final String INCHARGE_FULL_NAME_PARAM = "inchargeFullName";
   public static final String FACILITY_ID_PARAM = "facilityId";
-  public static final String CHIEFDOM_NAME_PARAM = "chiefdomName";
+  public static final String SECTOR_NAME_PARAM = "sectorName";
   public static final String DISTRICT_NAME_PARAM = "districtName";
 
   @Autowired
@@ -56,7 +56,7 @@ public class LocationController extends BaseController {
 
   /**
    * Creates District.
-   * 
+   *
    * @param districtCreationDto DTO of District to be created
    * @return created District
    */
@@ -72,20 +72,20 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Creates Chiefdom.
-   * @param chiefdomCreationDto DTO of chiefdom to be created
-   * @return created Chiefdom
+   * Creates Sector.
+   * @param sectorCreationDto DTO of sector to be created
+   * @return created Sector
    */
-  @RequestMapping(value = "/chiefdom", method = RequestMethod.POST)
+  @RequestMapping(value = "/sector", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
-  public ChiefdomCreationDto createChiefdom(
-      @RequestBody @Valid ChiefdomCreationDto chiefdomCreationDto,
+  public SectorCreationDto createSector(
+      @RequestBody @Valid SectorCreationDto sectorCreationDto,
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    Chiefdom chiefdom = locationMapper.fromDtoToChiefdom(chiefdomCreationDto);
+    Sector sector = locationMapper.fromDtoToSector(sectorCreationDto);
 
-    return locationMapper.toChiefdomCreationDto(locationService.createChiefdom(chiefdom));
+    return locationMapper.toSectorCreationDto(locationService.createSector(sector));
   }
 
   /**
@@ -145,23 +145,23 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Update Chiefdom.
-   * @param id                   id of Chiefdom to update
-   * @param chiefdomCreationDto DTO of Chiefdom to be updated
-   * @return updated Chiefdom
+   * Update Sector.
+   * @param id                   id of Sector to update
+   * @param sectorCreationDto DTO of Sector to be updated
+   * @return updated Sector
    */
-  @RequestMapping(value = "/chiefdom/{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/sector/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public ChiefdomCreationDto saveChiefdom(@PathVariable("id") UUID id,
-      @RequestBody @Valid ChiefdomCreationDto chiefdomCreationDto, BindingResult bindingResult) {
+  public SectorCreationDto saveSector(@PathVariable("id") UUID id,
+      @RequestBody @Valid SectorCreationDto sectorCreationDto, BindingResult bindingResult) {
 
     checkBindingResult(bindingResult);
 
-    Chiefdom chiefdom = locationService.getChiefdom(id);
-    locationMapper.updateChiefdomFromDto(chiefdomCreationDto, chiefdom);
+    Sector sector = locationService.getSector(id);
+    locationMapper.updateSectorFromDto(sectorCreationDto, sector);
 
-    return locationMapper.toChiefdomCreationDto(locationService.saveChiefdom(chiefdom));
+    return locationMapper.toSectorCreationDto(locationService.saveSector(sector));
   }
 
   /**
@@ -208,7 +208,7 @@ public class LocationController extends BaseController {
 
   /**
    * Get District with given id.
-   * 
+   *
    * @param id id of District to find
    * @return DistrictCreationDto with given id
    */
@@ -222,17 +222,17 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get Chiefdom with given id.
-   * @param id id of Chiefdom to find
-   * @return ChiefdomCreationDto with given id
+   * Get Sector with given id.
+   * @param id id of Sector to find
+   * @return SectorCreationDto with given id
    */
-  @RequestMapping(value = "/chiefdom/{id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/sector/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public ChiefdomCreationDto getChiefdom(@PathVariable("id") UUID id) {
-    Chiefdom chiefdom = locationService.getChiefdom(id);
+  public SectorCreationDto getSector(@PathVariable("id") UUID id) {
+    Sector sector = locationService.getSector(id);
 
-    return locationMapper.toChiefdomCreationDto(chiefdom);
+    return locationMapper.toSectorCreationDto(sector);
   }
 
   /**
@@ -290,16 +290,16 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of chiefdoms for preview.
-   * @return list of all chiefdoms
+   * Get list of Sectors for preview.
+   * @return list of all Sectors
    */
-  @RequestMapping(value = "/chiefdomsOnly", method = RequestMethod.GET)
+  @RequestMapping(value = "/sectorsOnly", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Set<LocationPreviewDto> getChiefdomsOnly() {
-    List<Chiefdom> chiefdoms = locationService.getChiefdoms();
+  public Set<LocationPreviewDto> getSectorsOnly() {
+    List<Sector> sectors = locationService.getSectors();
 
-    return locationMapper.toLocationPreviewDtos(chiefdoms);
+    return locationMapper.toLocationPreviewDtos(sectors);
   }
 
   /**
@@ -347,23 +347,23 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Finds chiefdoms matching all of the provided parameters.
-   * If there are no parameters, return all chiefdoms.
+   * Finds Sectors matching all of the provided parameters.
+   * If there are no parameters, return all Sectors.
    */
-  @RequestMapping(value = "chiefdom/locations/search", method = RequestMethod.GET)
+  @RequestMapping(value = "sector/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Page<LocationPreviewDto> searchChiefdoms(
+  public Page<LocationPreviewDto> searchSectors(
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentDistrict,
       Pageable pageable) throws IllegalArgumentException {
 
-    Page<Chiefdom> chiefdoms =
-        locationService.searchChiefdoms(name, parentDistrict, pageable);
+    Page<Sector> sectors =
+        locationService.searchSectors(name, parentDistrict, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtosWithOrder(chiefdoms.getContent());
+        locationMapper.toLocationPreviewDtosWithOrder(sectors.getContent());
 
-    return new PageImpl<>(locationPreviewDtos, pageable, chiefdoms.getTotalElements());
+    return new PageImpl<>(locationPreviewDtos, pageable, sectors.getTotalElements());
   }
 
   /**
@@ -376,12 +376,12 @@ public class LocationController extends BaseController {
   public Page<LocationPreviewDto> searchCommunities(
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
-      @RequestParam(value = CHIEFDOM_NAME_PARAM, required = false) String chiefdom,
+      @RequestParam(value = SECTOR_NAME_PARAM, required = false) String sector,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Community> communities =
-        locationService.searchCommunities(name, parentFacility, chiefdom, district, pageable);
+        locationService.searchCommunities(name, parentFacility, sector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(communities.getContent());
 
@@ -400,12 +400,12 @@ public class LocationController extends BaseController {
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
       @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
-      @RequestParam(value = PARENT_PARAM, required = false) String parentChiefdom,
+      @RequestParam(value = PARENT_PARAM, required = false) String parentSector,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
     Page<Facility> facilities = locationService.searchFacilities(
-        facilityId, name, facilityType, inchargeFullName, parentChiefdom, district, pageable);
+        facilityId, name, facilityType, inchargeFullName, parentSector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
 
@@ -413,15 +413,15 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Import list of Chiefdoms in ".csv" format to mots, parse it and save records in DB.
+   * Import list of Sectors in ".csv" format to mots, parse it and save records in DB.
    * @param file File in ".csv" format to upload
    */
-  @RequestMapping(value = "/chiefdom/import", method = RequestMethod.POST)
+  @RequestMapping(value = "/sector/import", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Map<Integer, String> importChiefdomCsv(@RequestPart("file") MultipartFile file)
+  public Map<Integer, String> importSectorCsv(@RequestPart("file") MultipartFile file)
       throws IOException {
-    return locationService.importChiefdomsFromCsv(file);
+    return locationService.importSectorsFromCsv(file);
   }
 
   /**

@@ -129,19 +129,19 @@ const FIELDS = {
         input,
         availableLocations,
         CHW_FORM_NAME,
-        'chiefdomId',
+        'sectorId',
         'facilityId',
         'communityId',
       )
     ),
   },
-  chiefdomId: {
+  sectorId: {
     type: Select,
-    label: 'Chiefdom',
+    label: 'Sector',
     required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
-        'chiefdoms',
+        'sectors',
         availableLocations,
         districtId,
       ),
@@ -152,7 +152,7 @@ const FIELDS = {
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
-          'chiefdoms',
+          'sectors',
           availableLocations,
           districtId,
         ),
@@ -169,31 +169,31 @@ const FIELDS = {
     type: Select,
     label: 'Facility',
     required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+    getSelectOptions: ({ availableLocations, districtId, sectorId }) => ({
       values: getSelectableLocations(
         'facilities',
         availableLocations,
         districtId,
-        chiefdomId,
+        sectorId,
       ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: (input, { availableLocations, districtId, chiefdomId }) => (
+    getAttributes: (input, { availableLocations, districtId, sectorId }) => (
       getAttributesForSelectWithClearOnChange(
         input,
         getSelectableLocations(
           'facilities',
           availableLocations,
           districtId,
-          chiefdomId,
+          sectorId,
         ),
         CHW_FORM_NAME,
         'communityId',
       )
     ),
-    getDynamicAttributes: ({ chiefdomId }) => ({
-      hidden: !chiefdomId,
+    getDynamicAttributes: ({ sectorId }) => ({
+      hidden: !sectorId,
     }),
   },
   communityId: {
@@ -201,20 +201,20 @@ const FIELDS = {
     label: 'Community',
     required: true,
     getSelectOptions: ({
-      availableLocations, districtId, chiefdomId, facilityId,
+      availableLocations, districtId, sectorId, facilityId,
     }) => ({
       values: getSelectableLocations(
         'communities',
         availableLocations,
         districtId,
-        chiefdomId,
+        sectorId,
         facilityId,
       ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
     getAttributes: (input, {
-      availableLocations, districtId, chiefdomId, facilityId,
+      availableLocations, districtId, sectorId, facilityId,
     }) => (
       getAttributesForSelect(
         input,
@@ -222,7 +222,7 @@ const FIELDS = {
           'communities',
           availableLocations,
           districtId,
-          chiefdomId,
+          sectorId,
           facilityId,
         ),
       )
@@ -289,7 +289,7 @@ class HealthWorkersForm extends Component {
         fieldConfig={fieldConfig}
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
-        chiefdomId={this.props.chiefdomId}
+        sectorId={this.props.sectorId}
         facilityId={this.props.facilityId}
         isChwIdDisabled={this.props.isChwIdDisabled}
         notSelectedChwIds={this.props.notSelectedChwIds}
@@ -364,7 +364,7 @@ function mapStateToProps(state) {
   return {
     availableLocations: state.availableLocations.districts,
     districtId: selector(state, 'districtId'),
-    chiefdomId: selector(state, 'chiefdomId'),
+    sectorId: selector(state, 'sectorId'),
     facilityId: selector(state, 'facilityId'),
   };
 }
@@ -381,7 +381,7 @@ HealthWorkersForm.propTypes = {
   fetchLocations: PropTypes.func.isRequired,
   availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
-  chiefdomId: PropTypes.string,
+  sectorId: PropTypes.string,
   facilityId: PropTypes.string,
   loading: PropTypes.bool,
   isChwIdDisabled: PropTypes.bool,
@@ -391,7 +391,7 @@ HealthWorkersForm.propTypes = {
 HealthWorkersForm.defaultProps = {
   availableLocations: [],
   districtId: null,
-  chiefdomId: null,
+  sectorId: null,
   facilityId: null,
   loading: false,
   isChwIdDisabled: false,

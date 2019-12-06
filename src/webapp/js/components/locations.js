@@ -9,7 +9,7 @@ import 'react-tabs/style/react-tabs.scss';
 import { resetLogoutCounter } from '../actions/index';
 import LocationsTable from '../container/locations-table';
 import {
-  FETCH_CHIEFDOMS, FETCH_DISTRICTS, FETCH_FACILITIES,
+  FETCH_SECTORS, FETCH_DISTRICTS, FETCH_FACILITIES,
   FETCH_COMMUNITIES,
 } from '../actions/types';
 import {
@@ -79,8 +79,8 @@ class Locations extends Component {
       Header: 'Facility',
       accessor: 'parent',
     }, {
-      Header: 'Chiefdom',
-      accessor: 'chiefdomName',
+      Header: 'Sector',
+      accessor: 'sectorName',
     }, {
       Header: 'District',
       accessor: 'districtName',
@@ -125,7 +125,7 @@ class Locations extends Component {
       Header: 'Incharge name',
       accessor: 'inchargeFullName',
     }, {
-      Header: 'Chiefdom',
+      Header: 'Sector',
       accessor: 'parent',
     }, {
       Header: 'District',
@@ -133,7 +133,7 @@ class Locations extends Component {
     },
   ];
 
-  static getChiefdomColumns = () => [
+  static getSectorColumns = () => [
     {
       Header: 'Actions',
       minWidth: 50,
@@ -142,7 +142,7 @@ class Locations extends Component {
         <div className="actions-buttons-container">
           {canEditLocation(cellInfo.original) &&
             <Link
-              to={`/locations/chiefdom/${cellInfo.value}`}
+              to={`/locations/sector/${cellInfo.value}`}
               type="button"
               className="btn btn-primary margin-right-sm"
               title="Edit"
@@ -209,7 +209,7 @@ class Locations extends Component {
           <TabList>
             <Tab>Communities</Tab>
             <Tab>Facilities</Tab>
-            <Tab>Chiefdoms</Tab>
+            <Tab>Sectors</Tab>
             <Tab>Districts</Tab>
           </TabList>
 
@@ -227,8 +227,8 @@ class Locations extends Component {
           </TabPanel>
           <TabPanel>
             <LocationsTable
-              locationType={FETCH_CHIEFDOMS}
-              tableColumns={Locations.getChiefdomColumns()}
+              locationType={FETCH_SECTORS}
+              tableColumns={Locations.getSectorColumns()}
             />
           </TabPanel>
           <TabPanel>

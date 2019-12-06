@@ -24,7 +24,7 @@ public class FacilityExtendedInfoDto {
   @Setter
   @Getter
   @Uuid
-  private String chiefdomId;
+  private String sectorId;
 
   @Setter
   @Getter

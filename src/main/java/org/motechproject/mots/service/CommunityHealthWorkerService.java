@@ -70,7 +70,7 @@ public class CommunityHealthWorkerService {
 
   private static final String CHW_ID_CSV_HEADER = "chw id";
   private static final String DISTRICT_CSV_HEADER = "district";
-  private static final String CHIEFDOM_CSV_HEADER = "chiefdom";
+  private static final String SECTOR_CSV_HEADER = "sector";
   private static final String GROUP_CSV_HEADER = "group";
   private static final String FIRST_NAME_CSV_HEADER = "first_name";
   private static final String FAMILY_NAME_CSV_HEADER = "family_name";
@@ -81,7 +81,7 @@ public class CommunityHealthWorkerService {
   private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
-      DISTRICT_CSV_HEADER, CHIEFDOM_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
+      DISTRICT_CSV_HEADER, SECTOR_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
       FAMILY_NAME_CSV_HEADER, GENDER_CSV_HEADER,
       MOBILE_CSV_HEADER, COMMUNITY_CSV_HEADER,
       PHU_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
@@ -128,11 +128,11 @@ public class CommunityHealthWorkerService {
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String familyName,
       String phoneNumber, String communityName, String facilityName,
-      String chiefdomName, String districtName, String groupName,
+      String sectorName, String districtName, String groupName,
       Boolean selected, Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
         chwId, firstName, familyName, phoneNumber, communityName,
-        facilityName, chiefdomName, districtName, groupName, selected, pageable);
+        facilityName, sectorName, districtName, groupName, selected, pageable);
   }
 
   /**

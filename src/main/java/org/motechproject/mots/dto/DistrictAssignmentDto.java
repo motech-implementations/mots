@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
 import org.motechproject.mots.validate.annotations.FacilityExistence;
+import org.motechproject.mots.validate.annotations.SectorExistence;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class DistrictAssignmentDto extends BulkAssignmentDto {
@@ -20,9 +20,9 @@ public class DistrictAssignmentDto extends BulkAssignmentDto {
 
   @Getter
   @Setter
-  @ChiefdomExistence
-  @Uuid(message = ValidationMessages.INVALID_CHIEFDOM_ID)
-  private String chiefdomId;
+  @SectorExistence
+  @Uuid(message = ValidationMessages.INVALID_SECTOR_ID)
+  private String sectorId;
 
   @Getter
   @Setter

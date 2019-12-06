@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.ChiefdomExistenceValidator;
+import org.motechproject.mots.validate.constraintvalidators.SectorExistenceValidator;
 
 @Target(ElementType.FIELD)
-@Constraint(validatedBy = {ChiefdomExistenceValidator.class})
+@Constraint(validatedBy = {SectorExistenceValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ChiefdomExistence {
+public @interface SectorExistence {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_EXISTING_CHIEFDOM;
+  String message() default ValidationMessages.NOT_EXISTING_SECTOR;
 
   /**
    * Specify validation groups, to which this constraint belongs

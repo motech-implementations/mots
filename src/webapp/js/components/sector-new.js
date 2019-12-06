@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 
-import ChiefdomForm from './chiefdom-form';
-import { createChiefdom } from '../actions';
+import SectorForm from './sector-form';
+import { createSector } from '../actions';
 import {
   hasAuthority,
   CREATE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
-class ChiefdomNew extends Component {
+class SectorNew extends Component {
   constructor(props) {
     super(props);
 
@@ -34,8 +34,8 @@ class ChiefdomNew extends Component {
       districtId: values.districtId,
     };
 
-    this.props.createChiefdom(valuesToSend, () => {
-      Alert.success('Chiefdom has been added');
+    this.props.createSector(valuesToSend, () => {
+      Alert.success('Sector has been added');
       this.props.history.push({
         pathname: '/locations/2',
       });
@@ -45,17 +45,17 @@ class ChiefdomNew extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Add Chiefdom</h1>
-        <ChiefdomForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Add Sector</h1>
+        <SectorForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
       </div>
     );
   }
 }
 
-export default connect(null, { createChiefdom })(ChiefdomNew);
+export default connect(null, { createSector })(SectorNew);
 
-ChiefdomNew.propTypes = {
-  createChiefdom: PropTypes.func.isRequired,
+SectorNew.propTypes = {
+  createSector: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

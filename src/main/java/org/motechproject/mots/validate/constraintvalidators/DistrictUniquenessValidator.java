@@ -1,10 +1,8 @@
 package org.motechproject.mots.validate.constraintvalidators;
 
 import java.util.Optional;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.District;

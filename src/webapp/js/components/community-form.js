@@ -27,15 +27,15 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, COMMUNITY_FORM_NAME, 'chiefdomId', 'facilityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, COMMUNITY_FORM_NAME, 'sectorId', 'facilityId')),
   },
-  chiefdomId: {
+  sectorId: {
     type: 'select',
-    label: 'Chiefdom',
+    label: 'Sector',
     required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
-        'chiefdoms',
+        'sectors',
         availableLocations,
         districtId,
       ),
@@ -48,12 +48,12 @@ const FIELDS = {
     type: 'select',
     label: 'Facility',
     required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+    getSelectOptions: ({ availableLocations, districtId, sectorId }) => ({
       values: getSelectableLocations(
         'facilities',
         availableLocations,
         districtId,
-        chiefdomId,
+        sectorId,
       ),
       displayNameKey: 'name',
       valueKey: 'id',
@@ -80,7 +80,7 @@ class CommunityForm extends Component {
         fieldConfig={fieldConfig}
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
-        chiefdomId={this.props.chiefdomId}
+        sectorId={this.props.sectorId}
         facilityId={this.props.facilityId}
       />
     );
@@ -119,7 +119,7 @@ function mapStateToProps(state) {
   return {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
-    chiefdomId: selector(state, 'chiefdomId'),
+    sectorId: selector(state, 'sectorId'),
     facilityId: selector(state, 'facilityId'),
   };
 }
@@ -136,14 +136,14 @@ CommunityForm.propTypes = {
   fetchLocations: PropTypes.func.isRequired,
   availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
-  chiefdomId: PropTypes.string,
+  sectorId: PropTypes.string,
   facilityId: PropTypes.string,
 };
 
 CommunityForm.defaultProps = {
   availableLocations: [],
   districtId: null,
-  chiefdomId: null,
+  sectorId: null,
   facilityId: null,
 };
 

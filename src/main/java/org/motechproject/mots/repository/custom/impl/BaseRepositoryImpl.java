@@ -28,7 +28,7 @@ public abstract class BaseRepositoryImpl {
   protected static final String FACILITY_TYPE = "type";
   protected static final String NAME = "name";
   protected static final String FACILITY = "facility";
-  protected static final String CHIEFDOM = "chiefdom";
+  protected static final String SECTOR = "sector";
   protected static final String DISTRICT = "district";
   protected static final String COMMUNITY = "community";
   protected static final String EMAIL = "email";

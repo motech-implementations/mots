@@ -16,12 +16,12 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "chiefdom", uniqueConstraints =
+@Table(name = "sector", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "district_id"}))
 @EqualsAndHashCode(callSuper = true, of = {"district"})
-public class Chiefdom extends Location {
+public class Sector extends Location {
 
-  @OneToMany(mappedBy = "chiefdom")
+  @OneToMany(mappedBy = "sector")
   @Getter
   @Setter
   @OrderBy("name ASC")
@@ -33,15 +33,15 @@ public class Chiefdom extends Location {
   @Setter
   private District district;
 
-  public Chiefdom(UUID id) {
+  public Sector(UUID id) {
     super(id);
   }
 
-  public Chiefdom(String name) {
+  public Sector(String name) {
     super(name);
   }
 
-  public Chiefdom(String name, District district) {
+  public Sector(String name, District district) {
     super(name);
     this.district = district;
   }

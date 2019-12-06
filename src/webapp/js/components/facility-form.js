@@ -27,15 +27,15 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, FACILITY_FORM_NAME, 'chiefdomId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, FACILITY_FORM_NAME, 'sectorId')),
   },
-  chiefdomId: {
+  sectorId: {
     type: 'select',
-    label: 'Chiefdom',
+    label: 'Sector',
     required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
-        'chiefdoms',
+        'sectors',
         availableLocations,
         districtId,
       ),
@@ -76,7 +76,7 @@ class FacilityForm extends Component {
         fieldConfig={fieldConfig}
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
-        chiefdomId={this.props.chiefdomId}
+        sectorId={this.props.sectorId}
       />
     );
   }
@@ -114,7 +114,7 @@ function mapStateToProps(state) {
   return {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
-    chiefdomId: selector(state, 'chiefdomId'),
+    sectorId: selector(state, 'sectorId'),
   };
 }
 
@@ -130,12 +130,12 @@ FacilityForm.propTypes = {
   fetchLocations: PropTypes.func.isRequired,
   availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
-  chiefdomId: PropTypes.string,
+  sectorId: PropTypes.string,
 };
 
 FacilityForm.defaultProps = {
   availableLocations: [],
   districtId: null,
-  chiefdomId: null,
+  sectorId: null,
 };
 

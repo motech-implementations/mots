@@ -25,10 +25,10 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
   private District district;
 
   @ManyToOne
-  @JoinColumn(name = "chiefdom_id")
+  @JoinColumn(name = "sector_id")
   @Getter
   @Setter
-  private Chiefdom chiefdom;
+  private Sector sector;
 
   @ManyToOne
   @JoinColumn(name = "facility_id")
@@ -64,7 +64,7 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
   /**
    * Constructor to build DistrictAssignmentLog.
    * @param district  a district
-   * @param chiefdom  a chiefdom
+   * @param sector  a sector
    * @param facility  a facility
    * @param group     a group
    * @param startDate a startDate
@@ -72,10 +72,10 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
    * @param module    a module
    * @param owner     an owner
    */
-  public DistrictAssignmentLog(District district, Chiefdom chiefdom, Facility facility,
+  public DistrictAssignmentLog(District district, Sector sector, Facility facility,
       Group group, LocalDate startDate, LocalDate endDate, Module module, User owner) {
     this.district = district;
-    this.chiefdom = chiefdom;
+    this.sector = sector;
     this.facility = facility;
     this.group = group;
     this.startDate = startDate;

@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
-import org.motechproject.mots.testbuilder.ChiefdomDataBuilder;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.FacilityDataBuilder;
+import org.motechproject.mots.testbuilder.SectorDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,14 +28,14 @@ public class FacilityRepositoryIntegrationTest extends
   private FacilityRepository facilityRepository;
 
   @Autowired
-  private ChiefdomRepository chiefdomRepository;
+  private SectorRepository sectorRepository;
 
   @Autowired
   private DistrictRepository districtRepository;
 
   private District district = new DistrictDataBuilder().buildAsNew();
 
-  private Chiefdom chiefdom = new ChiefdomDataBuilder()
+  private Sector sector = new SectorDataBuilder()
       .withDistrict(district)
       .buildAsNew();
 
@@ -48,7 +48,7 @@ public class FacilityRepositoryIntegrationTest extends
   @Before
   public void setUp() {
     districtRepository.save(district);
-    chiefdomRepository.save(chiefdom);
+    sectorRepository.save(sector);
     facilityRepository.save(facility1);
     facilityRepository.save(facility2);
   }
@@ -84,10 +84,10 @@ public class FacilityRepositoryIntegrationTest extends
   }
 
   @Test
-  public void shouldFindFacilityByChiefdom() {
+  public void shouldFindFacilityBySector() {
     // when
     Page<Facility> result = facilityRepository.search(null, null,
-        null, null, facility1.getChiefdom().getName(), null, null);
+        null, null, facility1.getSector().getName(), null, null);
 
     // then
     assertThat(result.getTotalElements(), is(2L));
@@ -105,6 +105,6 @@ public class FacilityRepositoryIntegrationTest extends
   }
 
   private FacilityDataBuilder getFacilityDataBuilder() {
-    return new FacilityDataBuilder().withChiefdom(chiefdom);
+    return new FacilityDataBuilder().withSector(sector);
   }
 }

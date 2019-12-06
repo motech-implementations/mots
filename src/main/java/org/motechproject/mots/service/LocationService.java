@@ -14,17 +14,17 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
-import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.FacilityRepository;
+import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.utils.AuthenticationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,27 +43,27 @@ public class LocationService {
   private static final Logger LOGGER = Logger.getLogger(LocationService.class);
 
   private static final String DISTRICT_HEADER = "district";
-  private static final String CHIEFDOM_HEADER = "chiefdom";
+  private static final String SECTOR_HEADER = "sector";
   private static final String PHU_HEADER = "phu";
   private static final String COMMUNITY_HEADER = "community";
   private static final String FACILITY_NAME_HEADER = "facility name";
   private static final String FACILITY_ID_HEADER = "facility id";
   private static final String FACILITY_TYPE_HEADER = "facility type";
 
-  private static final List<String> CHIEFDOM_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      CHIEFDOM_HEADER);
+  private static final List<String> SECTOR_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
+      SECTOR_HEADER);
 
   private static final List<String> COMMUNITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      CHIEFDOM_HEADER, PHU_HEADER, COMMUNITY_HEADER);
+      SECTOR_HEADER, PHU_HEADER, COMMUNITY_HEADER);
 
   private static final List<String> FACILITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      CHIEFDOM_HEADER, FACILITY_NAME_HEADER, FACILITY_ID_HEADER, FACILITY_TYPE_HEADER);
+      SECTOR_HEADER, FACILITY_NAME_HEADER, FACILITY_ID_HEADER, FACILITY_TYPE_HEADER);
 
   @Autowired
   private DistrictRepository districtRepository;
 
   @Autowired
-  private ChiefdomRepository chiefdomRepository;
+  private SectorRepository sectorRepository;
 
   @Autowired
   private FacilityRepository facilityRepository;
@@ -79,8 +79,8 @@ public class LocationService {
   }
 
 
-  public List<Chiefdom> getChiefdoms() {
-    return chiefdomRepository.findAll();
+  public List<Sector> getSectors() {
+    return sectorRepository.findAll();
   }
 
 
@@ -105,8 +105,8 @@ public class LocationService {
     return districtRepository.save(district);
   }
 
-  public Chiefdom createChiefdom(Chiefdom chiefdom) {
-    return chiefdomRepository.save(chiefdom);
+  public Sector createSector(Sector sector) {
+    return sectorRepository.save(sector);
   }
 
   /**
@@ -121,15 +121,15 @@ public class LocationService {
   }
 
   /**
-   * Finds chiefdoms matching all of the provided parameters.
-   * If there are no parameters, return all chiefdoms.
+   * Finds sectors matching all of the provided parameters.
+   * If there are no parameters, return all sectors.
    */
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Page<Chiefdom> searchChiefdoms(String chiefdomName,
+  public Page<Sector> searchSectors(String sectorName,
       String parentDistrict, Pageable pageable)
       throws IllegalArgumentException {
 
-    return chiefdomRepository.search(chiefdomName, parentDistrict, pageable);
+    return sectorRepository.search(sectorName, parentDistrict, pageable);
   }
 
   /**
@@ -138,11 +138,11 @@ public class LocationService {
    */
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Community> searchCommunities(String communityName,
-      String parentFacility, String chiefdomName, String districtName, Pageable pageable)
+      String parentFacility, String sectorName, String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
     return communityRepository.search(
-        communityName, parentFacility, chiefdomName, districtName, pageable);
+        communityName, parentFacility, sectorName, districtName, pageable);
   }
 
   /**
@@ -151,11 +151,11 @@ public class LocationService {
    */
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityId, String facilityName,
-      String facilityType, String inchargeFullName, String parentChiefdom, String districtName,
+      String facilityType, String inchargeFullName, String parentSector, String districtName,
       Pageable pageable) throws IllegalArgumentException {
 
     return facilityRepository.search(facilityId, facilityName, facilityType,
-        inchargeFullName, parentChiefdom, districtName, pageable);
+        inchargeFullName, parentSector, districtName, pageable);
   }
 
   @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
@@ -170,7 +170,7 @@ public class LocationService {
 
   /**
    * Update District.
-   * 
+   *
    * @param district District to update
    * @return updated District
    */
@@ -184,17 +184,17 @@ public class LocationService {
   }
 
   /**
-   * Update Chiefdom.
-   * @param chiefdom chiefdom to update
-   * @return updated Chiefdom
+   * Update Sector.
+   * @param sector Sector to update
+   * @return updated Sector
    */
   @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
-  public Chiefdom saveChiefdom(Chiefdom chiefdom) {
-    if (!canEditLocation(chiefdom)) {
+  public Sector saveSector(Sector sector) {
+    if (!canEditLocation(sector)) {
       throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
     }
 
-    return chiefdomRepository.save(chiefdom);
+    return sectorRepository.save(sector);
   }
 
   /**
@@ -229,22 +229,22 @@ public class LocationService {
 
 
   /**
-   * Import and save Chiefdom list from CSV file and return list of errors in the file
-   * @param chiefdomsCsvFile CSV file with Chiefdom list
+   * Import and save Sector list from CSV file and return list of errors in the file
+   * @param sectorsCsvFile CSV file with Sector list
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
   @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
-  public Map<Integer, String> importChiefdomsFromCsv(MultipartFile chiefdomsCsvFile)
+  public Map<Integer, String> importSectorsFromCsv(MultipartFile sectorsCsvFile)
       throws IOException {
-    ICsvMapReader csvMapReader = createCsvMapReader(chiefdomsCsvFile.getInputStream());
-    String[] header = getAndValidateCsvHeader(csvMapReader, CHIEFDOM_CSV_HEADERS);
+    ICsvMapReader csvMapReader = createCsvMapReader(sectorsCsvFile.getInputStream());
+    String[] header = getAndValidateCsvHeader(csvMapReader, SECTOR_CSV_HEADERS);
 
     Map<String, String> csvRow;
     Map<Integer, String> errorMap = new HashMap<>();
 
     while ((csvRow = csvMapReader.read(header)) != null) {
-      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, chiefdom=%s", csvMapReader.getLineNumber(),
+      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, sector=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
 
       String districtName = csvRow.get(DISTRICT_HEADER);
@@ -254,27 +254,27 @@ public class LocationService {
         continue;
       }
 
-      String chiefdomName = csvRow.get(CHIEFDOM_HEADER);
+      String sectorName = csvRow.get(SECTOR_HEADER);
 
-      if (StringUtils.isBlank(chiefdomName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
+      if (StringUtils.isBlank(sectorName)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
         continue;
       }
 
       District district = districtRepository.findByName(districtName).orElseGet(() ->
           districtRepository.save(new District(districtName)));
 
-      Optional<Chiefdom> chiefdom =
-          chiefdomRepository.findByNameAndDistrict(chiefdomName, district);
+      Optional<Sector> sector =
+          sectorRepository.findByNameAndDistrict(sectorName, district);
 
-      if (chiefdom.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name already exists");
+      if (sector.isPresent()) {
+        errorMap.put(csvMapReader.getLineNumber(), "Sector with this name already exists");
         continue;
       }
 
-      Chiefdom newChiefdom = new Chiefdom(chiefdomName, district);
+      Sector newSector = new Sector(sectorName, district);
 
-      chiefdomRepository.save(newChiefdom);
+      sectorRepository.save(newSector);
     }
 
     return errorMap;
@@ -306,10 +306,10 @@ public class LocationService {
         continue;
       }
 
-      String chiefdomName = csvRow.get(CHIEFDOM_HEADER);
+      String sectormName = csvRow.get(SECTOR_HEADER);
 
-      if (StringUtils.isBlank(chiefdomName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
+      if (StringUtils.isBlank(sectormName)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
         continue;
       }
 
@@ -334,16 +334,16 @@ public class LocationService {
         continue;
       }
 
-      Optional<Chiefdom> chiefdom = chiefdomRepository.findByNameAndDistrict(chiefdomName,
+      Optional<Sector> sector = sectorRepository.findByNameAndDistrict(sectormName,
           district.get());
 
-      if (!chiefdom.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name does not exist");
+      if (!sector.isPresent()) {
+        errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
         continue;
       }
 
-      Optional<Facility> facility = facilityRepository.findByNameAndChiefdom(facilityName,
-          chiefdom.get());
+      Optional<Facility> facility = facilityRepository.findByNameAndSector(facilityName,
+          sector.get());
 
       if (!facility.isPresent()) {
         errorMap.put(csvMapReader.getLineNumber(), "Facility with this name does not exist");
@@ -392,10 +392,10 @@ public class LocationService {
         continue;
       }
 
-      String chiefdomName = csvRow.get(CHIEFDOM_HEADER);
+      String sectorName = csvRow.get(SECTOR_HEADER);
 
-      if (StringUtils.isBlank(chiefdomName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
+      if (StringUtils.isBlank(sectorName)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
         continue;
       }
 
@@ -427,16 +427,16 @@ public class LocationService {
         continue;
       }
 
-      Optional<Chiefdom> chiefdom = chiefdomRepository.findByNameAndDistrict(chiefdomName,
+      Optional<Sector> sector = sectorRepository.findByNameAndDistrict(sectorName,
           district.get());
 
-      if (!chiefdom.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name does not exist");
+      if (!sector.isPresent()) {
+        errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
         continue;
       }
 
       Optional<Facility> facility = facilityRepository
-          .findByFacilityIdOrChiefdomAndName(facilityId, chiefdom.get(), facilityName);
+          .findByFacilityIdOrSectorAndName(facilityId, sector.get(), facilityName);
 
       if (facility.isPresent()) {
         errorMap.put(csvMapReader.getLineNumber(),
@@ -444,7 +444,7 @@ public class LocationService {
         continue;
       }
 
-      Facility newFacility = new Facility(facilityName, facilityType, facilityId, chiefdom.get());
+      Facility newFacility = new Facility(facilityName, facilityType, facilityId, sector.get());
 
       facilityRepository.save(newFacility);
     }
@@ -504,8 +504,8 @@ public class LocationService {
   }
 
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Chiefdom getChiefdom(UUID id) {
-    return chiefdomRepository.findOne(id);
+  public Sector getSector(UUID id) {
+    return sectorRepository.findOne(id);
   }
 
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)

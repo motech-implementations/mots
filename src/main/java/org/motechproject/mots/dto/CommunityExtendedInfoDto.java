@@ -23,7 +23,7 @@ public class CommunityExtendedInfoDto {
   @Setter
   @Getter
   @Uuid
-  private String chiefdomId;
+  private String sectorId;
 
   @Setter
   @Getter

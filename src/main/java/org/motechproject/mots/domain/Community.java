@@ -48,7 +48,7 @@ public class Community extends Location {
   }
 
   @Override
-  public String getChiefdomName() {
-    return facility.getChiefdom().getName();
+  public String getSectorName() {
+    return facility.getSector().getName();
   }
 }

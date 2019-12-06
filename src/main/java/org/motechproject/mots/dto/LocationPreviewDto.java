@@ -33,7 +33,7 @@ public class LocationPreviewDto {
   @Setter
   @Getter
   @JsonInclude(Include.NON_NULL)
-  private String chiefdomName;
+  private String sectorName;
 
   @Setter
   @Getter

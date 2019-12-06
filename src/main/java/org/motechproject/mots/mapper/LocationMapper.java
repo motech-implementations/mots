@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -14,12 +13,11 @@ import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
-import org.motechproject.mots.dto.ChiefdomCreationDto;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.dto.CommunityCreationDto;
 import org.motechproject.mots.dto.CommunityExtendedInfoDto;
 import org.motechproject.mots.dto.DistrictCreationDto;
@@ -28,6 +26,7 @@ import org.motechproject.mots.dto.FacilityCreationDto;
 import org.motechproject.mots.dto.FacilityDto;
 import org.motechproject.mots.dto.FacilityExtendedInfoDto;
 import org.motechproject.mots.dto.LocationPreviewDto;
+import org.motechproject.mots.dto.SectorCreationDto;
 
 @Mapper(uses = { UuidMapper.class, EnumsMapper.class },
     unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -93,34 +92,34 @@ public interface LocationMapper {
 
   @Mappings({
       @Mapping(target = "facilityId", source = "facility.id"),
-      @Mapping(target = "chiefdomId", source = "facility.chiefdom.id"),
-      @Mapping(target = "districtId", source = "facility.chiefdom.district.id"),
+      @Mapping(target = "sectorId", source = "facility.sector.id"),
+      @Mapping(target = "districtId", source = "facility.sector.district.id"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
   CommunityExtendedInfoDto toCommunityExtendedInfoDto(Community community);
 
   @Named("createFacility")
   @Mappings({
-      @Mapping(target = "chiefdomId", source = "chiefdom.id"),
+      @Mapping(target = "sectorId", source = "sector.id"),
       @Mapping(target = "facilityType", source = "type"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
   FacilityCreationDto toFacilityCreationDto(Facility facility);
 
   @Mappings({
-      @Mapping(target = "chiefdomId", source = "chiefdom.id"),
+      @Mapping(target = "sectorId", source = "sector.id"),
       @Mapping(target = "facilityType", source = "type"),
-      @Mapping(target = "districtId", source = "chiefdom.district.id"),
+      @Mapping(target = "districtId", source = "sector.district.id"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
   FacilityExtendedInfoDto toFacilityExtendedInfoDto(Facility facility);
 
-  @Named("createChiefdom")
+  @Named("createSector")
   @Mappings({
       @Mapping(target = "districtId", source = "district.id"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
-  ChiefdomCreationDto toChiefdomCreationDto(Chiefdom chiefdom);
+  SectorCreationDto toSectorCreationDto(Sector sector);
 
   @Named("createDistrict")
   @Mapping(target = "ownerUsername", source = "owner.username")
@@ -133,7 +132,7 @@ public interface LocationMapper {
   Community fromDtoToCommunity(CommunityCreationDto communityCreationDto);
 
   @Mappings({
-      @Mapping(target = "chiefdom", source = "chiefdomId"),
+      @Mapping(target = "sector", source = "sectorId"),
       @Mapping(target = "type", source = "facilityType"),
       @Mapping(target = "owner", ignore = true)
   })
@@ -143,7 +142,7 @@ public interface LocationMapper {
       @Mapping(target = "district", source = "districtId"),
       @Mapping(target = "owner", ignore = true)
   })
-  Chiefdom fromDtoToChiefdom(ChiefdomCreationDto chiefdomCreationDto);
+  Sector fromDtoToSector(SectorCreationDto sectorCreationDto);
 
   @Mapping(target = "owner", ignore = true)
   District fromDtoToDistrict(DistrictCreationDto districtCreationDto);
@@ -162,22 +161,22 @@ public interface LocationMapper {
   }
 
   /**
-   * Create Chiefdom object with given id.
-   * @param chiefdomId id of Chiefdom to create
-   * @return Chiefdom object with given id
+   * Create Sector object with given id.
+   * @param sectorId id of Sector to create
+   * @return Sector object with given id
    */
-  default Chiefdom toChiefdom(String chiefdomId) {
-    if (chiefdomId == null || chiefdomId.isEmpty()) {
+  default Sector toSector(String sectorId) {
+    if (sectorId == null || sectorId.isEmpty()) {
       return null;
     }
 
-    return new Chiefdom(UUID.fromString(chiefdomId));
+    return new Sector(UUID.fromString(sectorId));
   }
 
   /**
-   * Create Chiefdom object with given id.
-   * @param districtId id of Chiefdom to create
-   * @return Chiefdom object with given id
+   * Create District object with given id.
+   * @param districtId id of District to create
+   * @return District object with given id
    */
   default District toDistrict(String districtId) {
     if (districtId == null || districtId.isEmpty()) {
@@ -195,7 +194,7 @@ public interface LocationMapper {
       @MappingTarget Community community);
 
   @Mappings({
-      @Mapping(target = "chiefdom", source = "chiefdomId"),
+      @Mapping(target = "sector", source = "sectorId"),
       @Mapping(target = "type", source = "facilityType"),
       @Mapping(target = "owner", ignore = true)
   })
@@ -206,8 +205,8 @@ public interface LocationMapper {
       @Mapping(target = "district", source = "districtId"),
       @Mapping(target = "owner", ignore = true)
   })
-  void updateChiefdomFromDto(ChiefdomCreationDto chiefdomCreationDto,
-      @MappingTarget Chiefdom chiefdom);
+  void updateSectorFromDto(SectorCreationDto sectorCreationDto,
+      @MappingTarget Sector sector);
 
   @Mapping(target = "owner", ignore = true)
   void updateDistrictFromDto(DistrictCreationDto districtCreationDto,

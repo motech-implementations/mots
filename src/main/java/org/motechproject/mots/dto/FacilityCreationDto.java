@@ -6,9 +6,9 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
-import org.motechproject.mots.validate.annotations.ChiefdomExistence;
 import org.motechproject.mots.validate.annotations.FacilityType;
 import org.motechproject.mots.validate.annotations.FacilityUniqueness;
+import org.motechproject.mots.validate.annotations.SectorExistence;
 import org.motechproject.mots.validate.annotations.UniqueFacilityId;
 import org.motechproject.mots.validate.annotations.Uuid;
 
@@ -29,10 +29,10 @@ public class FacilityCreationDto {
 
   @Setter
   @Getter
-  @ChiefdomExistence
+  @SectorExistence
   @Uuid
-  @NotEmpty(message = ValidationMessages.EMPTY_CHIEFDOM_ID)
-  private String chiefdomId;
+  @NotEmpty(message = ValidationMessages.EMPTY_SECTOR_ID)
+  private String sectorId;
 
   @Setter
   @Getter

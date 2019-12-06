@@ -2,7 +2,6 @@ package org.motechproject.mots.domain;
 
 import java.util.Set;
 import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -21,7 +20,7 @@ public class District extends Location {
   @Getter
   @Setter
   @OrderBy("name ASC")
-  private Set<Chiefdom> chiefdoms;
+  private Set<Sector> sectors;
 
   public District(UUID id) {
     super(id);

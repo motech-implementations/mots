@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.ChiefdomUniquenessValidator;
+import org.motechproject.mots.validate.constraintvalidators.SectorUniquenessValidator;
 
 @Target(ElementType.TYPE)
-@Constraint(validatedBy = {ChiefdomUniquenessValidator.class})
+@Constraint(validatedBy = {SectorUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ChiefdomUniqueness {
+public @interface SectorUniqueness {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_UNIQUE_CHIEFDOM;
+  String message() default ValidationMessages.NOT_UNIQUE_SECTOR;
 
   /**
    * Specify validation groups, to which this constraint belongs

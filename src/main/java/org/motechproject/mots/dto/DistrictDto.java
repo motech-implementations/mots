@@ -21,5 +21,5 @@ public class DistrictDto {
 
   @Getter
   @Setter
-  private List<ChiefdomDto> chiefdoms;
+  private List<SectorDto> sectors;
 }

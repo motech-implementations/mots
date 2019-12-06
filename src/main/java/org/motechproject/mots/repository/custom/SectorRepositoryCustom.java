@@ -1,11 +1,11 @@
 package org.motechproject.mots.repository.custom;
 
-import org.motechproject.mots.domain.Chiefdom;
+import org.motechproject.mots.domain.Sector;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ChiefdomRepositoryCustom {
+public interface SectorRepositoryCustom {
 
-  Page<Chiefdom> search(String chiefdomName, String parentDistrict, Pageable pageable)
+  Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable)
       throws IllegalArgumentException;
 }

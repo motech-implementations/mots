@@ -7,12 +7,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
-import org.motechproject.mots.validate.annotations.ChiefdomUniqueness;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
+import org.motechproject.mots.validate.annotations.SectorUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
 
-@ChiefdomUniqueness
-public class ChiefdomCreationDto {
+@SectorUniqueness
+public class SectorCreationDto {
 
   @Getter
   @Setter

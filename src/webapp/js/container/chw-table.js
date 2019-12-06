@@ -97,8 +97,8 @@ class ChwTable extends Component {
       Header: 'District',
       accessor: 'districtName',
     }, {
-      Header: 'Chiefdom',
-      accessor: 'chiefdomName',
+      Header: 'Sector',
+      accessor: 'sectorName',
     }, {
       Header: 'Facility',
       accessor: 'facilityName',

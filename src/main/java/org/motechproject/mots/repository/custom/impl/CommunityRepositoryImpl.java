@@ -22,18 +22,18 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
    * If there are no parameters, return all Communities.
    */
   @Override
-  public Page<Community> search(String communityName, String parentFacility, String chiefdomName,
+  public Page<Community> search(String communityName, String parentFacility, String sectorName,
       String districtName, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Community> query = builder.createQuery(Community.class);
-    query = prepareQuery(query, communityName, parentFacility, chiefdomName, districtName,
+    query = prepareQuery(query, communityName, parentFacility, sectorName, districtName,
         false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, communityName, parentFacility, chiefdomName, districtName,
+    countQuery = prepareQuery(countQuery, communityName, parentFacility, sectorName, districtName,
         true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
@@ -49,7 +49,7 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String communityName,
-      String parentFacility, String chiefdomName, String districtName,
+      String parentFacility, String sectorName, String districtName,
       boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -69,15 +69,15 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
       predicate = builder.and(predicate, builder.like(root.get(FACILITY).get(NAME),
           '%' + parentFacility.trim() + '%'));
     }
-    if (chiefdomName != null) {
+    if (sectorName != null) {
       predicate = builder.and(
-          predicate, builder.like(root.get(FACILITY).get(CHIEFDOM).get(NAME),
-          '%' + chiefdomName.trim() + '%')
+          predicate, builder.like(root.get(FACILITY).get(SECTOR).get(NAME),
+          '%' + sectorName.trim() + '%')
       );
     }
     if (districtName != null) {
       predicate = builder.and(
-          predicate, builder.like(root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME),
+          predicate, builder.like(root.get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME),
           '%' + districtName.trim() + '%')
       );
     }
@@ -96,10 +96,10 @@ public class CommunityRepositoryImpl extends BaseRepositoryImpl implements
     Path path;
     if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
       path = root.get(FACILITY).get(NAME);
-    } else if (order.getProperty().equals(LocationController.CHIEFDOM_NAME_PARAM)) {
-      path = root.get(FACILITY).get(CHIEFDOM).get(NAME);
+    } else if (order.getProperty().equals(LocationController.SECTOR_NAME_PARAM)) {
+      path = root.get(FACILITY).get(SECTOR).get(NAME);
     } else if (order.getProperty().equals(LocationController.DISTRICT_NAME_PARAM)) {
-      path = root.get(FACILITY).get(CHIEFDOM).get(DISTRICT).get(NAME);
+      path = root.get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME);
     } else {
       path = root.get(order.getProperty());
     }
