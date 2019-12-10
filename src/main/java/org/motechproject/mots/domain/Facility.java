@@ -56,6 +56,16 @@ public class Facility extends Location {
   @Setter
   private String inchargeFullName;
 
+  @Column(name = "incharge_phone")
+  @Getter
+  @Setter
+  private String inchargePhone;
+
+  @Column(name = "incharge_email")
+  @Getter
+  @Setter
+  private String inchargeEmail;
+
   public Facility(UUID id) {
     super(id);
   }
@@ -77,12 +87,19 @@ public class Facility extends Location {
    * @param name name of the facility
    * @param type type of the facility
    * @param facilityId id of the facility
+   * @param inchargeFullName name of the facility incharge
+   * @param inchargePhone phone of the facility incharge
+   * @param inchargeEmail email of the facility incharge
    * @param sector parent sector of the facility
    */
-  public Facility(String name, FacilityType type, String facilityId, Sector sector) {
+  public Facility(String name, FacilityType type, String facilityId, String inchargeFullName,
+      String inchargePhone, String inchargeEmail, Sector sector) {
     super(name);
     this.type = type;
     this.facilityId = facilityId;
+    this.inchargeFullName = inchargeFullName;
+    this.inchargePhone = inchargePhone;
+    this.inchargeEmail = inchargeEmail;
     this.sector = sector;
   }
 

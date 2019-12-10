@@ -34,4 +34,12 @@ public class FacilityDto {
   @Getter
   @Setter
   private String inchargeFullName;
+
+  @Getter
+  @Setter
+  private String inchargePhone;
+
+  @Getter
+  @Setter
+  private String inchargeEmail;
 }

@@ -37,5 +37,17 @@ public class FacilityExtendedInfoDto {
 
   @Getter
   @Setter
+  private String inchargeFullName;
+
+  @Getter
+  @Setter
+  private String inchargePhone;
+
+  @Getter
+  @Setter
+  private String inchargeEmail;
+
+  @Getter
+  @Setter
   private String ownerUsername;
 }

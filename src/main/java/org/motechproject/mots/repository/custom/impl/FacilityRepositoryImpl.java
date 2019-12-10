@@ -28,19 +28,20 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<Facility> search(String facilityId, String facilityName, String facilityType,
-      String inchargeFullName, String parentSector, String districtName, Pageable pageable)
+      String inchargeFullName, String inchargePhone, String inchargeEmail,
+      String parentSector, String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Facility> query = builder.createQuery(Facility.class);
-    query = prepareQuery(query, facilityId, facilityName, facilityType,
-        inchargeFullName, parentSector, districtName, false, pageable);
+    query = prepareQuery(query, facilityId, facilityName, facilityType, inchargeFullName,
+        inchargePhone, inchargeEmail, parentSector, districtName, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, facilityId, facilityName, facilityType,
-        inchargeFullName, parentSector, districtName, true, pageable);
+    countQuery = prepareQuery(countQuery, facilityId, facilityName, facilityType, inchargeFullName,
+        inchargePhone, inchargeEmail, parentSector, districtName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -55,8 +56,9 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String facilityId,
-      String facilityName, String facilityType, String inchargeFullName, String parentSector,
-      String districtName, boolean count, Pageable pageable) throws IllegalArgumentException {
+      String facilityName, String facilityType, String inchargeFullName, String inchargePhone,
+      String inchargeEmail, String parentSector, String districtName,
+      boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Facility> root = query.from(Facility.class);
@@ -82,7 +84,15 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     }
     if (inchargeFullName != null) {
       predicate = builder.and(predicate,
-          builder.like(root.get(INCHARGE_FULL_NAME), '%' + facilityId.trim() + '%'));
+          builder.like(root.get(INCHARGE_FULL_NAME), '%' + inchargeFullName.trim() + '%'));
+    }
+    if (inchargePhone != null) {
+      predicate = builder.and(predicate,
+          builder.like(root.get(INCHARGE_PHONE), '%' + inchargePhone.trim() + '%'));
+    }
+    if (inchargeEmail != null) {
+      predicate = builder.and(predicate,
+          builder.like(root.get(INCHARGE_EMAIL), '%' + inchargeEmail.trim() + '%'));
     }
     if (parentSector != null) {
       predicate = builder.and(predicate, builder.like(root.get(SECTOR).get(NAME),

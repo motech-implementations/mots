@@ -49,6 +49,9 @@ public class LocationService {
   private static final String FACILITY_NAME_HEADER = "facility name";
   private static final String FACILITY_ID_HEADER = "facility id";
   private static final String FACILITY_TYPE_HEADER = "facility type";
+  private static final String INCHARGE_NAME_HEADER = "incharge name";
+  private static final String INCHARGE_PHONE_HEADER = "incharge phone";
+  private static final String INCHARGE_EMAIL_HEADER = "incharge email";
 
   private static final List<String> SECTOR_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
       SECTOR_HEADER);
@@ -57,7 +60,8 @@ public class LocationService {
       SECTOR_HEADER, PHU_HEADER, VILLAGE_HEADER);
 
   private static final List<String> FACILITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      SECTOR_HEADER, FACILITY_NAME_HEADER, FACILITY_ID_HEADER, FACILITY_TYPE_HEADER);
+      SECTOR_HEADER, FACILITY_NAME_HEADER, FACILITY_ID_HEADER, FACILITY_TYPE_HEADER,
+      INCHARGE_NAME_HEADER, INCHARGE_PHONE_HEADER, INCHARGE_EMAIL_HEADER);
 
   @Autowired
   private DistrictRepository districtRepository;
@@ -151,11 +155,11 @@ public class LocationService {
    */
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityId, String facilityName,
-      String facilityType, String inchargeFullName, String parentSector, String districtName,
-      Pageable pageable) throws IllegalArgumentException {
+      String facilityType, String inchargeFullName, String inchargePhone, String inchargeEmail,
+      String parentSector, String districtName, Pageable pageable) throws IllegalArgumentException {
 
     return facilityRepository.search(facilityId, facilityName, facilityType,
-        inchargeFullName, parentSector, districtName, pageable);
+        inchargeFullName, inchargePhone, inchargeEmail, parentSector, districtName, pageable);
   }
 
   @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
@@ -226,7 +230,6 @@ public class LocationService {
 
     return villageRepository.save(village);
   }
-
 
   /**
    * Import and save Sector list from CSV file and return list of errors in the file
@@ -444,7 +447,12 @@ public class LocationService {
         continue;
       }
 
-      Facility newFacility = new Facility(facilityName, facilityType, facilityId, sector.get());
+      String inchargeName = csvRow.get(INCHARGE_NAME_HEADER);
+      String inchargePhone = csvRow.get(INCHARGE_PHONE_HEADER);
+      String inchargeEmail = csvRow.get(INCHARGE_EMAIL_HEADER);
+
+      Facility newFacility = new Facility(facilityName, facilityType, facilityId, inchargeName,
+          inchargePhone, inchargeEmail, sector.get());
 
       facilityRepository.save(newFacility);
     }

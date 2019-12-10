@@ -48,5 +48,20 @@ public class FacilityCreationDto {
 
   @Getter
   @Setter
+  @JsonDeserialize(using = TrimTextDeserializer.class)
+  private String inchargeFullName;
+
+  @Getter
+  @Setter
+  @JsonDeserialize(using = TrimTextDeserializer.class)
+  private String inchargePhone;
+
+  @Getter
+  @Setter
+  @JsonDeserialize(using = TrimTextDeserializer.class)
+  private String inchargeEmail;
+
+  @Getter
+  @Setter
   private String ownerUsername;
 }

@@ -64,4 +64,12 @@ public abstract class Location extends BaseTimestampedEntity implements Auditabl
   public String getInchargeFullName() {
     return null;
   }
+
+  public String getInchargePhone() {
+    return null;
+  }
+
+  public String getInchargeEmail() {
+    return null;
+  }
 }

@@ -125,6 +125,12 @@ class Locations extends Component {
       Header: 'Incharge name',
       accessor: 'inchargeFullName',
     }, {
+      Header: 'Incharge phone',
+      accessor: 'inchargePhone',
+    }, {
+      Header: 'Incharge email',
+      accessor: 'inchargeEmail',
+    }, {
       Header: 'Sector',
       accessor: 'parent',
     }, {

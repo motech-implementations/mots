@@ -22,6 +22,8 @@ public abstract class BaseRepositoryImpl {
   protected static final String CHW_ID = "chwId";
   protected static final String FACILITY_ID = "facilityId";
   protected static final String INCHARGE_FULL_NAME = "inchargeFullName";
+  protected static final String INCHARGE_PHONE = "inchargePhone";
+  protected static final String INCHARGE_EMAIL = "inchargeEmail";
   protected static final String FIRST_NAME = "firstName";
   protected static final String FAMILY_NAME = "familyName";
   protected static final String PHONE_NUMBER = "phoneNumber";

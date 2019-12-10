@@ -45,6 +45,8 @@ public class LocationController extends BaseController {
   public static final String PARENT_PARAM = "parent";
   public static final String FACILITY_TYPE_PARAM = "facilityType";
   public static final String INCHARGE_FULL_NAME_PARAM = "inchargeFullName";
+  public static final String INCHARGE_PHONE_PARAM = "inchargePhone";
+  public static final String INCHARGE_EMAIL_PARAM = "inchargeEmail";
   public static final String FACILITY_ID_PARAM = "facilityId";
   public static final String SECTOR_NAME_PARAM = "sectorName";
   public static final String DISTRICT_NAME_PARAM = "districtName";
@@ -400,12 +402,14 @@ public class LocationController extends BaseController {
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
       @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
+      @RequestParam(value = INCHARGE_PHONE_PARAM, required = false) String inchargePhone,
+      @RequestParam(value = INCHARGE_EMAIL_PARAM, required = false) String inchargeEmail,
       @RequestParam(value = PARENT_PARAM, required = false) String parentSector,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
-    Page<Facility> facilities = locationService.searchFacilities(
-        facilityId, name, facilityType, inchargeFullName, parentSector, district, pageable);
+    Page<Facility> facilities = locationService.searchFacilities(facilityId, name, facilityType,
+        inchargeFullName, inchargePhone, inchargeEmail, parentSector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
 
