@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 
-import CommunityForm from './community-form';
-import { createCommunity } from '../actions';
+import VillageForm from './village-form';
+import { createVillage } from '../actions';
 import {
   hasAuthority,
   CREATE_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
-class CommunityNew extends Component {
+class VillageNew extends Component {
   constructor(props) {
     super(props);
 
@@ -34,8 +34,8 @@ class CommunityNew extends Component {
       facilityId: values.facilityId,
     };
 
-    this.props.createCommunity(valuesToSend, () => {
-      Alert.success('Community has been added');
+    this.props.createVillage(valuesToSend, () => {
+      Alert.success('Village has been added');
       this.props.history.push('/locations');
     });
   }
@@ -43,17 +43,17 @@ class CommunityNew extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Add Community</h1>
-        <CommunityForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Add Village</h1>
+        <VillageForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
       </div>
     );
   }
 }
 
-export default connect(null, { createCommunity })(CommunityNew);
+export default connect(null, { createVillage })(VillageNew);
 
-CommunityNew.propTypes = {
-  createCommunity: PropTypes.func.isRequired,
+VillageNew.propTypes = {
+  createVillage: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,

@@ -6,18 +6,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.Valid;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
-import org.motechproject.mots.dto.CommunityCreationDto;
-import org.motechproject.mots.dto.CommunityExtendedInfoDto;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.dto.DistrictCreationDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
 import org.motechproject.mots.dto.FacilityExtendedInfoDto;
 import org.motechproject.mots.dto.LocationPreviewDto;
 import org.motechproject.mots.dto.SectorCreationDto;
+import org.motechproject.mots.dto.VillageCreationDto;
+import org.motechproject.mots.dto.VillageExtendedInfoDto;
 import org.motechproject.mots.mapper.LocationMapper;
 import org.motechproject.mots.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,21 +106,21 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Creates Community.
-   * @param communityCreationDto DTO of community to be created
-   * @return created Community
+   * Creates Village.
+   * @param villageCreationDto DTO of village to be created
+   * @return created Village
    */
-  @RequestMapping(value = "/community", method = RequestMethod.POST)
+  @RequestMapping(value = "/village", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
-  public CommunityCreationDto createCommunity(
-      @RequestBody @Valid CommunityCreationDto communityCreationDto,
+  public VillageCreationDto createVillage(
+      @RequestBody @Valid VillageCreationDto villageCreationDto,
       BindingResult bindingResult) {
 
     checkBindingResult(bindingResult);
-    Community community = locationMapper.fromDtoToCommunity(communityCreationDto);
+    Village village = locationMapper.fromDtoToVillage(villageCreationDto);
 
-    return locationMapper.toCommunityCreationDto(locationService.createCommunity(community));
+    return locationMapper.toVillageCreationDto(locationService.createVillage(village));
   }
 
   /**
@@ -165,24 +165,24 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Update Community.
-   * @param id id of Community to update
-   * @param communityCreationDto DTO of Community to be updated
-   * @return updated Community
+   * Update Village.
+   * @param id id of Village to update
+   * @param villageCreationDto DTO of Village to be updated
+   * @return updated Village
    */
-  @RequestMapping(value = "/community/{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/village/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public CommunityCreationDto saveCommunity(@PathVariable("id") UUID id,
-      @RequestBody @Valid CommunityCreationDto communityCreationDto,
+  public VillageCreationDto saveVillage(@PathVariable("id") UUID id,
+      @RequestBody @Valid VillageCreationDto villageCreationDto,
       BindingResult bindingResult) {
 
     checkBindingResult(bindingResult);
 
-    Community community = locationService.getCommunity(id);
-    locationMapper.updateCommunityFromDto(communityCreationDto, community);
+    Village village = locationService.getVillage(id);
+    locationMapper.updateVillageFromDto(villageCreationDto, village);
 
-    return locationMapper.toCommunityCreationDto(locationService.saveCommunity(community));
+    return locationMapper.toVillageCreationDto(locationService.saveVillage(village));
   }
 
   /**
@@ -250,17 +250,17 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get Community with given id.
-   * @param id id of Community to find
-   * @return CommunityCreationDto with given id
+   * Get Village with given id.
+   * @param id id of Village to find
+   * @return VillageCreationDto with given id
    */
-  @RequestMapping(value = "/community/{id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/village/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public CommunityExtendedInfoDto getCommunity(@PathVariable("id") UUID id) {
-    Community community = locationService.getCommunity(id);
+  public VillageExtendedInfoDto getVillage(@PathVariable("id") UUID id) {
+    Village village = locationService.getVillage(id);
 
-    return locationMapper.toCommunityExtendedInfoDto(community);
+    return locationMapper.toVillageExtendedInfoDto(village);
   }
 
   /**
@@ -316,16 +316,16 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of communities for preview.
-   * @return list of all communities
+   * Get list of Villages for preview.
+   * @return list of all villages
    */
-  @RequestMapping(value = "/communitiesOnly", method = RequestMethod.GET)
+  @RequestMapping(value = "/villagesOnly", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Set<LocationPreviewDto> getCommunitiesOnly() {
-    List<Community> communities = locationService.getCommunities();
+  public Set<LocationPreviewDto> getVillagesOnly() {
+    List<Village> villages = locationService.getVillages();
 
-    return locationMapper.toLocationPreviewDtos(communities);
+    return locationMapper.toLocationPreviewDtos(villages);
   }
 
   /**
@@ -367,25 +367,25 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Finds communities matching all of the provided parameters.
-   * If there are no parameters, return all communities.
+   * Finds Villages matching all of the provided parameters.
+   * If there are no parameters, return all Villages.
    */
-  @RequestMapping(value = "community/locations/search", method = RequestMethod.GET)
+  @RequestMapping(value = "village/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Page<LocationPreviewDto> searchCommunities(
+  public Page<LocationPreviewDto> searchVillages(
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
       @RequestParam(value = SECTOR_NAME_PARAM, required = false) String sector,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) throws IllegalArgumentException {
 
-    Page<Community> communities =
-        locationService.searchCommunities(name, parentFacility, sector, district, pageable);
+    Page<Village> villages =
+        locationService.searchVillages(name, parentFacility, sector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtosWithOrder(communities.getContent());
+        locationMapper.toLocationPreviewDtosWithOrder(villages.getContent());
 
-    return new PageImpl<>(locationPreviewDtos, pageable, communities.getTotalElements());
+    return new PageImpl<>(locationPreviewDtos, pageable, villages.getTotalElements());
   }
 
   /**
@@ -425,15 +425,15 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Import list of Communities in ".csv" format to mots, parse it and save records in DB.
+   * Import list of Villages in ".csv" format to mots, parse it and save records in DB.
    * @param file File in ".csv" format to upload
    */
-  @RequestMapping(value = "/community/import", method = RequestMethod.POST)
+  @RequestMapping(value = "/village/import", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Map<Integer, String> importCommunityCsv(@RequestPart("file") MultipartFile file)
+  public Map<Integer, String> importVillageCsv(@RequestPart("file") MultipartFile file)
       throws IOException {
-    return locationService.importCommunitiesFromCsv(file);
+    return locationService.importVillagesFromCsv(file);
   }
 
   /**

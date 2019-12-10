@@ -10,16 +10,16 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
-import org.motechproject.mots.testbuilder.CommunityDataBuilder;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.testbuilder.CommunityHealthWorkerDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.FacilityDataBuilder;
 import org.motechproject.mots.testbuilder.SectorDataBuilder;
+import org.motechproject.mots.testbuilder.VillageDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<CommunityHealthWorker> {
 
   @Autowired
-  private CommunityRepository communityRepository;
+  private VillageRepository villageRepository;
 
   @Autowired
   private FacilityRepository facilityRepository;
@@ -58,7 +58,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
       .withSector(sector)
       .buildAsNew();
 
-  private Community community = new CommunityDataBuilder()
+  private Village village = new VillageDataBuilder()
       .withFacility(facility)
       .buildAsNew();
 
@@ -73,7 +73,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     districtRepository.save(district);
     sectorRepository.save(sector);
     facilityRepository.save(facility);
-    communityRepository.save(community);
+    villageRepository.save(village);
 
     repository.save(chw1);
     repository.save(chw2);
@@ -84,7 +84,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(chw1.getChwId(),
         chw1.getFirstName(), chw1.getFamilyName(), chw1.getPhoneNumber(),
-        community.getName(),
+        village.getName(),
         facility.getName(), sector.getName(),
         district.getName(), null, false, null);
 
@@ -135,6 +135,6 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
 
   private CommunityHealthWorkerDataBuilder getChwDataBuilder() {
     return new CommunityHealthWorkerDataBuilder()
-        .withCommunity(community);
+        .withVillage(village);
   }
 }

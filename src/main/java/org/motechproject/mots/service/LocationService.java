@@ -14,17 +14,17 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.domain.Sector;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
-import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.FacilityRepository;
 import org.motechproject.mots.repository.SectorRepository;
+import org.motechproject.mots.repository.VillageRepository;
 import org.motechproject.mots.utils.AuthenticationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,7 +45,7 @@ public class LocationService {
   private static final String DISTRICT_HEADER = "district";
   private static final String SECTOR_HEADER = "sector";
   private static final String PHU_HEADER = "phu";
-  private static final String COMMUNITY_HEADER = "community";
+  private static final String VILLAGE_HEADER = "village";
   private static final String FACILITY_NAME_HEADER = "facility name";
   private static final String FACILITY_ID_HEADER = "facility id";
   private static final String FACILITY_TYPE_HEADER = "facility type";
@@ -53,8 +53,8 @@ public class LocationService {
   private static final List<String> SECTOR_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
       SECTOR_HEADER);
 
-  private static final List<String> COMMUNITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      SECTOR_HEADER, PHU_HEADER, COMMUNITY_HEADER);
+  private static final List<String> VILLAGE_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
+      SECTOR_HEADER, PHU_HEADER, VILLAGE_HEADER);
 
   private static final List<String> FACILITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
       SECTOR_HEADER, FACILITY_NAME_HEADER, FACILITY_ID_HEADER, FACILITY_TYPE_HEADER);
@@ -69,7 +69,7 @@ public class LocationService {
   private FacilityRepository facilityRepository;
 
   @Autowired
-  private CommunityRepository communityRepository;
+  private VillageRepository villageRepository;
 
   @Autowired
   private AuthenticationHelper authenticationHelper;
@@ -89,16 +89,16 @@ public class LocationService {
   }
 
 
-  public List<Community> getCommunities() {
-    return communityRepository.findAll();
+  public List<Village> getVillages() {
+    return villageRepository.findAll();
   }
 
   public Facility createImportedFacility(Facility facility) {
     return facilityRepository.save(facility);
   }
 
-  public Community createImportedCommunity(Community community) {
-    return communityRepository.save(community);
+  public Village createImportedVillage(Village village) {
+    return villageRepository.save(village);
   }
 
   public District createDistrict(District district) {
@@ -133,16 +133,16 @@ public class LocationService {
   }
 
   /**
-   * Finds communities matching all of the provided parameters.
-   * If there are no parameters, return all communities.
+   * Finds Villages matching all of the provided parameters.
+   * If there are no parameters, return all Villages.
    */
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Page<Community> searchCommunities(String communityName,
+  public Page<Village> searchVillages(String villageName,
       String parentFacility, String sectorName, String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
-    return communityRepository.search(
-        communityName, parentFacility, sectorName, districtName, pageable);
+    return villageRepository.search(
+        villageName, parentFacility, sectorName, districtName, pageable);
   }
 
   /**
@@ -164,8 +164,8 @@ public class LocationService {
   }
 
   @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
-  public Community createCommunity(Community community) {
-    return communityRepository.save(community);
+  public Village createVillage(Village village) {
+    return villageRepository.save(village);
   }
 
   /**
@@ -212,19 +212,19 @@ public class LocationService {
   }
 
   /**
-   * Update Community.
-   * @param community community to update
-   * @return updated Community
+   * Update Village.
+   * @param village Village to update
+   * @return updated Village
    */
   @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
-  public Community saveCommunity(Community community) {
-    if (!canEditLocation(community)) {
+  public Village saveVillage(Village village) {
+    if (!canEditLocation(village)) {
       throw new MotsAccessDeniedException(
-          "Could not edit community, because you are not the owner"
+          "Could not edit village, because you are not the owner"
       );
     }
 
-    return communityRepository.save(community);
+    return villageRepository.save(village);
   }
 
 
@@ -281,22 +281,22 @@ public class LocationService {
   }
 
   /**
-   * Import and save Community list from CSV file and return list of errors in the file
-   * @param communitiesCsvFile CSV file with Community list
+   * Import and save Village list from CSV file and return list of errors in the file
+   * @param villagesCsvFile CSV file with Village list
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
   @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
-  public Map<Integer, String> importCommunitiesFromCsv(MultipartFile communitiesCsvFile)
+  public Map<Integer, String> importVillagesFromCsv(MultipartFile villagesCsvFile)
       throws IOException {
-    ICsvMapReader csvMapReader = createCsvMapReader(communitiesCsvFile.getInputStream());
-    String[] header = getAndValidateCsvHeader(csvMapReader, COMMUNITY_CSV_HEADERS);
+    ICsvMapReader csvMapReader = createCsvMapReader(villagesCsvFile.getInputStream());
+    String[] header = getAndValidateCsvHeader(csvMapReader, VILLAGE_CSV_HEADERS);
 
     Map<String, String> csvRow;
     Map<Integer, String> errorMap = new HashMap<>();
 
     while ((csvRow = csvMapReader.read(header)) != null) {
-      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, community=%s", csvMapReader.getLineNumber(),
+      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, village=%s", csvMapReader.getLineNumber(),
           csvMapReader.getRowNumber(), csvRow));
 
       String districtName = csvRow.get(DISTRICT_HEADER);
@@ -320,10 +320,10 @@ public class LocationService {
         continue;
       }
 
-      String communityName = csvRow.get(COMMUNITY_HEADER);
+      String villageName = csvRow.get(VILLAGE_HEADER);
 
-      if (StringUtils.isBlank(communityName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Community name is empty");
+      if (StringUtils.isBlank(villageName)) {
+        errorMap.put(csvMapReader.getLineNumber(), "Village name is empty");
         continue;
       }
 
@@ -350,17 +350,17 @@ public class LocationService {
         continue;
       }
 
-      Optional<Community> community =
-          communityRepository.findByNameAndFacility(communityName, facility.get());
+      Optional<Village> village =
+          villageRepository.findByNameAndFacility(villageName, facility.get());
 
-      if (community.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "Community with this name already exists");
+      if (village.isPresent()) {
+        errorMap.put(csvMapReader.getLineNumber(), "Village with this name already exists");
         continue;
       }
 
-      Community newCommunity = new Community(communityName, facility.get());
+      Village newVillage = new Village(villageName, facility.get());
 
-      communityRepository.save(newCommunity);
+      villageRepository.save(newVillage);
     }
 
     return errorMap;
@@ -494,8 +494,8 @@ public class LocationService {
   }
 
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Community getCommunity(UUID id) {
-    return communityRepository.findOne(id);
+  public Village getVillage(UUID id) {
+    return villageRepository.findOne(id);
   }
 
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)

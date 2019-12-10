@@ -5,51 +5,51 @@ import Alert from 'react-s-alert';
 import { initialize } from 'redux-form';
 
 import { hasAuthority, MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY } from '../utils/authorization';
-import { saveCommunity } from '../actions/index';
+import { saveVillage } from '../actions/index';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
-import CommunityForm, { COMMUNITY_FORM_NAME } from './community-form';
+import VillageForm, { VILLAGE_FORM_NAME } from './village-form';
 
-class CommunityEdit extends Component {
+class VillageEdit extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       showConfirmModal: false,
-      communityValues: {},
+      villageValues: {},
     };
 
     this.onSubmitCancel = this.onSubmitCancel.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onSubmitModal = this.onSubmitModal.bind(this);
     this.hideConfirmModal = this.hideConfirmModal.bind(this);
-    this.fetchCommunity = this.fetchCommunity.bind(this);
+    this.fetchVillage = this.fetchVillage.bind(this);
   }
 
   componentWillMount() {
     if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }
-    this.fetchCommunity();
+    this.fetchVillage();
   }
 
   onSubmitCancel() {
     this.props.history.push('/locations');
   }
 
-  onSubmit(communityValues) {
-    this.setState({ showConfirmModal: true, communityValues });
+  onSubmit(villageValues) {
+    this.setState({ showConfirmModal: true, villageValues });
   }
 
   onSubmitModal() {
     const valuesToSend = {
-      id: this.state.communityValues.id,
-      name: this.state.communityValues.name,
-      facilityId: this.state.communityValues.facilityId,
+      id: this.state.villageValues.id,
+      name: this.state.villageValues.name,
+      facilityId: this.state.villageValues.facilityId,
     };
 
-    this.props.saveCommunity(valuesToSend, () => {
-      Alert.success('Community has been updated');
+    this.props.saveVillage(valuesToSend, () => {
+      Alert.success('Village has been updated');
       this.props.history.push('/locations');
     });
   }
@@ -58,13 +58,13 @@ class CommunityEdit extends Component {
     this.setState({ showConfirmModal: false });
   }
 
-  fetchCommunity() {
-    const url = `/api/community/${this.props.match.params.communityId}`;
+  fetchVillage() {
+    const url = `/api/village/${this.props.match.params.villageId}`;
     apiClient.get(url)
       .then((response) => {
         if (response) {
-          const initialCommunityData = response.data;
-          this.props.initialize(COMMUNITY_FORM_NAME, initialCommunityData);
+          const initialVillageData = response.data;
+          this.props.initialize(VILLAGE_FORM_NAME, initialVillageData);
         }
       });
   }
@@ -72,8 +72,8 @@ class CommunityEdit extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Community</h1>
-        <CommunityForm
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Village</h1>
+        <VillageForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
           isPasswordRequired={false}
@@ -81,7 +81,7 @@ class CommunityEdit extends Component {
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}
           modalParentId="page-wrapper"
-          modalText="Are you sure to edit Community?"
+          modalText="Are you sure to edit Village?"
           onConfirm={this.onSubmitModal}
           onHide={this.hideConfirmModal}
         />
@@ -90,17 +90,17 @@ class CommunityEdit extends Component {
   }
 }
 
-export default connect(null, { saveCommunity, initialize })(CommunityEdit);
+export default connect(null, { saveVillage, initialize })(VillageEdit);
 
-CommunityEdit.propTypes = {
-  saveCommunity: PropTypes.func.isRequired,
+VillageEdit.propTypes = {
+  saveVillage: PropTypes.func.isRequired,
   initialize: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      communityId: PropTypes.string,
+      villageId: PropTypes.string,
     }),
   }).isRequired,
 };

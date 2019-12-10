@@ -12,10 +12,10 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +38,12 @@ public class LocationImporter implements ApplicationRunner {
   private static final String DISTRICT_HEADER = "District";
   private static final String SECTOR_HEADER = "Sector";
   private static final String FACILITY_HEADER = "FACILITY_NAME";
-  private static final String COMMUNITY_HEADER = "Community";
+  private static final String VILLAGE_HEADER = "Village";
 
   private static final int DISTRICT_COL_NUMBER = 0;
   private static final int SECTOR_COL_NUMBER = 1;
   private static final int FACILITY_COL_NUMBER = 2;
-  private static final int COMMUNITY_COL_NUMBER = 3;
+  private static final int VILLAGE_COL_NUMBER = 3;
 
   private static final String LOCATIONS_SHEET = "Locations";
   private static final String FACILITIES_SHEET = "Facilities";
@@ -54,7 +54,7 @@ public class LocationImporter implements ApplicationRunner {
   private List<District> currentDistrictList;
   private List<Sector> currentSectorList;
   private List<Facility> currentFacilityList;
-  private List<Community> currentCommunityList;
+  private List<Village> currentVillageList;
 
   /**
    * Initializes locationService and locations lists.
@@ -78,7 +78,7 @@ public class LocationImporter implements ApplicationRunner {
     this.currentDistrictList = locationService.getDistricts();
     this.currentSectorList = locationService.getSectors();
     this.currentFacilityList = locationService.getFacilites();
-    this.currentCommunityList = locationService.getCommunities();
+    this.currentVillageList = locationService.getVillages();
 
     InputStream excelFileToRead = new FileInputStream("src/main/resources/SL_Locations.xlsx");
     XSSFWorkbook  wb = new XSSFWorkbook(excelFileToRead);
@@ -95,7 +95,7 @@ public class LocationImporter implements ApplicationRunner {
     this.currentFacilityList = locationService.getFacilites();
 
     sheet = wb.getSheet(LOCATIONS_SHEET);
-    parseCommunities(sheet);
+    parseVillages(sheet);
 
     LOGGER.info("Locations have been successfully loaded");
   }
@@ -217,15 +217,15 @@ public class LocationImporter implements ApplicationRunner {
     });
   }
 
-  private void parseCommunities(XSSFSheet sheet) {
+  private void parseVillages(XSSFSheet sheet) {
     XSSFRow row;
     XSSFCell cell;
     Iterator rows = sheet.rowIterator();
-    HashSet<Community> newCommunitySet = new HashSet<>();
+    HashSet<Village> newVillageSet = new HashSet<>();
 
     while (rows.hasNext()) {
       row = (XSSFRow) rows.next();
-      cell = row.getCell(COMMUNITY_COL_NUMBER);
+      cell = row.getCell(VILLAGE_COL_NUMBER);
 
       if (cell == null) {
         continue;
@@ -233,11 +233,11 @@ public class LocationImporter implements ApplicationRunner {
 
       String cellText = cell.getStringCellValue();
 
-      if (cellText.equals(COMMUNITY_HEADER) || StringUtils.isEmpty(cellText)) {
+      if (cellText.equals(VILLAGE_HEADER) || StringUtils.isEmpty(cellText)) {
         continue;
       }
 
-      Community community = new Community(cellText);
+      Village village = new Village(cellText);
       String parentFacilityName = row.getCell(FACILITY_COL_NUMBER).getStringCellValue();
       String parentSectorName = row.getCell(SECTOR_COL_NUMBER).getStringCellValue();
       String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
@@ -246,16 +246,16 @@ public class LocationImporter implements ApplicationRunner {
           .filter(facility -> facility.getName().equals(parentFacilityName)
               && facility.getSector().getName().equals(parentSectorName)
               && facility.getSector().getDistrict().getName().equals(parentDistrictName))
-          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Community parent "
-              + "is not defined properly in spreadsheet", community.getName())));
+          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Village parent "
+              + "is not defined properly in spreadsheet", village.getName())));
 
-      community.setFacility(parent);
-      newCommunitySet.add(community);
+      village.setFacility(parent);
+      newVillageSet.add(village);
     }
 
-    newCommunitySet.forEach(newCommunity -> {
-      if (!currentCommunityList.contains(newCommunity)) {
-        locationService.createImportedCommunity(newCommunity);
+    newVillageSet.forEach(newVillage -> {
+      if (!currentVillageList.contains(newVillage)) {
+        locationService.createImportedVillage(newVillage);
       }
     });
   }

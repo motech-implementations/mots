@@ -83,8 +83,8 @@ export function getSelectableLocations(
     case 'facilities':
       if (sector && sector.facilities) return sector.facilities;
       break;
-    case 'communities':
-      if (facility && facility.communities) return facility.communities;
+    case 'villages':
+      if (facility && facility.villages) return facility.villages;
       break;
     default:
       return [];

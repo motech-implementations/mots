@@ -72,7 +72,7 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'sectorId', 'facilityId', 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'sectorId', 'facilityId', 'villageId')),
   },
   sectorId: {
     type: 'select',
@@ -87,7 +87,7 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'villageId')),
   },
   facilityId: {
     type: 'select',
@@ -103,17 +103,17 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'villageId')),
   },
-  communityId: {
+  villageId: {
     type: 'select',
-    label: 'Community',
+    label: 'Village',
     required: true,
     getSelectOptions: ({
       availableLocations, districtId, sectorId, facilityId,
     }) => ({
       values: getSelectableLocations(
-        'communities',
+        'villages',
         availableLocations,
         districtId,
         sectorId,

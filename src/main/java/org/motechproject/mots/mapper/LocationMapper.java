@@ -13,13 +13,11 @@ import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.domain.Sector;
-import org.motechproject.mots.dto.CommunityCreationDto;
-import org.motechproject.mots.dto.CommunityExtendedInfoDto;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.dto.DistrictCreationDto;
 import org.motechproject.mots.dto.DistrictDto;
 import org.motechproject.mots.dto.FacilityCreationDto;
@@ -27,6 +25,8 @@ import org.motechproject.mots.dto.FacilityDto;
 import org.motechproject.mots.dto.FacilityExtendedInfoDto;
 import org.motechproject.mots.dto.LocationPreviewDto;
 import org.motechproject.mots.dto.SectorCreationDto;
+import org.motechproject.mots.dto.VillageCreationDto;
+import org.motechproject.mots.dto.VillageExtendedInfoDto;
 
 @Mapper(uses = { UuidMapper.class, EnumsMapper.class },
     unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -47,7 +47,7 @@ public interface LocationMapper {
   /**
    * Convert location set to location preview dto set.
    * @param locations set of locations of any type
-   * @return map of community dtos, where the key is the community id
+   * @return map of Village dtos, where the key is the village id
    */
   default Set<LocationPreviewDto> toLocationPreviewDtos(List<? extends Location> locations) {
     Set<LocationPreviewDto> locationPreviewDtos = new HashSet<>();
@@ -63,7 +63,7 @@ public interface LocationMapper {
   /**
    * Convert location list to location preview dto list.
    * @param locations list of locations of any type
-   * @return list of community dtos
+   * @return list of village dtos
    */
   default List<LocationPreviewDto> toLocationPreviewDtosWithOrder(
       List<? extends Location> locations) {
@@ -83,12 +83,12 @@ public interface LocationMapper {
   })
   LocationPreviewDto toLocationPreviewDto(Location location);
 
-  @Named("createCommunity")
+  @Named("createVillage")
   @Mappings({
       @Mapping(target = "facilityId", source = "facility.id"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
-  CommunityCreationDto toCommunityCreationDto(Community community);
+  VillageCreationDto toVillageCreationDto(Village village);
 
   @Mappings({
       @Mapping(target = "facilityId", source = "facility.id"),
@@ -96,7 +96,7 @@ public interface LocationMapper {
       @Mapping(target = "districtId", source = "facility.sector.district.id"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
-  CommunityExtendedInfoDto toCommunityExtendedInfoDto(Community community);
+  VillageExtendedInfoDto toVillageExtendedInfoDto(Village village);
 
   @Named("createFacility")
   @Mappings({
@@ -129,7 +129,7 @@ public interface LocationMapper {
       @Mapping(target = "facility", source = "facilityId"),
       @Mapping(target = "owner", ignore = true)
   })
-  Community fromDtoToCommunity(CommunityCreationDto communityCreationDto);
+  Village fromDtoToVillage(VillageCreationDto villageCreationDto);
 
   @Mappings({
       @Mapping(target = "sector", source = "sectorId"),
@@ -190,8 +190,8 @@ public interface LocationMapper {
       @Mapping(target = "facility", source = "facilityId"),
       @Mapping(target = "owner", ignore = true)
   })
-  void updateCommunityFromDto(CommunityCreationDto communityCreationDto,
-      @MappingTarget Community community);
+  void updateVillageFromDto(VillageCreationDto villageCreationDto,
+      @MappingTarget Village village);
 
   @Mappings({
       @Mapping(target = "sector", source = "sectorId"),

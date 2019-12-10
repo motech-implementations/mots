@@ -7,7 +7,7 @@ public final class ValidationMessages {
   public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
   public static final String EMPTY_FAMILY_NAME = "Family name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
-  public static final String EMPTY_COMMUNITY = "Community cannot be empty";
+  public static final String EMPTY_VILLAGE = "Village cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
   public static final String EMPTY_QUESTION_OR_MESSAGE = "Message/Question name cannot be empty";
   public static final String EMPTY_LOCATION_NAME = "Location name cannot be empty";
@@ -33,7 +33,7 @@ public final class ValidationMessages {
   public static final String INVALID_DISTRICT_ID = "Invalid district UUID";
   public static final String INVALID_SECTOR_ID = "Invalid sector UUID";
   public static final String INVALID_GROUP_ID = "Invalid group UUID";
-  public static final String INVALID_COMMUNITY_ID = "Invalid community UUID";
+  public static final String INVALID_VILLAGE_ID = "Invalid village UUID";
   public static final String INVALID_PHONE_NUMBER = "Invalid phone number";
   public static final String INVALID_DATE = "Invalid format of date";
   public static final String INVALID_PAST_DATE = "Date must be in the past";
@@ -48,7 +48,7 @@ public final class ValidationMessages {
       = "A Community Health Worker with id %s already exists";
 
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
-  public static final String NOT_EXISTING_COMMUNITY = "Community doesn't exist";
+  public static final String NOT_EXISTING_VILLAGE = "Village doesn't exist";
   public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
   public static final String NOT_EXISTING_SECTOR = "Sector doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
@@ -61,8 +61,8 @@ public final class ValidationMessages {
   public static final String NOT_UNIQUE_FACILITY_ID = "A Facility with this ID already exists";
   public static final String NOT_UNIQUE_FACILITY =
       "A Facility with name: '%s' within sector already exists";
-  public static final String NOT_UNIQUE_COMMUNITY =
-      "A Community with name: '%s' within facility already exists";
+  public static final String NOT_UNIQUE_VILLAGE =
+      "A Village with name: '%s' within facility already exists";
   public static final String NOT_UNIQUE_SECTOR =
        "A Sector with name: '%s' within district already exists";
   public static final String NOT_UNIQUE_DISTRICT =

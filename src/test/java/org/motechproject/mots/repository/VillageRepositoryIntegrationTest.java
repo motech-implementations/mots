@@ -10,24 +10,24 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
-import org.motechproject.mots.testbuilder.CommunityDataBuilder;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.FacilityDataBuilder;
 import org.motechproject.mots.testbuilder.SectorDataBuilder;
+import org.motechproject.mots.testbuilder.VillageDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 @WithMockAdminUser
-public class CommunityRepositoryIntegrationTest extends
-    BaseCrudRepositoryIntegrationTest<Community> {
+public class VillageRepositoryIntegrationTest extends
+    BaseCrudRepositoryIntegrationTest<Village> {
 
   @Autowired
-  private CommunityRepository communityRepository;
+  private VillageRepository villageRepository;
 
   @Autowired
   private FacilityRepository facilityRepository;
@@ -48,8 +48,8 @@ public class CommunityRepositoryIntegrationTest extends
       .withSector(sector)
       .buildAsNew();
 
-  private Community community1 = generateInstance();
-  private Community community2 = generateInstance();
+  private Village village1 = generateInstance();
+  private Village village2 = generateInstance();
 
   /**
    * Prepare the test environment.
@@ -59,48 +59,48 @@ public class CommunityRepositoryIntegrationTest extends
     districtRepository.save(district);
     sectorRepository.save(sector);
     facilityRepository.save(facility);
-    communityRepository.save(community1);
-    communityRepository.save(community2);
+    villageRepository.save(village1);
+    villageRepository.save(village2);
   }
 
   @Override
-  protected CommunityRepository getRepository() {
-    return this.communityRepository;
+  protected VillageRepository getRepository() {
+    return this.villageRepository;
   }
 
   @Test
-  public void shouldFindCommunityByName() {
+  public void shouldFindVillageByName() {
     // when
-    Page<Community> result = communityRepository.search(
-        community1.getName(), null, null, null, null);
+    Page<Village> result = villageRepository.search(
+        village1.getName(), null, null, null, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
-    Community foundCommunity = result.getContent().get(0);
-    assertThat(foundCommunity.getName(), is(community1.getName()));
+    Village foundVillage = result.getContent().get(0);
+    assertThat(foundVillage.getName(), is(village1.getName()));
   }
 
   @Test
-  public void shouldFindCommunityByDistrict() {
+  public void shouldFindVillageByDistrict() {
     // when
-    Page<Community> result = communityRepository.search(
-        null, community1.getParentName(), null, null, null);
+    Page<Village> result = villageRepository.search(
+        null, village1.getParentName(), null, null, null);
 
     // then
     assertThat(result.getTotalElements(), is(2L));
-    Set<UUID> foundCommunities = result.getContent().stream()
+    Set<UUID> foundVillages = result.getContent().stream()
         .map(BaseTimestampedEntity::getId)
         .collect(Collectors.toSet());
-    assertTrue(foundCommunities.contains(community1.getId()));
-    assertTrue(foundCommunities.contains(community2.getId()));
+    assertTrue(foundVillages.contains(village1.getId()));
+    assertTrue(foundVillages.contains(village2.getId()));
   }
 
   @Override
-  protected Community generateInstance() {
-    return getCommunityDataBuilder().buildAsNew();
+  protected Village generateInstance() {
+    return getVillageDataBuilder().buildAsNew();
   }
 
-  private CommunityDataBuilder getCommunityDataBuilder() {
-    return new CommunityDataBuilder().withFacility(facility);
+  private VillageDataBuilder getVillageDataBuilder() {
+    return new VillageDataBuilder().withFacility(facility);
   }
 }

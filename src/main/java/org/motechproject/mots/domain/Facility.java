@@ -43,7 +43,7 @@ public class Facility extends Location {
   @Getter
   @Setter
   @OrderBy("name ASC")
-  private Set<Community> communities;
+  private Set<Village> villages;
 
   @ManyToOne
   @JoinColumn(name = "sector_id", nullable = false)

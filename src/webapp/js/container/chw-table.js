@@ -103,8 +103,8 @@ class ChwTable extends Component {
       Header: 'Facility',
       accessor: 'facilityName',
     }, {
-      Header: 'Community',
-      accessor: 'communityName',
+      Header: 'Village',
+      accessor: 'villageName',
     }, {
       Header: 'Preferred language',
       accessor: 'preferredLanguage',

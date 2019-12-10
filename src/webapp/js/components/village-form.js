@@ -11,7 +11,7 @@ import {
   getSelectableLocations,
 } from '../utils/form-utils';
 
-export const COMMUNITY_FORM_NAME = 'CommunityForm';
+export const VILLAGE_FORM_NAME = 'VillageForm';
 
 const FIELDS = {
   name: {
@@ -27,7 +27,7 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, COMMUNITY_FORM_NAME, 'sectorId', 'facilityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, VILLAGE_FORM_NAME, 'sectorId', 'facilityId')),
   },
   sectorId: {
     type: 'select',
@@ -42,7 +42,7 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, COMMUNITY_FORM_NAME, 'facilityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, VILLAGE_FORM_NAME, 'facilityId')),
   },
   facilityId: {
     type: 'select',
@@ -61,7 +61,7 @@ const FIELDS = {
   },
 };
 
-class CommunityForm extends Component {
+class VillageForm extends Component {
   constructor(props) {
     super(props);
 
@@ -112,7 +112,7 @@ function validate(values) {
   return errors;
 }
 
-const selector = formValueSelector(COMMUNITY_FORM_NAME);
+const selector = formValueSelector(VILLAGE_FORM_NAME);
 
 
 function mapStateToProps(state) {
@@ -126,10 +126,10 @@ function mapStateToProps(state) {
 
 export default reduxForm({
   validate,
-  form: COMMUNITY_FORM_NAME,
-})(connect(mapStateToProps, { fetchLocations })(CommunityForm));
+  form: VILLAGE_FORM_NAME,
+})(connect(mapStateToProps, { fetchLocations })(VillageForm));
 
-CommunityForm.propTypes = {
+VillageForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmitCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
@@ -140,7 +140,7 @@ CommunityForm.propTypes = {
   facilityId: PropTypes.string,
 };
 
-CommunityForm.defaultProps = {
+VillageForm.defaultProps = {
   availableLocations: [],
   districtId: null,
   sectorId: null,

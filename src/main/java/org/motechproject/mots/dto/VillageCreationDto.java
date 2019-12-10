@@ -7,12 +7,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
-import org.motechproject.mots.validate.annotations.CommunityUniqueness;
 import org.motechproject.mots.validate.annotations.FacilityExistence;
 import org.motechproject.mots.validate.annotations.Uuid;
+import org.motechproject.mots.validate.annotations.VillageUniqueness;
 
-@CommunityUniqueness
-public class CommunityCreationDto {
+@VillageUniqueness
+public class VillageCreationDto {
 
   @Getter
   @Setter

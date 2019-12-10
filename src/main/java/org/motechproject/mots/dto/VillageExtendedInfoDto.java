@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.motechproject.mots.validate.annotations.Uuid;
 
-public class CommunityExtendedInfoDto {
+public class VillageExtendedInfoDto {
 
   @Getter
   @Setter

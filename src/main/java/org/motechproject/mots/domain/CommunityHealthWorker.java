@@ -59,10 +59,10 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   private String phoneNumber;
 
   @ManyToOne
-  @JoinColumn(name = "community_id", nullable = false)
+  @JoinColumn(name = "village_id", nullable = false)
   @Getter
   @Setter
-  private Community community;
+  private Village village;
 
   @Column(name = "preferred_language", nullable = false)
   @Enumerated(EnumType.STRING)

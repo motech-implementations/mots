@@ -29,7 +29,7 @@ public class FacilityDto {
 
   @Getter
   @Setter
-  private List<CommunityDto> communities;
+  private List<VillageDto> villages;
 
   @Getter
   @Setter

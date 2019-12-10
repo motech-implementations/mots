@@ -232,17 +232,17 @@ public class ModuleAssignmentService {
     List<CommunityHealthWorker> communityHealthWorkers;
     if (facilityId != null) {
       communityHealthWorkers = communityHealthWorkerRepository
-          .findByCommunityFacilityIdAndSelected(
+          .findByVillageFacilityIdAndSelected(
               facilityId, true);
 
     } else if (sectorId != null) {
       communityHealthWorkers = communityHealthWorkerRepository
-          .findByCommunityFacilitySectorIdAndSelected(
+          .findByVillageFacilitySectorIdAndSelected(
               sectorId, true);
 
     } else {
       communityHealthWorkers = communityHealthWorkerRepository
-          .findByCommunityFacilitySectorDistrictIdAndSelected(
+          .findByVillageFacilitySectorDistrictIdAndSelected(
               districtId, true);
     }
 

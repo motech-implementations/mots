@@ -19,8 +19,8 @@ import RoleEdit from './role-edit';
 import Locations from './locations';
 import FacilityNew from './facility-new';
 import FacilityEdit from './facility-edit';
-import CommunityNew from './community-new';
-import CommunityEdit from './community-edit';
+import VillageNew from './village-new';
+import VillageEdit from './village-edit';
 import SectorNew from './sector-new';
 import SectorEdit from './sector-edit';
 import DistrictNew from './district-new';
@@ -30,7 +30,7 @@ import GroupAssignModules from './group-assign-modules';
 import Report from './report';
 import SectorUpload from './sector-upload';
 import FacilityUpload from './facility-upload';
-import CommunityUpload from './community-upload';
+import VillageUpload from './village-upload';
 import Groups from './groups';
 import GroupNew from './group-new';
 import GroupEdit from './group-edit';
@@ -88,9 +88,9 @@ export default class App extends Component {
                 <Route path="/locations/facility/upload" component={FacilityUpload} />
                 <Route path="/locations/facility/new" component={FacilityNew} />
                 <Route path="/locations/facility/:facilityId" component={FacilityEdit} />
-                <Route path="/locations/community/upload" component={CommunityUpload} />
-                <Route path="/locations/community/new" component={CommunityNew} />
-                <Route path="/locations/community/:communityId" component={CommunityEdit} />
+                <Route path="/locations/village/upload" component={VillageUpload} />
+                <Route path="/locations/village/new" component={VillageNew} />
+                <Route path="/locations/village/:villageId" component={VillageEdit} />
                 <Route path="/locations/sector/upload" component={SectorUpload} />
                 <Route path="/locations/sector/new" component={SectorNew} />
                 <Route path="/locations/sector/:sectorId" component={SectorEdit} />

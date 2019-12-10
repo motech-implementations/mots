@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "community", uniqueConstraints =
+@Table(name = "village", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "facility_id"}))
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, of = {"facility"})
-public class Community extends Location {
+public class Village extends Location {
 
   @ManyToOne
   @JoinColumn(name = "facility_id", nullable = false)
@@ -24,15 +24,15 @@ public class Community extends Location {
   @Setter
   private Facility facility;
 
-  public Community(UUID id) {
+  public Village(UUID id) {
     super(id);
   }
 
-  public Community(String name) {
+  public Village(String name) {
     super(name);
   }
 
-  public Community(String name, Facility facility) {
+  public Village(String name, Facility facility) {
     super(name);
     this.facility = facility;
   }

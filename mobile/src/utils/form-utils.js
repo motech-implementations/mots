@@ -40,8 +40,8 @@ export function getSelectableLocations(
       return district ? district.sectors : [];
     case 'facilities':
       return sector ? sector.facilities : [];
-    case 'communities':
-      return facility ? facility.communities : [];
+    case 'villages':
+      return facility ? facility.villages : [];
     default:
       return [];
   }

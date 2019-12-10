@@ -31,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class CommunityHealthWorkerController extends BaseController {
 
-  public static final String COMMUNITY_NAME_PARAM = "communityName";
+  public static final String VILLAGE_NAME_PARAM = "villageName";
   public static final String FACILITY_NAME_PARAM = "facilityName";
   public static final String SECTOR_NAME_PARAM = "sectorName";
   public static final String DISTRICT_NAME_PARAM = "districtName";
@@ -69,7 +69,7 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = "firstName", required = false) String firstName,
       @RequestParam(value = "familyName", required = false) String familyName,
       @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
-      @RequestParam(value = COMMUNITY_NAME_PARAM, required = false) String communityName,
+      @RequestParam(value = VILLAGE_NAME_PARAM, required = false) String villageName,
       @RequestParam(value = FACILITY_NAME_PARAM, required = false) String facilityName,
       @RequestParam(value = SECTOR_NAME_PARAM, required = false) String sectorName,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String districtName,
@@ -80,7 +80,7 @@ public class CommunityHealthWorkerController extends BaseController {
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
             chwId, firstName, familyName, phoneNumber,
-            communityName, facilityName, sectorName,
+            villageName, facilityName, sectorName,
             districtName, groupName, selected, pageable);
 
     List<CommunityHealthWorkerDto> healthWorkersDto =

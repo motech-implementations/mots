@@ -30,7 +30,7 @@ public abstract class BaseRepositoryImpl {
   protected static final String FACILITY = "facility";
   protected static final String SECTOR = "sector";
   protected static final String DISTRICT = "district";
-  protected static final String COMMUNITY = "community";
+  protected static final String VILLAGE = "village";
   protected static final String EMAIL = "email";
   protected static final String USERNAME = "username";
   protected static final String ROLES = "roles";

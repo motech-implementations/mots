@@ -7,19 +7,19 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.validate.constraintvalidators.CommunityExistenceValidator;
+import org.motechproject.mots.validate.constraintvalidators.VillageUniquenessValidator;
 
-@Target(ElementType.FIELD)
-@Constraint(validatedBy = {CommunityExistenceValidator.class})
+@Target(ElementType.TYPE)
+@Constraint(validatedBy = {VillageUniquenessValidator.class})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommunityExistence {
+public @interface VillageUniqueness {
 
   /**
    * Specify the message in case of a validation error
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_EXISTING_COMMUNITY;
+  String message() default ValidationMessages.NOT_UNIQUE_VILLAGE;
 
   /**
    * Specify validation groups, to which this constraint belongs

@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.validate.annotations.Uuid;
 
-public class CommunityDto {
+public class VillageDto {
 
   @Getter
   @Setter

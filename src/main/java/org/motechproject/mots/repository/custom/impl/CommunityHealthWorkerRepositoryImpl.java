@@ -25,7 +25,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String familyName, String phoneNumber,
-      String communityName, String facilityName, String sectorName,
+      String villageName, String facilityName, String sectorName,
       String districtName, String groupName, Boolean selected,
       Pageable pageable) throws IllegalArgumentException {
 
@@ -33,13 +33,13 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
     query = prepareQuery(query, chwId, firstName, familyName,
-        phoneNumber, communityName, facilityName,
+        phoneNumber, villageName, facilityName,
         sectorName, districtName, groupName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
     countQuery = prepareQuery(countQuery, chwId, firstName, familyName,
-        phoneNumber, communityName, facilityName,
+        phoneNumber, villageName, facilityName,
         sectorName, districtName, groupName, selected, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
@@ -56,7 +56,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String chwId, String firstName, String familyName,
-      String phoneNumber, String communityName, String facilityName,
+      String phoneNumber, String villageName, String facilityName,
       String sectorName, String districtName, String groupName,
       Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
 
@@ -84,22 +84,22 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
       predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),
           '%' + phoneNumber.trim() + '%'));
     }
-    if (communityName != null) {
+    if (villageName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(NAME), '%' + communityName.trim() + '%'));
+          root.get(VILLAGE).get(NAME), '%' + villageName.trim() + '%'));
     }
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(NAME), '%' + facilityName.trim() + '%'));
+          root.get(VILLAGE).get(FACILITY).get(NAME), '%' + facilityName.trim() + '%'));
     }
     if (sectorName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(SECTOR).get(NAME),
+          root.get(VILLAGE).get(FACILITY).get(SECTOR).get(NAME),
           '%' + sectorName.trim()  + '%'));
     }
     if (districtName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(COMMUNITY).get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME),
+          root.get(VILLAGE).get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME),
           '%' + districtName.trim()  + '%'));
     }
     if (groupName != null) {
@@ -124,14 +124,14 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   @Override
   protected Path getPath(Root root, Sort.Order order) {
     switch (order.getProperty()) {
-      case CommunityHealthWorkerController.COMMUNITY_NAME_PARAM:
-        return root.get(COMMUNITY).get(NAME);
+      case CommunityHealthWorkerController.VILLAGE_NAME_PARAM:
+        return root.get(VILLAGE).get(NAME);
       case CommunityHealthWorkerController.FACILITY_NAME_PARAM:
-        return root.get(COMMUNITY).get(FACILITY).get(NAME);
+        return root.get(VILLAGE).get(FACILITY).get(NAME);
       case CommunityHealthWorkerController.SECTOR_NAME_PARAM:
-        return root.get(COMMUNITY).get(FACILITY).get(SECTOR).get(NAME);
+        return root.get(VILLAGE).get(FACILITY).get(SECTOR).get(NAME);
       case CommunityHealthWorkerController.DISTRICT_NAME_PARAM:
-        return root.get(COMMUNITY).get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME);
+        return root.get(VILLAGE).get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME);
       case CommunityHealthWorkerController.GROUP_NAME_PARAM:
         return root.get(GROUP).get(NAME);
       default:

@@ -19,14 +19,14 @@ import {
   FETCH_SECTORS,
   FETCH_DISTRICTS,
   FETCH_FACILITIES,
-  FETCH_COMMUNITIES,
+  FETCH_VILLAGES,
   CREATE_USER,
   FETCH_ROLES,
   SEARCH_ROLES,
   SAVE_USER,
   CREATE_FACILITY,
-  CREATE_COMMUNITY,
-  SAVE_COMMUNITY,
+  CREATE_VILLAGE,
+  SAVE_VILLAGE,
   SAVE_FACILITY,
   SAVE_USER_PROFILE,
   FETCH_REPORTS,
@@ -272,22 +272,22 @@ export function saveFacility(values, callback) {
   };
 }
 
-export function createCommunity(values, callback) {
-  const request = apiClient.post(`${BASE_URL}/community`, values);
+export function createVillage(values, callback) {
+  const request = apiClient.post(`${BASE_URL}/village`, values);
   request.then(() => callback());
 
   return {
-    type: CREATE_COMMUNITY,
+    type: CREATE_VILLAGE,
     payload: request,
   };
 }
 
-export function saveCommunity(values, callback) {
-  const request = apiClient.put(`${BASE_URL}/community/${values.id}`, values);
+export function saveVillage(values, callback) {
+  const request = apiClient.put(`${BASE_URL}/village/${values.id}`, values);
   request.then(() => callback());
 
   return {
-    type: SAVE_COMMUNITY,
+    type: SAVE_VILLAGE,
     payload: request,
   };
 }
@@ -355,8 +355,8 @@ export function fetchLocationsOfType(type, searchParams) {
     case FETCH_FACILITIES:
       url = `${BASE_URL}/facility/locations/search`;
       break;
-    case FETCH_COMMUNITIES:
-      url = `${BASE_URL}/community/locations/search`;
+    case FETCH_VILLAGES:
+      url = `${BASE_URL}/village/locations/search`;
       break;
     default:
       throw new Error('Unexpected use of fetchLocationsOfType method');

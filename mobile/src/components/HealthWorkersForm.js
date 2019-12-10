@@ -131,7 +131,7 @@ const FIELDS = {
         CHW_FORM_NAME,
         'sectorId',
         'facilityId',
-        'communityId',
+        'villageId',
       )
     ),
   },
@@ -158,7 +158,7 @@ const FIELDS = {
         ),
         CHW_FORM_NAME,
         'facilityId',
-        'communityId',
+        'villageId',
       )
     ),
     getDynamicAttributes: ({ districtId }) => ({
@@ -189,22 +189,22 @@ const FIELDS = {
           sectorId,
         ),
         CHW_FORM_NAME,
-        'communityId',
+        'villageId',
       )
     ),
     getDynamicAttributes: ({ sectorId }) => ({
       hidden: !sectorId,
     }),
   },
-  communityId: {
+  villageId: {
     type: Select,
-    label: 'Community',
+    label: 'Village',
     required: true,
     getSelectOptions: ({
       availableLocations, districtId, sectorId, facilityId,
     }) => ({
       values: getSelectableLocations(
-        'communities',
+        'villages',
         availableLocations,
         districtId,
         sectorId,
@@ -219,7 +219,7 @@ const FIELDS = {
       getAttributesForSelect(
         input,
         getSelectableLocations(
-          'communities',
+          'villages',
           availableLocations,
           districtId,
           sectorId,

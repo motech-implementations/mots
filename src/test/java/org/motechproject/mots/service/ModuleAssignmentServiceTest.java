@@ -237,7 +237,7 @@ public class ModuleAssignmentServiceTest {
   @Test
   public void shouldAssignModulesToDistrict() throws Exception {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
-    when(communityHealthWorkerRepository.findByCommunityFacilitySectorDistrictIdAndSelected(any(),
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
     moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
@@ -273,7 +273,7 @@ public class ModuleAssignmentServiceTest {
   @Test
   public void shouldAssignModulesToASector() throws Exception {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
-    when(communityHealthWorkerRepository.findByCommunityFacilitySectorIdAndSelected(
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorIdAndSelected(
         eq(SECTOR.getId()), any())).thenReturn(Collections.singletonList(CHW));
 
     districtAssignmentDto.setSectorId(SECTOR.getId().toString());
@@ -318,7 +318,7 @@ public class ModuleAssignmentServiceTest {
         .withChw(chw)
         .build();
 
-    when(communityHealthWorkerRepository.findByCommunityFacilitySectorDistrictIdAndSelected(any(),
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(chw));
     when(assignedModulesRepository.findByHealthWorkerId(eq(chw.getId())))
         .thenReturn(Optional.of(assignedModules));
@@ -329,7 +329,7 @@ public class ModuleAssignmentServiceTest {
   @Test(expected = ModuleAssignmentException.class)
   public void assignModulesToDistrictShouldThrowCustomExceptionIfIvrServiceThrow()
       throws Exception {
-    when(communityHealthWorkerRepository.findByCommunityFacilitySectorDistrictIdAndSelected(any(),
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
     doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
