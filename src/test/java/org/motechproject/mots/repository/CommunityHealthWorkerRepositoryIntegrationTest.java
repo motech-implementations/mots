@@ -135,6 +135,9 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
 
   private CommunityHealthWorkerDataBuilder getChwDataBuilder() {
     return new CommunityHealthWorkerDataBuilder()
+        .withDistrict(district)
+        .withSector(sector)
+        .withFacility(facility)
         .withVillage(village);
   }
 }

@@ -13,7 +13,7 @@ public interface FacilityRepository extends JpaRepository<Facility, UUID>,
 
   List<Facility> findAll();
 
-  Optional<Facility> findByNameAndSector(String name, Sector sector);
+  Facility findByNameAndSector(String name, Sector sector);
 
   Optional<Facility> findByFacilityId(String id);
 

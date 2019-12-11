@@ -1,6 +1,5 @@
 package org.motechproject.mots.validate.constraintvalidators;
 
-import java.util.Optional;
 import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -38,12 +37,11 @@ public class FacilityUniquenessValidator implements
       UUID sectorId = UUID.fromString(facilityCreationDto.getSectorId());
       Sector sector = sectorRepository.findOne(sectorId);
 
-      Optional<Facility> existing = facilityRepository.findByNameAndSector(name, sector);
+      Facility existing = facilityRepository.findByNameAndSector(name, sector);
 
-      if (existing.isPresent() // when edit facility allows change
-          && !existing.get().getId().toString().equals(facilityCreationDto.getId())) {
-        String message = String.format(ValidationMessages.NOT_UNIQUE_FACILITY,
-                existing.get().getName());
+      if (existing != null // when edit facility allows change
+          && !existing.getId().toString().equals(facilityCreationDto.getId())) {
+        String message = String.format(ValidationMessages.NOT_UNIQUE_FACILITY, existing.getName());
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, NAME, message);

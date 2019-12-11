@@ -77,7 +77,6 @@ const FIELDS = {
   sectorId: {
     type: 'select',
     label: 'Sector',
-    required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'sectors',
@@ -92,7 +91,6 @@ const FIELDS = {
   facilityId: {
     type: 'select',
     label: 'Facility',
-    required: true,
     getSelectOptions: ({ availableLocations, districtId, sectorId }) => ({
       values: getSelectableLocations(
         'facilities',
@@ -108,7 +106,6 @@ const FIELDS = {
   villageId: {
     type: 'select',
     label: 'Village',
-    required: true,
     getSelectOptions: ({
       availableLocations, districtId, sectorId, facilityId,
     }) => ({

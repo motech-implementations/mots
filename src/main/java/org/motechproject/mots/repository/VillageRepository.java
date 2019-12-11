@@ -1,7 +1,6 @@
 package org.motechproject.mots.repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Village;
@@ -13,7 +12,7 @@ public interface VillageRepository extends JpaRepository<Village, UUID>,
 
   List<Village> findAll();
 
-  Optional<Village> findByNameAndFacility(String name, Facility facility);
+  Village findByNameAndFacility(String name, Facility facility);
 
   Village findByNameAndFacilityName(String name, String facilityName);
 

@@ -20,7 +20,10 @@ import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.District;
+import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Group;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
@@ -31,7 +34,10 @@ import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
+import org.motechproject.mots.repository.DistrictRepository;
+import org.motechproject.mots.repository.FacilityRepository;
 import org.motechproject.mots.repository.GroupRepository;
+import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.repository.VillageRepository;
 import org.motechproject.mots.validate.constraintvalidators.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +59,15 @@ public class CommunityHealthWorkerService {
 
   @Autowired
   private AssignedModulesRepository assignedModulesRepository;
+
+  @Autowired
+  private DistrictRepository districtRepository;
+
+  @Autowired
+  private SectorRepository sectorRepository;
+
+  @Autowired
+  private FacilityRepository facilityRepository;
 
   @Autowired
   private VillageRepository villageRepository;
@@ -276,17 +291,30 @@ public class CommunityHealthWorkerService {
         }
       }
 
-      String village = csvRow.get(VILLAGE_CSV_HEADER);
-      String facility = csvRow.get(PHU_CSV_HEADER);
+      String districtName = csvRow.get(DISTRICT_CSV_HEADER);
+      Optional<District> district = districtRepository.findByName(districtName);
 
-      Village chwVillage = villageRepository
-          .findByNameAndFacilityName(village, facility);
-
-      if (chwVillage == null) {
+      if (!district.isPresent()) {
         errorMap.put(csvMapReader.getLineNumber(), String.format(
-            "There is no village %s in facility %s in MOTS",
-            village, facility));
+            "There is no district with name: %s in MOTS", districtName));
         continue;
+      }
+
+      String sectorName = csvRow.get(SECTOR_CSV_HEADER);
+      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
+
+      String facilityName = csvRow.get(PHU_CSV_HEADER);
+      Facility facility = null;
+
+      if (sector != null && StringUtils.isNotBlank(facilityName)) {
+        facility = facilityRepository.findByNameAndSector(facilityName, sector);
+      }
+
+      String villageName = csvRow.get(VILLAGE_CSV_HEADER);
+      Village village = null;
+
+      if (facility != null && StringUtils.isNotBlank(villageName)) {
+        village = villageRepository.findByNameAndFacility(villageName, facility);
       }
 
       String groupName = csvRow.get(GROUP_CSV_HEADER);
@@ -334,7 +362,10 @@ public class CommunityHealthWorkerService {
       communityHealthWorker.setFamilyName(csvRow.get(FAMILY_NAME_CSV_HEADER));
       communityHealthWorker.setGender(Gender.getByDisplayName(csvRow.get(GENDER_CSV_HEADER)));
       communityHealthWorker.setPhoneNumber(phoneNumber);
-      communityHealthWorker.setVillage(chwVillage);
+      communityHealthWorker.setDistrict(district.get());
+      communityHealthWorker.setSector(sector);
+      communityHealthWorker.setFacility(facility);
+      communityHealthWorker.setVillage(village);
       communityHealthWorker.setPreferredLanguage(preferredLanguage);
 
       if (group != null) {

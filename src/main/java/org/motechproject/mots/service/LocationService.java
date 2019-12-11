@@ -267,10 +267,9 @@ public class LocationService {
       District district = districtRepository.findByName(districtName).orElseGet(() ->
           districtRepository.save(new District(districtName)));
 
-      Optional<Sector> sector =
-          sectorRepository.findByNameAndDistrict(sectorName, district);
+      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district);
 
-      if (sector.isPresent()) {
+      if (sector != null) {
         errorMap.put(csvMapReader.getLineNumber(), "Sector with this name already exists");
         continue;
       }
@@ -337,31 +336,28 @@ public class LocationService {
         continue;
       }
 
-      Optional<Sector> sector = sectorRepository.findByNameAndDistrict(sectormName,
-          district.get());
+      Sector sector = sectorRepository.findByNameAndDistrict(sectormName, district.get());
 
-      if (!sector.isPresent()) {
+      if (sector == null) {
         errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
         continue;
       }
 
-      Optional<Facility> facility = facilityRepository.findByNameAndSector(facilityName,
-          sector.get());
+      Facility facility = facilityRepository.findByNameAndSector(facilityName, sector);
 
-      if (!facility.isPresent()) {
+      if (facility == null) {
         errorMap.put(csvMapReader.getLineNumber(), "Facility with this name does not exist");
         continue;
       }
 
-      Optional<Village> village =
-          villageRepository.findByNameAndFacility(villageName, facility.get());
+      Village village = villageRepository.findByNameAndFacility(villageName, facility);
 
-      if (village.isPresent()) {
+      if (village != null) {
         errorMap.put(csvMapReader.getLineNumber(), "Village with this name already exists");
         continue;
       }
 
-      Village newVillage = new Village(villageName, facility.get());
+      Village newVillage = new Village(villageName, facility);
 
       villageRepository.save(newVillage);
     }
@@ -430,16 +426,15 @@ public class LocationService {
         continue;
       }
 
-      Optional<Sector> sector = sectorRepository.findByNameAndDistrict(sectorName,
-          district.get());
+      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
-      if (!sector.isPresent()) {
+      if (sector == null) {
         errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
         continue;
       }
 
       Optional<Facility> facility = facilityRepository
-          .findByFacilityIdOrSectorAndName(facilityId, sector.get(), facilityName);
+          .findByFacilityIdOrSectorAndName(facilityId, sector, facilityName);
 
       if (facility.isPresent()) {
         errorMap.put(csvMapReader.getLineNumber(),
@@ -452,7 +447,7 @@ public class LocationService {
       String inchargeEmail = csvRow.get(INCHARGE_EMAIL_HEADER);
 
       Facility newFacility = new Facility(facilityName, facilityType, facilityId, inchargeName,
-          inchargePhone, inchargeEmail, sector.get());
+          inchargePhone, inchargeEmail, sector);
 
       facilityRepository.save(newFacility);
     }

@@ -7,7 +7,7 @@ public final class ValidationMessages {
   public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
   public static final String EMPTY_FAMILY_NAME = "Family name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
-  public static final String EMPTY_VILLAGE = "Village cannot be empty";
+  public static final String EMPTY_DISTRICT = "District cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
   public static final String EMPTY_QUESTION_OR_MESSAGE = "Message/Question name cannot be empty";
   public static final String EMPTY_LOCATION_NAME = "Location name cannot be empty";

@@ -1,7 +1,6 @@
 package org.motechproject.mots.repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Sector;
@@ -13,6 +12,6 @@ public interface SectorRepository extends JpaRepository<Sector, UUID>,
 
   List<Sector> findAll();
 
-  Optional<Sector> findByNameAndDistrict(String name, District district);
+  Sector findByNameAndDistrict(String name, District district);
 
 }
