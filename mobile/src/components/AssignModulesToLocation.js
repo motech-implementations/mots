@@ -35,10 +35,10 @@ class AssignModulesToLocation extends Component {
     super(props);
     this.state = {
       availableModulesList: [],
-      chiefdomOptions: [],
+      sectorOptions: [],
       facilityOptions: [],
       selectedDistrict: {},
-      selectedChiefdom: {},
+      selectedSector: {},
       selectedFacility: {},
       startDate: '',
       endDate: '',
@@ -46,7 +46,7 @@ class AssignModulesToLocation extends Component {
 
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
     this.handleDistrictChange = this.handleDistrictChange.bind(this);
-    this.handleChiefdomChange = this.handleChiefdomChange.bind(this);
+    this.handleSectorChange = this.handleSectorChange.bind(this);
     this.handleFacilityChange = this.handleFacilityChange.bind(this);
   }
 
@@ -64,25 +64,25 @@ class AssignModulesToLocation extends Component {
   }
 
 
-  getChiefdomOptions(selectedDistrictId) {
+  getSectorOptions(selectedDistrictId) {
     if (selectedDistrictId != null) {
-      const chiefdoms = getSelectableLocations(
-        'chiefdoms',
+      const sectors = getSelectableLocations(
+        'sectors',
         this.props.availableLocations,
         selectedDistrictId,
       );
-      return chiefdoms.map(chiefdom => ({ value: chiefdom.id, label: chiefdom.name }));
+      return sectors.map(sector => ({ value: sector.id, label: sector.name }));
     }
     return [];
   }
 
-  getFacilityOptions(selectedChiefdomId) {
-    if (selectedChiefdomId != null) {
+  getFacilityOptions(selectedSectorId) {
+    if (selectedSectorId != null) {
       const facilities = getSelectableLocations(
         'facilities',
         this.props.availableLocations,
         this.state.selectedDistrict.value,
-        selectedChiefdomId,
+        selectedSectorId,
       );
       return facilities.map(facility => ({ value: facility.id, label: facility.name }));
     }
@@ -94,15 +94,15 @@ class AssignModulesToLocation extends Component {
       selectedDistrict: {
         value, label,
       },
-      selectedChiefdom: {},
+      selectedSector: {},
       selectedFacility: {},
-      chiefdomOptions: this.getChiefdomOptions(value),
+      sectorOptions: this.getSectorOptions(value),
     });
   };
 
-  handleChiefdomChange = (value, label) => {
+  handleSectorChange = (value, label) => {
     this.setState({
-      selectedChiefdom: {
+      selectedSector: {
         value, label,
       },
       selectedFacility: {},
@@ -143,8 +143,8 @@ class AssignModulesToLocation extends Component {
         startDate: this.state.startDate,
         endDate: this.state.endDate,
       };
-      if (this.state.selectedChiefdom.value) {
-        payload.chiefdomId = this.state.selectedChiefdom.value;
+      if (this.state.selectedSector.value) {
+        payload.sectorId = this.state.selectedSector.value;
       }
       if (this.state.selectedFacility.value) {
         payload.facilityId = this.state.selectedFacility.value;
@@ -201,24 +201,24 @@ class AssignModulesToLocation extends Component {
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText,
               PixelRatio.get() < 2 && labelStyleSmall]}>
-              Chiefdom:
+              Sector:
             </Text>
             <View style={selectField}>
               <Select
-                onSelect={this.handleChiefdomChange}
-                defaultText={this.state.selectedChiefdom.label
+                onSelect={this.handleSectorChange}
+                defaultText={this.state.selectedSector.label
                 || 'Click to Select (optional)'}
                 textStyle={lightThemeText}
                 style={{ borderWidth: 0 }}
                 transparent
                 optionListStyle={{ backgroundColor: '#FFF' }}
               >
-                {AssignModulesToLocation.getOptions(this.state.chiefdomOptions)}
+                {AssignModulesToLocation.getOptions(this.state.sectorOptions)}
               </Select>
             </View>
           </View>
           }
-          {this.state.selectedChiefdom.value &&
+          {this.state.selectedSector.value &&
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText,
               PixelRatio.get() < 2 && labelStyleSmall]}>

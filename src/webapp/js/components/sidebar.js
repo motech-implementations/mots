@@ -164,9 +164,9 @@ class SideBar extends Component {
       <ul className="nav nav-second-level">
         { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/locations/community/new" onClick={this.props.hideMenuSmart}>
+            <Link to="/locations/village/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
-              <span className="icon-text">Add Community</span>
+              <span className="icon-text">Add Village</span>
             </Link>
           </li>
         }
@@ -180,9 +180,9 @@ class SideBar extends Component {
         }
         { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/locations/chiefdom/new" onClick={this.props.hideMenuSmart}>
+            <Link to="/locations/sector/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
-              <span className="icon-text">Add Chiefdom</span>
+              <span className="icon-text">Add Sector</span>
             </Link>
           </li>
         }
@@ -196,9 +196,9 @@ class SideBar extends Component {
         }
         { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/locations/community/upload" onClick={this.props.hideMenuSmart}>
+            <Link to="/locations/village/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
-              <span className="icon-text">Upload Community CSV</span>
+              <span className="icon-text">Upload Village CSV</span>
             </Link>
           </li>
         }
@@ -212,9 +212,9 @@ class SideBar extends Component {
         }
         { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
           <li className="border-none">
-            <Link to="/locations/chiefdom/upload" onClick={this.props.hideMenuSmart}>
+            <Link to="/locations/sector/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
-              <span className="icon-text">Upload Chiefdom CSV</span>
+              <span className="icon-text">Upload Sector CSV</span>
             </Link>
           </li>
         }

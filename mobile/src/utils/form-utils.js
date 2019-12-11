@@ -21,27 +21,27 @@ function getLocationById(list, id) {
 
 export function getSelectableLocations(
   requestedList, districts,
-  districtId, chiefdomId, facilityId,
+  districtId, sectorId, facilityId,
 ) {
-  let { district, chiefdom, facility } = { district: {}, chiefdom: {}, facility: {} };
+  let { district, sector, facility } = { district: {}, sector: {}, facility: {} };
 
   if (districts && districtId) {
     district = getLocationById(districts, districtId);
   }
-  if (chiefdomId && district && district.chiefdoms) {
-    chiefdom = getLocationById(district.chiefdoms, chiefdomId);
+  if (sectorId && district && district.sectors) {
+    sector = getLocationById(district.sectors, sectorId);
   }
-  if (facilityId && chiefdom && chiefdom.facilities) {
-    facility = getLocationById(chiefdom.facilities, facilityId);
+  if (facilityId && sector && sector.facilities) {
+    facility = getLocationById(sector.facilities, facilityId);
   }
 
   switch (requestedList) {
-    case 'chiefdoms':
-      return district ? district.chiefdoms : [];
+    case 'sectors':
+      return district ? district.sectors : [];
     case 'facilities':
-      return chiefdom ? chiefdom.facilities : [];
-    case 'communities':
-      return facility ? facility.communities : [];
+      return sector ? sector.facilities : [];
+    case 'villages':
+      return facility ? facility.villages : [];
     default:
       return [];
   }

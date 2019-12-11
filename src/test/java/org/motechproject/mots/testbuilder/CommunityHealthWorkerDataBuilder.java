@@ -2,8 +2,8 @@ package org.motechproject.mots.testbuilder;
 
 import java.util.Random;
 import java.util.UUID;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 
@@ -18,7 +18,7 @@ public class CommunityHealthWorkerDataBuilder {
   private String familyName;
   private Gender gender;
   private String phoneNumber;
-  private Community community;
+  private Village village;
   private Language preferredLanguage;
   private String ivrId;
 
@@ -34,7 +34,7 @@ public class CommunityHealthWorkerDataBuilder {
     familyName = "second " + instanceNumber;
     gender = Gender.values()[RANDOM.nextInt(Gender.values().length)];
     phoneNumber = Integer.toString(instanceNumber);
-    community = new CommunityDataBuilder().build();
+    village = new VillageDataBuilder().build();
     preferredLanguage = Language.values()[RANDOM.nextInt(Language.values().length)];
   }
 
@@ -49,7 +49,7 @@ public class CommunityHealthWorkerDataBuilder {
     chw.setFamilyName(familyName);
     chw.setGender(gender);
     chw.setPhoneNumber(phoneNumber);
-    chw.setCommunity(community);
+    chw.setVillage(village);
     chw.setPreferredLanguage(preferredLanguage);
     chw.setIvrId(ivrId);
 
@@ -67,10 +67,10 @@ public class CommunityHealthWorkerDataBuilder {
   }
 
   /**
-   * Adds community for new {@link CommunityHealthWorker}.
+   * Adds village for new {@link CommunityHealthWorker}.
    */
-  public CommunityHealthWorkerDataBuilder withCommunity(Community community) {
-    this.community = community;
+  public CommunityHealthWorkerDataBuilder withVillage(Village village) {
+    this.village = village;
     return this;
   }
 

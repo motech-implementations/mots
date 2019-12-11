@@ -47,7 +47,7 @@ class FacilityEdit extends Component {
     const valuesToSend = {
       id: this.state.facilityValues.id,
       name: this.state.facilityValues.name,
-      chiefdomId: this.state.facilityValues.chiefdomId,
+      sectorId: this.state.facilityValues.sectorId,
       facilityType: this.state.facilityValues.facilityType,
       facilityId: this.state.facilityValues.facilityId,
     };

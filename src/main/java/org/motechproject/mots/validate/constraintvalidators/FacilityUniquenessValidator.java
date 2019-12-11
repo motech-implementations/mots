@@ -6,11 +6,11 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
 import org.motechproject.mots.constants.ValidationMessages;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.Facility;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.dto.FacilityCreationDto;
-import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.FacilityRepository;
+import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.validate.ValidationUtils;
 import org.motechproject.mots.validate.annotations.FacilityUniqueness;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +24,21 @@ public class FacilityUniquenessValidator implements
   private FacilityRepository facilityRepository;
 
   @Autowired
-  private ChiefdomRepository chiefdomRepository;
+  private SectorRepository sectorRepository;
 
   @Override
   public boolean isValid(FacilityCreationDto facilityCreationDto,
       ConstraintValidatorContext context) {
 
-    if (StringUtils.isNotEmpty(facilityCreationDto.getChiefdomId())
-        && ValidationUtils.isValidUuidString(facilityCreationDto.getChiefdomId())
+    if (StringUtils.isNotEmpty(facilityCreationDto.getSectorId())
+        && ValidationUtils.isValidUuidString(facilityCreationDto.getSectorId())
         && StringUtils.isNotEmpty(facilityCreationDto.getName())) {
 
       String name = facilityCreationDto.getName();
-      UUID chiefdomId = UUID.fromString(facilityCreationDto.getChiefdomId());
-      Chiefdom chiefdom = chiefdomRepository.findOne(chiefdomId);
+      UUID sectorId = UUID.fromString(facilityCreationDto.getSectorId());
+      Sector sector = sectorRepository.findOne(sectorId);
 
-      Optional<Facility> existing = facilityRepository.findByNameAndChiefdom(name, chiefdom);
+      Optional<Facility> existing = facilityRepository.findByNameAndSector(name, sector);
 
       if (existing.isPresent() // when edit facility allows change
           && !existing.get().getId().toString().equals(facilityCreationDto.getId())) {

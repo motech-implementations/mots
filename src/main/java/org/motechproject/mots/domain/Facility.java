@@ -21,9 +21,9 @@ import org.motechproject.mots.domain.enums.FacilityType;
 
 @Entity
 @Table(name = "facility", uniqueConstraints =
-    @UniqueConstraint(columnNames = {"name", "chiefdom_id"}))
+    @UniqueConstraint(columnNames = {"name", "sector_id"}))
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, of = { "chiefdom" })
+@EqualsAndHashCode(callSuper = true, of = { "sector" })
 public class Facility extends Location {
 
   @Column(name = "type", nullable = false)
@@ -43,18 +43,28 @@ public class Facility extends Location {
   @Getter
   @Setter
   @OrderBy("name ASC")
-  private Set<Community> communities;
+  private Set<Village> villages;
 
   @ManyToOne
-  @JoinColumn(name = "chiefdom_id", nullable = false)
+  @JoinColumn(name = "sector_id", nullable = false)
   @Getter
   @Setter
-  private Chiefdom chiefdom;
+  private Sector sector;
 
   @Column(name = "incharge_full_name")
   @Getter
   @Setter
   private String inchargeFullName;
+
+  @Column(name = "incharge_phone")
+  @Getter
+  @Setter
+  private String inchargePhone;
+
+  @Column(name = "incharge_email")
+  @Getter
+  @Setter
+  private String inchargeEmail;
 
   public Facility(UUID id) {
     super(id);
@@ -77,23 +87,30 @@ public class Facility extends Location {
    * @param name name of the facility
    * @param type type of the facility
    * @param facilityId id of the facility
-   * @param chiefdom parent chiefdom of the facility
+   * @param inchargeFullName name of the facility incharge
+   * @param inchargePhone phone of the facility incharge
+   * @param inchargeEmail email of the facility incharge
+   * @param sector parent sector of the facility
    */
-  public Facility(String name, FacilityType type, String facilityId, Chiefdom chiefdom) {
+  public Facility(String name, FacilityType type, String facilityId, String inchargeFullName,
+      String inchargePhone, String inchargeEmail, Sector sector) {
     super(name);
     this.type = type;
     this.facilityId = facilityId;
-    this.chiefdom = chiefdom;
+    this.inchargeFullName = inchargeFullName;
+    this.inchargePhone = inchargePhone;
+    this.inchargeEmail = inchargeEmail;
+    this.sector = sector;
   }
 
   @Override
   public String getParentName() {
-    return chiefdom.getName();
+    return sector.getName();
   }
 
   @Override
   public String getDistrictName() {
-    return chiefdom.getDistrict().getName();
+    return sector.getDistrict().getName();
   }
 
   @Override

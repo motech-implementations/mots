@@ -22,21 +22,21 @@ export const FETCH_CHWS = 'fetch_chws';
 
 export const FETCH_LOCATIONS = 'fetch_locations';
 export const FETCH_DISTRICTS = 'fetch_districts';
-export const FETCH_CHIEFDOMS = 'fetch_chiefdoms';
+export const FETCH_SECTORS = 'fetch_sectors';
 export const FETCH_FACILITIES = 'fetch_facilities';
-export const FETCH_COMMUNITIES = 'fetch_communities';
+export const FETCH_VILLAGES = 'fetch_villages';
 
 
 export const CREATE_FACILITY = 'create_facility';
 export const SAVE_FACILITY = 'save_facility';
 
 
-export const CREATE_COMMUNITY = 'create_community';
-export const SAVE_COMMUNITY = 'save_community';
+export const CREATE_VILLAGE = 'create_village';
+export const SAVE_VILLAGE = 'save_village';
 
 
-export const CREATE_CHIEFDOM = 'create_chiefdom';
-export const SAVE_CHIEFDOM = 'save_chiefdom';
+export const CREATE_SECTOR = 'create_sector';
+export const SAVE_SECTOR = 'save_sector';
 
 
 export const CREATE_DISTRICT = 'create_district';

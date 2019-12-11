@@ -31,7 +31,7 @@ class FacilityNew extends Component {
   onSubmit(values) {
     const valuesToSend = {
       name: values.name,
-      chiefdomId: values.chiefdomId,
+      sectorId: values.sectorId,
       facilityType: values.facilityType,
       facilityId: values.facilityId,
     };

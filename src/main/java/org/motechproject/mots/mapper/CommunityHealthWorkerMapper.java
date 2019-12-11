@@ -7,9 +7,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Group;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 
 @Mapper(uses = { UuidMapper.class, EnumsMapper.class },
@@ -18,14 +18,14 @@ import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 public interface CommunityHealthWorkerMapper {
 
   @Mappings({
-      @Mapping(target = "communityId", source = "community.id"),
-      @Mapping(target = "communityName", source = "community.name"),
-      @Mapping(target = "facilityName", source = "community.facility.name"),
-      @Mapping(target = "facilityId", source = "community.facility.id"),
-      @Mapping(target = "chiefdomName", source = "community.facility.chiefdom.name"),
-      @Mapping(target = "chiefdomId", source = "community.facility.chiefdom.id"),
-      @Mapping(target = "districtName", source = "community.facility.chiefdom.district.name"),
-      @Mapping(target = "districtId", source = "community.facility.chiefdom.district.id"),
+      @Mapping(target = "villageId", source = "village.id"),
+      @Mapping(target = "villageName", source = "village.name"),
+      @Mapping(target = "facilityName", source = "village.facility.name"),
+      @Mapping(target = "facilityId", source = "village.facility.id"),
+      @Mapping(target = "sectorName", source = "village.facility.sector.name"),
+      @Mapping(target = "sectorId", source = "village.facility.sector.id"),
+      @Mapping(target = "districtName", source = "village.facility.sector.district.name"),
+      @Mapping(target = "districtId", source = "village.facility.sector.district.id"),
       @Mapping(target = "groupId", source = "group.id"),
       @Mapping(target = "groupName", source = "group.name")
   })
@@ -36,23 +36,23 @@ public interface CommunityHealthWorkerMapper {
   @Mappings({
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "chwId", ignore = true),
-      @Mapping(target = "community", source = "communityId"),
+      @Mapping(target = "village", source = "villageId"),
       @Mapping(target = "group", source = "groupId"),
   })
   void updateFromDto(CommunityHealthWorkerDto healthWorkerDto,
       @MappingTarget CommunityHealthWorker healthWorker);
 
   /**
-   * Create community object with given id.
-   * @param communityId id of community to create
-   * @return Community object with given id
+   * Create village object with given id.
+   * @param villageId id of village to create
+   * @return Village object with given id
    */
-  default Community toCommunity(String communityId) {
-    if (communityId == null || communityId.isEmpty()) {
+  default Village toVillage(String villageId) {
+    if (villageId == null || villageId.isEmpty()) {
       return null;
     }
 
-    return new Community(UUID.fromString(communityId));
+    return new Village(UUID.fromString(villageId));
   }
 
   /**

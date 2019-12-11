@@ -19,9 +19,9 @@ import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.AssignedModules;
-import org.motechproject.mots.domain.Community;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Group;
+import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.ChwInfoDto;
@@ -31,8 +31,8 @@ import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
-import org.motechproject.mots.repository.CommunityRepository;
 import org.motechproject.mots.repository.GroupRepository;
+import org.motechproject.mots.repository.VillageRepository;
 import org.motechproject.mots.validate.constraintvalidators.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,7 +55,7 @@ public class CommunityHealthWorkerService {
   private AssignedModulesRepository assignedModulesRepository;
 
   @Autowired
-  private CommunityRepository communityRepository;
+  private VillageRepository villageRepository;
 
   @Autowired
   private GroupRepository groupRepository;
@@ -70,20 +70,20 @@ public class CommunityHealthWorkerService {
 
   private static final String CHW_ID_CSV_HEADER = "chw id";
   private static final String DISTRICT_CSV_HEADER = "district";
-  private static final String CHIEFDOM_CSV_HEADER = "chiefdom";
+  private static final String SECTOR_CSV_HEADER = "sector";
   private static final String GROUP_CSV_HEADER = "group";
   private static final String FIRST_NAME_CSV_HEADER = "first_name";
   private static final String FAMILY_NAME_CSV_HEADER = "family_name";
   private static final String GENDER_CSV_HEADER = "gender";
   private static final String MOBILE_CSV_HEADER = "mobile";
-  private static final String COMMUNITY_CSV_HEADER = "community";
+  private static final String VILLAGE_CSV_HEADER = "village";
   private static final String PHU_CSV_HEADER = "phu";
   private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
-      DISTRICT_CSV_HEADER, CHIEFDOM_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
+      DISTRICT_CSV_HEADER, SECTOR_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
       FAMILY_NAME_CSV_HEADER, GENDER_CSV_HEADER,
-      MOBILE_CSV_HEADER, COMMUNITY_CSV_HEADER,
+      MOBILE_CSV_HEADER, VILLAGE_CSV_HEADER,
       PHU_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
 
   @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
@@ -127,12 +127,12 @@ public class CommunityHealthWorkerService {
   @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String familyName,
-      String phoneNumber, String communityName, String facilityName,
-      String chiefdomName, String districtName, String groupName,
+      String phoneNumber, String villageName, String facilityName,
+      String sectorName, String districtName, String groupName,
       Boolean selected, Pageable pageable) throws IllegalArgumentException {
     return healthWorkerRepository.searchCommunityHealthWorkers(
-        chwId, firstName, familyName, phoneNumber, communityName,
-        facilityName, chiefdomName, districtName, groupName, selected, pageable);
+        chwId, firstName, familyName, phoneNumber, villageName,
+        facilityName, sectorName, districtName, groupName, selected, pageable);
   }
 
   /**
@@ -276,16 +276,16 @@ public class CommunityHealthWorkerService {
         }
       }
 
-      String community = csvRow.get(COMMUNITY_CSV_HEADER);
+      String village = csvRow.get(VILLAGE_CSV_HEADER);
       String facility = csvRow.get(PHU_CSV_HEADER);
 
-      Community chwCommunity = communityRepository
-          .findByNameAndFacilityName(community, facility);
+      Village chwVillage = villageRepository
+          .findByNameAndFacilityName(village, facility);
 
-      if (chwCommunity == null) {
+      if (chwVillage == null) {
         errorMap.put(csvMapReader.getLineNumber(), String.format(
-            "There is no community %s in facility %s in MOTS",
-            community, facility));
+            "There is no village %s in facility %s in MOTS",
+            village, facility));
         continue;
       }
 
@@ -334,7 +334,7 @@ public class CommunityHealthWorkerService {
       communityHealthWorker.setFamilyName(csvRow.get(FAMILY_NAME_CSV_HEADER));
       communityHealthWorker.setGender(Gender.getByDisplayName(csvRow.get(GENDER_CSV_HEADER)));
       communityHealthWorker.setPhoneNumber(phoneNumber);
-      communityHealthWorker.setCommunity(chwCommunity);
+      communityHealthWorker.setVillage(chwVillage);
       communityHealthWorker.setPreferredLanguage(preferredLanguage);
 
       if (group != null) {

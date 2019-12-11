@@ -72,51 +72,51 @@ const FIELDS = {
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'chiefdomId', 'facilityId', 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'sectorId', 'facilityId', 'villageId')),
   },
-  chiefdomId: {
+  sectorId: {
     type: 'select',
-    label: 'Chiefdom',
+    label: 'Sector',
     required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
-        'chiefdoms',
+        'sectors',
         availableLocations,
         districtId,
       ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'facilityId', 'villageId')),
   },
   facilityId: {
     type: 'select',
     label: 'Facility',
     required: true,
-    getSelectOptions: ({ availableLocations, districtId, chiefdomId }) => ({
+    getSelectOptions: ({ availableLocations, districtId, sectorId }) => ({
       values: getSelectableLocations(
         'facilities',
         availableLocations,
         districtId,
-        chiefdomId,
+        sectorId,
       ),
       displayNameKey: 'name',
       valueKey: 'id',
     }),
-    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'communityId')),
+    getAttributes: input => (getAttributesForSelectWithClearOnChange(input, CHW_FORM_NAME, 'villageId')),
   },
-  communityId: {
+  villageId: {
     type: 'select',
-    label: 'Community',
+    label: 'Village',
     required: true,
     getSelectOptions: ({
-      availableLocations, districtId, chiefdomId, facilityId,
+      availableLocations, districtId, sectorId, facilityId,
     }) => ({
       values: getSelectableLocations(
-        'communities',
+        'villages',
         availableLocations,
         districtId,
-        chiefdomId,
+        sectorId,
         facilityId,
       ),
       displayNameKey: 'name',
@@ -180,7 +180,7 @@ class HealthWorkersForm extends Component {
         }}
         availableLocations={this.props.availableLocations}
         districtId={this.props.districtId}
-        chiefdomId={this.props.chiefdomId}
+        sectorId={this.props.sectorId}
         facilityId={this.props.facilityId}
         addChw={this.props.addChw}
         groups={this.state.groups}
@@ -220,7 +220,7 @@ function mapStateToProps(state) {
   return {
     availableLocations: state.availableLocations,
     districtId: selector(state, 'districtId'),
-    chiefdomId: selector(state, 'chiefdomId'),
+    sectorId: selector(state, 'sectorId'),
     facilityId: selector(state, 'facilityId'),
     chwId: selector(state, 'chwId'),
   };
@@ -238,7 +238,7 @@ HealthWorkersForm.propTypes = {
   fetchLocations: PropTypes.func.isRequired,
   availableLocations: PropTypes.arrayOf(PropTypes.shape({})),
   districtId: PropTypes.string,
-  chiefdomId: PropTypes.string,
+  sectorId: PropTypes.string,
   facilityId: PropTypes.string,
   chwId: PropTypes.string,
   addChw: PropTypes.bool,
@@ -248,7 +248,7 @@ HealthWorkersForm.propTypes = {
 HealthWorkersForm.defaultProps = {
   availableLocations: [],
   districtId: null,
-  chiefdomId: null,
+  sectorId: null,
   facilityId: null,
   chwId: '',
   addChw: false,

@@ -9,8 +9,8 @@ import 'react-tabs/style/react-tabs.scss';
 import { resetLogoutCounter } from '../actions/index';
 import LocationsTable from '../container/locations-table';
 import {
-  FETCH_CHIEFDOMS, FETCH_DISTRICTS, FETCH_FACILITIES,
-  FETCH_COMMUNITIES,
+  FETCH_SECTORS, FETCH_DISTRICTS, FETCH_FACILITIES,
+  FETCH_VILLAGES,
 } from '../actions/types';
 import {
   hasAuthority,
@@ -48,7 +48,7 @@ class Locations extends Component {
     }
   }
 
-  static getCommunityColumns = () => [
+  static getVillageColumns = () => [
     {
       Header: 'Actions',
       minWidth: 50,
@@ -57,7 +57,7 @@ class Locations extends Component {
         <div className="actions-buttons-container">
           { canEditLocation(cellInfo.original) &&
           <Link
-            to={`/locations/community/${cellInfo.value}`}
+            to={`/locations/village/${cellInfo.value}`}
             type="button"
             className="btn btn-primary margin-right-sm"
             title="Edit"
@@ -79,8 +79,8 @@ class Locations extends Component {
       Header: 'Facility',
       accessor: 'parent',
     }, {
-      Header: 'Chiefdom',
-      accessor: 'chiefdomName',
+      Header: 'Sector',
+      accessor: 'sectorName',
     }, {
       Header: 'District',
       accessor: 'districtName',
@@ -125,7 +125,13 @@ class Locations extends Component {
       Header: 'Incharge name',
       accessor: 'inchargeFullName',
     }, {
-      Header: 'Chiefdom',
+      Header: 'Incharge phone',
+      accessor: 'inchargePhone',
+    }, {
+      Header: 'Incharge email',
+      accessor: 'inchargeEmail',
+    }, {
+      Header: 'Sector',
       accessor: 'parent',
     }, {
       Header: 'District',
@@ -133,7 +139,7 @@ class Locations extends Component {
     },
   ];
 
-  static getChiefdomColumns = () => [
+  static getSectorColumns = () => [
     {
       Header: 'Actions',
       minWidth: 50,
@@ -142,7 +148,7 @@ class Locations extends Component {
         <div className="actions-buttons-container">
           {canEditLocation(cellInfo.original) &&
             <Link
-              to={`/locations/chiefdom/${cellInfo.value}`}
+              to={`/locations/sector/${cellInfo.value}`}
               type="button"
               className="btn btn-primary margin-right-sm"
               title="Edit"
@@ -207,16 +213,16 @@ class Locations extends Component {
         <h1 className="page-header padding-bottom-xs margin-x-sm">Locations</h1>
         <Tabs selectedIndex={this.state.selectedIndex} onSelect={this.handleTabSelect}>
           <TabList>
-            <Tab>Communities</Tab>
+            <Tab>Villages</Tab>
             <Tab>Facilities</Tab>
-            <Tab>Chiefdoms</Tab>
+            <Tab>Sectors</Tab>
             <Tab>Districts</Tab>
           </TabList>
 
           <TabPanel>
             <LocationsTable
-              locationType={FETCH_COMMUNITIES}
-              tableColumns={Locations.getCommunityColumns()}
+              locationType={FETCH_VILLAGES}
+              tableColumns={Locations.getVillageColumns()}
             />
           </TabPanel>
           <TabPanel>
@@ -227,8 +233,8 @@ class Locations extends Component {
           </TabPanel>
           <TabPanel>
             <LocationsTable
-              locationType={FETCH_CHIEFDOMS}
-              tableColumns={Locations.getChiefdomColumns()}
+              locationType={FETCH_SECTORS}
+              tableColumns={Locations.getSectorColumns()}
             />
           </TabPanel>
           <TabPanel>

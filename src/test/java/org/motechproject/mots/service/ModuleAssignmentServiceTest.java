@@ -25,12 +25,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.motechproject.mots.domain.AssignedModules;
-import org.motechproject.mots.domain.Chiefdom;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.DistrictAssignmentLog;
 import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.domain.ModuleProgress;
+import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.dto.DistrictAssignmentDto;
@@ -40,18 +40,18 @@ import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.ModuleAssignmentException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.AssignedModulesRepository;
-import org.motechproject.mots.repository.ChiefdomRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictAssignmentLogRepository;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.ModuleRepository;
+import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.testbuilder.AssignedModulesDataBuilder;
-import org.motechproject.mots.testbuilder.ChiefdomDataBuilder;
 import org.motechproject.mots.testbuilder.CommunityHealthWorkerDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictAssignmentDtoDataBuilder;
 import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.ModuleDataBuilder;
 import org.motechproject.mots.testbuilder.ModuleProgressDataBuilder;
+import org.motechproject.mots.testbuilder.SectorDataBuilder;
 import org.motechproject.mots.utils.TestUtils;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -81,7 +81,7 @@ public class ModuleAssignmentServiceTest {
   private DistrictRepository districtRepository;
 
   @Mock
-  private ChiefdomRepository chiefdomRepository;
+  private SectorRepository sectorRepository;
 
   @Mock
   private DistrictAssignmentLogRepository districtAssignmentLogRepository;
@@ -114,7 +114,7 @@ public class ModuleAssignmentServiceTest {
 
   private static final District DISTRICT = new DistrictDataBuilder().build();
 
-  private static final Chiefdom CHIEFDOM = new ChiefdomDataBuilder().build();
+  private static final Sector SECTOR = new SectorDataBuilder().build();
 
   private AssignedModules existingAssignedModules;
 
@@ -152,8 +152,8 @@ public class ModuleAssignmentServiceTest {
         .thenReturn(Optional.of(existingAssignedModules));
     when(districtRepository.findOne(eq((DISTRICT.getId()))))
         .thenReturn(DISTRICT);
-    when(chiefdomRepository.findOne(eq((CHIEFDOM.getId()))))
-        .thenReturn(CHIEFDOM);
+    when(sectorRepository.findOne(eq((SECTOR.getId()))))
+        .thenReturn(SECTOR);
     mockModuleInModuleRepository(MODULE_2);
     mockModuleInModuleRepository(MODULE_3);
   }
@@ -237,7 +237,7 @@ public class ModuleAssignmentServiceTest {
   @Test
   public void shouldAssignModulesToDistrict() throws Exception {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
     moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
@@ -271,12 +271,12 @@ public class ModuleAssignmentServiceTest {
   }
 
   @Test
-  public void shouldAssignModulesToAChiefdom() throws Exception {
+  public void shouldAssignModulesToASector() throws Exception {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomIdAndSelected(
-        eq(CHIEFDOM.getId()), any())).thenReturn(Collections.singletonList(CHW));
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorIdAndSelected(
+        eq(SECTOR.getId()), any())).thenReturn(Collections.singletonList(CHW));
 
-    districtAssignmentDto.setChiefdomId(CHIEFDOM.getId().toString());
+    districtAssignmentDto.setSectorId(SECTOR.getId().toString());
 
     moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
 
@@ -291,7 +291,7 @@ public class ModuleAssignmentServiceTest {
 
     for (DistrictAssignmentLog log : districtAssignmentLogs) {
       assertEquals(DISTRICT, log.getDistrict());
-      assertEquals(CHIEFDOM, log.getChiefdom());
+      assertEquals(SECTOR, log.getSector());
       assertEquals(districtAssignmentDto.getStartDate(), log.getStartDate().toString());
       assertEquals(districtAssignmentDto.getEndDate(), log.getEndDate().toString());
       assertEquals(user, log.getOwner());
@@ -318,7 +318,7 @@ public class ModuleAssignmentServiceTest {
         .withChw(chw)
         .build();
 
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(chw));
     when(assignedModulesRepository.findByHealthWorkerId(eq(chw.getId())))
         .thenReturn(Optional.of(assignedModules));
@@ -329,7 +329,7 @@ public class ModuleAssignmentServiceTest {
   @Test(expected = ModuleAssignmentException.class)
   public void assignModulesToDistrictShouldThrowCustomExceptionIfIvrServiceThrow()
       throws Exception {
-    when(communityHealthWorkerRepository.findByCommunityFacilityChiefdomDistrictIdAndSelected(any(),
+    when(communityHealthWorkerRepository.findByVillageFacilitySectorDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
     doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());

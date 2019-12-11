@@ -81,8 +81,8 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Chiefdom',
-        name: 'chiefdomName',
+        displayName: 'Sector',
+        name: 'sectorName',
         dataType: 'String',
         defaultValue: null,
       }, {
@@ -91,8 +91,8 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Community',
-        name: 'communityName',
+        displayName: 'Village',
+        name: 'villageName',
         dataType: 'String',
         defaultValue: null,
       }, {

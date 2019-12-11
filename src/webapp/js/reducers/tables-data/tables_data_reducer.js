@@ -1,6 +1,6 @@
 import {
-  FETCH_CHIEFDOMS,
-  FETCH_CHWS, FETCH_COMMUNITIES, FETCH_DISTRICTS, FETCH_FACILITIES,
+  FETCH_SECTORS,
+  FETCH_CHWS, FETCH_VILLAGES, FETCH_DISTRICTS, FETCH_FACILITIES,
   FETCH_ROLES, SEARCH_ROLES, FETCH_PERMISSIONS,
   FETCH_USERS,
 } from '../../actions/types';
@@ -26,9 +26,9 @@ export default function (state = initialTablesData, action) {
         };
       }
       return state;
-    case FETCH_COMMUNITIES:
+    case FETCH_VILLAGES:
     case FETCH_FACILITIES:
-    case FETCH_CHIEFDOMS:
+    case FETCH_SECTORS:
     case FETCH_DISTRICTS:
       if (action.payload.data !== undefined) {
         return {

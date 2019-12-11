@@ -8,12 +8,12 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
-import org.motechproject.mots.validate.annotations.CommunityExistence;
 import org.motechproject.mots.validate.annotations.Gender;
 import org.motechproject.mots.validate.annotations.Language;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.Uuid;
+import org.motechproject.mots.validate.annotations.VillageExistence;
 
 @PhoneNumberUniqueness
 @ChwIdUniqueness
@@ -63,11 +63,11 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  private String chiefdomName;
+  private String sectorName;
 
   @Getter
   @Setter
-  private String chiefdomId;
+  private String sectorId;
 
   @Getter
   @Setter
@@ -79,14 +79,14 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  private String communityName;
+  private String villageName;
 
   @Getter
   @Setter
-  @CommunityExistence
-  @Uuid(message = ValidationMessages.INVALID_COMMUNITY_ID)
-  @NotEmpty(message = ValidationMessages.EMPTY_COMMUNITY)
-  private String communityId;
+  @VillageExistence
+  @Uuid(message = ValidationMessages.INVALID_VILLAGE_ID)
+  @NotEmpty(message = ValidationMessages.EMPTY_VILLAGE)
+  private String villageId;
 
   @Getter
   @Setter

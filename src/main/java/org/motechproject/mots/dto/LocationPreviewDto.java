@@ -33,7 +33,7 @@ public class LocationPreviewDto {
   @Setter
   @Getter
   @JsonInclude(Include.NON_NULL)
-  private String chiefdomName;
+  private String sectorName;
 
   @Setter
   @Getter
@@ -49,6 +49,16 @@ public class LocationPreviewDto {
   @Getter
   @JsonInclude(Include.NON_NULL)
   private String inchargeFullName;
+
+  @Setter
+  @Getter
+  @JsonInclude(Include.NON_NULL)
+  private String inchargePhone;
+
+  @Setter
+  @Getter
+  @JsonInclude(Include.NON_NULL)
+  private String inchargeEmail;
 
   @Getter
   @Setter

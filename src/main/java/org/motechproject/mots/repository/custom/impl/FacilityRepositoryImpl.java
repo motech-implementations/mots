@@ -28,19 +28,20 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<Facility> search(String facilityId, String facilityName, String facilityType,
-      String inchargeFullName, String parentChiefdom, String districtName, Pageable pageable)
+      String inchargeFullName, String inchargePhone, String inchargeEmail,
+      String parentSector, String districtName, Pageable pageable)
       throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Facility> query = builder.createQuery(Facility.class);
-    query = prepareQuery(query, facilityId, facilityName, facilityType,
-        inchargeFullName, parentChiefdom, districtName, false, pageable);
+    query = prepareQuery(query, facilityId, facilityName, facilityType, inchargeFullName,
+        inchargePhone, inchargeEmail, parentSector, districtName, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, facilityId, facilityName, facilityType,
-        inchargeFullName, parentChiefdom, districtName, true, pageable);
+    countQuery = prepareQuery(countQuery, facilityId, facilityName, facilityType, inchargeFullName,
+        inchargePhone, inchargeEmail, parentSector, districtName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
 
@@ -55,8 +56,9 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String facilityId,
-      String facilityName, String facilityType, String inchargeFullName, String parentChiefdom,
-      String districtName, boolean count, Pageable pageable) throws IllegalArgumentException {
+      String facilityName, String facilityType, String inchargeFullName, String inchargePhone,
+      String inchargeEmail, String parentSector, String districtName,
+      boolean count, Pageable pageable) throws IllegalArgumentException {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Facility> root = query.from(Facility.class);
@@ -82,15 +84,23 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     }
     if (inchargeFullName != null) {
       predicate = builder.and(predicate,
-          builder.like(root.get(INCHARGE_FULL_NAME), '%' + facilityId.trim() + '%'));
+          builder.like(root.get(INCHARGE_FULL_NAME), '%' + inchargeFullName.trim() + '%'));
     }
-    if (parentChiefdom != null) {
-      predicate = builder.and(predicate, builder.like(root.get(CHIEFDOM).get(NAME),
-          '%' + parentChiefdom.trim() + '%'));
+    if (inchargePhone != null) {
+      predicate = builder.and(predicate,
+          builder.like(root.get(INCHARGE_PHONE), '%' + inchargePhone.trim() + '%'));
+    }
+    if (inchargeEmail != null) {
+      predicate = builder.and(predicate,
+          builder.like(root.get(INCHARGE_EMAIL), '%' + inchargeEmail.trim() + '%'));
+    }
+    if (parentSector != null) {
+      predicate = builder.and(predicate, builder.like(root.get(SECTOR).get(NAME),
+          '%' + parentSector.trim() + '%'));
     }
     if (districtName != null) {
       predicate = builder.and(
-          predicate, builder.like(root.get(CHIEFDOM).get(DISTRICT).get(NAME),
+          predicate, builder.like(root.get(SECTOR).get(DISTRICT).get(NAME),
               '%' + districtName.trim() + '%')
       );
     }
@@ -116,7 +126,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     while (iterator.hasNext()) {
       order = iterator.next();
       if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
-        path = root.get(CHIEFDOM).get(NAME);
+        path = root.get(SECTOR).get(NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else if (order.getProperty().equals(LocationController.FACILITY_TYPE_PARAM)) {
@@ -124,7 +134,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else if (order.getProperty().equals(LocationController.DISTRICT_NAME_PARAM)) {
-        path = root.get(CHIEFDOM).get(DISTRICT).get(NAME);
+        path = root.get(SECTOR).get(DISTRICT).get(NAME);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else {

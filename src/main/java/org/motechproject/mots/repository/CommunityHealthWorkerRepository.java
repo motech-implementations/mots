@@ -17,16 +17,16 @@ public interface CommunityHealthWorkerRepository extends
 
   Optional<CommunityHealthWorker> findByPhoneNumber(String phoneNumber);
 
-  List<CommunityHealthWorker> findByCommunityFacilityChiefdomDistrictIdAndSelected(UUID districtId,
+  List<CommunityHealthWorker> findByVillageFacilitySectorDistrictIdAndSelected(UUID districtId,
       Boolean selected);
 
-  List<CommunityHealthWorker> findByCommunityFacilityChiefdomIdAndSelected(UUID chiefdomId,
+  List<CommunityHealthWorker> findByVillageFacilitySectorIdAndSelected(UUID sectorId,
       Boolean selected);
 
   // Adding @Query as the JPA query doesn't work for this case for some reason
-  @Query("SELECT c FROM CommunityHealthWorker c WHERE c.community.facility.id = ?1 "
+  @Query("SELECT c FROM CommunityHealthWorker c WHERE c.village.facility.id = ?1 "
       + "AND c.selected = ?2")
-  List<CommunityHealthWorker> findByCommunityFacilityIdAndSelected(UUID facilityId,
+  List<CommunityHealthWorker> findByVillageFacilityIdAndSelected(UUID facilityId,
       Boolean selected);
 
   List<CommunityHealthWorker> findByGroupIdAndSelected(UUID groupId, Boolean selected);
