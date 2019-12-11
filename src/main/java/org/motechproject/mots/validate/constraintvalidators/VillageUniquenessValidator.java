@@ -1,6 +1,5 @@
 package org.motechproject.mots.validate.constraintvalidators;
 
-import java.util.Optional;
 import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -38,12 +37,11 @@ public class VillageUniquenessValidator implements
       UUID facilityId = UUID.fromString(villageCreationDto.getFacilityId());
       Facility facility = facilityRepository.findOne(facilityId);
 
-      Optional<Village> existing = villageRepository.findByNameAndFacility(name, facility);
+      Village existing = villageRepository.findByNameAndFacility(name, facility);
 
-      if (existing.isPresent() // when edit village allows change
-          && !existing.get().getId().toString().equals(villageCreationDto.getId())) {
-        String message = String.format(ValidationMessages.NOT_UNIQUE_VILLAGE,
-            existing.get().getName());
+      if (existing != null // when edit village allows change
+          && !existing.getId().toString().equals(villageCreationDto.getId())) {
+        String message = String.format(ValidationMessages.NOT_UNIQUE_VILLAGE, existing.getName());
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, NAME, message);
