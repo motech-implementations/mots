@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="communities" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1fd6ba5e-88f2-4024-83c8-21372e6faef9">
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="villages" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1fd6ba5e-88f2-4024-83c8-21372e6faef9">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
@@ -21,7 +21,7 @@
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value="summary"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
-	<property name="reportType" value="Communities"/>
+	<property name="reportType" value="Villages"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -77,26 +77,26 @@
 		</box>
 	</style>
 	<subDataset name="RecordsCount" uuid="d614af09-3384-42cc-940b-df22a533f85d">
-		<parameter name="community" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="village" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="sector" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[SELECT
   COUNT(*) AS totalElements
-FROM community
- JOIN facility ON community.facility_id = facility.id
- JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
- JOIN district ON chiefdom.district_id = district.id
+FROM village
+ JOIN facility ON village.facility_id = facility.id
+ JOIN sector ON facility.sector_id = sector.id
+ JOIN district ON sector.district_id = district.id
  WHERE ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
-  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
-  AND ($P{community} IS NULL OR community.name LIKE CONCAT('%',$P{community},'%'))]]>
+  AND ($P{village} IS NULL OR village.name LIKE CONCAT('%',$P{village},'%'))]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
 	</subDataset>
-	<parameter name="community" class="java.lang.String">
+	<parameter name="village" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Name"/>
 		<property name="required" value="false"/>
@@ -106,9 +106,9 @@ FROM community
 		<property name="displayName" value="Facility"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="chiefdom" class="java.lang.String">
+	<parameter name="sector" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="Chiefdom"/>
+		<property name="displayName" value="Sector"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
@@ -120,7 +120,7 @@ FROM community
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Order By"/>
 		<property name="required" value="true"/>
-		<defaultValueExpression><![CDATA["community"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["village"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="pageSize" class="java.lang.String">
 		<property name="dataType" value="String"/>
@@ -135,25 +135,25 @@ FROM community
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT 
-  community.name AS community,
+		<![CDATA[SELECT
+  village.name AS village,
   facility.name AS facility,
-  chiefdom.name AS chiefdom,
+  sector.name AS sector,
   district.name AS district
- FROM community
- JOIN facility ON community.facility_id = facility.id
- JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
- JOIN district ON chiefdom.district_id = district.id
+ FROM village
+ JOIN facility ON village.facility_id = facility.id
+ JOIN sector ON facility.sector_id = sector.id
+ JOIN district ON sector.district_id = district.id
  WHERE ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
-  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
-  AND ($P{community} IS NULL OR community.name LIKE CONCAT('%',$P{community},'%'))
+  AND ($P{village} IS NULL OR village.name LIKE CONCAT('%',$P{village},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
-	<field name="community" class="java.lang.String"/>
+	<field name="village" class="java.lang.String"/>
 	<field name="facility" class="java.lang.String"/>
-	<field name="chiefdom" class="java.lang.String"/>
+	<field name="sector" class="java.lang.String"/>
 	<field name="district" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -168,17 +168,17 @@ FROM community
 				<textElement verticalAlignment="Middle">
 					<font size="16"/>
 				</textElement>
-				<text><![CDATA[Communities Report]]></text>
+				<text><![CDATA[Villages Report]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="8abac13c-7930-446c-a2aa-d3a9eb1653ed">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.Header"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.village.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Name"/>
 				</reportElement>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="f8c9591c-00d2-4a38-ab38-7a5224fc938d">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.community.order"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.village.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="0"/>
 				</reportElement>
 			</staticText>
@@ -196,13 +196,13 @@ FROM community
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="d712ff39-2114-4f82-91e1-53d775ca072c">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Sector"/>
 				</reportElement>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="b9ea0c64-d398-474c-bb4e-1b6abc5b384b">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="2"/>
 				</reportElement>
 			</staticText>
@@ -227,14 +227,14 @@ FROM community
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="RecordsCount" uuid="3dda0279-b3b9-4462-88d5-2b0e618b880b">
-						<datasetParameter name="community">
-							<datasetParameterExpression><![CDATA[$P{community}]]></datasetParameterExpression>
+						<datasetParameter name="village">
+							<datasetParameterExpression><![CDATA[$P{village}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="facility">
 							<datasetParameterExpression><![CDATA[$P{facility}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="chiefdom">
-							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						<datasetParameter name="sector">
+							<datasetParameterExpression><![CDATA[$P{sector}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="district">
 							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
@@ -309,7 +309,7 @@ FROM community
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Chiefdom]]></text>
+				<text><![CDATA[Sector]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="420" y="0" width="140" height="25" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">
@@ -334,7 +334,7 @@ FROM community
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="140" height="25" uuid="b4a7916d-24bc-4540-b4da-86d5b4785a23">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="net.sf.jasperreports.export.json.path" value="values.community"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.village"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -343,7 +343,7 @@ FROM community
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{community}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{village}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="140" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
@@ -363,7 +363,7 @@ FROM community
 				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="140" height="25" uuid="e5fcbae6-6549-4827-b415-1242aa44216d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="net.sf.jasperreports.export.json.path" value="values.chiefdom"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.sector"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -372,7 +372,7 @@ FROM community
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{sector}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="420" y="0" width="140" height="25" uuid="0294564d-f91f-47a1-975c-f446d6f284f0">

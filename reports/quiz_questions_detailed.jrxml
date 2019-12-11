@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="quiz_questions_detailed" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="mysql-mots.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
 	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
@@ -93,7 +93,7 @@
 		<parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="chwName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="phone" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="sector" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="groupName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
@@ -109,10 +109,8 @@
  JOIN course_module ON course_module.id = module_progress.course_module_id
  JOIN module ON module.id = course_module.module_id
  JOIN community_health_worker chw ON module_progress.chw_id = chw.id
- JOIN community ON chw.community_id = community.id
- JOIN facility ON community.facility_id = facility.id
- JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
- JOIN district ON chiefdom.district_id = district.id
+ JOIN district ON chw.district_id = district.id
+ LEFT JOIN sector ON chw.sector_id = sector.id
  LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
  LEFT JOIN chw_group ON chw_group.id = chw.group_id
  WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
@@ -121,10 +119,10 @@
   AND ($P{question} IS NULL OR question.content LIKE CONCAT('%',$P{question},'%'))
   AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
   AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
-  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
+  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
 	</subDataset>
@@ -163,9 +161,9 @@
 		<property name="displayName" value="Phone"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="chiefdom" class="java.lang.String">
+	<parameter name="sector" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="Chiefdom"/>
+		<property name="displayName" value="Sector"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
@@ -197,16 +195,16 @@
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT 
+		<![CDATA[SELECT
   module.name AS module,
   unit.name AS unit,
   question.name AS questionId,
   question.content AS question,
   multiple_choice_question_log.number_of_attempts AS numberOfAttempts,
   chw.chw_id as chwId,
-  CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) AS chwName,
+  CONCAT_WS(" ", chw.first_name, chw.family_name) AS chwName,
   chw.phone_number AS phone,
-  chiefdom.name AS chiefdom,
+  sector.name AS sector,
   district.name AS district,
   chw_group.name AS groupName,
   CASE
@@ -224,10 +222,8 @@
  JOIN course_module ON course_module.id = module_progress.course_module_id
  JOIN module ON module.id = course_module.module_id
  JOIN community_health_worker chw ON module_progress.chw_id = chw.id
- JOIN community ON chw.community_id = community.id
- JOIN facility ON community.facility_id = facility.id
- JOIN chiefdom ON facility.chiefdom_id = chiefdom.id
- JOIN district ON chiefdom.district_id = district.id
+ JOIN district ON chw.district_id = district.id
+ LEFT JOIN sector ON chw.sector_id = sector.id
  LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
  LEFT JOIN chw_group ON chw_group.id = chw.group_id
  WHERE ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
@@ -236,10 +232,10 @@
   AND ($P{question} IS NULL OR question.content LIKE CONCAT('%',$P{question},'%'))
   AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
   AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
-  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.other_name, chw.second_name) LIKE CONCAT('%',$P{chwName},'%'))
+  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
@@ -252,7 +248,7 @@
 	<field name="chwId" class="java.lang.String"/>
 	<field name="chwName" class="java.lang.String"/>
 	<field name="phone" class="java.lang.String"/>
-	<field name="chiefdom" class="java.lang.String"/>
+	<field name="sector" class="java.lang.String"/>
 	<field name="district" class="java.lang.String"/>
 	<field name="groupName" class="java.lang.String"/>
 	<background>
@@ -392,13 +388,13 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="8cb5097d-40b5-41af-8813-2683a4109947">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Sector"/>
 				</reportElement>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="205b3b6f-156b-4cfe-8f26-c092e057a27d">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="10"/>
 				</reportElement>
 			</staticText>
@@ -444,8 +440,8 @@
 						<datasetParameter name="phone">
 							<datasetParameterExpression><![CDATA[$P{phone}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="chiefdom">
-							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						<datasetParameter name="sector">
+							<datasetParameterExpression><![CDATA[$P{sector}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="district">
 							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
@@ -653,7 +649,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Chiefdom]]></text>
+				<text><![CDATA[Sector]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="740" y="0" width="60" height="30" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
@@ -812,7 +808,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="670" y="0" width="70" height="30" uuid="c3052fd8-de59-43d2-b301-e018de58a45d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="net.sf.jasperreports.export.json.path" value="values.chiefdom"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.sector"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="2">
@@ -824,7 +820,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{sector}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="230" y="0" width="50" height="30" uuid="25743ccb-b452-46db-83e6-a772a1f2e286">
