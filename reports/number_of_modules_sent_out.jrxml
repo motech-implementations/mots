@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="number_of_modules_sent_out" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f72f93d9-9e47-4924-961c-9a8a597aba37">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="mysql-mots.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="net.sf.jasperreports.export.html.embed.image" value="true"/>
 	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
@@ -92,7 +92,7 @@
 		<parameter name="startDate" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="chiefdom" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="sector" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="groupName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
@@ -103,7 +103,7 @@
  JOIN module ON module.id = dal.module_id
  JOIN user ON user.id = dal.owner_id
  LEFT JOIN district ON dal.district_id = district.id
- LEFT JOIN chiefdom ON dal.chiefdom_id = chiefdom.id
+ LEFT JOIN sector ON dal.sector_id = sector.id
  LEFT JOIN facility ON dal.facility_id = facility.id
  LEFT JOIN chw_group ON dal.group_id = chw_group.id
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
@@ -112,7 +112,7 @@
   AND ($P{startDate} IS NULL OR dal.start_date LIKE CONCAT($P{startDate},'%'))
   AND ($P{endDate} IS NULL OR dal.end_date LIKE CONCAT($P{endDate},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
-  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))]]>
 		</queryString>
@@ -148,9 +148,9 @@
 		<property name="displayName" value="District"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="chiefdom" class="java.lang.String">
+	<parameter name="sector" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="Chiefdom"/>
+		<property name="displayName" value="Sector"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="facility" class="java.lang.String">
@@ -185,7 +185,7 @@
 		<![CDATA[SELECT
   user.username AS username,
   district.name AS district,
-  chiefdom.name AS chiefdom,
+  sector.name AS sector,
   facility.name AS facility,
   chw_group.name AS groupName,
   module.name AS module,
@@ -196,7 +196,7 @@
  JOIN module ON module.id = dal.module_id
  JOIN user ON user.id = dal.owner_id
  LEFT JOIN district ON dal.district_id = district.id
- LEFT JOIN chiefdom ON dal.chiefdom_id = chiefdom.id
+ LEFT JOIN sector ON dal.sector_id = sector.id
  LEFT JOIN facility ON dal.facility_id = facility.id
  LEFT JOIN chw_group ON dal.group_id = chw_group.id
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
@@ -205,7 +205,7 @@
   AND ($P{startDate} IS NULL OR dal.start_date LIKE CONCAT($P{startDate},'%'))
   AND ($P{endDate} IS NULL OR dal.end_date LIKE CONCAT($P{endDate},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
-  AND ($P{chiefdom} IS NULL OR chiefdom.name LIKE CONCAT('%',$P{chiefdom},'%'))
+  AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
  ORDER BY $P!{orderBy}
@@ -217,7 +217,7 @@
 	<field name="dateOfPush" class="java.lang.String"/>
 	<field name="startDate" class="java.lang.String"/>
 	<field name="endDate" class="java.lang.String"/>
-	<field name="chiefdom" class="java.lang.String"/>
+	<field name="sector" class="java.lang.String"/>
 	<field name="facility" class="java.lang.String"/>
 	<field name="groupName" class="java.lang.String"/>
 	<background>
@@ -309,13 +309,13 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="f1f1e28c-9bff-4524-a1ee-1adcff6ff423">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Sector"/>
 				</reportElement>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="8b093498-cfb3-45ed-b07a-8188b7404e9a">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.chiefdom.order"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="6"/>
 				</reportElement>
 			</staticText>
@@ -370,8 +370,8 @@
 						<datasetParameter name="district">
 							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="chiefdom">
-							<datasetParameterExpression><![CDATA[$P{chiefdom}]]></datasetParameterExpression>
+						<datasetParameter name="sector">
+							<datasetParameterExpression><![CDATA[$P{sector}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="facility">
 							<datasetParameterExpression><![CDATA[$P{facility}]]></datasetParameterExpression>
@@ -515,7 +515,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[Chiefdom]]></text>
+				<text><![CDATA[Sector]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="650" y="0" width="80" height="25" uuid="e47424ca-c6f8-450d-83d5-44717cdaeefa">
@@ -646,7 +646,7 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="570" y="0" width="80" height="25" uuid="0b594fda-a907-47f6-a85f-39a0b60efc77">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="net.sf.jasperreports.export.json.path" value="values.chiefdom"/>
+					<property name="net.sf.jasperreports.export.json.path" value="values.sector"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="3">
@@ -656,7 +656,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{chiefdom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{sector}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="650" y="0" width="80" height="25" uuid="61622804-9875-4eab-afac-888477b138ad">
