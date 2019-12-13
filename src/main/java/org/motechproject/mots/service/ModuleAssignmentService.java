@@ -2,7 +2,6 @@ package org.motechproject.mots.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -326,8 +325,6 @@ public class ModuleAssignmentService {
             sectorId != null ? sectorRepository.findOne(sectorId) : null,
             facilityId != null ? facilityRepository.findOne(facilityId) : null,
             groupId != null ? groupRepository.findOne(groupId) : null,
-            LocalDate.parse(assignmentDto.getStartDate()),
-            LocalDate.parse(assignmentDto.getEndDate()),
             moduleToAssign,
             currentUser
         ));

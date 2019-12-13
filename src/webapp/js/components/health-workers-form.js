@@ -125,7 +125,7 @@ const FIELDS = {
     label: 'Preferred Language',
     required: true,
     getSelectOptions: () => ({
-      values: ['English', 'Krio', 'Limba', 'Susu', 'Temne', 'Mende'],
+      values: ['English', 'Kinyarwanda'],
     }),
   },
   groupId: {

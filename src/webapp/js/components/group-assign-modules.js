@@ -24,8 +24,6 @@ class DistrictAssignModules extends Component {
       selectedDistrict: null,
       selectedSector: null,
       selectedFacility: null,
-      startDate: '',
-      endDate: '',
       delayNotification: false,
       notificationTime: '',
       groups: [],
@@ -36,8 +34,6 @@ class DistrictAssignModules extends Component {
     this.handleModuleChange = this.handleModuleChange.bind(this);
     this.handleDistrictChange = this.handleDistrictChange.bind(this);
     this.handleSectorChange = this.handleSectorChange.bind(this);
-    this.handleStartDateChange = this.handleStartDateChange.bind(this);
-    this.handleEndDateChange = this.handleEndDateChange.bind(this);
     this.handleDelayNotificationChange = this.handleDelayNotificationChange.bind(this);
     this.handleNotificationTimeChange = this.handleNotificationTimeChange.bind(this);
     this.sendAssignedModules = this.sendAssignedModules.bind(this);
@@ -97,44 +93,40 @@ class DistrictAssignModules extends Component {
   }
 
   sendAssignedModules() {
-    if (this.validateDates()) {
-      const url = `/api/module/${this.state.selectedIndex === 0 ? 'district' : 'group'}/assign`;
+    const url = `/api/module/${this.state.selectedIndex === 0 ? 'district' : 'group'}/assign`;
 
-      const payload = {
-        modules: _.map(this.state.selectedModules, module => module.value),
-        startDate: this.state.startDate,
-        endDate: this.state.endDate,
-      };
+    const payload = {
+      modules: _.map(this.state.selectedModules, module => module.value),
+    };
 
-      if (this.state.selectedIndex === 0) {
-        payload.districtId = this.state.selectedDistrict.value;
+    if (this.state.selectedIndex === 0) {
+      payload.districtId = this.state.selectedDistrict.value;
 
-        if (this.state.selectedSector !== null) {
-          payload.sectorId = this.state.selectedSector.value;
-        }
-        if (this.state.selectedFacility !== null) {
-          payload.facilityId = this.state.selectedFacility.value;
-        }
-      } else {
-        payload.groupId = this.state.selectedGroup.value;
+      if (this.state.selectedSector !== null) {
+        payload.sectorId = this.state.selectedSector.value;
       }
-
-      if (this.state.delayNotification && this.state.notificationTime) {
-        payload.notificationTime = this.state.notificationTime;
+      if (this.state.selectedFacility !== null) {
+        payload.facilityId = this.state.selectedFacility.value;
       }
-
-      const callback = (assigned) => {
-        if (assigned) {
-          this.props.history.push('/chw/selected');
-          Alert.success('Modules have been assigned!');
-        } else {
-          Alert.success('Module was already assigned!');
-        }
-      };
-
-      apiClient.post(url, payload)
-        .then(response => callback(response.data));
+    } else {
+      payload.groupId = this.state.selectedGroup.value;
     }
+
+    if (this.state.delayNotification && this.state.notificationTime) {
+      payload.notificationTime = this.state.notificationTime;
+    }
+
+    const callback = (assigned) => {
+      if (assigned) {
+        this.props.history.push('/chw/selected');
+        Alert.success('Modules have been assigned!');
+      } else {
+        Alert.success('Module was already assigned!');
+      }
+    };
+
+    apiClient.post(url, payload)
+      .then(response => callback(response.data));
   }
 
   handleDistrictChange = (selectedDistrict) => {
@@ -162,20 +154,6 @@ class DistrictAssignModules extends Component {
     this.setState({ selectedModules });
   }
 
-  handleStartDateChange(startDate) {
-    const dateFormat = 'YYYY-MM-DD';
-    const formattedDate = !startDate || typeof startDate === 'string' ? startDate : startDate.format(dateFormat);
-    this.setState({ startDate: formattedDate });
-    this.props.resetLogoutCounter();
-  }
-
-  handleEndDateChange(endDate) {
-    const dateFormat = 'YYYY-MM-DD';
-    const formattedDate = !endDate || typeof endDate === 'string' ? endDate : endDate.format(dateFormat);
-    this.setState({ endDate: formattedDate });
-    this.props.resetLogoutCounter();
-  }
-
   handleDelayNotificationChange(event) {
     this.setState({ delayNotification: event.target.checked });
   }
@@ -197,19 +175,9 @@ class DistrictAssignModules extends Component {
     this.props.resetLogoutCounter();
   }
 
-  validateDates() {
-    const start = new Date(this.state.startDate);
-    const end = new Date(this.state.endDate);
-    if (start > end) {
-      Alert.error('End date must be after start date.');
-      return false;
-    }
-    return true;
-  }
-
   validate() {
     const empty = !this.state.selectedModules
-      || this.state.selectedModules.length === 0 || !this.state.startDate || !this.state.endDate
+      || this.state.selectedModules.length === 0
       || (this.state.delayNotification && this.state.notificationTime.length === 0);
     return !empty;
   }
@@ -272,13 +240,9 @@ class DistrictAssignModules extends Component {
                 sendAssignedModules={this.sendAssignedModules}
                 validate={this.validateLocation}
                 handleModuleChange={this.handleModuleChange}
-                handleStartDateChange={this.handleStartDateChange}
-                handleEndDateChange={this.handleEndDateChange}
                 handleDelayNotificationChange={this.handleDelayNotificationChange}
                 handleNotificationTimeChange={this.handleNotificationTimeChange}
                 selectedModules={this.state.selectedModules}
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
                 delayNotification={this.state.delayNotification}
                 disableModuleSelect={!this.state.selectedDistrict}
               />
@@ -303,13 +267,9 @@ class DistrictAssignModules extends Component {
                 sendAssignedModules={this.sendAssignedModules}
                 validate={this.validateGroup}
                 handleModuleChange={this.handleModuleChange}
-                handleStartDateChange={this.handleStartDateChange}
-                handleEndDateChange={this.handleEndDateChange}
                 handleDelayNotificationChange={this.handleDelayNotificationChange}
                 handleNotificationTimeChange={this.handleNotificationTimeChange}
                 selectedModules={this.state.selectedModules}
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
                 delayNotification={this.state.delayNotification}
                 disableModuleSelect={!this.state.selectedGroup}
               />

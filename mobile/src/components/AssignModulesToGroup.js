@@ -10,7 +10,6 @@ import { TagSelect } from 'react-native-tag-select';
 import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import DatePicker from 'react-native-datepicker';
 
 import apiClient from '../utils/api-client';
 import formsStyles from '../styles/formsStyles';
@@ -24,7 +23,7 @@ const { formHeader, buttonContainer } = formsStyles;
 const { labelStyle, labelStyleSmall } = inputsStyles;
 const {
   modulesContainer, itemSelected,
-  fieldRow, selectField, datePickerStyle, dateInput,
+  fieldRow, selectField,
 } = modulesStyles;
 const { lightThemeText } = commonStyles;
 
@@ -35,8 +34,6 @@ class AssignModulesToGroup extends Component {
       availableModulesList: [],
       groups: [],
       selectedGroup: {},
-      startDate: '',
-      endDate: '',
     };
 
     this.onSelect = this.onSelect.bind(this);
@@ -81,15 +78,12 @@ class AssignModulesToGroup extends Component {
   }
 
   sendAssignedModules(selectedModules) {
-    if (this.state.selectedGroup.value && selectedModules &&
-        this.state.startDate && this.state.endDate) {
+    if (this.state.selectedGroup.value && selectedModules) {
       const url = '/api/module/group/assign';
 
       const payload = {
         modules: selectedModules.map(module => module.id),
         groupId: this.state.selectedGroup.value,
-        startDate: this.state.startDate,
-        endDate: this.state.endDate,
       };
 
       const callback = (assigned) => {
@@ -111,8 +105,7 @@ class AssignModulesToGroup extends Component {
         .then(response => callback(response));
     } else {
       Actions.modalInfo({
-        message: 'You need to select group, start date, end date ' +
-        'and module to finish assignment.',
+        message: 'You need to select group and module to finish assignment.',
       });
     }
   }
@@ -142,54 +135,6 @@ class AssignModulesToGroup extends Component {
                 ))}
               </Select>
             </View>
-          </View>
-          <View style={fieldRow}>
-            <Text style={[
-              labelStyle,
-              lightThemeText,
-              PixelRatio.get() < 2 && labelStyleSmall]}
-            >
-              Start Date:
-            </Text>
-            <DatePicker
-              style={datePickerStyle}
-              format="YYYY-MM-DD"
-              timeFormat={false}
-              closeOnSelect
-              placeholder="Select a date"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                placeholderText: lightThemeText,
-                dateInput,
-              }}
-              date={this.state.startDate}
-              onDateChange={(date) => { this.setState({ startDate: date }); }}
-            />
-          </View>
-          <View style={fieldRow}>
-            <Text style={[
-              labelStyle,
-              lightThemeText,
-              PixelRatio.get() < 2 && labelStyleSmall]}
-            >
-              End Date:
-            </Text>
-            <DatePicker
-              style={datePickerStyle}
-              format="YYYY-MM-DD"
-              timeFormat={false}
-              closeOnSelect
-              placeholder="Select a date"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                placeholderText: lightThemeText,
-                dateInput,
-              }}
-              date={this.state.endDate}
-              onDateChange={(date) => { this.setState({ endDate: date }); }}
-            />
           </View>
           <View>
             <Text style={[
