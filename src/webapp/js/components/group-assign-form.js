@@ -37,36 +37,6 @@ class GroupAssignFrom extends Component {
           className="margin-bottom-md col-md-12"
           menuContainerStyle={{ zIndex: 5 }}
         />
-        <div className="col-md-6 margin-bottom-md">
-          <label htmlFor="start-date">Start date</label>
-          <div className="input-group">
-            <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-            <DateTime
-              dateFormat="YYYY-MM-DD"
-              timeFormat={false}
-              closeOnSelect
-              inputProps={{ disabled: !this.props.selectedModules }}
-              value={this.props.startDate}
-              onChange={this.props.handleStartDateChange}
-              id="start-date"
-            />
-          </div>
-        </div>
-        <div className="col-md-6 margin-bottom-md">
-          <label htmlFor="end-date">End date</label>
-          <div className="input-group">
-            <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-            <DateTime
-              dateFormat="YYYY-MM-DD"
-              timeFormat={false}
-              closeOnSelect
-              inputProps={{ disabled: !this.props.selectedModules }}
-              value={this.props.endDate}
-              onChange={this.props.handleEndDateChange}
-              id="end-date"
-            />
-          </div>
-        </div>
         <div className="col-md-12 margin-top-xs margin-bottom-xs">
           <input
             id="delay-notification"
@@ -121,8 +91,6 @@ export default GroupAssignFrom;
 GroupAssignFrom.propTypes = {
   resetLogoutCounter: PropTypes.func.isRequired,
   handleModuleChange: PropTypes.func.isRequired,
-  handleStartDateChange: PropTypes.func.isRequired,
-  handleEndDateChange: PropTypes.func.isRequired,
   handleDelayNotificationChange: PropTypes.func.isRequired,
   handleNotificationTimeChange: PropTypes.func.isRequired,
   sendAssignedModules: PropTypes.func.isRequired,
@@ -131,22 +99,12 @@ GroupAssignFrom.propTypes = {
     PropTypes.arrayOf(PropTypes.shape({})),
     PropTypes.shape({}),
   ]),
-  startDate: PropTypes.oneOfType([
-    PropTypes.shape({}),
-    PropTypes.string,
-  ]),
-  endDate: PropTypes.oneOfType([
-    PropTypes.shape({}),
-    PropTypes.string,
-  ]),
   delayNotification: PropTypes.bool,
   disableModuleSelect: PropTypes.bool,
 };
 
 GroupAssignFrom.defaultProps = {
   selectedModules: null,
-  startDate: '',
-  endDate: '',
   delayNotification: false,
   disableModuleSelect: false,
 };

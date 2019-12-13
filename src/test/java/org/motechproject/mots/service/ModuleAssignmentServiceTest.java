@@ -253,8 +253,6 @@ public class ModuleAssignmentServiceTest {
 
     for (DistrictAssignmentLog log : districtAssignmentLogs) {
       assertEquals(DISTRICT, log.getDistrict());
-      assertEquals(districtAssignmentDto.getStartDate(), log.getStartDate().toString());
-      assertEquals(districtAssignmentDto.getEndDate(), log.getEndDate().toString());
       assertEquals(user, log.getOwner());
     }
 
@@ -292,8 +290,6 @@ public class ModuleAssignmentServiceTest {
     for (DistrictAssignmentLog log : districtAssignmentLogs) {
       assertEquals(DISTRICT, log.getDistrict());
       assertEquals(SECTOR, log.getSector());
-      assertEquals(districtAssignmentDto.getStartDate(), log.getStartDate().toString());
-      assertEquals(districtAssignmentDto.getEndDate(), log.getEndDate().toString());
       assertEquals(user, log.getOwner());
     }
 

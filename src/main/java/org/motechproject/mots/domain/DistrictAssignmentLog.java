@@ -1,7 +1,5 @@
 package org.motechproject.mots.domain;
 
-import java.time.LocalDate;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -42,18 +40,6 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
   @Setter
   private Group group;
 
-  @Column(name = "start_date", nullable = false)
-  @Getter
-  @Setter
-  @NonNull
-  private LocalDate startDate;
-
-  @Column(name = "end_date", nullable = false)
-  @Getter
-  @Setter
-  @NonNull
-  private LocalDate endDate;
-
   @ManyToOne
   @JoinColumn(name = "module_id", nullable = false)
   @Getter
@@ -67,19 +53,15 @@ public class DistrictAssignmentLog extends BaseOwnershipEntity {
    * @param sector  a sector
    * @param facility  a facility
    * @param group     a group
-   * @param startDate a startDate
-   * @param endDate   an endDate
    * @param module    a module
    * @param owner     an owner
    */
   public DistrictAssignmentLog(District district, Sector sector, Facility facility,
-      Group group, LocalDate startDate, LocalDate endDate, Module module, User owner) {
+      Group group, Module module, User owner) {
     this.district = district;
     this.sector = sector;
     this.facility = facility;
     this.group = group;
-    this.startDate = startDate;
-    this.endDate = endDate;
     this.module = module;
     this.setOwner(owner);
   }
