@@ -84,22 +84,22 @@ public class CommunityHealthWorkerService {
       Logger.getLogger(CommunityHealthWorkerService.class);
 
   private static final String CHW_ID_CSV_HEADER = "chw id";
+  private static final String FIRST_NAME_CSV_HEADER = "first name";
+  private static final String FAMILY_NAME_CSV_HEADER = "family name";
+  private static final String GENDER_CSV_HEADER = "gender";
+  private static final String MOBILE_CSV_HEADER = "mobile phone";
   private static final String DISTRICT_CSV_HEADER = "district";
   private static final String SECTOR_CSV_HEADER = "sector";
-  private static final String GROUP_CSV_HEADER = "group";
-  private static final String FIRST_NAME_CSV_HEADER = "first_name";
-  private static final String FAMILY_NAME_CSV_HEADER = "family_name";
-  private static final String GENDER_CSV_HEADER = "gender";
-  private static final String MOBILE_CSV_HEADER = "mobile";
   private static final String VILLAGE_CSV_HEADER = "village";
-  private static final String PHU_CSV_HEADER = "phu";
-  private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred_language";
+  private static final String FACILITY_CSV_HEADER = "facility";
+  private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred language";
+  private static final String GROUP_CSV_HEADER = "group";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
       DISTRICT_CSV_HEADER, SECTOR_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
       FAMILY_NAME_CSV_HEADER, GENDER_CSV_HEADER,
       MOBILE_CSV_HEADER, VILLAGE_CSV_HEADER,
-      PHU_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
+      FACILITY_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
 
   @PreAuthorize(DefaultPermissions.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
@@ -303,7 +303,7 @@ public class CommunityHealthWorkerService {
       String sectorName = csvRow.get(SECTOR_CSV_HEADER);
       Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
-      String facilityName = csvRow.get(PHU_CSV_HEADER);
+      String facilityName = csvRow.get(FACILITY_CSV_HEADER);
       Facility facility = null;
 
       if (sector != null && StringUtils.isNotBlank(facilityName)) {
