@@ -61,8 +61,7 @@ public class FacilityRepositoryIntegrationTest extends
   @Test
   public void shouldFindFacility() {
     // when
-    Page<Facility> result = facilityRepository.search(facility1.getFacilityId(),
-        facility1.getName(), facility1.getFacilityType().getDisplayName(),
+    Page<Facility> result = facilityRepository.search(facility1.getName(),
         facility1.getInchargeFullName(), null, null, null, null, null);
 
     // then
@@ -74,8 +73,8 @@ public class FacilityRepositoryIntegrationTest extends
   @Test
   public void shouldFindFacilityByName() {
     // when
-    Page<Facility> result = facilityRepository.search(null,
-        facility1.getName(), null, null, null, null, null, null, null);
+    Page<Facility> result = facilityRepository.search(facility1.getName(),
+        null, null, null, null, null, null);
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -87,7 +86,7 @@ public class FacilityRepositoryIntegrationTest extends
   public void shouldFindFacilityBySector() {
     // when
     Page<Facility> result = facilityRepository.search(null, null,
-        null, null, null, null, facility1.getSector().getName(), null, null);
+        null, null, facility1.getSector().getName(), null, null);
 
     // then
     assertThat(result.getTotalElements(), is(2L));

@@ -32,8 +32,9 @@ class FacilityNew extends Component {
     const valuesToSend = {
       name: values.name,
       sectorId: values.sectorId,
-      facilityType: values.facilityType,
-      facilityId: values.facilityId,
+      inchargeFullName: values.inchargeFullName,
+      inchargePhone: values.inchargePhone,
+      inchargeEmail: values.inchargeEmail,
     };
 
     this.props.createFacility(valuesToSend, () => {

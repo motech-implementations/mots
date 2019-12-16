@@ -48,8 +48,9 @@ class FacilityEdit extends Component {
       id: this.state.facilityValues.id,
       name: this.state.facilityValues.name,
       sectorId: this.state.facilityValues.sectorId,
-      facilityType: this.state.facilityValues.facilityType,
-      facilityId: this.state.facilityValues.facilityId,
+      inchargeFullName: this.state.facilityValues.inchargeFullName,
+      inchargePhone: this.state.facilityValues.inchargePhone,
+      inchargeEmail: this.state.facilityValues.inchargeEmail,
     };
 
     this.props.saveFacility(valuesToSend, () => {

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -16,7 +15,6 @@ import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
-import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +35,7 @@ public class LocationImporter implements ApplicationRunner {
 
   private static final String DISTRICT_HEADER = "District";
   private static final String SECTOR_HEADER = "Sector";
-  private static final String FACILITY_HEADER = "FACILITY_NAME";
+  private static final String FACILITY_HEADER = "Facility";
   private static final String VILLAGE_HEADER = "Village";
 
   private static final int DISTRICT_COL_NUMBER = 0;
@@ -47,9 +45,6 @@ public class LocationImporter implements ApplicationRunner {
 
   private static final String LOCATIONS_SHEET = "Locations";
   private static final String FACILITIES_SHEET = "Facilities";
-
-  private static final int ID_FACILITY_COL_NUMBER = 3;
-  private static final int NAME_FACILITY_COL_NUMBER = 4;
 
   private List<District> currentDistrictList;
   private List<Sector> currentSectorList;
@@ -175,7 +170,6 @@ public class LocationImporter implements ApplicationRunner {
     XSSFCell cell;
     Iterator rows = sheet.rowIterator();
     HashSet<Facility> newFacilitySet = new HashSet<>();
-    DataFormatter fmt = new DataFormatter();
 
     while (rows.hasNext()) {
       row = (XSSFRow) rows.next();
@@ -191,12 +185,7 @@ public class LocationImporter implements ApplicationRunner {
         continue;
       }
 
-      String facilityId = fmt.formatCellValue(row.getCell(ID_FACILITY_COL_NUMBER));
-
-      FacilityType facilityType = FacilityType.getByDisplayName(
-          row.getCell(NAME_FACILITY_COL_NUMBER).getStringCellValue());
-
-      Facility facility = new Facility(cellText, facilityType, facilityId);
+      Facility facility = new Facility(cellText);
       String parentSectorName = row.getCell(SECTOR_COL_NUMBER).getStringCellValue();
       String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 

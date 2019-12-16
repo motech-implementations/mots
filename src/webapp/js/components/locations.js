@@ -19,19 +19,6 @@ import {
   MANAGE_OWN_FACILITIES_AUTHORITY,
 } from '../utils/authorization';
 
-const FacilityTypeFilter = ({ onChange }) => (
-  <select
-    onChange={event => onChange(event.target.value)}
-    style={{ width: '100%' }}
-  >
-    <option value="">Show All</option>
-    <option value="CHC">CHC</option>
-    <option value="CHP">CHP</option>
-    <option value="MCHP">MCHP</option>
-    <option value="clinic">Clinic</option>
-    <option value="hospital">Hospital</option>
-  </select>);
-
 class Locations extends Component {
   constructor(props) {
     super(props);
@@ -112,15 +99,8 @@ class Locations extends Component {
       show: hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY),
     },
     {
-      Header: 'Facility ID',
-      accessor: 'facilityId',
-    }, {
       Header: 'Name',
       accessor: 'name',
-    }, {
-      Header: 'Facility Type',
-      accessor: 'facilityType',
-      Filter: FacilityTypeFilter,
     }, {
       Header: 'Incharge name',
       accessor: 'inchargeFullName',
@@ -258,8 +238,4 @@ Locations.propTypes = {
     }),
   }).isRequired,
   resetLogoutCounter: PropTypes.func.isRequired,
-};
-
-FacilityTypeFilter.propTypes = {
-  onChange: PropTypes.func.isRequired,
 };
