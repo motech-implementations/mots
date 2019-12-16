@@ -2,7 +2,6 @@ package org.motechproject.mots.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.motechproject.mots.validate.annotations.FacilityType;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class FacilityExtendedInfoDto {
@@ -25,15 +24,6 @@ public class FacilityExtendedInfoDto {
   @Getter
   @Uuid
   private String sectorId;
-
-  @Setter
-  @Getter
-  @FacilityType
-  private String facilityType;
-
-  @Setter
-  @Getter
-  private String facilityId;
 
   @Getter
   @Setter

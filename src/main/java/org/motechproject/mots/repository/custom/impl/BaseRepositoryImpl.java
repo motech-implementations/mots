@@ -20,14 +20,12 @@ import org.springframework.data.domain.Sort;
 public abstract class BaseRepositoryImpl {
 
   protected static final String CHW_ID = "chwId";
-  protected static final String FACILITY_ID = "facilityId";
   protected static final String INCHARGE_FULL_NAME = "inchargeFullName";
   protected static final String INCHARGE_PHONE = "inchargePhone";
   protected static final String INCHARGE_EMAIL = "inchargeEmail";
   protected static final String FIRST_NAME = "firstName";
   protected static final String FAMILY_NAME = "familyName";
   protected static final String PHONE_NUMBER = "phoneNumber";
-  protected static final String FACILITY_TYPE = "type";
   protected static final String NAME = "name";
   protected static final String FACILITY = "facility";
   protected static final String SECTOR = "sector";

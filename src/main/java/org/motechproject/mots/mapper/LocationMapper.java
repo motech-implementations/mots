@@ -101,14 +101,12 @@ public interface LocationMapper {
   @Named("createFacility")
   @Mappings({
       @Mapping(target = "sectorId", source = "sector.id"),
-      @Mapping(target = "facilityType", source = "type"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
   FacilityCreationDto toFacilityCreationDto(Facility facility);
 
   @Mappings({
       @Mapping(target = "sectorId", source = "sector.id"),
-      @Mapping(target = "facilityType", source = "type"),
       @Mapping(target = "districtId", source = "sector.district.id"),
       @Mapping(target = "ownerUsername", source = "owner.username")
   })
@@ -133,7 +131,6 @@ public interface LocationMapper {
 
   @Mappings({
       @Mapping(target = "sector", source = "sectorId"),
-      @Mapping(target = "type", source = "facilityType"),
       @Mapping(target = "owner", ignore = true)
   })
   Facility fromDtoToFacility(FacilityCreationDto facilityCreationDto);
@@ -195,7 +192,6 @@ public interface LocationMapper {
 
   @Mappings({
       @Mapping(target = "sector", source = "sectorId"),
-      @Mapping(target = "type", source = "facilityType"),
       @Mapping(target = "owner", ignore = true)
   })
   void updateFacilityFromDto(FacilityCreationDto facilityCreationDto,

@@ -16,7 +16,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.audit.AuditListener;
 import org.motechproject.mots.domain.audit.Auditable;
-import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.security.User;
 
 @MappedSuperclass
@@ -50,14 +49,6 @@ public abstract class Location extends BaseTimestampedEntity implements Auditabl
   }
 
   public String getDistrictName() {
-    return null;
-  }
-
-  public FacilityType getFacilityType() {
-    return null;
-  }
-
-  public String getFacilityId() {
     return null;
   }
 

@@ -19,7 +19,6 @@ import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
-import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.FacilityRepository;
@@ -44,11 +43,8 @@ public class LocationService {
 
   private static final String DISTRICT_HEADER = "district";
   private static final String SECTOR_HEADER = "sector";
-  private static final String PHU_HEADER = "phu";
+  private static final String FACILITY_HEADER = "facility";
   private static final String VILLAGE_HEADER = "village";
-  private static final String FACILITY_NAME_HEADER = "facility name";
-  private static final String FACILITY_ID_HEADER = "facility id";
-  private static final String FACILITY_TYPE_HEADER = "facility type";
   private static final String INCHARGE_NAME_HEADER = "incharge name";
   private static final String INCHARGE_PHONE_HEADER = "incharge phone";
   private static final String INCHARGE_EMAIL_HEADER = "incharge email";
@@ -57,10 +53,10 @@ public class LocationService {
       SECTOR_HEADER);
 
   private static final List<String> VILLAGE_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      SECTOR_HEADER, PHU_HEADER, VILLAGE_HEADER);
+      SECTOR_HEADER, FACILITY_HEADER, VILLAGE_HEADER);
 
   private static final List<String> FACILITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      SECTOR_HEADER, FACILITY_NAME_HEADER, FACILITY_ID_HEADER, FACILITY_TYPE_HEADER,
+      SECTOR_HEADER, FACILITY_HEADER,
       INCHARGE_NAME_HEADER, INCHARGE_PHONE_HEADER, INCHARGE_EMAIL_HEADER);
 
   @Autowired
@@ -154,11 +150,11 @@ public class LocationService {
    * If there are no parameters, return all facilities.
    */
   @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Page<Facility> searchFacilities(String facilityId, String facilityName,
-      String facilityType, String inchargeFullName, String inchargePhone, String inchargeEmail,
+  public Page<Facility> searchFacilities(String facilityName,
+      String inchargeFullName, String inchargePhone, String inchargeEmail,
       String parentSector, String districtName, Pageable pageable) throws IllegalArgumentException {
 
-    return facilityRepository.search(facilityId, facilityName, facilityType,
+    return facilityRepository.search(facilityName,
         inchargeFullName, inchargePhone, inchargeEmail, parentSector, districtName, pageable);
   }
 
@@ -315,7 +311,7 @@ public class LocationService {
         continue;
       }
 
-      String facilityName = csvRow.get(PHU_HEADER);
+      String facilityName = csvRow.get(FACILITY_HEADER);
 
       if (StringUtils.isBlank(facilityName)) {
         errorMap.put(csvMapReader.getLineNumber(), "PHU name is empty");
@@ -398,24 +394,10 @@ public class LocationService {
         continue;
       }
 
-      String facilityName = csvRow.get(FACILITY_NAME_HEADER);
+      String facilityName = csvRow.get(FACILITY_HEADER);
 
       if (StringUtils.isBlank(facilityName)) {
         errorMap.put(csvMapReader.getLineNumber(), "Facility name is empty");
-        continue;
-      }
-
-      String facilityId = csvRow.get(FACILITY_ID_HEADER);
-
-      if (StringUtils.isBlank(facilityId)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Facility id is empty");
-        continue;
-      }
-
-      FacilityType facilityType = FacilityType.getByDisplayName(csvRow.get(FACILITY_TYPE_HEADER));
-
-      if (facilityType == null) {
-        errorMap.put(csvMapReader.getLineNumber(), "Invalid or empty Facility type");
         continue;
       }
 
@@ -433,12 +415,11 @@ public class LocationService {
         continue;
       }
 
-      Optional<Facility> facility = facilityRepository
-          .findByFacilityIdOrSectorAndName(facilityId, sector, facilityName);
+      Facility facility = facilityRepository.findByNameAndSector(facilityName, sector);
 
-      if (facility.isPresent()) {
+      if (facility != null) {
         errorMap.put(csvMapReader.getLineNumber(),
-            "Facility with this name of facility id already exists");
+            "Facility with this name already exists");
         continue;
       }
 
@@ -446,7 +427,7 @@ public class LocationService {
       String inchargePhone = csvRow.get(INCHARGE_PHONE_HEADER);
       String inchargeEmail = csvRow.get(INCHARGE_EMAIL_HEADER);
 
-      Facility newFacility = new Facility(facilityName, facilityType, facilityId, inchargeName,
+      Facility newFacility = new Facility(facilityName, inchargeName,
           inchargePhone, inchargeEmail, sector);
 
       facilityRepository.save(newFacility);

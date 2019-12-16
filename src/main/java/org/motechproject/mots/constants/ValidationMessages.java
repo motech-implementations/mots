@@ -20,7 +20,6 @@ public final class ValidationMessages {
       = "Call flow element type cannot be empty";
   public static final String EMPTY_FACILITY_ID = "Facility Id cannot be empty";
   public static final String EMPTY_SECTOR_ID = "Sector Id cannot be empty";
-  public static final String EMPTY_FACILITY_TYPE = "Facility type cannot be empty";
   public static final String EMPTY_MODULES = "Modules cannot be empty";
   public static final String EMPTY_START_DATE = "Start date cannot be empty";
   public static final String EMPTY_END_DATE = "End date cannot be empty";
@@ -58,7 +57,6 @@ public final class ValidationMessages {
 
   public static final String NOT_UNIQUE_USERNAME = "A User with username '%s' already exists";
   public static final String USER_DUPLICATE_EMAIL = "A User with email '%s' already exists";
-  public static final String NOT_UNIQUE_FACILITY_ID = "A Facility with this ID already exists";
   public static final String NOT_UNIQUE_FACILITY =
       "A Facility with name: '%s' within sector already exists";
   public static final String NOT_UNIQUE_VILLAGE =

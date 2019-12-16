@@ -43,29 +43,14 @@ const FIELDS = {
       valueKey: 'id',
     }),
   },
-  facilityType: {
-    label: 'Facility Type',
-    required: true,
-    type: 'select',
-    getSelectOptions: () => ({
-      values: ['CHC', 'CHP', 'MCHP', 'Clinic', 'Hospital'],
-    }),
-  },
-  facilityId: {
-    label: 'Facility ID',
-    required: true,
-  },
   inchargeFullName: {
     label: 'Incharge name',
-    required: true,
   },
   inchargePhone: {
     label: 'Incharge phone',
-    required: true,
   },
   inchargeEmail: {
     label: 'Incharge email',
-    required: true,
   },
 };
 

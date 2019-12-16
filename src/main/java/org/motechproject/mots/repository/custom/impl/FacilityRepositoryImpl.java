@@ -10,7 +10,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.motechproject.mots.domain.Facility;
-import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.repository.custom.FacilityRepositoryCustom;
 import org.motechproject.mots.web.LocationController;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
    * If there are no parameters, return all Facilities.
    */
   @Override
-  public Page<Facility> search(String facilityId, String facilityName, String facilityType,
+  public Page<Facility> search(String facilityName,
       String inchargeFullName, String inchargePhone, String inchargeEmail,
       String parentSector, String districtName, Pageable pageable)
       throws IllegalArgumentException {
@@ -35,12 +34,12 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Facility> query = builder.createQuery(Facility.class);
-    query = prepareQuery(query, facilityId, facilityName, facilityType, inchargeFullName,
+    query = prepareQuery(query, facilityName, inchargeFullName,
         inchargePhone, inchargeEmail, parentSector, districtName, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, facilityId, facilityName, facilityType, inchargeFullName,
+    countQuery = prepareQuery(countQuery, facilityName, inchargeFullName,
         inchargePhone, inchargeEmail, parentSector, districtName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
@@ -55,8 +54,8 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     return new PageImpl<>(facilities, pageable, count);
   }
 
-  private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String facilityId,
-      String facilityName, String facilityType, String inchargeFullName, String inchargePhone,
+  private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
+      String facilityName, String inchargeFullName, String inchargePhone,
       String inchargeEmail, String parentSector, String districtName,
       boolean count, Pageable pageable) throws IllegalArgumentException {
 
@@ -69,18 +68,10 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     }
 
     Predicate predicate = builder.conjunction();
-    if (facilityId != null) {
-      predicate = builder.and(predicate,
-          builder.like(root.get(FACILITY_ID), '%' + facilityId.trim() + '%'));
-    }
+
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
           '%' + facilityName.trim() + '%'));
-    }
-    if (facilityType != null) {
-      FacilityType validFacilityType = FacilityType.valueOf(facilityType.trim().toUpperCase());
-      predicate = builder.and(predicate,
-          builder.equal(root.get(FACILITY_TYPE), validFacilityType));
     }
     if (inchargeFullName != null) {
       predicate = builder.and(predicate,
@@ -127,10 +118,6 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
       order = iterator.next();
       if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
         path = root.get(SECTOR).get(NAME);
-        Order mountedOrder = getSortDirection(builder, order, path);
-        orders.add(mountedOrder);
-      } else if (order.getProperty().equals(LocationController.FACILITY_TYPE_PARAM)) {
-        path = root.get(FACILITY_TYPE);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else if (order.getProperty().equals(LocationController.DISTRICT_NAME_PARAM)) {
