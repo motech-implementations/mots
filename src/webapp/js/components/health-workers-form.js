@@ -54,7 +54,6 @@ const FIELDS = {
   gender: {
     type: 'select',
     label: 'Gender',
-    required: true,
     getSelectOptions: () => ({
       values: ['Male', 'Female'],
     }),
