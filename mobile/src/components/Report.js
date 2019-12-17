@@ -182,7 +182,7 @@ class Report extends Component {
     if (reportJson && reportJson.length) {
       const { colModel } = reportJson[0];
       const { filters, sorters } = this.state;
-      let { values } = reportJson[0];
+      let { values = [] } = reportJson[0];
       // filter and sort values
       values = values.filter(createFilter(...filters));
       values.sort(createSorter(...sorters));
