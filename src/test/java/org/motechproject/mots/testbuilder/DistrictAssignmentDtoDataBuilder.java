@@ -8,15 +8,11 @@ public class DistrictAssignmentDtoDataBuilder {
 
   private String districtId;
   private Set<String> modules = new HashSet<>();
-  private String startDate;
-  private String endDate;
 
   /**
    * Returns instance of {@link DistrictAssignmentDtoDataBuilder} with sample data.
    */
   public DistrictAssignmentDtoDataBuilder() {
-    startDate = "2018-01-01";
-    endDate = "2018-02-01";
   }
 
   /**
@@ -27,8 +23,6 @@ public class DistrictAssignmentDtoDataBuilder {
     DistrictAssignmentDto districtAssignmentDto = new DistrictAssignmentDto();
     districtAssignmentDto.setDistrictId(districtId);
     districtAssignmentDto.setModules(modules);
-    districtAssignmentDto.setStartDate(startDate);
-    districtAssignmentDto.setEndDate(endDate);
 
     return districtAssignmentDto;
   }
