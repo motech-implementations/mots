@@ -21,8 +21,6 @@ public final class ValidationMessages {
   public static final String EMPTY_FACILITY_ID = "Facility Id cannot be empty";
   public static final String EMPTY_SECTOR_ID = "Sector Id cannot be empty";
   public static final String EMPTY_MODULES = "Modules cannot be empty";
-  public static final String EMPTY_START_DATE = "Start date cannot be empty";
-  public static final String EMPTY_END_DATE = "End date cannot be empty";
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
   public static final String EMPTY_GROUP_ID = "Group Id cannot be empty";
 
@@ -39,7 +37,6 @@ public final class ValidationMessages {
   public static final String INVALID_GENDER = "Invalid gender";
   public static final String INVALID_LANGUAGE = "Invalid language";
   public static final String INVALID_CALL_FLOW_ELEMENT_TYPE = "Invalid call flow element type";
-  public static final String INVALID_FACILITY_TYPE = "Invalid facility type";
   public static final String INVALID_IDS = "Invalid: %s UUID";
 
   public static final String NOT_UNIQUE_PHONE_NUMBER = "Phone number is not unique";
@@ -52,8 +49,6 @@ public final class ValidationMessages {
   public static final String NOT_EXISTING_SECTOR = "Sector doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
   public static final String NOT_EXISTING_GROUP = "Group doesn't exist";
-
-  public static final String END_DATE_AFTER_START_DATE = "End date must be after start date.";
 
   public static final String NOT_UNIQUE_USERNAME = "A User with username '%s' already exists";
   public static final String USER_DUPLICATE_EMAIL = "A User with email '%s' already exists";
