@@ -304,9 +304,9 @@ public class LocationService {
         continue;
       }
 
-      String sectormName = csvRow.get(SECTOR_HEADER);
+      String sectorName = csvRow.get(SECTOR_HEADER);
 
-      if (StringUtils.isBlank(sectormName)) {
+      if (StringUtils.isBlank(sectorName)) {
         errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
         continue;
       }
@@ -332,7 +332,7 @@ public class LocationService {
         continue;
       }
 
-      Sector sector = sectorRepository.findByNameAndDistrict(sectormName, district.get());
+      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
       if (sector == null) {
         errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
