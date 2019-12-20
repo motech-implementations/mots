@@ -1,10 +1,12 @@
 package org.motechproject.mots.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -219,18 +221,18 @@ public class IvrService {
     String retryAttemptsLong = Integer.toString(ivrConfig.getRetryAttemptsLong());
     String retryDelayLong = Integer.toString(ivrConfig.getRetryDelayLong());
 
-    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add(SEND_TO_SUBSCRIBERS, StringUtils.join(subscriberIds, ","));
-    params.add(MESSAGE_ID, messageId);
-    params.add(SEND_SMS_IF_VOICE_FAILS, sendSmsIfVoiceFails);
-    params.add(DETECT_VOICEMAIL_ACTION, detectVoiceMailAction);
-    params.add(RETRY_ATTEMPTS_SHORT, retryAttemptsShort);
-    params.add(RETRY_DELAY_SHORT, retryDelayShort);
-    params.add(RETRY_ATTEMPTS_LONG, retryAttemptsLong);
-    params.add(RETRY_DELAY_LONG, retryDelayLong);
+    Map<String, String> params = new HashMap<>();
+    params.put(SEND_TO_SUBSCRIBERS, StringUtils.join(subscriberIds, ","));
+    params.put(MESSAGE_ID, messageId);
+    params.put(SEND_SMS_IF_VOICE_FAILS, sendSmsIfVoiceFails);
+    params.put(DETECT_VOICEMAIL_ACTION, detectVoiceMailAction);
+    params.put(RETRY_ATTEMPTS_SHORT, retryAttemptsShort);
+    params.put(RETRY_DELAY_SHORT, retryDelayShort);
+    params.put(RETRY_ATTEMPTS_LONG, retryAttemptsLong);
+    params.put(RETRY_DELAY_LONG, retryDelayLong);
 
-    sendVotoRequest(getAbsoluteUrl(SEND_MESSAGE_URL), params,
-        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
+    sendVotoRequest(getAbsoluteUrl(SEND_MESSAGE_URL), new LinkedMultiValueMap<>(),
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST, params);
   }
 
   /**
@@ -282,15 +284,39 @@ public class IvrService {
   }
 
   private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,
-      ParameterizedTypeReference<T> responseType, HttpMethod method) throws IvrException {
-    params.add(API_KEY, ivrApiKey);
+      ParameterizedTypeReference<T> responseType, HttpMethod method,
+      Map<String, String> jsonParams) throws IvrException {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
+    String json;
+    try {
+      json = mapper.writeValueAsString(jsonParams);
+    } catch (JsonProcessingException ex) {
+      throw new IvrException("Could not parse requests params", ex);
+    }
+    HttpEntity<?> request = new HttpEntity<>(json, headers);
+
+    return sendVotoRequest(url, params, responseType, method, request);
+  }
+
+  private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,
+      ParameterizedTypeReference<T> responseType, HttpMethod method) throws IvrException {
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
-
     HttpEntity<?> request = new HttpEntity<>(headers);
+
+    return sendVotoRequest(url, params, responseType, method, request);
+  }
+
+  private <T> T sendVotoRequest(String url, MultiValueMap<String, String> params,
+      ParameterizedTypeReference<T> responseType, HttpMethod method,
+      HttpEntity<?> request) throws IvrException {
+    params.add(API_KEY, ivrApiKey);
+
+    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
 
     try {
       ResponseEntity<T> responseEntity = restTemplate.exchange(builder.build().toString(),
