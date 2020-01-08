@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Async } from 'react-select';
 import PropTypes from 'prop-types';
 import DateTime from 'react-datetime';
+import { ClimbingBoxLoader } from 'react-spinners';
 
 import 'react-datetime/css/react-datetime.css';
 
@@ -75,11 +76,16 @@ class GroupAssignFrom extends Component {
           <button
             type="submit"
             className="btn btn-primary btn-block margin-x-md padding-x-sm"
-            style={{ marginBottom: '200px' }}
-            disabled={!this.props.validate()}
+            disabled={!this.props.validate() || this.props.assignInProgress}
           >
             <h4>Assign!</h4>
           </button>
+          <div style={{ marginBottom: '200px' }}>
+            <ClimbingBoxLoader
+              color="#000000"
+              loading={this.props.assignInProgress}
+            />
+          </div>
         </form>
       </div>
     );
@@ -101,11 +107,13 @@ GroupAssignFrom.propTypes = {
   ]),
   delayNotification: PropTypes.bool,
   disableModuleSelect: PropTypes.bool,
+  assignInProgress: PropTypes.bool,
 };
 
 GroupAssignFrom.defaultProps = {
   selectedModules: null,
   delayNotification: false,
   disableModuleSelect: false,
+  assignInProgress: false,
 };
 

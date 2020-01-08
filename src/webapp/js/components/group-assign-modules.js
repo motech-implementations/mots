@@ -29,6 +29,7 @@ class DistrictAssignModules extends Component {
       groups: [],
       selectedGroup: null,
       selectedIndex: 0,
+      assignInProgress: false,
     };
 
     this.handleModuleChange = this.handleModuleChange.bind(this);
@@ -99,6 +100,8 @@ class DistrictAssignModules extends Component {
       modules: _.map(this.state.selectedModules, module => module.value),
     };
 
+    this.setState({ assignInProgress: true });
+
     if (this.state.selectedIndex === 0) {
       payload.districtId = this.state.selectedDistrict.value;
 
@@ -122,6 +125,7 @@ class DistrictAssignModules extends Component {
         Alert.success('Modules have been assigned!');
       } else {
         Alert.success('Module was already assigned!');
+        this.setState({ assignInProgress: false });
       }
     };
 
@@ -245,6 +249,7 @@ class DistrictAssignModules extends Component {
                 selectedModules={this.state.selectedModules}
                 delayNotification={this.state.delayNotification}
                 disableModuleSelect={!this.state.selectedDistrict}
+                assignInProgress={this.state.assignInProgress}
               />
             </div>
           </TabPanel>
@@ -272,6 +277,7 @@ class DistrictAssignModules extends Component {
                 selectedModules={this.state.selectedModules}
                 delayNotification={this.state.delayNotification}
                 disableModuleSelect={!this.state.selectedGroup}
+                assignInProgress={this.state.assignInProgress}
               />
             </div>
           </TabPanel>
