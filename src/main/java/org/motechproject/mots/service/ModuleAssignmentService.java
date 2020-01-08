@@ -229,20 +229,16 @@ public class ModuleAssignmentService {
         ? UUID.fromString(assignmentDto.getFacilityId()) : null;
 
     List<CommunityHealthWorker> communityHealthWorkers;
+
     if (facilityId != null) {
       communityHealthWorkers = communityHealthWorkerRepository
-          .findByVillageFacilityIdAndSelected(
-              facilityId, true);
-
+          .findByFacilityIdAndSelected(facilityId, true);
     } else if (sectorId != null) {
       communityHealthWorkers = communityHealthWorkerRepository
-          .findByVillageFacilitySectorIdAndSelected(
-              sectorId, true);
-
+          .findBySectorIdAndSelected(sectorId, true);
     } else {
       communityHealthWorkers = communityHealthWorkerRepository
-          .findByVillageFacilitySectorDistrictIdAndSelected(
-              districtId, true);
+          .findByDistrictIdAndSelected(districtId, true);
     }
 
     return bulkAssignModules(assignmentDto, communityHealthWorkers, districtId, sectorId,
