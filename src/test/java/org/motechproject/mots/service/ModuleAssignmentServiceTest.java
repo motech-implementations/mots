@@ -263,7 +263,7 @@ public class ModuleAssignmentServiceTest {
     assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscriberToGroups(eq(CHW.getIvrId()), eq(Collections.singletonList(IVR_GROUP)));
+        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singleton(CHW.getIvrId())));
     verify(moduleProgressService)
         .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
   }
@@ -300,7 +300,7 @@ public class ModuleAssignmentServiceTest {
     assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscriberToGroups(eq(CHW.getIvrId()), eq(Collections.singletonList(IVR_GROUP)));
+        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singleton(CHW.getIvrId())));
     verify(moduleProgressService)
         .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
   }
@@ -328,7 +328,7 @@ public class ModuleAssignmentServiceTest {
     when(communityHealthWorkerRepository.findByDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
-    doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
+    doThrow(new IvrException("message")).when(ivrService).addSubscribersToGroup(any(), any());
 
     moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
   }

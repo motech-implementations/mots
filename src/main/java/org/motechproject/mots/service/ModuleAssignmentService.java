@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -275,15 +277,16 @@ public class ModuleAssignmentService {
 
       newChwModules.add(moduleToAssign);
     }
+
     Set<String> newIvrSubscribers = new HashSet<>();
+    Map<String, Set<String>> subscribersToAdd = new HashMap<>();
+
+    newChwModules.forEach(module -> subscribersToAdd.put(module.getIvrGroup(), new HashSet<>()));
 
     for (CommunityHealthWorker chw : communityHealthWorkers) {
-
-      AssignedModules existingAssignedModules =
-          getAssignedModules(chw.getId());
+      AssignedModules existingAssignedModules = getAssignedModules(chw.getId());
 
       Set<Module> oldModules = existingAssignedModules.getModules();
-
       Set<Module> modulesToAdd = getModulesToAdd(oldModules, newChwModules);
 
       existingAssignedModules.getModules().addAll(modulesToAdd);
@@ -300,19 +303,24 @@ public class ModuleAssignmentService {
             "Could not assign module to CHW, because CHW has empty IVR id");
       }
 
-      List<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
+      moduleProgressService.createModuleProgresses(chw, modulesToAdd);
+
+      if (modulesToAdd.size() > 0) {
+        newIvrSubscribers.add(ivrId);
+      }
+
+      modulesToAdd.forEach(module -> subscribersToAdd.get(module.getIvrGroup()).add(ivrId));
+    }
+
+    subscribersToAdd.forEach((ivrGroup, subscribers) -> {
       try {
-        ivrService.addSubscriberToGroups(ivrId, ivrGroups);
+        ivrService.addSubscribersToGroup(ivrGroup, subscribers);
       } catch (IvrException ex) {
-        String message = "Could not assign or delete module for CHW, "
+        String message = "Could not assign module for CHW, "
             + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
         throw new ModuleAssignmentException(message, ex);
       }
-      moduleProgressService.createModuleProgresses(chw, modulesToAdd);
-      if (ivrGroups.size() > 0) {
-        newIvrSubscribers.add(ivrId);
-      }
-    }
+    });
 
     if (newIvrSubscribers.size() > 0) {
       for (Module moduleToAssign : newChwModules) {
