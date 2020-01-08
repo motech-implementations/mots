@@ -130,6 +130,22 @@ public class IvrService {
   }
 
   /**
+   * Add Subscribers to group.
+   * @param groupId id of group to add subscriber
+   * @param subscriberIds set of subscribers ids
+   */
+  public void addSubscribersToGroup(String groupId, Set<String> subscriberIds) throws IvrException {
+    if (!subscriberIds.isEmpty()) {
+      Map<String, String> params = new HashMap<>();
+      params.put(SUBSCRIBER_IDS, StringUtils.join(subscriberIds, ","));
+      params.put(GROUPS, groupId);
+
+      sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), new LinkedMultiValueMap<>(),
+          new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST, params);
+    }
+  }
+
+  /**
    * Add Subscriber to groups.
    * @param subscriberId subscriber id
    * @param groupsIds ids of groups to add subscriber
