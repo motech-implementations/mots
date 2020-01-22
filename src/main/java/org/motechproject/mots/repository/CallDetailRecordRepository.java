@@ -9,10 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CallDetailRecordRepository extends CrudRepository<CallDetailRecord, UUID> {
 
-  CallDetailRecord findByCallLogIdAndCallStatus(String callLogId, CallStatus callStatus);
+  List<CallDetailRecord> findByCallLogIdAndCallStatus(String callLogId, CallStatus callStatus);
 
   @SuppressWarnings("checkstyle:linelength")
-  List<CallDetailRecord> findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanAndCallStatusAndChwIvrId(
-      Date startDate, Date endDate, CallStatus status, String chwIvrId);
+  List<CallDetailRecord> findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanAndCallStatusAndChwIvrIdAndCallLogIdNotLike(
+      Date startDate, Date endDate, CallStatus status, String chwIvrId, String callLogId);
 
 }

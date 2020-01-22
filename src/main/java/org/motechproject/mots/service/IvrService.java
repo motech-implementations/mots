@@ -5,14 +5,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
@@ -257,20 +260,29 @@ public class IvrService {
    * @param callDetailRecord of call that is going to be parsed.
    * @return true if there was no calls in progress during this one.
    */
+  @SuppressWarnings("checkstyle:linelength")
   private boolean noCallsStartedDuringCall(CallDetailRecord callDetailRecord) {
-    CallDetailRecord callDetailRecordInProgress = callDetailRecordRepository
+    List<CallDetailRecord> callDetailRecordsInProgress = callDetailRecordRepository
         .findByCallLogIdAndCallStatus(callDetailRecord.getCallLogId(), CallStatus.IN_PROGRESS);
 
-    Date startDate = callDetailRecordInProgress.getCreatedDate();
+    Optional<Date> startDate = callDetailRecordsInProgress.stream()
+        .min(Comparator.comparing(CallDetailRecord::getCreatedDate))
+        .map(BaseTimestampedEntity::getCreatedDate);
+
+    if (!startDate.isPresent()) {
+      return true;
+    }
+
     Date endDate = callDetailRecord.getCreatedDate();
 
     List<CallDetailRecord> callDetailRecords = callDetailRecordRepository
-        .findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanAndCallStatusAndChwIvrId(
-            startDate, endDate, CallStatus.IN_PROGRESS, callDetailRecord.getChwIvrId());
+        .findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanAndCallStatusAndChwIvrIdAndCallLogIdNotLike(
+            startDate.get(), endDate, CallStatus.IN_PROGRESS,
+            callDetailRecord.getChwIvrId(), callDetailRecord.getCallLogId());
 
-    // There is always callDetailRecordInProgress included in this list.
-    // We have to check if there is anything else.
-    return callDetailRecords.size() == 1;
+    // If there are any records in this list it means that another call was started
+    // before this one was finished, so this call will be ignored.
+    return callDetailRecords.isEmpty();
   }
 
   private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord) throws IvrException {
