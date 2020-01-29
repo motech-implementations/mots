@@ -266,7 +266,7 @@ public class IvrService {
         .findByCallLogIdAndCallStatus(callDetailRecord.getCallLogId(), CallStatus.IN_PROGRESS);
 
     Optional<Date> startDate = callDetailRecordsInProgress.stream()
-        .min(Comparator.comparing(CallDetailRecord::getCreatedDate))
+        .max(Comparator.comparing(CallDetailRecord::getCreatedDate))
         .map(BaseTimestampedEntity::getCreatedDate);
 
     if (!startDate.isPresent()) {
