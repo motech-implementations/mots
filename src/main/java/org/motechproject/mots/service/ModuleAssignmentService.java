@@ -279,9 +279,9 @@ public class ModuleAssignmentService {
     }
 
     Set<String> newIvrSubscribers = new HashSet<>();
-    Map<String, Set<String>> subscribersToAdd = new HashMap<>();
+    Map<String, List<String>> subscribersToAdd = new HashMap<>();
 
-    newChwModules.forEach(module -> subscribersToAdd.put(module.getIvrGroup(), new HashSet<>()));
+    newChwModules.forEach(module -> subscribersToAdd.put(module.getIvrGroup(), new ArrayList<>()));
 
     for (CommunityHealthWorker chw : communityHealthWorkers) {
       AssignedModules existingAssignedModules = getAssignedModules(chw.getId());
