@@ -263,7 +263,7 @@ public class ModuleAssignmentServiceTest {
     assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singleton(CHW.getIvrId())));
+        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singletonList(CHW.getIvrId())));
     verify(moduleProgressService)
         .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
   }
@@ -300,7 +300,7 @@ public class ModuleAssignmentServiceTest {
     assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singleton(CHW.getIvrId())));
+        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singletonList(CHW.getIvrId())));
     verify(moduleProgressService)
         .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
   }

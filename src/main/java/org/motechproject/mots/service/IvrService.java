@@ -70,6 +70,8 @@ public class IvrService {
   private static final String SEND_MESSAGE_URL = "/outgoing_calls";
   private static final String GET_CALL_LOGS_URL = "/trees/%s/delivery_logs/%s";
 
+  private static final Integer MAX_NUMBER_OF_SUBSCRIBERS = 200;
+
   @Value("${mots.ivrApiKey}")
   private String ivrApiKey;
 
@@ -137,14 +139,20 @@ public class IvrService {
    * @param groupId id of group to add subscriber
    * @param subscriberIds set of subscribers ids
    */
-  public void addSubscribersToGroup(String groupId, Set<String> subscriberIds) throws IvrException {
+  public void addSubscribersToGroup(String groupId,
+      List<String> subscriberIds) throws IvrException {
     if (!subscriberIds.isEmpty()) {
-      Map<String, String> params = new HashMap<>();
-      params.put(SUBSCRIBER_IDS, StringUtils.join(subscriberIds, ","));
-      params.put(GROUPS, groupId);
+      for (int index = 0; index * MAX_NUMBER_OF_SUBSCRIBERS < subscriberIds.size(); index++) {
+        int start = index * MAX_NUMBER_OF_SUBSCRIBERS;
+        int end = Math.min(start + MAX_NUMBER_OF_SUBSCRIBERS, subscriberIds.size());
 
-      sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), new LinkedMultiValueMap<>(),
-          new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST, params);
+        Map<String, String> params = new HashMap<>();
+        params.put(SUBSCRIBER_IDS, StringUtils.join(subscriberIds.subList(start, end), ","));
+        params.put(GROUPS, groupId);
+
+        sendVotoRequest(getAbsoluteUrl(ADD_TO_GROUPS_URL), new LinkedMultiValueMap<>(),
+            new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST, params);
+      }
     }
   }
 
