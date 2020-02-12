@@ -90,17 +90,15 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
     }
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(VILLAGE).get(FACILITY).get(NAME), '%' + facilityName.trim() + '%'));
+          root.get(FACILITY).get(NAME), '%' + facilityName.trim() + '%'));
     }
     if (sectorName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(VILLAGE).get(FACILITY).get(SECTOR).get(NAME),
-          '%' + sectorName.trim()  + '%'));
+          root.get(SECTOR).get(NAME), '%' + sectorName.trim()  + '%'));
     }
     if (districtName != null) {
       predicate = builder.and(predicate, builder.like(
-          root.get(VILLAGE).get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME),
-          '%' + districtName.trim()  + '%'));
+          root.get(DISTRICT).get(NAME), '%' + districtName.trim()  + '%'));
     }
     if (groupName != null) {
       predicate = builder.and(predicate, builder.like(
@@ -127,11 +125,11 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
       case CommunityHealthWorkerController.VILLAGE_NAME_PARAM:
         return root.get(VILLAGE).get(NAME);
       case CommunityHealthWorkerController.FACILITY_NAME_PARAM:
-        return root.get(VILLAGE).get(FACILITY).get(NAME);
+        return root.get(FACILITY).get(NAME);
       case CommunityHealthWorkerController.SECTOR_NAME_PARAM:
-        return root.get(VILLAGE).get(FACILITY).get(SECTOR).get(NAME);
+        return root.get(SECTOR).get(NAME);
       case CommunityHealthWorkerController.DISTRICT_NAME_PARAM:
-        return root.get(VILLAGE).get(FACILITY).get(SECTOR).get(DISTRICT).get(NAME);
+        return root.get(DISTRICT).get(NAME);
       case CommunityHealthWorkerController.GROUP_NAME_PARAM:
         return root.get(GROUP).get(NAME);
       default:
