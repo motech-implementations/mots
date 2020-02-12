@@ -293,10 +293,7 @@ public class ModuleAssignmentService {
 
       repository.save(existingAssignedModules);
 
-      entityManager.flush();
-      entityManager.refresh(existingAssignedModules);
-
-      String ivrId = existingAssignedModules.getHealthWorker().getIvrId();
+      String ivrId = chw.getIvrId();
 
       if (ivrId == null) {
         throw new ModuleAssignmentException(
