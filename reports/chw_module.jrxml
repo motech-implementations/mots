@@ -95,6 +95,7 @@
 		<parameter name="dateReceived" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="startDate" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="gender" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="groupName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
@@ -116,6 +117,7 @@
   AND ($P{dateReceived} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceived},'%'))
   AND ($P{startDate} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDate},'%'))
   AND ($P{endDate} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDate},'%'))
+  AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
 		</queryString>
@@ -166,6 +168,12 @@
 		<property name="displayName" value="End Date"/>
 		<property name="required" value="false"/>
 	</parameter>
+	<parameter name="gender" class="java.lang.String">
+		<property name="dataType" value="Enum"/>
+		<property name="displayName" value="Gender"/>
+		<property name="options" value="MALE:Male,FEMALE:Female"/>
+		<property name="required" value="false"/>
+	</parameter>
 	<parameter name="groupName" class="java.lang.String">
 		<property name="dataType" value="String"/>
 		<property name="displayName" value="Group"/>
@@ -197,6 +205,7 @@
   sector.name AS sector,
   facility.name AS facility,
   module.name AS moduleId,
+  CONCAT(LEFT(chw.gender, 1), LOWER(SUBSTRING(chw.gender, 2))) AS gender,
   chw_group.name AS groupName,
   DATE_FORMAT(module_progress.created_date, '%Y-%m-%d') AS dateReceived,
   DATE_FORMAT(module_progress.start_date, '%Y-%m-%d') AS startDate,
@@ -217,6 +226,7 @@
   AND ($P{dateReceived} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceived},'%'))
   AND ($P{startDate} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDate},'%'))
   AND ($P{endDate} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDate},'%'))
+  AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
  ORDER BY $P!{orderBy}
@@ -231,6 +241,7 @@
 	<field name="endDate" class="java.lang.String"/>
 	<field name="sector" class="java.lang.String"/>
 	<field name="facility" class="java.lang.String"/>
+	<field name="gender" class="java.lang.String"/>
 	<field name="groupName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -272,6 +283,18 @@
 				</reportElement>
 			</staticText>
 			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="9439fc34-600a-4698-9444-71447ddcc299">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.gender.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Gender"/>
+				</reportElement>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="0" height="0" uuid="d24b2ca4-df9b-4c43-91d1-d09632f6f371">
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.gender.order"/>
+					<property name="net.sf.jasperreports.export.json.data" value="2"/>
+				</reportElement>
+			</staticText>
+			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="8a7f263e-2b33-440f-a80b-88c9047cf901">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.groupName.Header"/>
 					<property name="net.sf.jasperreports.export.json.data" value="Group"/>
@@ -280,7 +303,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="351a3511-560e-4f2a-a70a-66080f733493">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.groupName.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="2"/>
+					<property name="net.sf.jasperreports.export.json.data" value="3"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -292,7 +315,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="20e6f829-bed9-4dc3-8b03-3b0c91f865d5">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.moduleId.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="3"/>
+					<property name="net.sf.jasperreports.export.json.data" value="4"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -304,7 +327,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="a24f83b1-4f3d-41f2-b144-e748969be01b">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.dateReceived.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="4"/>
+					<property name="net.sf.jasperreports.export.json.data" value="5"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -316,7 +339,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="1c5b748b-5a66-4ba9-bd60-8c757aeb3ec8">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.startDate.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="5"/>
+					<property name="net.sf.jasperreports.export.json.data" value="6"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -328,7 +351,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="4a8c3790-69cb-4d7e-a7ce-f2cdecc7d3c5">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.endDate.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="6"/>
+					<property name="net.sf.jasperreports.export.json.data" value="7"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -340,7 +363,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="4053a0cd-7f51-4360-aea3-6fc59f0e8ef0">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.district.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="7"/>
+					<property name="net.sf.jasperreports.export.json.data" value="8"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -352,7 +375,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="20cc32ce-fc98-407b-aaf7-ca79b61fbc42">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="8"/>
+					<property name="net.sf.jasperreports.export.json.data" value="9"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -364,7 +387,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="81ff6e95-c302-4823-88be-724f1816d1c7">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.facility.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="9"/>
+					<property name="net.sf.jasperreports.export.json.data" value="10"/>
 				</reportElement>
 			</staticText>
 			<componentElement>
@@ -402,6 +425,9 @@
 						</datasetParameter>
 						<datasetParameter name="endDate">
 							<datasetParameterExpression><![CDATA[$P{endDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="gender">
+							<datasetParameterExpression><![CDATA[$P{gender}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="groupName">
 							<datasetParameterExpression><![CDATA[$P{groupName}]]></datasetParameterExpression>
@@ -460,9 +486,25 @@
 				<text><![CDATA[CHW Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="0" width="70" height="25" uuid="472f5ff1-38ef-4974-95dc-234159a9e47a">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				<reportElement x="180" y="0" width="55" height="25" uuid="ece61ced-7409-4f8c-8c05-ba304746d28c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Gender]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="0" width="60" height="25" uuid="472f5ff1-38ef-4974-95dc-234159a9e47a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -476,7 +518,8 @@
 				<text><![CDATA[Group]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="250" y="0" width="100" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
+				<reportElement x="295" y="0" width="55" height="25" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -620,9 +663,24 @@
 				<textFieldExpression><![CDATA[$F{chwName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="70" height="25" uuid="73e500aa-b351-44ae-bcb8-0f21d28355a5">
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="55" height="25" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">
+					<property name="net.sf.jasperreports.export.json.path" value="values.gender"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<box leftPadding="4">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="235" y="0" width="60" height="25" uuid="73e500aa-b351-44ae-bcb8-0f21d28355a5">
 					<property name="net.sf.jasperreports.export.json.path" value="values.groupName"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
@@ -635,9 +693,9 @@
 				<textFieldExpression><![CDATA[$F{groupName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="250" y="0" width="100" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				<reportElement stretchType="RelativeToTallestObject" x="295" y="0" width="55" height="25" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
 					<property name="net.sf.jasperreports.export.json.path" value="values.moduleId"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<box leftPadding="4">
