@@ -1,6 +1,9 @@
 package org.motechproject.mots.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -435,6 +438,10 @@ public class ModuleProgressService {
       return null;
     }
 
-    return LocalDateTime.parse(date, DateTimeFormatter.ofPattern(VOTO_DATE_FORMAT));
+    ZonedDateTime zonedDate = ZonedDateTime.of(
+        LocalDateTime.parse(date, DateTimeFormatter.ofPattern(VOTO_DATE_FORMAT)),
+        ZoneOffset.UTC);
+
+    return zonedDate.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
   }
 }
