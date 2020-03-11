@@ -36,6 +36,11 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Setter
   private String baseUrl;
 
+  @Column(name = "main_menu_tree_id")
+  @Getter
+  @Setter
+  private String mainMenuTreeId;
+
   @Column(name = "module_assigned_message_id", nullable = false)
   @Getter
   @Setter
@@ -80,7 +85,7 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Min(value = 0)
   private Integer retryDelayLong;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "ivr_config_languages", joinColumns = @JoinColumn(name = "ivr_config_id"))
   @Column(name = "ivr_language_id", nullable = false)
   @MapKeyColumn(name = "language")
@@ -110,7 +115,7 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Setter
   private String callStatusField;
 
-  @ElementCollection(targetClass = CallStatus.class, fetch = FetchType.LAZY)
+  @ElementCollection(targetClass = CallStatus.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "ivr_config_call_status_map",
       joinColumns = @JoinColumn(name = "ivr_config_id"))
   @MapKeyColumn(name = "ivr_status")

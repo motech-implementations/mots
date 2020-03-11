@@ -84,9 +84,6 @@ public class IvrService {
   @Autowired
   private ModuleProgressService moduleProgressService;
 
-  @Autowired
-  private ModuleService moduleService;
-
   private RestOperations restTemplate = new RestTemplate();
   private ObjectMapper mapper = new ObjectMapper();
 
@@ -190,25 +187,29 @@ public class IvrService {
   }
 
   /**
-   * Save IVR Call Detail Record.
+   * Save IVR Call Detail Record and update module progress.
    * @param callDetailRecord callDetailRecord to be saved
    * @param configName name of the IVR config
    */
-  public void saveCallDetailRecord(CallDetailRecord callDetailRecord,
+  public void saveCallDetailRecordAndUpdateModuleProgress(CallDetailRecord callDetailRecord,
       String configName) throws IvrException {
     IvrConfig ivrConfig = ivrConfigService.getConfig();
-
     setConfigFields(callDetailRecord, ivrConfig, configName);
-    callDetailRecordRepository.save(callDetailRecord);
 
     CallStatus callStatus = callDetailRecord.getCallStatus();
     boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
 
-    if ((CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted)
-        && noCallsStartedDuringCall(callDetailRecord)) {
-      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord);
+    if (CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted) {
+      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord,
+          ivrConfig.getMainMenuTreeId());
 
-      moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+      callDetailRecordRepository.save(callDetailRecord);
+
+      if (noCallsStartedDuringCall(callDetailRecord)) {
+        moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+      }
+    } else {
+      callDetailRecordRepository.save(callDetailRecord);
     }
   }
 
@@ -293,8 +294,8 @@ public class IvrService {
     return callDetailRecords.isEmpty();
   }
 
-  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord) throws IvrException {
-    String votoMainTreeId = moduleService.getReleasedCourseIvrId();
+  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord,
+      String votoMainTreeId) throws IvrException {
     String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, votoMainTreeId,
         callDetailRecord.getCallLogId());
 

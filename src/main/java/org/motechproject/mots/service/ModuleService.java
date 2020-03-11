@@ -32,6 +32,9 @@ public class ModuleService {
   @Autowired
   private ModuleAssignmentService moduleAssignmentService;
 
+  @Autowired
+  private IvrConfigService ivrConfigService;
+
   private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
 
   @PreAuthorize(DefaultPermissions.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
@@ -176,16 +179,9 @@ public class ModuleService {
     moduleAssignmentService.unassignOldModulesVersions(newVersionModules);
     moduleAssignmentService.updateModuleProgress(releasedCourseModules);
 
-    return courseRepository.save(course);
-  }
+    ivrConfigService.updateMainMenuTreeId(course.getIvrId());
 
-  /**
-   * Get released course IVR Id.
-   * @return released course IVR Id
-   */
-  public String getReleasedCourseIvrId() {
-    Course course = getReleasedCourse();
-    return course.getIvrId();
+    return courseRepository.save(course);
   }
 
   public Course findCourseById(UUID id) {
