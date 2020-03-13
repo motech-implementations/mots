@@ -37,10 +37,9 @@ public class ModuleDto extends IvrObjectDto {
   @Setter
   private Status status;
 
-  @Valid
   @Getter
   @Setter
-  private MultipleChoiceQuestionDto startModuleQuestion;
+  private String startModuleQuestionIvrId;
 
   @Getter
   @Setter

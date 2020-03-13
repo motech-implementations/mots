@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -77,18 +76,7 @@ public class Module extends BaseTimestampedEntity {
   private Integer version;
 
   @Valid
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "start_module_question_id")
-  @Getter
-  @Setter
-  private MultipleChoiceQuestion startModuleQuestion;
-
-  @Valid
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      orphanRemoval = true,
-      fetch = FetchType.EAGER)
-  @JoinColumn(name = "module_id")
+  @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("list_order ASC")
   @Getter
   private List<Unit> units = new ArrayList<>();
@@ -104,13 +92,11 @@ public class Module extends BaseTimestampedEntity {
   }
 
   private Module(String name, String ivrGroup, String description,
-      Integer version, MultipleChoiceQuestion startModuleQuestion,
-      List<Unit> units, Module previousVersion) {
+      Integer version, List<Unit> units, Module previousVersion) {
     this.name = name;
     this.ivrGroup = ivrGroup;
     this.description = description;
     this.version = version;
-    this.startModuleQuestion = startModuleQuestion;
     this.units = units;
     this.previousVersion = previousVersion;
 
@@ -159,19 +145,12 @@ public class Module extends BaseTimestampedEntity {
    * @return copy of Module
    */
   public Module copyAsNewDraft() {
-    MultipleChoiceQuestion startModuleQuestionCopy = null;
-
-    if (startModuleQuestion != null) {
-      startModuleQuestionCopy = startModuleQuestion.copyAsNewDraft();
-    }
-
     List<Unit> unitsCopy = new ArrayList<>();
 
     if (units != null) {
       units.forEach(unit -> unitsCopy.add(unit.copyAsNewDraft()));
     }
 
-    return new Module(name, ivrGroup, description, version + 1,
-        startModuleQuestionCopy, unitsCopy, this);
+    return new Module(name, ivrGroup, description, version + 1, unitsCopy, this);
   }
 }

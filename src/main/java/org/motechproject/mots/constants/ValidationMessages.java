@@ -4,6 +4,16 @@ public final class ValidationMessages {
 
   public static final String EMPTY_CHW_ID = "CHW Id cannot be empty";
   public static final String EMPTY_IVR_ID = "IVR Id cannot be empty";
+  public static final String EMPTY_CONTINUATION_QUESTION_IVR_ID =
+      "Unit Continuation Question IVR Id cannot be empty";
+  public static final String EMPTY_START_MODULE_QUESTION_IVR_ID =
+      "Start Module Question IVR Id cannot be empty";
+  public static final String EMPTY_NO_MODULES_MESSAGE_IVR_ID =
+      "No Modules Message IVR Id cannot be empty";
+  public static final String EMPTY_MENU_INTRO_MESSAGE_IVR_ID =
+      "Menu Intro Message IVR Id cannot be empty";
+  public static final String EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID =
+      "Choose Module Question IVR Id cannot be empty";
   public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
   public static final String EMPTY_FAMILY_NAME = "Family name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";

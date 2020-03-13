@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.motechproject.mots.domain.Course;
-import org.motechproject.mots.domain.Module;
 import org.motechproject.mots.dto.CourseDto;
 import org.motechproject.mots.dto.ModuleDto;
 import org.motechproject.mots.dto.ModuleSimpleDto;
-import org.motechproject.mots.mapper.ModuleMapper;
 import org.motechproject.mots.service.ModuleService;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +33,6 @@ public class ModuleController extends BaseController {
   @Autowired
   private SmartValidator validator;
 
-  private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
-
   /**
    * Get list of Module Simple DTOs.
    * @return list of all Modules
@@ -45,9 +41,7 @@ public class ModuleController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<ModuleSimpleDto> getSimpleModules() {
-    Iterable<Module> modules = moduleService.getReleasedModules();
-
-    return moduleMapper.toSimpleDtos(modules);
+    return moduleService.getReleasedModules();
   }
 
   /**
@@ -101,9 +95,7 @@ public class ModuleController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<CourseDto> getCourses() {
-    List<Course> courses = moduleService.getCourses();
-
-    return moduleMapper.toCourseDtos(courses);
+    return moduleService.getCourses();
   }
 
   /**
@@ -114,9 +106,7 @@ public class ModuleController extends BaseController {
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public CourseDto createCourse() {
-    Course course = moduleService.createCourse();
-
-    return moduleMapper.toDto(course);
+    return moduleService.createCourse();
   }
 
   /**
@@ -132,9 +122,7 @@ public class ModuleController extends BaseController {
       @RequestBody @Valid CourseDto courseDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
 
-    Course course = moduleService.updateCourse(id, courseDto);
-
-    return moduleMapper.toDto(course);
+    return moduleService.updateCourse(id, courseDto);
   }
 
   /**
@@ -149,7 +137,7 @@ public class ModuleController extends BaseController {
 
     validateCourseForRelease(course);
 
-    return moduleMapper.toDto(moduleService.releaseCourse(course));
+    return moduleService.releaseCourse(course);
   }
 
   private void validateCourseForRelease(Course course) {

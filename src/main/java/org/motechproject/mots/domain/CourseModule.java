@@ -11,6 +11,9 @@ import javax.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
 @Table(name = "course_module")
@@ -29,6 +32,13 @@ public class CourseModule extends IvrObject {
   @Getter
   @Setter
   private Module module;
+
+  @NotBlank(message = ValidationMessages.EMPTY_START_MODULE_QUESTION_IVR_ID,
+      groups = CourseReleaseCheck.class)
+  @Column(name = "start_module_question_ivr_id")
+  @Getter
+  @Setter
+  private String startModuleQuestionIvrId;
 
   @Column(name = "list_order", nullable = false)
   @Getter
@@ -59,15 +69,17 @@ public class CourseModule extends IvrObject {
   }
 
   private CourseModule(String ivrId, String ivrName, Course course, Module module,
-      Integer listOrder, CourseModule previousVersion) {
+      String startModuleQuestionIvrId, Integer listOrder, CourseModule previousVersion) {
     super(ivrId, ivrName);
     this.course = course;
     this.module = module;
+    this.startModuleQuestionIvrId = startModuleQuestionIvrId;
     this.listOrder = listOrder;
     this.previousVersion = previousVersion;
   }
 
   public CourseModule copyAsNewDraft(Course course) {
-    return new CourseModule(getIvrId(), getIvrName(), course, module, listOrder, this);
+    return new CourseModule(getIvrId(), getIvrName(), course, module,
+        startModuleQuestionIvrId, listOrder, this);
   }
 }

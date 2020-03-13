@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -55,8 +54,7 @@ public class ModuleProgress extends BaseTimestampedEntity {
   @Setter
   private ProgressStatus status;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-  @JoinColumn(name = "module_progress_id", nullable = false)
+  @OneToMany(mappedBy = "moduleProgress", cascade = CascadeType.ALL, orphanRemoval = true)
   @SortComparator(UnitProgressComparator.class)
   @Getter
   @Setter
@@ -83,7 +81,8 @@ public class ModuleProgress extends BaseTimestampedEntity {
     this.status = ProgressStatus.NOT_STARTED;
     this.interrupted = false;
     this.currentUnitNumber = 0;
-    this.unitsProgresses = courseModule.getModule().getUnits().stream().map(UnitProgress::new)
+    this.unitsProgresses = courseModule.getModule().getUnits().stream()
+        .map(unit -> new UnitProgress(unit, this))
         .collect(Collectors.toCollection(() -> new TreeSet<>(new UnitProgressComparator())));
   }
 
@@ -98,19 +97,22 @@ public class ModuleProgress extends BaseTimestampedEntity {
   /**
    * Change module status to in progress.
    */
-  public void startModule(LocalDateTime startDate) {
+  public void startModule(LocalDateTime startDate, Integer currentUnitNumber) {
     if (ProgressStatus.NOT_STARTED.equals(status)) {
       status = ProgressStatus.IN_PROGRESS;
       this.startDate = startDate;
     }
+    this.currentUnitNumber = currentUnitNumber;
   }
 
   /**
    * Change current unit, if no more units change status to completed.
    */
-  public void nextUnit(LocalDateTime endDate) {
+  public void nextUnit(LocalDateTime endDate, Integer currentUnitNumber) {
+    this.currentUnitNumber = currentUnitNumber;
+
     if (currentUnitNumber < courseModule.getModule().getUnits().size() - 1) {
-      currentUnitNumber++;
+      this.currentUnitNumber++;
     } else {
       status = ProgressStatus.COMPLETED;
       this.endDate = endDate;

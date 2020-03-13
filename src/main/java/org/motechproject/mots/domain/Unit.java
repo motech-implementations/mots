@@ -5,10 +5,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -16,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
 @Table(name = "unit")
@@ -38,22 +40,24 @@ public class Unit extends IvrObject {
   @Setter
   private Integer listOrder;
 
+  @ManyToOne
+  @JoinColumn(name = "module_id")
+  @Getter
+  @Setter
+  private Module module;
+
   @Valid
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      orphanRemoval = true,
-      fetch = FetchType.EAGER)
-  @JoinColumn(name = "unit_id")
+  @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("list_order ASC")
   @Getter
   private List<CallFlowElement> callFlowElements;
 
-  @Valid
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "continuation_question_id")
+  @NotBlank(message = ValidationMessages.EMPTY_CONTINUATION_QUESTION_IVR_ID,
+      groups = CourseReleaseCheck.class)
+  @Column(name = "continuation_question_ivr_id")
   @Getter
   @Setter
-  private MultipleChoiceQuestion unitContinuationQuestion;
+  private String continuationQuestionIvrId;
 
   @Column(name = "allow_replay", nullable = false)
   @Getter
@@ -63,13 +67,13 @@ public class Unit extends IvrObject {
   private Unit(String ivrId, String ivrName, String name, String description,
       Integer listOrder,
       List<CallFlowElement> callFlowElements,
-      MultipleChoiceQuestion unitContinuationQuestion, Boolean allowReplay) {
+      String continuationQuestionIvrId, Boolean allowReplay) {
     super(ivrId, ivrName);
     this.name = name;
     this.description = description;
     this.listOrder = listOrder;
     this.callFlowElements = callFlowElements;
-    this.unitContinuationQuestion = unitContinuationQuestion;
+    this.continuationQuestionIvrId = continuationQuestionIvrId;
     this.allowReplay = allowReplay;
   }
 
@@ -94,12 +98,6 @@ public class Unit extends IvrObject {
    * @return copy of Unit
    */
   public Unit copyAsNewDraft() {
-    MultipleChoiceQuestion unitContinuationQuestionCopy = null;
-
-    if (unitContinuationQuestion != null) {
-      unitContinuationQuestionCopy = unitContinuationQuestion.copyAsNewDraft();
-    }
-
     List<CallFlowElement> callFlowElementsCopy = new ArrayList<>();
 
     if (callFlowElements != null) {
@@ -108,6 +106,6 @@ public class Unit extends IvrObject {
     }
 
     return new Unit(getIvrId(), getIvrName(), name, description, listOrder, callFlowElementsCopy,
-        unitContinuationQuestionCopy, allowReplay);
+        continuationQuestionIvrId, allowReplay);
   }
 }

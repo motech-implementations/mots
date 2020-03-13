@@ -34,6 +34,18 @@ public class CourseDto extends IvrObjectDto {
   @Setter
   private String type;
 
+  @Getter
+  @Setter
+  private String noModulesMessageIvrId;
+
+  @Getter
+  @Setter
+  private String menuIntroMessageIvrId;
+
+  @Getter
+  @Setter
+  private String chooseModuleQuestionIvrId;
+
   @Valid
   @Getter
   @Setter

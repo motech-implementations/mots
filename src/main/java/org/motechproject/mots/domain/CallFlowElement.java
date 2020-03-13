@@ -6,6 +6,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +26,12 @@ public abstract class CallFlowElement extends IvrObject {
   @Setter
   @NotBlank(message = ValidationMessages.EMPTY_QUESTION_OR_MESSAGE)
   private String name;
+
+  @ManyToOne
+  @JoinColumn(name = "unit_id")
+  @Getter
+  @Setter
+  private Unit unit;
 
   @Type(type = "text")
   @Column(name = "content")
