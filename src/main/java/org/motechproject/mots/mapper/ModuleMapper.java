@@ -158,6 +158,7 @@ public abstract class ModuleMapper {
     }
 
     courseModule.setIvrId(moduleDto.getIvrId());
+    courseModule.setStartModuleQuestionIvrId(moduleDto.getStartModuleQuestionIvrId());
   }
 
   /**
@@ -190,6 +191,7 @@ public abstract class ModuleMapper {
         updateUnitFromDto(unitDto, unit);
         unit.setAllowReplay(BooleanUtils.isTrue(unit.getAllowReplay()));
         unit.setListOrder(i);
+        unit.setModule(module);
         updatedUnits.add(unit);
       }
     }
@@ -223,6 +225,7 @@ public abstract class ModuleMapper {
         }
 
         callFlowElement.setListOrder(i);
+        callFlowElement.setUnit(unit);
         updatedCallFlowElements.add(callFlowElement);
       }
     }

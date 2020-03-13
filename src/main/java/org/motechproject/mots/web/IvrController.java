@@ -40,7 +40,7 @@ public class IvrController extends BaseController {
 
     CallDetailRecord callDetailRecord = callDetailRecordMapper.fromDto(recordDto);
 
-    ivrService.saveCallDetailRecord(callDetailRecord, configName);
+    ivrService.saveCallDetailRecordAndUpdateModuleProgress(callDetailRecord, configName);
   }
 
   /**

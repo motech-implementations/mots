@@ -5,17 +5,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.constants.DefaultPermissions;
-import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
@@ -83,9 +79,6 @@ public class IvrService {
 
   @Autowired
   private ModuleProgressService moduleProgressService;
-
-  @Autowired
-  private ModuleService moduleService;
 
   private RestOperations restTemplate = new RestTemplate();
   private ObjectMapper mapper = new ObjectMapper();
@@ -190,25 +183,26 @@ public class IvrService {
   }
 
   /**
-   * Save IVR Call Detail Record.
+   * Save IVR Call Detail Record and update module progress.
    * @param callDetailRecord callDetailRecord to be saved
    * @param configName name of the IVR config
    */
-  public void saveCallDetailRecord(CallDetailRecord callDetailRecord,
+  public void saveCallDetailRecordAndUpdateModuleProgress(CallDetailRecord callDetailRecord,
       String configName) throws IvrException {
     IvrConfig ivrConfig = ivrConfigService.getConfig();
-
     setConfigFields(callDetailRecord, ivrConfig, configName);
-    callDetailRecordRepository.save(callDetailRecord);
 
     CallStatus callStatus = callDetailRecord.getCallStatus();
-    boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
 
-    if ((CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted)
-        && noCallsStartedDuringCall(callDetailRecord)) {
-      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord);
+    if (CallStatus.FINISHED_COMPLETE.equals(callStatus)
+        || CallStatus.FINISHED_INCOMPLETE.equals(callStatus)) {
+      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord,
+          ivrConfig.getMainMenuTreeId());
 
-      moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+      callDetailRecordRepository.save(callDetailRecord);
+      moduleProgressService.updateModuleProgress(votoCallLogDto);
+    } else {
+      callDetailRecordRepository.save(callDetailRecord);
     }
   }
 
@@ -219,14 +213,13 @@ public class IvrService {
    *     listened by user and what answers were chosen)
    */
   @PreAuthorize(DefaultPermissions.HAS_ADMIN_ROLE)
-  public void manuallySendVotoCallLog(VotoCallLogDto votoCallLogDto) throws IvrException {
+  public void manuallySendVotoCallLog(VotoCallLogDto votoCallLogDto) {
     IvrConfig ivrConfig = ivrConfigService.getConfig();
     CallStatus callStatus = getCallStatus(ivrConfig, votoCallLogDto.getStatus());
 
-    boolean callInterrupted = CallStatus.FINISHED_INCOMPLETE.equals(callStatus);
-
-    if (CallStatus.FINISHED_COMPLETE.equals(callStatus) || callInterrupted) {
-      moduleProgressService.updateModuleProgress(votoCallLogDto, callInterrupted);
+    if (CallStatus.FINISHED_COMPLETE.equals(callStatus)
+        || CallStatus.FINISHED_INCOMPLETE.equals(callStatus)) {
+      moduleProgressService.updateModuleProgress(votoCallLogDto);
     } else {
       throw new IllegalArgumentException("Wrong call status send: " + callStatus
           + ", only " + CallStatus.FINISHED_COMPLETE + " or "
@@ -262,39 +255,8 @@ public class IvrService {
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST, params);
   }
 
-  /**
-   * This method checks if another call was started during this one for the same CHW.
-   *
-   * @param callDetailRecord of call that is going to be parsed.
-   * @return true if there was no calls in progress during this one.
-   */
-  @SuppressWarnings("checkstyle:linelength")
-  private boolean noCallsStartedDuringCall(CallDetailRecord callDetailRecord) {
-    List<CallDetailRecord> callDetailRecordsInProgress = callDetailRecordRepository
-        .findByCallLogIdAndCallStatus(callDetailRecord.getCallLogId(), CallStatus.IN_PROGRESS);
-
-    Optional<Date> startDate = callDetailRecordsInProgress.stream()
-        .max(Comparator.comparing(CallDetailRecord::getCreatedDate))
-        .map(BaseTimestampedEntity::getCreatedDate);
-
-    if (!startDate.isPresent()) {
-      return true;
-    }
-
-    Date endDate = callDetailRecord.getCreatedDate();
-
-    List<CallDetailRecord> callDetailRecords = callDetailRecordRepository
-        .findAllByCreatedDateGreaterThanEqualAndCreatedDateLessThanAndCallStatusAndChwIvrIdAndCallLogIdNotLike(
-            startDate.get(), endDate, CallStatus.IN_PROGRESS,
-            callDetailRecord.getChwIvrId(), callDetailRecord.getCallLogId());
-
-    // If there are any records in this list it means that another call was started
-    // before this one was finished, so this call will be ignored.
-    return callDetailRecords.isEmpty();
-  }
-
-  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord) throws IvrException {
-    String votoMainTreeId = moduleService.getReleasedCourseIvrId();
+  private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord,
+      String votoMainTreeId) throws IvrException {
     String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, votoMainTreeId,
         callDetailRecord.getCallLogId());
 

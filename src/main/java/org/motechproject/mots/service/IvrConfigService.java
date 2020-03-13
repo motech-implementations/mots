@@ -10,8 +10,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class IvrConfigService {
 
-  @Autowired
   private IvrConfigRepository ivrConfigRepository;
+
+  private IvrConfig ivrConfig;
+
+  @Autowired
+  public IvrConfigService(IvrConfigRepository ivrConfigRepository) {
+    this.ivrConfigRepository = ivrConfigRepository;
+    this.ivrConfig = getFirstConfig();
+  }
+
+  public synchronized void updateMainMenuTreeId(String mainMenuTreeId) {
+    ivrConfig.setMainMenuTreeId(mainMenuTreeId);
+    ivrConfig = ivrConfigRepository.save(ivrConfig);
+  }
 
   /**
    * Get IVR config from DB.
@@ -19,13 +31,16 @@ public class IvrConfigService {
    * @return IVR config
    */
   public IvrConfig getConfig() {
-    return getFirstConfig();
+    if (ivrConfig == null) {
+      throw new EntityNotFoundException("IVR config not preset");
+    }
+    return ivrConfig;
   }
 
   private IvrConfig getFirstConfig() {
     Iterator<IvrConfig> ivrConfigIterator = ivrConfigRepository.findAll().iterator();
     if (!ivrConfigIterator.hasNext()) {
-      throw new EntityNotFoundException("IVR config not preset");
+      return null;
     }
     return ivrConfigIterator.next();
   }

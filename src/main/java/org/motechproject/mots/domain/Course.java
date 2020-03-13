@@ -9,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -20,9 +19,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
+import org.motechproject.mots.constants.ValidationMessages;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
+import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
 @Table(name = "course")
@@ -58,11 +60,7 @@ public class Course extends IvrObject {
   @Setter
   private Status status;
 
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      mappedBy = "course",
-      orphanRemoval = true,
-      fetch = FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "course", orphanRemoval = true)
   @OrderBy("list_order ASC")
   @Getter
   @Valid
@@ -79,20 +77,38 @@ public class Course extends IvrObject {
   @Setter
   private Course previousVersion;
 
-  @OneToOne
-  @JoinColumn(name = "no_modules_message_id")
+  @NotBlank(message = ValidationMessages.EMPTY_NO_MODULES_MESSAGE_IVR_ID,
+      groups = CourseReleaseCheck.class)
+  @Column(name = "no_modules_message_ivr_id")
   @Getter
   @Setter
-  private Message noModulesMessage;
+  private String noModulesMessageIvrId;
+
+  @NotBlank(message = ValidationMessages.EMPTY_MENU_INTRO_MESSAGE_IVR_ID,
+      groups = CourseReleaseCheck.class)
+  @Column(name = "menu_intro_message_ivr_id")
+  @Getter
+  @Setter
+  private String menuIntroMessageIvrId;
+
+  @NotBlank(message = ValidationMessages.EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID,
+      groups = CourseReleaseCheck.class)
+  @Column(name = "choose_module_question_ivr_id")
+  @Getter
+  @Setter
+  private String chooseModuleQuestionIvrId;
 
   private Course(String ivrId, String ivrName, String name, String description, Integer version,
-      Course previousVersion, Message noModulesMessage) {
+      Course previousVersion, String noModulesMessageIvrId, String menuIntroMessageIvrId,
+      String chooseModuleQuestionIvrId) {
     super(ivrId, ivrName);
     this.name = name;
     this.description = description;
     this.version = version;
     this.previousVersion = previousVersion;
-    this.noModulesMessage = noModulesMessage;
+    this.noModulesMessageIvrId = noModulesMessageIvrId;
+    this.menuIntroMessageIvrId = menuIntroMessageIvrId;
+    this.chooseModuleQuestionIvrId = chooseModuleQuestionIvrId;
 
     this.status = Status.DRAFT;
   }
@@ -130,14 +146,8 @@ public class Course extends IvrObject {
    * @return draft copy of course
    */
   public Course copyAsNewDraft() {
-    Message noModulesMessageCopy = null;
-
-    if (noModulesMessage != null) {
-      noModulesMessageCopy = noModulesMessage.copyAsNewDraft();
-    }
-
-    Course course = new Course(getIvrId(), getIvrName(), name, description,
-        version + 1, this, noModulesMessageCopy);
+    Course course = new Course(getIvrId(), getIvrName(), name, description, version + 1, this,
+        noModulesMessageIvrId, menuIntroMessageIvrId, chooseModuleQuestionIvrId);
 
     List<CourseModule> courseModulesCopy = new ArrayList<>();
 

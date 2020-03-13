@@ -37,10 +37,9 @@ public class UnitDto extends IvrObjectDto {
   @Setter
   private List<CallFlowElementDto> children;
 
-  @Valid
   @Getter
   @Setter
-  private MultipleChoiceQuestionDto unitContinuationQuestion;
+  private String continuationQuestionIvrId;
 
   @Getter
   @Setter

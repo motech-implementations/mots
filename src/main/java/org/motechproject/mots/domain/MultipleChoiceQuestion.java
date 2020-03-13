@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -26,10 +25,7 @@ import org.motechproject.mots.validate.annotations.IsCorrect;
 @PrimaryKeyJoinColumn(name = "call_flow_element_id")
 public class MultipleChoiceQuestion extends CallFlowElement {
 
-  @OneToMany(
-      cascade = CascadeType.ALL,
-      orphanRemoval = true,
-      fetch = FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "question_id")
   @OrderBy("choice_id ASC")
   @Getter

@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,11 +24,17 @@ import org.motechproject.mots.domain.enums.ProgressStatus;
 @NoArgsConstructor
 public class UnitProgress extends BaseTimestampedEntity {
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne
   @JoinColumn(name = "unit_id", nullable = false)
   @Getter
   @Setter
   private Unit unit;
+
+  @ManyToOne
+  @JoinColumn(name = "module_progress_id", nullable = false)
+  @Getter
+  @Setter
+  private ModuleProgress moduleProgress;
 
   @Column(name = "current_call_flow_element_number", nullable = false)
   @Getter
@@ -56,9 +61,11 @@ public class UnitProgress extends BaseTimestampedEntity {
   /**
    * Create new Unit Progress.
    * @param unit Unit which progress will be stored
+   * @param moduleProgress parent module progress
    */
-  public UnitProgress(Unit unit) {
+  public UnitProgress(Unit unit, ModuleProgress moduleProgress) {
     this.unit = unit;
+    this.moduleProgress = moduleProgress;
     this.status = ProgressStatus.NOT_STARTED;
     this.numberOfReplays = 0;
     this.currentCallFlowElementNumber = 0;
@@ -74,28 +81,6 @@ public class UnitProgress extends BaseTimestampedEntity {
 
   public boolean isCompleted() {
     return ProgressStatus.COMPLETED.equals(status);
-  }
-
-  /**
-   * Change current call flow element, if no more elements change status to completed.
-   */
-  public void nextElement() {
-    currentCallFlowElementNumber++;
-    if (currentCallFlowElementNumber >= unit.getCallFlowElements().size()) {
-      status = ProgressStatus.COMPLETED;
-    }
-  }
-
-  /**
-   * Change current call flow element to previous one.
-   */
-  public void previousElement() {
-    if (currentCallFlowElementNumber > 0) {
-      currentCallFlowElementNumber--;
-      callFlowElementLogs.removeIf(callLog ->
-          callLog.getCallFlowElement().getListOrder().equals(currentCallFlowElementNumber));
-      status = ProgressStatus.IN_PROGRESS;
-    }
   }
 
   /**
@@ -116,16 +101,26 @@ public class UnitProgress extends BaseTimestampedEntity {
    * @param choice chosen response, null if no answer was chosen
    * @param numberOfAttempts number of times this question was listened
    */
-  public void addMultipleChoiceQuestionLog(LocalDateTime startDate, LocalDateTime endDate,
+  public void addOrUpdateMultipleChoiceQuestionLog(LocalDateTime startDate, LocalDateTime endDate,
       CallFlowElement callFlowElement, Choice choice, Integer numberOfAttempts) {
-    MultipleChoiceQuestionLog multipleChoiceQuestionLog = new MultipleChoiceQuestionLog(startDate,
-        endDate, (MultipleChoiceQuestion) callFlowElement, choice, numberOfAttempts);
 
     if (callFlowElementLogs == null) {
       callFlowElementLogs = new HashSet<>();
     }
 
-    callFlowElementLogs.add(multipleChoiceQuestionLog);
+    MultipleChoiceQuestionLog multipleChoiceQuestionLog =
+        (MultipleChoiceQuestionLog) findCallFlowElementLog(callFlowElement);
+
+    if (multipleChoiceQuestionLog == null) {
+      multipleChoiceQuestionLog = new MultipleChoiceQuestionLog(startDate,
+          endDate, (MultipleChoiceQuestion) callFlowElement, choice, numberOfAttempts);
+      callFlowElementLogs.add(multipleChoiceQuestionLog);
+    } else if (choice != null || multipleChoiceQuestionLog.getChosenResponse() == null) {
+      multipleChoiceQuestionLog.setStartDate(startDate);
+      multipleChoiceQuestionLog.setEndDate(endDate);
+      multipleChoiceQuestionLog.setChosenResponse(choice);
+      multipleChoiceQuestionLog.setNumberOfAttempts(numberOfAttempts);
+    }
   }
 
   /**
@@ -134,15 +129,22 @@ public class UnitProgress extends BaseTimestampedEntity {
    * @param endDate question end date
    * @param callFlowElement message that was listened
    */
-  public void addMessageLog(LocalDateTime startDate, LocalDateTime endDate,
+  public void addOrUpdateMessageLog(LocalDateTime startDate, LocalDateTime endDate,
       CallFlowElement callFlowElement) {
-    MessageLog messageLog = new MessageLog(startDate, endDate, callFlowElement);
 
     if (callFlowElementLogs == null) {
       callFlowElementLogs = new HashSet<>();
     }
 
-    callFlowElementLogs.add(messageLog);
+    MessageLog messageLog = (MessageLog) findCallFlowElementLog(callFlowElement);
+
+    if (messageLog == null) {
+      messageLog = new MessageLog(startDate, endDate, callFlowElement);
+      callFlowElementLogs.add(messageLog);
+    } else {
+      messageLog.setStartDate(startDate);
+      messageLog.setEndDate(endDate);
+    }
   }
 
   /**
@@ -150,8 +152,17 @@ public class UnitProgress extends BaseTimestampedEntity {
    */
   public void resetProgressForUnitRepeat() {
     currentCallFlowElementNumber = 0;
-    callFlowElementLogs.clear();
     status = ProgressStatus.NOT_STARTED;
     numberOfReplays++;
+  }
+
+  private CallFlowElementLog findCallFlowElementLog(CallFlowElement callFlowElement) {
+    for (CallFlowElementLog element : callFlowElementLogs) {
+      if (callFlowElement.getIvrId().equals(element.getCallFlowElement().getIvrId())) {
+        return element;
+      }
+    }
+
+    return null;
   }
 }

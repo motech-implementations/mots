@@ -5,7 +5,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
@@ -24,15 +23,15 @@ import org.motechproject.mots.domain.MultipleChoiceQuestion;
 import org.motechproject.mots.domain.UnitProgress;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 import org.motechproject.mots.domain.enums.ChoiceType;
-import org.motechproject.mots.domain.enums.ProgressStatus;
+import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.dto.VotoBlockDto;
 import org.motechproject.mots.dto.VotoBlockResponseDto;
 import org.motechproject.mots.dto.VotoCallLogDto;
 import org.motechproject.mots.exception.CourseProgressException;
 import org.motechproject.mots.exception.EntityNotFoundException;
-import org.motechproject.mots.exception.MotsException;
-import org.motechproject.mots.exception.WrongModuleException;
+import org.motechproject.mots.repository.CallFlowElementRepository;
 import org.motechproject.mots.repository.ModuleProgressRepository;
+import org.motechproject.mots.repository.UnitProgressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,13 +44,9 @@ public class ModuleProgressService {
   private static final String MESSAGE_BLOCK_TYPE = "Message";
   private static final String QUESTION_BLOCK_TYPE = "Multiple Choice Question";
   private static final String RUN_ANOTHER_TREE_BLOCK_TYPE = "Run Another Tree";
-  private static final List<String> IGNORED_VOTO_BLOCK_TYPES = Arrays.asList(
-      "Edit Subscriber Property", "Branch via Subscriber Data", "Branch via Group Membership",
-      "Edit Group Membership");
 
-  private static final int QUIT_RESPONSE = 1;
-  private static final int CONTINUE_RESPONSE = 2;
-  private static final int REPEAT_RESPONSE = 3;
+  private static final Integer CONTINUE_RESPONSE = 2;
+  private static final Integer REPEAT_RESPONSE = 3;
 
   private static final String VOTO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -59,44 +54,30 @@ public class ModuleProgressService {
   private ModuleProgressRepository moduleProgressRepository;
 
   @Autowired
+  private UnitProgressRepository unitProgressRepository;
+
+  @Autowired
+  private CallFlowElementRepository callFlowElementRepository;
+
+  @Autowired
   private ModuleService moduleService;
 
   /**
    * Update Module Progress after call ends.
    * @param votoCallLogDto log containing all Voto tree interactions in specific call
-   * @param callInterrupted true if last call was interrupted
    */
-  public void updateModuleProgress(VotoCallLogDto votoCallLogDto, boolean callInterrupted) {
-    String chwIvrId = votoCallLogDto.getChwIvrId();
-    Optional<ModuleProgress> interruptedModuleProgress =
-        moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndInterrupted(chwIvrId, true);
-
+  public void updateModuleProgress(VotoCallLogDto votoCallLogDto) {
     ListIterator<VotoBlockDto> blockIterator = votoCallLogDto.getInteractions().listIterator();
+    VotoBlockDto blockDto = getVotoBlock(blockIterator);
 
-    if (interruptedModuleProgress.isPresent()) {
-      ModuleProgress moduleProgress = interruptedModuleProgress.get();
-
-      try {
-        if (parseVotoModuleBlocks(votoCallLogDto, blockIterator,
-            moduleProgress.getCourseModule().getIvrId(), callInterrupted)) {
-          return;
-        }
-      } catch (MotsException ex) {
-        LOGGER.warn("Call continuation failed for CallLog with id: " + votoCallLogDto.getLogId()
-            + ", starting from main menu", ex);
-
-        moduleProgress.getCurrentUnitProgress().resetProgressForUnitRepeat();
-        moduleProgress.setInterrupted(false);
-        moduleProgressRepository.save(moduleProgress);
-
-        blockIterator = votoCallLogDto.getInteractions().listIterator();
-      }
+    if (blockDto == null) {
+      return;
     }
 
     try {
-      parseVotoMainMenuBlocks(votoCallLogDto, blockIterator, callInterrupted);
-    } catch (MotsException ex) {
-      LOGGER.error("Could not parse CallLog with id: " + votoCallLogDto.getLogId(), ex);
+      parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+    } catch (CourseProgressException e) {
+      LOGGER.error("Error occurred during module progress update ", e);
     }
   }
 
@@ -158,179 +139,135 @@ public class ModuleProgressService {
     }
   }
 
-  @SuppressWarnings("PMD.CyclomaticComplexity")
-  private void parseVotoMainMenuBlocks(VotoCallLogDto callLog,
-      ListIterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
-    while (blockIterator.hasNext()) {
-      VotoBlockDto blockDto = getVotoBlock(blockIterator);
+  private Optional<ModuleProgress> findModuleProgress(VotoCallLogDto callLog,
+      VotoBlockDto blockDto) {
+    return moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndCourseModuleIvrId(
+        callLog.getChwIvrId(), blockDto.getBlockId());
+  }
 
-      // skip the "No modules available" or "Choose module" message
-      if (blockDto == null || !MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-        LOGGER.debug("Main menu did not had choose module/no modules available message");
-      }
+  private Optional<UnitProgress> findUnitProgress(VotoCallLogDto callLog, VotoBlockDto blockDto) {
+    return unitProgressRepository.findByModuleProgressCommunityHealthWorkerIvrIdAndUnitIvrId(
+        callLog.getChwIvrId(), blockDto.getBlockId());
+  }
 
-      String chwIvrId = callLog.getChwIvrId();
+  private Optional<UnitProgress> findCurrentElement(VotoCallLogDto callLog, VotoBlockDto blockDto) {
+    Optional<CallFlowElement> callFlowElement =
+        callFlowElementRepository.findByIvrIdAndUnitModuleStatus(
+            blockDto.getBlockId(), Status.RELEASED);
 
+    if (callFlowElement.isPresent()) {
+      return unitProgressRepository.findByModuleProgressCommunityHealthWorkerIvrIdAndUnitIvrId(
+          callLog.getChwIvrId(), callFlowElement.get().getUnit().getIvrId());
+    }
+
+    return unitProgressRepository
+        .findByModuleProgressCommunityHealthWorkerIvrIdAndUnitContinuationQuestionIvrId(
+            callLog.getChwIvrId(), blockDto.getBlockId());
+  }
+
+  private void parseVotoMainMenu(VotoCallLogDto votoCallLogDto,
+      ListIterator<VotoBlockDto> blockIterator, VotoBlockDto blockDto) {
+
+    while (blockDto == null || isMainMenuBlock(blockDto)) {
       if (!blockIterator.hasNext()) {
-        LOGGER.debug(String.format("No modules available for CHW with IVR Id: %s", chwIvrId));
         return;
       }
 
-      // skip all choose module questions
-      while (blockIterator.hasNext()) {
-        if (RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-          break;
-        }
-
-        //skip all "start module" questions, if main menu was repeated skip "choose module" message
-        if (!QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())
-            && !MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-          throw new CourseProgressException("Unexpected block type: \"{0}\" in main menu",
-              blockDto.getBlockType());
-        }
-
-        blockDto = getVotoBlock(blockIterator);
-      }
-
-      if (!blockIterator.hasNext()) {
-        LOGGER.debug(String.format("No module chosen by CHW with IVR Id: %s", chwIvrId));
-        return;
-      }
-
-      String moduleIvrId = blockDto.getBlockId();
-
-      try {
-        if (parseVotoModuleBlocks(callLog, blockIterator, moduleIvrId, callInterrupted)) {
-          return;
-        }
-      } catch (WrongModuleException ex) {
-        LOGGER.info("Wrong module chosen in CallLog with id: " + callLog.getLogId(), ex);
-      }
-    }
-  }
-
-  private boolean parseVotoModuleBlocks(VotoCallLogDto callLog,
-      ListIterator<VotoBlockDto> blockIterator, String moduleId, boolean callInterrupted) {
-    String chwIvrId = callLog.getChwIvrId();
-
-    ModuleProgress moduleProgress =
-        moduleProgressRepository.findByCommunityHealthWorkerIvrIdAndCourseModuleIvrId(chwIvrId,
-            moduleId).orElseThrow(() -> new WrongModuleException("No module progress found for"
-            + " CHW with IVR Id: {0} and module with IVR Id: {1}", chwIvrId, moduleId));
-
-    if (ProgressStatus.COMPLETED.equals(moduleProgress.getStatus())) {
-      throw new WrongModuleException("Module already completed for CHW with IVR Id: {0} "
-          + "and module with IVR Id: {1}", chwIvrId, moduleId);
+      blockDto = getVotoBlock(blockIterator);
     }
 
-    if (!moduleProgress.getInterrupted()) {
-      VotoBlockDto blockDto = checkRunUnitBlock(blockIterator, moduleProgress);
-      moduleProgress.startModule(parseDate(blockDto.getEntryAt()));
-    }
+    if (RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+      Optional<ModuleProgress> moduleProgress = findModuleProgress(votoCallLogDto, blockDto);
 
-    while (!moduleProgress.isCompleted()) {
-      UnitProgress unitProgress = moduleProgress.getCurrentUnitProgress();
-
-      if (!unitProgress.isCompleted()
-          && (parseVotoUnitBlocks(unitProgress, blockIterator, callInterrupted)
-          || !blockIterator.hasNext())) {
-        unitProgress.previousElement();
-        moduleProgress.setInterrupted(true);
-        moduleProgressRepository.save(moduleProgress);
-        return true;
-      }
-
-      moduleProgress.setInterrupted(false);
-
-      if (parseUnitContinuationQuestion(blockIterator, moduleProgress, unitProgress)) {
-        moduleProgressRepository.save(moduleProgress);
-        return true;
-      }
-    }
-
-    moduleProgressRepository.save(moduleProgress);
-    return false;
-  }
-
-  private boolean parseUnitContinuationQuestion(ListIterator<VotoBlockDto> blockIterator,
-      ModuleProgress moduleProgress, UnitProgress unitProgress) {
-
-    // unit continuation question block
-    VotoBlockDto blockDto = blockIterator.next();
-    Integer choiceId = getChoiceId(blockDto);
-
-    // no response was chosen - should end the call
-    if (choiceId == null) {
-      if (blockIterator.hasNext()) {
-        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()));
+      if (moduleProgress.isPresent()) {
+        parseVotoModule(votoCallLogDto, moduleProgress.get(), blockIterator);
       } else {
-        moduleProgress.setInterrupted(true);
+        Optional<UnitProgress> unitProgress = findUnitProgress(votoCallLogDto, blockDto);
+
+        if (unitProgress.isPresent()) {
+          parseVotoUnit(votoCallLogDto, unitProgress.get(), blockIterator);
+          moduleProgressRepository.save(unitProgress.get().getModuleProgress());
+        } else {
+          throw new CourseProgressException("Module or Unit with IVR Id: {0} not found",
+              blockDto.getBlockId());
+        }
       }
+    } else {
+      Optional<UnitProgress> unitProgress = findCurrentElement(votoCallLogDto, blockDto);
 
-      return true;
-    }
-
-    switch (choiceId) {
-      case QUIT_RESPONSE:
-        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()));
-
-        return true;
-      case CONTINUE_RESPONSE:
-        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()));
-
-        if (!moduleProgress.isCompleted()) {
-          checkRunUnitBlock(blockIterator, moduleProgress);
-        }
-
-        return false;
-      case REPEAT_RESPONSE:
-        if (!unitProgress.getUnit().getAllowReplay()) {
-          throw new CourseProgressException("Unit with IVR Id: {0} cannot be replayed",
-              unitProgress.getUnit().getIvrId());
-        }
-
-        unitProgress.resetProgressForUnitRepeat();
-
-        return false;
-      default:
-        throw new CourseProgressException("Unexpected unit continuation question response for Unit "
-            + "with IVR Id: {0}", unitProgress.getUnit().getIvrId());
+      if (unitProgress.isPresent()) {
+        blockIterator.previous();
+        parseVotoUnit(votoCallLogDto, unitProgress.get(), blockIterator);
+        moduleProgressRepository.save(unitProgress.get().getModuleProgress());
+      } else {
+        throw new CourseProgressException("Call flow element with IVR Id: {0} not found",
+            blockDto.getBlockId());
+      }
     }
   }
 
-  /**
-   * Parse Voto Unit blocks.
-   * @return returns true if call was interrupted
-   */
+  private UnitProgress findCurrentUnit(ModuleProgress moduleProgress, VotoBlockDto blockDto) {
+    if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+      return null;
+    }
+
+    UnitProgress unitProgress = moduleProgress.getCurrentUnitProgress();
+
+    if (blockDto.getBlockId().equals(unitProgress.getUnit().getIvrId())) {
+      return unitProgress;
+    }
+
+    for (UnitProgress progress : moduleProgress.getUnitsProgresses()) {
+      if (blockDto.getBlockId().equals(progress.getUnit().getIvrId())) {
+        return progress;
+      }
+    }
+
+    return null;
+  }
+
+  private void parseVotoModule(VotoCallLogDto votoCallLogDto, ModuleProgress moduleProgress,
+      ListIterator<VotoBlockDto> blockIterator) {
+
+    VotoBlockDto blockDto = getVotoBlock(blockIterator);
+
+    if (blockDto == null) {
+      return;
+    }
+
+    if (!RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+      parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+    }
+
+    UnitProgress unitProgress = findCurrentUnit(moduleProgress, blockDto);
+
+    if (unitProgress == null) {
+      parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+    } else {
+      moduleProgress.startModule(parseDate(blockDto.getEntryAt()),
+          unitProgress.getUnit().getListOrder());
+      parseVotoUnit(votoCallLogDto, unitProgress, blockIterator);
+      moduleProgressRepository.save(moduleProgress);
+    }
+  }
+
   @SuppressWarnings("PMD.CyclomaticComplexity")
-  private boolean parseVotoUnitBlocks(UnitProgress unitProgress,
-      ListIterator<VotoBlockDto> blockIterator, boolean callInterrupted) {
+  private void parseVotoUnit(VotoCallLogDto votoCallLogDto, UnitProgress unitProgress,
+      ListIterator<VotoBlockDto> blockIterator) {
     unitProgress.startUnit();
     ListIterator<CallFlowElement> callFlowElementsIterator =
         unitProgress.getCallFlowElementsIterator();
 
-    while (callFlowElementsIterator.hasNext()) {
-      CallFlowElement callFlowElement = callFlowElementsIterator.next();
+    String unitContinuationQuestionId = unitProgress.getUnit().getContinuationQuestionIvrId();
+    VotoBlockDto blockDto = blockIterator.next();
 
-      if (blockIterator.hasNext()) {
-        VotoBlockDto blockDto = blockIterator.next();
+    if (!blockDto.getBlockId().equals(unitContinuationQuestionId)) {
+      while (callFlowElementsIterator.hasNext()) {
+        CallFlowElement callFlowElement = findCallFlowElement(blockDto, callFlowElementsIterator);
 
-        if (!callFlowElement.getIvrId().equals(blockDto.getBlockId())) {
-          callFlowElementsIterator.previous();
-          if (callFlowElementsIterator.hasPrevious()) {
-            callFlowElement = callFlowElementsIterator.previous();
-
-            if (!callFlowElement.getIvrId().equals(blockDto.getBlockId())) {
-              throw new CourseProgressException("IVR Block Id: {0} did not match CallFlowElement "
-                  + "IVRId: {1}", blockDto.getBlockId(), callFlowElement.getIvrId());
-            }
-
-            unitProgress.previousElement();
-            callFlowElementsIterator.next();
-          } else {
-            throw new CourseProgressException("IVR Block Id: {0} did not match CallFlowElement "
-                + "IVRId: {1}", blockDto.getBlockId(), callFlowElement.getIvrId());
-          }
+        if (callFlowElement == null) {
+          parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+          return;
         }
 
         LocalDateTime startDate = parseDate(blockDto.getEntryAt());
@@ -358,50 +295,111 @@ public class ModuleProgressService {
             choice = getChoice((MultipleChoiceQuestion) callFlowElement, blockDto);
           }
 
-          unitProgress.addMultipleChoiceQuestionLog(startDate, endDate, callFlowElement,
+          unitProgress.addOrUpdateMultipleChoiceQuestionLog(startDate, endDate, callFlowElement,
               choice, numberOfAttempts);
         } else {
-          unitProgress.addMessageLog(startDate, endDate, callFlowElement);
+          unitProgress.addOrUpdateMessageLog(startDate, endDate, callFlowElement);
         }
 
-        unitProgress.nextElement();
-      } else {
-        if (callInterrupted) {
-          return true;
+        if (!blockIterator.hasNext()) {
+          blockDto = null;
+          break;
         }
 
-        throw new CourseProgressException("Unexpected end of IVR Call Log");
+        blockDto = blockIterator.next();
       }
     }
 
-    unitProgress.endUnit();
+    if (callFlowElementsIterator.hasNext()) {
+      unitProgress.setCurrentCallFlowElementNumber(callFlowElementsIterator.nextIndex());
+    } else {
+      unitProgress.endUnit();
+    }
 
-    return false;
+    if (blockDto == null) {
+      return;
+    }
+
+    if (blockDto.getBlockId().equals(unitContinuationQuestionId)) {
+      unitProgress.endUnit();
+      parseUnitContinuationQuestion(votoCallLogDto, blockIterator, blockDto, unitProgress);
+    }
   }
 
-  private VotoBlockDto checkRunUnitBlock(ListIterator<VotoBlockDto> blockIterator,
-      ModuleProgress moduleProgress) {
-    VotoBlockDto blockDto = getVotoBlock(blockIterator);
+  private CallFlowElement findCallFlowElement(VotoBlockDto blockDto,
+      ListIterator<CallFlowElement> callFlowElementsIterator) {
+    CallFlowElement callFlowElement = callFlowElementsIterator.next();
 
-    if (blockDto == null || !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
-      throw new CourseProgressException("Unexpected block in module: {0}",
-          moduleProgress.getCourseModule().getModule().getName());
+    if (blockDto.getBlockId().equals(callFlowElement.getIvrId())) {
+      return callFlowElement;
     }
 
-    UnitProgress unitProgress = moduleProgress.getCurrentUnitProgress();
+    callFlowElementsIterator.previous();
 
-    if (!blockDto.getBlockId().equals(unitProgress.getUnit().getIvrId())) {
-      throw new CourseProgressException("IVR Block Id: {0} did not match current Unit IVR Id",
-          blockDto.getBlockId());
+    while (callFlowElementsIterator.hasPrevious()) {
+      callFlowElement = callFlowElementsIterator.previous();
+
+      if (blockDto.getBlockId().equals(callFlowElement.getIvrId())) {
+        callFlowElementsIterator.next();
+        return callFlowElement;
+      }
     }
 
-    return blockDto;
+    callFlowElementsIterator.next();
+
+    while (callFlowElementsIterator.hasNext()) {
+      callFlowElement = callFlowElementsIterator.next();
+
+      if (blockDto.getBlockId().equals(callFlowElement.getIvrId())) {
+        return callFlowElement;
+      }
+    }
+
+    return null;
+  }
+
+  private void parseUnitContinuationQuestion(VotoCallLogDto votoCallLogDto,
+      ListIterator<VotoBlockDto> blockIterator, VotoBlockDto blockDto, UnitProgress unitProgress) {
+    ModuleProgress moduleProgress = unitProgress.getModuleProgress();
+    Integer choiceId = getChoiceId(blockDto);
+
+    if (CONTINUE_RESPONSE.equals(choiceId)) {
+      moduleProgress.nextUnit(parseDate(blockDto.getExitAt()),
+          unitProgress.getUnit().getListOrder());
+
+      if (!moduleProgress.isCompleted()) {
+        parseVotoModule(votoCallLogDto, moduleProgress, blockIterator);
+      } else if (blockIterator.hasNext()) {
+        blockDto = getVotoBlock(blockIterator);
+
+        if (blockDto != null) {
+          parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+        }
+      }
+    } else if (REPEAT_RESPONSE.equals(choiceId)) {
+      if (!unitProgress.getUnit().getAllowReplay()) {
+        throw new CourseProgressException("Unit with IVR Id: {0} cannot be replayed",
+            unitProgress.getUnit().getIvrId());
+      }
+
+      unitProgress.resetProgressForUnitRepeat();
+      parseVotoUnit(votoCallLogDto, unitProgress, blockIterator);
+    } else {
+      moduleProgress.nextUnit(parseDate(blockDto.getExitAt()),
+          unitProgress.getUnit().getListOrder());
+    }
   }
 
   private VotoBlockDto getVotoBlock(ListIterator<VotoBlockDto> blockIterator) {
+    if (!blockIterator.hasNext()) {
+      return null;
+    }
+
     VotoBlockDto blockDto = blockIterator.next();
 
-    while (IGNORED_VOTO_BLOCK_TYPES.contains(blockDto.getBlockType())) {
+    while (!MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())
+        && !QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())
+        && !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
       if (!blockIterator.hasNext()) {
         return null;
       }
@@ -410,6 +408,28 @@ public class ModuleProgressService {
     }
 
     return blockDto;
+  }
+
+  private boolean isMainMenuBlock(VotoBlockDto blockDto) {
+    if (RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+      return false;
+    }
+
+    Course course = moduleService.getReleasedCourse();
+
+    if (blockDto.getBlockId().equals(course.getNoModulesMessageIvrId())
+        || blockDto.getBlockId().equals(course.getMenuIntroMessageIvrId())
+        || blockDto.getBlockId().equals(course.getChooseModuleQuestionIvrId())) {
+      return true;
+    }
+
+    for (CourseModule module : course.getCourseModules()) {
+      if (blockDto.getBlockId().equals(module.getStartModuleQuestionIvrId())) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private Integer getChoiceId(VotoBlockDto blockDto) {
