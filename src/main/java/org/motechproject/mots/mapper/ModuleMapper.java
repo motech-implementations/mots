@@ -59,6 +59,7 @@ public abstract class ModuleMapper {
 
     moduleDto.setIvrId(courseModule.getIvrId());
     moduleDto.setIvrName(courseModule.getIvrName());
+    moduleDto.setStartModuleQuestionIvrId(courseModule.getStartModuleQuestionIvrId());
 
     return moduleDto;
   }
