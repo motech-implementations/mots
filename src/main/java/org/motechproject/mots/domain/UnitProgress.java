@@ -36,11 +36,6 @@ public class UnitProgress extends BaseTimestampedEntity {
   @Setter
   private ModuleProgress moduleProgress;
 
-  @Column(name = "current_call_flow_element_number", nullable = false)
-  @Getter
-  @Setter
-  private Integer currentCallFlowElementNumber;
-
   @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
@@ -68,7 +63,6 @@ public class UnitProgress extends BaseTimestampedEntity {
     this.moduleProgress = moduleProgress;
     this.status = ProgressStatus.NOT_STARTED;
     this.numberOfReplays = 0;
-    this.currentCallFlowElementNumber = 0;
   }
 
   public void startUnit() {
@@ -90,7 +84,7 @@ public class UnitProgress extends BaseTimestampedEntity {
   public ListIterator<CallFlowElement> getCallFlowElementsIterator() {
     List<CallFlowElement> callFlowElements = unit.getCallFlowElements();
 
-    return callFlowElements.listIterator(currentCallFlowElementNumber);
+    return callFlowElements.listIterator();
   }
 
   /**
@@ -151,7 +145,6 @@ public class UnitProgress extends BaseTimestampedEntity {
    * Reset unit progress and increment number of replays.
    */
   public void resetProgressForUnitRepeat() {
-    currentCallFlowElementNumber = 0;
     status = ProgressStatus.NOT_STARTED;
     numberOfReplays++;
   }

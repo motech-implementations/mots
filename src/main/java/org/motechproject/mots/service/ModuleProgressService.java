@@ -310,9 +310,7 @@ public class ModuleProgressService {
       }
     }
 
-    if (callFlowElementsIterator.hasNext()) {
-      unitProgress.setCurrentCallFlowElementNumber(callFlowElementsIterator.nextIndex());
-    } else {
+    if (!callFlowElementsIterator.hasNext()) {
       unitProgress.endUnit();
     }
 
@@ -323,6 +321,8 @@ public class ModuleProgressService {
     if (blockDto.getBlockId().equals(unitContinuationQuestionId)) {
       unitProgress.endUnit();
       parseUnitContinuationQuestion(votoCallLogDto, blockIterator, blockDto, unitProgress);
+    } else {
+      parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
     }
   }
 
@@ -387,6 +387,12 @@ public class ModuleProgressService {
     } else {
       moduleProgress.nextUnit(parseDate(blockDto.getExitAt()),
           unitProgress.getUnit().getListOrder());
+
+      blockDto = getVotoBlock(blockIterator);
+
+      if (blockDto != null) {
+        parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+      }
     }
   }
 
