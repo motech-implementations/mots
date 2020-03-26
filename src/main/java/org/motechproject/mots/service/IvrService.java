@@ -17,6 +17,7 @@ import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.VotoCallLogDto;
+import org.motechproject.mots.dto.VotoOutgoingCallDto;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.MotsException;
@@ -65,7 +66,9 @@ public class IvrService {
   private static final String DELETE_GROUPS_URL = "/subscribers/delete/groups";
   private static final String SEND_MESSAGE_URL = "/outgoing_calls";
   private static final String GET_CALL_LOGS_URL = "/trees/%s/delivery_logs/%s";
+  private static final String GET_OUTGOING_CALL_URL = "/outgoing_calls/%s";
 
+  private static final Integer MAX_NUMBER_OF_OUTGOING_RECORDS_CACHED = 100;
   private static final Integer MAX_NUMBER_OF_SUBSCRIBERS = 200;
 
   @Value("${mots.ivrApiKey}")
@@ -80,8 +83,10 @@ public class IvrService {
   @Autowired
   private ModuleProgressService moduleProgressService;
 
-  private RestOperations restTemplate = new RestTemplate();
-  private ObjectMapper mapper = new ObjectMapper();
+  private final RestOperations restTemplate = new RestTemplate();
+  private final ObjectMapper mapper = new ObjectMapper();
+
+  private final Map<String, VotoOutgoingCallDto> callDtoCache = new HashMap<>();
 
   /**
    * Create IVR Subscriber with given phone number.
@@ -255,10 +260,52 @@ public class IvrService {
         new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST, params);
   }
 
+  private synchronized VotoOutgoingCallDto getVotoOutgoingCall(String outgoingCallId)
+      throws IvrException {
+    if (callDtoCache.containsKey(outgoingCallId)) {
+      return callDtoCache.get(outgoingCallId);
+    }
+
+    VotoOutgoingCallDto outgoingCallDto = fetchVotoOutgoingCall(outgoingCallId);
+
+    if (callDtoCache.size() > MAX_NUMBER_OF_OUTGOING_RECORDS_CACHED) {
+      callDtoCache.clear();
+    }
+
+    callDtoCache.put(outgoingCallId, outgoingCallDto);
+
+    return outgoingCallDto;
+  }
+
+  private VotoOutgoingCallDto fetchVotoOutgoingCall(String outgoingCallId) throws IvrException {
+    String logUrl = getUrlWithParams(GET_OUTGOING_CALL_URL, outgoingCallId);
+
+    VotoResponseDto<VotoOutgoingCallDto> response = sendVotoRequest(logUrl,
+        new LinkedMultiValueMap<>(),
+        new ParameterizedTypeReference<VotoResponseDto<VotoOutgoingCallDto>>() {},
+        HttpMethod.GET);
+
+    return response.getData();
+  }
+
   private VotoCallLogDto getVotoCallLog(CallDetailRecord callDetailRecord,
       String votoMainTreeId) throws IvrException {
-    String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, votoMainTreeId,
-        callDetailRecord.getCallLogId());
+    String votoTreeId = votoMainTreeId;
+
+    if (StringUtils.isNotBlank(callDetailRecord.getOutgoingCallId())) {
+      VotoOutgoingCallDto outgoingCallDto =
+          getVotoOutgoingCall(callDetailRecord.getOutgoingCallId());
+
+      if (StringUtils.isNotBlank(outgoingCallDto.getTreeId())) {
+        votoTreeId = outgoingCallDto.getTreeId();
+      }
+    }
+
+    return getVotoCallLog(callDetailRecord.getCallLogId(), votoTreeId);
+  }
+
+  private VotoCallLogDto getVotoCallLog(String callLogId, String votoTreeId) throws IvrException {
+    String logUrl = getUrlWithParams(GET_CALL_LOGS_URL, votoTreeId, callLogId);
 
     VotoResponseDto<VotoCallLogDto> response = sendVotoRequest(logUrl, new LinkedMultiValueMap<>(),
         new ParameterizedTypeReference<VotoResponseDto<VotoCallLogDto>>() {}, HttpMethod.GET);
@@ -353,11 +400,13 @@ public class IvrService {
 
     callDetailRecord.setCallStatus(getCallStatus(ivrConfig, ivrCallStatus));
     callDetailRecord.setIvrConfigName(configName);
-    callDetailRecord.setCallId(ivrData.get(ivrConfig.getCallIdField()));
+    callDetailRecord.setIncomingCallId(ivrData.get(ivrConfig.getIncomingCallIdField()));
+    callDetailRecord.setOutgoingCallId(ivrData.get(ivrConfig.getOutgoingCallIdField()));
     callDetailRecord.setChwIvrId(ivrData.get(ivrConfig.getChwIvrIdField()));
     callDetailRecord.setCallLogId(ivrData.get(ivrConfig.getCallLogIdField()));
 
-    ivrData.remove(ivrConfig.getCallIdField());
+    ivrData.remove(ivrConfig.getIncomingCallIdField());
+    ivrData.remove(ivrConfig.getOutgoingCallIdField());
     ivrData.remove(ivrConfig.getChwIvrIdField());
     ivrData.remove(ivrConfig.getCallLogIdField());
   }

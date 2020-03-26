@@ -95,10 +95,15 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Setter
   private Map<Language, String> ivrLanguagesIds;
 
-  @Column(name = "call_id_field", nullable = false)
+  @Column(name = "incoming_call_id_field", nullable = false)
   @Getter
   @Setter
-  private String callIdField;
+  private String incomingCallIdField;
+
+  @Column(name = "outgoing_call_id_field", nullable = false)
+  @Getter
+  @Setter
+  private String outgoingCallIdField;
 
   @Column(name = "chw_ivr_id_field", nullable = false)
   @Getter

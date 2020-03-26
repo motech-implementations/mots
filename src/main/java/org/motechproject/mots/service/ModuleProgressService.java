@@ -168,7 +168,7 @@ public class ModuleProgressService {
   private void parseVotoMainMenu(VotoCallLogDto votoCallLogDto,
       ListIterator<VotoBlockDto> blockIterator, VotoBlockDto blockDto) {
 
-    while (blockDto == null || isMainMenuBlock(blockDto)) {
+    while (blockDto == null || isMainMenuBlock(blockDto) || !isBlockTypeSupported(blockDto)) {
       if (!blockIterator.hasNext()) {
         return;
       }
@@ -403,9 +403,7 @@ public class ModuleProgressService {
 
     VotoBlockDto blockDto = blockIterator.next();
 
-    while (!MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())
-        && !QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())
-        && !RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+    while (!isBlockTypeSupported(blockDto)) {
       if (!blockIterator.hasNext()) {
         return null;
       }
@@ -414,6 +412,12 @@ public class ModuleProgressService {
     }
 
     return blockDto;
+  }
+
+  private boolean isBlockTypeSupported(VotoBlockDto blockDto) {
+    return MESSAGE_BLOCK_TYPE.equals(blockDto.getBlockType())
+        || QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())
+        || RUN_ANOTHER_TREE_BLOCK_TYPE.equals(blockDto.getBlockType());
   }
 
   private boolean isMainMenuBlock(VotoBlockDto blockDto) {
