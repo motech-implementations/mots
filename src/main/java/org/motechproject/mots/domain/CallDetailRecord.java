@@ -24,8 +24,13 @@ public class CallDetailRecord extends BaseTimestampedEntity {
 
   @Getter
   @Setter
-  @Column(name = "call_id")
-  private String callId;
+  @Column(name = "incoming_call_id")
+  private String incomingCallId;
+
+  @Getter
+  @Setter
+  @Column(name = "outgoing_call_id")
+  private String outgoingCallId;
 
   @Getter
   @Setter
