@@ -95,14 +95,23 @@ public class ModuleProgress extends BaseTimestampedEntity {
   }
 
   /**
-   * Change module status to in progress.
+   * Calculate module status.
    */
-  public void startModule(LocalDateTime startDate, Integer currentUnitNumber) {
+  public void calculateModuleStatus(LocalDateTime date, Integer currentUnitNumber) {
     if (ProgressStatus.NOT_STARTED.equals(status)) {
       status = ProgressStatus.IN_PROGRESS;
-      this.startDate = startDate;
+      this.startDate = date;
     }
-    this.currentUnitNumber = currentUnitNumber;
+
+    if (this.currentUnitNumber < currentUnitNumber) {
+      this.currentUnitNumber = currentUnitNumber;
+    }
+
+    if (!ProgressStatus.COMPLETED.equals(status) && unitsProgresses.stream()
+        .allMatch(unitProgress -> ProgressStatus.COMPLETED.equals(unitProgress.getStatus()))) {
+      status = ProgressStatus.COMPLETED;
+      this.endDate = date;
+    }
   }
 
   /**
