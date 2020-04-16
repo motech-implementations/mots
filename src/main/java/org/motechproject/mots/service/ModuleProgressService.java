@@ -77,7 +77,8 @@ public class ModuleProgressService {
     try {
       parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
     } catch (CourseProgressException e) {
-      LOGGER.error("Error occurred during module progress update ", e);
+      LOGGER.error("Error occurred during module progress update, for call log with id: "
+          + votoCallLogDto.getLogId(), e);
     }
   }
 
@@ -186,7 +187,10 @@ public class ModuleProgressService {
 
         if (unitProgress.isPresent()) {
           parseVotoUnit(votoCallLogDto, unitProgress.get(), blockIterator);
-          moduleProgressRepository.save(unitProgress.get().getModuleProgress());
+          ModuleProgress progress = unitProgress.get().getModuleProgress();
+          progress.calculateModuleStatus(parseDate(blockDto.getEntryAt()),
+              unitProgress.get().getUnit().getListOrder());
+          moduleProgressRepository.save(progress);
         } else {
           throw new CourseProgressException("Module or Unit with IVR Id: {0} not found",
               blockDto.getBlockId());
@@ -198,7 +202,10 @@ public class ModuleProgressService {
       if (unitProgress.isPresent()) {
         blockIterator.previous();
         parseVotoUnit(votoCallLogDto, unitProgress.get(), blockIterator);
-        moduleProgressRepository.save(unitProgress.get().getModuleProgress());
+        ModuleProgress progress = unitProgress.get().getModuleProgress();
+        progress.calculateModuleStatus(parseDate(blockDto.getEntryAt()),
+            unitProgress.get().getUnit().getListOrder());
+        moduleProgressRepository.save(progress);
       } else {
         throw new CourseProgressException("Call flow element with IVR Id: {0} not found",
             blockDto.getBlockId());
@@ -244,9 +251,9 @@ public class ModuleProgressService {
     if (unitProgress == null) {
       parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
     } else {
-      moduleProgress.startModule(parseDate(blockDto.getEntryAt()),
-          unitProgress.getUnit().getListOrder());
       parseVotoUnit(votoCallLogDto, unitProgress, blockIterator);
+      moduleProgress.calculateModuleStatus(parseDate(blockDto.getEntryAt()),
+          unitProgress.getUnit().getListOrder());
       moduleProgressRepository.save(moduleProgress);
     }
   }

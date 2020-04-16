@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissions;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
@@ -43,6 +44,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @SuppressWarnings("PMD.TooManyMethods")
 @Service
 public class IvrService {
+
+  private static final Logger LOGGER = Logger.getLogger(IvrService.class);
 
   private static final String PHONE = "phone";
   private static final String PREFERRED_LANGUAGE = "preferred_language";
@@ -193,7 +196,7 @@ public class IvrService {
    * @param configName name of the IVR config
    */
   public void saveCallDetailRecordAndUpdateModuleProgress(CallDetailRecord callDetailRecord,
-      String configName) throws IvrException {
+      String configName) {
     IvrConfig ivrConfig = ivrConfigService.getConfig();
     setConfigFields(callDetailRecord, ivrConfig, configName);
 
@@ -201,14 +204,18 @@ public class IvrService {
 
     if (CallStatus.FINISHED_COMPLETE.equals(callStatus)
         || CallStatus.FINISHED_INCOMPLETE.equals(callStatus)) {
-      VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord,
-          ivrConfig.getMainMenuTreeId());
+      try {
+        VotoCallLogDto votoCallLogDto = getVotoCallLog(callDetailRecord,
+            ivrConfig.getMainMenuTreeId());
 
-      callDetailRecordRepository.save(callDetailRecord);
-      moduleProgressService.updateModuleProgress(votoCallLogDto);
-    } else {
-      callDetailRecordRepository.save(callDetailRecord);
+        moduleProgressService.updateModuleProgress(votoCallLogDto);
+      } catch (Exception e) {
+        LOGGER.error("Error occurred during module progress update, for call log with id: "
+            + callDetailRecord.getCallLogId(), e);
+      }
     }
+
+    callDetailRecordRepository.save(callDetailRecord);
   }
 
   /**
