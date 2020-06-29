@@ -349,7 +349,7 @@ public class CommunityHealthWorkerService {
 
       Language preferredLanguage = Language.getByDisplayName(
           Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER)));
-      preferredLanguage = preferredLanguage != null ? preferredLanguage : Language.ENGLISH;
+      preferredLanguage = preferredLanguage != null ? preferredLanguage : Language.KRIO;
 
       String name = communityHealthWorker.getCombinedName();
 

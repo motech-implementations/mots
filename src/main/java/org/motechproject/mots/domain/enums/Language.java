@@ -3,8 +3,8 @@ package org.motechproject.mots.domain.enums;
 import lombok.Getter;
 
 public enum Language {
-  ENGLISH("English"),
-  KINYARWANDA("Kinyarwanda");
+  KRIO("Krio"),
+  MENDE("Mende");
 
   @Getter
   private String displayName;

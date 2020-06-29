@@ -232,7 +232,7 @@ const FIELDS = {
     label: 'Preferred Language',
     required: true,
     getSelectOptions: () => ({
-      values: ['English', 'Kinyarwanda'],
+      values: ['Krio', 'Mende'],
     }),
     getAttributes: input => (getAttributesForSelect(input)),
   },
