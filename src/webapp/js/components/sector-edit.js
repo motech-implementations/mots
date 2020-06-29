@@ -49,7 +49,7 @@ class SectorEdit extends Component {
     };
 
     this.props.saveSector(valuesToSend, () => {
-      Alert.success('Sector has been updated');
+      Alert.success('Chiefdom has been updated');
       this.props.history.push('/locations/2');
     });
   }
@@ -72,7 +72,7 @@ class SectorEdit extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Sector</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Chiefdom</h1>
         <SectorForm
           onSubmit={this.onSubmit}
           onSubmitCancel={this.onSubmitCancel}
@@ -81,7 +81,7 @@ class SectorEdit extends Component {
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}
           modalParentId="page-wrapper"
-          modalText="Are you sure to edit Sector?"
+          modalText="Are you sure to edit Chiefdom?"
           onConfirm={this.onSubmitModal}
           onHide={this.hideConfirmModal}
         />

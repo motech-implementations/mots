@@ -35,7 +35,7 @@ class SectorNew extends Component {
     };
 
     this.props.createSector(valuesToSend, () => {
-      Alert.success('Sector has been added');
+      Alert.success('Chiefdom has been added');
       this.props.history.push({
         pathname: '/locations/2',
       });
@@ -45,7 +45,7 @@ class SectorNew extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-header padding-bottom-xs margin-x-sm">Add Sector</h1>
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Add Chiefdom</h1>
         <SectorForm onSubmit={this.onSubmit} onSubmitCancel={this.onSubmitCancel} />
       </div>
     );

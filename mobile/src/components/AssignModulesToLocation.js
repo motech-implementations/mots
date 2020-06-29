@@ -193,8 +193,9 @@ class AssignModulesToLocation extends Component {
           {this.state.selectedDistrict.value &&
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText,
-              PixelRatio.get() < 2 && labelStyleSmall]}>
-              Sector:
+              PixelRatio.get() < 2 && labelStyleSmall]}
+            >
+              Chiefdom:
             </Text>
             <View style={selectField}>
               <Select
@@ -214,7 +215,8 @@ class AssignModulesToLocation extends Component {
           {this.state.selectedSector.value &&
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText,
-              PixelRatio.get() < 2 && labelStyleSmall]}>
+              PixelRatio.get() < 2 && labelStyleSmall]}
+            >
               Facility:
             </Text>
             <View style={selectField}>

@@ -66,7 +66,7 @@ class Locations extends Component {
       Header: 'Facility',
       accessor: 'parent',
     }, {
-      Header: 'Sector',
+      Header: 'Chiefdom',
       accessor: 'sectorName',
     }, {
       Header: 'District',
@@ -111,7 +111,7 @@ class Locations extends Component {
       Header: 'Incharge email',
       accessor: 'inchargeEmail',
     }, {
-      Header: 'Sector',
+      Header: 'Chiefdom',
       accessor: 'parent',
     }, {
       Header: 'District',
@@ -195,7 +195,7 @@ class Locations extends Component {
           <TabList>
             <Tab>Villages</Tab>
             <Tab>Facilities</Tab>
-            <Tab>Sectors</Tab>
+            <Tab>Chiefdoms</Tab>
             <Tab>Districts</Tab>
           </TabList>
 

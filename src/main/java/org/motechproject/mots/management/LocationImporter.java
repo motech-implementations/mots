@@ -34,7 +34,7 @@ public class LocationImporter implements ApplicationRunner {
   private boolean loadLocations;
 
   private static final String DISTRICT_HEADER = "District";
-  private static final String SECTOR_HEADER = "Sector";
+  private static final String SECTOR_HEADER = "Chiefdom";
   private static final String FACILITY_HEADER = "Facility";
   private static final String VILLAGE_HEADER = "Village";
 
@@ -151,7 +151,7 @@ public class LocationImporter implements ApplicationRunner {
 
       District parent = currentDistrictList.stream()
           .filter(district -> district.getName().equals(parentName))
-          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Sector parent "
+          .findFirst().orElseThrow(() -> new RuntimeException(String.format("'%s' Chiefdom parent "
               + "is not defined properly in spreadsheet", sector.getName())));
 
       sector.setDistrict(parent);

@@ -11,7 +11,8 @@ import Button from '../components/Button';
 import Spinner from '../components/Spinner';
 import {
   CHW_WRITE_AUTHORITY, ASSIGN_MODULES_AUTHORITY,
-  hasAuthority } from '../utils/authorization';
+  hasAuthority,
+} from '../utils/authorization';
 import styles from '../styles/listsStyles';
 import commonStyles from '../styles/commonStyles';
 import buildSearchParams from '../utils/search-params';
@@ -81,7 +82,7 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Sector',
+        displayName: 'Chiefdom',
         name: 'sectorName',
         dataType: 'String',
         defaultValue: null,

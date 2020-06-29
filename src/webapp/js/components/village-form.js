@@ -31,7 +31,7 @@ const FIELDS = {
   },
   sectorId: {
     type: 'select',
-    label: 'Sector',
+    label: 'Chiefdom',
     required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(

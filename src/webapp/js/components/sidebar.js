@@ -182,7 +182,7 @@ class SideBar extends Component {
           <li className="border-none">
             <Link to="/locations/sector/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
-              <span className="icon-text">Add Sector</span>
+              <span className="icon-text">Add Chiefdom</span>
             </Link>
           </li>
         }
@@ -214,7 +214,7 @@ class SideBar extends Component {
           <li className="border-none">
             <Link to="/locations/sector/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
-              <span className="icon-text">Upload Sector CSV</span>
+              <span className="icon-text">Upload Chiefdom CSV</span>
             </Link>
           </li>
         }

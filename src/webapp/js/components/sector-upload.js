@@ -6,7 +6,7 @@ const SectorUpload = () => (
   <div>
     <CsvUpload
       uploadUrl="/api/sector/import"
-      uploadLabel="CSV File Upload for Sectors"
+      uploadLabel="CSV File Upload for Chiefdoms"
     />
   </div>
 );
