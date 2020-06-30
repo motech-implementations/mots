@@ -108,7 +108,7 @@ FROM village
 	</parameter>
 	<parameter name="sector" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="Sector"/>
+		<property name="displayName" value="Chiefdom"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
@@ -197,7 +197,7 @@ FROM village
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="d712ff39-2114-4f82-91e1-53d775ca072c">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Sector"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -309,7 +309,7 @@ FROM village
 				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<text><![CDATA[Sector]]></text>
+				<text><![CDATA[Chiefdom]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="420" y="0" width="140" height="25" uuid="dca5aacb-3b9d-4eb3-8592-c8bcc19f4bf9">

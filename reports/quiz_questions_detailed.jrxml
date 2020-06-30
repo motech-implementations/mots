@@ -179,7 +179,7 @@
 	</parameter>
 	<parameter name="sector" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="Sector"/>
+		<property name="displayName" value="Chiefdom"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
@@ -436,7 +436,7 @@
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="8cb5097d-40b5-41af-8813-2683a4109947">
 					<property name="net.sf.jasperreports.export.json.path" value="colModel.sector.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Sector"/>
+					<property name="net.sf.jasperreports.export.json.data" value="Chiefdom"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -734,7 +734,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Sector]]></text>
+				<text><![CDATA[Chiefdom]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="740" y="0" width="60" height="30" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
