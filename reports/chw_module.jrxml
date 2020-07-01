@@ -93,8 +93,14 @@
 		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="moduleId" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="dateReceived" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="dateReceivedMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="dateReceivedMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="startDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="startDateMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="startDateMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="endDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="endDateMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="endDateMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="gender" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="groupName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
@@ -115,8 +121,14 @@
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{moduleId} IS NULL OR module.name LIKE CONCAT('%',$P{moduleId},'%'))
   AND ($P{dateReceived} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceived},'%'))
+  AND ($P{dateReceivedMin} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceivedMin},'%') OR module_progress.created_date > $P{dateReceivedMin})
+  AND ($P{dateReceivedMax} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceivedMax},'%') OR module_progress.created_date < $P{dateReceivedMax})
   AND ($P{startDate} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDate},'%'))
+  AND ($P{startDateMin} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDateMin},'%') OR module_progress.start_date > $P{startDateMin})
+  AND ($P{startDateMax} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDateMax},'%') OR module_progress.start_date < $P{startDateMax})
   AND ($P{endDate} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDate},'%'))
+  AND ($P{endDateMin} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDateMin},'%') OR module_progress.end_date > $P{endDateMin})
+  AND ($P{endDateMax} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDateMax},'%') OR module_progress.end_date < $P{endDateMax})
   AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
@@ -158,14 +170,44 @@
 		<property name="displayName" value="Date Received"/>
 		<property name="required" value="false"/>
 	</parameter>
+	<parameter name="dateReceivedMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Date Received Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="dateReceivedMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Date Received Max"/>
+		<property name="required" value="false"/>
+	</parameter>
 	<parameter name="startDate" class="java.lang.String">
 		<property name="dataType" value="Date"/>
 		<property name="displayName" value="Start Date"/>
 		<property name="required" value="false"/>
 	</parameter>
+	<parameter name="startDateMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Start Date Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="startDateMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Start Date Max"/>
+		<property name="required" value="false"/>
+	</parameter>
 	<parameter name="endDate" class="java.lang.String">
 		<property name="dataType" value="Date"/>
 		<property name="displayName" value="End Date"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="endDateMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="End Date Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="endDateMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="End Date Max"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="gender" class="java.lang.String">
@@ -224,8 +266,14 @@
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{moduleId} IS NULL OR module.name LIKE CONCAT('%',$P{moduleId},'%'))
   AND ($P{dateReceived} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceived},'%'))
+  AND ($P{dateReceivedMin} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceivedMin},'%') OR module_progress.created_date > $P{dateReceivedMin})
+  AND ($P{dateReceivedMax} IS NULL OR module_progress.created_date LIKE CONCAT($P{dateReceivedMax},'%') OR module_progress.created_date < $P{dateReceivedMax})
   AND ($P{startDate} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDate},'%'))
+  AND ($P{startDateMin} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDateMin},'%') OR module_progress.start_date > $P{startDateMin})
+  AND ($P{startDateMax} IS NULL OR module_progress.start_date LIKE CONCAT($P{startDateMax},'%') OR module_progress.start_date < $P{startDateMax})
   AND ($P{endDate} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDate},'%'))
+  AND ($P{endDateMin} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDateMin},'%') OR module_progress.end_date > $P{endDateMin})
+  AND ($P{endDateMax} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDateMax},'%') OR module_progress.end_date < $P{endDateMax})
   AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
@@ -420,11 +468,29 @@
 						<datasetParameter name="dateReceived">
 							<datasetParameterExpression><![CDATA[$P{dateReceived}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="dateReceivedMin">
+							<datasetParameterExpression><![CDATA[$P{dateReceivedMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="dateReceivedMax">
+							<datasetParameterExpression><![CDATA[$P{dateReceivedMax}]]></datasetParameterExpression>
+						</datasetParameter>
 						<datasetParameter name="startDate">
 							<datasetParameterExpression><![CDATA[$P{startDate}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="startDateMin">
+							<datasetParameterExpression><![CDATA[$P{startDateMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="startDateMax">
+							<datasetParameterExpression><![CDATA[$P{startDateMax}]]></datasetParameterExpression>
+						</datasetParameter>
 						<datasetParameter name="endDate">
 							<datasetParameterExpression><![CDATA[$P{endDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="endDateMin">
+							<datasetParameterExpression><![CDATA[$P{endDateMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="endDateMax">
+							<datasetParameterExpression><![CDATA[$P{endDateMax}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="gender">
 							<datasetParameterExpression><![CDATA[$P{gender}]]></datasetParameterExpression>
