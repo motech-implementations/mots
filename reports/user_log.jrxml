@@ -81,7 +81,11 @@
 		<parameter name="name" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="userRole" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="loginDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="loginDateMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="loginDateMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="logoutDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="logoutDateMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="logoutDateMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[SELECT
@@ -94,6 +98,10 @@
   AND ($P{name} IS NULL OR user.name LIKE CONCAT('%',$P{name},'%'))
   AND ($P{userRole} IS NULL OR user_role.name LIKE CONCAT('%',$P{userRole},'%'))
   AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
+  AND ($P{loginDateMin} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDateMin},'%') OR user_log.login_date > $P{loginDateMin})
+  AND ($P{loginDateMax} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDateMax},'%') OR user_log.login_date < $P{loginDateMax})
+  AND ($P{logoutDateMin} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDateMin},'%') OR user_log.logout_date > $P{logoutDateMin})
+  AND ($P{logoutDateMax} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDateMax},'%') OR user_log.logout_date < $P{logoutDateMax})
   AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
@@ -118,9 +126,29 @@
 		<property name="displayName" value="Login Date"/>
 		<property name="required" value="false"/>
 	</parameter>
+	<parameter name="loginDateMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Login Date Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="loginDateMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Login Date Max"/>
+		<property name="required" value="false"/>
+	</parameter>
 	<parameter name="logoutDate" class="java.lang.String">
 		<property name="dataType" value="Date"/>
 		<property name="displayName" value="Logout Date"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="logoutDateMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Logout Date Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="logoutDateMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Logout Date Max"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="orderBy" class="java.lang.String">
@@ -156,6 +184,10 @@
   AND ($P{name} IS NULL OR user.name LIKE CONCAT('%',$P{name},'%'))
   AND ($P{userRole} IS NULL OR user_role.name LIKE CONCAT('%',$P{userRole},'%'))
   AND ($P{loginDate} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDate},'%'))
+  AND ($P{loginDateMin} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDateMin},'%') OR user_log.login_date > $P{loginDateMin})
+  AND ($P{loginDateMax} IS NULL OR user_log.login_date LIKE CONCAT($P{loginDateMax},'%') OR user_log.login_date < $P{loginDateMax})
+  AND ($P{logoutDateMin} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDateMin},'%') OR user_log.logout_date > $P{logoutDateMin})
+  AND ($P{logoutDateMax} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDateMax},'%') OR user_log.logout_date < $P{logoutDateMax})
   AND ($P{logoutDate} IS NULL OR user_log.logout_date LIKE CONCAT($P{logoutDate},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
@@ -261,8 +293,20 @@
 						<datasetParameter name="loginDate">
 							<datasetParameterExpression><![CDATA[$P{loginDate}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="loginDateMin">
+							<datasetParameterExpression><![CDATA[$P{loginDateMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="loginDateMax">
+							<datasetParameterExpression><![CDATA[$P{loginDateMax}]]></datasetParameterExpression>
+						</datasetParameter>
 						<datasetParameter name="logoutDate">
 							<datasetParameterExpression><![CDATA[$P{logoutDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="logoutDateMin">
+							<datasetParameterExpression><![CDATA[$P{logoutDateMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="logoutDateMax">
+							<datasetParameterExpression><![CDATA[$P{logoutDateMax}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="pageSize">
 							<datasetParameterExpression><![CDATA[Integer.valueOf($P{pageSize})]]></datasetParameterExpression>

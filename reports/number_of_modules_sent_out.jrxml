@@ -89,6 +89,8 @@
 		<parameter name="username" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="module" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="dateOfPush" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="dateOfPushMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="dateOfPushMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="sector" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
@@ -107,6 +109,8 @@
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
   AND ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
   AND ($P{dateOfPush} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPush},'%'))
+  AND ($P{dateOfPushMin} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPushMin},'%') OR dal.created_date > $P{dateOfPushMin})
+  AND ($P{dateOfPushMax} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPushMax},'%') OR dal.created_date < $P{dateOfPushMax})
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
@@ -127,6 +131,16 @@
 	<parameter name="dateOfPush" class="java.lang.String">
 		<property name="dataType" value="Date"/>
 		<property name="displayName" value="Date of Push"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="dateOfPushMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Date of Push Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="dateOfPushMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Date of Push Max"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
@@ -186,6 +200,8 @@
  WHERE ($P{username} IS NULL OR user.username LIKE CONCAT('%',$P{username},'%'))
   AND ($P{module} IS NULL OR module.name LIKE CONCAT('%',$P{module},'%'))
   AND ($P{dateOfPush} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPush},'%'))
+  AND ($P{dateOfPushMin} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPushMin},'%') OR dal.created_date > $P{dateOfPushMin})
+  AND ($P{dateOfPushMax} IS NULL OR dal.created_date LIKE CONCAT($P{dateOfPushMax},'%') OR dal.created_date < $P{dateOfPushMax})
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
@@ -316,6 +332,12 @@
 						</datasetParameter>
 						<datasetParameter name="dateOfPush">
 							<datasetParameterExpression><![CDATA[$P{dateOfPush}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="dateOfPushMin">
+							<datasetParameterExpression><![CDATA[$P{dateOfPushMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="dateOfPushMax">
+							<datasetParameterExpression><![CDATA[$P{dateOfPushMax}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="district">
 							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>

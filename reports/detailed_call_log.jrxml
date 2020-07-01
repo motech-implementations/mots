@@ -87,6 +87,8 @@
 		<parameter name="unitId" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="elementId" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="sentDate" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="sentDateMin" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="sentDateMax" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="groupName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="pageSize" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
@@ -113,6 +115,8 @@
   AND ($P{unitId} IS NULL OR unit.name LIKE CONCAT('%',$P{unitId},'%'))
   AND ($P{elementId} IS NULL OR element.name LIKE CONCAT('%',$P{elementId},'%'))
   AND ($P{sentDate} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDate},'%'))
+  AND ($P{sentDateMin} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMin},'%') OR call_flow_element_log.start_date > $P{sentDateMin})
+  AND ($P{sentDateMax} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMax},'%') OR call_flow_element_log.start_date < $P{sentDateMax})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
 		</queryString>
@@ -166,6 +170,16 @@
 	<parameter name="sentDate" class="java.lang.String">
 		<property name="dataType" value="Date"/>
 		<property name="displayName" value="Sent Date"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="sentDateMin" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Sent Date Min"/>
+		<property name="required" value="false"/>
+	</parameter>
+	<parameter name="sentDateMax" class="java.lang.String">
+		<property name="dataType" value="Date"/>
+		<property name="displayName" value="Sent Date Max"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="groupName" class="java.lang.String">
@@ -230,6 +244,8 @@
   AND ($P{unitId} IS NULL OR unit.name LIKE CONCAT('%',$P{unitId},'%'))
   AND ($P{elementId} IS NULL OR element.name LIKE CONCAT('%',$P{elementId},'%'))
   AND ($P{sentDate} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDate},'%'))
+  AND ($P{sentDateMin} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMin},'%') OR call_flow_element_log.start_date > $P{sentDateMin})
+  AND ($P{sentDateMax} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMax},'%') OR call_flow_element_log.start_date < $P{sentDateMax})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
   AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
  ORDER BY $P!{orderBy}
@@ -457,6 +473,12 @@
 						</datasetParameter>
 						<datasetParameter name="sentDate">
 							<datasetParameterExpression><![CDATA[$P{sentDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="sentDateMin">
+							<datasetParameterExpression><![CDATA[$P{sentDateMin}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="sentDateMax">
+							<datasetParameterExpression><![CDATA[$P{sentDateMax}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="groupName">
 							<datasetParameterExpression><![CDATA[$P{groupName}]]></datasetParameterExpression>

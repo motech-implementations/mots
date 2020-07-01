@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import { connect } from 'react-redux';
 import DateTime from 'react-datetime';
+import moment from 'moment';
 
 import { resetLogoutCounter } from '../actions/index';
 import MobileTable from '../components/mobile-table';
@@ -53,19 +54,60 @@ class Report extends Component {
           const dateFormat = 'YYYY-MM-DD';
 
           return (
-            <DateTime
-              dateFormat={dateFormat}
-              timeFormat={false}
-              closeOnSelect
-              onChange={date => onChange(!date || typeof date === 'string' ? date : date.format(dateFormat))}
-              value={filter ? filter.value : null}
-              renderInput={props => (
-                <div className="input-group">
-                  <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-                  <input {...props} />
-                </div>
-              )}
-            />);
+            <div>
+              <DateTime
+                dateFormat={dateFormat}
+                timeFormat={false}
+                closeOnSelect
+                onChange={date => onChange({
+                  type: 'date',
+                  min: !date || typeof date === 'string' ? date : date.format(dateFormat),
+                  max: filter && filter.value ? filter.value.max : null,
+                })}
+                value={filter && filter.value ? filter.value.min : null}
+                isValidDate={(current) => {
+                  const max = filter && filter.value ? filter.value.max : null;
+
+                  if (!max || !moment(max).isValid()) {
+                    return true;
+                  }
+
+                  return !current || current.isSameOrBefore(moment(max));
+                }}
+                renderInput={props => (
+                  <div className="input-group">
+                    <span className="input-group-addon"><i className="fa fa-calendar" /></span>
+                    <input {...props} placeholder="Min Date" />
+                  </div>
+                )}
+              />
+              <DateTime
+                dateFormat={dateFormat}
+                timeFormat={false}
+                closeOnSelect
+                onChange={date => onChange({
+                  type: 'date',
+                  max: !date || typeof date === 'string' ? date : date.format(dateFormat),
+                  min: filter && filter.value ? filter.value.min : null,
+                })}
+                value={filter && filter.value ? filter.value.max : null}
+                isValidDate={(current) => {
+                  const min = filter && filter.value ? filter.value.min : null;
+
+                  if (!min || !moment(min).isValid()) {
+                    return true;
+                  }
+
+                  return !current || current.isSameOrAfter(moment(min));
+                }}
+                renderInput={props => (
+                  <div className="input-group">
+                    <span className="input-group-addon"><i className="fa fa-calendar" /></span>
+                    <input {...props} placeholder="Max Date" />
+                  </div>
+                )}
+              />
+            </div>);
         };
       default:
         return null;
@@ -73,7 +115,17 @@ class Report extends Component {
   }
 
   static convertFilters(filtered) {
-    return _.reduce(filtered, (acc, { id, value }) => _.assign(acc, { [id]: value }), {});
+    return _.reduce(filtered, (acc, { id, value }) => {
+      if (value && value.type === 'date') {
+        return {
+          ...acc,
+          [`${id}Min`]: value.min,
+          [`${id}Max`]: value.max,
+        };
+      }
+
+      return { ...acc, [id]: value };
+    }, {});
   }
 
   static convertOrder(sorted) {
