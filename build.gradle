@@ -1,24 +1,10 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE")
-        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
-    }
-}
-
 plugins {
     id 'java'
     id 'idea'
     id 'org.springframework.boot' version '1.5.10.RELEASE'
     id 'checkstyle'
     id 'pmd'
-    id 'com.moowork.node' version '1.2.0'
+    id 'com.github.node-gradle.node' version '2.2.4'
     id 'net.ltgt.apt' version '0.8'
     id 'net.researchgate.release' version '2.7.0'
 }
@@ -36,34 +22,35 @@ repositories {
 }
 
 dependencies {
-    compile 'org.springframework:spring-context-support'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.security.oauth:spring-security-oauth2'
-    compile 'org.springframework.security:spring-security-jwt'
-    compile 'mysql:mysql-connector-java'
-    compile 'org.projectlombok:lombok:1.16.18'
-    compile 'org.hibernate:hibernate-java8'
-    compile 'com.zaxxer:HikariCP:3.4.2'
-    compile 'org.liquibase:liquibase-core:3.5.3'
-    compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
-    compile 'org.apache.commons:commons-lang3:3.7'
-    compile 'commons-io:commons-io:2.6'
-    compile 'org.apache.poi:poi-ooxml:3.17'
-    compile 'net.sf.jasperreports:jasperreports:6.4.1'
-    compile 'net.sf.supercsv:super-csv:2.4.0'
-    compile 'com.google.guava:guava:24.1-jre'
+    implementation 'org.springframework:spring-context-support'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security.oauth:spring-security-oauth2'
+    implementation 'org.springframework.security:spring-security-jwt'
+    implementation 'mysql:mysql-connector-java'
+    implementation 'org.hibernate:hibernate-java8'
+    implementation 'com.zaxxer:HikariCP:3.4.2'
+    implementation 'org.liquibase:liquibase-core:3.5.3'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'commons-io:commons-io:2.6'
+    implementation 'org.apache.poi:poi-ooxml:3.17'
+    implementation 'net.sf.jasperreports:jasperreports:6.4.1'
+    implementation 'net.sf.supercsv:super-csv:2.4.0'
+    implementation 'com.google.guava:guava:24.1-jre'
+    implementation 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.2.0.Final'
-    annotationProcessor 'org.projectlombok:lombok:1.16.18'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'org.powermock:powermock-api-mockito:1.6.5'
-    testCompile 'org.powermock:powermock-module-junit4:1.6.5'
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'org.springframework.security:spring-security-test:5.0.3.RELEASE'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:1.+'
+    testImplementation 'org.powermock:powermock-api-mockito:1.6.5'
+    testImplementation 'org.powermock:powermock-module-junit4:1.6.5'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test:5.0.3.RELEASE'
 }
 
 processResources {
@@ -96,7 +83,7 @@ jar.dependsOn 'webpackProduction'
 bootRun.dependsOn 'webpack'
 
 wrapper {
-    gradleVersion = '5.0'
+    gradleVersion = '6.0'
 }
 
 checkstyle {
@@ -107,7 +94,7 @@ checkstyle {
 
 pmd {
     toolVersion = '5.8.1'
-    consoleOutput= true
+    consoleOutput = true
     ignoreFailures = false
     ruleSetFiles = files("ruleset.xml")
     reportsDir = file("build/reports/pmd")
