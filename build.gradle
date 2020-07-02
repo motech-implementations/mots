@@ -51,19 +51,19 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.7'
     compile 'commons-io:commons-io:2.6'
     compile 'org.apache.poi:poi-ooxml:3.17'
-    compile "net.sf.jasperreports:jasperreports:6.4.1"
+    compile 'net.sf.jasperreports:jasperreports:6.4.1'
     compile 'net.sf.supercsv:super-csv:2.4.0'
     compile 'com.google.guava:guava:24.1-jre'
 
-    apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
-    apt 'org.projectlombok:lombok:1.16.18'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+    annotationProcessor 'org.projectlombok:lombok:1.16.18'
 
-    testCompile "junit:junit:4.12"
-    testCompile "org.mockito:mockito-core:1.+"
-    testCompile "org.powermock:powermock-api-mockito:1.6.5"
-    testCompile "org.powermock:powermock-module-junit4:1.6.5"
-    testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.springframework.security:spring-security-test:5.0.3.RELEASE"
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.+'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.5'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.5'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.springframework.security:spring-security-test:5.0.3.RELEASE'
 }
 
 processResources {
@@ -76,10 +76,6 @@ node {
     version = '6.11.4'
     npmVersion = '3.10.10'
     download = true
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
 }
 
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
@@ -98,6 +94,10 @@ task webpackProduction(type: NodeTask, dependsOn: 'npmInstall') {
 
 jar.dependsOn 'webpackProduction'
 bootRun.dependsOn 'webpack'
+
+wrapper {
+    gradleVersion = '5.0'
+}
 
 checkstyle {
     toolVersion '8.0'
