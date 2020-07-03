@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class UserPermission extends BaseTimestampedEntity {
   @Column(name = "name", nullable = false)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_PERMISSION_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_PERMISSION_NAME)
   private String name;
 
   @Column(name = "display_name")

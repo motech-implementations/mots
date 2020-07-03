@@ -5,6 +5,7 @@ import static org.motechproject.mots.validate.ValidationUtils.isValidDateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +23,7 @@ public class PastDateFormatValidator implements ConstraintValidator<PastDate, St
   public boolean isValid(String value, ConstraintValidatorContext context) {
     if (StringUtils.isNotEmpty(value)
         && isValidDateFormat(MotsConstants.SIMPLE_DATE_FORMAT, value)) {
-      SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.SIMPLE_DATE_FORMAT);
+      SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.SIMPLE_DATE_FORMAT, Locale.ENGLISH);
       try {
         Date date = sdf.parse(value);
         return date.before(new Date());

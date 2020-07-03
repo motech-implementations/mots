@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@SuppressWarnings("PMD.CyclomaticComplexity")
+@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
     implements CommunityHealthWorkerRepositoryCustom {
 
@@ -26,8 +26,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
       String chwId, String firstName, String familyName, String phoneNumber,
       String villageName, String facilityName, String sectorName,
-      String districtName, String groupName, Boolean selected,
-      Pageable pageable) throws IllegalArgumentException {
+      String districtName, String groupName, Boolean selected, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
@@ -58,7 +57,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
       String chwId, String firstName, String familyName,
       String phoneNumber, String villageName, String facilityName,
       String sectorName, String districtName, String groupName,
-      Boolean selected, boolean count, Pageable pageable) throws IllegalArgumentException {
+      Boolean selected, boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<CommunityHealthWorker> root = query.from(CommunityHealthWorker.class);

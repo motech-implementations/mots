@@ -33,14 +33,14 @@ public class FacilityRepositoryIntegrationTest extends
   @Autowired
   private DistrictRepository districtRepository;
 
-  private District district = new DistrictDataBuilder().buildAsNew();
+  private final District district = new DistrictDataBuilder().buildAsNew();
 
-  private Sector sector = new SectorDataBuilder()
+  private final Sector sector = new SectorDataBuilder()
       .withDistrict(district)
       .buildAsNew();
 
-  private Facility facility1 = generateInstance();
-  private Facility facility2 = generateInstance();
+  private final Facility facility1 = generateInstance();
+  private final Facility facility2 = generateInstance();
 
   /**
    * Prepare the test environment.

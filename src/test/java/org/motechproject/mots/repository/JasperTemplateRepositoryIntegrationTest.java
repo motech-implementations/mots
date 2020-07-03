@@ -21,7 +21,7 @@ public class JasperTemplateRepositoryIntegrationTest extends
   private JasperTemplateRepository jasperTemplateRepository;
 
   @Override
-  JasperTemplateRepository getRepository() {
+  protected JasperTemplateRepository getRepository() {
     return this.jasperTemplateRepository;
   }
 

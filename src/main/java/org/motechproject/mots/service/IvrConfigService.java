@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class IvrConfigService {
 
-  private IvrConfigRepository ivrConfigRepository;
+  private final IvrConfigRepository ivrConfigRepository;
 
   private IvrConfig ivrConfig;
 

@@ -22,8 +22,7 @@ public class SectorRepositoryImpl extends BaseRepositoryImpl
    * If there are no parameters, return all Sectors.
    */
   @Override
-  public Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable)
-      throws IllegalArgumentException {
+  public Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable) {
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Sector> query = builder.createQuery(Sector.class);
@@ -46,7 +45,7 @@ public class SectorRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String sectorName,
-      String parentDistrict, boolean count, Pageable pageable) throws IllegalArgumentException {
+      String parentDistrict, boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Sector> root = query.from(Sector.class);

@@ -4,7 +4,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.annotations.DateTimeFormat;
 import org.motechproject.mots.validate.annotations.ModulesExistence;
 import org.motechproject.mots.validate.annotations.Uuids;
@@ -15,7 +15,7 @@ public class BulkAssignmentDto {
   @Setter
   @ModulesExistence
   @Uuids
-  @NotEmpty(message = ValidationMessages.EMPTY_MODULES)
+  @NotEmpty(message = ValidationMessageConstants.EMPTY_MODULES)
   private Set<String> modules;
 
   @Getter

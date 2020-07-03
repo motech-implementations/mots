@@ -150,9 +150,9 @@ public class ModuleAssignmentServiceTest {
 
     when(assignedModulesRepository.findByHealthWorkerId(eq(CHW.getId())))
         .thenReturn(Optional.of(existingAssignedModules));
-    when(districtRepository.findOne(eq((DISTRICT.getId()))))
+    when(districtRepository.findOne(eq(DISTRICT.getId())))
         .thenReturn(DISTRICT);
-    when(sectorRepository.findOne(eq((SECTOR.getId()))))
+    when(sectorRepository.findOne(eq(SECTOR.getId())))
         .thenReturn(SECTOR);
     mockModuleInModuleRepository(MODULE_2);
     mockModuleInModuleRepository(MODULE_3);
@@ -172,7 +172,7 @@ public class ModuleAssignmentServiceTest {
   }
 
   @Test
-  public void shouldAssignModules() throws Exception {
+  public void shouldAssignModules() throws IvrException {
     when(moduleProgressService.getModuleProgress(any(), any()))
         .thenReturn(getModuleProgress(ProgressStatus.NOT_STARTED));
 
@@ -225,7 +225,7 @@ public class ModuleAssignmentServiceTest {
   }
 
   @Test(expected = ModuleAssignmentException.class)
-  public void assignModulesShouldThrowCustomExceptionIfIvrServiceThrow() throws Exception {
+  public void assignModulesShouldThrowCustomExceptionIfIvrServiceThrow() throws IvrException {
     when(moduleProgressService.getModuleProgress(any(), any()))
         .thenReturn(getModuleProgress(ProgressStatus.NOT_STARTED));
 
@@ -235,7 +235,7 @@ public class ModuleAssignmentServiceTest {
   }
 
   @Test
-  public void shouldAssignModulesToDistrict() throws Exception {
+  public void shouldAssignModulesToDistrict() throws IvrException {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
     when(communityHealthWorkerRepository.findByDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
@@ -269,7 +269,7 @@ public class ModuleAssignmentServiceTest {
   }
 
   @Test
-  public void shouldAssignModulesToASector() throws Exception {
+  public void shouldAssignModulesToASector() throws IvrException {
     when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
     when(communityHealthWorkerRepository.findBySectorIdAndSelected(
         eq(SECTOR.getId()), any())).thenReturn(Collections.singletonList(CHW));
@@ -324,7 +324,7 @@ public class ModuleAssignmentServiceTest {
 
   @Test(expected = ModuleAssignmentException.class)
   public void assignModulesToDistrictShouldThrowCustomExceptionIfIvrServiceThrow()
-      throws Exception {
+      throws IvrException {
     when(communityHealthWorkerRepository.findByDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 

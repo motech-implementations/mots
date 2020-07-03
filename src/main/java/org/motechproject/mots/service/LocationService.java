@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
@@ -113,9 +113,8 @@ public class LocationService {
    * Finds districts matching all of the provided parameters.
    * If there are no parameters, return all districts.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Page<District> searchDistricts(String districtName, Pageable pageable)
-      throws IllegalArgumentException {
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  public Page<District> searchDistricts(String districtName, Pageable pageable) {
 
     return districtRepository.search(districtName, pageable);
   }
@@ -124,10 +123,8 @@ public class LocationService {
    * Finds sectors matching all of the provided parameters.
    * If there are no parameters, return all sectors.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
-  public Page<Sector> searchSectors(String sectorName,
-      String parentDistrict, Pageable pageable)
-      throws IllegalArgumentException {
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  public Page<Sector> searchSectors(String sectorName, String parentDistrict, Pageable pageable) {
 
     return sectorRepository.search(sectorName, parentDistrict, pageable);
   }
@@ -136,10 +133,9 @@ public class LocationService {
    * Finds Villages matching all of the provided parameters.
    * If there are no parameters, return all Villages.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Village> searchVillages(String villageName,
-      String parentFacility, String sectorName, String districtName, Pageable pageable)
-      throws IllegalArgumentException {
+      String parentFacility, String sectorName, String districtName, Pageable pageable) {
 
     return villageRepository.search(
         villageName, parentFacility, sectorName, districtName, pageable);
@@ -149,21 +145,21 @@ public class LocationService {
    * Finds facilities matching all of the provided parameters.
    * If there are no parameters, return all facilities.
    */
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityName,
       String inchargeFullName, String inchargePhone, String inchargeEmail,
-      String parentSector, String districtName, Pageable pageable) throws IllegalArgumentException {
+      String parentSector, String districtName, Pageable pageable) {
 
     return facilityRepository.search(facilityName,
         inchargeFullName, inchargePhone, inchargeEmail, parentSector, districtName, pageable);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_CREATE_FACILITIES_ROLE)
   public Facility createFacility(Facility facility) {
     return facilityRepository.save(facility);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_CREATE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_CREATE_FACILITIES_ROLE)
   public Village createVillage(Village village) {
     return villageRepository.save(village);
   }
@@ -174,7 +170,7 @@ public class LocationService {
    * @param district District to update
    * @return updated District
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public District saveDistrict(District district) {
     if (!canEditLocation(district)) {
       throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
@@ -188,7 +184,7 @@ public class LocationService {
    * @param sector Sector to update
    * @return updated Sector
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Sector saveSector(Sector sector) {
     if (!canEditLocation(sector)) {
       throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
@@ -202,7 +198,7 @@ public class LocationService {
    * @param facility facility to update
    * @return updated Facility
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Facility saveFacility(Facility facility) {
     if (!canEditLocation(facility)) {
       throw new MotsAccessDeniedException("Could not edit facility, because you are not the owner");
@@ -216,7 +212,7 @@ public class LocationService {
    * @param village Village to update
    * @return updated Village
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_FACILITIES_OR_MANAGE_OWN_FACILITIES_ROLE)
   public Village saveVillage(Village village) {
     if (!canEditLocation(village)) {
       throw new MotsAccessDeniedException(
@@ -228,209 +224,216 @@ public class LocationService {
   }
 
   /**
-   * Import and save Sector list from CSV file and return list of errors in the file
+   * Import and save Sector list from CSV file and return list of errors in the file.
    * @param sectorsCsvFile CSV file with Sector list
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_UPLOAD_LOCATION_CSV_ROLE)
   public Map<Integer, String> importSectorsFromCsv(MultipartFile sectorsCsvFile)
       throws IOException {
-    ICsvMapReader csvMapReader = createCsvMapReader(sectorsCsvFile.getInputStream());
-    String[] header = getAndValidateCsvHeader(csvMapReader, SECTOR_CSV_HEADERS);
-
-    Map<String, String> csvRow;
     Map<Integer, String> errorMap = new HashMap<>();
 
-    while ((csvRow = csvMapReader.read(header)) != null) {
-      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, sector=%s", csvMapReader.getLineNumber(),
-          csvMapReader.getRowNumber(), csvRow));
+    try (ICsvMapReader csvMapReader = createCsvMapReader(sectorsCsvFile.getInputStream())) {
+      String[] header = getAndValidateCsvHeader(csvMapReader, SECTOR_CSV_HEADERS);
 
-      String districtName = csvRow.get(DISTRICT_HEADER);
+      Map<String, String> csvRow;
 
-      if (StringUtils.isBlank(districtName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "District name is empty");
-        continue;
+      while ((csvRow = csvMapReader.read(header)) != null) {
+        LOGGER.debug(String.format("lineNo=%s, rowNo=%s, sector=%s", csvMapReader.getLineNumber(),
+            csvMapReader.getRowNumber(), csvRow));
+
+        String districtName = csvRow.get(DISTRICT_HEADER);
+
+        if (StringUtils.isBlank(districtName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "District name is empty");
+          continue;
+        }
+
+        String sectorName = csvRow.get(SECTOR_HEADER);
+
+        if (StringUtils.isBlank(sectorName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          continue;
+        }
+
+        District district = districtRepository.findByName(districtName).orElseGet(() ->
+            districtRepository.save(new District(districtName)));
+
+        Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district);
+
+        if (sector != null) {
+          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name already exists");
+          continue;
+        }
+
+        Sector newSector = new Sector(sectorName, district);
+
+        sectorRepository.save(newSector);
       }
-
-      String sectorName = csvRow.get(SECTOR_HEADER);
-
-      if (StringUtils.isBlank(sectorName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
-        continue;
-      }
-
-      District district = districtRepository.findByName(districtName).orElseGet(() ->
-          districtRepository.save(new District(districtName)));
-
-      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district);
-
-      if (sector != null) {
-        errorMap.put(csvMapReader.getLineNumber(), "Sector with this name already exists");
-        continue;
-      }
-
-      Sector newSector = new Sector(sectorName, district);
-
-      sectorRepository.save(newSector);
     }
 
     return errorMap;
   }
 
   /**
-   * Import and save Village list from CSV file and return list of errors in the file
+   * Import and save Village list from CSV file and return list of errors in the file.
    * @param villagesCsvFile CSV file with Village list
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
+  @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
+  @PreAuthorize(DefaultPermissionConstants.HAS_UPLOAD_LOCATION_CSV_ROLE)
   public Map<Integer, String> importVillagesFromCsv(MultipartFile villagesCsvFile)
       throws IOException {
-    ICsvMapReader csvMapReader = createCsvMapReader(villagesCsvFile.getInputStream());
-    String[] header = getAndValidateCsvHeader(csvMapReader, VILLAGE_CSV_HEADERS);
-
-    Map<String, String> csvRow;
     Map<Integer, String> errorMap = new HashMap<>();
 
-    while ((csvRow = csvMapReader.read(header)) != null) {
-      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, village=%s", csvMapReader.getLineNumber(),
-          csvMapReader.getRowNumber(), csvRow));
+    try (ICsvMapReader csvMapReader = createCsvMapReader(villagesCsvFile.getInputStream())) {
+      String[] header = getAndValidateCsvHeader(csvMapReader, VILLAGE_CSV_HEADERS);
 
-      String districtName = csvRow.get(DISTRICT_HEADER);
+      Map<String, String> csvRow;
 
-      if (StringUtils.isBlank(districtName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "District name is empty");
-        continue;
+      while ((csvRow = csvMapReader.read(header)) != null) {
+        LOGGER.debug(String.format("lineNo=%s, rowNo=%s, village=%s", csvMapReader.getLineNumber(),
+            csvMapReader.getRowNumber(), csvRow));
+
+        String districtName = csvRow.get(DISTRICT_HEADER);
+
+        if (StringUtils.isBlank(districtName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "District name is empty");
+          continue;
+        }
+
+        String sectorName = csvRow.get(SECTOR_HEADER);
+
+        if (StringUtils.isBlank(sectorName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          continue;
+        }
+
+        String facilityName = csvRow.get(FACILITY_HEADER);
+
+        if (StringUtils.isBlank(facilityName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "PHU name is empty");
+          continue;
+        }
+
+        String villageName = csvRow.get(VILLAGE_HEADER);
+
+        if (StringUtils.isBlank(villageName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "Village name is empty");
+          continue;
+        }
+
+        Optional<District> district = districtRepository.findByName(districtName);
+
+        if (!district.isPresent()) {
+          errorMap.put(csvMapReader.getLineNumber(), "District with this name does not exist");
+          continue;
+        }
+
+        Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
+
+        if (sector == null) {
+          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
+          continue;
+        }
+
+        Facility facility = facilityRepository.findByNameAndSector(facilityName, sector);
+
+        if (facility == null) {
+          errorMap.put(csvMapReader.getLineNumber(), "Facility with this name does not exist");
+          continue;
+        }
+
+        Village village = villageRepository.findByNameAndFacility(villageName, facility);
+
+        if (village != null) {
+          errorMap.put(csvMapReader.getLineNumber(), "Village with this name already exists");
+          continue;
+        }
+
+        Village newVillage = new Village(villageName, facility);
+
+        villageRepository.save(newVillage);
       }
-
-      String sectorName = csvRow.get(SECTOR_HEADER);
-
-      if (StringUtils.isBlank(sectorName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
-        continue;
-      }
-
-      String facilityName = csvRow.get(FACILITY_HEADER);
-
-      if (StringUtils.isBlank(facilityName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "PHU name is empty");
-        continue;
-      }
-
-      String villageName = csvRow.get(VILLAGE_HEADER);
-
-      if (StringUtils.isBlank(villageName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Village name is empty");
-        continue;
-      }
-
-      Optional<District> district = districtRepository.findByName(districtName);
-
-      if (!district.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "District with this name does not exist");
-        continue;
-      }
-
-      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
-
-      if (sector == null) {
-        errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
-        continue;
-      }
-
-      Facility facility = facilityRepository.findByNameAndSector(facilityName, sector);
-
-      if (facility == null) {
-        errorMap.put(csvMapReader.getLineNumber(), "Facility with this name does not exist");
-        continue;
-      }
-
-      Village village = villageRepository.findByNameAndFacility(villageName, facility);
-
-      if (village != null) {
-        errorMap.put(csvMapReader.getLineNumber(), "Village with this name already exists");
-        continue;
-      }
-
-      Village newVillage = new Village(villageName, facility);
-
-      villageRepository.save(newVillage);
     }
 
     return errorMap;
   }
 
   /**
-   * Import and save Facility list from CSV file and return list of errors in the file
+   * Import and save Facility list from CSV file and return list of errors in the file.
    * @param facilitiesCsvFile CSV file with Facility list
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
-  @PreAuthorize(DefaultPermissions.HAS_UPLOAD_LOCATION_CSV_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_UPLOAD_LOCATION_CSV_ROLE)
   public Map<Integer, String> importFacilitiesFromCsv(MultipartFile facilitiesCsvFile)
       throws IOException {
-    ICsvMapReader csvMapReader = createCsvMapReader(facilitiesCsvFile.getInputStream());
-    String[] header = getAndValidateCsvHeader(csvMapReader, FACILITY_CSV_HEADERS);
-
-    Map<String, String> csvRow;
     Map<Integer, String> errorMap = new HashMap<>();
 
-    while ((csvRow = csvMapReader.read(header)) != null) {
-      LOGGER.debug(String.format("lineNo=%s, rowNo=%s, facility=%s", csvMapReader.getLineNumber(),
-          csvMapReader.getRowNumber(), csvRow));
+    try (ICsvMapReader csvMapReader = createCsvMapReader(facilitiesCsvFile.getInputStream())) {
+      String[] header = getAndValidateCsvHeader(csvMapReader, FACILITY_CSV_HEADERS);
 
-      String districtName = csvRow.get(DISTRICT_HEADER);
+      Map<String, String> csvRow;
 
-      if (StringUtils.isBlank(districtName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "District name is empty");
-        continue;
+      while ((csvRow = csvMapReader.read(header)) != null) {
+        LOGGER.debug(String.format("lineNo=%s, rowNo=%s, facility=%s", csvMapReader.getLineNumber(),
+            csvMapReader.getRowNumber(), csvRow));
+
+        String districtName = csvRow.get(DISTRICT_HEADER);
+
+        if (StringUtils.isBlank(districtName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "District name is empty");
+          continue;
+        }
+
+        String sectorName = csvRow.get(SECTOR_HEADER);
+
+        if (StringUtils.isBlank(sectorName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          continue;
+        }
+
+        String facilityName = csvRow.get(FACILITY_HEADER);
+
+        if (StringUtils.isBlank(facilityName)) {
+          errorMap.put(csvMapReader.getLineNumber(), "Facility name is empty");
+          continue;
+        }
+
+        Optional<District> district = districtRepository.findByName(districtName);
+
+        if (!district.isPresent()) {
+          errorMap.put(csvMapReader.getLineNumber(), "District with this name does not exist");
+          continue;
+        }
+
+        Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
+
+        if (sector == null) {
+          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
+          continue;
+        }
+
+        Facility facility = facilityRepository.findByNameAndSector(facilityName, sector);
+
+        if (facility != null) {
+          errorMap.put(csvMapReader.getLineNumber(),
+              "Facility with this name already exists");
+          continue;
+        }
+
+        String inchargeName = csvRow.get(INCHARGE_NAME_HEADER);
+        String inchargePhone = csvRow.get(INCHARGE_PHONE_HEADER);
+        String inchargeEmail = csvRow.get(INCHARGE_EMAIL_HEADER);
+
+        Facility newFacility = new Facility(facilityName, inchargeName,
+            inchargePhone, inchargeEmail, sector);
+
+        facilityRepository.save(newFacility);
       }
-
-      String sectorName = csvRow.get(SECTOR_HEADER);
-
-      if (StringUtils.isBlank(sectorName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
-        continue;
-      }
-
-      String facilityName = csvRow.get(FACILITY_HEADER);
-
-      if (StringUtils.isBlank(facilityName)) {
-        errorMap.put(csvMapReader.getLineNumber(), "Facility name is empty");
-        continue;
-      }
-
-      Optional<District> district = districtRepository.findByName(districtName);
-
-      if (!district.isPresent()) {
-        errorMap.put(csvMapReader.getLineNumber(), "District with this name does not exist");
-        continue;
-      }
-
-      Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
-
-      if (sector == null) {
-        errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
-        continue;
-      }
-
-      Facility facility = facilityRepository.findByNameAndSector(facilityName, sector);
-
-      if (facility != null) {
-        errorMap.put(csvMapReader.getLineNumber(),
-            "Facility with this name already exists");
-        continue;
-      }
-
-      String inchargeName = csvRow.get(INCHARGE_NAME_HEADER);
-      String inchargePhone = csvRow.get(INCHARGE_PHONE_HEADER);
-      String inchargeEmail = csvRow.get(INCHARGE_EMAIL_HEADER);
-
-      Facility newFacility = new Facility(facilityName, inchargeName,
-          inchargePhone, inchargeEmail, sector);
-
-      facilityRepository.save(newFacility);
     }
 
     return errorMap;
@@ -467,32 +470,32 @@ public class LocationService {
 
   private boolean canEditAllLocations() {
     return authenticationHelper.getCurrentUser()
-        .hasPermission(DefaultPermissions.MANAGE_FACILITIES);
+        .hasPermission(DefaultPermissionConstants.MANAGE_FACILITIES);
   }
 
   private boolean canEditOwnLocation(Location location) {
     return authenticationHelper.getCurrentUser().hasPermission(
-        DefaultPermissions.MANAGE_OWN_FACILITIES)
+        DefaultPermissionConstants.MANAGE_OWN_FACILITIES)
       && authenticationHelper.getCurrentUser().getUsername().equals(
           location.getOwner().getUsername());
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Village getVillage(UUID id) {
     return villageRepository.findOne(id);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Facility getFacility(UUID id) {
     return facilityRepository.findOne(id);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Sector getSector(UUID id) {
     return sectorRepository.findOne(id);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public District getDistrict(UUID id) {
     return districtRepository.findOne(id);
   }

@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/index.html",
             "/login",
             "/"
-      );
+        );
   }
 
   @Override

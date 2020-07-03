@@ -28,10 +28,10 @@ public class SectorRepositoryIntegrationTest extends
   @Autowired
   private DistrictRepository districtRepository;
 
-  private District district = new DistrictDataBuilder().buildAsNew();
+  private final District district = new DistrictDataBuilder().buildAsNew();
 
-  private Sector sector1 = generateInstance();
-  private Sector sector2 = generateInstance();
+  private final Sector sector1 = generateInstance();
+  private final Sector sector2 = generateInstance();
 
   /**
    * Prepare the test environment.

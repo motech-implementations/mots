@@ -4,7 +4,7 @@ import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.Group;
 import org.motechproject.mots.dto.GroupDto;
 import org.motechproject.mots.repository.GroupRepository;
@@ -31,7 +31,7 @@ public class GroupNameUniqunessValidator implements
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, NAME,
-            String.format(ValidationMessages.NOT_UNIQUE_GROUP_NAME, newGroupName));
+            String.format(ValidationMessageConstants.NOT_UNIQUE_GROUP_NAME, newGroupName));
         return false;
       }
     }

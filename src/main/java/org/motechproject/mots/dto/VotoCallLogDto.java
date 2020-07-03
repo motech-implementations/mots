@@ -27,7 +27,7 @@ public class VotoCallLogDto {
   private List<VotoBlockDto> interactions;
 
   @JsonProperty("delivery_log")
-  private void unpackNestedObject(Map<String, String> log) {
+  protected void unpackNestedObject(Map<String, String> log) {
     logId = log.get("id");
     chwIvrId = log.get("subscriber_id");
     status = log.get("delivery_status");

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface DistrictRepositoryCustom {
 
-  Page<District> search(String districtName, Pageable pageable) throws IllegalArgumentException;
+  Page<District> search(String districtName, Pageable pageable);
 }

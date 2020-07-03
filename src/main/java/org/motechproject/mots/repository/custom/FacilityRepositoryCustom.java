@@ -8,6 +8,5 @@ public interface FacilityRepositoryCustom {
 
   Page<Facility> search(String facilityName,
       String inchargeFullName, String inchargePhone, String inchargeEmail,
-      String parentSector, String districtName, Pageable pageable)
-      throws IllegalArgumentException;
+      String parentSector, String districtName, Pageable pageable);
 }

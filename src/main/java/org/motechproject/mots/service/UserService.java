@@ -3,7 +3,7 @@ package org.motechproject.mots.service;
 import java.text.MessageFormat;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
-import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserRole;
@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+  private static final UserMapper USER_MAPPER = UserMapper.INSTANCE;
+
   @Autowired
   private UserRepository userRepository;
 
@@ -33,14 +35,12 @@ public class UserService {
   @Autowired
   private PermissionRepository permissionRepository;
 
-  private UserMapper userMapper = UserMapper.INSTANCE;
-
   public User getUserByUserName(String userName) {
     return userRepository.findOneByUsername(userName).orElseThrow(() ->
         new EntityNotFoundException("User with username: {0} not found", userName));
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Iterable<User> getUsers() {
     return userRepository.findAll();
   }
@@ -49,16 +49,16 @@ public class UserService {
    * Finds users matching all of the provided parameters. If there are no parameters, return all
    * users.
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Page<User> searchUsers(String username, String email, String name, String role,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
     return userRepository.search(username, email, name, role, pageable);
   }
 
   /**
    * Returns UserRoles.
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Iterable<UserRole> getRoles() {
     return roleRepository.findAll();
   }
@@ -66,12 +66,12 @@ public class UserService {
   /**
    * Returns UserPermissions.
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Iterable<UserPermission> getPermissions() {
     return permissionRepository.findAll();
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public UserRole getRole(UUID id) {
     return roleRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("Role with id: {0} not found", id.toString()));
@@ -82,10 +82,9 @@ public class UserService {
    * if not it checks for name uniqueness. If the name is not unique it throws MotsException.
    *
    * @param role UserRole to be created or updated.
-   * @throws MotsException if trying to create a new role with already existing name.
    * @return saved UserRole
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public UserRole saveRole(UserRole role) {
     roleRepository.findByName(role.getName()).ifPresent(r -> {
       if (role.getId() == null || !role.getId().equals(r.getId())) {
@@ -96,13 +95,12 @@ public class UserService {
     return roleRepository.save(role);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
-  public Page<UserRole> searchRoles(String name, Pageable pageable)
-      throws IllegalArgumentException {
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
+  public Page<UserRole> searchRoles(String name, Pageable pageable) {
     return roleRepository.search(name, pageable);
   }
 
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public User getUser(UUID id) {
     return userRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("User with id: {0} not found", id.toString()));
@@ -114,7 +112,7 @@ public class UserService {
    * @param user User to be created.
    * @return saved User
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public User saveUser(User user, boolean encodeNewPassword) {
     if (encodeNewPassword) {
       String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
@@ -130,7 +128,7 @@ public class UserService {
    * @param user User to be created.
    * @return created User
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_USERS_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public User registerNewUser(User user) {
 
     String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
@@ -153,7 +151,7 @@ public class UserService {
       changeUserPassword(existingUser.getUsername(),
           userProfileDto.getNewPassword(), userProfileDto.getPassword());
     }
-    userMapper.updateFromUserProfileDto(userProfileDto, existingUser);
+    USER_MAPPER.updateFromUserProfileDto(userProfileDto, existingUser);
 
     return userRepository.save(existingUser);
   }

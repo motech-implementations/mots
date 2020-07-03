@@ -3,7 +3,7 @@ package org.motechproject.mots.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.Course;
 import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.Module;
@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ModuleService {
 
+  private static final ModuleMapper MODULE_MAPPER = ModuleMapper.INSTANCE;
+
   @Autowired
   private CourseRepository courseRepository;
 
@@ -36,18 +38,16 @@ public class ModuleService {
   @Autowired
   private IvrConfigService ivrConfigService;
 
-  private ModuleMapper moduleMapper = ModuleMapper.INSTANCE;
-
-  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public List<CourseDto> getCourses() {
-    return moduleMapper.toCourseDtos(courseRepository.findAllByOrderByVersionAsc());
+    return MODULE_MAPPER.toCourseDtos(courseRepository.findAllByOrderByVersionAsc());
   }
 
   /**
    * Get modules from released course.
    * @return released modules
    */
-  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public List<ModuleSimpleDto> getReleasedModules() {
     Course course = getReleasedCourseIfExists();
 
@@ -55,7 +55,7 @@ public class ModuleService {
       return new ArrayList<>();
     }
 
-    return moduleMapper.toSimpleDtos(course.getModules());
+    return MODULE_MAPPER.toSimpleDtos(course.getModules());
   }
 
   /**
@@ -64,17 +64,17 @@ public class ModuleService {
    * @return Created Module
    */
   @Transactional
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto createModule(ModuleDto moduleDto) {
     Course course = getDraftCourse();
     CourseModule courseModule = new CourseModule(course, Module.initialize(),
         course.getModules().size());
 
-    moduleMapper.updateCourseModuleFromDto(moduleDto, courseModule);
+    MODULE_MAPPER.updateCourseModuleFromDto(moduleDto, courseModule);
 
     courseModule = courseModuleRepository.save(courseModule);
 
-    return moduleMapper.toDto(courseModule);
+    return MODULE_MAPPER.toDto(courseModule);
   }
 
   /**
@@ -83,7 +83,7 @@ public class ModuleService {
    * @param moduleDto Module DTO
    * @return updated Module
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto updateModule(UUID id, ModuleDto moduleDto) {
     Course course = getDraftCourse();
     CourseModule courseModule = course.findCourseModuleByModuleId(id);
@@ -94,11 +94,11 @@ public class ModuleService {
       throw new MotsException("Only Module draft can be updated");
     }
 
-    moduleMapper.updateCourseModuleFromDto(moduleDto, courseModule);
+    MODULE_MAPPER.updateCourseModuleFromDto(moduleDto, courseModule);
 
     courseModule = courseModuleRepository.save(courseModule);
 
-    return moduleMapper.toDto(courseModule);
+    return MODULE_MAPPER.toDto(courseModule);
   }
 
   /**
@@ -106,7 +106,7 @@ public class ModuleService {
    * @param id id of module to be copied
    * @return copied module draft
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public ModuleDto copyModule(UUID id) {
     Course course = getDraftCourse();
     CourseModule courseModule = course.findCourseModuleByModuleId(id);
@@ -120,7 +120,7 @@ public class ModuleService {
 
     courseModule = courseModuleRepository.save(courseModule);
 
-    return moduleMapper.toDto(courseModule);
+    return MODULE_MAPPER.toDto(courseModule);
   }
 
   /**
@@ -128,7 +128,7 @@ public class ModuleService {
    * @return Created Course
    */
   @Transactional
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public CourseDto createCourse() {
     List<Course> courses = courseRepository.findByStatus(Status.DRAFT);
 
@@ -145,7 +145,7 @@ public class ModuleService {
       course = releasedCourse.copyAsNewDraft();
     }
 
-    return moduleMapper.toDto(courseRepository.save(course));
+    return MODULE_MAPPER.toDto(courseRepository.save(course));
   }
 
   /**
@@ -154,7 +154,7 @@ public class ModuleService {
    * @param courseDto Course DTO
    * @return updated Course
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public CourseDto updateCourse(UUID id, CourseDto courseDto) {
     Course course = findCourseById(id);
 
@@ -162,16 +162,16 @@ public class ModuleService {
       throw new MotsException("Only Course draft can be updated");
     }
 
-    moduleMapper.updateCourseFromDto(courseDto, course);
+    MODULE_MAPPER.updateCourseFromDto(courseDto, course);
 
-    return moduleMapper.toDto(courseRepository.save(course));
+    return MODULE_MAPPER.toDto(courseRepository.save(course));
   }
 
   /**
    * Release Course.
    * @param course Course to be released
    */
-  @PreAuthorize(DefaultPermissions.HAS_MANAGE_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public CourseDto releaseCourse(Course course) {
     List<Module> newVersionModules = course.getNewVersionModules();
     List<CourseModule> releasedCourseModules = course.getReleasedCourseModules();
@@ -182,7 +182,7 @@ public class ModuleService {
 
     ivrConfigService.updateMainMenuTreeId(course.getIvrId());
 
-    return moduleMapper.toDto(courseRepository.save(course));
+    return MODULE_MAPPER.toDto(courseRepository.save(course));
   }
 
   public Course findCourseById(UUID id) {

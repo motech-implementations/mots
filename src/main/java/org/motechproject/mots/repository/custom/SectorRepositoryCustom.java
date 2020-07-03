@@ -6,6 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface SectorRepositoryCustom {
 
-  Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable)
-      throws IllegalArgumentException;
+  Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable);
 }

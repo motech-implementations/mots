@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 
@@ -32,19 +32,19 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Column(name = "chw_id", unique = true, nullable = false)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_CHW_ID)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_CHW_ID)
   private String chwId;
 
   @Column(name = "first_name", nullable = false)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_FIRST_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_FIRST_NAME)
   private String firstName;
 
   @Column(name = "family_name", nullable = false)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_FAMILY_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_FAMILY_NAME)
   private String familyName;
 
   @Column(name = "gender")
@@ -108,16 +108,16 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
    * @return all CHW names combined into single String
    */
   public String getCombinedName() {
-    String name = "";
+    StringBuilder name = new StringBuilder("");
 
     if (StringUtils.isNotBlank(getFirstName())) {
-      name = getFirstName();
+      name.append(getFirstName());
     }
 
     if (StringUtils.isNotBlank(getFamilyName())) {
-      name += " " + getFamilyName();
+      name.append(" ").append(getFamilyName());
     }
 
-    return name.trim();
+    return name.toString().trim();
   }
 }

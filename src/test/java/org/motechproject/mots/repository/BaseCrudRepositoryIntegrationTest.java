@@ -11,17 +11,17 @@ import org.springframework.data.repository.CrudRepository;
 public abstract class BaseCrudRepositoryIntegrationTest<T extends BaseTimestampedEntity>
     extends BaseIntegrationTest {
 
-  abstract CrudRepository<T, UUID> getRepository();
+  private final AtomicInteger instanceNumber = new AtomicInteger(0);
+
+  protected abstract CrudRepository<T, UUID> getRepository();
 
   /*
    * Generate a unique instance of given type.
    * @return generated instance
    */
-  abstract T generateInstance();
+  protected abstract T generateInstance();
 
-  private AtomicInteger instanceNumber = new AtomicInteger(0);
-
-  int getNextInstanceNumber() {
+  protected int getNextInstanceNumber() {
     return this.instanceNumber.incrementAndGet();
   }
 

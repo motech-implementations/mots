@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class IvrController extends BaseController {
 
+  private static final CallDetailRecordMapper RECORD_MAPPER = CallDetailRecordMapper.INSTANCE;
+
   @Autowired
   private IvrService ivrService;
-
-  private CallDetailRecordMapper callDetailRecordMapper = CallDetailRecordMapper.INSTANCE;
 
   /**
    * Map data to CallDetailRecord and save it.
@@ -37,7 +37,7 @@ public class IvrController extends BaseController {
       @RequestParam Map<String, String> ivrData) {
     CallDetailRecordDto recordDto = new CallDetailRecordDto(ivrData);
 
-    CallDetailRecord callDetailRecord = callDetailRecordMapper.fromDto(recordDto);
+    CallDetailRecord callDetailRecord = RECORD_MAPPER.fromDto(recordDto);
 
     ivrService.saveCallDetailRecordAndUpdateModuleProgress(callDetailRecord, configName);
   }
@@ -52,5 +52,4 @@ public class IvrController extends BaseController {
   public void manuallySendVotoCallLog(@RequestBody VotoResponseDto<VotoCallLogDto> votoResponse) {
     ivrService.manuallySendVotoCallLog(votoResponse.getData());
   }
-
 }

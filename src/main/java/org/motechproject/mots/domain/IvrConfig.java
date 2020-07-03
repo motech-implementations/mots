@@ -64,25 +64,25 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Column(name = "retry_attempts_short", nullable = false)
   @Getter
   @Setter
-  @Min(value = 0)
+  @Min(0)
   private Integer retryAttemptsShort;
 
   @Column(name = "retry_delay_short", nullable = false)
   @Getter
   @Setter
-  @Min(value = 0)
+  @Min(0)
   private Integer retryDelayShort;
 
   @Column(name = "retry_attempts_long", nullable = false)
   @Getter
   @Setter
-  @Min(value = 0)
+  @Min(0)
   private Integer retryAttemptsLong;
 
   @Column(name = "retry_delay_long", nullable = false)
   @Getter
   @Setter
-  @Min(value = 0)
+  @Min(0)
   private Integer retryDelayLong;
 
   @ElementCollection(fetch = FetchType.EAGER)

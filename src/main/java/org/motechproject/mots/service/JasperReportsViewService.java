@@ -3,7 +3,7 @@ package org.motechproject.mots.service;
 import static java.io.File.createTempFile;
 import static net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN;
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_JASPER_FILE_CREATION;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_JASPER_FILE_CREATION;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -57,10 +57,9 @@ public class JasperReportsViewService {
    * @param jasperTemplate template that will be used to create a view
    * @param request  it is used to take web application context
    * @return created jasper view.
-   * @throws JasperReportViewException if there will be any problem with creating the view.
    */
   public JasperReportsMultiFormatView getJasperReportsView(
-      JasperTemplate jasperTemplate, HttpServletRequest request) throws JasperReportViewException {
+      JasperTemplate jasperTemplate, HttpServletRequest request) {
     JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
     jasperView.setExporterParameters(getExportParams());
     setFormatMappings(jasperView);
@@ -83,19 +82,20 @@ public class JasperReportsViewService {
   public String generateJsonReport(
       JasperTemplate jasperTemplate, Map<String, Object> params)
       throws JRException, SQLException {
-    Connection connection = replicationDataSource.getConnection();
-    JasperReport jasperReport = (JasperReport) JRLoader.loadObject(
-        getReportUrlForReportData(jasperTemplate));
-    JasperPrint jasperPrint = JasperFillManager.fillReport(
-        jasperReport, params, connection);
+    StringBuilder output;
 
-    StringBuilder output = new StringBuilder();
-    JsonMetadataExporter jsonExporter = new JsonMetadataExporter();
-    jsonExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-    jsonExporter.setExporterOutput(new SimpleWriterExporterOutput(output));
-    jsonExporter.exportReport();
+    try (Connection connection = replicationDataSource.getConnection()) {
+      JasperReport jasperReport = (JasperReport) JRLoader.loadObject(
+          getReportUrlForReportData(jasperTemplate));
+      JasperPrint jasperPrint = JasperFillManager.fillReport(
+          jasperReport, params, connection);
 
-    connection.close();
+      output = new StringBuilder();
+      JsonMetadataExporter jsonExporter = new JsonMetadataExporter();
+      jsonExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+      jsonExporter.setExporterOutput(new SimpleWriterExporterOutput(output));
+      jsonExporter.exportReport();
+    }
 
     return output.toString();
   }
@@ -122,8 +122,7 @@ public class JasperReportsViewService {
    *
    * @return Url to ".jasper" file.
    */
-  private URL getReportUrlForReportData(JasperTemplate jasperTemplate)
-      throws JasperReportViewException {
+  private URL getReportUrlForReportData(JasperTemplate jasperTemplate) {
     File tmpFile;
 
     try {

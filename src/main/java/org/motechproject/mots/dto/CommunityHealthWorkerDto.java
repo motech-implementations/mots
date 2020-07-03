@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
@@ -29,19 +29,19 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_CHW_ID)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_CHW_ID)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String chwId;
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_FIRST_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_FIRST_NAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String firstName;
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_FAMILY_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_FAMILY_NAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String familyName;
 
@@ -53,7 +53,7 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @PhoneNumber
-  @NotBlank(message = ValidationMessages.EMPTY_PHONE_NUMBER)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_PHONE_NUMBER)
   private String phoneNumber;
 
   @Getter
@@ -63,8 +63,8 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @DistrictExistence
-  @Uuid(message = ValidationMessages.INVALID_DISTRICT_ID)
-  @NotEmpty(message = ValidationMessages.EMPTY_DISTRICT)
+  @Uuid(message = ValidationMessageConstants.INVALID_DISTRICT_ID)
+  @NotEmpty(message = ValidationMessageConstants.EMPTY_DISTRICT)
   private String districtId;
 
   @Getter
@@ -74,7 +74,7 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @SectorExistence
-  @Uuid(message = ValidationMessages.INVALID_SECTOR_ID)
+  @Uuid(message = ValidationMessageConstants.INVALID_SECTOR_ID)
   private String sectorId;
 
   @Getter
@@ -84,7 +84,7 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @FacilityExistence
-  @Uuid(message = ValidationMessages.INVALID_FACILITY_ID)
+  @Uuid(message = ValidationMessageConstants.INVALID_FACILITY_ID)
   private String facilityId;
 
   @Getter
@@ -94,13 +94,13 @@ public class CommunityHealthWorkerDto {
   @Getter
   @Setter
   @VillageExistence
-  @Uuid(message = ValidationMessages.INVALID_VILLAGE_ID)
+  @Uuid(message = ValidationMessageConstants.INVALID_VILLAGE_ID)
   private String villageId;
 
   @Getter
   @Setter
   @Language
-  @NotEmpty(message = ValidationMessages.EMPTY_PREFERRED_LANGUAGE)
+  @NotEmpty(message = ValidationMessageConstants.EMPTY_PREFERRED_LANGUAGE)
   private String preferredLanguage;
 
   @Getter

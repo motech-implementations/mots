@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.constraintvalidators.CallFlowElementTypeValidator;
 
 @Target(ElementType.FIELD)
@@ -15,14 +15,14 @@ import org.motechproject.mots.validate.constraintvalidators.CallFlowElementTypeV
 public @interface CallFlowElementType {
 
   /**
-   * Specify the message in case of a validation error
+   * Specify the message in case of a validation error.
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.INVALID_CALL_FLOW_ELEMENT_TYPE;
+  String message() default ValidationMessageConstants.INVALID_CALL_FLOW_ELEMENT_TYPE;
 
   /**
-   * Specify validation groups, to which this constraint belongs
+   * Specify validation groups, to which this constraint belongs.
    *
    * @return array with group classes
    */
@@ -30,7 +30,7 @@ public @interface CallFlowElementType {
   };
 
   /**
-   * Specify custom payload objects
+   * Specify custom payload objects.
    *
    * @return array with payload classes
    */

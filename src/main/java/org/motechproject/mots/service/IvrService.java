@@ -12,7 +12,7 @@ import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
@@ -224,7 +224,7 @@ public class IvrService {
    * @param votoCallLogDto it contains information about module progress (which trees were
    *     listened by user and what answers were chosen)
    */
-  @PreAuthorize(DefaultPermissions.HAS_ADMIN_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ADMIN_ROLE)
   public void manuallySendVotoCallLog(VotoCallLogDto votoCallLogDto) {
     IvrConfig ivrConfig = ivrConfigService.getConfig();
     CallStatus callStatus = getCallStatus(ivrConfig, votoCallLogDto.getStatus());

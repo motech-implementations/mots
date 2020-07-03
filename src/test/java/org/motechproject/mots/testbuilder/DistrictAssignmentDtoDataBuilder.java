@@ -7,13 +7,7 @@ import org.motechproject.mots.dto.DistrictAssignmentDto;
 public class DistrictAssignmentDtoDataBuilder {
 
   private String districtId;
-  private Set<String> modules = new HashSet<>();
-
-  /**
-   * Returns instance of {@link DistrictAssignmentDtoDataBuilder} with sample data.
-   */
-  public DistrictAssignmentDtoDataBuilder() {
-  }
+  private final Set<String> modules = new HashSet<>();
 
   /**
    * Builds instance of {@link DistrictAssignmentDto} without id.

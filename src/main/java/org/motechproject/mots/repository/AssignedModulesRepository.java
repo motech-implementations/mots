@@ -10,5 +10,6 @@ public interface AssignedModulesRepository extends CrudRepository<AssignedModule
 
   Optional<AssignedModules> findByHealthWorkerId(UUID healthWorkerId);
 
+  @SuppressWarnings("PMD.MethodNamingConventions")
   List<AssignedModules> findByModules_id(UUID moduleId);
 }

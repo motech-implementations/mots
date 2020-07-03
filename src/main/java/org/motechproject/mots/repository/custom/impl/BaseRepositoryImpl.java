@@ -41,11 +41,11 @@ public abstract class BaseRepositoryImpl {
   protected EntityManager entityManager;
 
   protected int getFirstResult(Pageable pageable, int pageSize) {
-    return null != pageable ? pageable.getPageNumber() * pageSize : 0;
+    return null == pageable ? 0 : pageable.getPageNumber() * pageSize;
   }
 
   protected int getPageSize(Pageable pageable) {
-    return null != pageable ? pageable.getPageSize() : 0;
+    return null == pageable ? 0 : pageable.getPageSize();
   }
 
   protected <T> CriteriaQuery<T> addSortProperties(CriteriaQuery<T> query,
@@ -56,11 +56,15 @@ public abstract class BaseRepositoryImpl {
 
     Sort.Order order;
     Path<T> path;
+
     while (iterator.hasNext()) {
       order = iterator.next();
       path = getPath(root, order);
       Path parentPath = path.getParentPath();
-      if (parentPath.getParentPath() != null) {
+      if (parentPath.getParentPath() == null) {
+        Order mountedOrder = getSortDirection(builder, order, path);
+        orders.add(mountedOrder);
+      } else {
         // if parent path still has a parent, this is a nested attribute
         List<Path> parentPaths = new ArrayList<>();
         while (parentPath.getParentPath() != null) {
@@ -78,11 +82,9 @@ public abstract class BaseRepositoryImpl {
         Order mountedOrder = getSortDirection(builder, order,
             from.get(((PathImplementor) path).getAttribute().getName()));
         orders.add(mountedOrder);
-      } else {
-        Order mountedOrder = getSortDirection(builder, order, path);
-        orders.add(mountedOrder);
       }
     }
+
     return query.orderBy(orders);
   }
 
@@ -93,11 +95,13 @@ public abstract class BaseRepositoryImpl {
   protected static <T> Order getSortDirection(CriteriaBuilder builder, Sort.Order order,
       Path<T> path) {
     Order mountedOrder;
+
     if (order.isAscending()) {
       mountedOrder = builder.asc(path);
     } else {
       mountedOrder = builder.desc(path);
     }
+
     return mountedOrder;
   }
 }

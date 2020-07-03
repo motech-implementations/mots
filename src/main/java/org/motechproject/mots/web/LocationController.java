@@ -49,10 +49,10 @@ public class LocationController extends BaseController {
   public static final String SECTOR_NAME_PARAM = "sectorName";
   public static final String DISTRICT_NAME_PARAM = "districtName";
 
+  private static final LocationMapper LOCATION_MAPPER = LocationMapper.INSTANCE;
+
   @Autowired
   private LocationService locationService;
-
-  private LocationMapper locationMapper = LocationMapper.INSTANCE;
 
   /**
    * Creates District.
@@ -66,9 +66,9 @@ public class LocationController extends BaseController {
   public DistrictCreationDto createDistrict(
       @RequestBody @Valid DistrictCreationDto districtCreationDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    District district = locationMapper.fromDtoToDistrict(districtCreationDto);
+    District district = LOCATION_MAPPER.fromDtoToDistrict(districtCreationDto);
 
-    return locationMapper.toDistrictCreationDto(locationService.createDistrict(district));
+    return LOCATION_MAPPER.toDistrictCreationDto(locationService.createDistrict(district));
   }
 
   /**
@@ -83,9 +83,9 @@ public class LocationController extends BaseController {
       @RequestBody @Valid SectorCreationDto sectorCreationDto,
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    Sector sector = locationMapper.fromDtoToSector(sectorCreationDto);
+    Sector sector = LOCATION_MAPPER.fromDtoToSector(sectorCreationDto);
 
-    return locationMapper.toSectorCreationDto(locationService.createSector(sector));
+    return LOCATION_MAPPER.toSectorCreationDto(locationService.createSector(sector));
   }
 
   /**
@@ -100,9 +100,9 @@ public class LocationController extends BaseController {
       @RequestBody @Valid FacilityCreationDto facilityCreationDto,
       BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    Facility facility = locationMapper.fromDtoToFacility(facilityCreationDto);
+    Facility facility = LOCATION_MAPPER.fromDtoToFacility(facilityCreationDto);
 
-    return locationMapper.toFacilityCreationDto(locationService.createFacility(facility));
+    return LOCATION_MAPPER.toFacilityCreationDto(locationService.createFacility(facility));
   }
 
   /**
@@ -118,9 +118,9 @@ public class LocationController extends BaseController {
       BindingResult bindingResult) {
 
     checkBindingResult(bindingResult);
-    Village village = locationMapper.fromDtoToVillage(villageCreationDto);
+    Village village = LOCATION_MAPPER.fromDtoToVillage(villageCreationDto);
 
-    return locationMapper.toVillageCreationDto(locationService.createVillage(village));
+    return LOCATION_MAPPER.toVillageCreationDto(locationService.createVillage(village));
   }
 
   /**
@@ -139,9 +139,9 @@ public class LocationController extends BaseController {
     checkBindingResult(bindingResult);
 
     District district = locationService.getDistrict(id);
-    locationMapper.updateDistrictFromDto(districtCreationDto, district);
+    LOCATION_MAPPER.updateDistrictFromDto(districtCreationDto, district);
 
-    return locationMapper.toDistrictCreationDto(locationService.saveDistrict(district));
+    return LOCATION_MAPPER.toDistrictCreationDto(locationService.saveDistrict(district));
   }
 
   /**
@@ -159,9 +159,9 @@ public class LocationController extends BaseController {
     checkBindingResult(bindingResult);
 
     Sector sector = locationService.getSector(id);
-    locationMapper.updateSectorFromDto(sectorCreationDto, sector);
+    LOCATION_MAPPER.updateSectorFromDto(sectorCreationDto, sector);
 
-    return locationMapper.toSectorCreationDto(locationService.saveSector(sector));
+    return LOCATION_MAPPER.toSectorCreationDto(locationService.saveSector(sector));
   }
 
   /**
@@ -180,9 +180,9 @@ public class LocationController extends BaseController {
     checkBindingResult(bindingResult);
 
     Village village = locationService.getVillage(id);
-    locationMapper.updateVillageFromDto(villageCreationDto, village);
+    LOCATION_MAPPER.updateVillageFromDto(villageCreationDto, village);
 
-    return locationMapper.toVillageCreationDto(locationService.saveVillage(village));
+    return LOCATION_MAPPER.toVillageCreationDto(locationService.saveVillage(village));
   }
 
   /**
@@ -201,9 +201,9 @@ public class LocationController extends BaseController {
     checkBindingResult(bindingResult);
 
     Facility facility = locationService.getFacility(id);
-    locationMapper.updateFacilityFromDto(facilityCreationDto, facility);
+    LOCATION_MAPPER.updateFacilityFromDto(facilityCreationDto, facility);
 
-    return locationMapper.toFacilityCreationDto(locationService.saveFacility(facility));
+    return LOCATION_MAPPER.toFacilityCreationDto(locationService.saveFacility(facility));
   }
 
   /**
@@ -218,7 +218,7 @@ public class LocationController extends BaseController {
   public DistrictCreationDto getDistrict(@PathVariable("id") UUID id) {
     District district = locationService.getDistrict(id);
 
-    return locationMapper.toDistrictCreationDto(district);
+    return LOCATION_MAPPER.toDistrictCreationDto(district);
   }
 
   /**
@@ -232,7 +232,7 @@ public class LocationController extends BaseController {
   public SectorCreationDto getSector(@PathVariable("id") UUID id) {
     Sector sector = locationService.getSector(id);
 
-    return locationMapper.toSectorCreationDto(sector);
+    return LOCATION_MAPPER.toSectorCreationDto(sector);
   }
 
   /**
@@ -246,7 +246,7 @@ public class LocationController extends BaseController {
   public FacilityExtendedInfoDto getFacility(@PathVariable("id") UUID id) {
     Facility facility = locationService.getFacility(id);
 
-    return locationMapper.toFacilityExtendedInfoDto(facility);
+    return LOCATION_MAPPER.toFacilityExtendedInfoDto(facility);
   }
 
   /**
@@ -260,7 +260,7 @@ public class LocationController extends BaseController {
   public VillageExtendedInfoDto getVillage(@PathVariable("id") UUID id) {
     Village village = locationService.getVillage(id);
 
-    return locationMapper.toVillageExtendedInfoDto(village);
+    return LOCATION_MAPPER.toVillageExtendedInfoDto(village);
   }
 
   /**
@@ -273,7 +273,7 @@ public class LocationController extends BaseController {
   public List<DistrictDto> getDistricts() {
     List<District> districts = locationService.getDistricts();
 
-    return locationMapper.toDistrictDtos(districts);
+    return LOCATION_MAPPER.toDistrictDtos(districts);
   }
 
   /**
@@ -286,7 +286,7 @@ public class LocationController extends BaseController {
   public Set<LocationPreviewDto> getDistrictsOnly() {
     List<District> districts = locationService.getDistricts();
 
-    return locationMapper.toLocationPreviewDtos(districts);
+    return LOCATION_MAPPER.toLocationPreviewDtos(districts);
   }
 
   /**
@@ -299,7 +299,7 @@ public class LocationController extends BaseController {
   public Set<LocationPreviewDto> getSectorsOnly() {
     List<Sector> sectors = locationService.getSectors();
 
-    return locationMapper.toLocationPreviewDtos(sectors);
+    return LOCATION_MAPPER.toLocationPreviewDtos(sectors);
   }
 
   /**
@@ -312,7 +312,7 @@ public class LocationController extends BaseController {
   public Set<LocationPreviewDto> getFacilitiesOnly() {
     List<Facility> facilities = locationService.getFacilites();
 
-    return locationMapper.toLocationPreviewDtos(facilities);
+    return LOCATION_MAPPER.toLocationPreviewDtos(facilities);
   }
 
   /**
@@ -325,7 +325,7 @@ public class LocationController extends BaseController {
   public Set<LocationPreviewDto> getVillagesOnly() {
     List<Village> villages = locationService.getVillages();
 
-    return locationMapper.toLocationPreviewDtos(villages);
+    return LOCATION_MAPPER.toLocationPreviewDtos(villages);
   }
 
   /**
@@ -337,11 +337,11 @@ public class LocationController extends BaseController {
   @ResponseBody
   public Page<LocationPreviewDto> searchDistricts(
       @RequestParam(value = NAME_PARAM, required = false) String name,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<District> districts = locationService.searchDistricts(name, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtosWithOrder(districts.getContent());
+        LOCATION_MAPPER.toLocationPreviewDtosWithOrder(districts.getContent());
 
     return new PageImpl<>(locationPreviewDtos, pageable, districts.getTotalElements());
   }
@@ -356,12 +356,12 @@ public class LocationController extends BaseController {
   public Page<LocationPreviewDto> searchSectors(
       @RequestParam(value = NAME_PARAM, required = false) String name,
       @RequestParam(value = PARENT_PARAM, required = false) String parentDistrict,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<Sector> sectors =
         locationService.searchSectors(name, parentDistrict, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtosWithOrder(sectors.getContent());
+        LOCATION_MAPPER.toLocationPreviewDtosWithOrder(sectors.getContent());
 
     return new PageImpl<>(locationPreviewDtos, pageable, sectors.getTotalElements());
   }
@@ -378,12 +378,12 @@ public class LocationController extends BaseController {
       @RequestParam(value = PARENT_PARAM, required = false) String parentFacility,
       @RequestParam(value = SECTOR_NAME_PARAM, required = false) String sector,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<Village> villages =
         locationService.searchVillages(name, parentFacility, sector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtosWithOrder(villages.getContent());
+        LOCATION_MAPPER.toLocationPreviewDtosWithOrder(villages.getContent());
 
     return new PageImpl<>(locationPreviewDtos, pageable, villages.getTotalElements());
   }
@@ -402,12 +402,12 @@ public class LocationController extends BaseController {
       @RequestParam(value = INCHARGE_EMAIL_PARAM, required = false) String inchargeEmail,
       @RequestParam(value = PARENT_PARAM, required = false) String parentSector,
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<Facility> facilities = locationService.searchFacilities(name,
         inchargeFullName, inchargePhone, inchargeEmail, parentSector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
-        locationMapper.toLocationPreviewDtosWithOrder(facilities.getContent());
+        LOCATION_MAPPER.toLocationPreviewDtosWithOrder(facilities.getContent());
 
     return new PageImpl<>(locationPreviewDtos, pageable, facilities.getTotalElements());
   }

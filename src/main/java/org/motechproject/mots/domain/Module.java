@@ -2,6 +2,7 @@ package org.motechproject.mots.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.validate.CourseReleaseCheck;
@@ -32,19 +33,7 @@ public class Module extends BaseTimestampedEntity {
 
   private static final String VERSION_SEPARATOR = "_v";
 
-  /**
-   * Initialize module.
-   * @return module with initial values
-   */
-  public static Module initialize() {
-    Module module = new Module();
-    module.version = 1;
-    module.status = Status.DRAFT;
-
-    return module;
-  }
-
-  @NotBlank(message = ValidationMessages.EMPTY_MODULE_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_MODULE_NAME)
   @Column(name = "name", nullable = false)
   @Getter
   @Setter
@@ -87,6 +76,18 @@ public class Module extends BaseTimestampedEntity {
   @Setter
   private Module previousVersion;
 
+  /**
+   * Initialize module.
+   * @return module with initial values
+   */
+  public static Module initialize() {
+    Module module = new Module();
+    module.version = 1;
+    module.status = Status.DRAFT;
+
+    return module;
+  }
+
   public Module(UUID id) {
     super(id);
   }
@@ -121,7 +122,7 @@ public class Module extends BaseTimestampedEntity {
 
   @PrePersist
   protected void onCreate() {
-    nameCode = getName().toLowerCase().replaceAll(" ", "-")
+    nameCode = getName().toLowerCase(Locale.ENGLISH).replaceAll(" ", "-")
         + VERSION_SEPARATOR + getVersion();
   }
 

@@ -3,6 +3,9 @@ package org.motechproject.mots.exception;
 import java.text.MessageFormat;
 
 public abstract class BaseFormattedException extends MotsException {
+
+  private static final long serialVersionUID = 1L;
+
   public BaseFormattedException(String message) {
     super(message);
   }

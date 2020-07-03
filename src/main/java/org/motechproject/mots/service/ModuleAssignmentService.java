@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.constants.MotsConstants;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.BaseEntity;
@@ -97,7 +98,7 @@ public class ModuleAssignmentService {
    * @param chwId Id of CHW
    * @return modules assigned to CHW with given Id
    */
-  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_MODULES_ROLE)
   public AssignedModules getAssignedModules(UUID chwId) {
     return repository.findByHealthWorkerId(chwId).orElseThrow(() ->
         new EntityNotFoundException("No assigned modules found for CHW with Id: {0}",
@@ -110,20 +111,24 @@ public class ModuleAssignmentService {
    */
   @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   @Transactional
-  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_MODULES_ROLE)
   public void assignModules(ModuleAssignmentDto assignmentDto) {
     UUID chwId = UUID.fromString(assignmentDto.getChwId());
-    AssignedModules existingAssignedModules =
-        getAssignedModules(chwId);
+    AssignedModules existingAssignedModules = getAssignedModules(chwId);
     CommunityHealthWorker assignedModulesChw = existingAssignedModules.getHealthWorker();
+
+    String ivrId = assignedModulesChw.getIvrId();
+    if (ivrId == null) {
+      throw new ModuleAssignmentException(
+          "Could not assign module to CHW, because CHW has empty IVR id");
+    }
 
     Set<Module> oldModules = new HashSet<>(existingAssignedModules.getModules());
 
     Set<Module> modules = new HashSet<>();
     for (String moduleId : assignmentDto.getModules()) {
       Module moduleToAssign = moduleRepository.findById(UUID.fromString(moduleId)).orElseThrow(() ->
-          new EntityNotFoundException("No module found for Id: {0}",
-              moduleId));
+          new EntityNotFoundException("No module found for Id: {0}", moduleId));
       modules.add(moduleToAssign);
     }
     existingAssignedModules.setModules(modules);
@@ -140,16 +145,11 @@ public class ModuleAssignmentService {
 
     validateModulesToUnassign(assignedModulesChw, modulesToRemove);
 
-    String ivrId = assignedModulesChw.getIvrId();
-    if (ivrId == null) {
-      throw new ModuleAssignmentException(
-          "Could not assign module to CHW, because CHW has empty IVR id");
-    }
-
     try {
       List<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
       ivrService.addSubscriberToGroups(ivrId, ivrGroups);
-      if (ivrGroups.size() > 0) {
+
+      if (!ivrGroups.isEmpty()) {
         sendModuleAssignmentNotification(
             Collections.singleton(ivrId), assignmentDto.getNotificationTime());
       }
@@ -221,14 +221,15 @@ public class ModuleAssignmentService {
    * @param assignmentDto dto with district id, list of modules assigned to it
    *     and start and end dates
    */
+  @SuppressWarnings("PMD.ConfusingTernary")
   @Transactional
-  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_MODULES_ROLE)
   public boolean assignModulesToChwsInLocation(DistrictAssignmentDto assignmentDto) {
     UUID districtId = UUID.fromString(assignmentDto.getDistrictId());
-    UUID sectorId = assignmentDto.getSectorId() != null
-        ? UUID.fromString(assignmentDto.getSectorId()) : null;
-    UUID facilityId = assignmentDto.getFacilityId() != null
-        ? UUID.fromString(assignmentDto.getFacilityId()) : null;
+    UUID sectorId =
+        assignmentDto.getSectorId() == null ? null : UUID.fromString(assignmentDto.getSectorId());
+    UUID facilityId = assignmentDto.getFacilityId() == null ? null
+        : UUID.fromString(assignmentDto.getFacilityId());
 
     List<CommunityHealthWorker> communityHealthWorkers;
 
@@ -253,7 +254,7 @@ public class ModuleAssignmentService {
    *     and start and end dates
    */
   @Transactional
-  @PreAuthorize(DefaultPermissions.HAS_ASSIGN_MODULES_ROLE)
+  @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_MODULES_ROLE)
   public boolean assignModulesToGroup(GroupAssignmentDto assignmentDto) {
     UUID groupId = UUID.fromString(assignmentDto.getGroupId());
     List<CommunityHealthWorker> communityHealthWorkers =
@@ -262,14 +263,11 @@ public class ModuleAssignmentService {
     return bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, null, groupId);
   }
 
-  @SuppressWarnings("PMD.CyclomaticComplexity")
+  @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
   private boolean bulkAssignModules(BulkAssignmentDto assignmentDto,
       List<CommunityHealthWorker> communityHealthWorkers, UUID districtId,
       UUID sectorId, UUID facilityId, UUID groupId) {
     Set<Module> newChwModules = new HashSet<>();
-    String userName = (String) SecurityContextHolder.getContext().getAuthentication()
-        .getPrincipal();
-    User currentUser = userService.getUserByUserName(userName);
 
     for (String moduleId : assignmentDto.getModules()) {
       Module moduleToAssign = moduleRepository.findById(UUID.fromString(moduleId)).orElseThrow(() ->
@@ -302,7 +300,7 @@ public class ModuleAssignmentService {
 
       moduleProgressService.createModuleProgresses(chw, modulesToAdd);
 
-      if (modulesToAdd.size() > 0) {
+      if (!modulesToAdd.isEmpty()) {
         newIvrSubscribers.add(ivrId);
       }
 
@@ -319,13 +317,17 @@ public class ModuleAssignmentService {
       }
     });
 
-    if (newIvrSubscribers.size() > 0) {
+    String userName = (String) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
+    User currentUser = userService.getUserByUserName(userName);
+
+    if (!newIvrSubscribers.isEmpty()) {
       for (Module moduleToAssign : newChwModules) {
         assignmentLogRepository.save(new DistrictAssignmentLog(
-            districtId != null ? districtRepository.findOne(districtId) : null,
-            sectorId != null ? sectorRepository.findOne(sectorId) : null,
-            facilityId != null ? facilityRepository.findOne(facilityId) : null,
-            groupId != null ? groupRepository.findOne(groupId) : null,
+            districtId == null ? null : districtRepository.findOne(districtId),
+            sectorId == null ? null : sectorRepository.findOne(sectorId),
+            facilityId == null ? null : facilityRepository.findOne(facilityId),
+            groupId == null ? null : groupRepository.findOne(groupId),
             moduleToAssign,
             currentUser
         ));
@@ -339,16 +341,7 @@ public class ModuleAssignmentService {
   }
 
   private void sendModuleAssignmentNotification(Set<String> subscribers, String notificationTime) {
-    if (notificationTime != null) {
-      SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.DATE_TIME_PATTERN);
-      try {
-        Date time = sdf.parse(notificationTime);
-        moduleAssignmentNotificationScheduler.schedule(subscribers, time);
-      } catch (ParseException e) {
-        String message = "Invalid notification time format: " + notificationTime;
-        throw new ModuleAssignmentException(message, e);
-      }
-    } else {
+    if (notificationTime == null) {
       try {
         LOGGER.info("Sending module assignment notifications right away, subscribers: "
             + StringUtils.join(subscribers, ","));
@@ -357,6 +350,15 @@ public class ModuleAssignmentService {
         String message = "Could not send the module assignment notification to CHWs.\n"
             + ex.getClearVotoInfo();
         throw new ModuleAssignmentException(message, ex);
+      }
+    } else {
+      SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.DATE_TIME_PATTERN, Locale.ENGLISH);
+      try {
+        Date time = sdf.parse(notificationTime);
+        moduleAssignmentNotificationScheduler.schedule(subscribers, time);
+      } catch (ParseException e) {
+        String message = "Invalid notification time format: " + notificationTime;
+        throw new ModuleAssignmentException(message, e);
       }
     }
   }

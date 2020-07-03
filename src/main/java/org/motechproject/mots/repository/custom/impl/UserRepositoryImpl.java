@@ -25,7 +25,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<User> search(String username, String email, String name, String role,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<User> query = builder.createQuery(User.class);
@@ -48,7 +48,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String username, String email,
-      String name, String role, boolean count, Pageable pageable) throws IllegalArgumentException {
+      String name, String role, boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<User> root = query.from(User.class);

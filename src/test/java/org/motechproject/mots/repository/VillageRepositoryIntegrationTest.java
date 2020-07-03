@@ -38,18 +38,18 @@ public class VillageRepositoryIntegrationTest extends
   @Autowired
   private DistrictRepository districtRepository;
 
-  private District district = new DistrictDataBuilder().buildAsNew();
+  private final District district = new DistrictDataBuilder().buildAsNew();
 
-  private Sector sector = new SectorDataBuilder()
+  private final Sector sector = new SectorDataBuilder()
       .withDistrict(district)
       .buildAsNew();
 
-  private Facility facility = new FacilityDataBuilder()
+  private final Facility facility = new FacilityDataBuilder()
       .withSector(sector)
       .buildAsNew();
 
-  private Village village1 = generateInstance();
-  private Village village2 = generateInstance();
+  private final Village village1 = generateInstance();
+  private final Village village2 = generateInstance();
 
   /**
    * Prepare the test environment.

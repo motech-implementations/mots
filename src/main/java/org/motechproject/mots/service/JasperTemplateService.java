@@ -1,9 +1,9 @@
 package org.motechproject.mots.service;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_FILE_INVALID;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_PARAMETER_MISSING;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_TEMPLATE_EXIST;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_FILE_INVALID;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_PARAMETER_MISSING;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_TEMPLATE_EXIST;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -48,9 +48,7 @@ public class JasperTemplateService {
    * @param description report's description
    * @return saved report template
    */
-  public JasperTemplate saveTemplate(
-      MultipartFile file, String name, String description)
-      throws ReportingException {
+  public JasperTemplate saveTemplate(MultipartFile file, String name, String description) {
     JasperTemplate jasperTemplate = jasperTemplateRepository.findByName(name);
 
     if (jasperTemplate == null) {
@@ -73,9 +71,7 @@ public class JasperTemplateService {
    * @param jsonOutput the json output of given template
    * @return saved report template
    */
-  public JasperTemplate saveJsonOutput(
-      JasperTemplate jasperTemplate, String jsonOutput)
-      throws ReportingException {
+  public JasperTemplate saveJsonOutput(JasperTemplate jasperTemplate, String jsonOutput) {
     jasperTemplate.setJsonOutput(jsonOutput);
     long outputVersion = Instant.now().toEpochMilli();
     jasperTemplate.setJsonOutputVersion(outputVersion);
@@ -127,8 +123,7 @@ public class JasperTemplateService {
    * Validate ".jrmxl" file and insert this template to database.
    * Throws reporting exception if an error occurs during file validation or parsing,
    */
-  void validateFileAndInsertTemplate(JasperTemplate jasperTemplate, MultipartFile file)
-      throws ReportingException {
+  protected void validateFileAndInsertTemplate(JasperTemplate jasperTemplate, MultipartFile file) {
     throwIfTemplateWithSameNameAlreadyExists(jasperTemplate.getName());
     validateFileAndSetData(jasperTemplate, file);
     saveWithParameters(jasperTemplate);
@@ -137,7 +132,7 @@ public class JasperTemplateService {
   /**
    * Insert template and template parameters to database.
    */
-  void saveWithParameters(JasperTemplate jasperTemplate) {
+  protected void saveWithParameters(JasperTemplate jasperTemplate) {
     jasperTemplateRepository.save(jasperTemplate);
   }
 
@@ -145,8 +140,7 @@ public class JasperTemplateService {
    * Validate ".jrmxl" file and insert if template not exist. If this name of template already
    * exist, remove older template and insert new.
    */
-  void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file)
-      throws ReportingException {
+  protected void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file) {
     JasperTemplate templateTmp = jasperTemplateRepository.findByName(jasperTemplate.getName());
     if (templateTmp != null) {
       jasperTemplateRepository.delete(templateTmp.getId());
@@ -161,8 +155,7 @@ public class JasperTemplateService {
    * report file as ".jasper" in byte array in Template class. If report is not valid throw
    * exception.
    */
-  private void validateFileAndSetData(JasperTemplate jasperTemplate, MultipartFile file)
-      throws ReportingException {
+  private void validateFileAndSetData(JasperTemplate jasperTemplate, MultipartFile file) {
     ReportingValidationHelper.throwIfFileIsNull(file);
     ReportingValidationHelper.throwIfIncorrectFileType(file, ALLOWED_FILETYPES);
     ReportingValidationHelper.throwIfFileIsEmpty(file);
@@ -197,8 +190,8 @@ public class JasperTemplateService {
     }
   }
 
-  private void processJrParameters(JasperTemplate jasperTemplate, JRParameter[] jrParameters)
-      throws ReportingException {
+  @SuppressWarnings("PMD.UseVarargs")
+  private void processJrParameters(JasperTemplate jasperTemplate, JRParameter[] jrParameters) {
     ArrayList<JasperTemplateParameter> parameters = new ArrayList<>();
 
     for (JRParameter jrParameter : jrParameters) {
@@ -215,8 +208,7 @@ public class JasperTemplateService {
   /**
    * Create new report parameter of report which is not defined in Jasper system.
    */
-  private JasperTemplateParameter createParameter(JRParameter jrParameter)
-      throws ReportingException {
+  private JasperTemplateParameter createParameter(JRParameter jrParameter) {
     String displayName = jrParameter.getPropertiesMap().getProperty("displayName");
 
     if (isBlank(displayName)) {
@@ -250,7 +242,7 @@ public class JasperTemplateService {
     return jasperTemplateParameter;
   }
 
-  private void throwIfTemplateWithSameNameAlreadyExists(String name) throws ReportingException {
+  private void throwIfTemplateWithSameNameAlreadyExists(String name) {
     if (jasperTemplateRepository.findByName(name) != null) {
       throw new ReportingException(ERROR_REPORTING_TEMPLATE_EXIST);
     }

@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@SuppressWarnings("PMD.CyclomaticComplexity")
+@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
 public class FacilityRepositoryImpl extends BaseRepositoryImpl
     implements FacilityRepositoryCustom {
 
@@ -28,8 +28,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
   @Override
   public Page<Facility> search(String facilityName,
       String inchargeFullName, String inchargePhone, String inchargeEmail,
-      String parentSector, String districtName, Pageable pageable)
-      throws IllegalArgumentException {
+      String parentSector, String districtName, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
@@ -57,7 +56,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
       String facilityName, String inchargeFullName, String inchargePhone,
       String inchargeEmail, String parentSector, String districtName,
-      boolean count, Pageable pageable) throws IllegalArgumentException {
+      boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Facility> root = query.from(Facility.class);

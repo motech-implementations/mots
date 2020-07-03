@@ -18,8 +18,8 @@ public class DistrictRepositoryIntegrationTest extends
   @Autowired
   private DistrictRepository districtRepository;
 
-  private District district1 = generateInstance();
-  private District district2 = generateInstance();
+  private final District district1 = generateInstance();
+  private final District district2 = generateInstance();
 
   /**
    * Prepare the test environment.

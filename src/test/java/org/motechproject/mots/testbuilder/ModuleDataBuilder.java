@@ -3,11 +3,12 @@ package org.motechproject.mots.testbuilder;
 import java.util.UUID;
 import org.motechproject.mots.domain.Module;
 
-public class ModuleDataBuilder {
-  private static int instanceNumber = 0;
+public final class ModuleDataBuilder {
 
-  private UUID id;
-  private String name;
+  private static int instanceNumber;
+
+  private final UUID id;
+  private final String name;
   private String ivrGroup;
 
   /**

@@ -18,7 +18,7 @@ public class VotoOutgoingCallDto {
   private String treeId;
 
   @JsonProperty("outgoing_call")
-  private void unpackNestedObject(Map<String, Object> call) {
+  protected void unpackNestedObject(Map<String, Object> call) {
     callId = call.get("id") == null ? null : call.get("id").toString();
     treeId = call.get("tree_id") == null ? null : call.get("tree_id").toString();
   }

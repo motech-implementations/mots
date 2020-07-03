@@ -1,6 +1,6 @@
 package org.motechproject.mots.constants;
 
-public final class ValidationMessages {
+public final class ValidationMessageConstants {
 
   public static final String EMPTY_CHW_ID = "CHW Id cannot be empty";
   public static final String EMPTY_IVR_ID = "IVR Id cannot be empty";
@@ -77,6 +77,6 @@ public final class ValidationMessages {
   public static final String EMPTY_GROUP_NAME = "Group name cannot be empty";
   public static final String NOT_UNIQUE_GROUP_NAME = "A Group with name '%s' already exists";
 
-  private ValidationMessages() {
+  private ValidationMessageConstants() {
   }
 }

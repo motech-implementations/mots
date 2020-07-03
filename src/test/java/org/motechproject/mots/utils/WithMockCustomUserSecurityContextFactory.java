@@ -2,7 +2,7 @@ package org.motechproject.mots.utils;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.motechproject.mots.constants.DefaultPermissions;
+import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserRole;
@@ -19,9 +19,9 @@ public class WithMockCustomUserSecurityContextFactory
   @Override
   public SecurityContext createSecurityContext(WithMockAdminUser customUser) {
     Set<UserPermission> rights = new HashSet<>();
-    rights.add(new UserPermission(DefaultPermissions.CREATE_FACILITIES));
-    rights.add(new UserPermission(DefaultPermissions.DISPLAY_FACILITIES));
-    rights.add(new UserPermission(DefaultPermissions.MANAGE_FACILITIES));
+    rights.add(new UserPermission(DefaultPermissionConstants.CREATE_FACILITIES));
+    rights.add(new UserPermission(DefaultPermissionConstants.DISPLAY_FACILITIES));
+    rights.add(new UserPermission(DefaultPermissionConstants.MANAGE_FACILITIES));
 
     Set<UserRole> grantedAuthorities = new HashSet<>();
     grantedAuthorities.add(new UserRole("test-role", rights));

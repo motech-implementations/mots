@@ -4,7 +4,7 @@ import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.dto.DistrictCreationDto;
 import org.motechproject.mots.repository.DistrictRepository;
@@ -32,7 +32,7 @@ public class DistrictUniquenessValidator implements
 
       if (existing.isPresent() // when edit district allows change
           && !existing.get().getId().toString().equals(districtCreationDto.getId())) {
-        String message = String.format(ValidationMessages.NOT_UNIQUE_DISTRICT,
+        String message = String.format(ValidationMessageConstants.NOT_UNIQUE_DISTRICT,
             existing.get().getName());
 
         context.disableDefaultConstraintViolation();

@@ -18,7 +18,7 @@ public class RoleRepositoryImpl extends BaseRepositoryImpl implements RoleReposi
    * If there are no parameters, return all Roles.
    */
   @Override
-  public Page<UserRole> search(String name, Pageable pageable) throws IllegalArgumentException {
+  public Page<UserRole> search(String name, Pageable pageable) {
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<UserRole> query = builder.createQuery(UserRole.class);
@@ -41,7 +41,7 @@ public class RoleRepositoryImpl extends BaseRepositoryImpl implements RoleReposi
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String name,
-      boolean count, Pageable pageable) throws IllegalArgumentException {
+      boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<UserRole> root = query.from(UserRole.class);

@@ -1,6 +1,6 @@
 package org.motechproject.mots.web;
 
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_JASPER_TEMPLATE_NOT_FOUND;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_JASPER_TEMPLATE_NOT_FOUND;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -16,8 +16,6 @@ import org.motechproject.mots.domain.JasperTemplate;
 import org.motechproject.mots.dto.JasperTemplateDto;
 import org.motechproject.mots.dto.VersionedReportDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
-import org.motechproject.mots.exception.JasperReportViewException;
-import org.motechproject.mots.exception.ReportingException;
 import org.motechproject.mots.mapper.JasperTemplateMapper;
 import org.motechproject.mots.repository.JasperTemplateRepository;
 import org.motechproject.mots.service.JasperReportsViewService;
@@ -42,7 +40,10 @@ import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiForm
 @Transactional
 @RequestMapping("/api/reports/templates")
 public class JasperTemplateController extends BaseController {
+
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
+
+  private static final JasperTemplateMapper JASPER_TEMPLATE_MAPPER = JasperTemplateMapper.INSTANCE;
 
   @Autowired
   private JasperTemplateService jasperTemplateService;
@@ -53,8 +54,6 @@ public class JasperTemplateController extends BaseController {
   @Autowired
   private JasperReportsViewService jasperReportsViewService;
 
-  private JasperTemplateMapper jasperTemplateMapper = JasperTemplateMapper.INSTANCE;
-
   /**
    * Adding report templates with ".jrxml" format to database.
    *
@@ -64,9 +63,8 @@ public class JasperTemplateController extends BaseController {
    */
   @RequestMapping(method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void createJasperReportTemplate(
-      @RequestPart("file") MultipartFile file, String name, String description
-  ) throws ReportingException {
+  public void createJasperReportTemplate(@RequestPart("file") MultipartFile file,
+      String name, String description) {
     LOGGER.debug("Saving template with name: " + name);
 
     JasperTemplate template = jasperTemplateService
@@ -85,7 +83,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseBody
   public List<JasperTemplateDto> getVisibleTemplates() {
     // we want to show only visible reports
-    return jasperTemplateMapper.toDtos(
+    return JASPER_TEMPLATE_MAPPER.toDtos(
         jasperTemplateRepository.findByVisibleOrderByCreatedDateAsc(true));
   }
 
@@ -104,7 +102,7 @@ public class JasperTemplateController extends BaseController {
       throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);
     }
 
-    return jasperTemplateMapper.toDto(jasperTemplate);
+    return JASPER_TEMPLATE_MAPPER.toDto(jasperTemplate);
   }
 
   /**
@@ -134,9 +132,8 @@ public class JasperTemplateController extends BaseController {
    */
   @RequestMapping(value = "/{id}/{format}", method = RequestMethod.GET)
   @ResponseBody
-  public ModelAndView generateReport(
-      HttpServletRequest request, @PathVariable("id") UUID templateId,
-      @PathVariable("format") String format) throws JasperReportViewException {
+  public ModelAndView generateReport(HttpServletRequest request,
+      @PathVariable("id") UUID templateId, @PathVariable("format") String format) {
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
 
     if (template == null) {
@@ -175,7 +172,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseBody
   public Object generateReportIfModified(
       HttpServletRequest request, @PathVariable("id") UUID templateId,
-      @RequestParam(value = "version") long version) throws SQLException, JRException, IOException {
+      @RequestParam("version") long version) throws SQLException, JRException, IOException {
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
 
     if (template == null) {

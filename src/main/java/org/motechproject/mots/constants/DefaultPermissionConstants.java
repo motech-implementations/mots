@@ -1,7 +1,7 @@
 package org.motechproject.mots.constants;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class DefaultPermissions {
+public class DefaultPermissionConstants {
 
   public static final String CHW_READ = "ROLE_CHW_READ";
   public static final String CHW_WRITE = "ROLE_CHW_WRITE";

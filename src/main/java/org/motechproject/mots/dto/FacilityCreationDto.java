@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.FacilityUniqueness;
 import org.motechproject.mots.validate.annotations.SectorExistence;
@@ -20,7 +20,7 @@ public class FacilityCreationDto {
 
   @Getter
   @Setter
-  @NotEmpty(message = ValidationMessages.EMPTY_LOCATION_NAME)
+  @NotEmpty(message = ValidationMessageConstants.EMPTY_LOCATION_NAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String name;
 
@@ -28,7 +28,7 @@ public class FacilityCreationDto {
   @Getter
   @SectorExistence
   @Uuid
-  @NotEmpty(message = ValidationMessages.EMPTY_SECTOR_ID)
+  @NotEmpty(message = ValidationMessageConstants.EMPTY_SECTOR_ID)
   private String sectorId;
 
   @Getter

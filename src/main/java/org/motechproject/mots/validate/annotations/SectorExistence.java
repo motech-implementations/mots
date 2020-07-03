@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.constraintvalidators.SectorExistenceValidator;
 
 @Target(ElementType.FIELD)
@@ -15,14 +15,14 @@ import org.motechproject.mots.validate.constraintvalidators.SectorExistenceValid
 public @interface SectorExistence {
 
   /**
-   * Specify the message in case of a validation error
+   * Specify the message in case of a validation error.
    *
    * @return the message about the error
    */
-  String message() default ValidationMessages.NOT_EXISTING_SECTOR;
+  String message() default ValidationMessageConstants.NOT_EXISTING_SECTOR;
 
   /**
-   * Specify validation groups, to which this constraint belongs
+   * Specify validation groups, to which this constraint belongs.
    *
    * @return array with group classes
    */
@@ -30,7 +30,7 @@ public @interface SectorExistence {
   };
 
   /**
-   * Specify custom payload objects
+   * Specify custom payload objects.
    *
    * @return array with payload classes
    */

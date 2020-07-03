@@ -10,22 +10,22 @@ import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 
-public class CommunityHealthWorkerDataBuilder {
+public final class CommunityHealthWorkerDataBuilder {
   private static final Random RANDOM = new Random();
 
   private static int instanceNumber = 1000;
 
-  private UUID id;
-  private String chwId;
-  private String firstName;
-  private String familyName;
-  private Gender gender;
-  private String phoneNumber;
+  private final UUID id;
+  private final String chwId;
+  private final String firstName;
+  private final String familyName;
+  private final Gender gender;
+  private final String phoneNumber;
+  private final Language preferredLanguage;
   private Village village;
   private Facility facility;
   private Sector sector;
   private District district;
-  private Language preferredLanguage;
   private String ivrId;
 
   /**

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -32,10 +32,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "user")
 public class User extends BaseTimestampedEntity implements UserDetails {
 
+  private static final long serialVersionUID = 1L;
+
   @Column(name = "username", nullable = false, unique = true)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_USERNAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_USERNAME)
   private String username;
 
   @Column(name = "password", nullable = false)
@@ -46,7 +48,7 @@ public class User extends BaseTimestampedEntity implements UserDetails {
   @Column(name = "email", unique = true)
   @Getter
   @Setter
-  @Email(message = ValidationMessages.INVALID_EMAIL)
+  @Email(message = ValidationMessageConstants.INVALID_EMAIL)
   private String email;
 
   @Column(name = "name")

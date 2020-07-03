@@ -23,7 +23,7 @@ public class VillageRepositoryImpl extends BaseRepositoryImpl implements
    */
   @Override
   public Page<Village> search(String villageName, String parentFacility, String sectorName,
-      String districtName, Pageable pageable) throws IllegalArgumentException {
+      String districtName, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
@@ -50,7 +50,7 @@ public class VillageRepositoryImpl extends BaseRepositoryImpl implements
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String villageName,
       String parentFacility, String sectorName, String districtName,
-      boolean count, Pageable pageable) throws IllegalArgumentException {
+      boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<Village> root = query.from(Village.class);

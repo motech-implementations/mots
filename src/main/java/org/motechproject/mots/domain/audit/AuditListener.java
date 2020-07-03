@@ -21,7 +21,7 @@ public class AuditListener {
   }
 
   @PrePersist
-  void setOwner(Auditable entity) {
+  protected void setOwner(Auditable entity) {
     if (loadLocations) {
       entity.setOwner(authenticationHelper.getAdminUser());
     } else {

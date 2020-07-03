@@ -87,15 +87,16 @@ wrapper {
 }
 
 checkstyle {
-    toolVersion '8.0'
+    toolVersion '8.34'
     configFile = file("checkstyle.xml")
     maxWarnings = 0
 }
 
 pmd {
-    toolVersion = '5.8.1'
+    toolVersion = '6.25.0'
     consoleOutput = true
     ignoreFailures = false
+    ruleSets = []
     ruleSetFiles = files("ruleset.xml")
     reportsDir = file("build/reports/pmd")
 }

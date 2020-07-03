@@ -4,6 +4,8 @@ import lombok.Getter;
 
 public class IvrException extends Exception {
 
+  private static final long serialVersionUID = 1L;
+
   @Getter
   private String clearVotoInfo = "";
 

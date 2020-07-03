@@ -19,8 +19,7 @@ public class DistrictRepositoryImpl extends BaseRepositoryImpl
    * If there are no parameters, return all Districts.
    */
   @Override
-  public Page<District> search(String districtName, Pageable pageable)
-      throws IllegalArgumentException {
+  public Page<District> search(String districtName, Pageable pageable) {
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<District> query = builder.createQuery(District.class);
@@ -43,7 +42,7 @@ public class DistrictRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query, String districtName,
-      boolean count, Pageable pageable) throws IllegalArgumentException {
+      boolean count, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
     Root<District> root = query.from(District.class);

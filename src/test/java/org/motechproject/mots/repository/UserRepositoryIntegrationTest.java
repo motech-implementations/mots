@@ -26,10 +26,10 @@ public class UserRepositoryIntegrationTest extends
   @Autowired
   private RoleRepository roleRepository;
 
-  private UserRole userRole = new UserRoleDataBuilder().buildAsNew();
+  private final UserRole userRole = new UserRoleDataBuilder().buildAsNew();
 
-  private User user1 = generateInstance();
-  private User user2 = generateInstance();
+  private final User user1 = generateInstance();
+  private final User user2 = generateInstance();
 
   /**
    * Prepare the test environment.

@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
@@ -33,7 +33,7 @@ public class CourseModule extends IvrObject {
   @Setter
   private Module module;
 
-  @NotBlank(message = ValidationMessages.EMPTY_START_MODULE_QUESTION_IVR_ID,
+  @NotBlank(message = ValidationMessageConstants.EMPTY_START_MODULE_QUESTION_IVR_ID,
       groups = CourseReleaseCheck.class)
   @Column(name = "start_module_question_ivr_id")
   @Getter

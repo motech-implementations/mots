@@ -6,14 +6,12 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.ChoiceType;
 
 @Entity
 @Table(name = "choice")
-@NoArgsConstructor
 public class Choice extends BaseTimestampedEntity {
 
   @Column(name = "choice_id", nullable = false)
@@ -37,6 +35,9 @@ public class Choice extends BaseTimestampedEntity {
   @Getter
   @Setter
   private String description;
+
+  public Choice() {
+  }
 
   private Choice(Integer choiceId, String ivrName, ChoiceType type, String description) {
     this.choiceId = choiceId;

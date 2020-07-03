@@ -43,27 +43,27 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
   @Autowired
   private CommunityHealthWorkerRepository repository;
 
-  @Override
-  CommunityHealthWorkerRepository getRepository() {
-    return this.repository;
-  }
+  private final District district = new DistrictDataBuilder().buildAsNew();
 
-  private District district = new DistrictDataBuilder().buildAsNew();
-
-  private Sector sector = new SectorDataBuilder()
+  private final Sector sector = new SectorDataBuilder()
       .withDistrict(district)
       .buildAsNew();
 
-  private Facility facility = new FacilityDataBuilder()
+  private final Facility facility = new FacilityDataBuilder()
       .withSector(sector)
       .buildAsNew();
 
-  private Village village = new VillageDataBuilder()
+  private final Village village = new VillageDataBuilder()
       .withFacility(facility)
       .buildAsNew();
 
-  private CommunityHealthWorker chw1 = generateInstance();
-  private CommunityHealthWorker chw2 = generateInstance();
+  private final CommunityHealthWorker chw1 = generateInstance();
+  private final CommunityHealthWorker chw2 = generateInstance();
+
+  @Override
+  protected CommunityHealthWorkerRepository getRepository() {
+    return this.repository;
+  }
 
   /**
    * Prepare the test environment.

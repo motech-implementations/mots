@@ -3,7 +3,7 @@ package org.motechproject.mots.dto;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class PermissionDto {
@@ -15,7 +15,7 @@ public class PermissionDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_PERMISSION_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_PERMISSION_NAME)
   private String name;
 
   @Getter

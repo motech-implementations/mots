@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 public class GroupController extends BaseController {
 
+  private static final GroupMapper GROUP_MAPPER = GroupMapper.INSTANCE;
+
   @Autowired
   private GroupService groupService;
-
-  private GroupMapper groupMapper = GroupMapper.INSTANCE;
 
   /**
    * Get list of groups.
@@ -36,7 +36,7 @@ public class GroupController extends BaseController {
   public List<GroupDto> getGroups() {
     Iterable<Group> groups = groupService.getGroups();
 
-    return groupMapper.toDtos(groups);
+    return GROUP_MAPPER.toDtos(groups);
   }
 
   /**
@@ -50,7 +50,7 @@ public class GroupController extends BaseController {
   public GroupDto getGroup(@PathVariable("id") UUID id) {
     Group group = groupService.getGroup(id);
 
-    return groupMapper.toDto(group);
+    return GROUP_MAPPER.toDto(group);
   }
 
   /**
@@ -64,9 +64,9 @@ public class GroupController extends BaseController {
   public GroupDto createGroup(@RequestBody @Valid GroupDto groupDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
 
-    Group group = groupMapper.fromDto(groupDto);
+    Group group = GROUP_MAPPER.fromDto(groupDto);
 
-    return groupMapper.toDto(groupService.saveGroup(group));
+    return GROUP_MAPPER.toDto(groupService.saveGroup(group));
   }
 
   /**
@@ -83,9 +83,9 @@ public class GroupController extends BaseController {
     checkBindingResult(bindingResult);
 
     Group existingGroup = groupService.getGroup(id);
-    groupMapper.updateFromDto(groupDto, existingGroup);
+    GROUP_MAPPER.updateFromDto(groupDto, existingGroup);
 
-    return groupMapper.toDto(groupService.saveGroup(existingGroup));
+    return GROUP_MAPPER.toDto(groupService.saveGroup(existingGroup));
   }
 
 }

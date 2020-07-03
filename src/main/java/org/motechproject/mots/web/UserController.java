@@ -36,14 +36,14 @@ public class UserController extends BaseController {
 
   public static final String ROLE_PARAM = "role";
 
+  private static final UserMapper USER_MAPPER = UserMapper.INSTANCE;
+
+  private static final RoleMapper ROLE_MAPPER = RoleMapper.INSTANCE;
+
+  private static final PermissionMapper PERMISSION_MAPPER = PermissionMapper.INSTANCE;
+
   @Autowired
   private UserService userService;
-
-  private UserMapper userMapper = UserMapper.INSTANCE;
-
-  private RoleMapper roleMapper = RoleMapper.INSTANCE;
-
-  private PermissionMapper permissionMapper = PermissionMapper.INSTANCE;
 
   /**
    * Get list of users.
@@ -55,7 +55,7 @@ public class UserController extends BaseController {
   public List<UserDto> getUsers() {
     Iterable<User> users = userService.getUsers();
 
-    return userMapper.toDtos(users);
+    return USER_MAPPER.toDtos(users);
   }
 
   /**
@@ -70,10 +70,10 @@ public class UserController extends BaseController {
       @RequestParam(value = "email", required = false) String email,
       @RequestParam(value = "name", required = false) String name,
       @RequestParam(value = ROLE_PARAM, required = false) String role,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<User> users = userService.searchUsers(username, email, name, role, pageable);
-    List<UserDto> userDtos = userMapper.toDtos(users.getContent());
+    List<UserDto> userDtos = USER_MAPPER.toDtos(users.getContent());
 
     return new PageImpl<>(userDtos, pageable, users.getTotalElements());
   }
@@ -89,7 +89,7 @@ public class UserController extends BaseController {
   public UserDto getUser(@PathVariable("id") UUID id) {
     User user = userService.getUser(id);
 
-    return userMapper.toDto(user);
+    return USER_MAPPER.toDto(user);
   }
 
   /**
@@ -104,8 +104,8 @@ public class UserController extends BaseController {
 
     checkBindingResult(bindingResult);
 
-    User user = userMapper.fromDto(userDto);
-    return userMapper.toDto(userService.registerNewUser(user));
+    User user = USER_MAPPER.fromDto(userDto);
+    return USER_MAPPER.toDto(userService.registerNewUser(user));
   }
 
   /**
@@ -128,9 +128,9 @@ public class UserController extends BaseController {
     }
 
     User existingUser = userService.getUser(id);
-    userMapper.passwordNullSafeUpdateFromDto(userDto, existingUser);
+    USER_MAPPER.passwordNullSafeUpdateFromDto(userDto, existingUser);
 
-    return userMapper.toDto(userService.saveUser(existingUser, encodeNewPassword));
+    return USER_MAPPER.toDto(userService.saveUser(existingUser, encodeNewPassword));
   }
 
   /**
@@ -163,7 +163,7 @@ public class UserController extends BaseController {
     checkBindingResult(bindingResult);
     final User updatedUserProfile = userService.editUserProfile(id, userProfileDto);
 
-    return userMapper.toUserProfileDto(updatedUserProfile);
+    return USER_MAPPER.toUserProfileDto(updatedUserProfile);
   }
 
   /**
@@ -175,7 +175,7 @@ public class UserController extends BaseController {
   @ResponseBody
   public UserProfileDto getUserProfile(Principal principal) {
     User user = userService.getUserByUserName(principal.getName());
-    return userMapper.toUserProfileDto(user);
+    return USER_MAPPER.toUserProfileDto(user);
   }
 
   /**
@@ -188,7 +188,7 @@ public class UserController extends BaseController {
   public List<RoleDto> getRoles() {
     Iterable<UserRole> roles = userService.getRoles();
 
-    return roleMapper.toDtos(roles);
+    return ROLE_MAPPER.toDtos(roles);
   }
 
   /**
@@ -201,7 +201,7 @@ public class UserController extends BaseController {
   public List<PermissionDto> getPermissions() {
     Iterable<UserPermission> permissions = userService.getPermissions();
 
-    return permissionMapper.toDtos(permissions);
+    return PERMISSION_MAPPER.toDtos(permissions);
   }
 
   /**
@@ -215,7 +215,7 @@ public class UserController extends BaseController {
   public RoleDto getRole(@PathVariable("id") UUID id) {
 
     UserRole role = userService.getRole(id);
-    return roleMapper.toDto(role);
+    return ROLE_MAPPER.toDto(role);
   }
 
   /**
@@ -229,10 +229,10 @@ public class UserController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Page<RoleDto> searchRoles(@RequestParam(value = "name", required = false) String name,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<UserRole> roles = userService.searchRoles(name, pageable);
-    List<RoleDto> roleDtos = roleMapper.toDtos(roles.getContent());
+    List<RoleDto> roleDtos = ROLE_MAPPER.toDtos(roles.getContent());
 
     return new PageImpl<>(roleDtos, pageable, roles.getTotalElements());
   }
@@ -248,8 +248,8 @@ public class UserController extends BaseController {
   public RoleDto createRole(@RequestBody @Valid RoleDto roleDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
 
-    UserRole role = roleMapper.fromDto(roleDto);
-    return roleMapper.toDto(userService.saveRole(role));
+    UserRole role = ROLE_MAPPER.fromDto(roleDto);
+    return ROLE_MAPPER.toDto(userService.saveRole(role));
   }
 
   /**
@@ -271,7 +271,7 @@ public class UserController extends BaseController {
       throw new IllegalArgumentException("Readonly role cannot be edited");
     }
 
-    roleMapper.updateFromDto(roleDto, role);
-    return roleMapper.toDto(userService.saveRole(role));
+    ROLE_MAPPER.updateFromDto(roleDto, role);
+    return ROLE_MAPPER.toDto(userService.saveRole(role));
   }
 }

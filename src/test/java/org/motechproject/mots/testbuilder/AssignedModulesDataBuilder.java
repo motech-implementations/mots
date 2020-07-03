@@ -7,11 +7,11 @@ import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.Module;
 
-public class AssignedModulesDataBuilder {
+public final class AssignedModulesDataBuilder {
 
-  private UUID id;
+  private final UUID id;
+  private final Set<Module> modules = new HashSet<>();
   private CommunityHealthWorker chw;
-  private Set<Module> modules = new HashSet<>();
 
   /**
    * Returns instance of {@link AssignedModulesDataBuilder} with sample data.

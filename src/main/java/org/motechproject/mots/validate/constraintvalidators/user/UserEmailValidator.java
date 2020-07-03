@@ -5,7 +5,7 @@ import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.dto.UserDto;
 import org.motechproject.mots.repository.UserRepository;
@@ -33,7 +33,7 @@ public class UserEmailValidator implements
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, EMAIL,
-            String.format(ValidationMessages.USER_DUPLICATE_EMAIL,
+            String.format(ValidationMessageConstants.USER_DUPLICATE_EMAIL,
                 existingUser.get().getEmail()));
         return false;
       }

@@ -6,16 +6,17 @@ import java.util.UUID;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserRole;
 
-public class UserDataBuilder {
-  private static int instanceNumber = 0;
+public final class UserDataBuilder {
 
-  private UUID id;
-  private String name;
-  private String username;
-  private String password;
-  private String email;
+  private static int instanceNumber;
+
+  private final UUID id;
+  private final String name;
+  private final String username;
+  private final String password;
+  private final String email;
+  private final boolean enabled;
   private UserRole role;
-  private boolean enabled;
 
   /**
    * Returns instance of {@link UserDataBuilder} with sample data.

@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 
 @Entity
 @Table(name = "chw_group")
@@ -22,7 +22,7 @@ public class Group extends BaseTimestampedEntity {
   @Column(name = "name", unique = true, nullable = false)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_GROUP_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_GROUP_NAME)
   private String name;
 
   @OneToMany(mappedBy = "group")

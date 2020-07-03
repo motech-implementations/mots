@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.NewPasswordsMatch;
 import org.motechproject.mots.validate.annotations.Uuid;
@@ -28,7 +28,7 @@ public class UserProfileDto {
 
   @Getter
   @Setter
-  @Email(message = ValidationMessages.INVALID_EMAIL)
+  @Email(message = ValidationMessageConstants.INVALID_EMAIL)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String email;
 

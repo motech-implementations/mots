@@ -77,7 +77,7 @@ public class ModuleAssignmentController extends BaseController {
   @RequestMapping(value = "/assignedModules", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public ChwModulesDto getAssignedModules(@RequestParam(value = "chwId") String chwId) {
+  public ChwModulesDto getAssignedModules(@RequestParam("chwId") String chwId) {
     AssignedModules assignedModules =
         moduleAssignmentService.getAssignedModules(UUID.fromString(chwId));
 

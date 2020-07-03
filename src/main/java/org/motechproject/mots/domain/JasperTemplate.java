@@ -84,7 +84,7 @@ public class JasperTemplate extends BaseTimestampedEntity {
 
   @PrePersist
   @PreUpdate
-  private void preSave() {
+  protected void preSave() {
     if (templateParameters != null) {
       templateParameters.forEach(line -> line.setTemplate(this));
     }

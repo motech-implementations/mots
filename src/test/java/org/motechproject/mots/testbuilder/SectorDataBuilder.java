@@ -4,11 +4,12 @@ import java.util.UUID;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Sector;
 
-public class SectorDataBuilder {
-  private static int instanceNumber = 0;
+public final class SectorDataBuilder {
 
-  private UUID id;
-  private String name;
+  private static int instanceNumber;
+
+  private final UUID id;
+  private final String name;
   private District district;
 
   /**

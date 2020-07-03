@@ -14,14 +14,14 @@ import org.motechproject.mots.validate.constraintvalidators.UuidsValidator;
 public @interface Uuids {
 
   /**
-   * Specify the message in case of a validation error
+   * Specify the message in case of a validation error.
    *
    * @return the message about the error
    */
   String message() default "{invalid.uuid}";
 
   /**
-   * Specify validation groups, to which this constraint belongs
+   * Specify validation groups, to which this constraint belongs.
    *
    * @return array with group classes
    */
@@ -29,7 +29,7 @@ public @interface Uuids {
   };
 
   /**
-   * Specify custom payload objects
+   * Specify custom payload objects.
    *
    * @return array with payload classes
    */

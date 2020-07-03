@@ -5,7 +5,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class RoleDto {
@@ -17,7 +17,7 @@ public class RoleDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_ROLE_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_ROLE_NAME)
   private String name;
 
   @Getter

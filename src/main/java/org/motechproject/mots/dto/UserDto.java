@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.UserEmailUniqueness;
 import org.motechproject.mots.validate.annotations.UsernameUniqueness;
@@ -27,13 +27,13 @@ public class UserDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_USERNAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_USERNAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String username;
 
   @Getter
   @Setter
-  @Email(message = ValidationMessages.INVALID_EMAIL)
+  @Email(message = ValidationMessageConstants.INVALID_EMAIL)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String email;
 

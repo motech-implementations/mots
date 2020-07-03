@@ -5,7 +5,6 @@ import org.motechproject.mots.domain.security.UserLog;
 import org.motechproject.mots.service.UserLogService;
 import org.motechproject.mots.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.TokenRequest;
@@ -23,8 +22,7 @@ public class CustomTokenServices extends DefaultTokenServices {
   private TokenStore tokenStore;
 
   @Override
-  public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication)
-      throws AuthenticationException {
+  public OAuth2AccessToken createAccessToken(OAuth2Authentication authentication) {
     OAuth2AccessToken accessToken = super.createAccessToken(authentication);
 
     User user = getUserFromPrincipal(authentication.getUserAuthentication().getPrincipal());
@@ -34,8 +32,7 @@ public class CustomTokenServices extends DefaultTokenServices {
   }
 
   @Override
-  public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest)
-      throws AuthenticationException {
+  public OAuth2AccessToken refreshAccessToken(String refreshTokenValue, TokenRequest tokenRequest) {
     OAuth2AccessToken accessToken =  super.refreshAccessToken(refreshTokenValue, tokenRequest);
 
     OAuth2Authentication authentication =
@@ -44,11 +41,11 @@ public class CustomTokenServices extends DefaultTokenServices {
     User user = getUserFromPrincipal(authentication.getUserAuthentication().getPrincipal());
 
     UserLog existingUserLog = userLogService.getUserLog(user);
-    if (existingUserLog != null) {
+    if (existingUserLog == null) {
+      userLogService.createNewUserLog(user, accessToken.getExpiration());
+    } else {
       existingUserLog.setLogoutDate(accessToken.getExpiration());
       userLogService.updateUserLog(existingUserLog);
-    } else {
-      userLogService.createNewUserLog(user, accessToken.getExpiration());
     }
 
     return accessToken;

@@ -76,7 +76,7 @@ public abstract class ModuleMapper {
   })
   public abstract UnitDto toDto(Unit unit);
 
-  CallFlowElementDto toDto(CallFlowElement callFlowElement) {
+  protected CallFlowElementDto toDto(CallFlowElement callFlowElement) {
     if (CallFlowElementType.QUESTION.equals(callFlowElement.getType())) {
       return toDto((MultipleChoiceQuestion) callFlowElement);
     }
@@ -84,9 +84,9 @@ public abstract class ModuleMapper {
     return toDto((Message) callFlowElement);
   }
 
-  abstract MessageDto toDto(Message message);
+  protected abstract MessageDto toDto(Message message);
 
-  abstract MultipleChoiceQuestionDto toDto(MultipleChoiceQuestion multipleChoiceQuestion);
+  protected abstract MultipleChoiceQuestionDto toDto(MultipleChoiceQuestion multipleChoiceQuestion);
 
   public abstract List<ModuleSimpleDto> toSimpleDtos(Iterable<Module> modules);
 
@@ -235,7 +235,7 @@ public abstract class ModuleMapper {
     unit.setCallFlowElements(updatedCallFlowElements);
   }
 
-  CallFlowElement fromDto(CallFlowElementDto callFlowElementDto) {
+  protected CallFlowElement fromDto(CallFlowElementDto callFlowElementDto) {
     if (CallFlowElementType.QUESTION.toString().equals(callFlowElementDto.getType())) {
       return fromDto((MultipleChoiceQuestionDto) callFlowElementDto);
     }
@@ -244,12 +244,13 @@ public abstract class ModuleMapper {
   }
 
   @Mapping(target = LIST_ORDER_FIELD, constant = "0")
-  abstract Message fromDto(MessageDto messageDto);
+  protected abstract Message fromDto(MessageDto messageDto);
 
   @Mapping(target = LIST_ORDER_FIELD, constant = "0")
-  abstract MultipleChoiceQuestion fromDto(MultipleChoiceQuestionDto multipleChoiceQuestionDto);
+  protected abstract MultipleChoiceQuestion fromDto(
+      MultipleChoiceQuestionDto multipleChoiceQuestionDto);
 
-  List<Choice> fromDto(List<ChoiceDto> choiceDtos) {
+  protected List<Choice> fromDto(List<ChoiceDto> choiceDtos) {
     List<Choice> choices = new ArrayList<>();
 
     if (choiceDtos != null) {
@@ -263,27 +264,27 @@ public abstract class ModuleMapper {
     return choices;
   }
 
-  abstract Choice fromDto(ChoiceDto choiceDto);
+  protected abstract Choice fromDto(ChoiceDto choiceDto);
 
   @Mappings({
       @Mapping(target = "courseModules", ignore = true),
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "status", ignore = true)
   })
-  abstract void updateFromDto(CourseDto courseDto, @MappingTarget Course course);
+  protected abstract void updateFromDto(CourseDto courseDto, @MappingTarget Course course);
 
   @Mappings({
       @Mapping(target = "units", ignore = true),
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "status", ignore = true)
   })
-  abstract void updateFromDto(ModuleDto moduleDto, @MappingTarget Module module);
+  protected abstract void updateFromDto(ModuleDto moduleDto, @MappingTarget Module module);
 
   @Mappings({
       @Mapping(target = "callFlowElements", ignore = true),
       @Mapping(target = "id", ignore = true)
   })
-  abstract void updateFromDto(UnitDto unitDto, @MappingTarget Unit unit);
+  protected abstract void updateFromDto(UnitDto unitDto, @MappingTarget Unit unit);
 
   private void updateFromDto(CallFlowElementDto callFlowElementDto,
       CallFlowElement callFlowElement) {
@@ -300,12 +301,12 @@ public abstract class ModuleMapper {
       @Mapping(target = LIST_ORDER_FIELD, constant = "0"),
       @Mapping(target = "id", ignore = true)
   })
-  abstract void updateFromDto(MessageDto messageDto, @MappingTarget Message message);
+  protected abstract void updateFromDto(MessageDto messageDto, @MappingTarget Message message);
 
   @Mappings({
       @Mapping(target = LIST_ORDER_FIELD, constant = "0"),
       @Mapping(target = "id", ignore = true)
   })
-  abstract void updateFromDto(MultipleChoiceQuestionDto multipleChoiceQuestionDto,
+  protected abstract void updateFromDto(MultipleChoiceQuestionDto multipleChoiceQuestionDto,
       @MappingTarget MultipleChoiceQuestion multipleChoiceQuestion);
 }

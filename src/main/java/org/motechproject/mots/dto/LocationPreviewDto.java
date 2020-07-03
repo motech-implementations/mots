@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class LocationPreviewDto {
@@ -17,7 +17,7 @@ public class LocationPreviewDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_LOCATION_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_LOCATION_NAME)
   private String name;
 
   @Setter

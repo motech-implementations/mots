@@ -5,6 +5,8 @@ import lombok.Getter;
 
 public class BindingResultException extends RuntimeException {
 
+  private static final long serialVersionUID = 1L;
+
   @Getter
   private final Map<String, String> errors;
 

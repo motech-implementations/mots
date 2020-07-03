@@ -19,6 +19,7 @@ public class Message extends CallFlowElement {
     super(ivrId, ivrName, name, content, type, listOrder);
   }
 
+  @Override
   public Message copyAsNewDraft() {
     return new Message(getIvrId(), getIvrName(), getName(),
         getContent(), getType(), getListOrder());

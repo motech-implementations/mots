@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
@@ -14,12 +15,12 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_FILE_EMPTY;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_FILE_INCORRECT_TYPE;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_FILE_INVALID;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_FILE_MISSING;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_PARAMETER_MISSING;
-import static org.motechproject.mots.constants.ReportingMessages.ERROR_REPORTING_TEMPLATE_EXIST;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_FILE_EMPTY;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_FILE_INCORRECT_TYPE;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_FILE_INVALID;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_FILE_MISSING;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_PARAMETER_MISSING;
+import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_REPORTING_TEMPLATE_EXIST;
 import static org.motechproject.mots.service.JasperTemplateService.REPORT_TYPE_PROPERTY;
 import static org.motechproject.mots.service.JasperTemplateService.SUPPORTED_FORMATS_PROPERTY;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
@@ -29,6 +30,7 @@ import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.text.MessageFormat;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -66,7 +69,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(BlockJUnit4ClassRunner.class)
 @PrepareForTest({JasperTemplateService.class, JasperCompileManager.class})
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.CloseResource",
+    "PMD.SignatureDeclareThrowsException"})
 public class JasperTemplateServiceTest {
 
   @Mock
@@ -87,10 +91,10 @@ public class JasperTemplateServiceTest {
   private static final String PARAM3 = "param3";
   private static final String PARAM4 = "param4";
   private static final String IMAGE_NAME = "image";
-  
+
   private HttpServletRequest request;
   private JasperTemplate template;
-  
+
   @Before
   public void setUp() {
     request = mock(HttpServletRequest.class);
@@ -98,17 +102,20 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldSaveValidNonExistentTemplate() throws Exception {
+  public void shouldSaveValidNonExistentTemplate() {
     // given
     given(jasperTemplateRepository.findByName(anyString()))
         .willReturn(null);
 
     // when
-    testSaveTemplate(DISPLAY_NAME);
+    template = testSaveTemplate(DISPLAY_NAME);
+
+    // then
+    assertNotNull(template);
   }
 
   @Test
-  public void shouldUpdateValidExistentTemplate() throws Exception {
+  public void shouldUpdateValidExistentTemplate() {
     // given
     UUID oldId = UUID.randomUUID();
 
@@ -126,7 +133,7 @@ public class JasperTemplateServiceTest {
     assertEquals(template.getId(), oldId);
   }
 
-  private JasperTemplate testSaveTemplate(String name) throws ReportingException {
+  private JasperTemplate testSaveTemplate(String name) {
     JasperTemplateService service = spy(jasperTemplateService);
     MultipartFile file = mock(MultipartFile.class);
     String description = "description";
@@ -146,7 +153,7 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldThrowErrorIfFileNotOfTypeJasperXml() throws Exception {
+  public void shouldThrowErrorIfFileNotOfTypeJasperXml() {
     expectedException.expect(ReportingException.class);
     expectedException.expectMessage(ERROR_REPORTING_FILE_INCORRECT_TYPE);
 
@@ -155,7 +162,7 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldThrowErrorIfFileEmpty() throws Exception {
+  public void shouldThrowErrorIfFileEmpty() {
     expectedException.expect(ReportingException.class);
     expectedException.expectMessage(ERROR_REPORTING_FILE_EMPTY);
     MockMultipartFile file = new MockMultipartFile(
@@ -165,7 +172,7 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldThrowErrorIfFileNotPresent() throws Exception {
+  public void shouldThrowErrorIfFileNotPresent() {
     expectedException.expect(ReportingException.class);
     expectedException.expectMessage(ERROR_REPORTING_FILE_MISSING);
 
@@ -173,7 +180,7 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldThrowErrorIfFileIsInvalid() throws Exception {
+  public void shouldThrowErrorIfFileIsInvalid() {
     expectedException.expect(ReportingException.class);
     expectedException.expectMessage(ERROR_REPORTING_FILE_INVALID);
 
@@ -182,7 +189,7 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldThrowErrorIfTemplateNameAlreadyExists() throws Exception {
+  public void shouldThrowErrorIfTemplateNameAlreadyExists() {
     JasperTemplate jasperTemplate = new JasperTemplate();
     jasperTemplate.setName("Name");
     expectedException.expect(ReportingException.class);
@@ -193,7 +200,7 @@ public class JasperTemplateServiceTest {
   }
 
   @Test
-  public void shouldThrowErrorIfDisplayNameOfParameterIsMissing() throws Exception {
+  public void shouldThrowErrorIfDisplayNameOfParameterIsMissing() throws IOException, JRException {
     expectedException.expect(ReportingException.class);
     expectedException.expectMessage(
         MessageFormat.format(ERROR_REPORTING_PARAMETER_MISSING, "displayName"));

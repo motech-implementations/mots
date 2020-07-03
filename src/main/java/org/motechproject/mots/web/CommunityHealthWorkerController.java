@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
-import org.motechproject.mots.exception.ReportingException;
 import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.service.CommunityHealthWorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class CommunityHealthWorkerController extends BaseController {
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String districtName,
       @RequestParam(value = GROUP_NAME_PARAM, required = false) String groupName,
       @RequestParam(value = "selected", required = false) Boolean selected,
-      Pageable pageable) throws IllegalArgumentException {
+      Pageable pageable) {
 
     Page<CommunityHealthWorker> healthWorkers =
         healthWorkerService.searchCommunityHealthWorkers(
@@ -181,7 +180,7 @@ public class CommunityHealthWorkerController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Map<Integer, String> uploadChwSpreadsheet(@PathVariable("selected") Boolean selected,
-      @RequestPart("file") MultipartFile file) throws ReportingException, IOException {
+      @RequestPart("file") MultipartFile file) throws IOException {
     return healthWorkerService.processChwCsv(file, selected);
   }
 }

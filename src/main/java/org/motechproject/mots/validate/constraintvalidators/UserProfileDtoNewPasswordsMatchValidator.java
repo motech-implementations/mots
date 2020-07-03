@@ -2,7 +2,7 @@ package org.motechproject.mots.validate.constraintvalidators;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.dto.UserProfileDto;
 import org.motechproject.mots.validate.ValidationUtils;
 import org.motechproject.mots.validate.annotations.NewPasswordsMatch;
@@ -24,7 +24,7 @@ public class UserProfileDtoNewPasswordsMatchValidator implements
 
       context.disableDefaultConstraintViolation();
       ValidationUtils.addDefaultViolationMessageToInnerField(context, CONFIRM_NEW_PASSWORD,
-          ValidationMessages.PASSWORDS_NOT_MATCH);
+          ValidationMessageConstants.PASSWORDS_NOT_MATCH);
       return false;
     }
     return true;

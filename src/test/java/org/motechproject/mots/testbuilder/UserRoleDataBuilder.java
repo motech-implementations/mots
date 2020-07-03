@@ -3,11 +3,12 @@ package org.motechproject.mots.testbuilder;
 import java.util.UUID;
 import org.motechproject.mots.domain.security.UserRole;
 
-public class UserRoleDataBuilder {
-  private static int instanceNumber = 0;
+public final class UserRoleDataBuilder {
 
-  private UUID id;
-  private String name;
+  private static int instanceNumber;
+
+  private final UUID id;
+  private final String name;
 
   /**
    * Returns instance of {@link UserRoleDataBuilder} with sample data.

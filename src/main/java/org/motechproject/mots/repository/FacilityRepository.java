@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FacilityRepository extends JpaRepository<Facility, UUID>,
     FacilityRepositoryCustom {
 
+  @Override
   List<Facility> findAll();
 
   Facility findByNameAndSector(String name, Sector sector);

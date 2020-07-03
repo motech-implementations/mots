@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.annotations.Uuid;
 
 public class UnitDto extends IvrObjectDto {
@@ -19,7 +19,7 @@ public class UnitDto extends IvrObjectDto {
   @Setter
   private String treeId;
 
-  @NotBlank(message = ValidationMessages.EMPTY_UNIT_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_UNIT_NAME)
   @Getter
   @Setter
   private String name;

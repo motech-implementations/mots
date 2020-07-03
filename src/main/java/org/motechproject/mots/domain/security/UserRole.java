@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class UserRole extends BaseTimestampedEntity {
   @Column(name = "name", nullable = false, unique = true)
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_ROLE_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_ROLE_NAME)
   private String name;
 
   @Column(name = "readonly", nullable = false, columnDefinition = "BIT DEFAULT 0")

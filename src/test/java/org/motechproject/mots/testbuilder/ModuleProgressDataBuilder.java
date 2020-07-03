@@ -6,9 +6,9 @@ import org.motechproject.mots.domain.CourseModule;
 import org.motechproject.mots.domain.ModuleProgress;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 
-public class ModuleProgressDataBuilder {
+public final class ModuleProgressDataBuilder {
 
-  private UUID id;
+  private final UUID id;
   private ProgressStatus status;
   private CourseModule courseModule;
   private CommunityHealthWorker chw;

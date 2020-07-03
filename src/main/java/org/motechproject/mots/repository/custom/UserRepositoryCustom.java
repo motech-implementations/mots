@@ -6,6 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserRepositoryCustom {
 
-  Page<User> search(String username, String email, String name, String role,
-      Pageable pageable) throws IllegalArgumentException;
+  Page<User> search(String username, String email, String name, String role, Pageable pageable);
 }

@@ -1,6 +1,9 @@
 package org.motechproject.mots.exception;
 
 public class ReportingException extends BaseFormattedException {
+
+  private static final long serialVersionUID = 1L;
+
   public ReportingException(String message) {
     super(message);
   }

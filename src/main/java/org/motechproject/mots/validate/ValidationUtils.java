@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
@@ -38,7 +39,8 @@ public final class ValidationUtils {
    * @param value is a date value to check
    */
   public static boolean isValidDateFormat(String format, String value) {
-    SimpleDateFormat sdf = new SimpleDateFormat(format);
+    SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+
     try {
       Date date = sdf.parse(value);
       return value.equals(sdf.format(date));

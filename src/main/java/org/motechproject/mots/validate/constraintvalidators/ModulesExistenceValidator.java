@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.validate.ValidationUtils;
 import org.motechproject.mots.validate.annotations.ModulesExistence;
@@ -34,7 +34,7 @@ public class ModulesExistenceValidator
         }
       }
       String message = String.format(
-          ValidationMessages.NOT_EXISTING_MODULES_WITH_ID, notExistingModules.toString());
+          ValidationMessageConstants.NOT_EXISTING_MODULES_WITH_ID, notExistingModules.toString());
       context.disableDefaultConstraintViolation();
       ValidationUtils.addDefaultViolationMessage(context, message);
       return notExistingModules.toString().isEmpty();

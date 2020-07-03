@@ -16,11 +16,10 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
@@ -28,20 +27,7 @@ import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
 @Table(name = "course")
-@NoArgsConstructor
 public class Course extends IvrObject {
-
-  /**
-   * Initialize Course.
-   * @return course with initial values
-   */
-  public static Course initialize() {
-    Course course = new Course();
-    course.version = 1;
-    course.status = Status.DRAFT;
-
-    return course;
-  }
 
   @Column(name = "name")
   @Getter
@@ -77,26 +63,41 @@ public class Course extends IvrObject {
   @Setter
   private Course previousVersion;
 
-  @NotBlank(message = ValidationMessages.EMPTY_NO_MODULES_MESSAGE_IVR_ID,
+  @NotBlank(message = ValidationMessageConstants.EMPTY_NO_MODULES_MESSAGE_IVR_ID,
       groups = CourseReleaseCheck.class)
   @Column(name = "no_modules_message_ivr_id")
   @Getter
   @Setter
   private String noModulesMessageIvrId;
 
-  @NotBlank(message = ValidationMessages.EMPTY_MENU_INTRO_MESSAGE_IVR_ID,
+  @NotBlank(message = ValidationMessageConstants.EMPTY_MENU_INTRO_MESSAGE_IVR_ID,
       groups = CourseReleaseCheck.class)
   @Column(name = "menu_intro_message_ivr_id")
   @Getter
   @Setter
   private String menuIntroMessageIvrId;
 
-  @NotBlank(message = ValidationMessages.EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID,
+  @NotBlank(message = ValidationMessageConstants.EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID,
       groups = CourseReleaseCheck.class)
   @Column(name = "choose_module_question_ivr_id")
   @Getter
   @Setter
   private String chooseModuleQuestionIvrId;
+
+  /**
+   * Initialize Course.
+   * @return course with initial values
+   */
+  public static Course initialize() {
+    Course course = new Course();
+    course.version = 1;
+    course.status = Status.DRAFT;
+
+    return course;
+  }
+
+  public Course() {
+  }
 
   private Course(String ivrId, String ivrName, String name, String description, Integer version,
       Course previousVersion, String noModulesMessageIvrId, String menuIntroMessageIvrId,

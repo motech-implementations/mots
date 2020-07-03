@@ -3,11 +3,11 @@ package org.motechproject.mots.testbuilder;
 import java.util.UUID;
 import org.motechproject.mots.domain.District;
 
-public class DistrictDataBuilder {
-  private static int instanceNumber = 0;
+public final class DistrictDataBuilder {
+  private static int instanceNumber;
 
-  private UUID id;
-  private String name;
+  private final UUID id;
+  private final String name;
 
   /**
    * Returns instance of {@link DistrictDataBuilder} with sample data.

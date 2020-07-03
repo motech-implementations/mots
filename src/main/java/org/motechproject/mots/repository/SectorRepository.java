@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SectorRepository extends JpaRepository<Sector, UUID>,
     SectorRepositoryCustom {
 
+  @Override
   List<Sector> findAll();
 
   Sector findByNameAndDistrict(String name, District district);

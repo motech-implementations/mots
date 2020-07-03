@@ -4,6 +4,8 @@ import lombok.Getter;
 
 public class MotsException extends RuntimeException {
 
+  private static final long serialVersionUID = 1L;
+
   @Getter
   private String displayMessage;
 

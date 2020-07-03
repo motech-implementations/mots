@@ -1,8 +1,8 @@
 package org.motechproject.mots.management;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
 @Component
 public class LocationImporter implements ApplicationRunner {
 
-  private LocationService locationService;
+  private final LocationService locationService;
 
   private static final Logger LOGGER = Logger.getLogger(LocationImporter.class);
 
@@ -65,6 +65,7 @@ public class LocationImporter implements ApplicationRunner {
    * @param args Arguments passed to the application
    * @throws IOException if location of the .xlsx file is wrong.
    */
+  @Override
   public void run(ApplicationArguments args) throws IOException {
     if (!loadLocations) {
       return;
@@ -75,22 +76,22 @@ public class LocationImporter implements ApplicationRunner {
     this.currentFacilityList = locationService.getFacilites();
     this.currentVillageList = locationService.getVillages();
 
-    InputStream excelFileToRead = new FileInputStream("src/main/resources/SL_Locations.xlsx");
-    XSSFWorkbook  wb = new XSSFWorkbook(excelFileToRead);
+    try (XSSFWorkbook wb = new XSSFWorkbook(
+        Files.newInputStream(Paths.get("src/main/resources/SL_Locations.xlsx")))) {
+      XSSFSheet sheet = wb.getSheet(LOCATIONS_SHEET);
+      parseDistricts(sheet);
+      this.currentDistrictList = locationService.getDistricts();
 
-    XSSFSheet sheet = wb.getSheet(LOCATIONS_SHEET);
-    parseDistricts(sheet);
-    this.currentDistrictList = locationService.getDistricts();
+      parseSectors(sheet);
+      this.currentSectorList = locationService.getSectors();
 
-    parseSectors(sheet);
-    this.currentSectorList = locationService.getSectors();
+      sheet = wb.getSheet(FACILITIES_SHEET);
+      parseFacilities(sheet);
+      this.currentFacilityList = locationService.getFacilites();
 
-    sheet = wb.getSheet(FACILITIES_SHEET);
-    parseFacilities(sheet);
-    this.currentFacilityList = locationService.getFacilites();
-
-    sheet = wb.getSheet(LOCATIONS_SHEET);
-    parseVillages(sheet);
+      sheet = wb.getSheet(LOCATIONS_SHEET);
+      parseVillages(sheet);
+    }
 
     LOGGER.info("Locations have been successfully loaded");
   }

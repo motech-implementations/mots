@@ -7,14 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @MappedSuperclass
 @NoArgsConstructor
 public abstract class IvrObject extends BaseTimestampedEntity {
 
-  @NotBlank(message = ValidationMessages.EMPTY_IVR_ID, groups = CourseReleaseCheck.class)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_IVR_ID, groups = CourseReleaseCheck.class)
   @Column(name = "ivr_id")
   @Getter
   @Setter

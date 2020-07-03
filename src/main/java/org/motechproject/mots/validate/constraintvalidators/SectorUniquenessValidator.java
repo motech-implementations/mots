@@ -4,7 +4,7 @@ import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang.StringUtils;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.dto.SectorCreationDto;
@@ -41,7 +41,8 @@ public class SectorUniquenessValidator implements
 
       if (existing != null // when edit sector allows change
           && !existing.getId().toString().equals(sectorCreationDto.getId())) {
-        String message = String.format(ValidationMessages.NOT_UNIQUE_SECTOR, existing.getName());
+        String message = String.format(ValidationMessageConstants.NOT_UNIQUE_SECTOR,
+            existing.getName());
 
         context.disableDefaultConstraintViolation();
         ValidationUtils.addDefaultViolationMessageToInnerField(context, NAME, message);

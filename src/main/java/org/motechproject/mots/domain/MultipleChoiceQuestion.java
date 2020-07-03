@@ -71,6 +71,7 @@ public class MultipleChoiceQuestion extends CallFlowElement {
    * Create a copy of Multiple Choice Question.
    * @return copied question
    */
+  @Override
   public MultipleChoiceQuestion copyAsNewDraft() {
     List<Choice> choicesCopy = new ArrayList<>();
 

@@ -36,7 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.CyclomaticComplexity", "PMD.NullAssignment",
+    "PMD.AvoidReassigningParameters"})
 public class ModuleProgressService {
 
   private static final Logger LOGGER = Logger.getLogger(ModuleProgressService.class);
@@ -258,7 +259,7 @@ public class ModuleProgressService {
     }
   }
 
-  @SuppressWarnings("PMD.CyclomaticComplexity")
+  @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
   private void parseVotoUnit(VotoCallLogDto votoCallLogDto, UnitProgress unitProgress,
       ListIterator<VotoBlockDto> blockIterator) {
     unitProgress.startUnit();
@@ -365,6 +366,7 @@ public class ModuleProgressService {
     return null;
   }
 
+  @SuppressWarnings("PMD.ConfusingTernary")
   private void parseUnitContinuationQuestion(VotoCallLogDto votoCallLogDto,
       ListIterator<VotoBlockDto> blockIterator, VotoBlockDto blockDto, UnitProgress unitProgress) {
     ModuleProgress moduleProgress = unitProgress.getModuleProgress();

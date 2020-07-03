@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VillageRepository extends JpaRepository<Village, UUID>,
     VillageRepositoryCustom {
 
+  @Override
   List<Village> findAll();
 
   Village findByNameAndFacility(String name, Facility facility);

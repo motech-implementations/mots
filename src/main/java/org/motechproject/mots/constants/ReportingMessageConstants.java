@@ -1,6 +1,6 @@
 package org.motechproject.mots.constants;
 
-public class ReportingMessages {
+public class ReportingMessageConstants {
   public static final String ERROR_JASPER_FILE_CREATION =
       "A temporary Jasper file could not be created";
   public static final String ERROR_JASPER_TEMPLATE_NOT_FOUND =

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
   private ClientRepository clientRepository;
 
   @Override
-  public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+  public ClientDetails loadClientByClientId(String clientId) {
     Client client = clientRepository.findOneByClientId(clientId)
         .orElseThrow(() -> new NoSuchClientException(
             String.format("Client with clientId=%s was not found", clientId)));

@@ -12,16 +12,14 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
 @Entity
 @Table(name = "unit")
-@NoArgsConstructor
 public class Unit extends IvrObject {
 
   @Column(name = "name", nullable = false)
@@ -52,7 +50,7 @@ public class Unit extends IvrObject {
   @Getter
   private List<CallFlowElement> callFlowElements;
 
-  @NotBlank(message = ValidationMessages.EMPTY_CONTINUATION_QUESTION_IVR_ID,
+  @NotBlank(message = ValidationMessageConstants.EMPTY_CONTINUATION_QUESTION_IVR_ID,
       groups = CourseReleaseCheck.class)
   @Column(name = "continuation_question_ivr_id")
   @Getter
@@ -63,6 +61,9 @@ public class Unit extends IvrObject {
   @Getter
   @Setter
   private Boolean allowReplay;
+
+  public Unit() {
+  }
 
   private Unit(String ivrId, String ivrName, String name, String description,
       Integer listOrder,

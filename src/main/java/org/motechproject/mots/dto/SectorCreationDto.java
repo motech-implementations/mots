@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.motechproject.mots.constants.ValidationMessages;
+import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.utils.TrimTextDeserializer;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
 import org.motechproject.mots.validate.annotations.SectorUniqueness;
@@ -21,7 +21,7 @@ public class SectorCreationDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessages.EMPTY_LOCATION_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_LOCATION_NAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
   private String name;
 
@@ -29,7 +29,7 @@ public class SectorCreationDto {
   @Getter
   @DistrictExistence
   @Uuid
-  @NotEmpty(message = ValidationMessages.EMPTY_DISTRICT_ID)
+  @NotEmpty(message = ValidationMessageConstants.EMPTY_DISTRICT_ID)
   private String districtId;
 
   @Getter
