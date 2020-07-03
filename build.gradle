@@ -1,9 +1,9 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'org.springframework.boot' version '1.5.10.RELEASE'
     id 'checkstyle'
     id 'pmd'
+    id 'org.springframework.boot' version '1.5.10.RELEASE'
     id 'com.github.node-gradle.node' version '2.2.4'
     id 'net.ltgt.apt' version '0.8'
     id 'net.researchgate.release' version '2.7.0'
@@ -65,25 +65,8 @@ node {
     download = true
 }
 
-task webpack(type: NodeTask, dependsOn: 'npmInstall') {
-    script = project.file('node_modules/.bin/webpack')
-}
-
-task webpackWatch(type: NodeTask, dependsOn: 'npmInstall') {
-    script = project.file('node_modules/.bin/webpack')
-    args = ['--watch']
-}
-
-task webpackProduction(type: NodeTask, dependsOn: 'npmInstall') {
-    script = project.file('node_modules/.bin/webpack')
-    args = ['-p']
-}
-
-jar.dependsOn 'webpackProduction'
-bootRun.dependsOn 'webpack'
-
 wrapper {
-    gradleVersion = '6.0'
+    gradleVersion = '6.5.1'
 }
 
 checkstyle {
@@ -100,5 +83,22 @@ pmd {
     ruleSetFiles = files("ruleset.xml")
     reportsDir = file("build/reports/pmd")
 }
+
+task webpack(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+}
+
+task webpackWatch(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+    args = ['--watch']
+}
+
+task webpackProduction(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+    args = ['-p']
+}
+
+jar.dependsOn 'webpackProduction'
+bootRun.dependsOn 'webpack'
 
 apply from: 'liquibase.gradle'
