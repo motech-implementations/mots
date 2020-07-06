@@ -3,16 +3,17 @@ package org.motechproject.mots.task;
 import java.util.Date;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.service.IvrService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ModuleAssignmentNotificationScheduler  {
-  private static final Logger LOGGER = Logger
+  private static final Logger LOGGER = LoggerFactory
       .getLogger(ModuleAssignmentNotificationScheduler.class);
 
   private final IvrService ivrService;

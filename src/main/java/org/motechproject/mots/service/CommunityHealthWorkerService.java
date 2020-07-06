@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.AssignedModules;
@@ -40,6 +39,8 @@ import org.motechproject.mots.repository.GroupRepository;
 import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.repository.VillageRepository;
 import org.motechproject.mots.validate.constraintvalidators.PhoneNumberValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,7 @@ import org.supercsv.prefs.CsvPreference;
 public class CommunityHealthWorkerService {
 
   private static final Logger LOGGER =
-      Logger.getLogger(CommunityHealthWorkerService.class);
+      LoggerFactory.getLogger(CommunityHealthWorkerService.class);
 
   private static final ChwInfoMapper CHW_INFO_MAPPER = ChwInfoMapper.INSTANCE;
 

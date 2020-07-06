@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import net.sf.jasperreports.engine.JRException;
-import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.JasperTemplate;
 import org.motechproject.mots.dto.JasperTemplateDto;
 import org.motechproject.mots.dto.VersionedReportDto;
@@ -20,6 +19,8 @@ import org.motechproject.mots.mapper.JasperTemplateMapper;
 import org.motechproject.mots.repository.JasperTemplateRepository;
 import org.motechproject.mots.service.JasperReportsViewService;
 import org.motechproject.mots.service.JasperTemplateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiForm
 @RequestMapping("/api/reports/templates")
 public class JasperTemplateController extends BaseController {
 
-  private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JasperTemplateController.class);
 
   private static final JasperTemplateMapper JASPER_TEMPLATE_MAPPER = JasperTemplateMapper.INSTANCE;
 

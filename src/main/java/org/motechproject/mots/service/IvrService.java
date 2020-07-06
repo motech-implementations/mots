@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
@@ -23,6 +22,8 @@ import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.CallDetailRecordRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -45,7 +46,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class IvrService {
 
-  private static final Logger LOGGER = Logger.getLogger(IvrService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(IvrService.class);
 
   private static final String PHONE = "phone";
   private static final String PREFERRED_LANGUAGE = "preferred_language";

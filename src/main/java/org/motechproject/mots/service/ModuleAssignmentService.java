@@ -16,7 +16,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.constants.MotsConstants;
 import org.motechproject.mots.domain.AssignedModules;
@@ -43,6 +42,8 @@ import org.motechproject.mots.repository.GroupRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.task.ModuleAssignmentNotificationScheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ModuleAssignmentService {
-  private static final Logger LOGGER = Logger
+  private static final Logger LOGGER = LoggerFactory
       .getLogger(ModuleAssignmentService.class);
 
   @Autowired

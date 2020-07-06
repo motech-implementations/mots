@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.util.StringUtils;
@@ -18,7 +19,7 @@ public class ClientDetails implements org.springframework.security.oauth2.provid
 
   private static final long serialVersionUID = 1L;
 
-  private static final Logger LOGGER = Logger.getLogger(ClientDetails.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ClientDetails.class);
 
   @Getter
   @Setter

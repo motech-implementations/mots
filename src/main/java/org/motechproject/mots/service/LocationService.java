@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
@@ -25,6 +24,8 @@ import org.motechproject.mots.repository.FacilityRepository;
 import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.repository.VillageRepository;
 import org.motechproject.mots.utils.AuthenticationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +40,7 @@ import org.supercsv.prefs.CsvPreference;
 @Service
 public class LocationService {
 
-  private static final Logger LOGGER = Logger.getLogger(LocationService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LocationService.class);
 
   private static final String DISTRICT_HEADER = "district";
   private static final String SECTOR_HEADER = "sector";
