@@ -1,11 +1,8 @@
 package org.motechproject.mots.domain.security;
 
-import static com.google.common.collect.MoreCollectors.onlyElement;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -82,17 +79,6 @@ public class User extends BaseTimestampedEntity implements UserDetails {
 
   public boolean hasPermission(String permissionName) {
     return roles.stream().anyMatch(role -> role.hasPermission(permissionName));
-  }
-
-  /**
-   * Check if user has only this role.
-   * @param roleId ID of role
-   */
-  public boolean hasOnlyRole(UUID roleId) {
-    if (roleId != null) {
-      return roles.stream().collect(onlyElement()).getId().equals(roleId);
-    }
-    return false;
   }
 
   @Override
