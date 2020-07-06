@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.dto.UserDto;

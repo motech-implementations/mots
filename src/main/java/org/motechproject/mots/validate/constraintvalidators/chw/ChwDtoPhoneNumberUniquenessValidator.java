@@ -3,7 +3,7 @@ package org.motechproject.mots.validate.constraintvalidators.chw;
 import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;

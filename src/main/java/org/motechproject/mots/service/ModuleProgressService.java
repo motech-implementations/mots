@@ -10,7 +10,7 @@ import java.util.ListIterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.motechproject.mots.domain.CallFlowElement;
 import org.motechproject.mots.domain.Choice;

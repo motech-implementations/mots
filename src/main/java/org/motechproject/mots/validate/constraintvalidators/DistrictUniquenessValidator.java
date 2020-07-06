@@ -3,7 +3,7 @@ package org.motechproject.mots.validate.constraintvalidators;
 import java.util.Optional;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.District;
 import org.motechproject.mots.dto.DistrictCreationDto;

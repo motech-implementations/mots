@@ -3,7 +3,7 @@ package org.motechproject.mots.validate.constraintvalidators;
 import java.util.UUID;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.validate.ValidationUtils;
 import org.motechproject.mots.validate.annotations.SectorExistence;
