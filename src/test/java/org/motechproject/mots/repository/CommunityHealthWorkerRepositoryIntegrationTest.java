@@ -23,6 +23,7 @@ import org.motechproject.mots.testbuilder.VillageDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @WithMockAdminUser
 public class CommunityHealthWorkerRepositoryIntegrationTest extends
@@ -86,7 +87,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
         chw1.getFirstName(), chw1.getFamilyName(), chw1.getPhoneNumber(),
         village.getName(),
         facility.getName(), sector.getName(),
-        district.getName(), null, false, null);
+        district.getName(), null, false, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -99,7 +100,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
         chw2.getFirstName(), null, null,
-        null, null, null, null, null, false, null);
+        null, null, null, null, null, false, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -112,7 +113,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
         null, null, null,
-        null, null, null, district.getName(), null, false, null);
+        null, null, null, district.getName(), null, false, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(2L));

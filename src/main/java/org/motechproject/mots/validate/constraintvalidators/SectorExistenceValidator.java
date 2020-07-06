@@ -24,7 +24,7 @@ public class SectorExistenceValidator
 
     if (StringUtils.isNotEmpty(sectorId) && ValidationUtils.isValidUuidString(sectorId)) {
       UUID sector = UUID.fromString(sectorId);
-      return sectorRepository.exists(sector);
+      return sectorRepository.existsById(sector);
     }
     return true;
   }

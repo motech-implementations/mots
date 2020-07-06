@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationHelper {
 
-  public static final String ADMIN_USER = "admin";
+  private static final String ADMIN_USER = "admin";
 
   @Autowired
   private UserService userService;

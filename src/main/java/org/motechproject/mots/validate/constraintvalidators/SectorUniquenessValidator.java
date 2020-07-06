@@ -35,7 +35,7 @@ public class SectorUniquenessValidator implements
 
       String name = sectorCreationDto.getName();
       UUID districtId = UUID.fromString(sectorCreationDto.getDistrictId());
-      District district = districtRepository.findOne(districtId);
+      District district = districtRepository.getOne(districtId);
 
       Sector existing = sectorRepository.findByNameAndDistrict(name, district);
 

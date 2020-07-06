@@ -10,6 +10,7 @@ import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @WithMockAdminUser
 public class DistrictRepositoryIntegrationTest extends
@@ -43,7 +44,7 @@ public class DistrictRepositoryIntegrationTest extends
   @Test
   public void shouldFindDistrictByName() {
     // when
-    Page<District> result = districtRepository.search(district1.getName(), null);
+    Page<District> result = districtRepository.search(district1.getName(), PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));

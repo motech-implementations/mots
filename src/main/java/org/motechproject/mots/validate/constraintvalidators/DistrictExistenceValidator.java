@@ -23,7 +23,7 @@ public class DistrictExistenceValidator
   public boolean isValid(String districtId, ConstraintValidatorContext context) {
     if (StringUtils.isNotEmpty(districtId) && ValidationUtils.isValidUuidString(districtId)) {
       UUID district = UUID.fromString(districtId);
-      return districtRepository.exists(district);
+      return districtRepository.existsById(district);
     }
     return true;
   }

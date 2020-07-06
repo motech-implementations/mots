@@ -483,21 +483,21 @@ public class LocationService {
 
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Village getVillage(UUID id) {
-    return villageRepository.findOne(id);
+    return villageRepository.getOne(id);
   }
 
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Facility getFacility(UUID id) {
-    return facilityRepository.findOne(id);
+    return facilityRepository.getOne(id);
   }
 
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Sector getSector(UUID id) {
-    return sectorRepository.findOne(id);
+    return sectorRepository.getOne(id);
   }
 
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public District getDistrict(UUID id) {
-    return districtRepository.findOne(id);
+    return districtRepository.getOne(id);
   }
 }

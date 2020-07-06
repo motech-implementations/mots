@@ -52,13 +52,13 @@ import org.motechproject.mots.testbuilder.DistrictDataBuilder;
 import org.motechproject.mots.testbuilder.ModuleDataBuilder;
 import org.motechproject.mots.testbuilder.ModuleProgressDataBuilder;
 import org.motechproject.mots.testbuilder.SectorDataBuilder;
-import org.motechproject.mots.utils.TestUtils;
+import org.motechproject.mots.testbuilder.UserDataBuilder;
+import org.motechproject.mots.utils.AuthenticationHelper;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(SecurityContextHolder.class)
+@PrepareForTest(ModuleAssignmentService.class)
 @SuppressWarnings("PMD.TooManyMethods")
 public class ModuleAssignmentServiceTest {
 
@@ -88,6 +88,9 @@ public class ModuleAssignmentServiceTest {
 
   @Mock
   private IvrService ivrService;
+
+  @Mock
+  private AuthenticationHelper authenticationHelper;
 
   @Mock
   @SuppressWarnings("unused")
@@ -129,7 +132,9 @@ public class ModuleAssignmentServiceTest {
    */
   @Before
   public void setUp() {
-    user = TestUtils.createNewUserAndAddToSecurityContext();
+    user = new UserDataBuilder().build();
+    when(authenticationHelper.getCurrentUser()).thenReturn(user);
+
     existingAssignedModules = new AssignedModulesDataBuilder()
         .withChw(CHW)
         .withModule(MODULE_1)
@@ -150,9 +155,9 @@ public class ModuleAssignmentServiceTest {
 
     when(assignedModulesRepository.findByHealthWorkerId(eq(CHW.getId())))
         .thenReturn(Optional.of(existingAssignedModules));
-    when(districtRepository.findOne(eq(DISTRICT.getId())))
+    when(districtRepository.getOne(eq(DISTRICT.getId())))
         .thenReturn(DISTRICT);
-    when(sectorRepository.findOne(eq(SECTOR.getId())))
+    when(sectorRepository.getOne(eq(SECTOR.getId())))
         .thenReturn(SECTOR);
     mockModuleInModuleRepository(MODULE_2);
     mockModuleInModuleRepository(MODULE_3);

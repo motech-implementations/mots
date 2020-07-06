@@ -35,7 +35,7 @@ public class VillageUniquenessValidator implements
 
       String name = villageCreationDto.getName();
       UUID facilityId = UUID.fromString(villageCreationDto.getFacilityId());
-      Facility facility = facilityRepository.findOne(facilityId);
+      Facility facility = facilityRepository.getOne(facilityId);
 
       Village existing = villageRepository.findByNameAndFacility(name, facility);
 

@@ -18,7 +18,7 @@ public class FacilityExistenceValidator implements ConstraintValidator<FacilityE
   public boolean isValid(String facilityId, ConstraintValidatorContext context) {
     if (StringUtils.isNotEmpty(facilityId) && ValidationUtils.isValidUuidString(facilityId)) {
       UUID facility = UUID.fromString(facilityId);
-      return facilityRepository.exists(facility);
+      return facilityRepository.existsById(facility);
     }
     return true;
   }

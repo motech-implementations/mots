@@ -96,7 +96,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public JasperTemplateDto getTemplate(@PathVariable("id") UUID templateId) {
-    JasperTemplate jasperTemplate = jasperTemplateRepository.findOne(templateId);
+    JasperTemplate jasperTemplate = jasperTemplateRepository.getOne(templateId);
     if (jasperTemplate == null) {
       throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);
     }
@@ -112,7 +112,7 @@ public class JasperTemplateController extends BaseController {
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteTemplate(@PathVariable("id") UUID templateId) {
-    JasperTemplate jasperTemplate = jasperTemplateRepository.findOne(templateId);
+    JasperTemplate jasperTemplate = jasperTemplateRepository.getOne(templateId);
     if (jasperTemplate == null) {
       throw new EntityNotFoundException(
           ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);
@@ -148,7 +148,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseBody
   public Object generateReportIfModified(@PathVariable("id") UUID templateId,
       @RequestParam("version") long version) throws SQLException, JRException, IOException {
-    JasperTemplate template = jasperTemplateRepository.findOne(templateId);
+    JasperTemplate template = jasperTemplateRepository.getOne(templateId);
 
     if (template == null) {
       throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);

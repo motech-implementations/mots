@@ -21,6 +21,7 @@ import org.motechproject.mots.testbuilder.VillageDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @WithMockAdminUser
 public class VillageRepositoryIntegrationTest extends
@@ -72,7 +73,7 @@ public class VillageRepositoryIntegrationTest extends
   public void shouldFindVillageByName() {
     // when
     Page<Village> result = villageRepository.search(
-        village1.getName(), null, null, null, null);
+        village1.getName(), null, null, null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -84,7 +85,7 @@ public class VillageRepositoryIntegrationTest extends
   public void shouldFindVillageByDistrict() {
     // when
     Page<Village> result = villageRepository.search(
-        null, village1.getParentName(), null, null, null);
+        null, village1.getParentName(), null, null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(2L));

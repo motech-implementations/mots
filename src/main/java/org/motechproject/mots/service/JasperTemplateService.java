@@ -143,7 +143,7 @@ public class JasperTemplateService {
   protected void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file) {
     JasperTemplate templateTmp = jasperTemplateRepository.findByName(jasperTemplate.getName());
     if (templateTmp != null) {
-      jasperTemplateRepository.delete(templateTmp.getId());
+      jasperTemplateRepository.deleteById(templateTmp.getId());
     }
     validateFileAndSetData(jasperTemplate, file);
     saveWithParameters(jasperTemplate);

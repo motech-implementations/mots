@@ -60,7 +60,7 @@ public class JasperReportsExportService {
    */
   public void generateReport(UUID templateId, String format, HttpServletRequest request,
       HttpServletResponse response) throws SQLException, JRException, IOException {
-    JasperTemplate template = jasperTemplateRepository.findOne(templateId);
+    JasperTemplate template = jasperTemplateRepository.getOne(templateId);
 
     if (template == null) {
       throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);

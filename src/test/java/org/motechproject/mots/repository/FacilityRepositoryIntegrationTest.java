@@ -19,6 +19,7 @@ import org.motechproject.mots.testbuilder.SectorDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @WithMockAdminUser
 public class FacilityRepositoryIntegrationTest extends
@@ -62,7 +63,7 @@ public class FacilityRepositoryIntegrationTest extends
   public void shouldFindFacility() {
     // when
     Page<Facility> result = facilityRepository.search(facility1.getName(),
-        facility1.getInchargeFullName(), null, null, null, null, null);
+        facility1.getInchargeFullName(), null, null, null, null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -74,7 +75,7 @@ public class FacilityRepositoryIntegrationTest extends
   public void shouldFindFacilityByName() {
     // when
     Page<Facility> result = facilityRepository.search(facility1.getName(),
-        null, null, null, null, null, null);
+        null, null, null, null, null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -86,7 +87,7 @@ public class FacilityRepositoryIntegrationTest extends
   public void shouldFindFacilityBySector() {
     // when
     Page<Facility> result = facilityRepository.search(null, null,
-        null, null, facility1.getSector().getName(), null, null);
+        null, null, facility1.getSector().getName(), null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(2L));

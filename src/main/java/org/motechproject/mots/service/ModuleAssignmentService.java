@@ -42,11 +42,11 @@ import org.motechproject.mots.repository.GroupRepository;
 import org.motechproject.mots.repository.ModuleRepository;
 import org.motechproject.mots.repository.SectorRepository;
 import org.motechproject.mots.task.ModuleAssignmentNotificationScheduler;
+import org.motechproject.mots.utils.AuthenticationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,7 +89,7 @@ public class ModuleAssignmentService {
   private GroupRepository groupRepository;
 
   @Autowired
-  private UserService userService;
+  private AuthenticationHelper authenticationHelper;
 
   @Autowired
   private ModuleAssignmentNotificationScheduler moduleAssignmentNotificationScheduler;
@@ -192,7 +192,7 @@ public class ModuleAssignmentService {
         }
       });
 
-      repository.save(assignedModulesList);
+      repository.saveAll(assignedModulesList);
     }
   }
 
@@ -318,17 +318,15 @@ public class ModuleAssignmentService {
       }
     });
 
-    String userName = (String) SecurityContextHolder.getContext().getAuthentication()
-        .getPrincipal();
-    User currentUser = userService.getUserByUserName(userName);
+    User currentUser = authenticationHelper.getCurrentUser();
 
     if (!newIvrSubscribers.isEmpty()) {
       for (Module moduleToAssign : newChwModules) {
         assignmentLogRepository.save(new DistrictAssignmentLog(
-            districtId == null ? null : districtRepository.findOne(districtId),
-            sectorId == null ? null : sectorRepository.findOne(sectorId),
-            facilityId == null ? null : facilityRepository.findOne(facilityId),
-            groupId == null ? null : groupRepository.findOne(groupId),
+            districtId == null ? null : districtRepository.getOne(districtId),
+            sectorId == null ? null : sectorRepository.getOne(sectorId),
+            facilityId == null ? null : facilityRepository.getOne(facilityId),
+            groupId == null ? null : groupRepository.getOne(groupId),
             moduleToAssign,
             currentUser
         ));

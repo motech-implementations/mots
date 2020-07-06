@@ -23,7 +23,7 @@ public class GroupExistenceValidator
   public boolean isValid(String groupId, ConstraintValidatorContext context) {
     if (StringUtils.isNotEmpty(groupId) && ValidationUtils.isValidUuidString(groupId)) {
       UUID group = UUID.fromString(groupId);
-      return groupRepository.exists(group);
+      return groupRepository.existsById(group);
     }
     return true;
   }

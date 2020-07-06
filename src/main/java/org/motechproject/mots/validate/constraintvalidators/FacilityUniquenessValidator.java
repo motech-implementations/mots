@@ -35,7 +35,7 @@ public class FacilityUniquenessValidator implements
 
       String name = facilityCreationDto.getName();
       UUID sectorId = UUID.fromString(facilityCreationDto.getSectorId());
-      Sector sector = sectorRepository.findOne(sectorId);
+      Sector sector = sectorRepository.getOne(sectorId);
 
       Facility existing = facilityRepository.findByNameAndSector(name, sector);
 

@@ -17,6 +17,7 @@ import org.motechproject.mots.testbuilder.SectorDataBuilder;
 import org.motechproject.mots.utils.WithMockAdminUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 @WithMockAdminUser
 public class SectorRepositoryIntegrationTest extends
@@ -52,7 +53,7 @@ public class SectorRepositoryIntegrationTest extends
   public void shouldFindSectorByName() {
     // when
     Page<Sector> result = sectorRepository.search(
-        sector1.getName(), null, null);
+        sector1.getName(), null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -64,7 +65,7 @@ public class SectorRepositoryIntegrationTest extends
   public void shouldFindSectorByDistrict() {
     // when
     Page<Sector> result = sectorRepository.search(
-        null, sector1.getParentName(), null);
+        null, sector1.getParentName(), PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(2L));

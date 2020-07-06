@@ -13,7 +13,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
-import org.hibernate.jpa.criteria.PathImplementor;
+import org.hibernate.query.criteria.internal.PathImplementor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 

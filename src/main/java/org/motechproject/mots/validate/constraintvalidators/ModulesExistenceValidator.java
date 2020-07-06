@@ -44,6 +44,6 @@ public class ModulesExistenceValidator
 
   private Boolean checkIfExist(String moduleId) {
     UUID module = UUID.fromString(moduleId);
-    return moduleRepository.exists(module);
+    return moduleRepository.existsById(module);
   }
 }

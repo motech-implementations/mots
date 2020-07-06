@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CommunityHealthWorkerRepository extends
     JpaRepository<CommunityHealthWorker, UUID>, CommunityHealthWorkerRepositoryCustom {
 
-  Optional<CommunityHealthWorker> findById(UUID id);
-
   Optional<CommunityHealthWorker> findByChwId(String chwId);
 
   Optional<CommunityHealthWorker> findByPhoneNumber(String phoneNumber);

@@ -19,7 +19,7 @@ task dbDiff(type: JavaExec) {
     args "--username=" + databaseUser
     args "--password=" + databasePassword
     args "--url=" + databaseUrl
-    args "--driver=com.mysql.jdbc.Driver"
+    args "--driver=com.mysql.cj.jdbc.Driver"
     args "diffChangeLog"
 }
 

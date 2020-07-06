@@ -16,6 +16,7 @@ import org.motechproject.mots.testbuilder.UserDataBuilder;
 import org.motechproject.mots.testbuilder.UserRoleDataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 public class UserRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<User> {
@@ -50,7 +51,7 @@ public class UserRepositoryIntegrationTest extends
   public void shouldFindUserByUserName() {
     // when
     Page<User> result = userRepository.search(user1.getUsername(),
-        null, null, null, null);
+        null, null, null, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
@@ -62,7 +63,7 @@ public class UserRepositoryIntegrationTest extends
   public void shouldFindUserByRole() {
     // when
     Page<User> result = userRepository.search(null, null,
-        null, user1.getRoles().iterator().next().getName(), null);
+        null, user1.getRoles().iterator().next().getName(), PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(2L));

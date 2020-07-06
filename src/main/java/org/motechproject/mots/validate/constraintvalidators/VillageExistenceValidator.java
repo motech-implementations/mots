@@ -19,7 +19,7 @@ public class VillageExistenceValidator implements
   public boolean isValid(String villageId, ConstraintValidatorContext context) {
     if (StringUtils.isNotEmpty(villageId) && ValidationUtils.isValidUuidString(villageId)) {
       UUID village = UUID.fromString(villageId);
-      return villageRepository.exists(village);
+      return villageRepository.existsById(village);
     }
     return true;
   }

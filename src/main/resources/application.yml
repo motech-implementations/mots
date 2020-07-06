@@ -1,15 +1,7 @@
-liquibase:
-    change-log: classpath:/db/changelog/liquibase-changelog.xml
-
 mots:
     ivrApiKey: ${ivrApiKey}
     resourceId: mots
     loadLocations: ${loadLocations}
-
-security:
-    oauth2:
-        client:
-            authentication-scheme: header
 
 token:
     validitySeconds: 600
@@ -27,11 +19,10 @@ server:
 
 spring:
     datasource:
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: com.mysql.cj.jdbc.Driver
         password: ${databasePassword}
         url: ${databaseUrl}
         username: ${databaseUser}
-        type: com.zaxxer.hikari.HikariDataSource
     jpa:
         hibernate:
             ddl-auto: validate
@@ -39,3 +30,5 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL5Dialect
         show-sql: false
+    liquibase:
+        change-log: classpath:/db/changelog/liquibase-changelog.xml

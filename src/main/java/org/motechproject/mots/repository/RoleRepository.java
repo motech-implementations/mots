@@ -8,7 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface RoleRepository extends CrudRepository<UserRole, UUID>, RoleRepositoryCustom {
 
-  Optional<UserRole> findById(UUID id);
-
   Optional<UserRole> findByName(String name);
 }

@@ -52,7 +52,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -62,12 +61,10 @@ import org.motechproject.mots.exception.ReportingException;
 import org.motechproject.mots.repository.JasperTemplateRepository;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 @RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(BlockJUnit4ClassRunner.class)
 @PrepareForTest({JasperTemplateService.class, JasperCompileManager.class})
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.CloseResource",
     "PMD.SignatureDeclareThrowsException"})

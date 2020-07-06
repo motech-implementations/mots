@@ -126,7 +126,7 @@ public class ModuleProgressService {
 
       if (moduleProgresses != null && !moduleProgresses.isEmpty()) {
         moduleProgresses.forEach(moduleProgress -> moduleProgress.setCourseModule(courseModule));
-        moduleProgressRepository.save(moduleProgresses);
+        moduleProgressRepository.saveAll(moduleProgresses);
       }
     });
   }
