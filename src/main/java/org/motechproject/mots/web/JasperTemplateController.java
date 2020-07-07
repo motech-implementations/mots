@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import org.motechproject.mots.domain.JasperTemplate;
 import org.motechproject.mots.dto.JasperTemplateDto;
@@ -17,7 +17,7 @@ import org.motechproject.mots.dto.VersionedReportDto;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.mapper.JasperTemplateMapper;
 import org.motechproject.mots.repository.JasperTemplateRepository;
-import org.motechproject.mots.service.JasperReportsViewService;
+import org.motechproject.mots.service.JasperReportsExportService;
 import org.motechproject.mots.service.JasperTemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
 @Controller
 @Transactional
@@ -53,7 +51,7 @@ public class JasperTemplateController extends BaseController {
   private JasperTemplateRepository jasperTemplateRepository;
 
   @Autowired
-  private JasperReportsViewService jasperReportsViewService;
+  private JasperReportsExportService jasperReportsExportService;
 
   /**
    * Adding report templates with ".jrxml" format to database.
@@ -129,41 +127,18 @@ public class JasperTemplateController extends BaseController {
    * @param request    request (to get the request parameters)
    * @param templateId report template ID
    * @param format     report format to generate, default is PDF
-   * @return the generated report
    */
   @RequestMapping(value = "/{id}/{format}", method = RequestMethod.GET)
-  @ResponseBody
-  public ModelAndView generateReport(HttpServletRequest request,
-      @PathVariable("id") UUID templateId, @PathVariable("format") String format) {
-    JasperTemplate template = jasperTemplateRepository.findOne(templateId);
-
-    if (template == null) {
-      throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);
-    }
-
-    Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
-        request, template
-    );
-    map.put("format", format);
-
-    JasperReportsMultiFormatView jasperView = jasperReportsViewService
-        .getJasperReportsView(template, request);
-
-    String fileName = template.getName().replaceAll("\\s+", "_");
-    String contentDisposition = "inline; filename=" + fileName + "." + format;
-
-    jasperView
-        .getContentDispositionMappings()
-        .setProperty(format, contentDisposition.toLowerCase(Locale.ENGLISH));
-
-    return new ModelAndView(jasperView, map);
+  public void generateReport(HttpServletRequest request, HttpServletResponse response,
+      @PathVariable("id") UUID templateId, @PathVariable("format") String format)
+      throws SQLException, JRException, IOException {
+    jasperReportsExportService.generateReport(templateId, format, request, response);
   }
 
   /**
    * Generate a report based on the template and request parameters.
    * Return the generated report only if its version has changed
    *
-   * @param request    request (to get the request parameters)
    * @param templateId report template ID
    * @param version     a version (timestamp) of the report
    * @return the generated report along with its version
@@ -171,8 +146,7 @@ public class JasperTemplateController extends BaseController {
   @RequestMapping(value = "/{id}/json/versioned", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseBody
-  public Object generateReportIfModified(
-      HttpServletRequest request, @PathVariable("id") UUID templateId,
+  public Object generateReportIfModified(@PathVariable("id") UUID templateId,
       @RequestParam("version") long version) throws SQLException, JRException, IOException {
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
 
@@ -183,7 +157,7 @@ public class JasperTemplateController extends BaseController {
     reportParams.put("pageSize", String.valueOf(Integer.MAX_VALUE));
     reportParams.put("format", "json");
 
-    String jsonOutput = jasperReportsViewService.generateJsonReport(template, reportParams);
+    String jsonOutput = jasperReportsExportService.generateJsonReport(template, reportParams);
 
     if (jsonOutput.equals(template.getJsonOutput())) {
       Long currentVersion = template.getJsonOutputVersion();
@@ -197,5 +171,4 @@ public class JasperTemplateController extends BaseController {
       return new VersionedReportDto(jsonOutput, template.getJsonOutputVersion());
     }
   }
-
 }
