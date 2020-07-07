@@ -3,11 +3,11 @@ package org.motechproject.mots.domain.security;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.BaseTimestampedEntity;
 
