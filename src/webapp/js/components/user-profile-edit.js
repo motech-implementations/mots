@@ -25,7 +25,7 @@ class UserProfileEdit extends Component {
     this.fetchUser = this.fetchUser.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchUser();
   }
 

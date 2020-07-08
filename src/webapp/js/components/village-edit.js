@@ -26,7 +26,7 @@ class VillageEdit extends Component {
     this.fetchVillage = this.fetchVillage.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }

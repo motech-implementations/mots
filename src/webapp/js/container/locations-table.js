@@ -34,7 +34,7 @@ class LocationsTable extends Component {
     this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(
       DISPLAY_FACILITIES_AUTHORITY,
       MANAGE_FACILITIES_AUTHORITY,

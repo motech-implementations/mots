@@ -44,7 +44,7 @@ class DistrictAssignModules extends Component {
     this.handleTabSelect = this.handleTabSelect.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(ASSIGN_MODULES_AUTHORITY)) {
       this.props.history.push('/home');
     }

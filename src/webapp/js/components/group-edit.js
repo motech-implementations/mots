@@ -24,7 +24,7 @@ class GroupEdit extends Component {
     this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(GROUP_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
     }

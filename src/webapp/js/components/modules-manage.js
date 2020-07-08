@@ -70,7 +70,7 @@ class ModulesManage extends Component {
     this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(MANAGE_MODULES_AUTHORITY, DISPLAY_MODULES_AUTHORITY)) {
       this.props.history.push('/home');
     } else {
@@ -78,8 +78,8 @@ class ModulesManage extends Component {
     }
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    this.canAddCourse(nextState.treeData);
+  componentDidUpdate() {
+    this.canAddCourse(this.state.treeData);
   }
 
   static getNodeKey(node) {

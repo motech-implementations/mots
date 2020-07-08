@@ -26,7 +26,7 @@ class DistrictEdit extends Component {
     this.fetchDistrict = this.fetchDistrict.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }

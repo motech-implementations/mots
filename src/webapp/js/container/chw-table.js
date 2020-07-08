@@ -28,7 +28,7 @@ class ChwTable extends Component {
     this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(CHW_READ_AUTHORITY)) {
       this.props.history.push('/home');
     }

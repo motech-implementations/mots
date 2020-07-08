@@ -22,7 +22,7 @@ class HealthWorkersNew extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(CHW_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
     } else {

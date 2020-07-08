@@ -15,7 +15,7 @@ class UserNew extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }

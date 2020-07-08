@@ -24,7 +24,7 @@ class CsvUpload extends Component {
     this.fileUpload = this.fileUpload.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(UPLOAD_CHW_CSV_AUTHORITY, UPLOAD_LOCATION_CSV_AUTHORITY)) {
       this.props.history.push('/home');
     }

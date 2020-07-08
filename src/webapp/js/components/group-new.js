@@ -15,7 +15,7 @@ class GroupNew extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(GROUP_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
     }

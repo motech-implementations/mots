@@ -149,7 +149,7 @@ class HealthWorkersForm extends Component {
     this.renderField = this.renderField.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchLocations();
     this.fetchData();
   }

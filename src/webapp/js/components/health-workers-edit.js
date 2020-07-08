@@ -27,7 +27,7 @@ class HealthWorkersEdit extends Component {
     this.hideConfirmModal = this.hideConfirmModal.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(CHW_WRITE_AUTHORITY)) {
       this.props.history.push('/home');
     } else {

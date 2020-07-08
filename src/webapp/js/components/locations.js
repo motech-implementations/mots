@@ -29,7 +29,7 @@ class Locations extends Component {
     this.handleTabSelect = this.handleTabSelect.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.match.params.tabIndex) {
       this.setState({ selectedIndex: Number.parseInt(this.props.match.params.tabIndex, 10) });
     }

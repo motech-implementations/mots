@@ -18,7 +18,7 @@ class DistrictNew extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(CREATE_FACILITIES_AUTHORITY)) {
       this.props.history.push('/home');
     }

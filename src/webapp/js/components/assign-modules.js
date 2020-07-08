@@ -35,7 +35,7 @@ class AssignModules extends Component {
     this.handleNotificationTimeChange = this.handleNotificationTimeChange.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(ASSIGN_MODULES_AUTHORITY)) {
       this.props.history.push('/home');
     } else {

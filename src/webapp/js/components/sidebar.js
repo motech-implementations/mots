@@ -35,7 +35,7 @@ class SideBar extends Component {
     this.toggleGroupsMenu = this.toggleGroupsMenu.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (hasAuthority(DISPLAY_REPORTS_AUTHORITY)) {
       this.props.fetchReports();
     }

@@ -31,7 +31,7 @@ class UsersTable extends Component {
     this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }

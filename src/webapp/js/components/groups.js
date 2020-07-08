@@ -52,7 +52,7 @@ class Groups extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(GROUP_READ_AUTHORITY)) {
       this.props.history.push('/home');
     }

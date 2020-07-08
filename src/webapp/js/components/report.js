@@ -156,7 +156,7 @@ class Report extends Component {
     this.fetchDataWithDebounce = _.debounce(this.fetchData, 500);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!hasAuthority(DISPLAY_REPORTS_AUTHORITY) || _.isUndefined(this.props.location.state)) {
       this.props.history.push('/home');
     } else {
@@ -176,20 +176,23 @@ class Report extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(
-      {
-        reportId: nextProps.match.params.reportId,
-        loading: true,
-        filtered: [],
-        sorted: [],
-        page: 0,
-        pageSize: 20,
-        exportWithFilters: false,
-        exportWithOrder: false,
-      },
-      () => this.fetchReport(),
-    );
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.match.params.reportId !== prevState.reportId) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState(
+        {
+          reportId: this.props.match.params.reportId,
+          loading: true,
+          filtered: [],
+          sorted: [],
+          page: 0,
+          pageSize: 20,
+          exportWithFilters: false,
+          exportWithOrder: false,
+        },
+        () => this.fetchReport(),
+      );
+    }
   }
 
   getExportParams() {

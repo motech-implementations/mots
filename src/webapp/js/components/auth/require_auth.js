@@ -5,16 +5,16 @@ import authenticate from './authenticate_token';
 
 export default (ComposedComponent) => {
   class Authentication extends Component {
-    componentWillMount() {
+    componentDidMount() {
       authenticate();
       if (!this.props.authenticated) {
         this.props.history.push('/login');
       }
     }
 
-    componentWillUpdate(nextProps) {
+    componentDidUpdate() {
       authenticate();
-      if (!nextProps.authenticated) {
+      if (!this.props.authenticated) {
         this.props.history.push('/login');
       }
     }
