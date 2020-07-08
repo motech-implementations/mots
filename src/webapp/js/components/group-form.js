@@ -28,7 +28,7 @@ const GroupForm = ({ handleSubmit, onSubmit, onSubmitCancel }) => {
       { _.map(FIELDS, renderField) }
       <div className="col-md-2" />
       <button type="submit" className="btn btn-primary margin-bottom-md">Submit</button>
-      <button className="btn btn-danger margin-left-sm margin-bottom-md" onClick={onSubmitCancel}>Cancel</button>
+      <button type="button" className="btn btn-danger margin-left-sm margin-bottom-md" onClick={onSubmitCancel}>Cancel</button>
     </form>
   );
 };

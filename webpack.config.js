@@ -1,10 +1,11 @@
-const webpack = require('webpack');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, 'src/webapp');
 const SRC = path.resolve(ROOT, 'js');
 const DEST = path.resolve(__dirname, 'build/resources/main/static/site');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -20,40 +21,75 @@ module.exports = {
     colors: true,
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
-    new ExtractTextPlugin('bundle.css', {
-      allChunks: true,
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'bundle.css',
     }),
   ],
   module: {
-    loaders: [
+    rules: [
       {
         enforce: 'pre',
         test: /\.js$/,
         exclude: /node_modules/,
-        loaders: ['eslint-loader'],
+        loader: 'eslint-loader',
       },
       {
         test: /\.js$/,
-        loaders: ['babel-loader?presets[]=es2015&presets[]=react&presets[]=stage-1'],
-        include: SRC,
         exclude: /node_modules/,
+        loader: 'babel-loader',
       },
       {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader'] }),
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader', 'sass-loader',
+        ],
+      },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader' },
+      {
+        test: /\.(woff|woff2)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 5000,
+            },
+          },
+        ],
       },
       {
-        test: /\.scss$/,
-        use: ExtractTextPlugin.extract('css-loader!sass-loader'),
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              mimetype: 'application/octet-stream',
+            },
+          },
+        ],
       },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, use: 'file-loader' },
-      { test: /\.(woff|woff2)$/, use: 'url-loader?prefix=font/&limit=5000' },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, use: 'url-loader?limit=10000&mimetype=application/octet-stream' },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, use: 'url-loader?limit=10000&mimetype=image/svg+xml' },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              mimetype: 'image/svg+xml',
+            },
+          },
+        ],
+      },
     ],
+  },
+  resolve: {
+    extensions: ['.js'],
   },
 };

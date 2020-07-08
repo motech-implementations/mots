@@ -40,6 +40,6 @@ ReactDOM.render(
         />
       </div>
     </HashRouter>
-  </Provider>
-  , document.getElementById('root'),
+  </Provider>,
+  document.getElementById('root'),
 );

@@ -19,17 +19,21 @@
     "airbnb"
   ],
   "rules": {
-    "import/named": 2,
-    "react/jsx-filename-extension": 0,
+    "import/named": "error",
+    "react/jsx-filename-extension": "off",
     "jsx-a11y/anchor-is-valid": [ "error", {
       "components": [ "Link" ],
       "specialLink": [ "to", "hrefLeft", "hrefRight" ],
       "aspects": [ "noHref" ]
     }],
-    "jsx-a11y/label-has-for": [ 2, {
+    "jsx-a11y/label-has-for": [ "error", {
       "components": [ "Label" ],
       "required": "id",
       "allowChildren": false
-    }]
+    }],
+    "react/destructuring-assignment": "off",
+    "react/jsx-props-no-spreading": "off",
+    "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
+    "import/no-cycle": "off"
   }
 }

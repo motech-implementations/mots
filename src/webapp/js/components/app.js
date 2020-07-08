@@ -47,9 +47,9 @@ export default class App extends Component {
   }
 
   toggleShowMenuSmart() {
-    this.setState({
-      showMenuSmart: !this.state.showMenuSmart,
-    });
+    this.setState(prevState => ({
+      showMenuSmart: !prevState.showMenuSmart,
+    }));
   }
 
   hideMenuSmart() {

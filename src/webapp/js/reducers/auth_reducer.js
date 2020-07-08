@@ -1,4 +1,6 @@
-import { AUTH_USER, UNAUTH_USER, AUTH_ERROR, SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER } from '../actions/types';
+import {
+  AUTH_USER, UNAUTH_USER, AUTH_ERROR, SET_COUNTER_LOGOUT_TIME, RESET_LOGOUT_COUNTER,
+} from '../actions/types';
 
 const initialState = {
   error: null,
@@ -7,7 +9,7 @@ const initialState = {
   resetCounter: false,
 };
 
-export default function (state = initialState, action) {
+export default (state = initialState, action) => {
   switch (action.type) {
     case AUTH_USER:
       return { ...state, error: null, authenticated: true };
@@ -24,4 +26,4 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-}
+};

@@ -46,12 +46,15 @@ class GroupAssignFrom extends Component {
             checked={this.props.delayNotification}
             onChange={this.props.handleDelayNotificationChange}
           />
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor="delay-notification" className="margin-left-sm margin-bottom-sm">
             Delay the notification
           </label>
         </div>
-        {this.props.delayNotification &&
+        {this.props.delayNotification
+        && (
         <div className="col-md-12 margin-top-sm">
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor="notification-time">Notification date</label>
           <div className="input-group">
             <span className="input-group-addon">
@@ -68,7 +71,7 @@ class GroupAssignFrom extends Component {
             />
           </div>
         </div>
-        }
+        )}
         <form
           className="form-horizontal col-md-12"
           onSubmit={this.props.sendAssignedModules}
@@ -116,4 +119,3 @@ GroupAssignFrom.defaultProps = {
   disableModuleSelect: false,
   assignInProgress: false,
 };
-

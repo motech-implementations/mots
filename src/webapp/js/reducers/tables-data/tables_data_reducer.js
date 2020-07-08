@@ -6,7 +6,7 @@ import {
 } from '../../actions/types';
 import initialTablesData from './tables_data_initial_state';
 
-export default function (state = initialTablesData, action) {
+export default (state = initialTablesData, action) => {
   switch (action.type) {
     case FETCH_CHWS:
       if (action.payload.data !== undefined) {
@@ -66,4 +66,4 @@ export default function (state = initialTablesData, action) {
     default:
       return state;
   }
-}
+};

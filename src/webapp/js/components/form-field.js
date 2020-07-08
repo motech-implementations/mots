@@ -10,7 +10,7 @@ function renderSelectOptions(options) {
   const { values, valueKey, displayNameKey } = options;
 
   return [
-    <option key="empty" value={null} />,
+    <option key="empty" value={null}> </option>,
     _.map(values, (value, index) => {
       const rawValue = valueKey ? value[valueKey] : value;
       const optionValue = typeof rawValue === 'string' ? rawValue : JSON.stringify(rawValue);
@@ -19,7 +19,8 @@ function renderSelectOptions(options) {
       return (
         <option key={index} value={optionValue} disabled={value.disabled}>
           { displayValue }
-        </option>);
+        </option>
+      );
     }),
   ];
 }

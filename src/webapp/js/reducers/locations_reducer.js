@@ -1,6 +1,6 @@
 import { FETCH_LOCATIONS } from '../actions/types';
 
-export default function (state = [], action) {
+export default (state = [], action) => {
   switch (action.type) {
     case FETCH_LOCATIONS:
       if (action.payload.data !== undefined) {
@@ -10,4 +10,4 @@ export default function (state = [], action) {
     default:
       return state;
   }
-}
+};

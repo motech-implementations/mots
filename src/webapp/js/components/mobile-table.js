@@ -11,17 +11,25 @@ const MobileTable = ({ data, columns }) => (
           key={row.id ? row.id : index}
         >
           {columns.map(column => (
-            column.show === false ?
-              null :
-              <div className="padding-x-xxs" key={column.Header}>
-                <strong>{column.Header}:</strong> {
-                  column.Cell && typeof column.Cell === 'function' ?
-                    <div className="margin-x-xs">
-                      {column.Cell({ value: row[column.accessor] })}
-                    </div> :
-                    row[column.accessor]
+            column.show === false
+              ? null
+              : (
+                <div className="padding-x-xxs" key={column.Header}>
+                  <strong>
+                    {column.Header}
+                    :
+                  </strong>
+                  {
+                  column.Cell && typeof column.Cell === 'function'
+                    ? (
+                      <div className="margin-x-xs">
+                        {column.Cell({ value: row[column.accessor] })}
+                      </div>
+                    )
+                    : row[column.accessor]
                   }
-              </div>
+                </div>
+              )
           ))}
         </div>
       ))

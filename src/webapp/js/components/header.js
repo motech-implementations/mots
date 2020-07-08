@@ -39,7 +39,6 @@ const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
   </div>
 );
 
-
 export default Header;
 
 Header.propTypes = {
