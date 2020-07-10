@@ -7,6 +7,8 @@ import SortableTree from 'react-sortable-tree';
 import update from 'immutability-helper';
 import Alert from 'react-s-alert';
 
+import 'react-sortable-tree/style.css';
+
 import apiClient from '../utils/api-client';
 import {
   DISPLAY_MODULES_AUTHORITY, hasAuthority,

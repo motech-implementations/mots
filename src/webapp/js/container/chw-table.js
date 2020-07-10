@@ -18,6 +18,11 @@ import { buildSearchParams } from '../utils/react-table-search-params';
 class ChwTable extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: true,
+    };
+
     // flag of someone is typing
     this.filtering = false;
 
@@ -32,7 +37,6 @@ class ChwTable extends Component {
     if (!hasAuthority(CHW_READ_AUTHORITY)) {
       this.props.history.push('/home');
     }
-    this.setState({ loading: true });
   }
 
   onFilteredChange() {

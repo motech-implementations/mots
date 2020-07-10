@@ -207,24 +207,28 @@ class Locations extends Component {
 
           <TabPanel>
             <LocationsTable
+              key={FETCH_VILLAGES}
               locationType={FETCH_VILLAGES}
               tableColumns={Locations.getVillageColumns()}
             />
           </TabPanel>
           <TabPanel>
             <LocationsTable
+              key={FETCH_FACILITIES}
               locationType={FETCH_FACILITIES}
               tableColumns={Locations.getFacilityColumns()}
             />
           </TabPanel>
           <TabPanel>
             <LocationsTable
+              key={FETCH_SECTORS}
               locationType={FETCH_SECTORS}
               tableColumns={Locations.getSectorColumns()}
             />
           </TabPanel>
           <TabPanel>
             <LocationsTable
+              key={FETCH_DISTRICTS}
               locationType={FETCH_DISTRICTS}
               tableColumns={Locations.getDistrictColumns()}
             />

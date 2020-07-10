@@ -306,7 +306,7 @@ class ModuleForm extends Component {
         key={fieldKey}
         name={fieldName}
         component={ModuleForm.renderFieldInput}
-        onFocus={props.resetLogoutCounter()}
+        onFocus={() => props.resetLogoutCounter()}
         fieldConfig={fieldConfig}
         disabled={!props.isEditable || (props.isModuleReleased && !fieldConfig.releasedEditable)}
       />

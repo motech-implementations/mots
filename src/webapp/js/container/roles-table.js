@@ -21,6 +21,11 @@ class RolesTable extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: true,
+    };
+
     // flag of someone is typing
     this.filtering = false;
 
@@ -35,7 +40,6 @@ class RolesTable extends Component {
     if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
       this.props.history.push('/home');
     }
-    this.setState({ loading: true });
   }
 
   onFilteredChange() {

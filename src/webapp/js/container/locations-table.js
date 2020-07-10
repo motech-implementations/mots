@@ -24,6 +24,11 @@ class LocationsTable extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      loading: true,
+    };
+
     // flag of someone is typing
     this.filtering = false;
 
@@ -42,7 +47,6 @@ class LocationsTable extends Component {
     )) {
       this.props.history.push('/home');
     }
-    this.setState({ loading: true });
   }
 
   onFilteredChange() {
