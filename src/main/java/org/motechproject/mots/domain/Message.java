@@ -14,14 +14,14 @@ public class Message extends CallFlowElement {
     super(CallFlowElementType.MESSAGE);
   }
 
-  private Message(String ivrId, String ivrName, String name, String content,
+  private Message(String ivrId, String ivrName, Unit unit, String name, String content,
       CallFlowElementType type, Integer listOrder) {
-    super(ivrId, ivrName, name, content, type, listOrder);
+    super(ivrId, ivrName, unit, name, content, type, listOrder);
   }
 
   @Override
-  public Message copyAsNewDraft() {
-    return new Message(getIvrId(), getIvrName(), getName(),
+  public Message copyAsNewDraft(Unit unit) {
+    return new Message(getIvrId(), getIvrName(), unit, getName(),
         getContent(), getType(), getListOrder());
   }
 }

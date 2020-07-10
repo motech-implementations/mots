@@ -65,15 +65,13 @@ public class Unit extends IvrObject {
   public Unit() {
   }
 
-  private Unit(String ivrId, String ivrName, String name, String description,
-      Integer listOrder,
-      List<CallFlowElement> callFlowElements,
-      String continuationQuestionIvrId, Boolean allowReplay) {
+  private Unit(String ivrId, String ivrName, Module module, String name, String description,
+      Integer listOrder, String continuationQuestionIvrId, Boolean allowReplay) {
     super(ivrId, ivrName);
+    this.module = module;
     this.name = name;
     this.description = description;
     this.listOrder = listOrder;
-    this.callFlowElements = callFlowElements;
     this.continuationQuestionIvrId = continuationQuestionIvrId;
     this.allowReplay = allowReplay;
   }
@@ -98,15 +96,17 @@ public class Unit extends IvrObject {
    * Create a drat copy of Unit.
    * @return copy of Unit
    */
-  public Unit copyAsNewDraft() {
+  public Unit copyAsNewDraft(Module module) {
+    Unit unitCopy = new Unit(getIvrId(), getIvrName(), module, name, description, listOrder,
+        continuationQuestionIvrId, allowReplay);
+
     List<CallFlowElement> callFlowElementsCopy = new ArrayList<>();
 
     if (callFlowElements != null) {
-      callFlowElements.forEach(callFlowElement ->
-          callFlowElementsCopy.add(callFlowElement.copyAsNewDraft()));
+      callFlowElements.forEach(el -> callFlowElementsCopy.add(el.copyAsNewDraft(unitCopy)));
     }
 
-    return new Unit(getIvrId(), getIvrName(), name, description, listOrder, callFlowElementsCopy,
-        continuationQuestionIvrId, allowReplay);
+    unitCopy.setCallFlowElements(callFlowElementsCopy);
+    return unitCopy;
   }
 }

@@ -93,12 +93,11 @@ public class Module extends BaseTimestampedEntity {
   }
 
   private Module(String name, String ivrGroup, String description,
-      Integer version, List<Unit> units, Module previousVersion) {
+      Integer version, Module previousVersion) {
     this.name = name;
     this.ivrGroup = ivrGroup;
     this.description = description;
     this.version = version;
-    this.units = units;
     this.previousVersion = previousVersion;
 
     this.status = Status.DRAFT;
@@ -146,12 +145,16 @@ public class Module extends BaseTimestampedEntity {
    * @return copy of Module
    */
   public Module copyAsNewDraft() {
+    Module moduleCopy = new Module(name, ivrGroup, description, version + 1, this);
+
     List<Unit> unitsCopy = new ArrayList<>();
 
     if (units != null) {
-      units.forEach(unit -> unitsCopy.add(unit.copyAsNewDraft()));
+      units.forEach(unit -> unitsCopy.add(unit.copyAsNewDraft(moduleCopy)));
     }
 
-    return new Module(name, ivrGroup, description, version + 1, unitsCopy, this);
+    moduleCopy.setUnits(unitsCopy);
+
+    return moduleCopy;
   }
 }

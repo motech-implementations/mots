@@ -62,14 +62,15 @@ public abstract class CallFlowElement extends IvrObject {
    * @param type type of element
    * @param listOrder order of element
    */
-  public CallFlowElement(String ivrId, String ivrName, String name, String content,
+  public CallFlowElement(String ivrId, String ivrName, Unit unit, String name, String content,
       CallFlowElementType type, Integer listOrder) {
     super(ivrId, ivrName);
+    this.unit = unit;
     this.name = name;
     this.content = content;
     this.type = type;
     this.listOrder = listOrder;
   }
 
-  public abstract CallFlowElement copyAsNewDraft();
+  public abstract CallFlowElement copyAsNewDraft(Unit unit);
 }

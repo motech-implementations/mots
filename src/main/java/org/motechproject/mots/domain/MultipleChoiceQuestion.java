@@ -43,10 +43,10 @@ public class MultipleChoiceQuestion extends CallFlowElement {
     super(CallFlowElementType.QUESTION);
   }
 
-  private MultipleChoiceQuestion(String ivrId, String ivrName, String name, String content,
-      CallFlowElementType type, Integer listOrder, List<Choice> choices,
+  private MultipleChoiceQuestion(String ivrId, String ivrName, Unit unit, String name,
+      String content, CallFlowElementType type, Integer listOrder, List<Choice> choices,
       QuestionType questionType) {
-    super(ivrId, ivrName, name, content, type, listOrder);
+    super(ivrId, ivrName, unit, name, content, type, listOrder);
     this.choices = choices;
     this.questionType = questionType;
   }
@@ -72,14 +72,14 @@ public class MultipleChoiceQuestion extends CallFlowElement {
    * @return copied question
    */
   @Override
-  public MultipleChoiceQuestion copyAsNewDraft() {
+  public MultipleChoiceQuestion copyAsNewDraft(Unit unit) {
     List<Choice> choicesCopy = new ArrayList<>();
 
     if (choices != null) {
       choices.forEach(choice -> choicesCopy.add(choice.copyAsNewDraft()));
     }
 
-    return new MultipleChoiceQuestion(getIvrId(), getIvrName(), getName(),
+    return new MultipleChoiceQuestion(getIvrId(), getIvrName(), unit, getName(),
         getContent(), getType(), getListOrder(), choicesCopy, getQuestionType());
   }
 }
