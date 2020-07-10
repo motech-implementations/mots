@@ -47,7 +47,8 @@ class ChwTable extends Component {
       accessor: 'id',
       Cell: cell => (
         <div className="actions-buttons-container">
-          { hasAuthority(CHW_WRITE_AUTHORITY) &&
+          { hasAuthority(CHW_WRITE_AUTHORITY)
+            && (
             <Link
               to={`/chw/${cell.value}`}
               type="button"
@@ -57,8 +58,9 @@ class ChwTable extends Component {
               <span className="glyphicon glyphicon-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
-            }
-          { hasAuthority(ASSIGN_MODULES_AUTHORITY) &&
+          )}
+          { hasAuthority(ASSIGN_MODULES_AUTHORITY)
+            && (
             <Link
               to={`/modules/assign/${cell.value}`}
               type="button"
@@ -68,17 +70,18 @@ class ChwTable extends Component {
               <span className="glyphicon glyphicon-circle-arrow-right" />
               <span
                 className="hide-min-r-small-min next-button-text"
-              >Assign Module
+              >
+                Assign Module
               </span>
             </Link>
-            }
+          )}
         </div>
 
       ),
       filterable: false,
       sortable: false,
-      show: this.props.selected && (hasAuthority(CHW_WRITE_AUTHORITY) ||
-          hasAuthority(ASSIGN_MODULES_AUTHORITY)),
+      show: this.props.selected && (hasAuthority(CHW_WRITE_AUTHORITY)
+          || hasAuthority(ASSIGN_MODULES_AUTHORITY)),
     },
     {
       Header: 'ID',

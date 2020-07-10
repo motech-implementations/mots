@@ -23,7 +23,8 @@ class CounterLogout extends Component {
   static renderCountdown({ minutes, seconds }) {
     return (
       <div>
-        {CounterLogout.minTwoDigits(minutes)}:
+        {CounterLogout.minTwoDigits(minutes)}
+        :
         {CounterLogout.minTwoDigits(seconds)}
       </div>
     );

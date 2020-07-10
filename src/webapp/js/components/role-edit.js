@@ -62,8 +62,8 @@ class RoleEdit extends Component {
       .then((response) => {
         if (response) {
           const initialUserData = response.data;
-          initialUserData.permissions = _.map(initialUserData.permissions, val =>
-            ({ value: val.id, label: val.displayName }));
+          initialUserData.permissions = _.map(initialUserData.permissions,
+              val => ({ value: val.id, label: val.displayName }));
           this.props.initialize(ROLE_FORM_NAME, initialUserData);
         }
       });

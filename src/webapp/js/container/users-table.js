@@ -115,7 +115,6 @@ class UsersTable extends Component {
     this.props.resetLogoutCounter();
   }
 
-
   render() {
     return (
       <div>

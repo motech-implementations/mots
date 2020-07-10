@@ -168,12 +168,15 @@ class AssignModules extends Component {
               checked={this.state.delayNotification}
               onChange={event => this.setState({ delayNotification: event.target.checked })}
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="delay-notification" className="margin-left-sm margin-bottom-sm">
               Delay the notification
             </label>
           </div>
-          {this.state.delayNotification &&
+          {this.state.delayNotification
+          && (
           <div className="col-md-12 margin-top-sm">
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="notification-time">Notification date</label>
             <div className="input-group">
               <span className="input-group-addon">
@@ -190,7 +193,7 @@ class AssignModules extends Component {
               />
             </div>
           </div>
-          }
+          )}
           <form
             className="form-horizontal col-md-12"
             onSubmit={this.sendAssignedModules}

@@ -68,12 +68,14 @@ class CsvUpload extends Component {
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">{this.props.uploadLabel}</h1>
         <div>
-          <form className="form-horizontal" onSubmit={this.onFormSubmit} >
+          <form className="form-horizontal" onSubmit={this.onFormSubmit}>
             <div className="row padding-bottom-xs">
               <div className="input-group col-md-4">
                 <label className="input-group-btn" htmlFor="csvInput">
                   <span className="btn btn-primary">
-                    Browse <input
+                    Browse
+                    {' '}
+                    <input
                       id="csvInput"
                       type="file"
                       style={{ display: 'none' }}
@@ -92,7 +94,8 @@ class CsvUpload extends Component {
                 />
               </div>
             </div>
-            { this.props.selectText &&
+            { this.props.selectText
+            && (
             <div className="row">
               <div className="input-group margin-top-md margin-bottom-md">
                 <input
@@ -107,13 +110,15 @@ class CsvUpload extends Component {
                   {this.props.selectText}
                 </label>
               </div>
-            </div> }
+            </div>
+            )}
             <div className="row">
               <button
                 type="submit"
                 className="col-md-4 offset-md-2 btn btn-primary"
                 disabled={!this.state.file}
-              >Upload
+              >
+                Upload
               </button>
             </div>
           </form>

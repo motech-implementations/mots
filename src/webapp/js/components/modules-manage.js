@@ -629,8 +629,10 @@ class ModulesManage extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</h1>
-        { hasAuthority(MANAGE_MODULES_AUTHORITY) &&
+        { hasAuthority(MANAGE_MODULES_AUTHORITY)
+        && (
         <button
+          type="button"
           className="btn btn-success margin-bottom-lg"
           onClick={this.addCourse}
           disabled={!this.state.canAddCourse}
@@ -638,7 +640,7 @@ class ModulesManage extends Component {
           <span className="glyphicon glyphicon-plus" />
           <span className="icon-text">Add Course</span>
         </button>
-        }
+        )}
         <MotsConfirmModal
           showModal={this.state.showConfirmModal}
           modalParentId="page-wrapper"
@@ -670,6 +672,7 @@ class ModulesManage extends Component {
                 className: this.getNodeClassName(node),
                 buttons: node.type === 'COURSE' || node.type === 'MODULE' || !this.isEditable(node, path) || this.isModuleReleased(node, path) ? [] : [
                   <button
+                    type="button"
                     className="btn btn-danger"
                     onClick={(event) => {
                       this.removeNode(path, node);
@@ -687,7 +690,8 @@ class ModulesManage extends Component {
           </div>
           <div className="col-md-6">
             {
-              this.state.selectedElement.path && <ModuleForm
+              this.state.selectedElement.path && (
+              <ModuleForm
                 onSubmit={this.saveNode}
                 releaseCourse={this.releaseCourse}
                 editModule={this.showConfirmModal}
@@ -708,6 +712,7 @@ class ModulesManage extends Component {
                 addMessage={() => this.addMessage(this.state.selectedElement.path)}
                 addQuestion={() => this.addQuestion(this.state.selectedElement.path)}
               />
+            )
             }
           </div>
         </div>

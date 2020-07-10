@@ -4,7 +4,9 @@ import _ from 'lodash';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+ Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
 
 import 'react-datetime/css/react-datetime.css';
 

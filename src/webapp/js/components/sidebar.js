@@ -51,37 +51,39 @@ class SideBar extends Component {
 
   toggleHealthWorkersMenu(event) {
     event.preventDefault();
-    this.setState({ healthWorkersMenuCollapsed: !this.state.healthWorkersMenuCollapsed });
+    this.setState(prevState => ({
+      healthWorkersMenuCollapsed: !prevState.healthWorkersMenuCollapsed,
+    }));
     return false;
   }
 
   toggleModulesMenu(event) {
     event.preventDefault();
-    this.setState({ modulesMenuCollapsed: !this.state.modulesMenuCollapsed });
+    this.setState(prevState => ({ modulesMenuCollapsed: !prevState.modulesMenuCollapsed }));
     return false;
   }
 
   toggleLocationsMenu(event) {
     event.preventDefault();
-    this.setState({ locationsMenuCollapsed: !this.state.locationsMenuCollapsed });
+    this.setState(prevState => ({ locationsMenuCollapsed: !prevState.locationsMenuCollapsed }));
     return false;
   }
 
   toggleUsersMenu(event) {
     event.preventDefault();
-    this.setState({ usersMenuCollapsed: !this.state.usersMenuCollapsed });
+    this.setState(prevState => ({ usersMenuCollapsed: !prevState.usersMenuCollapsed }));
     return false;
   }
 
   toggleReportsMenu(event) {
     event.preventDefault();
-    this.setState({ reportsMenuCollapsed: !this.state.reportsMenuCollapsed });
+    this.setState(prevState => ({ reportsMenuCollapsed: !prevState.reportsMenuCollapsed }));
     return false;
   }
 
   toggleGroupsMenu(event) {
     event.preventDefault();
-    this.setState({ groupsMenuCollapsed: !this.state.groupsMenuCollapsed });
+    this.setState(prevState => ({ groupsMenuCollapsed: !prevState.groupsMenuCollapsed }));
     return false;
   }
 
@@ -92,38 +94,42 @@ class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(CHW_WRITE_AUTHORITY) &&
+        { hasAuthority(CHW_WRITE_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/chw/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
               <span className="icon-text">Add CHW</span>
             </Link>
           </li>
-        }
-        { hasAuthority(UPLOAD_CHW_CSV_AUTHORITY) &&
+          )}
+        { hasAuthority(UPLOAD_CHW_CSV_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/chw/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload CSV</span>
             </Link>
           </li>
-        }
-        { hasAuthority(CHW_READ_AUTHORITY) &&
+          )}
+        { hasAuthority(CHW_READ_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/chw/overall" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-list-alt" />
               <span className="icon-text">CHW List</span>
             </Link>
           </li>
-        }
-        { hasAuthority(CHW_READ_AUTHORITY) &&
+          )}
+        { hasAuthority(CHW_READ_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/chw/selected" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
             <span className="icon-text">Selected CHW List</span>
           </Link>
         </li>
-        }
+        )}
       </ul>
     );
   }
@@ -135,22 +141,24 @@ class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(ASSIGN_MODULES_AUTHORITY) &&
+        { hasAuthority(ASSIGN_MODULES_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/modules/groupAssign" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-ok" />
               <span className="icon-text">Assign</span>
             </Link>
           </li>
-        }
-        { hasAuthority(MANAGE_MODULES_AUTHORITY, DISPLAY_MODULES_AUTHORITY) &&
+        )}
+        { hasAuthority(MANAGE_MODULES_AUTHORITY, DISPLAY_MODULES_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/modules/manage" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-th-list" />
               <span className="icon-text">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</span>
             </Link>
           </li>
-        }
+        )}
       </ul>
     );
   }
@@ -162,74 +170,82 @@ class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/village/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
               <span className="icon-text">Add Village</span>
             </Link>
           </li>
-        }
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        )}
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/facility/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
               <span className="icon-text">Add Facility</span>
             </Link>
           </li>
-        }
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        )}
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/sector/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
               <span className="icon-text">Add Sector</span>
             </Link>
           </li>
-        }
-        { hasAuthority(CREATE_FACILITIES_AUTHORITY) &&
+        )}
+        { hasAuthority(CREATE_FACILITIES_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/district/new" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-plus" />
               <span className="icon-text">Add District</span>
             </Link>
           </li>
-        }
-        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
+        )}
+        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/village/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload Village CSV</span>
             </Link>
           </li>
-        }
-        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
+        )}
+        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/facility/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload Facility CSV</span>
             </Link>
           </li>
-        }
-        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY) &&
+        )}
+        { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY)
+          && (
           <li className="border-none">
             <Link to="/locations/sector/upload" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-save-file" />
               <span className="icon-text">Upload Sector CSV</span>
             </Link>
           </li>
-        }
+        )}
         { hasAuthority(
           DISPLAY_FACILITIES_AUTHORITY,
           MANAGE_FACILITIES_AUTHORITY,
           MANAGE_OWN_FACILITIES_AUTHORITY,
-        ) &&
+        )
+        && (
         <li className="border-none">
           <Link to="/locations/0" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
             <span className="icon-text">Location list</span>
           </Link>
         </li>
-        }
+        )}
       </ul>
     );
   }
@@ -241,38 +257,42 @@ class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        { hasAuthority(MANAGE_USERS_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/users/new" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-plus" />
             <span className="icon-text">Add User</span>
           </Link>
         </li>
-        }
-        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        )}
+        { hasAuthority(MANAGE_USERS_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/users" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
             <span className="icon-text">User list</span>
           </Link>
         </li>
-        }
-        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        )}
+        { hasAuthority(MANAGE_USERS_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/roles/new" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-plus" />
             <span className="icon-text">Add role</span>
           </Link>
         </li>
-        }
-        { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+        )}
+        { hasAuthority(MANAGE_USERS_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/roles" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
             <span className="icon-text">Role list</span>
           </Link>
         </li>
-        }
+        )}
       </ul>
     );
   }
@@ -309,22 +329,24 @@ class SideBar extends Component {
 
     return (
       <ul className="nav nav-second-level">
-        { hasAuthority(GROUP_WRITE_AUTHORITY) &&
+        { hasAuthority(GROUP_WRITE_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/groups/new" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-plus" />
             <span className="icon-text">Add Group</span>
           </Link>
         </li>
-        }
-        { hasAuthority(GROUP_READ_AUTHORITY) &&
+        )}
+        { hasAuthority(GROUP_READ_AUTHORITY)
+        && (
         <li className="border-none">
           <Link to="/groups" onClick={this.props.hideMenuSmart}>
             <span className="glyphicon glyphicon-list-alt" />
             <span className="icon-text">Group List</span>
           </Link>
         </li>
-        }
+        )}
       </ul>
     );
   }
@@ -342,14 +364,19 @@ class SideBar extends Component {
           <li>
             <Link to="/" onClick={this.props.hideMenuSmart}>
               <span className="glyphicon glyphicon-home" />
-              <span className="icon-text">{this.props.showMenuSmart} Home</span>
+              <span className="icon-text">
+                {this.props.showMenuSmart}
+                {' '}
+                Home
+              </span>
             </Link>
           </li>
           { hasAuthority(
               CHW_READ_AUTHORITY,
               CHW_WRITE_AUTHORITY,
               UPLOAD_CHW_CSV_AUTHORITY,
-            ) &&
+            )
+            && (
             <li>
               <a href="" onClick={this.toggleHealthWorkersMenu}>
                 <span className="fa fa-users" />
@@ -360,12 +387,13 @@ class SideBar extends Component {
               </a>
               {this.renderHealthWorkersMenu()}
             </li>
-          }
+          )}
           { hasAuthority(
               ASSIGN_MODULES_AUTHORITY,
               MANAGE_MODULES_AUTHORITY,
               DISPLAY_MODULES_AUTHORITY,
-          ) &&
+          )
+            && (
             <li>
               <a href="" onClick={this.toggleModulesMenu}>
                 <span className="glyphicon glyphicon-education" />
@@ -376,8 +404,9 @@ class SideBar extends Component {
               </a>
               { this.renderModulesMenu() }
             </li>
-          }
-          { hasAuthority(DISPLAY_REPORTS_AUTHORITY) &&
+          )}
+          { hasAuthority(DISPLAY_REPORTS_AUTHORITY)
+          && (
           <li>
             <a href="" onClick={this.toggleReportsMenu}>
               <span className="fa fa-bar-chart" />
@@ -388,14 +417,15 @@ class SideBar extends Component {
             </a>
             {this.renderReportsMenu()}
           </li>
-          }
+          )}
           { hasAuthority(
             DISPLAY_FACILITIES_AUTHORITY,
             MANAGE_FACILITIES_AUTHORITY,
             MANAGE_OWN_FACILITIES_AUTHORITY,
             CREATE_FACILITIES_AUTHORITY,
             UPLOAD_LOCATION_CSV_AUTHORITY,
-          ) &&
+          )
+          && (
           <li>
             <a href="" onClick={this.toggleLocationsMenu}>
               <span className="fa fa-map-marker" />
@@ -406,8 +436,9 @@ class SideBar extends Component {
             </a>
             {this.renderLocationsMenu()}
           </li>
-          }
-          { hasAuthority(MANAGE_USERS_AUTHORITY) &&
+          )}
+          { hasAuthority(MANAGE_USERS_AUTHORITY)
+          && (
           <li>
             <a href="" onClick={this.toggleUsersMenu}>
               <span className="glyphicon glyphicon-user" />
@@ -418,8 +449,9 @@ class SideBar extends Component {
             </a>
             {this.renderUsersMenu()}
           </li>
-          }
-          { hasAuthority(GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY) &&
+          )}
+          { hasAuthority(GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY)
+          && (
           <li>
             <a href="" onClick={this.toggleGroupsMenu}>
               <span className="fa fa-group" />
@@ -430,10 +462,12 @@ class SideBar extends Component {
             </a>
             {this.renderGroupsMenu()}
           </li>
-          }
+          )}
           <li className="hide-min-r-small-min">
             <a href="" onClick={this.props.signoutUser}>
-              <span className="glyphicon glyphicon-log-in" /> Logout
+              <span className="glyphicon glyphicon-log-in" />
+              {' '}
+              Logout
             </a>
           </li>
         </ul>

@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, formValueSelector, Field, FieldArray, FormSection } from 'redux-form';
+import {
+ reduxForm, formValueSelector, Field, FieldArray, FormSection,
+} from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
 import Select from 'react-select';
@@ -294,8 +296,7 @@ class ModuleForm extends Component {
           fieldConfig={fieldConfig}
           component={ModuleForm.renderSection}
         >
-          { _.map(fieldConfig.fields, (config, name) =>
-            ModuleForm.renderField(config, name, `${fieldName}.${name}`, props)) }
+          { _.map(fieldConfig.fields, (config, name) => ModuleForm.renderField(config, name, `${fieldName}.${name}`, props)) }
         </FormSection>
       );
     }
@@ -315,26 +316,30 @@ class ModuleForm extends Component {
   static renderFieldArray = ({ fieldsConfig, properties, fields }) => (
     <div>
       <div className="text-center">
-        { properties.isEditable && !properties.isModuleReleased &&
+        { properties.isEditable && !properties.isModuleReleased
+        && (
         <button type="button" className="btn btn-success margin-bottom-lg" onClick={() => fields.push(fieldsConfig.defaultValue)}>
           <span className="glyphicon glyphicon-plus" />
           <span className="icon-text">{fieldsConfig.addLabel}</span>
-        </button> }
+        </button>
+        )}
       </div>
       <ul className="list-unstyled">
         {fields.map((field, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <li key={index}>
             <div className="row">
-              { properties.isEditable && !properties.isModuleReleased &&
+              { properties.isEditable && !properties.isModuleReleased
+              && (
               <button type="button" className="btn btn-danger pull-right margin-right-md" onClick={() => fields.remove(index)}>
                 <span className="glyphicon glyphicon-trash" />
-              </button> }
+              </button>
+              )}
               <h4 className="margin-left-md">{`${fieldsConfig.fieldLabel} #${index + 1}`}</h4>
             </div>
-            { _.map(fieldsConfig.fields, (fieldConfig, fieldName) =>
-              ModuleForm.renderField(fieldConfig, `${field}.${fieldName}`, `${field}.${fieldName}`, properties)) }
-          </li>))}
+            { _.map(fieldsConfig.fields, (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig, `${field}.${fieldName}`, `${field}.${fieldName}`, properties)) }
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -363,7 +368,7 @@ class ModuleForm extends Component {
 
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
-        <div className="row" >
+        <div className="row">
           <Tooltip
             title={fieldConfig.tooltip}
             position="top"
@@ -404,47 +409,64 @@ class ModuleForm extends Component {
     return (
       <div>
         {
-          hasAuthority(MANAGE_MODULES_AUTHORITY) && (this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE') ?
-            <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
-              { _.map(ModuleForm.getFields(this.props.nodeType), (fieldConfig, fieldName) =>
-                ModuleForm.renderField(fieldConfig, fieldName, fieldName, this.props)) }
-              <div className="col-md-4" />
-              { this.props.isEditable && !this.props.isModuleReleased &&
-              <button
-                type="submit"
-                disabled={!this.props.nodeChanged && (pristine || submitting)}
-                className="btn btn-primary margin-bottom-md"
-              >Save
-              </button> }
-              { this.props.nodeType === 'COURSE' && this.props.isEditable &&
-              <button
-                type="button"
-                disabled={this.props.isNew || this.props.nodeChanged || !pristine || submitting}
-                className="btn btn-success margin-left-sm margin-bottom-md"
-                onClick={this.props.releaseCourse}
-              >Publish
-              </button> }
-              { this.props.isDraftCourse && this.props.nodeType === 'MODULE' && this.props.isModuleReleased &&
-              <button
-                type="button"
-                className="btn btn-primary margin-bottom-md"
-                onClick={this.props.editModule}
-              >Edit
-              </button> }
-              { this.props.isEditable && !this.props.isModuleReleased &&
-              <button
-                type="button"
-                disabled={pristine || submitting}
-                className="btn btn-danger margin-left-sm margin-bottom-md"
-                onClick={reset}
-              >Cancel
-              </button> }
-            </form>
-            :
-            <form className="form-horizontal" onSubmit={(event) => { event.preventDefault(); }}>
-              { _.map(ModuleForm.getFields(this.props.nodeType), (fieldConfig, fieldName) =>
-                ModuleForm.renderField(fieldConfig, fieldName, fieldName, this.props)) }
-            </form>
+          hasAuthority(MANAGE_MODULES_AUTHORITY) && (this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE')
+            ? (
+              <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
+                { _.map(ModuleForm.getFields(this.props.nodeType),
+                  (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
+                    fieldName, fieldName, this.props))}
+                <div className="col-md-4" />
+                { this.props.isEditable && !this.props.isModuleReleased
+                && (
+                <button
+                  type="submit"
+                  disabled={!this.props.nodeChanged && (pristine || submitting)}
+                  className="btn btn-primary margin-bottom-md"
+                >
+                  Save
+                </button>
+                )}
+                { this.props.nodeType === 'COURSE' && this.props.isEditable
+                && (
+                <button
+                  type="button"
+                  disabled={this.props.isNew || this.props.nodeChanged || !pristine || submitting}
+                  className="btn btn-success margin-left-sm margin-bottom-md"
+                  onClick={this.props.releaseCourse}
+                >
+                  Publish
+                </button>
+                )}
+                { this.props.isDraftCourse && this.props.nodeType === 'MODULE' && this.props.isModuleReleased
+                && (
+                <button
+                  type="button"
+                  className="btn btn-primary margin-bottom-md"
+                  onClick={this.props.editModule}
+                >
+                  Edit
+                </button>
+                )}
+                { this.props.isEditable && !this.props.isModuleReleased
+                && (
+                <button
+                  type="button"
+                  disabled={pristine || submitting}
+                  className="btn btn-danger margin-left-sm margin-bottom-md"
+                  onClick={reset}
+                >
+                  Cancel
+                </button>
+                )}
+              </form>
+              )
+            : (
+              <form className="form-horizontal" onSubmit={(event) => { event.preventDefault(); }}>
+                { _.map(ModuleForm.getFields(this.props.nodeType),
+                  (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
+                    fieldName, fieldName, this.props)) }
+              </form>
+              )
         }
       </div>
     );

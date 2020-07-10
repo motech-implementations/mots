@@ -4,7 +4,6 @@ import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import FooterInfo from '../footerInfo';
 
-
 import { signinUser } from '../../actions';
 
 class Signin extends Component {

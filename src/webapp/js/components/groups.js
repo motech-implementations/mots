@@ -69,8 +69,8 @@ class Groups extends Component {
       });
   }
 
-  filterMethod = (filter, row) =>
-    (_.toString(row[filter.id]).toLowerCase().includes(filter.value.trim().toLowerCase()));
+  filterMethod = (filter, row) => (_.toString(row[filter.id]).toLowerCase()
+    .includes(filter.value.trim().toLowerCase()));
 
   render() {
     return (

@@ -47,6 +47,7 @@ class MotsConfirmModal extends Component {
               Confirm
             </button>
             <button
+              type="button"
               className="btn btn-danger margin-left-sm margin-bottom-md"
               onClick={this.hideConfirmModal}
             >

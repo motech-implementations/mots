@@ -8,7 +8,7 @@ import DateTime from 'react-datetime';
 import moment from 'moment';
 
 import { resetLogoutCounter } from '../actions/index';
-import MobileTable from '../components/mobile-table';
+import MobileTable from './mobile-table';
 import apiClient from '../utils/api-client';
 import {
   DISPLAY_REPORTS_AUTHORITY,
@@ -47,7 +47,8 @@ class Report extends Component {
               { options.map(option => (
                 <option key={option.value} value={option.value}>{option.displayName}</option>
               ))}
-            </select>);
+            </select>
+          );
         };
       case 'Date':
         return ({ filter, onChange }) => {
@@ -107,7 +108,8 @@ class Report extends Component {
                   </div>
                 )}
               />
-            </div>);
+            </div>
+          );
         };
       default:
         return null;
@@ -321,7 +323,7 @@ class Report extends Component {
 
   render() {
     return (
-      <div >
+      <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">
           {this.props.location.state ? this.props.location.state.reportName : this.state.reportId}
         </h1>
@@ -330,13 +332,15 @@ class Report extends Component {
             onClick={this.fetchPdf}
             type="button"
             className="btn btn-success margin-left-sm"
-          >Download PDF
+          >
+            Download PDF
           </button>
           <button
             onClick={this.fetchXls}
             type="button"
             className="btn btn-success margin-left-sm"
-          >Download XLS
+          >
+            Download XLS
           </button>
         </div>
         <div className="form-inline margin-bottom-md">
@@ -348,6 +352,7 @@ class Report extends Component {
               checked={this.state.exportWithFilters}
               onChange={event => this.setState({ exportWithFilters: event.target.checked })}
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="margin-left-sm margin-right-md" htmlFor="filtersInput">
               Export with selected filters
             </label>
@@ -360,12 +365,14 @@ class Report extends Component {
               checked={this.state.exportWithOrder}
               onChange={event => this.setState({ exportWithOrder: event.target.checked })}
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className="margin-left-sm margin-right-md" htmlFor="orderInput">
               Export with selected order
             </label>
           </div>
         </div>
-        { this.state.reportModel &&
+        { this.state.reportModel
+        && (
         <div>
           <div className="hide-min-r-small-min">
             <MobileTable
@@ -386,7 +393,8 @@ class Report extends Component {
               page={this.state.page}
               pageSize={this.state.pageSize}
               onFilteredChange={
-                filtered => this.setState({ filtered, page: 0 }, this.fetchDataWithDebounce)}
+                filtered => this.setState({ filtered, page: 0 }, this.fetchDataWithDebounce)
+              }
               onSortedChange={sorted => this.setState({ sorted, page: 0 }, this.fetchData)}
               onPageChange={page => this.setState({ page }, this.fetchData)}
               onPageSizeChange={pageSize => this.setState({ pageSize, page: 0 }, this.fetchData)}
@@ -394,7 +402,7 @@ class Report extends Component {
             />
           </div>
         </div>
-        }
+        )}
       </div>
     );
   }

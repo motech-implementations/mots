@@ -113,7 +113,6 @@ class RolesTable extends Component {
     this.props.resetLogoutCounter();
   }
 
-
   render() {
     return (
       <div>

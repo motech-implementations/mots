@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+ Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -42,7 +44,8 @@ class Locations extends Component {
       accessor: 'id',
       Cell: cellInfo => (
         <div className="actions-buttons-container">
-          { canEditLocation(cellInfo.original) &&
+          { canEditLocation(cellInfo.original)
+          && (
           <Link
             to={`/locations/village/${cellInfo.value}`}
             type="button"
@@ -52,7 +55,7 @@ class Locations extends Component {
             <span className="glyphicon glyphicon-edit" />
             <span className="hide-min-r-small-min next-button-text">Edit</span>
           </Link>
-          }
+          )}
         </div>
       ),
       filterable: false,
@@ -81,7 +84,8 @@ class Locations extends Component {
       accessor: 'id',
       Cell: cellInfo => (
         <div className="actions-buttons-container">
-          { canEditLocation(cellInfo.original) &&
+          { canEditLocation(cellInfo.original)
+          && (
           <Link
             to={`/locations/facility/${cellInfo.value}`}
             type="button"
@@ -91,7 +95,7 @@ class Locations extends Component {
             <span className="glyphicon glyphicon-edit" />
             <span className="hide-min-r-small-min next-button-text">Edit</span>
           </Link>
-          }
+          )}
         </div>
       ),
       filterable: false,
@@ -126,7 +130,8 @@ class Locations extends Component {
       accessor: 'id',
       Cell: cellInfo => (
         <div className="actions-buttons-container">
-          {canEditLocation(cellInfo.original) &&
+          {canEditLocation(cellInfo.original)
+            && (
             <Link
               to={`/locations/sector/${cellInfo.value}`}
               type="button"
@@ -136,7 +141,7 @@ class Locations extends Component {
               <span className="glyphicon glyphicon-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
-          }
+          )}
         </div>
       ),
       filterable: false,
@@ -159,7 +164,8 @@ class Locations extends Component {
       accessor: 'id',
       Cell: cellInfo => (
         <div className="actions-buttons-container">
-          {canEditLocation(cellInfo.original) &&
+          {canEditLocation(cellInfo.original)
+            && (
             <Link
               to={`/locations/district/${cellInfo.value}`}
               type="button"
@@ -169,7 +175,7 @@ class Locations extends Component {
               <span className="glyphicon glyphicon-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
-          }
+          )}
         </div>
       ),
       filterable: false,
