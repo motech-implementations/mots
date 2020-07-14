@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 import Select from 'react-select';
-import 'react-datetime/css/react-datetime.css';
 
 import FormField from './form-field';
 import { fetchLocations } from '../actions/index';

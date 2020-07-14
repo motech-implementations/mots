@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 import { initialize } from 'redux-form';
 
-import 'react-datetime/css/react-datetime.css';
-
 import HealthWorkersForm, { CHW_FORM_NAME } from './health-workers-form';
 import { saveHealthWorker } from '../actions';
 import apiClient from '../utils/api-client';

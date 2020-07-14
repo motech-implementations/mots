@@ -2,12 +2,9 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { Async } from 'react-select';
 import PropTypes from 'prop-types';
-import DateTime from 'react-datetime';
 import { ClimbingBoxLoader } from 'react-spinners';
 
-import 'react-datetime/css/react-datetime.css';
-
-import { getDefaultNotificationDate } from '../utils/form-utils';
+import DatePicker from '../utils/date-picker';
 import apiClient from '../utils/api-client';
 
 class GroupAssignFrom extends Component {
@@ -25,6 +22,8 @@ class GroupAssignFrom extends Component {
   }
 
   render() {
+    const { notificationTime } = this.props;
+
     return (
       <div>
         <Async
@@ -56,20 +55,13 @@ class GroupAssignFrom extends Component {
         <div className="col-md-12 margin-top-sm">
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label htmlFor="notification-time">Notification date</label>
-          <div className="input-group">
-            <span className="input-group-addon">
-              <i className="fa fa-calendar" />
-            </span>
-            <DateTime
-              dateFormat="YYYY-MM-DD"
-              timeFormat="HH:mm"
-              closeOnSelect
-              onChange={this.props.handleNotificationTimeChange}
-              id="notification-time"
-              defaultValue={getDefaultNotificationDate()}
-              isValidDate={current => current.isSameOrAfter(new Date(), 'day')}
-            />
-          </div>
+          <DatePicker
+            id="notification-time"
+            showTimeSelect
+            value={notificationTime}
+            onChange={this.props.handleNotificationTimeChange}
+            minDate={new Date()}
+          />
         </div>
         )}
         <form
@@ -109,6 +101,7 @@ GroupAssignFrom.propTypes = {
     PropTypes.shape({}),
   ]),
   delayNotification: PropTypes.bool,
+  notificationTime: PropTypes.string,
   disableModuleSelect: PropTypes.bool,
   assignInProgress: PropTypes.bool,
 };
@@ -116,6 +109,7 @@ GroupAssignFrom.propTypes = {
 GroupAssignFrom.defaultProps = {
   selectedModules: null,
   delayNotification: false,
+  notificationTime: null,
   disableModuleSelect: false,
   assignInProgress: false,
 };

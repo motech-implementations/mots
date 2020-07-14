@@ -92,7 +92,3 @@ export function getSelectableLocations(
 
   return [];
 }
-
-export function getDefaultNotificationDate() {
-  return new Date();
-}

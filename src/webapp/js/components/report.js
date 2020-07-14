@@ -4,9 +4,8 @@ import FileDownload from 'js-file-download';
 import PropTypes from 'prop-types';
 import ReactTable from 'react-table';
 import { connect } from 'react-redux';
-import DateTime from 'react-datetime';
-import moment from 'moment';
 
+import DatePicker from '../utils/date-picker';
 import { resetLogoutCounter } from '../actions/index';
 import MobileTable from './mobile-table';
 import apiClient from '../utils/api-client';
@@ -51,66 +50,36 @@ class Report extends Component {
           );
         };
       case 'Date':
-        return ({ filter, onChange }) => {
-          const dateFormat = 'YYYY-MM-DD';
-
-          return (
-            <div>
-              <DateTime
-                dateFormat={dateFormat}
-                timeFormat={false}
-                closeOnSelect
-                onChange={date => onChange({
+        return ({ filter, onChange }) => (
+          <div>
+            <DatePicker
+              placeholderText="Min Date"
+              onChange={date => onChange({
                   type: 'date',
-                  min: !date || typeof date === 'string' ? date : date.format(dateFormat),
+                  min: date,
                   max: filter && filter.value ? filter.value.max : null,
                 })}
-                value={filter && filter.value ? filter.value.min : null}
-                isValidDate={(current) => {
-                  const max = filter && filter.value ? filter.value.max : null;
-
-                  if (!max || !moment(max).isValid()) {
-                    return true;
-                  }
-
-                  return !current || current.isSameOrBefore(moment(max));
-                }}
-                renderInput={props => (
-                  <div className="input-group">
-                    <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-                    <input {...props} placeholder="Min Date" />
-                  </div>
-                )}
-              />
-              <DateTime
-                dateFormat={dateFormat}
-                timeFormat={false}
-                closeOnSelect
-                onChange={date => onChange({
+              value={filter && filter.value ? filter.value.min : null}
+              maxDate={filter && filter.value ? filter.value.max : null}
+              startDate={filter && filter.value ? filter.value.min : null}
+              endDate={filter && filter.value ? filter.value.max : null}
+              selectsStart
+            />
+            <DatePicker
+              placeholderText="Max Date"
+              onChange={date => onChange({
                   type: 'date',
-                  max: !date || typeof date === 'string' ? date : date.format(dateFormat),
+                  max: date,
                   min: filter && filter.value ? filter.value.min : null,
                 })}
-                value={filter && filter.value ? filter.value.max : null}
-                isValidDate={(current) => {
-                  const min = filter && filter.value ? filter.value.min : null;
-
-                  if (!min || !moment(min).isValid()) {
-                    return true;
-                  }
-
-                  return !current || current.isSameOrAfter(moment(min));
-                }}
-                renderInput={props => (
-                  <div className="input-group">
-                    <span className="input-group-addon"><i className="fa fa-calendar" /></span>
-                    <input {...props} placeholder="Max Date" />
-                  </div>
-                )}
-              />
-            </div>
-          );
-        };
+              value={filter && filter.value ? filter.value.max : null}
+              minDate={filter && filter.value ? filter.value.min : null}
+              startDate={filter && filter.value ? filter.value.min : null}
+              endDate={filter && filter.value ? filter.value.max : null}
+              selectsEnd
+            />
+          </div>
+        );
       default:
         return null;
     }

@@ -5,15 +5,14 @@ import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
 import { Async } from 'react-select';
-import DateTime from 'react-datetime';
 
 import 'react-select/dist/react-select.css';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
+import DatePicker from '../utils/date-picker';
 import { resetLogoutCounter } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { hasAuthority, ASSIGN_MODULES_AUTHORITY } from '../utils/authorization';
-import { getDefaultNotificationDate } from '../utils/form-utils';
 
 class AssignModules extends Component {
   constructor(props) {
@@ -123,10 +122,7 @@ class AssignModules extends Component {
   }
 
   handleNotificationTimeChange(notificationTime) {
-    const dateFormat = 'YYYY-MM-DD HH:mm';
-    const formattedTime = (notificationTime)
-      ? notificationTime.clone().utc().format(dateFormat) : notificationTime;
-    this.setState({ notificationTime: formattedTime });
+    this.setState({ notificationTime });
     this.props.resetLogoutCounter();
   }
 
@@ -135,7 +131,7 @@ class AssignModules extends Component {
   }
 
   render() {
-    const { selectedModules } = this.state;
+    const { selectedModules, notificationTime } = this.state;
     const { availableModulesList } = this.state;
 
     return (
@@ -178,20 +174,13 @@ class AssignModules extends Component {
           <div className="col-md-12 margin-top-sm">
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="notification-time">Notification date</label>
-            <div className="input-group">
-              <span className="input-group-addon">
-                <i className="fa fa-calendar" />
-              </span>
-              <DateTime
-                dateFormat="YYYY-MM-DD"
-                timeFormat="HH:mm"
-                closeOnSelect
-                onChange={this.handleNotificationTimeChange}
-                id="notification-time"
-                defaultValue={getDefaultNotificationDate()}
-                isValidDate={current => current.isSameOrAfter(new Date(), 'day')}
-              />
-            </div>
+            <DatePicker
+              id="notification-time"
+              showTimeSelect
+              value={notificationTime}
+              onChange={this.handleNotificationTimeChange}
+              minDate={new Date()}
+            />
           </div>
           )}
           <form

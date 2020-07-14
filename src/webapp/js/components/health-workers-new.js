@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 
-import 'react-datetime/css/react-datetime.css';
-
 import HealthWorkersForm from './health-workers-form';
 import apiClient from '../utils/api-client';
 import { selectHealthWorker } from '../actions';

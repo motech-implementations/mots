@@ -8,8 +8,6 @@ import {
  Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 
-import 'react-datetime/css/react-datetime.css';
-
 import { resetLogoutCounter, fetchLocations } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { ASSIGN_MODULES_AUTHORITY, hasAuthority } from '../utils/authorization';
@@ -165,10 +163,7 @@ class DistrictAssignModules extends Component {
   }
 
   handleNotificationTimeChange(notificationTime) {
-    const dateFormat = 'YYYY-MM-DD HH:mm';
-    const formattedTime = (notificationTime)
-      ? notificationTime.clone().utc().format(dateFormat) : notificationTime;
-    this.setState({ notificationTime: formattedTime });
+    this.setState({ notificationTime });
     this.props.resetLogoutCounter();
   }
 
@@ -250,6 +245,7 @@ class DistrictAssignModules extends Component {
                 handleNotificationTimeChange={this.handleNotificationTimeChange}
                 selectedModules={this.state.selectedModules}
                 delayNotification={this.state.delayNotification}
+                notificationTime={this.state.notificationTime}
                 disableModuleSelect={!this.state.selectedDistrict}
                 assignInProgress={this.state.assignInProgress}
               />
@@ -278,6 +274,7 @@ class DistrictAssignModules extends Component {
                 handleNotificationTimeChange={this.handleNotificationTimeChange}
                 selectedModules={this.state.selectedModules}
                 delayNotification={this.state.delayNotification}
+                notificationTime={this.state.notificationTime}
                 disableModuleSelect={!this.state.selectedGroup}
                 assignInProgress={this.state.assignInProgress}
               />
