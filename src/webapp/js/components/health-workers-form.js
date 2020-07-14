@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import Select from 'react-select';
 
+import Select from '../utils/select';
 import FormField from './form-field';
 import { fetchLocations } from '../actions/index';
 import {
@@ -35,7 +35,6 @@ const FIELDS = {
           input.onChange(value);
         },
         options,
-        simpleValue: true,
       };
     },
     getDynamicAttributes: ({ addChw }) => ({

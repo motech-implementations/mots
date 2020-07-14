@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import Select from 'react-select';
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
 import {
  Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 
+import Select from '../utils/select';
 import { resetLogoutCounter, fetchLocations } from '../actions/index';
 import apiClient from '../utils/api-client';
 import { ASSIGN_MODULES_AUTHORITY, hasAuthority } from '../utils/authorization';
@@ -20,6 +20,7 @@ class DistrictAssignModules extends Component {
     this.state = {
       sectorOptions: [],
       facilityOptions: [],
+      modulesOptions: [],
       selectedModules: null,
       selectedDistrict: null,
       selectedSector: null,
@@ -50,6 +51,7 @@ class DistrictAssignModules extends Component {
     }
     this.props.fetchLocations();
     this.fetchGroups();
+    this.fetchModules();
   }
 
   getSectorOptions(selectedDistrict) {
@@ -57,7 +59,7 @@ class DistrictAssignModules extends Component {
       const sectors = getSelectableLocations(
         'sectors',
         this.props.availableLocations,
-        selectedDistrict.value,
+        selectedDistrict,
       );
       return _.map(
         sectors,
@@ -72,8 +74,8 @@ class DistrictAssignModules extends Component {
       const facilities = getSelectableLocations(
         'facilities',
         this.props.availableLocations,
-        this.state.selectedDistrict.value,
-        selectedSector.value,
+        this.state.selectedDistrict,
+        selectedSector,
       );
       return _.map(
         facilities,
@@ -93,26 +95,37 @@ class DistrictAssignModules extends Component {
       });
   }
 
+  fetchModules() {
+    apiClient.get('/api/modules/simple')
+      .then((response) => {
+        if (response) {
+          const modulesOptions = _.map(response.data,
+              module => ({ value: module.id, label: module.name }));
+          this.setState({ modulesOptions });
+        }
+      });
+  }
+
   sendAssignedModules() {
     const url = `/api/module/${this.state.selectedIndex === 0 ? 'district' : 'group'}/assign`;
 
     const payload = {
-      modules: _.map(this.state.selectedModules, module => module.value),
+      modules: this.state.selectedModules,
     };
 
     this.setState({ assignInProgress: true });
 
     if (this.state.selectedIndex === 0) {
-      payload.districtId = this.state.selectedDistrict.value;
+      payload.districtId = this.state.selectedDistrict;
 
       if (this.state.selectedSector !== null) {
-        payload.sectorId = this.state.selectedSector.value;
+        payload.sectorId = this.state.selectedSector;
       }
       if (this.state.selectedFacility !== null) {
-        payload.facilityId = this.state.selectedFacility.value;
+        payload.facilityId = this.state.selectedFacility;
       }
     } else {
-      payload.groupId = this.state.selectedGroup.value;
+      payload.groupId = this.state.selectedGroup;
     }
 
     if (this.state.delayNotification && this.state.notificationTime) {
@@ -211,29 +224,26 @@ class DistrictAssignModules extends Component {
                 onFocus={() => this.props.resetLogoutCounter()}
                 placeholder="Select a District"
                 className="margin-bottom-md col-md-12"
-                menuContainerStyle={{ zIndex: 5 }}
               />
               <Select
                 name="sector"
                 value={this.state.selectedSector}
                 options={this.state.sectorOptions}
-                disabled={!this.state.selectedDistrict}
+                isDisabled={!this.state.selectedDistrict}
                 onChange={this.handleSectorChange}
                 onFocus={() => this.props.resetLogoutCounter()}
                 placeholder="Select a Sector (optional)"
                 className="margin-bottom-md col-md-12"
-                menuContainerStyle={{ zIndex: 5 }}
               />
               <Select
                 name="facility"
                 value={this.state.selectedFacility}
                 options={this.state.facilityOptions}
-                disabled={!this.state.selectedSector}
+                isDisabled={!this.state.selectedSector}
                 onChange={this.handleFacilityChange}
                 onFocus={() => this.props.resetLogoutCounter()}
                 placeholder="Select a Facility (optional)"
                 className="margin-bottom-md col-md-12"
-                menuContainerStyle={{ zIndex: 5 }}
               />
 
               <GroupAssignFrom
@@ -243,6 +253,7 @@ class DistrictAssignModules extends Component {
                 handleModuleChange={this.handleModuleChange}
                 handleDelayNotificationChange={this.handleDelayNotificationChange}
                 handleNotificationTimeChange={this.handleNotificationTimeChange}
+                modulesOptions={this.state.modulesOptions}
                 selectedModules={this.state.selectedModules}
                 delayNotification={this.state.delayNotification}
                 notificationTime={this.state.notificationTime}
@@ -262,7 +273,6 @@ class DistrictAssignModules extends Component {
                 onFocus={() => this.props.resetLogoutCounter()}
                 placeholder="Select a Group"
                 className="margin-bottom-md col-md-12"
-                menuContainerStyle={{ zIndex: 5 }}
               />
 
               <GroupAssignFrom
@@ -272,6 +282,7 @@ class DistrictAssignModules extends Component {
                 handleModuleChange={this.handleModuleChange}
                 handleDelayNotificationChange={this.handleDelayNotificationChange}
                 handleNotificationTimeChange={this.handleNotificationTimeChange}
+                modulesOptions={this.state.modulesOptions}
                 selectedModules={this.state.selectedModules}
                 delayNotification={this.state.delayNotification}
                 notificationTime={this.state.notificationTime}

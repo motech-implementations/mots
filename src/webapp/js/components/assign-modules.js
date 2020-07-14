@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
 import Alert from 'react-s-alert';
-import { Async } from 'react-select';
 
-import 'react-select/dist/react-select.css';
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
+import Select from '../utils/select';
 import DatePicker from '../utils/date-picker';
 import { resetLogoutCounter } from '../actions/index';
 import apiClient from '../utils/api-client';
@@ -20,6 +19,7 @@ class AssignModules extends Component {
     this.state = {
       availableModulesList: [],
       selectedModules: [],
+      availableChws: [],
       selectedChw: this.props.match.params.chwId || '',
       currentModules: [],
       delayNotification: false,
@@ -39,6 +39,7 @@ class AssignModules extends Component {
       this.props.history.push('/home');
     } else {
       this.fetchAvailableModules();
+      this.fetchChwsInfo();
     }
   }
 
@@ -61,13 +62,14 @@ class AssignModules extends Component {
   fetchChwsInfo = () => {
     const url = 'api/chwInfo';
 
-    return apiClient.get(url)
+    apiClient.get(url)
       .then((response) => {
-        const chwList = _.map(
+        const availableChws = _.map(
           response.data,
           chw => ({ value: chw.id, label: `${chw.chwId}: ${_.defaultTo(chw.firstName, '')} ${_.defaultTo(chw.familyName, '')}` }),
         );
-        return { options: chwList };
+
+        this.setState({ availableChws });
       });
   };
 
@@ -111,7 +113,7 @@ class AssignModules extends Component {
 
   handleChwChange = (selectedChw) => {
     if (selectedChw) {
-      this.setState({ selectedChw: selectedChw.value }, () => this.fetchChwModules());
+      this.setState({ selectedChw }, () => this.fetchChwModules());
     } else {
       this.setState({ selectedChw: '' });
     }
@@ -138,10 +140,10 @@ class AssignModules extends Component {
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules</h1>
         <div className="col-md-8 col-md-offset-2">
-          <Async
+          <Select
             name="form-field-name"
             value={this.state.selectedChw}
-            loadOptions={this.fetchChwsInfo}
+            options={this.state.availableChws}
             onChange={this.handleChwChange}
             onFocus={() => this.props.resetLogoutCounter()}
             placeholder="Select a Community Health Worker"

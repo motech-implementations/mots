@@ -28,7 +28,7 @@ class RoleNew extends Component {
 
   onSubmit(values) {
     const valuesToSend = { ...values };
-    valuesToSend.permissions = _.map(values.permissions, val => ({ id: val.value }));
+    valuesToSend.permissions = _.map(values.permissions, val => ({ id: val }));
 
     this.props.createRole(valuesToSend, () => {
       Alert.success('New role has been created');

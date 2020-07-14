@@ -44,7 +44,7 @@ class RoleEdit extends Component {
 
   onSubmitModal() {
     const valuesToSend = { ...this.state.roleValues };
-    valuesToSend.permissions = _.map(this.state.roleValues.permissions, val => ({ id: val.value }));
+    valuesToSend.permissions = _.map(this.state.roleValues.permissions, val => ({ id: val }));
 
     this.props.saveRole(valuesToSend, () => {
       Alert.success('Role has been updated');
@@ -62,8 +62,7 @@ class RoleEdit extends Component {
       .then((response) => {
         if (response) {
           const initialUserData = response.data;
-          initialUserData.permissions = _.map(initialUserData.permissions,
-              val => ({ value: val.id, label: val.displayName }));
+          initialUserData.permissions = _.map(initialUserData.permissions, val => val.id);
           this.props.initialize(ROLE_FORM_NAME, initialUserData);
         }
       });

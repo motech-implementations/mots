@@ -6,10 +6,10 @@ import {
 } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
-import Select from 'react-select';
 
 import 'react-tippy/dist/tippy.css';
 
+import Select from '../utils/select';
 import { resetLogoutCounter } from '../actions/index';
 import { hasAuthority, MANAGE_MODULES_AUTHORITY } from '../utils/authorization';
 
@@ -50,7 +50,6 @@ const QUESTION_FIELDS = {
           input.onChange(value);
         },
         options,
-        simpleValue: true,
       };
     },
   },
@@ -80,7 +79,6 @@ const QUESTION_FIELDS = {
             { value: 'I don\'t know', label: 'I don\'t know' },
             { value: 'Repeat', label: 'Repeat' },
           ],
-          simpleValue: true,
         }),
       },
       description: {

@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Select from 'react-select';
 
+import Select from '../utils/select';
 import FormField from './form-field';
 import { fetchPermissions } from '../actions/index';
 
@@ -24,7 +24,7 @@ const FIELDS = {
       onChange: (value) => {
         input.onChange(value);
       },
-      multi: true,
+      isMulti: true,
     }),
     getDynamicAttributes: ({ permissions }) => ({
       options: permissions,
