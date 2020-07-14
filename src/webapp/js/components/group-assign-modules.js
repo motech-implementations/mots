@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import {
  Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
@@ -135,9 +135,9 @@ class DistrictAssignModules extends Component {
     const callback = (assigned) => {
       if (assigned) {
         this.props.history.push('/chw/selected');
-        Alert.success('Modules have been assigned!');
+        toast.success('Modules have been assigned!');
       } else {
-        Alert.success('Module was already assigned!');
+        toast.success('Module was already assigned!');
         this.setState({ assignInProgress: false });
       }
     };

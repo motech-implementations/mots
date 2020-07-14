@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import RoleForm, { ROLE_FORM_NAME } from './role-form';
@@ -47,7 +47,7 @@ class RoleEdit extends Component {
     valuesToSend.permissions = _.map(this.state.roleValues.permissions, val => ({ id: val }));
 
     this.props.saveRole(valuesToSend, () => {
-      Alert.success('Role has been updated');
+      toast.success('Role has been updated');
       this.props.history.push('/roles');
     });
   }

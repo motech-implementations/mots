@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import DistrictForm from './district-form';
 import { createDistrict } from '../actions';
@@ -35,7 +35,7 @@ class DistrictNew extends Component {
     };
 
     this.props.createDistrict(valuesToSend, () => {
-      Alert.success('District has been added');
+      toast.success('District has been added');
       this.props.history.push({
         pathname: '/locations/3',
       });

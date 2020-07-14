@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import { signoutUser, useRefreshToken } from '../actions';
 import { dispatch } from '../index';
@@ -47,14 +47,14 @@ const handleError = (error) => {
       dispatch(signoutUser());
       break;
     case 403:
-      Alert.error('Access denied.');
+      toast.error('Access denied.');
       break;
     default: {
       const errorMessage = getErrorMessage(error.response);
       if (errorMessage) {
-        Alert.error(errorMessage);
+        toast.error(errorMessage);
       } else {
-        Alert.error(error);
+        toast.error(error);
       }
     }
   }

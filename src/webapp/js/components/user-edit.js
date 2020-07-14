@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import UserForm, { USER_FORM_NAME } from './user-form';
@@ -46,7 +46,7 @@ class UserEdit extends Component {
     valuesToSend.roles = [{ id: valuesToSend.roleId }];
 
     this.props.saveUser(valuesToSend, () => {
-      Alert.success('User has been updated');
+      toast.success('User has been updated');
       this.props.history.push('/users');
     });
   }

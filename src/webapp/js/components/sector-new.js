@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import SectorForm from './sector-form';
 import { createSector } from '../actions';
@@ -35,7 +35,7 @@ class SectorNew extends Component {
     };
 
     this.props.createSector(valuesToSend, () => {
-      Alert.success('Sector has been added');
+      toast.success('Sector has been added');
       this.props.history.push({
         pathname: '/locations/2',
       });

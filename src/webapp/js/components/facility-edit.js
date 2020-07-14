@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import { hasAuthority, MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY } from '../utils/authorization';
@@ -54,7 +54,7 @@ class FacilityEdit extends Component {
     };
 
     this.props.saveFacility(valuesToSend, () => {
-      Alert.success('Facility has been updated');
+      toast.success('Facility has been updated');
       this.props.history.push({
         pathname: '/locations/1',
       });

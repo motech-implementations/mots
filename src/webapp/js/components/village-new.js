@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import VillageForm from './village-form';
 import { createVillage } from '../actions';
@@ -35,7 +35,7 @@ class VillageNew extends Component {
     };
 
     this.props.createVillage(valuesToSend, () => {
-      Alert.success('Village has been added');
+      toast.success('Village has been added');
       this.props.history.push('/locations');
     });
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import { hasAuthority, MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY } from '../utils/authorization';
@@ -49,7 +49,7 @@ class VillageEdit extends Component {
     };
 
     this.props.saveVillage(valuesToSend, () => {
-      Alert.success('Village has been updated');
+      toast.success('Village has been updated');
       this.props.history.push('/locations');
     });
   }

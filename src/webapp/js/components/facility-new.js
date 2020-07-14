@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import FacilityForm from './facility-form';
 import { createFacility } from '../actions';
@@ -38,7 +38,7 @@ class FacilityNew extends Component {
     };
 
     this.props.createFacility(valuesToSend, () => {
-      Alert.success('Facility has been added');
+      toast.success('Facility has been added');
       this.props.history.push({
         pathname: '/locations/1',
       });

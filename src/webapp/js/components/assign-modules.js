@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import DualListBox from 'react-dual-listbox';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import 'react-dual-listbox/lib/react-dual-listbox.css';
 
@@ -104,7 +104,7 @@ class AssignModules extends Component {
     }
     const callback = () => {
       this.props.history.push('/chw/selected');
-      Alert.success('Modules have been assigned!');
+      toast.success('Modules have been assigned!');
     };
 
     apiClient.post(url, payload)

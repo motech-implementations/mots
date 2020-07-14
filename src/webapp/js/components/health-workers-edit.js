@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import HealthWorkersForm, { CHW_FORM_NAME } from './health-workers-form';
@@ -43,7 +43,7 @@ class HealthWorkersEdit extends Component {
 
   onSubmitModal() {
     this.props.saveHealthWorker(this.state.healthWorkerValues, () => {
-      Alert.success('CHW has been saved');
+      toast.success('CHW has been saved');
       this.props.history.push('/chw/selected');
     });
   }

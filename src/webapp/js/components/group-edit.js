@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import GroupForm, { GROUP_FORM_NAME } from './group-form';
@@ -42,7 +42,7 @@ class GroupEdit extends Component {
   onSubmitModal() {
     apiClient.put(`api/group/${this.state.groupValues.id}`, this.state.groupValues)
       .then(() => {
-        Alert.success('Group has been updated');
+        toast.success('Group has been updated');
         this.props.history.push('/groups');
       });
   }

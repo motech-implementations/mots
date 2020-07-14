@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { initialize, isDirty, getFormValues } from 'redux-form';
 import SortableTree from 'react-sortable-tree';
 import update from 'immutability-helper';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import 'react-sortable-tree/style.css';
 
@@ -51,7 +51,7 @@ class ModulesManage extends Component {
       nodeName = 'Course';
     }
 
-    Alert.success(`${nodeName} has been saved successfully`);
+    toast.success(`${nodeName} has been saved successfully`);
   }
 
   constructor(props) {
@@ -234,7 +234,7 @@ class ModulesManage extends Component {
     apiClient.put(`/api/courses/${courseId}/release`)
       .then((response) => {
         this.updateAndSelectCourse(response.data, courseIndex);
-        Alert.success('Course has been published successfully');
+        toast.success('Course has been published successfully');
       });
   }
 
@@ -245,7 +245,7 @@ class ModulesManage extends Component {
     apiClient.put(`/api/modules/${moduleId}/edit`)
       .then((response) => {
         this.updateAndSelectModule(response.data, nodeIndexPath);
-        Alert.success('New module draft has been created successfully');
+        toast.success('New module draft has been created successfully');
       });
 
     this.hideConfirmModal();
@@ -377,7 +377,7 @@ class ModulesManage extends Component {
     apiClient.post('/api/courses')
       .then((response) => {
         this.addAndSelectCourse(response.data);
-        Alert.success('New Course has been created successfully');
+        toast.success('New Course has been created successfully');
       });
   }
 

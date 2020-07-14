@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import UserForm from './user-form';
 import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
@@ -30,7 +30,7 @@ class UserNew extends Component {
     valuesToSend.roles = [{ id: values.roleId }];
 
     this.props.createUser(valuesToSend, () => {
-      Alert.success('New User has been created');
+      toast.success('New User has been created');
       this.props.history.push('/users');
     });
   }

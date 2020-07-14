@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import { hasAuthority, MANAGE_FACILITIES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY } from '../utils/authorization';
@@ -48,7 +48,7 @@ class DistrictEdit extends Component {
     };
 
     this.props.saveDistrict(valuesToSend, () => {
-      Alert.success('District has been updated');
+      toast.success('District has been updated');
       this.props.history.push('/locations/3');
     });
   }

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import RoleForm from './role-form';
 import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
@@ -31,7 +31,7 @@ class RoleNew extends Component {
     valuesToSend.permissions = _.map(values.permissions, val => ({ id: val }));
 
     this.props.createRole(valuesToSend, () => {
-      Alert.success('New role has been created');
+      toast.success('New role has been created');
       this.props.history.push('/roles');
     });
   }

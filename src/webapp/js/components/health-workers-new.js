@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 
 import HealthWorkersForm from './health-workers-form';
 import apiClient from '../utils/api-client';
@@ -34,7 +34,7 @@ class HealthWorkersNew extends Component {
 
   onSubmit(values) {
     this.props.selectHealthWorker(values, () => {
-      Alert.success('CHW has been added');
+      toast.success('CHW has been added');
       this.props.history.push('/chw/selected');
     });
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import UserProfileForm, { USER_PROFILE_FORM_NAME } from './user-profile-form';
@@ -41,7 +41,7 @@ class UserProfileEdit extends Component {
     const valuesToSend = this.state.userValues;
 
     this.props.saveUserProfile(valuesToSend, () => {
-      Alert.success('Your profile has been updated.');
+      toast.success('Your profile has been updated.');
       this.props.history.push('/home');
     });
     this.hideConfirmModal();

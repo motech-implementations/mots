@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Alert from 'react-s-alert';
+import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 
 import GroupForm from './group-form';
@@ -28,7 +28,7 @@ class GroupNew extends Component {
   onSubmit(values) {
     apiClient.post('api/group', values)
       .then(() => {
-        Alert.success('New group has been created');
+        toast.success('New group has been created');
         this.props.history.push('/groups');
       });
   }
