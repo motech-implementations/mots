@@ -4,7 +4,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import {
- Tab, Tabs, TabList, TabPanel,
+  Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 
 import Select from '../utils/select';
@@ -85,6 +85,49 @@ class DistrictAssignModules extends Component {
     return [];
   }
 
+  handleDistrictChange = (selectedDistrict) => {
+    this.setState({
+      selectedDistrict,
+      selectedSector: null,
+      selectedFacility: null,
+      sectorOptions: this.getSectorOptions(selectedDistrict),
+    });
+  };
+
+  handleSectorChange = (selectedSector) => {
+    this.setState({
+      selectedSector,
+      selectedFacility: null,
+      facilityOptions: this.getFacilityOptions(selectedSector),
+    });
+  };
+
+  handleFacilityChange = (selectedFacility) => {
+    this.setState({ selectedFacility });
+  };
+
+  handleModuleChange(selectedModules) {
+    this.setState({ selectedModules });
+  }
+
+  handleDelayNotificationChange(event) {
+    this.setState({ delayNotification: event.target.checked });
+  }
+
+  handleNotificationTimeChange(notificationTime) {
+    this.setState({ notificationTime });
+    this.props.resetLogoutCounter();
+  }
+
+  handleGroupChange(selectedGroup) {
+    this.setState({ selectedGroup });
+  }
+
+  handleTabSelect(index) {
+    this.setState({ selectedIndex: index });
+    this.props.resetLogoutCounter();
+  }
+
   fetchGroups() {
     apiClient.get('/api/group')
       .then((response) => {
@@ -100,7 +143,7 @@ class DistrictAssignModules extends Component {
       .then((response) => {
         if (response) {
           const modulesOptions = _.map(response.data,
-              module => ({ value: module.id, label: module.name }));
+            module => ({ value: module.id, label: module.name }));
           this.setState({ modulesOptions });
         }
       });
@@ -144,49 +187,6 @@ class DistrictAssignModules extends Component {
 
     apiClient.post(url, payload)
       .then(response => callback(response.data));
-  }
-
-  handleDistrictChange = (selectedDistrict) => {
-    this.setState({
-      selectedDistrict,
-      selectedSector: null,
-      selectedFacility: null,
-      sectorOptions: this.getSectorOptions(selectedDistrict),
-    });
-  };
-
-  handleSectorChange = (selectedSector) => {
-    this.setState({
-      selectedSector,
-      selectedFacility: null,
-      facilityOptions: this.getFacilityOptions(selectedSector),
-    });
-  };
-
-  handleFacilityChange = (selectedFacility) => {
-    this.setState({ selectedFacility });
-  };
-
-  handleModuleChange(selectedModules) {
-    this.setState({ selectedModules });
-  }
-
-  handleDelayNotificationChange(event) {
-    this.setState({ delayNotification: event.target.checked });
-  }
-
-  handleNotificationTimeChange(notificationTime) {
-    this.setState({ notificationTime });
-    this.props.resetLogoutCounter();
-  }
-
-  handleGroupChange(selectedGroup) {
-    this.setState({ selectedGroup });
-  }
-
-  handleTabSelect(index) {
-    this.setState({ selectedIndex: index });
-    this.props.resetLogoutCounter();
   }
 
   validate() {

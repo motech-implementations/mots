@@ -55,10 +55,10 @@ class Report extends Component {
             <DatePicker
               placeholderText="Min Date"
               onChange={date => onChange({
-                  type: 'date',
-                  min: date,
-                  max: filter && filter.value ? filter.value.max : null,
-                })}
+                type: 'date',
+                min: date,
+                max: filter && filter.value ? filter.value.max : null,
+              })}
               value={filter && filter.value ? filter.value.min : null}
               maxDate={filter && filter.value ? filter.value.max : null}
               startDate={filter && filter.value ? filter.value.min : null}
@@ -68,10 +68,10 @@ class Report extends Component {
             <DatePicker
               placeholderText="Max Date"
               onChange={date => onChange({
-                  type: 'date',
-                  max: date,
-                  min: filter && filter.value ? filter.value.min : null,
-                })}
+                type: 'date',
+                max: date,
+                min: filter && filter.value ? filter.value.min : null,
+              })}
               value={filter && filter.value ? filter.value.max : null}
               minDate={filter && filter.value ? filter.value.min : null}
               startDate={filter && filter.value ? filter.value.min : null}
@@ -178,49 +178,6 @@ class Report extends Component {
     };
   }
 
-  fetchReport() {
-    const url = `api/reports/templates/${this.state.reportId}/json`;
-
-    apiClient.get(url, { params: { pageSize: 20 } })
-      .then((response) => {
-        if (response.data && response.data.length === 1) {
-          const { colModel, values, totalPages } = response.data[0];
-
-          if (colModel && colModel.length === 1) {
-            const columns = colModel[0];
-            const reportModel = [];
-            const reportData = values || [];
-            const reportTemplate = _.find(this.props.reportTemplates, { id: this.state.reportId });
-            const reportParameters = reportTemplate.templateParameters || [];
-
-            _.forEach(columns, (value, key) => {
-              const parameter = _.find(reportParameters, { name: key });
-              const Filter = Report.prepareFilter(parameter);
-
-              reportModel.push({
-                ...value[0],
-                order: parseInt(value[0].order, 10),
-                accessor: key,
-                filterable: !!parameter,
-                minWidth: parameter && parameter.dataType === 'Date' ? 150 : 100,
-                Filter,
-              });
-            });
-
-            _.sortBy(reportModel, ['order']);
-            reportModel.sort((o1, o2) => o1.order - o2.order);
-
-            this.setState({
-              reportModel,
-              reportData,
-              loading: false,
-              totalPages: parseInt(totalPages, 10),
-            });
-          }
-        }
-      });
-  }
-
   fetchReportData = (searchParams) => {
     const url = `api/reports/templates/${this.state.reportId}/json`;
 
@@ -272,6 +229,49 @@ class Report extends Component {
 
     this.props.resetLogoutCounter();
   };
+
+  fetchReport() {
+    const url = `api/reports/templates/${this.state.reportId}/json`;
+
+    apiClient.get(url, { params: { pageSize: 20 } })
+      .then((response) => {
+        if (response.data && response.data.length === 1) {
+          const { colModel, values, totalPages } = response.data[0];
+
+          if (colModel && colModel.length === 1) {
+            const columns = colModel[0];
+            const reportModel = [];
+            const reportData = values || [];
+            const reportTemplate = _.find(this.props.reportTemplates, { id: this.state.reportId });
+            const reportParameters = reportTemplate.templateParameters || [];
+
+            _.forEach(columns, (value, key) => {
+              const parameter = _.find(reportParameters, { name: key });
+              const Filter = Report.prepareFilter(parameter);
+
+              reportModel.push({
+                ...value[0],
+                order: parseInt(value[0].order, 10),
+                accessor: key,
+                filterable: !!parameter,
+                minWidth: parameter && parameter.dataType === 'Date' ? 150 : 100,
+                Filter,
+              });
+            });
+
+            _.sortBy(reportModel, ['order']);
+            reportModel.sort((o1, o2) => o1.order - o2.order);
+
+            this.setState({
+              reportModel,
+              reportData,
+              loading: false,
+              totalPages: parseInt(totalPages, 10),
+            });
+          }
+        }
+      });
+  }
 
   fetchData() {
     const offset = this.state.page * this.state.pageSize;

@@ -43,6 +43,37 @@ class AssignModules extends Component {
     }
   }
 
+  fetchChwsInfo = () => {
+    const url = 'api/chwInfo';
+
+    apiClient.get(url)
+      .then((response) => {
+        const availableChws = _.map(
+          response.data,
+          chw => ({ value: chw.id, label: `${chw.chwId}: ${_.defaultTo(chw.firstName, '')} ${_.defaultTo(chw.familyName, '')}` }),
+        );
+
+        this.setState({ availableChws });
+      });
+  };
+
+  handleChwChange = (selectedChw) => {
+    if (selectedChw) {
+      this.setState({ selectedChw }, () => this.fetchChwModules());
+    } else {
+      this.setState({ selectedChw: '' });
+    }
+  };
+
+  handleModuleChange(selectedModules) {
+    this.setState({ selectedModules });
+  }
+
+  handleNotificationTimeChange(notificationTime) {
+    this.setState({ notificationTime });
+    this.props.resetLogoutCounter();
+  }
+
   fetchAvailableModules() {
     const url = '/api/modules/simple';
 
@@ -58,20 +89,6 @@ class AssignModules extends Component {
         }
       });
   }
-
-  fetchChwsInfo = () => {
-    const url = 'api/chwInfo';
-
-    apiClient.get(url)
-      .then((response) => {
-        const availableChws = _.map(
-          response.data,
-          chw => ({ value: chw.id, label: `${chw.chwId}: ${_.defaultTo(chw.firstName, '')} ${_.defaultTo(chw.familyName, '')}` }),
-        );
-
-        this.setState({ availableChws });
-      });
-  };
 
   fetchChwModules() {
     const url = '/api/assignedModules';
@@ -109,23 +126,6 @@ class AssignModules extends Component {
 
     apiClient.post(url, payload)
       .then(() => callback());
-  }
-
-  handleChwChange = (selectedChw) => {
-    if (selectedChw) {
-      this.setState({ selectedChw }, () => this.fetchChwModules());
-    } else {
-      this.setState({ selectedChw: '' });
-    }
-  };
-
-  handleModuleChange(selectedModules) {
-    this.setState({ selectedModules });
-  }
-
-  handleNotificationTimeChange(notificationTime) {
-    this.setState({ notificationTime });
-    this.props.resetLogoutCounter();
   }
 
   areModulesEqual() {

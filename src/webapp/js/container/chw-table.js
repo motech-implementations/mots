@@ -62,7 +62,7 @@ class ChwTable extends Component {
               <span className="fa fa-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
-          )}
+            )}
           { hasAuthority(ASSIGN_MODULES_AUTHORITY)
             && (
             <Link
@@ -78,7 +78,7 @@ class ChwTable extends Component {
                 Assign Module
               </span>
             </Link>
-          )}
+            )}
         </div>
 
       ),

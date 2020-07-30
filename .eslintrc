@@ -34,9 +34,6 @@
     "react/destructuring-assignment": "off",
     "react/jsx-props-no-spreading": "off",
     "arrow-parens": ["error", "as-needed", { "requireForBlockBody": true }],
-    "import/no-cycle": "off",
-    "react/sort-comp": "off",
-    "template-curly-spacing": "off",
-    "indent": "off"
+    "import/no-cycle": "off"
   }
 }

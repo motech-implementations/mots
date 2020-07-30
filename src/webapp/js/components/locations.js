@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
- Tab, Tabs, TabList, TabPanel,
+  Tab, Tabs, TabList, TabPanel,
 } from 'react-tabs';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -141,7 +141,7 @@ class Locations extends Component {
               <span className="fa fa-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
-          )}
+            )}
         </div>
       ),
       filterable: false,
@@ -175,7 +175,7 @@ class Locations extends Component {
               <span className="fa fa-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
-          )}
+            )}
         </div>
       ),
       filterable: false,

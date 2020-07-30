@@ -149,7 +149,7 @@ class SideBar extends Component {
               <span className="icon-text">Assign</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(MANAGE_MODULES_AUTHORITY, DISPLAY_MODULES_AUTHORITY)
           && (
           <li className="border-none">
@@ -158,7 +158,7 @@ class SideBar extends Component {
               <span className="icon-text">{ hasAuthority(MANAGE_MODULES_AUTHORITY) ? 'Manage Modules' : 'Module List' }</span>
             </Link>
           </li>
-        )}
+          )}
       </ul>
     );
   }
@@ -178,7 +178,7 @@ class SideBar extends Component {
               <span className="icon-text">Add Village</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(CREATE_FACILITIES_AUTHORITY)
           && (
           <li className="border-none">
@@ -187,7 +187,7 @@ class SideBar extends Component {
               <span className="icon-text">Add Facility</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(CREATE_FACILITIES_AUTHORITY)
           && (
           <li className="border-none">
@@ -196,7 +196,7 @@ class SideBar extends Component {
               <span className="icon-text">Add Sector</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(CREATE_FACILITIES_AUTHORITY)
           && (
           <li className="border-none">
@@ -205,7 +205,7 @@ class SideBar extends Component {
               <span className="icon-text">Add District</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY)
           && (
           <li className="border-none">
@@ -214,7 +214,7 @@ class SideBar extends Component {
               <span className="icon-text">Upload Village CSV</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY)
           && (
           <li className="border-none">
@@ -223,7 +223,7 @@ class SideBar extends Component {
               <span className="icon-text">Upload Facility CSV</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(UPLOAD_LOCATION_CSV_AUTHORITY)
           && (
           <li className="border-none">
@@ -232,7 +232,7 @@ class SideBar extends Component {
               <span className="icon-text">Upload Sector CSV</span>
             </Link>
           </li>
-        )}
+          )}
         { hasAuthority(
           DISPLAY_FACILITIES_AUTHORITY,
           MANAGE_FACILITIES_AUTHORITY,
@@ -370,10 +370,10 @@ class SideBar extends Component {
             </Link>
           </li>
           { hasAuthority(
-              CHW_READ_AUTHORITY,
-              CHW_WRITE_AUTHORITY,
-              UPLOAD_CHW_CSV_AUTHORITY,
-            )
+            CHW_READ_AUTHORITY,
+            CHW_WRITE_AUTHORITY,
+            UPLOAD_CHW_CSV_AUTHORITY,
+          )
             && (
             <li className="nav-item">
               <a className="nav-link" href="" onClick={this.toggleHealthWorkersMenu}>
@@ -385,11 +385,11 @@ class SideBar extends Component {
               </a>
               {this.renderHealthWorkersMenu()}
             </li>
-          )}
+            )}
           { hasAuthority(
-              ASSIGN_MODULES_AUTHORITY,
-              MANAGE_MODULES_AUTHORITY,
-              DISPLAY_MODULES_AUTHORITY,
+            ASSIGN_MODULES_AUTHORITY,
+            MANAGE_MODULES_AUTHORITY,
+            DISPLAY_MODULES_AUTHORITY,
           )
             && (
             <li className="nav-item">
@@ -402,7 +402,7 @@ class SideBar extends Component {
               </a>
               { this.renderModulesMenu() }
             </li>
-          )}
+            )}
           { hasAuthority(DISPLAY_REPORTS_AUTHORITY)
           && (
           <li className="nav-item">

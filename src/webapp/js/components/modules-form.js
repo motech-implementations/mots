@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- reduxForm, formValueSelector, Field, FieldArray, FormSection,
+  reduxForm, formValueSelector, Field, FieldArray, FormSection,
 } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
@@ -459,14 +459,14 @@ class ModuleForm extends Component {
                 </button>
                 )}
               </form>
-              )
+            )
             : (
               <form onSubmit={(event) => { event.preventDefault(); }}>
                 { _.map(ModuleForm.getFields(this.props.nodeType),
                   (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
                     fieldName, fieldName, this.props)) }
               </form>
-              )
+            )
         }
       </div>
     );

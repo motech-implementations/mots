@@ -714,7 +714,7 @@ class ModulesManage extends Component {
                 addMessage={() => this.addMessage(this.state.selectedElement.path)}
                 addQuestion={() => this.addQuestion(this.state.selectedElement.path)}
               />
-            )
+              )
             }
           </div>
         </div>

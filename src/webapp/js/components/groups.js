@@ -60,6 +60,9 @@ class Groups extends Component {
     this.fetchData();
   }
 
+  filterMethod = (filter, row) => (_.toString(row[filter.id]).toLowerCase()
+    .includes(filter.value.trim().toLowerCase()));
+
   fetchData() {
     apiClient.get('/api/group')
       .then((response) => {
@@ -68,9 +71,6 @@ class Groups extends Component {
         }
       });
   }
-
-  filterMethod = (filter, row) => (_.toString(row[filter.id]).toLowerCase()
-    .includes(filter.value.trim().toLowerCase()));
 
   render() {
     return (
