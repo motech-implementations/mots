@@ -59,7 +59,7 @@ class ChwTable extends Component {
               className="btn btn-primary margin-right-sm"
               title="Edit"
             >
-              <span className="glyphicon glyphicon-edit" />
+              <span className="fa fa-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
           )}
@@ -71,7 +71,7 @@ class ChwTable extends Component {
               className="btn btn-success"
               title="Assign Module"
             >
-              <span className="glyphicon glyphicon-circle-arrow-right" />
+              <span className="fa fa-arrow-circle-right" />
               <span
                 className="hide-min-r-small-min next-button-text"
               >

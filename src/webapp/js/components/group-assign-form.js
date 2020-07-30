@@ -21,7 +21,6 @@ const GroupAssignFrom = props => (
       <input
         id="delay-notification"
         type="checkbox"
-        className="checkbox-inline"
         checked={props.delayNotification}
         onChange={props.handleDelayNotificationChange}
       />
@@ -45,7 +44,7 @@ const GroupAssignFrom = props => (
       </div>
     )}
     <form
-      className="form-horizontal col-md-12"
+      className="col-md-12"
       onSubmit={props.sendAssignedModules}
     >
       <button

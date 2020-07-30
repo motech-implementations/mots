@@ -24,11 +24,15 @@ const GroupForm = ({ handleSubmit, onSubmit, onSubmitCancel }) => {
   );
 
   return (
-    <form className="form-horizontal" onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       { _.map(FIELDS, renderField) }
-      <div className="col-md-2" />
-      <button type="submit" className="btn btn-primary margin-bottom-md">Submit</button>
-      <button type="button" className="btn btn-danger margin-left-sm margin-bottom-md" onClick={onSubmitCancel}>Cancel</button>
+      <div className="row">
+        <div className="col-md-2" />
+        <div className="col-md-10">
+          <button type="submit" className="btn btn-primary margin-bottom-md">Submit</button>
+          <button type="button" className="btn btn-danger margin-left-sm margin-bottom-md" onClick={onSubmitCancel}>Cancel</button>
+        </div>
+      </div>
     </form>
   );
 };

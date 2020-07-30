@@ -61,7 +61,7 @@ class RolesTable extends Component {
             className={`btn btn-primary margin-right-sm ${cell.original && cell.original.readonly ? 'disabled' : ''}`}
             title="Edit"
           >
-            <span className="glyphicon glyphicon-edit" />
+            <span className="fa fa-edit" />
             <span className="hide-min-r-small-min next-button-text">Edit</span>
           </Link>
         </div>

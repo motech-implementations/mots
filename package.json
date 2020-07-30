@@ -20,7 +20,7 @@
   "dependencies": {
     "@redux-offline/redux-offline": "^2.6.0",
     "axios": "^0.19.2",
-    "bootstrap": "3.4.0",
+    "bootstrap": "^4.5.0",
     "client-oauth2": "^4.3.0",
     "date-fns": "^2.14.0",
     "font-awesome": "^4.7.0",

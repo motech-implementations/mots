@@ -43,13 +43,13 @@ class FormField extends Component {
       },
     };
 
-    const className = `form-group ${fieldConfig.required || attributes.required ? 'required' : ''} ${attributes.hidden ? 'hidden' : ''} ${touched && error ? 'has-error' : ''}`;
+    const className = `form-group ${fieldConfig.required || attributes.required ? 'required' : ''} ${attributes.hidden ? 'd-none' : ''} ${touched && error ? 'has-error' : ''}`;
     const inputClass = (this.props.largeInput) ? 'col-md-8' : 'col-md-4';
     const labelClass = (this.props.largeInput) ? 'col-md-3' : 'col-md-2';
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
         <div className="row">
-          <label htmlFor={attributes.id} className={`${labelClass} control-label`}>{ attributes.label || label }</label>
+          <label htmlFor={attributes.id} className={`${labelClass} col-form-label`}>{ attributes.label || label }</label>
           <div className={inputClass}>
             <FieldType {...attributes}>
               {

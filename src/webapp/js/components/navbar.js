@@ -22,7 +22,7 @@ class Navbar extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-inverse navbar-fixed-top">
+      <nav className="navbar fixed-top navbar-light bg-light navbar-expand-md navbar-inverse">
         <Header
           signoutUser={this.onSignout}
           toggleShowMenuSmart={this.props.toggleShowMenuSmart}

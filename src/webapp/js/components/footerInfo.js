@@ -1,7 +1,7 @@
 import React from 'react';
 
 const FooterInfo = () => (
-  <div className="panel-footer">
+  <div className="card-footer">
     <div className="footer-text">
       This project has received funding from the Innovative Medicines
       Initiative 2 Joint Undertaking under grant agreement EBOVAC1

@@ -241,9 +241,9 @@ class ModuleForm extends Component {
 
   static renderSection({ fieldConfig, children }) {
     return (
-      <div className="panel panel-default margin-bottom-lg">
-        <div className="panel-heading">{fieldConfig.label}</div>
-        <div className="panel-body">
+      <div className="card margin-bottom-lg">
+        <div className="card-header">{fieldConfig.label}</div>
+        <div className="card-body">
           {children}
         </div>
       </div>
@@ -257,19 +257,21 @@ class ModuleForm extends Component {
       }
 
       return (
-        <div key={fieldKey}>
+        <div className="row" key={fieldKey}>
           <div className="col-md-4" />
-          { _.map(fieldConfig, field => (
-            <button
-              type="button"
-              key={field.label}
-              className="btn btn-success margin-bottom-lg margin-right-sm"
-              onClick={props[field.callback]}
-            >
-              <span className="glyphicon glyphicon-plus" />
-              <span className="icon-text">{field.label}</span>
-            </button>
-          ))}
+          <div className="col-md-8">
+            { _.map(fieldConfig, field => (
+              <button
+                type="button"
+                key={field.label}
+                className="btn btn-success margin-bottom-lg margin-right-sm"
+                onClick={props[field.callback]}
+              >
+                <span className="fa fa-plus" />
+                <span className="icon-text">{field.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       );
     }
@@ -317,7 +319,7 @@ class ModuleForm extends Component {
         { properties.isEditable && !properties.isModuleReleased
         && (
         <button type="button" className="btn btn-success margin-bottom-lg" onClick={() => fields.push(fieldsConfig.defaultValue)}>
-          <span className="glyphicon glyphicon-plus" />
+          <span className="fa fa-plus" />
           <span className="icon-text">{fieldsConfig.addLabel}</span>
         </button>
         )}
@@ -326,14 +328,14 @@ class ModuleForm extends Component {
         {fields.map((field, index) => (
           // eslint-disable-next-line react/no-array-index-key
           <li key={index}>
-            <div className="row">
+            <div className="row justify-content-between">
+              <h4 className="margin-left-md">{`${fieldsConfig.fieldLabel} #${index + 1}`}</h4>
               { properties.isEditable && !properties.isModuleReleased
               && (
-              <button type="button" className="btn btn-danger pull-right margin-right-md" onClick={() => fields.remove(index)}>
-                <span className="glyphicon glyphicon-trash" />
-              </button>
+                <button type="button" className="btn btn-danger margin-right-md margin-bottom-sm" onClick={() => fields.remove(index)}>
+                  <span className="fa fa-trash" />
+                </button>
               )}
-              <h4 className="margin-left-md">{`${fieldsConfig.fieldLabel} #${index + 1}`}</h4>
             </div>
             { _.map(fieldsConfig.fields, (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig, `${field}.${fieldName}`, `${field}.${fieldName}`, properties)) }
           </li>
@@ -366,26 +368,26 @@ class ModuleForm extends Component {
 
     return (
       <div className={`padding-left-md padding-right-md ${className}`}>
-        <div className="row">
-          <Tooltip
-            title={fieldConfig.tooltip}
-            position="top"
-            theme="transparent"
-            animation="shift"
-            arrow="true"
-            followCursor="true"
-            delay="150"
-            duration="250"
-            hideDelay="50"
-            size="big"
-            style={{ display: 'block' }}
-          >
-            <label htmlFor={attr.id} className="col-md-4 control-label">{ label }</label>
+        <Tooltip
+          title={fieldConfig.tooltip}
+          position="top"
+          theme="transparent"
+          animation="shift"
+          arrow="true"
+          followCursor="true"
+          delay="150"
+          duration="250"
+          hideDelay="50"
+          size="big"
+          style={{ display: 'block' }}
+        >
+          <div className="row">
+            <label htmlFor={attr.id} className="col-md-4 col-form-label">{ label }</label>
             <div className="col-md-8">
               <FieldType {...attr} />
             </div>
-          </Tooltip>
-        </div>
+          </div>
+        </Tooltip>
         <div className="row">
           <div className="col-md-4" />
           <div className="help-block col-md-8" style={{ float: 'left' }}>
@@ -409,7 +411,7 @@ class ModuleForm extends Component {
         {
           hasAuthority(MANAGE_MODULES_AUTHORITY) && (this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE')
             ? (
-              <form className="form-horizontal" onSubmit={handleSubmit(this.props.onSubmit)}>
+              <form onSubmit={handleSubmit(this.props.onSubmit)}>
                 { _.map(ModuleForm.getFields(this.props.nodeType),
                   (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
                     fieldName, fieldName, this.props))}
@@ -459,7 +461,7 @@ class ModuleForm extends Component {
               </form>
               )
             : (
-              <form className="form-horizontal" onSubmit={(event) => { event.preventDefault(); }}>
+              <form onSubmit={(event) => { event.preventDefault(); }}>
                 { _.map(ModuleForm.getFields(this.props.nodeType),
                   (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
                     fieldName, fieldName, this.props)) }

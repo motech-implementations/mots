@@ -639,7 +639,7 @@ class ModulesManage extends Component {
           onClick={this.addCourse}
           disabled={!this.state.canAddCourse}
         >
-          <span className="glyphicon glyphicon-plus" />
+          <span className="fa fa-plus" />
           <span className="icon-text">Add Course</span>
         </button>
         )}
@@ -681,7 +681,7 @@ class ModulesManage extends Component {
                       event.stopPropagation();
                     }}
                   >
-                    <span className="glyphicon glyphicon-trash" />
+                    <span className="fa fa-trash" />
                   </button>,
                 ],
               })}

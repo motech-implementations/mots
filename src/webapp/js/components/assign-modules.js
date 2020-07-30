@@ -139,7 +139,7 @@ class AssignModules extends Component {
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules</h1>
-        <div className="col-md-8 col-md-offset-2">
+        <div className="col-md-8 offset-md-2">
           <Select
             name="form-field-name"
             value={this.state.selectedChw}
@@ -162,7 +162,6 @@ class AssignModules extends Component {
             <input
               id="delay-notification"
               type="checkbox"
-              className="checkbox-inline"
               checked={this.state.delayNotification}
               onChange={event => this.setState({ delayNotification: event.target.checked })}
             />
@@ -186,7 +185,7 @@ class AssignModules extends Component {
           </div>
           )}
           <form
-            className="form-horizontal col-md-12"
+            className="col-md-12"
             onSubmit={this.sendAssignedModules}
           >
             <button

@@ -52,7 +52,7 @@ class Locations extends Component {
             className="btn btn-primary margin-right-sm"
             title="Edit"
           >
-            <span className="glyphicon glyphicon-edit" />
+            <span className="fa fa-edit" />
             <span className="hide-min-r-small-min next-button-text">Edit</span>
           </Link>
           )}
@@ -92,7 +92,7 @@ class Locations extends Component {
             className="btn btn-primary margin-right-sm"
             title="Edit"
           >
-            <span className="glyphicon glyphicon-edit" />
+            <span className="fa fa-edit" />
             <span className="hide-min-r-small-min next-button-text">Edit</span>
           </Link>
           )}
@@ -138,7 +138,7 @@ class Locations extends Component {
               className="btn btn-primary margin-right-sm"
               title="Edit"
             >
-              <span className="glyphicon glyphicon-edit" />
+              <span className="fa fa-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
           )}
@@ -172,7 +172,7 @@ class Locations extends Component {
               className="btn btn-primary margin-right-sm"
               title="Edit"
             >
-              <span className="glyphicon glyphicon-edit" />
+              <span className="fa fa-edit" />
               <span className="hide-min-r-small-min next-button-text">Edit</span>
             </Link>
           )}

@@ -68,10 +68,10 @@ class CsvUpload extends Component {
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">{this.props.uploadLabel}</h1>
         <div>
-          <form className="form-horizontal" onSubmit={this.onFormSubmit}>
+          <form onSubmit={this.onFormSubmit}>
             <div className="row padding-bottom-xs">
-              <div className="input-group col-md-4">
-                <label className="input-group-btn" htmlFor="csvInput">
+              <div className="input-group col-md-4 p-0">
+                <label className="input-group-prepend" htmlFor="csvInput">
                   <span className="btn btn-primary">
                     Browse
                     {' '}
@@ -101,7 +101,6 @@ class CsvUpload extends Component {
                 <input
                   id="selectedInput"
                   type="checkbox"
-                  className="checkbox-inline"
                   checked={this.state.selected}
                   onChange={event => this.setState({ selected: event.target.checked })}
                   onFocus={() => this.props.resetLogoutCounter()}
@@ -115,7 +114,7 @@ class CsvUpload extends Component {
             <div className="row">
               <button
                 type="submit"
-                className="col-md-4 offset-md-2 btn btn-primary"
+                className="col-md-4 btn btn-primary"
                 disabled={!this.state.file}
               >
                 Upload
@@ -123,7 +122,7 @@ class CsvUpload extends Component {
             </div>
           </form>
         </div>
-        <h3>Result</h3>
+        <h3 className="mt-3">Result</h3>
         <div>
           <ClimbingBoxLoader
             color="#000000"

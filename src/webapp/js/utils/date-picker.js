@@ -18,9 +18,9 @@ class CustomInput extends Component {
 
     return (
       <div className="input-group">
-        <span className="input-group-addon">
-          <i className="fa fa-calendar" />
-        </span>
+        <div className="input-group-prepend">
+          <span className="input-group-text"><i className="fa fa-calendar" /></span>
+        </div>
         <input
           placeholder={placeholderText}
           className="form-control"

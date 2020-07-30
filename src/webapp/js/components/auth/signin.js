@@ -27,7 +27,9 @@ class Signin extends Component {
 
     return (
       <div className={resultingClassName}>
-        <span className="input-group-addon"><i className={`glyphicon glyphicon-${icon}`} /></span>
+        <div className="input-group-prepend">
+          <span className="input-group-text"><i className={`fa fa-${icon}`} /></span>
+        </div>
         <input className="form-control" type={type} placeholder={placeholder} {...input} />
       </div>
     );
@@ -50,25 +52,23 @@ class Signin extends Component {
 
     return (
       <div className="page-container">
-        <div className="login-container mainbox col-md-6 col-md-offset-3
-      col-sm-8 col-sm-offset-2"
-        >
+        <div className="login-container col-md-6 offset-md-3 col-sm-8 offset-sm-2">
           <div className="row">
-            <div className="col-md-8 col-md-offset-2">
-              <img className="img-responsive" alt="test" src="/EBODAClogo-RGB-with.jpg" />
+            <div className="col-md-8 offset-md-2">
+              <img className="img-fluid" alt="logo" src="/EBODAClogo-RGB-with.jpg" />
             </div>
           </div>
 
           <div className="row">
-            <div className="col-md-8 col-md-offset-2">
-              <div className="panel panel-info">
-                <div className="panel-heading">
-                  <div className="panel-title">Sign In</div>
+            <div className="col-md-8 offset-md-2">
+              <div className="card text-info">
+                <div className="card-header">
+                  <div>Sign In</div>
                 </div>
-                <div className="panel-body padding-top-lg">
+                <div className="card-body">
                   { this.renderAlert() }
 
-                  <form className="form-horizontal" onSubmit={handleSubmit(this.onSubmit)}>
+                  <form onSubmit={handleSubmit(this.onSubmit)}>
                     <Field
                       placeholder="Username"
                       type="text"
@@ -86,9 +86,7 @@ class Signin extends Component {
                       className="form-control"
                     />
                     <div className="form-group">
-                      <div className="col-sm-12 controls">
-                        <button type="submit" className="btn btn-success">Login</button>
-                      </div>
+                      <button type="submit" className="btn btn-success">Login</button>
                     </div>
                   </form>
                 </div>

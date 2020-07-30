@@ -206,7 +206,7 @@ class DistrictAssignModules extends Component {
 
   render() {
     return (
-      <div className="form-horizontal">
+      <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm text-center">Assign Modules</h1>
         <Tabs selectedIndex={this.state.selectedIndex} onSelect={this.handleTabSelect}>
           <TabList>
@@ -215,7 +215,7 @@ class DistrictAssignModules extends Component {
           </TabList>
 
           <TabPanel>
-            <div className="col-md-8 col-md-offset-2">
+            <div className="col-md-8 offset-md-2">
               <Select
                 name="district"
                 value={this.state.selectedDistrict}
@@ -263,7 +263,7 @@ class DistrictAssignModules extends Component {
             </div>
           </TabPanel>
           <TabPanel>
-            <div className="col-md-8 col-md-offset-2">
+            <div className="col-md-8 offset-md-2">
 
               <Select
                 name="group"

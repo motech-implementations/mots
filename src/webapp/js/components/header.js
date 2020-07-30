@@ -5,32 +5,29 @@ import { Link } from 'react-router-dom';
 import CounterLogout from './counter-logout';
 
 const Header = ({ signoutUser, toggleShowMenuSmart, hideMenuSmart }) => (
-  <div>
+  <div className="w-100">
     <div className="navbar-header">
-      <button type="button" className="navbar-toggle" onClick={toggleShowMenuSmart}>
-        <span className="sr-only">Toggle navigation</span>
-        <span className="icon-bar" />
-        <span className="icon-bar" />
-        <span className="icon-bar" />
+      <button type="button" className="navbar-toggler" onClick={toggleShowMenuSmart}>
+        <span className="navbar-toggler-icon" />
       </button>
       <Link className="navbar-brand hide-min-r-small-min" to="/" onClick={hideMenuSmart}>MOTS</Link>
       <Link className="navbar-brand hide-max-r-xsmall-max" to="/" onClick={hideMenuSmart}>Mobile Training and Support</Link>
-      <div className="hide-min-r-small-min">
-        <CounterLogout />
-      </div>
     </div>
-    <div className="navbar-right hide-max-r-xsmall-max padding-y-md">
+    <div className="float-right hide-min-r-small-min padding-y-md">
       <CounterLogout />
-      <ul className="nav navbar-right top-nav padding-y-md">
-        <li>
+    </div>
+    <div className="float-right hide-max-r-xsmall-max padding-y-md">
+      <CounterLogout />
+      <ul className="nav float-right top-nav padding-y-md">
+        <li className="p-2">
           <Link to="/profile" onClick={hideMenuSmart}>
-            <span className="glyphicon glyphicon-user" />
+            <span className="fa fa-user" />
             <span className="icon-text">Profile</span>
           </Link>
         </li>
-        <li>
+        <li className="p-2">
           <a href="" onClick={signoutUser}>
-            <span className="glyphicon glyphicon-log-in" />
+            <span className="fa fa-sign-out" />
             <span className="icon-text">Logout</span>
           </a>
         </li>
