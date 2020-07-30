@@ -63,11 +63,13 @@ public class IvrService {
   private static final String RETRY_DELAY_SHORT = "retry_delay_short";
   private static final String RETRY_DELAY_LONG = "retry_delay_long";
   private static final String API_KEY = "api_key";
+  private static final String NAME = "name";
 
   private static final String SUBSCRIBERS_URL = "/subscribers";
   private static final String MODIFY_SUBSCRIBERS_URL = "/subscribers/%s";
   private static final String ADD_TO_GROUPS_URL = "/subscribers/groups";
   private static final String DELETE_GROUPS_URL = "/subscribers/delete/groups";
+  private static final String CREATE_GROUP_URL = "/groups";
   private static final String SEND_MESSAGE_URL = "/outgoing_calls";
   private static final String GET_CALL_LOGS_URL = "/trees/%s/delivery_logs/%s";
   private static final String GET_OUTGOING_CALL_URL = "/outgoing_calls/%s";
@@ -99,13 +101,13 @@ public class IvrService {
    * @param preferredLanguage CHW preferred language
    * @return ivr id of created subscriber
    */
-  public String createSubscriber(String phoneNumber, String name,
-      Language preferredLanguage) throws IvrException {
+  public String createSubscriber(String phoneNumber, String name, Language preferredLanguage,
+      String districtIvrId) throws IvrException {
     MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name,
         preferredLanguage);
 
-    String groups = ivrConfigService.getConfig().getDefaultUsersGroupId();
-    params.add(GROUPS, groups);
+    String defaultGroup = ivrConfigService.getConfig().getDefaultUsersGroupId();
+    params.add(GROUPS, StringUtils.joinWith(",", defaultGroup, districtIvrId));
     params.add(RECEIVE_SMS, "1");
 
     VotoResponseDto<String> votoResponse = sendVotoRequest(getAbsoluteUrl(SUBSCRIBERS_URL), params,
@@ -134,6 +136,26 @@ public class IvrService {
     String url = getUrlWithParams(MODIFY_SUBSCRIBERS_URL, ivrId);
     sendVotoRequest(url, params, new ParameterizedTypeReference<VotoResponseDto<String>>() {},
         HttpMethod.PUT);
+  }
+
+  public String createGroup(String groupName) throws IvrException {
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add(NAME, groupName);
+
+    VotoResponseDto<String> votoResponse = sendVotoRequest(getAbsoluteUrl(CREATE_GROUP_URL), params,
+        new ParameterizedTypeReference<VotoResponseDto<String>>() {}, HttpMethod.POST);
+
+    if (votoResponse == null || StringUtils.isBlank(votoResponse.getData())) {
+      throw new IvrException("Group created successfully, but group id was not returned");
+    }
+
+    return votoResponse.getData();
+  }
+
+  public void changeSubscriberGroup(String subscriberId,
+      String oldGroupId, String newGroupId) throws IvrException {
+    addSubscriberToGroups(subscriberId, Collections.singletonList(newGroupId));
+    removeSubscriberFromGroups(subscriberId, Collections.singletonList(oldGroupId));
   }
 
   /**

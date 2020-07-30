@@ -149,4 +149,5 @@
   <include file="20200326_1758.mysql.sql" relativeToChangelogFile="true" />
   <include file="20200701_1504.mysql.sql" relativeToChangelogFile="true" />
   <include file="20200706_2037.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20200730_0834.mysql.sql" relativeToChangelogFile="true" />
 </databaseChangeLog>

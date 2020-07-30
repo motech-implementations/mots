@@ -165,11 +165,8 @@ public class CommunityHealthWorkerController extends BaseController {
   public CommunityHealthWorkerDto saveHealthWorker(@PathVariable("id") UUID id,
       @RequestBody @Valid CommunityHealthWorkerDto healthWorkerDto, BindingResult bindingResult) {
     checkBindingResult(bindingResult);
-    CommunityHealthWorker existingHealthWorker = healthWorkerService.getHealthWorker(id);
 
-    healthWorkerMapper.updateFromDto(healthWorkerDto, existingHealthWorker);
-
-    return healthWorkerMapper.toDto(healthWorkerService.saveHealthWorker(existingHealthWorker));
+    return healthWorkerService.saveHealthWorker(id, healthWorkerDto);
   }
 
   /**

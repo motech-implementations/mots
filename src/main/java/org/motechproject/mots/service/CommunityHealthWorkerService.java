@@ -27,10 +27,12 @@ import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
 import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.ChwInfoDto;
+import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.exception.ChwException;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.mapper.ChwInfoMapper;
+import org.motechproject.mots.mapper.CommunityHealthWorkerMapper;
 import org.motechproject.mots.repository.AssignedModulesRepository;
 import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.motechproject.mots.repository.DistrictRepository;
@@ -102,6 +104,9 @@ public class CommunityHealthWorkerService {
   @Autowired
   private IvrService ivrService;
 
+  @Autowired
+  private CommunityHealthWorkerMapper healthWorkerMapper;
+
   @PreAuthorize(DefaultPermissionConstants.HAS_CHW_READ_ROLE)
   public Iterable<CommunityHealthWorker> getHealthWorkers() {
     return healthWorkerRepository.findAll();
@@ -165,12 +170,15 @@ public class CommunityHealthWorkerService {
 
     healthWorker.setSelected(true);
 
+    District district = districtRepository.getOne(healthWorker.getDistrict().getId());
+    String districtIvrId = district.getIvrGroupId();
     String phoneNumber = healthWorker.getPhoneNumber();
     String name = healthWorker.getCombinedName();
     Language preferredLanguage = healthWorker.getPreferredLanguage();
 
     try {
-      String ivrId = ivrService.createSubscriber(phoneNumber, name, preferredLanguage);
+      String ivrId = ivrService.createSubscriber(phoneNumber, name,
+          preferredLanguage, districtIvrId);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
       String message = "Could not select CHW, because of IVR subscriber creation error. \n\n"
@@ -190,28 +198,6 @@ public class CommunityHealthWorkerService {
   public CommunityHealthWorker getHealthWorker(UUID id) {
     return healthWorkerRepository.findById(id).orElseThrow(() ->
         new EntityNotFoundException("CHW with id: {0} not found", id.toString()));
-  }
-
-  /**
-   * Update CHW and IVR Subscriber.
-   * @param chw CHW to update
-   * @return saved CHW
-   */
-  @PreAuthorize(DefaultPermissionConstants.HAS_CHW_WRITE_ROLE)
-  public CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw) {
-    String ivrId = chw.getIvrId();
-    String phoneNumber = chw.getPhoneNumber();
-    String name = chw.getCombinedName();
-    Language preferredLanguage = chw.getPreferredLanguage();
-
-    try {
-      ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage);
-    } catch (IvrException ex) {
-      String message = "Could not update CHW, because of IVR subscriber update error. \n"
-          + ex.getClearVotoInfo();
-      throw new ChwException(message, ex);
-    }
-    return healthWorkerRepository.save(chw);
   }
 
   /**.
@@ -362,6 +348,10 @@ public class CommunityHealthWorkerService {
             !preferredLanguage.equals(communityHealthWorker.getPreferredLanguage())
                 || !StringUtils.equals(phoneNumber, communityHealthWorker.getPhoneNumber());
 
+        District oldDistrict = communityHealthWorker.getDistrict();
+
+        ivrDataChanged = ivrDataChanged || !oldDistrict.getId().equals(district.get().getId());
+
         communityHealthWorker.setChwId(chwId);
         communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER));
         communityHealthWorker.setFamilyName(csvRow.get(FAMILY_NAME_CSV_HEADER));
@@ -383,7 +373,7 @@ public class CommunityHealthWorkerService {
           selectHealthWorker(communityHealthWorker);
         } else if (communityHealthWorker.getSelected() && ivrDataChanged) {
           try {
-            saveHealthWorker(communityHealthWorker);
+            saveHealthWorker(communityHealthWorker, oldDistrict);
           } catch (ChwException ex) {
             errorMap.put(csvMapReader.getLineNumber(), ex.getDisplayMessage());
           }
@@ -394,6 +384,44 @@ public class CommunityHealthWorkerService {
     }
 
     return errorMap;
+  }
+
+  /**
+   * Update CHW and IVR Subscriber.
+   * @param id id of the CHW to update
+   * @param chw CHW to update
+   * @return saved CHW
+   */
+  @PreAuthorize(DefaultPermissionConstants.HAS_CHW_WRITE_ROLE)
+  public CommunityHealthWorkerDto saveHealthWorker(UUID id, CommunityHealthWorkerDto chw) {
+    CommunityHealthWorker existingHealthWorker = getHealthWorker(id);
+    District oldDistrict = existingHealthWorker.getDistrict();
+
+    healthWorkerMapper.updateFromDto(chw, existingHealthWorker);
+
+    return healthWorkerMapper.toDto(saveHealthWorker(existingHealthWorker, oldDistrict));
+  }
+
+  private CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw, District oldDistrict) {
+    String ivrId = chw.getIvrId();
+    String phoneNumber = chw.getPhoneNumber();
+    String name = chw.getCombinedName();
+    Language preferredLanguage = chw.getPreferredLanguage();
+
+    try {
+      ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage);
+
+      if (!oldDistrict.getId().equals(chw.getDistrict().getId())) {
+        District newDistrict = districtRepository.getOne(chw.getDistrict().getId());
+        ivrService.changeSubscriberGroup(ivrId, oldDistrict.getIvrGroupId(),
+            newDistrict.getIvrGroupId());
+      }
+    } catch (IvrException ex) {
+      String message = "Could not update CHW, because of IVR subscriber update error. \n"
+          + ex.getClearVotoInfo();
+      throw new ChwException(message, ex);
+    }
+    return healthWorkerRepository.save(chw);
   }
 
   @SuppressWarnings("PMD.CyclomaticComplexity")

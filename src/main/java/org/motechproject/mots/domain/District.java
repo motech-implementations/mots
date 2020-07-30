@@ -2,6 +2,7 @@ package org.motechproject.mots.domain;
 
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -15,6 +16,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "district", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))
 public class District extends Location {
+
+  @Column(name = "ivr_group_id")
+  @Getter
+  @Setter
+  private String ivrGroupId;
 
   @OneToMany(mappedBy = "district")
   @Getter
