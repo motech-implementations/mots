@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.motechproject.mots.domain.AssignedModules;
 import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.District;
@@ -54,11 +55,8 @@ import org.motechproject.mots.testbuilder.ModuleProgressDataBuilder;
 import org.motechproject.mots.testbuilder.SectorDataBuilder;
 import org.motechproject.mots.testbuilder.UserDataBuilder;
 import org.motechproject.mots.utils.AuthenticationHelper;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(ModuleAssignmentService.class)
+@RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("PMD.TooManyMethods")
 public class ModuleAssignmentServiceTest {
 
@@ -70,9 +68,6 @@ public class ModuleAssignmentServiceTest {
 
   @Mock
   private CommunityHealthWorkerRepository communityHealthWorkerRepository;
-
-  @Mock
-  private UserService userService;
 
   @Mock
   private ModuleRepository moduleRepository;
@@ -241,7 +236,6 @@ public class ModuleAssignmentServiceTest {
 
   @Test
   public void shouldAssignModulesToDistrict() throws IvrException {
-    when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
     when(communityHealthWorkerRepository.findByDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
@@ -275,7 +269,6 @@ public class ModuleAssignmentServiceTest {
 
   @Test
   public void shouldAssignModulesToASector() throws IvrException {
-    when(userService.getUserByUserName(eq(user.getUsername()))).thenReturn(user);
     when(communityHealthWorkerRepository.findBySectorIdAndSelected(
         eq(SECTOR.getId()), any())).thenReturn(Collections.singletonList(CHW));
 

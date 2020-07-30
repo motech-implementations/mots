@@ -7,6 +7,7 @@ import static org.motechproject.mots.constants.ReportingMessageConstants.ERROR_R
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -36,8 +37,12 @@ public class JasperTemplateService {
   protected static final String REPORT_TYPE_PROPERTY = "reportType";
   protected static final String SUPPORTED_FORMATS_PROPERTY = "supportedFormats";
 
+  private final JasperTemplateRepository jasperTemplateRepository;
+
   @Autowired
-  private JasperTemplateRepository jasperTemplateRepository;
+  public JasperTemplateService(JasperTemplateRepository jasperTemplateRepository) {
+    this.jasperTemplateRepository = jasperTemplateRepository;
+  }
 
   /**
    * Saves a template with given name.
@@ -149,6 +154,18 @@ public class JasperTemplateService {
     saveWithParameters(jasperTemplate);
   }
 
+  protected JasperReport compileReport(InputStream inputStream) throws JRException {
+    return JasperCompileManager.compileReport(inputStream);
+  }
+
+  protected byte[] writeReportToByteArray(JasperReport report) throws IOException {
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    ObjectOutputStream out = new ObjectOutputStream(bos);
+    out.writeObject(report);
+
+    return bos.toByteArray();
+  }
+
   /**
    * Validate ".jrxml" report file with JasperCompileManager. If report is valid create additional
    * report parameters. Save additional report parameters as JasperTemplateParameter list. Save
@@ -161,7 +178,7 @@ public class JasperTemplateService {
     ReportingValidationHelper.throwIfFileIsEmpty(file);
 
     try {
-      JasperReport report = JasperCompileManager.compileReport(file.getInputStream());
+      JasperReport report = compileReport(file.getInputStream());
 
       String reportType = report.getProperty(REPORT_TYPE_PROPERTY);
       if (reportType != null) {
@@ -179,10 +196,8 @@ public class JasperTemplateService {
         processJrParameters(jasperTemplate, jrParameters);
       }
 
-      ByteArrayOutputStream bos = new ByteArrayOutputStream();
-      ObjectOutputStream out = new ObjectOutputStream(bos);
-      out.writeObject(report);
-      jasperTemplate.setData(bos.toByteArray());
+      byte[] reportData = writeReportToByteArray(report);
+      jasperTemplate.setData(reportData);
     } catch (JRException ex) {
       throw new ReportingException(ex, ERROR_REPORTING_FILE_INVALID);
     } catch (IOException ex) {
