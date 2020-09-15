@@ -17,8 +17,7 @@ public final class CommunityHealthWorkerDataBuilder {
 
   private final UUID id;
   private final String chwId;
-  private final String firstName;
-  private final String familyName;
+  private final String chwName;
   private final Gender gender;
   private final String phoneNumber;
   private final Language preferredLanguage;
@@ -36,8 +35,7 @@ public final class CommunityHealthWorkerDataBuilder {
 
     id = UUID.randomUUID();
     chwId = "CHW #" + instanceNumber;
-    firstName = "first " + instanceNumber;
-    familyName = "second " + instanceNumber;
+    chwName = "first " + instanceNumber;
     gender = Gender.values()[RANDOM.nextInt(Gender.values().length)];
     phoneNumber = Integer.toString(instanceNumber);
     village = new VillageDataBuilder().build();
@@ -54,8 +52,7 @@ public final class CommunityHealthWorkerDataBuilder {
 
     CommunityHealthWorker chw = new CommunityHealthWorker();
     chw.setChwId(chwId);
-    chw.setFirstName(firstName);
-    chw.setFamilyName(familyName);
+    chw.setChwName(chwName);
     chw.setGender(gender);
     chw.setPhoneNumber(phoneNumber);
     chw.setVillage(village);

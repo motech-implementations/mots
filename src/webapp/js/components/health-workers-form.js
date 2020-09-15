@@ -41,12 +41,8 @@ const FIELDS = {
       disabled: !addChw,
     }),
   },
-  firstName: {
-    label: 'First Name',
-    required: true,
-  },
-  familyName: {
-    label: 'Family Name',
+  chwName: {
+    label: 'CHW Name',
     required: true,
   },
   gender: {

@@ -115,7 +115,7 @@
     AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
     AND ($P{unitId} IS NULL OR unit.name LIKE CONCAT('%',$P{unitId},'%'))
     AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-    AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
+    AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))
    GROUP BY chw.chw_id, chw.phone_number, module.name, unit.name, sector.name, facility.name) AS t]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
@@ -192,7 +192,7 @@
 	<queryString>
 		<![CDATA[SELECT
   chw.chw_id as chwId,
-  CONCAT_WS(" ", chw.first_name, chw.family_name) AS chwName,
+  chw.chw_name AS chwName,
   chw.phone_number AS phone,
   CONCAT(LEFT(chw.gender, 1), LOWER(SUBSTRING(chw.gender, 2))) AS gender,
   module.name AS moduleId,
@@ -226,7 +226,7 @@
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
   AND ($P{unitId} IS NULL OR unit.name LIKE CONCAT('%',$P{unitId},'%'))
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))
  GROUP BY chwId, phone, moduleId, unitId, sector, district
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>

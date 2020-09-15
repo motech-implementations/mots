@@ -1,5 +1,0 @@
---liquibase formatted sql
-
---changeset user:1518615027250-3
-ALTER TABLE in_charge DROP KEY UC_IN_CHARGEFACILITY_ID_COL;
-ALTER TABLE in_charge ADD CONSTRAINT UC_IN_CHARGEFACILITY_ID_COL UNIQUE (facility_id);

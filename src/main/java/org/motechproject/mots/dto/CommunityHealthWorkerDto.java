@@ -35,15 +35,9 @@ public class CommunityHealthWorkerDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessageConstants.EMPTY_FIRST_NAME)
+  @NotBlank(message = ValidationMessageConstants.EMPTY_CHW_NAME)
   @JsonDeserialize(using = TrimTextDeserializer.class)
-  private String firstName;
-
-  @Getter
-  @Setter
-  @NotBlank(message = ValidationMessageConstants.EMPTY_FAMILY_NAME)
-  @JsonDeserialize(using = TrimTextDeserializer.class)
-  private String familyName;
+  private String chwName;
 
   @Getter
   @Setter

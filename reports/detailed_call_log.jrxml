@@ -118,7 +118,7 @@
   AND ($P{sentDateMin} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMin},'%') OR call_flow_element_log.start_date > $P{sentDateMin})
   AND ($P{sentDateMax} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMax},'%') OR call_flow_element_log.start_date < $P{sentDateMax})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
 	</subDataset>
@@ -213,7 +213,7 @@
   module.name AS moduleId,
   unit.name AS unitId,
   chw.chw_id as chwId,
-  CONCAT_WS(" ", chw.first_name, chw.family_name) AS chwName,
+  chw.chw_name AS chwName,
   chw.phone_number AS phone,
   chw_group.name AS groupName,
   CASE chw.gender
@@ -247,7 +247,7 @@
   AND ($P{sentDateMin} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMin},'%') OR call_flow_element_log.start_date > $P{sentDateMin})
   AND ($P{sentDateMax} IS NULL OR call_flow_element_log.start_date LIKE CONCAT($P{sentDateMax},'%') OR call_flow_element_log.start_date < $P{sentDateMax})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>

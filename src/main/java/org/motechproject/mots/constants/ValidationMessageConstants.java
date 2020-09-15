@@ -14,8 +14,7 @@ public final class ValidationMessageConstants {
       "Menu Intro Message IVR Id cannot be empty";
   public static final String EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID =
       "Choose Module Question IVR Id cannot be empty";
-  public static final String EMPTY_FIRST_NAME = "First name cannot be empty";
-  public static final String EMPTY_FAMILY_NAME = "Family name cannot be empty";
+  public static final String EMPTY_CHW_NAME = "Community health worker name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_DISTRICT = "District cannot be empty";
   public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";

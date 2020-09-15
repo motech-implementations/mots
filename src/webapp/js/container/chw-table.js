@@ -86,16 +86,12 @@ class ChwTable extends Component {
       sortable: false,
       show: this.props.selected && (hasAuthority(CHW_WRITE_AUTHORITY)
           || hasAuthority(ASSIGN_MODULES_AUTHORITY)),
-    },
-    {
+    }, {
       Header: 'ID',
       accessor: 'chwId',
     }, {
-      Header: 'First name',
-      accessor: 'firstName',
-    }, {
-      Header: 'Family Name',
-      accessor: 'familyName',
+      Header: 'CHW name',
+      accessor: 'chwName',
     }, {
       Header: 'Gender',
       accessor: 'gender',

@@ -131,7 +131,7 @@
   AND ($P{endDateMax} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDateMax},'%') OR module_progress.end_date < $P{endDateMax})
   AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))]]>
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))]]>
 		</queryString>
 		<field name="totalElements" class="java.lang.Integer"/>
 	</subDataset>
@@ -242,7 +242,7 @@
 	<queryString>
 		<![CDATA[SELECT
   chw.chw_id as chwId,
-  CONCAT_WS(" ", chw.first_name, chw.family_name) AS chwName,
+  chw.chw_name AS chwName,
   district.name AS district,
   sector.name AS sector,
   facility.name AS facility,
@@ -276,7 +276,7 @@
   AND ($P{endDateMax} IS NULL OR module_progress.end_date LIKE CONCAT($P{endDateMax},'%') OR module_progress.end_date < $P{endDateMax})
   AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{groupName} IS NULL OR chw_group.name LIKE CONCAT('%',$P{groupName},'%'))
-  AND ($P{chwName} IS NULL OR CONCAT_WS(" ", chw.first_name, chw.family_name) LIKE CONCAT('%',$P{chwName},'%'))
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))
  ORDER BY $P!{orderBy}
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>

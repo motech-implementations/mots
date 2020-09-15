@@ -50,7 +50,7 @@ class AssignModules extends Component {
       .then((response) => {
         const availableChws = _.map(
           response.data,
-          chw => ({ value: chw.id, label: `${chw.chwId}: ${_.defaultTo(chw.firstName, '')} ${_.defaultTo(chw.familyName, '')}` }),
+          chw => ({ value: chw.id, label: `${chw.chwId}: ${_.defaultTo(chw.chwName, '')}` }),
         );
 
         this.setState({ availableChws });
