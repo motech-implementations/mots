@@ -87,8 +87,7 @@
 	</style>
 	<subDataset name="RecordsCount" uuid="cdc79b35-b4a8-4892-8861-b795f43f118a">
 		<parameter name="chwId" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="firstName" class="java.lang.String" isForPrompting="false"/>
-		<parameter name="familyName" class="java.lang.String" isForPrompting="false"/>
+		<parameter name="chwName" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="district" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="sector" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="facility" class="java.lang.String" isForPrompting="false"/>
@@ -106,8 +105,7 @@
  LEFT JOIN village ON chw.village_id = village.id
  LEFT JOIN chw_group ON chw_group.id = chw.group_id
  WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
-  AND ($P{firstName} IS NULL OR chw.first_name LIKE CONCAT('%',$P{firstName},'%'))
-  AND ($P{familyName} IS NULL OR chw.family_name LIKE CONCAT('%',$P{familyName},'%'))
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
@@ -122,14 +120,9 @@
 		<property name="displayName" value="ID"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="firstName" class="java.lang.String">
+	<parameter name="chwName" class="java.lang.String">
 		<property name="dataType" value="String"/>
-		<property name="displayName" value="First Name"/>
-		<property name="required" value="false"/>
-	</parameter>
-	<parameter name="familyName" class="java.lang.String">
-		<property name="dataType" value="String"/>
-		<property name="displayName" value="Family Name"/>
+		<property name="displayName" value="CHW Name"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
@@ -183,8 +176,7 @@
 	<queryString>
 		<![CDATA[SELECT
   chw.chw_id AS chwId,
-  chw.first_name AS firstName,
-  chw.family_name AS familyName,
+  chw.chw_name AS chwName,
   CONCAT(LEFT(chw.gender, 1), LOWER(SUBSTRING(chw.gender, 2))) AS gender,
   district.name AS district,
   sector.name AS sector,
@@ -200,8 +192,7 @@
  LEFT JOIN village ON chw.village_id = village.id
  LEFT JOIN chw_group ON chw_group.id = chw.group_id
  WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
-  AND ($P{firstName} IS NULL OR chw.first_name LIKE CONCAT('%',$P{firstName},'%'))
-  AND ($P{familyName} IS NULL OR chw.family_name LIKE CONCAT('%',$P{familyName},'%'))
+  AND ($P{chwName} IS NULL OR chw.chw_name LIKE CONCAT('%',$P{chwName},'%'))
   AND ($P{district} IS NULL OR district.name LIKE CONCAT('%',$P{district},'%'))
   AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
   AND ($P{facility} IS NULL OR facility.name LIKE CONCAT('%',$P{facility},'%'))
@@ -212,8 +203,7 @@
  LIMIT $P!{pageSize} OFFSET $P!{offset}]]>
 	</queryString>
 	<field name="chwId" class="java.lang.String"/>
-	<field name="firstName" class="java.lang.String"/>
-	<field name="familyName" class="java.lang.String"/>
+	<field name="chwName" class="java.lang.String"/>
 	<field name="gender" class="java.lang.String"/>
 	<field name="district" class="java.lang.String"/>
 	<field name="sector" class="java.lang.String"/>
@@ -251,26 +241,14 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="5f34e949-b07f-4a7b-97dc-33a1508fe084">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.firstName.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="First Name"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwName.Header"/>
+					<property name="net.sf.jasperreports.export.json.data" value="CHW Name"/>
 				</reportElement>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="0" width="0" height="0" uuid="5f63dd8a-2106-4865-af58-24f7cb50b852">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.firstName.order"/>
+					<property name="net.sf.jasperreports.export.json.path" value="colModel.chwName.order"/>
 					<property name="net.sf.jasperreports.export.json.data" value="1"/>
-				</reportElement>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="0" width="0" height="0" uuid="48901e8e-be08-4b81-b9f5-7902bbdc400e">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.familyName.Header"/>
-					<property name="net.sf.jasperreports.export.json.data" value="Family Name"/>
-				</reportElement>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="0" width="0" height="0" uuid="a0f32db5-4e41-45fc-9089-5820fc4eda4f">
-					<property name="net.sf.jasperreports.export.json.path" value="colModel.familyName.order"/>
-					<property name="net.sf.jasperreports.export.json.data" value="2"/>
 				</reportElement>
 			</staticText>
 			<staticText>
@@ -381,11 +359,8 @@
 						<datasetParameter name="chwId">
 							<datasetParameterExpression><![CDATA[$P{chwId}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="firstName">
-							<datasetParameterExpression><![CDATA[$P{firstName}]]></datasetParameterExpression>
-						</datasetParameter>
-						<datasetParameter name="familyName">
-							<datasetParameterExpression><![CDATA[$P{familyName}]]></datasetParameterExpression>
+						<datasetParameter name="chwName">
+							<datasetParameterExpression><![CDATA[$P{chwName}]]></datasetParameterExpression>
 						</datasetParameter>
 						<datasetParameter name="district">
 							<datasetParameterExpression><![CDATA[$P{district}]]></datasetParameterExpression>
@@ -448,7 +423,7 @@
 				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="90" y="0" width="100" height="30" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
+				<reportElement x="90" y="0" width="200" height="30" uuid="ab4f850a-b5f1-4b44-b089-7ea706bbf287">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -461,23 +436,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<text><![CDATA[First Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="190" y="0" width="100" height="30" uuid="30bca9b0-ebfb-4f9b-80eb-a6d4243c3348">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box leftPadding="4">
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<text><![CDATA[Family Name]]></text>
+				<text><![CDATA[CHW Name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="290" y="0" width="50" height="30" uuid="ece61ced-7409-4f8c-8c05-ba304746d28c">
@@ -627,8 +586,8 @@
 				<textFieldExpression><![CDATA[$F{chwId}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="90" y="0" width="100" height="30" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
-					<property name="net.sf.jasperreports.export.json.path" value="values.firstName"/>
+				<reportElement stretchType="RelativeToTallestObject" x="90" y="0" width="200" height="30" uuid="592c94f9-cf92-4939-814e-3e89c9652e62">
+					<property name="net.sf.jasperreports.export.json.path" value="values.chwName"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -639,22 +598,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="190" y="0" width="100" height="30" uuid="4af42638-63bb-4079-bf17-b4a3db830124">
-					<property name="net.sf.jasperreports.export.json.path" value="values.familyName"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box leftPadding="4">
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{familyName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{chwName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="290" y="0" width="50" height="30" uuid="231172d9-bfa2-4d17-8893-930db8402bc2">

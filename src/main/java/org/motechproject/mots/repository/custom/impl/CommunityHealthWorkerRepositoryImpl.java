@@ -24,20 +24,20 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
    */
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String familyName, String phoneNumber,
+      String chwId, String chwName, String phoneNumber,
       String villageName, String facilityName, String sectorName,
       String districtName, String groupName, Boolean selected, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<CommunityHealthWorker> query = builder.createQuery(CommunityHealthWorker.class);
-    query = prepareQuery(query, chwId, firstName, familyName,
+    query = prepareQuery(query, chwId, chwName,
         phoneNumber, villageName, facilityName,
         sectorName, districtName, groupName, selected, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, chwId, firstName, familyName,
+    countQuery = prepareQuery(countQuery, chwId, chwName,
         phoneNumber, villageName, facilityName,
         sectorName, districtName, groupName, selected, true, pageable);
 
@@ -54,7 +54,7 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
-      String chwId, String firstName, String familyName,
+      String chwId, String chwName,
       String phoneNumber, String villageName, String facilityName,
       String sectorName, String districtName, String groupName,
       Boolean selected, boolean count, Pageable pageable) {
@@ -71,13 +71,9 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
     if (chwId != null) {
       predicate = builder.and(predicate, builder.like(root.get(CHW_ID), '%' + chwId.trim() + '%'));
     }
-    if (firstName != null) {
-      predicate = builder.and(predicate, builder.like(root.get(FIRST_NAME),
-          '%' + firstName.trim() + '%'));
-    }
-    if (familyName != null) {
-      predicate = builder.and(predicate, builder.like(root.get(FAMILY_NAME),
-          '%' + familyName.trim() + '%'));
+    if (chwName != null) {
+      predicate = builder.and(predicate, builder.like(root.get(CHW_NAME),
+          '%' + chwName.trim() + '%'));
     }
     if (phoneNumber != null) {
       predicate = builder.and(predicate, builder.like(root.get(PHONE_NUMBER),

@@ -67,3 +67,5 @@ bin/*
 
 # vs code files
 .vscode
+
+*.p12

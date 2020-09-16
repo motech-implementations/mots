@@ -84,7 +84,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
   public void shouldFindChw() {
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(chw1.getChwId(),
-        chw1.getFirstName(), chw1.getFamilyName(), chw1.getPhoneNumber(),
+        chw1.getChwName(), chw1.getPhoneNumber(),
         village.getName(),
         facility.getName(), sector.getName(),
         district.getName(), null, false, PageRequest.of(0, 100));
@@ -96,16 +96,16 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
   }
 
   @Test
-  public void shouldFindChwByFirstName() {
+  public void shouldFindChwByChwName() {
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
-        chw2.getFirstName(), null, null,
-        null, null, null, null, null, false, PageRequest.of(0, 100));
+        chw2.getChwName(), null, null,
+        null, null, null, null, null,  PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(1L));
     CommunityHealthWorker foundWorker = result.getContent().get(0);
-    assertThat(foundWorker.getFirstName(), is(chw2.getFirstName()));
+    assertThat(foundWorker.getChwName(), is(chw2.getChwName()));
   }
 
   @Test
@@ -113,7 +113,7 @@ public class CommunityHealthWorkerRepositoryIntegrationTest extends
     // when
     Page<CommunityHealthWorker> result = repository.searchCommunityHealthWorkers(null,
         null, null, null,
-        null, null, null, district.getName(), null, false, PageRequest.of(0, 100));
+        null, null,  district.getName(), null, false, PageRequest.of(0, 100));
 
     // then
     assertThat(result.getTotalElements(), is(2L));

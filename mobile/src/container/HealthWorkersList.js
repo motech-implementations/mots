@@ -63,13 +63,8 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'First name',
-        name: 'firstName',
-        dataType: 'String',
-        defaultValue: null,
-      }, {
-        displayName: 'Family Name',
-        name: 'familyName',
+        displayName: 'ChW name',
+        name: 'chwName',
         dataType: 'String',
         defaultValue: null,
       }, {

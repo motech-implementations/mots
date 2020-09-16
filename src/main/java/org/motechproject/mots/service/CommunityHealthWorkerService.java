@@ -63,8 +63,7 @@ public class CommunityHealthWorkerService {
   private static final ChwInfoMapper CHW_INFO_MAPPER = ChwInfoMapper.INSTANCE;
 
   private static final String CHW_ID_CSV_HEADER = "chw id";
-  private static final String FIRST_NAME_CSV_HEADER = "first name";
-  private static final String FAMILY_NAME_CSV_HEADER = "family name";
+  private static final String CHW_NAME_CSV_HEADER = "chw name";
   private static final String GENDER_CSV_HEADER = "gender";
   private static final String MOBILE_CSV_HEADER = "mobile phone";
   private static final String DISTRICT_CSV_HEADER = "district";
@@ -75,9 +74,8 @@ public class CommunityHealthWorkerService {
   private static final String GROUP_CSV_HEADER = "group";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
-      DISTRICT_CSV_HEADER, SECTOR_CSV_HEADER, GROUP_CSV_HEADER, FIRST_NAME_CSV_HEADER,
-      FAMILY_NAME_CSV_HEADER, GENDER_CSV_HEADER,
-      MOBILE_CSV_HEADER, VILLAGE_CSV_HEADER,
+      DISTRICT_CSV_HEADER, SECTOR_CSV_HEADER, GROUP_CSV_HEADER, CHW_NAME_CSV_HEADER,
+      GENDER_CSV_HEADER, MOBILE_CSV_HEADER, VILLAGE_CSV_HEADER,
       FACILITY_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
 
   @Autowired
@@ -147,12 +145,12 @@ public class CommunityHealthWorkerService {
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_CHW_READ_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
-      String chwId, String firstName, String familyName,
+      String chwId, String chwName,
       String phoneNumber, String villageName, String facilityName,
       String sectorName, String districtName, String groupName,
       Boolean selected, Pageable pageable) {
     return healthWorkerRepository.searchCommunityHealthWorkers(
-        chwId, firstName, familyName, phoneNumber, villageName,
+        chwId, chwName, phoneNumber, villageName,
         facilityName, sectorName, districtName, groupName, selected, pageable);
   }
 
@@ -173,7 +171,7 @@ public class CommunityHealthWorkerService {
     District district = districtRepository.getOne(healthWorker.getDistrict().getId());
     String districtIvrId = district.getIvrGroupId();
     String phoneNumber = healthWorker.getPhoneNumber();
-    String name = healthWorker.getCombinedName();
+    String name = healthWorker.getChwName();
     Language preferredLanguage = healthWorker.getPreferredLanguage();
 
     try {
@@ -342,7 +340,7 @@ public class CommunityHealthWorkerService {
             Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER)));
         preferredLanguage = preferredLanguage == null ? Language.ENGLISH : preferredLanguage;
 
-        String name = communityHealthWorker.getCombinedName();
+        String name = communityHealthWorker.getChwName();
 
         boolean ivrDataChanged =
             !preferredLanguage.equals(communityHealthWorker.getPreferredLanguage())
@@ -353,8 +351,7 @@ public class CommunityHealthWorkerService {
         ivrDataChanged = ivrDataChanged || !oldDistrict.getId().equals(district.get().getId());
 
         communityHealthWorker.setChwId(chwId);
-        communityHealthWorker.setFirstName(csvRow.get(FIRST_NAME_CSV_HEADER));
-        communityHealthWorker.setFamilyName(csvRow.get(FAMILY_NAME_CSV_HEADER));
+        communityHealthWorker.setChwName(csvRow.get(CHW_NAME_CSV_HEADER));
         communityHealthWorker.setGender(Gender.getByDisplayName(csvRow.get(GENDER_CSV_HEADER)));
         communityHealthWorker.setPhoneNumber(phoneNumber);
         communityHealthWorker.setDistrict(district.get());
@@ -367,7 +364,7 @@ public class CommunityHealthWorkerService {
           communityHealthWorker.setGroup(group);
         }
 
-        ivrDataChanged = ivrDataChanged || !communityHealthWorker.getCombinedName().equals(name);
+        ivrDataChanged = ivrDataChanged || !communityHealthWorker.getChwName().equals(name);
 
         if (selected && !communityHealthWorker.getSelected()) {
           selectHealthWorker(communityHealthWorker);
@@ -405,7 +402,7 @@ public class CommunityHealthWorkerService {
   private CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw, District oldDistrict) {
     String ivrId = chw.getIvrId();
     String phoneNumber = chw.getPhoneNumber();
-    String name = chw.getCombinedName();
+    String name = chw.getChwName();
     Language preferredLanguage = chw.getPreferredLanguage();
 
     try {
@@ -438,13 +435,8 @@ public class CommunityHealthWorkerService {
       return true;
     }
 
-    if (StringUtils.isBlank(csvRow.get(FIRST_NAME_CSV_HEADER))) {
-      errorMap.put(lineNumber, "First Name is empty");
-      return true;
-    }
-
-    if (StringUtils.isBlank(csvRow.get(FAMILY_NAME_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Family Name is empty");
+    if (StringUtils.isBlank(csvRow.get(CHW_NAME_CSV_HEADER))) {
+      errorMap.put(lineNumber, "CHW Name is empty");
       return true;
     }
 

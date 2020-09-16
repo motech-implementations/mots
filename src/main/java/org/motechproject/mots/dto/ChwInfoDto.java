@@ -20,11 +20,6 @@ public class ChwInfoDto {
 
   @Getter
   @Setter
-  @NotBlank(message = ValidationMessageConstants.EMPTY_FIRST_NAME)
-  private String firstName;
-
-  @Getter
-  @Setter
-  @NotBlank(message = ValidationMessageConstants.EMPTY_FAMILY_NAME)
-  private String familyName;
+  @NotBlank(message = ValidationMessageConstants.EMPTY_CHW_NAME)
+  private String chwName;
 }

@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +35,9 @@ public class UserService {
 
   @Autowired
   private PermissionRepository permissionRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public User getUserByUserName(String userName) {
     return userRepository.findOneByUsername(userName).orElseThrow(() ->
@@ -115,7 +119,7 @@ public class UserService {
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public User saveUser(User user, boolean encodeNewPassword) {
     if (encodeNewPassword) {
-      String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+      String newPasswordEncoded = passwordEncoder.encode(user.getPassword());
       user.setPassword(newPasswordEncoded);
     }
 
@@ -131,7 +135,7 @@ public class UserService {
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public User registerNewUser(User user) {
 
-    String newPasswordEncoded = new BCryptPasswordEncoder().encode(user.getPassword());
+    String newPasswordEncoded = passwordEncoder.encode(user.getPassword());
     user.setPassword(newPasswordEncoded);
 
     return userRepository.save(user);
@@ -170,7 +174,7 @@ public class UserService {
       throw new IllegalArgumentException("Current password is incorrect.");
     }
 
-    String newPasswordEncoded = new BCryptPasswordEncoder().encode(newPassword);
+    String newPasswordEncoded = passwordEncoder.encode(newPassword);
     user.setPassword(newPasswordEncoded);
     userRepository.save(user);
   }

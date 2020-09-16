@@ -91,13 +91,8 @@ const FIELDS = {
       };
     },
   },
-  firstName: {
-    label: 'First Name',
-    required: true,
-    getAttributes: () => getAttributesForInput(),
-  },
-  familyName: {
-    label: 'Family Name',
+  chwName: {
+    label: 'CHW Name',
     required: true,
     getAttributes: () => getAttributesForInput(),
   },
