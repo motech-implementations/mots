@@ -81,6 +81,8 @@ pmd {
     reportsDir = file("build/reports/pmd")
 }
 
+defaultTasks 'bootRun'
+
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     script = project.file('node_modules/.bin/webpack')
     args = ['--mode=development']
