@@ -66,32 +66,31 @@ const getQuestionFields = (questionType, changeFieldValue) => ({
       },
       type: {
         label: 'Type',
-        required: questionType !== 'Survey',
-        type: questionType === 'Survey' ? 'input' : Select,
+        required: true,
+        type: Select,
         tooltip: 'Check this field if this answer is the correct one out of the list of options.',
         getAttributes: (input) => {
-          const attr = {
+          let options = [
+            { value: 'Correct', label: 'Correct' },
+            { value: 'Incorrect', label: 'Incorrect' },
+            { value: 'I don\'t know', label: 'I don\'t know' },
+            { value: 'Repeat', label: 'Repeat' },
+          ];
+
+          if (questionType === 'Survey') {
+            options = [
+              { value: 'Survey', label: 'Survey' },
+              { value: 'Repeat', label: 'Repeat' },
+            ];
+          }
+
+          return {
             name: input.name,
             value: input.value,
             onChange: (value) => {
               input.onChange(value);
             },
-          };
-
-          if (questionType === 'Survey') {
-            return {
-              ...attr, disabled: true, type: 'text', className: 'form-control',
-            };
-          }
-
-          return {
-            ...attr,
-            options: [
-              { value: 'Correct', label: 'Correct' },
-              { value: 'Incorrect', label: 'Incorrect' },
-              { value: 'I don\'t know', label: 'I don\'t know' },
-              { value: 'Repeat', label: 'Repeat' },
-            ],
+            options,
           };
         },
       },
