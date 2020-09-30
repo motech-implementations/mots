@@ -4,7 +4,8 @@ import lombok.Getter;
 
 public enum QuestionType {
   PRE_TEST("Pre-test"),
-  POST_TEST("Post-test");
+  POST_TEST("Post-test"),
+  SURVEY("Survey");
 
   @Getter
   private String displayName;
