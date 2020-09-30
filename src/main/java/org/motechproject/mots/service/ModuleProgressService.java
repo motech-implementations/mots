@@ -290,6 +290,7 @@ public class ModuleProgressService {
             if (blockIterator.hasNext()) {
               blockDto = blockIterator.next();
             } else {
+              choice = null;
               break;
             }
 
@@ -297,6 +298,7 @@ public class ModuleProgressService {
               blockIterator.previous();
               LOGGER.debug(String.format("Repeat question did not worked for block with id: %s",
                   callFlowElement.getIvrId()));
+              choice = null;
               break;
             }
 
