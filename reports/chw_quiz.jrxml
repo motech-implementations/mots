@@ -95,6 +95,7 @@
    FROM multiple_choice_question_log
    JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
    JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
+   JOIN multiple_choice_question ON question.id = multiple_choice_question.call_flow_element_id
    JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
    JOIN unit ON unit.id = unit_progress.unit_id
    JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
@@ -106,7 +107,8 @@
    LEFT JOIN facility ON chw.facility_id = facility.id
    LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
    LEFT JOIN chw_group ON chw_group.id = chw.group_id
-   WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
+   WHERE multiple_choice_question.question_type != 'SURVEY'
+    AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
     AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
     AND ($P{gender} IS NULL OR chw.gender = $P{gender})
     AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
@@ -206,6 +208,7 @@
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
  JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
+ JOIN multiple_choice_question ON question.id = multiple_choice_question.call_flow_element_id
  JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
  JOIN unit ON unit.id = unit_progress.unit_id
  JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
@@ -217,7 +220,8 @@
  LEFT JOIN facility ON chw.facility_id = facility.id
  LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
  LEFT JOIN chw_group ON chw_group.id = chw.group_id
- WHERE ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
+ WHERE multiple_choice_question.question_type != 'SURVEY'
+  AND ($P{chwId} IS NULL OR chw.chw_id LIKE CONCAT('%',$P{chwId},'%'))
   AND ($P{phone} IS NULL OR chw.phone_number LIKE CONCAT('%',$P{phone},'%'))
   AND ($P{gender} IS NULL OR chw.gender = $P{gender})
   AND ($P{sector} IS NULL OR sector.name LIKE CONCAT('%',$P{sector},'%'))
