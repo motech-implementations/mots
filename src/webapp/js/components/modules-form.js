@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  reduxForm, formValueSelector, Field, FieldArray, FormSection,
+  reduxForm, formValueSelector, change, Field, FieldArray, FormSection,
 } from 'redux-form';
 import { connect } from 'react-redux';
 import { Tooltip } from 'react-tippy';
@@ -15,7 +15,7 @@ import { hasAuthority, MANAGE_MODULES_AUTHORITY } from '../utils/authorization';
 
 export const MODULE_FORM_NAME = 'ModuleForm';
 
-const QUESTION_FIELDS = {
+const getQuestionFields = (questionType, changeFieldValue) => ({
   name: {
     label: 'Name',
     required: true,
@@ -42,11 +42,13 @@ const QUESTION_FIELDS = {
       const options = [
         { value: 'Pre-test', label: 'Pre-test' },
         { value: 'Post-test', label: 'Post-test' },
+        { value: 'Survey', label: 'Survey' },
       ];
       return {
         name: input.name,
         value: input.value,
         onChange: (value) => {
+          changeFieldValue(MODULE_FORM_NAME, 'choices', []);
           input.onChange(value);
         },
         options,
@@ -64,31 +66,43 @@ const QUESTION_FIELDS = {
       },
       type: {
         label: 'Type',
-        required: true,
-        type: Select,
+        required: questionType !== 'Survey',
+        type: questionType === 'Survey' ? 'input' : Select,
         tooltip: 'Check this field if this answer is the correct one out of the list of options.',
-        getAttributes: input => ({
-          name: input.name,
-          value: input.value,
-          onChange: (value) => {
-            input.onChange(value);
-          },
-          options: [
-            { value: 'Correct', label: 'Correct' },
-            { value: 'Incorrect', label: 'Incorrect' },
-            { value: 'I don\'t know', label: 'I don\'t know' },
-            { value: 'Repeat', label: 'Repeat' },
-          ],
-        }),
+        getAttributes: (input) => {
+          const attr = {
+            name: input.name,
+            value: input.value,
+            onChange: (value) => {
+              input.onChange(value);
+            },
+          };
+
+          if (questionType === 'Survey') {
+            return {
+              ...attr, disabled: true, type: 'text', className: 'form-control',
+            };
+          }
+
+          return {
+            ...attr,
+            options: [
+              { value: 'Correct', label: 'Correct' },
+              { value: 'Incorrect', label: 'Incorrect' },
+              { value: 'I don\'t know', label: 'I don\'t know' },
+              { value: 'Repeat', label: 'Repeat' },
+            ],
+          };
+        },
       },
       description: {
         label: 'Description',
         tooltip: 'Enter here a short description of the answer. <br /> This field is optional.',
       },
     },
-    defaultValue: {},
+    defaultValue: questionType === 'Survey' ? { type: 'Survey' } : {},
   },
-};
+});
 
 const MESSAGE_FIELDS = {
   name: {
@@ -222,7 +236,7 @@ const COURSE_FIELDS = {
 };
 
 class ModuleForm extends Component {
-  static getFields(nodeType) {
+  static getFields(nodeType, questionType, changeFieldValue) {
     switch (nodeType) {
       case 'COURSE':
         return COURSE_FIELDS;
@@ -233,7 +247,7 @@ class ModuleForm extends Component {
       case 'MESSAGE':
         return MESSAGE_FIELDS;
       case 'QUESTION':
-        return QUESTION_FIELDS;
+        return getQuestionFields(questionType, changeFieldValue);
       default:
         return [];
     }
@@ -412,9 +426,10 @@ class ModuleForm extends Component {
           hasAuthority(MANAGE_MODULES_AUTHORITY) && (this.props.nodeType === 'MODULE' || this.props.nodeType === 'COURSE')
             ? (
               <form onSubmit={handleSubmit(this.props.onSubmit)}>
-                { _.map(ModuleForm.getFields(this.props.nodeType),
-                  (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
-                    fieldName, fieldName, this.props))}
+                { _.map(ModuleForm.getFields(this.props.nodeType,
+                  this.props.questionType, this.props.change),
+                (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
+                  fieldName, fieldName, this.props))}
                 <div className="col-md-4" />
                 { this.props.isEditable && !this.props.isModuleReleased
                 && (
@@ -462,9 +477,10 @@ class ModuleForm extends Component {
             )
             : (
               <form onSubmit={(event) => { event.preventDefault(); }}>
-                { _.map(ModuleForm.getFields(this.props.nodeType),
-                  (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
-                    fieldName, fieldName, this.props)) }
+                { _.map(ModuleForm.getFields(this.props.nodeType,
+                  this.props.questionType, this.props.change),
+                (fieldConfig, fieldName) => ModuleForm.renderField(fieldConfig,
+                  fieldName, fieldName, this.props)) }
               </form>
             )
         }
@@ -500,7 +516,7 @@ function validateFields(fields, values) {
 }
 
 function validate(values) {
-  const fields = ModuleForm.getFields(values.type);
+  const fields = ModuleForm.getFields(values.type, values.questionType, null);
 
   return validateFields(fields, values);
 }
@@ -513,6 +529,7 @@ function mapStateToProps(state) {
     nodeType: selector(state, 'type'),
     nodeStatus: selector(state, 'status'),
     nodeChanged: selector(state, 'changed'),
+    questionType: selector(state, 'questionType'),
     isNew: id === null || id === undefined,
   };
 }
@@ -520,13 +537,14 @@ function mapStateToProps(state) {
 export default reduxForm({
   validate,
   form: MODULE_FORM_NAME,
-})(connect(mapStateToProps, { resetLogoutCounter })(ModuleForm));
+})(connect(mapStateToProps, { change, resetLogoutCounter })(ModuleForm));
 
 ModuleForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  change: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   releaseCourse: PropTypes.func.isRequired,
   editModule: PropTypes.func.isRequired,
@@ -537,6 +555,7 @@ ModuleForm.propTypes = {
   nodeStatus: PropTypes.string,
   nodeChanged: PropTypes.bool,
   isNew: PropTypes.bool,
+  questionType: PropTypes.string,
   resetLogoutCounter: PropTypes.func.isRequired,
 };
 
@@ -545,4 +564,5 @@ ModuleForm.defaultProps = {
   nodeStatus: null,
   nodeChanged: false,
   isNew: true,
+  questionType: null,
 };

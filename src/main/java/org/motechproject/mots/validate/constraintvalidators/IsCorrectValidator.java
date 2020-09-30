@@ -18,6 +18,10 @@ public class IsCorrectValidator
   public boolean isValid(List<Choice> values, ConstraintValidatorContext context) {
     int correct = 0;
     for (Choice choice : values) {
+      if (ChoiceType.SURVEY.equals(choice.getType())) {
+        return true;
+      }
+
       if (ChoiceType.CORRECT.equals(choice.getType())) {
         correct++;
       }

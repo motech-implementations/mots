@@ -6,7 +6,8 @@ public enum ChoiceType {
   CORRECT("Correct"),
   INCORRECT("Incorrect"),
   DONT_KNOW("I don't know"),
-  REPEAT("Repeat");
+  REPEAT("Repeat"),
+  SURVEY("Survey");
 
   @Getter
   private String displayName;
