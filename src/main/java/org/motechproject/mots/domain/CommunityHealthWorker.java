@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.Gender;
-import org.motechproject.mots.domain.enums.Language;
 
 @Entity
 @Table(name = "community_health_worker")
@@ -74,12 +73,6 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Getter
   @Setter
   private District district;
-
-  @Column(name = "preferred_language", nullable = false)
-  @Enumerated(EnumType.STRING)
-  @Getter
-  @Setter
-  private Language preferredLanguage;
 
   @Column(name = "selected", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
   @Getter

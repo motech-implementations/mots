@@ -91,9 +91,6 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Preferred language',
-        name: 'preferredLanguage',
-      }, {
         displayName: 'Phone number',
         name: 'phoneNumber',
         dataType: 'String',

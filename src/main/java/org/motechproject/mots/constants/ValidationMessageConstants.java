@@ -17,7 +17,6 @@ public final class ValidationMessageConstants {
   public static final String EMPTY_CHW_NAME = "Community health worker name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_DISTRICT = "District cannot be empty";
-  public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
   public static final String EMPTY_QUESTION_OR_MESSAGE = "Message/Question name cannot be empty";
   public static final String EMPTY_LOCATION_NAME = "Location name cannot be empty";
   public static final String EMPTY_MODULE_NAME = "Module Name cannot be empty";
@@ -44,7 +43,6 @@ public final class ValidationMessageConstants {
   public static final String INVALID_DATE = "Invalid format of date";
   public static final String INVALID_PAST_DATE = "Date must be in the past";
   public static final String INVALID_GENDER = "Invalid gender";
-  public static final String INVALID_LANGUAGE = "Invalid language";
   public static final String INVALID_CALL_FLOW_ELEMENT_TYPE = "Invalid call flow element type";
   public static final String INVALID_IDS = "Invalid: %s UUID";
 
