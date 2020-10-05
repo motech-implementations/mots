@@ -267,7 +267,7 @@ public class LocationService {
         String sectorName = csvRow.get(SECTOR_HEADER);
 
         if (StringUtils.isBlank(sectorName)) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
           continue;
         }
 
@@ -277,7 +277,7 @@ public class LocationService {
         Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district);
 
         if (sector != null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name already exists");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name already exists");
           continue;
         }
 
@@ -321,7 +321,7 @@ public class LocationService {
         String sectorName = csvRow.get(SECTOR_HEADER);
 
         if (StringUtils.isBlank(sectorName)) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
           continue;
         }
 
@@ -349,7 +349,7 @@ public class LocationService {
         Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
         if (sector == null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name does not exist");
           continue;
         }
 
@@ -406,7 +406,7 @@ public class LocationService {
         String sectorName = csvRow.get(SECTOR_HEADER);
 
         if (StringUtils.isBlank(sectorName)) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
           continue;
         }
 
@@ -427,7 +427,7 @@ public class LocationService {
         Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
         if (sector == null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name does not exist");
           continue;
         }
 

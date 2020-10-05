@@ -232,7 +232,7 @@ class DistrictAssignModules extends Component {
                 isDisabled={!this.state.selectedDistrict}
                 onChange={this.handleSectorChange}
                 onFocus={() => this.props.resetLogoutCounter()}
-                placeholder="Select a Sector (optional)"
+                placeholder="Select a Chiefdom (optional)"
                 className="margin-bottom-md col-md-12"
               />
               <Select

@@ -76,7 +76,7 @@ class HealthWorkersList extends Component {
         dataType: 'String',
         defaultValue: null,
       }, {
-        displayName: 'Sector',
+        displayName: 'Chiefdom',
         name: 'sectorName',
         dataType: 'String',
         defaultValue: null,
