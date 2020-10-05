@@ -109,10 +109,6 @@ class ChwTable extends Component {
       Header: 'Village',
       accessor: 'villageName',
     }, {
-      Header: 'Preferred language',
-      accessor: 'preferredLanguage',
-      filterable: false,
-    }, {
       Header: 'Phone number',
       accessor: 'phoneNumber',
     }, {

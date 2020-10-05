@@ -3,7 +3,6 @@ package org.motechproject.mots.mapper;
 import org.mapstruct.Mapper;
 import org.motechproject.mots.domain.enums.ChoiceType;
 import org.motechproject.mots.domain.enums.Gender;
-import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.domain.enums.QuestionType;
 
 @Mapper(componentModel = "spring")
@@ -33,31 +32,6 @@ public class EnumsMapper {
     }
 
     return gender.getDisplayName();
-  }
-
-  /**
-   * Get Language object from display name.
-   * @param displayName display name of Language
-   * @return Language object
-   */
-  public Language toLanguage(String displayName) {
-    if (displayName == null || displayName.isEmpty()) {
-      return null;
-    }
-
-    return Language.getByDisplayName(displayName);
-  }
-
-  /**
-   * Get display name from Language.
-   * @return display name of Language
-   */
-  public String fromLanguage(Language language) {
-    if (language == null) {
-      return null;
-    }
-
-    return language.getDisplayName();
   }
 
   /**

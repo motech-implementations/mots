@@ -8,7 +8,6 @@ import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
-import org.motechproject.mots.domain.enums.Language;
 
 public final class CommunityHealthWorkerDataBuilder {
   private static final Random RANDOM = new Random();
@@ -20,7 +19,6 @@ public final class CommunityHealthWorkerDataBuilder {
   private final String chwName;
   private final Gender gender;
   private final String phoneNumber;
-  private final Language preferredLanguage;
   private Village village;
   private Facility facility;
   private Sector sector;
@@ -42,7 +40,6 @@ public final class CommunityHealthWorkerDataBuilder {
     sector = new SectorDataBuilder().build();
     facility = new FacilityDataBuilder().build();
     district = new DistrictDataBuilder().build();
-    preferredLanguage = Language.values()[RANDOM.nextInt(Language.values().length)];
   }
 
   /**
@@ -59,7 +56,6 @@ public final class CommunityHealthWorkerDataBuilder {
     chw.setFacility(facility);
     chw.setSector(sector);
     chw.setDistrict(district);
-    chw.setPreferredLanguage(preferredLanguage);
     chw.setIvrId(ivrId);
 
     return chw;

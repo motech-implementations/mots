@@ -113,14 +113,6 @@ const FIELDS = {
       valueKey: 'id',
     }),
   },
-  preferredLanguage: {
-    type: 'select',
-    label: 'Preferred Language',
-    required: true,
-    getSelectOptions: () => ({
-      values: ['English', 'Kinyarwanda'],
-    }),
-  },
   groupId: {
     type: 'select',
     label: 'Group',

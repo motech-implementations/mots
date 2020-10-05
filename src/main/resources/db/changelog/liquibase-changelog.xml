@@ -9,5 +9,6 @@
   <include file="03_initial_jasper_values.mysql.sql" relativeToChangelogFile="true" />
   <include file="04_initial_reports.mysql.sql" relativeToChangelogFile="true" />
   <include file="20200924_1402.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20201001_1606.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

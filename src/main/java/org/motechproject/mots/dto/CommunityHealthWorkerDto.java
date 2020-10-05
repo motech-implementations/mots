@@ -11,7 +11,6 @@ import org.motechproject.mots.validate.annotations.ChwIdUniqueness;
 import org.motechproject.mots.validate.annotations.DistrictExistence;
 import org.motechproject.mots.validate.annotations.FacilityExistence;
 import org.motechproject.mots.validate.annotations.Gender;
-import org.motechproject.mots.validate.annotations.Language;
 import org.motechproject.mots.validate.annotations.PhoneNumber;
 import org.motechproject.mots.validate.annotations.PhoneNumberUniqueness;
 import org.motechproject.mots.validate.annotations.SectorExistence;
@@ -90,12 +89,6 @@ public class CommunityHealthWorkerDto {
   @VillageExistence
   @Uuid(message = ValidationMessageConstants.INVALID_VILLAGE_ID)
   private String villageId;
-
-  @Getter
-  @Setter
-  @Language
-  @NotEmpty(message = ValidationMessageConstants.EMPTY_PREFERRED_LANGUAGE)
-  private String preferredLanguage;
 
   @Getter
   @Setter
