@@ -35,7 +35,7 @@ public class LocationImporter implements ApplicationRunner {
   private boolean loadLocations;
 
   private static final String DISTRICT_HEADER = "District";
-  private static final String SECTOR_HEADER = "Sector";
+  private static final String SECTOR_HEADER = "Chiefdom";
   private static final String FACILITY_HEADER = "Facility";
   private static final String VILLAGE_HEADER = "Village";
 

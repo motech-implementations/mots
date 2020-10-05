@@ -28,7 +28,7 @@ public final class ValidationMessageConstants {
   public static final String EMPTY_CALL_FLOW_ELEMENT_TYPE
       = "Call flow element type cannot be empty";
   public static final String EMPTY_FACILITY_ID = "Facility Id cannot be empty";
-  public static final String EMPTY_SECTOR_ID = "Sector Id cannot be empty";
+  public static final String EMPTY_SECTOR_ID = "Chiefdom Id cannot be empty";
   public static final String EMPTY_MODULES = "Modules cannot be empty";
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
   public static final String EMPTY_GROUP_ID = "Group Id cannot be empty";
@@ -55,7 +55,7 @@ public final class ValidationMessageConstants {
   public static final String NOT_EXISTING_FACILITY = "Facility doesn't exist";
   public static final String NOT_EXISTING_VILLAGE = "Village doesn't exist";
   public static final String NOT_EXISTING_DISTRICT = "District doesn't exist";
-  public static final String NOT_EXISTING_SECTOR = "Sector doesn't exist";
+  public static final String NOT_EXISTING_SECTOR = "Chiefdom doesn't exist";
   public static final String NOT_EXISTING_MODULES_WITH_ID = "Module with id: %s doesn't exist";
   public static final String NOT_EXISTING_GROUP = "Group doesn't exist";
 
@@ -66,7 +66,7 @@ public final class ValidationMessageConstants {
   public static final String NOT_UNIQUE_VILLAGE =
       "A Village with name: '%s' within facility already exists";
   public static final String NOT_UNIQUE_SECTOR =
-       "A Sector with name: '%s' within district already exists";
+       "A Chiefdom with name: '%s' within district already exists";
   public static final String NOT_UNIQUE_DISTRICT =
        "A District with name: '%s' already exists";
 
