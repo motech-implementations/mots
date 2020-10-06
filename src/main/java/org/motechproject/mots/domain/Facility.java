@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -14,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.motechproject.mots.domain.enums.FacilityType;
 
 @Entity
 @Table(name = "facility", uniqueConstraints =
@@ -21,6 +24,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, of = { "sector" })
 public class Facility extends Location {
+
+  @Column(name = "type", nullable = false)
+  @Getter
+  @Setter
+  @Enumerated(EnumType.STRING)
+  private FacilityType type;
 
   @OneToMany(mappedBy = "facility")
   @Getter
@@ -56,22 +65,26 @@ public class Facility extends Location {
   /**
    * Construct facility by first calling super constructor, and then setting type and facilityId.
    * @param name name of the facility
+   * @param facilityType type of the facility
    */
-  public Facility(String name) {
+  public Facility(String name, FacilityType facilityType) {
     super(name);
+    this.type = facilityType;
   }
 
   /**
    * Construct new facility with given parameters.
    * @param name name of the facility
+   * @param type type of the facility
    * @param inchargeFullName name of the facility incharge
    * @param inchargePhone phone of the facility incharge
    * @param inchargeEmail email of the facility incharge
    * @param sector parent sector of the facility
    */
-  public Facility(String name, String inchargeFullName,
+  public Facility(String name, FacilityType type, String inchargeFullName,
       String inchargePhone, String inchargeEmail, Sector sector) {
     super(name);
+    this.type = type;
     this.inchargeFullName = inchargeFullName;
     this.inchargePhone = inchargePhone;
     this.inchargeEmail = inchargeEmail;
@@ -86,5 +99,10 @@ public class Facility extends Location {
   @Override
   public String getDistrictName() {
     return sector.getDistrict().getName();
+  }
+
+  @Override
+  public FacilityType getFacilityType() {
+    return getType();
   }
 }

@@ -33,6 +33,7 @@ public final class ValidationMessageConstants {
   public static final String EMPTY_DISTRICT_ID = "District Id cannot be empty";
   public static final String EMPTY_GROUP_ID = "Group Id cannot be empty";
 
+  public static final String INVALID_FACILITY_TYPE = "Invalid facility type";
   public static final String INVALID_EMAIL = "Invalid e-mail address";
   public static final String INVALID_ID = "Invalid ID (UUID)";
   public static final String INVALID_FACILITY_ID = "Invalid facility UUID";

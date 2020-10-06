@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.utils.TrimTextDeserializer;
+import org.motechproject.mots.validate.annotations.FacilityType;
 import org.motechproject.mots.validate.annotations.FacilityUniqueness;
 import org.motechproject.mots.validate.annotations.SectorExistence;
 import org.motechproject.mots.validate.annotations.Uuid;
@@ -30,6 +31,11 @@ public class FacilityCreationDto {
   @Uuid
   @NotEmpty(message = ValidationMessageConstants.EMPTY_SECTOR_ID)
   private String sectorId;
+
+  @Setter
+  @Getter
+  @FacilityType
+  private String facilityType;
 
   @Getter
   @Setter

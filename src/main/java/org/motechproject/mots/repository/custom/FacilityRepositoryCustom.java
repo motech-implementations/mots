@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface FacilityRepositoryCustom {
 
-  Page<Facility> search(String facilityName,
+  Page<Facility> search(String facilityName, String facilityType,
       String inchargeFullName, String inchargePhone, String inchargeEmail,
       String parentSector, String districtName, Pageable pageable);
 }

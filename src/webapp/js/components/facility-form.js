@@ -43,6 +43,13 @@ const FIELDS = {
       valueKey: 'id',
     }),
   },
+  facilityType: {
+    label: 'Facility Type',
+    type: 'select',
+    getSelectOptions: () => ({
+      values: ['CHC', 'CHP', 'MCHP', 'Clinic', 'Hospital'],
+    }),
+  },
   inchargeFullName: {
     label: 'Incharge name',
   },
