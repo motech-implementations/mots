@@ -222,15 +222,6 @@ const FIELDS = {
       hidden: !facilityId,
     }),
   },
-  preferredLanguage: {
-    type: Select,
-    label: 'Preferred Language',
-    required: true,
-    getSelectOptions: () => ({
-      values: ['English', 'Kinyarwanda'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
-  },
   groupId: {
     type: Select,
     label: 'Group',

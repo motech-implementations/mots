@@ -75,7 +75,7 @@ public class CommunityHealthWorker extends BaseTimestampedEntity {
   @Setter
   private District district;
 
-  @Column(name = "preferred_language", nullable = false)
+  @Column(name = "preferred_language")
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
