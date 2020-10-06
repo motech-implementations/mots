@@ -43,6 +43,7 @@ public class LocationController extends BaseController {
 
   public static final String NAME_PARAM = "name";
   public static final String PARENT_PARAM = "parent";
+  public static final String FACILITY_TYPE_PARAM = "facilityType";
   public static final String INCHARGE_FULL_NAME_PARAM = "inchargeFullName";
   public static final String INCHARGE_PHONE_PARAM = "inchargePhone";
   public static final String INCHARGE_EMAIL_PARAM = "inchargeEmail";
@@ -397,6 +398,7 @@ public class LocationController extends BaseController {
   @ResponseBody
   public Page<LocationPreviewDto> searchFacilities(
       @RequestParam(value = NAME_PARAM, required = false) String name,
+      @RequestParam(value = FACILITY_TYPE_PARAM, required = false) String facilityType,
       @RequestParam(value = INCHARGE_FULL_NAME_PARAM, required = false) String inchargeFullName,
       @RequestParam(value = INCHARGE_PHONE_PARAM, required = false) String inchargePhone,
       @RequestParam(value = INCHARGE_EMAIL_PARAM, required = false) String inchargeEmail,
@@ -404,7 +406,7 @@ public class LocationController extends BaseController {
       @RequestParam(value = DISTRICT_NAME_PARAM, required = false) String district,
       Pageable pageable) {
 
-    Page<Facility> facilities = locationService.searchFacilities(name,
+    Page<Facility> facilities = locationService.searchFacilities(name, facilityType,
         inchargeFullName, inchargePhone, inchargeEmail, parentSector, district, pageable);
     List<LocationPreviewDto> locationPreviewDtos =
         LOCATION_MAPPER.toLocationPreviewDtosWithOrder(facilities.getContent());

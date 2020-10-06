@@ -1,15 +1,20 @@
 package org.motechproject.mots.testbuilder;
 
+import java.util.Random;
 import java.util.UUID;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
+import org.motechproject.mots.domain.enums.FacilityType;
 
 public final class FacilityDataBuilder {
+
+  private static final Random RANDOM = new Random();
 
   private static int instanceNumber;
 
   private final UUID id;
   private final String name;
+  private final FacilityType facilityType;
   private Sector sector;
 
   /**
@@ -20,6 +25,7 @@ public final class FacilityDataBuilder {
 
     id = UUID.randomUUID();
     name = "Facility #" + instanceNumber;
+    facilityType = FacilityType.values()[RANDOM.nextInt(FacilityType.values().length)];
     sector = new SectorDataBuilder().build();
   }
 
@@ -30,6 +36,7 @@ public final class FacilityDataBuilder {
 
     Facility facility = new Facility();
     facility.setName(name);
+    facility.setType(facilityType);
     facility.setSector(sector);
 
     return facility;

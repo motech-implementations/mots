@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.audit.AuditListener;
 import org.motechproject.mots.domain.audit.Auditable;
+import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.security.User;
 
 @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
@@ -50,6 +51,10 @@ public abstract class Location extends BaseTimestampedEntity implements Auditabl
   }
 
   public String getDistrictName() {
+    return null;
+  }
+
+  public FacilityType getFacilityType() {
     return null;
   }
 

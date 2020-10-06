@@ -25,6 +25,7 @@ public abstract class BaseRepositoryImpl {
   protected static final String INCHARGE_EMAIL = "inchargeEmail";
   protected static final String CHW_NAME = "chwName";
   protected static final String PHONE_NUMBER = "phoneNumber";
+  protected static final String FACILITY_TYPE = "type";
   protected static final String NAME = "name";
   protected static final String FACILITY = "facility";
   protected static final String SECTOR = "sector";
