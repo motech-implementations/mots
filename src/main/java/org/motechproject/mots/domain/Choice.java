@@ -10,6 +10,11 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.motechproject.mots.domain.enums.ChoiceType;
 
+/**
+ * It represents one of the possible choices in the Multiple Choice Question
+ *        (it can have many choices) and later it's used in Multiple Choice Question Log to
+ *        show which response was chosen in the call.
+ */
 @Entity
 @Table(name = "choice")
 public class Choice extends BaseTimestampedEntity {

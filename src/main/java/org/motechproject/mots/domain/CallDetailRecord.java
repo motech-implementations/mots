@@ -17,6 +17,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.motechproject.mots.domain.enums.CallStatus;
 
+/**
+ * This class is used for storing the IVR callback. The IVR is sending the current call status
+ *        to MOTS e.g. in progress, finished/failed. Call ids (incomingCallId or
+ *        outgoingCallId depending how the call was scheduled) are used to fetch the details when
+ *        the call is finished.
+ */
 @Entity
 @Table(name = "call_detail_record")
 @NoArgsConstructor

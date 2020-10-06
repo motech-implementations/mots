@@ -15,8 +15,12 @@ public class DistrictRepositoryImpl extends BaseRepositoryImpl
     implements DistrictRepositoryCustom {
 
   /**
-   * Finds Districts matching all of the provided parameters.
+   * Finds {@link District}s matching all of the provided parameters.
    * If there are no parameters, return all Districts.
+   *
+   * @param districtName name of a district
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @return page with found districts
    */
   @Override
   public Page<District> search(String districtName, Pageable pageable) {

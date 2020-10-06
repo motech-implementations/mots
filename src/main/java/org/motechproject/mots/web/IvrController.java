@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * This class is responsible of managing Interactive voice response and receiving manually
+ *        sent update.
+ */
 @Controller
 public class IvrController extends BaseController {
 
@@ -27,8 +31,10 @@ public class IvrController extends BaseController {
   private IvrService ivrService;
 
   /**
-   * Map data to CallDetailRecord and save it.
+   * It's used to save the callbacks from IVR (the call status).
+   *
    * @param ivrData data in form of a map from IVR system callback
+   * @param configName name of the config
    */
   @RequestMapping(value = "/ivrCallback/{configName}", method = RequestMethod.POST,
       consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -45,6 +51,7 @@ public class IvrController extends BaseController {
   /**
    * Manually send Voto call log to Mots, this should be used only when call log is incorrect and
    * must be manually changed before it can be successfully processed in Mots.
+   *
    * @param votoResponse voto response containing call log
    */
   @RequestMapping(value = "/votoCallLog/send", method = RequestMethod.POST)

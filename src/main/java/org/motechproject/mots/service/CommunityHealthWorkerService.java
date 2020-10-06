@@ -124,6 +124,7 @@ public class CommunityHealthWorkerService {
 
   /**
    * Get list of not selected CHW Ids.
+   *
    * @return list of not selected CHW Ids
    */
   public List<String> getNotSelectedChwIds() {
@@ -140,8 +141,20 @@ public class CommunityHealthWorkerService {
   }
 
   /**
-   * Finds CommunityHealthWorkers matching all of the provided parameters.
+   * Finds {@link CommunityHealthWorker}s (CHW) matching all of the provided parameters.
    * If there are no parameters, return all CommunityHealthWorkers.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param selected flag indicating that CHW is selected
+   * @param villageName {@link Village} to which CHW may belong
+   * @param sectorName {@link Sector} to which CHW may belong
+   * @param phoneNumber phone nubmer of CHW
+   * @param groupName {@link Group} to which CHW may belong
+   * @param facilityName {@link Facility} to which CHW may belong
+   * @param districtName {@link District} to which CHW may belong
+   * @param chwName name of a CHW
+   * @param chwId id of a CHW
+   * @return page with found CHWs
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_CHW_READ_ROLE)
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(
@@ -157,6 +170,7 @@ public class CommunityHealthWorkerService {
   /**
    * Select CHW, create IVR Subscriber and assign it to CHW. Initiate empty AssignedModules
    * instance for selected CHW.
+   *
    * @param healthWorker CHW to be selected
    * @return saved CHW
    */
@@ -198,9 +212,11 @@ public class CommunityHealthWorkerService {
         new EntityNotFoundException("CHW with id: {0} not found", id.toString()));
   }
 
-  /**.
-   * Processes CSV file which contains CHW list and returns list of errors
+  /**
+   * Processes CSV file which contains CHW list and returns list of errors.
+   *
    * @param chwCsvFile CSV file with CHW list
+   * @param selected flag indicating that CHW is selected
    * @return map with row numbers as keys and errors as values.
    * @throws IOException in case of file issues
    */
@@ -384,7 +400,8 @@ public class CommunityHealthWorkerService {
   }
 
   /**
-   * Update CHW and IVR Subscriber.
+   * Update {@link CommunityHealthWorker} (CHW) and IVR Subscriber.
+   *
    * @param id id of the CHW to update
    * @param chw CHW to update
    * @return saved CHW

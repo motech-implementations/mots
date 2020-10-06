@@ -7,6 +7,10 @@ import org.motechproject.mots.repository.IvrConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class is responsible for managing {@link IvrConfig} that is required for a proper
+ *      connection to IVR system and customizing theirs features (e.g. delay time after call fails).
+ */
 @Service
 public class IvrConfigService {
 
@@ -29,6 +33,7 @@ public class IvrConfigService {
    * Get IVR config from DB.
    *
    * @return IVR config
+   * @throws EntityNotFoundException if IVR config is not found
    */
   public IvrConfig getConfig() {
     if (ivrConfig == null) {

@@ -19,6 +19,10 @@ import org.motechproject.mots.domain.audit.Auditable;
 import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.domain.security.User;
 
+/**
+ * This class is a base for all location entities and contains common information
+ *        about what is a name and who created a location.
+ */
 @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
 @MappedSuperclass
 @NoArgsConstructor
