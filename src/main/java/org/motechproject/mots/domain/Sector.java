@@ -14,6 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents an area to which multiple facilities {@link Facility} can belong to.
+ */
 @NoArgsConstructor
 @Entity
 @Table(name = "sector", uniqueConstraints =

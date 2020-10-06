@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This class is responsible manage and manipulate {@link CommunityHealthWorker} entity class.
+ */
 @Controller
 public class CommunityHealthWorkerController extends BaseController {
 
@@ -43,10 +46,11 @@ public class CommunityHealthWorkerController extends BaseController {
   private CommunityHealthWorkerMapper healthWorkerMapper;
 
   /**
-   * Get list of community health workers.
+   * Get list of community health workers
+   * {@link org.motechproject.mots.domain.CommunityHealthWorker}.
+   *
    * @return list of all community health workers
    */
-
   @RequestMapping(value = "/chw", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
@@ -57,8 +61,20 @@ public class CommunityHealthWorkerController extends BaseController {
   }
 
   /**
-   * Finds CommunityHealthWorkers matching all of the provided parameters.
-   * If there are no parameters, return all CommunityHealthWorkers.
+   * Finds {@link CommunityHealthWorker}s (CHW) matching all of the provided parameters.
+   *
+   * @param chwId id of CHW
+   * @param chwName name of CHW
+   * @param districtName name of district
+   * @param facilityName name of facility
+   * @param groupName name of group
+   * @param pageable object for paging
+   * @param phoneNumber phone number of CHW
+   * @param sectorName name of sector
+   * @param selected flag that determines if CHW is selected
+   * @param villageName name of village
+   * @return page with {@link CommunityHealthWorkerDto}
+   *        If there are no parameters, return all CommunityHealthWorkers.
    */
   @RequestMapping(value = "/chw/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -89,8 +105,9 @@ public class CommunityHealthWorkerController extends BaseController {
 
   /**
    * Find CHW by CHW Id.
+   *
    * @param chwId chw id to find CHW by.
-   * @return found CHW
+   * @return found CHW {@link CommunityHealthWorkerDto}
    */
   @RequestMapping(value = "/chw/findByChwId/{chwId}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -102,8 +119,9 @@ public class CommunityHealthWorkerController extends BaseController {
   }
 
   /**
-   * Get list of basic representation (ChwInfoDto) of selected CHWs.
-   * @return list of ChwInfoDto representations of CHWs
+   * Get list of basic representation {@link ChwInfoDto} of selected CHWs.
+   *
+   * @return list of {@link ChwInfoDto} representations of CHWs
    */
   @RequestMapping(value = "/chwInfo", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -120,10 +138,12 @@ public class CommunityHealthWorkerController extends BaseController {
   }
 
   /**
-   * Select community health worker.
+   * Update community health worker from given dto.
+   *
    * @param id id of CHW to select
-   * @param healthWorkerDto DTO of community health worker to be selected
-   * @return selected community health worker
+   * @param healthWorkerDto DTO of community health worker to be updated
+   * @param bindingResult spring object required for validation
+   * @return updated community health worker {@link CommunityHealthWorkerDto}
    */
   @RequestMapping(value = "/chw/{id}/select", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
@@ -140,8 +160,9 @@ public class CommunityHealthWorkerController extends BaseController {
 
   /**
    * Get community health worker with given id.
+   *
    * @param id id of CHW to find
-   * @return CHW with given id
+   * @return CHW {@link CommunityHealthWorkerDto} with given id
    */
   @RequestMapping(value = "/chw/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -154,9 +175,11 @@ public class CommunityHealthWorkerController extends BaseController {
 
   /**
    * Update community health worker.
+   *
    * @param id id of CHW to update
    * @param healthWorkerDto DTO of CHW to update
-   * @return updated CHW
+   * @param bindingResult spring object for validation
+   * @return updated CHW {@link CommunityHealthWorkerDto}
    */
   @RequestMapping(value = "/chw/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
@@ -170,7 +193,11 @@ public class CommunityHealthWorkerController extends BaseController {
 
   /**
    * Upload list of CHWs in ".csv" format to mots, parse it and save records in DB.
+   *
    * @param file File in ".csv" format to upload
+   * @param selected flag that determines if CHW is selected
+   * @return map with row numbers as keys and errors as values.
+   * @throws IOException if there is an error while reading file
    */
   @RequestMapping(value = "/chw/upload/{selected}", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)

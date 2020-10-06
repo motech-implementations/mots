@@ -19,6 +19,7 @@ public enum ChoiceType {
   /**
    * Return an enum value from display name.
    * @param name display name of enum value
+   * @return display name of ChoiceType
    */
   public static ChoiceType getByDisplayName(String name) {
     for (ChoiceType choiceType : ChoiceType.values()) {

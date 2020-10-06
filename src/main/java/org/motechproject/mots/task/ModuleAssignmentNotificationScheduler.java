@@ -28,6 +28,7 @@ public class ModuleAssignmentNotificationScheduler  {
 
   /**
    * Schedule a task that notifies IVR subscribers when a module is available.
+   *
    * @param subscribers a list of IVR subscribers to send the notification to
    * @param time when to fire the task
    */

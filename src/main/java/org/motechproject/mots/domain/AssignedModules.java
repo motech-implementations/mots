@@ -11,6 +11,10 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * This class represents relation between {@link Module}s and {@link CommunityHealthWorker}. Single
+ *        CommunityHealthWorker can be assigned to multiple modules.
+ */
 @Entity
 @Table(name = "assigned_modules")
 public class AssignedModules extends BaseTimestampedEntity {

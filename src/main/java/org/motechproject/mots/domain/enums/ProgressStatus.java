@@ -17,6 +17,7 @@ public enum ProgressStatus {
   /**
    * Return an enum value from display name.
    * @param name display name of enum value
+   * @return display name of ProgressStatus
    */
   public static ProgressStatus getByDisplayName(String name) {
     for (ProgressStatus progressStatus : ProgressStatus.values()) {

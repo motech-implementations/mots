@@ -96,8 +96,10 @@ public class ModuleAssignmentService {
 
   /**
    * Get modules assinged to CHW.
+   *
    * @param chwId Id of CHW
    * @return modules assigned to CHW with given Id
+   * @throws EntityNotFoundException if no assigned modules found for CHW with given id
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_MODULES_ROLE)
   public AssignedModules getAssignedModules(UUID chwId) {
@@ -107,8 +109,12 @@ public class ModuleAssignmentService {
   }
 
   /**
-   * Assign modules to CHW.
+   * Assign modules to CHW and sends module assignment notification.
+   *
    * @param assignmentDto modules assigned for CHW
+   * @throws ModuleAssignmentException if {@link CommunityHealthWorker}'s IVR id is null
+   * @throws ModuleAssignmentException in case of IVR module assignment error
+   * @throws EntityNotFoundException if no module found for any module id from assigment modules
    */
   @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   @Transactional
@@ -172,6 +178,15 @@ public class ModuleAssignmentService {
     moduleProgressService.updateModuleProgressWithNewCourseModules(releasedCourseModules);
   }
 
+
+  /**
+   * Removes {@link CommunityHealthWorker} form IVR group for each assigned module.
+   *        New module has different group id and this is removing subscriber
+   *        from previous module version group.
+   *
+   * @param oldModule module to unassign
+   * @throws ModuleAssignmentException if IVR module assignment error occurred
+   */
   private void unassignOldModuleVersion(Module oldModule) {
     List<AssignedModules> assignedModulesList =
         repository.findByModules_id(oldModule.getId());
@@ -217,10 +232,15 @@ public class ModuleAssignmentService {
   }
 
   /**
-   * Creates DistrictAssignmentLog for district/sector/facility assignment,
+   * Creates {@link DistrictAssignmentLog} for
+   *        {@link org.motechproject.mots.domain.District}/
+   *        {@link org.motechproject.mots.domain.Sector}/
+   *        {@link org.motechproject.mots.domain.Facility} assignment,
    * and assigns modules to each CHW from a location: district/sector/facility.
+   *
    * @param assignmentDto dto with district id, list of modules assigned to it
    *     and start and end dates
+   * @return true if any module was assigned, false otherwise
    */
   @SuppressWarnings("PMD.ConfusingTernary")
   @Transactional
@@ -252,7 +272,8 @@ public class ModuleAssignmentService {
   /**
    * Assigns modules to each CHW from a group.
    * @param assignmentDto dto with group id, list of modules assigned to it
-   *     and start and end dates
+   *     and start and end dates.
+   * @return true if any module was assigned, false otherwise
    */
   @Transactional
   @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_MODULES_ROLE)
@@ -261,9 +282,26 @@ public class ModuleAssignmentService {
     List<CommunityHealthWorker> communityHealthWorkers =
         communityHealthWorkerRepository.findByGroupIdAndSelected(groupId, true);
 
-    return bulkAssignModules(assignmentDto, communityHealthWorkers, null, null, null, groupId);
+    return bulkAssignModules(assignmentDto, communityHealthWorkers, null,
+        null, null, groupId);
   }
 
+  /**
+   * Method assign multiple {@link CommunityHealthWorker}s to multiple {@link Module}s
+   * and request is send to IVR and notifications to CHWs from IVR.
+   *
+   * @param assignmentDto {@link BulkAssignmentDto} wrapper for multi assigment
+   * @param communityHealthWorkers {@link CommunityHealthWorker}s to assign modules
+   * @param districtId id of {@link org.motechproject.mots.domain.District}
+   *      used for {@link DistrictAssignmentLog} creation
+   * @param sectorId id of {@link org.motechproject.mots.domain.Sector}
+   *      used for {@link DistrictAssignmentLog} creation
+   * @param facilityId id of {@link org.motechproject.mots.domain.Facility}
+   *      used for {@link DistrictAssignmentLog} creation
+   * @param groupId id of {@link org.motechproject.mots.domain.Group}
+   *      used for {@link DistrictAssignmentLog} creation
+   * @return true if any module was assigned, false otherwise
+   */
   @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.NPathComplexity"})
   private boolean bulkAssignModules(BulkAssignmentDto assignmentDto,
       List<CommunityHealthWorker> communityHealthWorkers, UUID districtId,
@@ -339,6 +377,13 @@ public class ModuleAssignmentService {
     return false;
   }
 
+  /**
+   * Uses {@link IvrService} to send request to IVR and notifications to CHWs from IVR.
+   * It sets schedule in case when notification time is null.
+   *
+   * @param subscribers Collection of subscriber to which message will be send
+   * @param notificationTime time to send notification
+   */
   private void sendModuleAssignmentNotification(Set<String> subscribers, String notificationTime) {
     if (notificationTime == null) {
       try {
