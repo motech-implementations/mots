@@ -18,6 +18,10 @@ import org.hibernate.annotations.Type;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
+/**
+ * This class represents lowest level call flow area. Units contains {@link CallFlowElement}s
+ *        that are used to communicate between {@link CommunityHealthWorker} and the IVR system.
+ */
 @Entity
 @Table(name = "unit")
 public class Unit extends IvrObject {
@@ -78,6 +82,7 @@ public class Unit extends IvrObject {
 
   /**
    * Update list content.
+   *
    * @param callFlowElements list of new Call Flow Elements
    */
   public void setCallFlowElements(List<CallFlowElement> callFlowElements) {
@@ -93,7 +98,9 @@ public class Unit extends IvrObject {
   }
 
   /**
-   * Create a drat copy of Unit.
+   * Create a draft copy of Unit.
+   *
+   * @param module module to copy
    * @return copy of Unit
    */
   public Unit copyAsNewDraft(Module module) {

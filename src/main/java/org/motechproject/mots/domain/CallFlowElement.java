@@ -16,6 +16,11 @@ import org.hibernate.annotations.Type;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 
+/**
+ * This class is a base class for all IVR interactive classes (e.g. {@link Message},
+ *        {@link MultipleChoiceQuestion}) which are the actual content in the Viamo
+ *        (the audio files played to the user).
+ */
 @Entity
 @Table(name = "call_flow_element")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -57,6 +62,7 @@ public abstract class CallFlowElement extends IvrObject {
    * Create new Call Flow Element.
    * @param ivrId ivr id of element
    * @param ivrName ivr name of element
+   * @param unit unit of element
    * @param name name of element
    * @param content content of element
    * @param type type of element

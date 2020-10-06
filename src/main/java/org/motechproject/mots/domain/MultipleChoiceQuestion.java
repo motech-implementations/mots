@@ -20,6 +20,9 @@ import org.motechproject.mots.domain.enums.QuestionType;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 import org.motechproject.mots.validate.annotations.IsCorrect;
 
+/**
+ * This class represents IVR activity that contains a question with multiple {@link Choice}s.
+ */
 @Entity
 @Table(name = "multiple_choice_question")
 @PrimaryKeyJoinColumn(name = "call_flow_element_id")

@@ -17,6 +17,7 @@ public enum QuestionType {
   /**
    * Return an enum value from display name.
    * @param name display name of enum value
+   * @return display name of QuestionType
    */
   public static QuestionType getByDisplayName(String name) {
     for (QuestionType type : QuestionType.values()) {

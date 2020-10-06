@@ -40,6 +40,11 @@ import org.motechproject.mots.repository.JasperTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class is responsible for generating reports using {@link JasperTemplate} and
+ *        {@link org.motechproject.mots.domain.JasperTemplateParameter}s. After generation
+ *        reports are added to a http response in demanded format.
+ */
 @Service
 public class JasperReportsExportService {
 
@@ -53,10 +58,16 @@ public class JasperReportsExportService {
   private JasperTemplateRepository jasperTemplateRepository;
 
   /**
-   * Generate Jasper Report.
+   * Loads report template with given id and loads data from db to fill template
+   * and exports report to {@link HttpServletResponse} response.
    *
    * @param templateId id of the template that will be used to generate the report
    * @param format format of the report
+   * @param response response object used to set proper headers
+   * @param request request (to get the request parameters)
+   * @throws SQLException if there is an error while connecting to db
+   * @throws IOException if there is an error while creating {@link Exporter}
+   * @throws JRException if there is an error while creating {@link JasperReport}
    */
   public void generateReport(UUID templateId, String format, HttpServletRequest request,
       HttpServletResponse response) throws SQLException, JRException, IOException {
@@ -87,11 +98,13 @@ public class JasperReportsExportService {
   }
 
   /**
-   * Generate Jasper Report in JSON format.
+   * Uses given template to fill report with data from the db and exports it in JSON format.
    *
    * @param jasperTemplate template that will be used to generate the report
+   * @param params parameters to configure report
    * @return generated json
    * @throws JRException if there will be any problem with creating the report.
+   * @throws SQLException if connection fails
    */
   public String generateJsonReport(JasperTemplate jasperTemplate, Map<String, Object> params)
       throws JRException, SQLException {
@@ -117,6 +130,7 @@ public class JasperReportsExportService {
    * Create ".jasper" file with byte array from Template.
    *
    * @return Url to ".jasper" file.
+   * @throws JasperReportViewException if in case of any errors
    */
   private URL getReportUrlForReportData(JasperTemplate jasperTemplate) {
     File tmpFile;

@@ -30,6 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This class is responsible for managing {@link JasperTemplate} (i.e. creation, read,
+ *        update, deletion). Also it is used for conversion of template files, because they are
+ *        stored in the db in HEX format.
+ */
 @Service
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateService {
@@ -126,7 +131,10 @@ public class JasperTemplateService {
 
   /**
    * Validate ".jrmxl" file and insert this template to database.
-   * Throws reporting exception if an error occurs during file validation or parsing,
+   * Throws reporting exception if an error occurs during file validation or parsing.
+   *
+   * @param jasperTemplate template to fill data
+   * @param file file to validate
    */
   protected void validateFileAndInsertTemplate(JasperTemplate jasperTemplate, MultipartFile file) {
     throwIfTemplateWithSameNameAlreadyExists(jasperTemplate.getName());
@@ -136,6 +144,8 @@ public class JasperTemplateService {
 
   /**
    * Insert template and template parameters to database.
+   *
+   * @param jasperTemplate template to save
    */
   protected void saveWithParameters(JasperTemplate jasperTemplate) {
     jasperTemplateRepository.save(jasperTemplate);
@@ -144,6 +154,9 @@ public class JasperTemplateService {
   /**
    * Validate ".jrmxl" file and insert if template not exist. If this name of template already
    * exist, remove older template and insert new.
+   *
+   * @param file file to validate
+   * @param jasperTemplate template to save
    */
   protected void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file) {
     JasperTemplate templateTmp = jasperTemplateRepository.findByName(jasperTemplate.getName());
@@ -171,6 +184,9 @@ public class JasperTemplateService {
    * report parameters. Save additional report parameters as JasperTemplateParameter list. Save
    * report file as ".jasper" in byte array in Template class. If report is not valid throw
    * exception.
+   *
+   * @param file file report file in ".jrxml" format
+   * @param jasperTemplate the report's template
    */
   private void validateFileAndSetData(JasperTemplate jasperTemplate, MultipartFile file) {
     ReportingValidationHelper.throwIfFileIsNull(file);
@@ -205,6 +221,13 @@ public class JasperTemplateService {
     }
   }
 
+  /**
+   * Creates {@link JasperTemplateParameter} from {@link JRParameter}
+   * and sets them to {@link JasperTemplate}.
+   *
+   * @param jasperTemplate template to set parameters
+   * @param jrParameters parameters to set
+   */
   @SuppressWarnings("PMD.UseVarargs")
   private void processJrParameters(JasperTemplate jasperTemplate, JRParameter[] jrParameters) {
     ArrayList<JasperTemplateParameter> parameters = new ArrayList<>();
@@ -222,6 +245,10 @@ public class JasperTemplateService {
 
   /**
    * Create new report parameter of report which is not defined in Jasper system.
+   *
+   * @param jrParameter parameter used to create JasperTemplateParameter
+   * @return newly created {@link JasperTemplateParameter}
+   * @throws ReportingException if display name is blank
    */
   private JasperTemplateParameter createParameter(JRParameter jrParameter) {
     String displayName = jrParameter.getPropertiesMap().getProperty("displayName");

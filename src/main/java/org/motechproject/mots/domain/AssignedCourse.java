@@ -9,6 +9,10 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * This class assigns a {@link Course} to a {@link CommunityHealthWorker} and contains
+ * an estimated date of finishing the course.
+ */
 @Entity
 @Table(name = "assigned_course")
 public class AssignedCourse extends BaseTimestampedEntity {

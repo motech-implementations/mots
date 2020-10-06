@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents the lowest order location entity in location hierarchy.
+ */
 @Entity
 @Table(name = "village", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "facility_id"}))

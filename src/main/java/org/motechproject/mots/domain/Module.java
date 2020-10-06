@@ -26,6 +26,10 @@ import org.motechproject.mots.domain.enums.Status;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
+/**
+ * This class represents middle level entity that contains a portion of a course
+ *        called {@link Unit}.
+ */
 @Entity
 @Table(name = "module")
 @NoArgsConstructor

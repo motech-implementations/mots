@@ -41,6 +41,10 @@ import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * This class is responsible for making requests to IVR system (e.g. managing subscribers,
+ *        getting call statuses, retrieving informations about phone interactions ).
+ */
 @SuppressWarnings("PMD.TooManyMethods")
 @Service
 public class IvrService {
@@ -95,9 +99,12 @@ public class IvrService {
 
   /**
    * Create IVR Subscriber with given phone number.
+   *
    * @param phoneNumber CHW phone number
    * @param name CHW name
+   * @param districtIvrId IVR group id
    * @return ivr id of created subscriber
+   * @throws IvrException in case of any error
    */
   public String createSubscriber(String phoneNumber, String name, String districtIvrId)
       throws IvrException {
@@ -120,9 +127,12 @@ public class IvrService {
 
   /**
    * Update existing IVR subscriber.
+   *
    * @param ivrId id of existing IVR subscriber
    * @param phoneNumber new CHW phone number
    * @param name new CHW name
+   * @throws IvrException if there is an error while creating a subscriber
+   *        or sending request to IVR service
    */
   public void updateSubscriber(String ivrId, String phoneNumber, String name) throws IvrException {
     MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name);
@@ -156,6 +166,7 @@ public class IvrService {
    * Add Subscribers to group.
    * @param groupId id of group to add subscriber
    * @param subscriberIds set of subscribers ids
+   * @throws IvrException if there is an error while sending request to IVR service
    */
   public void addSubscribersToGroup(String groupId,
       List<String> subscriberIds) throws IvrException {
@@ -178,6 +189,7 @@ public class IvrService {
    * Add Subscriber to groups.
    * @param subscriberId subscriber id
    * @param groupsIds ids of groups to add subscriber
+   * @throws IvrException if there is an error while sending request to IVR service
    */
   public void addSubscriberToGroups(String subscriberId,
       List<String> groupsIds) throws IvrException {
@@ -195,6 +207,7 @@ public class IvrService {
    * Remove Subscriber from groups.
    * @param subscriberId subscriber id
    * @param groupsIds ids of groups to remove subscriber
+   * @throws IvrException if there is an error while sending request to IVR service
    */
   public void removeSubscriberFromGroups(String subscriberId,
       List<String> groupsIds) throws IvrException {
@@ -238,8 +251,10 @@ public class IvrService {
   /**
    * Manually send Voto call log to Mots, this should be used only when call log is incorrect and
    * must be manually changed before it can be successfully processed in Mots.
+   *
    * @param votoCallLogDto it contains information about module progress (which trees were
    *     listened by user and what answers were chosen)
+   * @throws IllegalArgumentException if unexpected call status is in a response.
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_ADMIN_ROLE)
   public void manuallySendVotoCallLog(VotoCallLogDto votoCallLogDto) {
@@ -259,6 +274,7 @@ public class IvrService {
   /**
    * Send module assignment message to a list of subscribers.]
    * @param subscriberIds a list of subscribers
+   * @throws IvrException if there is an error while sending IVR notification
    */
   public void sendModuleAssignedMessage(Set<String> subscriberIds) throws IvrException {
     IvrConfig ivrConfig = ivrConfigService.getConfig();

@@ -13,6 +13,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 
+/**
+ * This class represents collection of {@link CommunityHealthWorker}s that is used to assign module
+ *        to multiple health workers at once.
+ *
+ */
 @Entity
 @Table(name = "chw_group")
 @NoArgsConstructor

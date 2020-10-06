@@ -24,6 +24,7 @@ public class EnumsMapper {
 
   /**
    * Get display name from Gender.
+   * @param gender gender to get display name
    * @return display name of Gender
    */
   public String fromGender(Gender gender) {
@@ -49,6 +50,7 @@ public class EnumsMapper {
 
   /**
    * Get display name from QuestionType.
+   * @param questionType question type to get display name
    * @return display name of QuestionType
    */
   public String fromQuestionType(QuestionType questionType) {
@@ -74,6 +76,7 @@ public class EnumsMapper {
 
   /**
    * Get display name from ChoiceType.
+   * @param choiceType choice type to get display name
    * @return display name of ChoiceType
    */
   public String fromChoiceType(ChoiceType choiceType) {

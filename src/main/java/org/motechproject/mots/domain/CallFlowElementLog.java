@@ -12,6 +12,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This abstract class is used as a base class for IVR system event response
+ *        (e.g. {@link MessageLog}). It's storing the info when and what message were listened.
+ */
 @Entity
 @Table(name = "call_flow_element_log")
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -36,6 +40,7 @@ public abstract class CallFlowElementLog extends BaseTimestampedEntity {
 
   /**
    * Create new Call Flow Element Log.
+   *
    * @param startDate date when question started
    * @param endDate end date od the question
    * @param callFlowElement element for which log is created

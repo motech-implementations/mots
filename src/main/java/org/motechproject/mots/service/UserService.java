@@ -49,8 +49,15 @@ public class UserService {
   }
 
   /**
-   * Finds users matching all of the provided parameters. If there are no parameters, return all
-   * users.
+   * Finds {@link User} matching all of the provided parameters. If there are no parameters,
+   *        return all users.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param email email of user
+   * @param role name of role of user
+   * @param username username of user
+   * @param name name of user
+   * @return page with found users.
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Page<User> searchUsers(String username, String email, String name, String role,
@@ -60,6 +67,7 @@ public class UserService {
 
   /**
    * Returns UserRoles.
+   * @return user roles
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Iterable<UserRole> getRoles() {
@@ -68,12 +76,20 @@ public class UserService {
 
   /**
    * Returns UserPermissions.
+   * @return user permissions
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public Iterable<UserPermission> getPermissions() {
     return permissionRepository.findAll();
   }
 
+  /**
+   * Gets {@link UserRole} with given id.
+   *
+   * @param id id of a role
+   * @return UserRole or throws error if it doesn't exists
+   * @throws EntityNotFoundException if role with id not found
+   */
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
   public UserRole getRole(UUID id) {
     return roleRepository.findById(id).orElseThrow(() ->
@@ -113,6 +129,7 @@ public class UserService {
    * Save User with new encoded password (if it's not blank).
    *
    * @param user User to be created.
+   * @param encodeNewPassword flag indication if password should be encoded
    * @return saved User
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_USERS_ROLE)
@@ -144,6 +161,7 @@ public class UserService {
    * Save User Profile with new encoded password (if it's not blank).
    *
    * @param userProfileDto User Profile to be updated.
+   * @param userId id of user to update
    * @return saved User
    */
   public User editUserProfile(UUID userId, final UserProfileDto userProfileDto) {

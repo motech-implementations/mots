@@ -14,6 +14,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * These are the parameters you can pass to the report, it's used for filtering
+ *        (the available filters which corresponds to specific cells in the report).
+ */
 @Entity
 @Table(name = "template_parameters")
 @NoArgsConstructor

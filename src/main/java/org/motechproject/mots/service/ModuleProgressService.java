@@ -66,6 +66,7 @@ public class ModuleProgressService {
 
   /**
    * Update Module Progress after call ends.
+   *
    * @param votoCallLogDto log containing all Voto tree interactions in specific call
    */
   public void updateModuleProgress(VotoCallLogDto votoCallLogDto) {
@@ -90,6 +91,7 @@ public class ModuleProgressService {
 
   /**
    * Remove Module Progresses for given CHW and Modules.
+   *
    * @param chw CHW for which Module Progresses should be removed
    * @param modules List of Module for which Module Progresses should be removed
    */
@@ -101,10 +103,13 @@ public class ModuleProgressService {
   }
 
   /**
-   * Get ModuleProgress with specific CommunityHealthWorker ID and Module ID.
+   * Get ModuleProgress with specific CommunityHealthWorker ID and Module ID
+   * or throw {@link EntityNotFoundException} if not found.
+   *
    * @param chwId CommunityHealthWorker ID
    * @param moduleId Module ID
    * @return ModuleProgress
+   * @throws EntityNotFoundException if ModuleProgress with chwId and moduleId doesn't exist
    */
   public ModuleProgress getModuleProgress(UUID chwId, UUID moduleId) {
     Course course = moduleService.getReleasedCourse();
@@ -116,6 +121,7 @@ public class ModuleProgressService {
 
   /**
    * Update ModuleProgresses with new Course Modules when Module is reused in newly released Course.
+   *
    * @param courseModules list of new Course Modules with reused Modules
    */
   public void updateModuleProgressWithNewCourseModules(List<CourseModule> courseModules) {
@@ -131,6 +137,13 @@ public class ModuleProgressService {
     });
   }
 
+  /**
+   * Creates {@link ModuleProgress} if there is no module progress
+   * for {@link CommunityHealthWorker}, {@link Module} and {@link Course}.
+   *
+   * @param chw CommunityHealthWorker to check if there is already module progress
+   * @param module Module to check if there is already module progress
+   */
   private void createModuleProgress(CommunityHealthWorker chw, Module module) {
     Course course = moduleService.getReleasedCourse();
     if (!moduleProgressRepository

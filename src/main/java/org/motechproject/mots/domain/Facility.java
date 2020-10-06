@@ -15,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a medical center that multiple {@link Village}s can belong to.
+ */
 @Entity
 @Table(name = "facility", uniqueConstraints =
     @UniqueConstraint(columnNames = {"name", "sector_id"}))

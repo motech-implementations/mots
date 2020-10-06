@@ -15,6 +15,9 @@ import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
+/**
+ * This class is used as a link between {@link Course} and a {@link Module}.
+ */
 @Entity
 @Table(name = "course_module")
 @NoArgsConstructor

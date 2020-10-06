@@ -11,6 +11,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents an answer for {@link MultipleChoiceQuestion}. Also it tracks
+ * number of attempts.
+ */
 @Entity
 @Table(name = "multiple_choice_question_log")
 @PrimaryKeyJoinColumn(name = "call_flow_element_log_id")

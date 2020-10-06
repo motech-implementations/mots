@@ -19,6 +19,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 
+/**
+ * This class represents state in which {@link Unit} can be. Unit progress is required to determine
+ *        {@link Module} progress.
+ */
 @Entity
 @Table(name = "unit_progress")
 @NoArgsConstructor

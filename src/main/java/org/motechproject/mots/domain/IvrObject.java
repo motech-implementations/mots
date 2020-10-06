@@ -10,6 +10,10 @@ import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
+/**
+ * This class is a base object that all IVR object must extend. It contains identification
+ *        info form IVR.
+ */
 @MappedSuperclass
 @NoArgsConstructor
 public abstract class IvrObject extends BaseTimestampedEntity {

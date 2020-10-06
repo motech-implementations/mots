@@ -20,8 +20,15 @@ public class UserRepositoryImpl extends BaseRepositoryImpl
     implements UserRepositoryCustom {
 
   /**
-   * Finds Users matching all of the provided parameters.
+   * Finds {@link User}s matching all of the provided parameters.
    * If there are no parameters, return all Users.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param name name of a user
+   * @param username username of a user
+   * @param role name of {@link UserRole}
+   * @param email email of a user
+   * @return page with found users
    */
   @Override
   public Page<User> search(String username, String email, String name, String role,

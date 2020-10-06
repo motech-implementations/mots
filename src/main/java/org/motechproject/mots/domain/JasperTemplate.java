@@ -21,6 +21,10 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
+/**
+ * This class represents template that is used to create reports that is filled with data from
+ *        the db.
+ */
 @Builder
 @Entity
 @Table(name = "jasper_templates")
