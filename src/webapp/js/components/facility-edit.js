@@ -48,6 +48,7 @@ class FacilityEdit extends Component {
       id: this.state.facilityValues.id,
       name: this.state.facilityValues.name,
       sectorId: this.state.facilityValues.sectorId,
+      facilityType: this.state.facilityValues.facilityType,
       inchargeFullName: this.state.facilityValues.inchargeFullName,
       inchargePhone: this.state.facilityValues.inchargePhone,
       inchargeEmail: this.state.facilityValues.inchargeEmail,

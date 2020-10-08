@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -25,7 +24,6 @@ import org.motechproject.mots.domain.Group;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.Gender;
-import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.ChwInfoDto;
 import org.motechproject.mots.dto.CommunityHealthWorkerDto;
 import org.motechproject.mots.exception.ChwException;
@@ -70,13 +68,11 @@ public class CommunityHealthWorkerService {
   private static final String SECTOR_CSV_HEADER = "sector";
   private static final String VILLAGE_CSV_HEADER = "village";
   private static final String FACILITY_CSV_HEADER = "facility";
-  private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred language";
   private static final String GROUP_CSV_HEADER = "group";
 
   private static final List<String> CSV_HEADERS = Arrays.asList(CHW_ID_CSV_HEADER,
       DISTRICT_CSV_HEADER, SECTOR_CSV_HEADER, GROUP_CSV_HEADER, CHW_NAME_CSV_HEADER,
-      GENDER_CSV_HEADER, MOBILE_CSV_HEADER, VILLAGE_CSV_HEADER,
-      FACILITY_CSV_HEADER, PREFERRED_LANGUAGE_CSV_HEADER);
+      GENDER_CSV_HEADER, MOBILE_CSV_HEADER, VILLAGE_CSV_HEADER, FACILITY_CSV_HEADER);
 
   @Autowired
   private CommunityHealthWorkerRepository healthWorkerRepository;
@@ -172,11 +168,9 @@ public class CommunityHealthWorkerService {
     String districtIvrId = district.getIvrGroupId();
     String phoneNumber = healthWorker.getPhoneNumber();
     String name = healthWorker.getChwName();
-    Language preferredLanguage = healthWorker.getPreferredLanguage();
 
     try {
-      String ivrId = ivrService.createSubscriber(phoneNumber, name,
-          preferredLanguage, districtIvrId);
+      String ivrId = ivrService.createSubscriber(phoneNumber, name, districtIvrId);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
       String message = "Could not select CHW, because of IVR subscriber creation error. \n\n"
@@ -266,7 +260,7 @@ public class CommunityHealthWorkerService {
           chwIdSet.add(chwId);
         }
 
-        if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap, selected)) {
+        if (validateBlankFieldsInCsv(csvMapReader.getLineNumber(), csvRow, errorMap)) {
           continue;
         }
 
@@ -336,15 +330,10 @@ public class CommunityHealthWorkerService {
           continue;
         }
 
-        Language preferredLanguage = Language.getByDisplayName(
-            Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER)));
-        preferredLanguage = preferredLanguage == null ? Language.ENGLISH : preferredLanguage;
-
         String name = communityHealthWorker.getChwName();
 
         boolean ivrDataChanged =
-            !preferredLanguage.equals(communityHealthWorker.getPreferredLanguage())
-                || !StringUtils.equals(phoneNumber, communityHealthWorker.getPhoneNumber());
+            !StringUtils.equals(phoneNumber, communityHealthWorker.getPhoneNumber());
 
         District oldDistrict = communityHealthWorker.getDistrict();
 
@@ -358,7 +347,6 @@ public class CommunityHealthWorkerService {
         communityHealthWorker.setSector(sector);
         communityHealthWorker.setFacility(facility);
         communityHealthWorker.setVillage(village);
-        communityHealthWorker.setPreferredLanguage(preferredLanguage);
 
         if (group != null) {
           communityHealthWorker.setGroup(group);
@@ -403,10 +391,9 @@ public class CommunityHealthWorkerService {
     String ivrId = chw.getIvrId();
     String phoneNumber = chw.getPhoneNumber();
     String name = chw.getChwName();
-    Language preferredLanguage = chw.getPreferredLanguage();
 
     try {
-      ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage);
+      ivrService.updateSubscriber(ivrId, phoneNumber, name);
 
       if (!oldDistrict.getId().equals(chw.getDistrict().getId())) {
         District newDistrict = districtRepository.getOne(chw.getDistrict().getId());
@@ -423,7 +410,7 @@ public class CommunityHealthWorkerService {
 
   @SuppressWarnings("PMD.CyclomaticComplexity")
   private boolean validateBlankFieldsInCsv(int lineNumber, Map<String, String> csvRow,
-      Map<Integer, String> errorMap, Boolean selected) {
+      Map<Integer, String> errorMap) {
 
     if (StringUtils.isBlank(csvRow.get(CHW_ID_CSV_HEADER))) {
       errorMap.put(lineNumber, "CHW ID is empty");
@@ -437,11 +424,6 @@ public class CommunityHealthWorkerService {
 
     if (StringUtils.isBlank(csvRow.get(CHW_NAME_CSV_HEADER))) {
       errorMap.put(lineNumber, "CHW Name is empty");
-      return true;
-    }
-
-    if (selected && StringUtils.isBlank(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER))) {
-      errorMap.put(lineNumber, "Preferred language is empty");
       return true;
     }
 

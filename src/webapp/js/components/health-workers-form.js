@@ -69,7 +69,7 @@ const FIELDS = {
   },
   sectorId: {
     type: 'select',
-    label: 'Sector',
+    label: 'Chiefdom',
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'sectors',
@@ -111,14 +111,6 @@ const FIELDS = {
       ),
       displayNameKey: 'name',
       valueKey: 'id',
-    }),
-  },
-  preferredLanguage: {
-    type: 'select',
-    label: 'Preferred Language',
-    required: true,
-    getSelectOptions: () => ({
-      values: ['English', 'Kinyarwanda'],
     }),
   },
   groupId: {

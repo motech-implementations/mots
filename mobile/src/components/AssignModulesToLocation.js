@@ -194,7 +194,7 @@ class AssignModulesToLocation extends Component {
           <View style={fieldRow}>
             <Text style={[labelStyle, lightThemeText,
               PixelRatio.get() < 2 && labelStyleSmall]}>
-              Sector:
+              Chiefdom:
             </Text>
             <View style={selectField}>
               <Select

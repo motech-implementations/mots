@@ -31,7 +31,7 @@ const FIELDS = {
   },
   sectorId: {
     type: 'select',
-    label: 'Sector',
+    label: 'Chiefdom',
     required: true,
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
@@ -41,6 +41,13 @@ const FIELDS = {
       ),
       displayNameKey: 'name',
       valueKey: 'id',
+    }),
+  },
+  facilityType: {
+    label: 'Facility Type',
+    type: 'select',
+    getSelectOptions: () => ({
+      values: ['CHC', 'CHP', 'MCHP', 'Clinic', 'Hospital'],
     }),
   },
   inchargeFullName: {

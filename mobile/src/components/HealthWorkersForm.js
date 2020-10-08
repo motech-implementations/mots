@@ -131,7 +131,7 @@ const FIELDS = {
   },
   sectorId: {
     type: Select,
-    label: 'Sector',
+    label: 'Chiefdom',
     getSelectOptions: ({ availableLocations, districtId }) => ({
       values: getSelectableLocations(
         'sectors',
@@ -221,15 +221,6 @@ const FIELDS = {
     getDynamicAttributes: ({ facilityId }) => ({
       hidden: !facilityId,
     }),
-  },
-  preferredLanguage: {
-    type: Select,
-    label: 'Preferred Language',
-    required: true,
-    getSelectOptions: () => ({
-      values: ['English', 'Kinyarwanda'],
-    }),
-    getAttributes: input => (getAttributesForSelect(input)),
   },
   groupId: {
     type: Select,

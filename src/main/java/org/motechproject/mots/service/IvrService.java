@@ -15,7 +15,6 @@ import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
-import org.motechproject.mots.domain.enums.Language;
 import org.motechproject.mots.dto.VotoCallLogDto;
 import org.motechproject.mots.dto.VotoOutgoingCallDto;
 import org.motechproject.mots.dto.VotoResponseDto;
@@ -49,7 +48,6 @@ public class IvrService {
   private static final Logger LOGGER = LoggerFactory.getLogger(IvrService.class);
 
   private static final String PHONE = "phone";
-  private static final String PREFERRED_LANGUAGE = "preferred_language";
   private static final String GROUPS = "groups";
   private static final String RECEIVE_SMS = "receive_sms";
   private static final String NAME_PROPERTY = "property[name]";
@@ -98,13 +96,11 @@ public class IvrService {
    * Create IVR Subscriber with given phone number.
    * @param phoneNumber CHW phone number
    * @param name CHW name
-   * @param preferredLanguage CHW preferred language
    * @return ivr id of created subscriber
    */
-  public String createSubscriber(String phoneNumber, String name, Language preferredLanguage,
-      String districtIvrId) throws IvrException {
-    MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name,
-        preferredLanguage);
+  public String createSubscriber(String phoneNumber, String name, String districtIvrId)
+      throws IvrException {
+    MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name);
 
     String defaultGroup = ivrConfigService.getConfig().getDefaultUsersGroupId();
     params.add(GROUPS, StringUtils.joinWith(",", defaultGroup, districtIvrId));
@@ -126,12 +122,9 @@ public class IvrService {
    * @param ivrId id of existing IVR subscriber
    * @param phoneNumber new CHW phone number
    * @param name new CHW name
-   * @param preferredLanguage new CHW preferred language
    */
-  public void updateSubscriber(String ivrId, String phoneNumber, String name,
-      Language preferredLanguage) throws IvrException {
-    MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name,
-        preferredLanguage);
+  public void updateSubscriber(String ivrId, String phoneNumber, String name) throws IvrException {
+    MultiValueMap<String, String> params = prepareBasicSubscriberParamsToSend(phoneNumber, name);
 
     String url = getUrlWithParams(MODIFY_SUBSCRIBERS_URL, ivrId);
     sendVotoRequest(url, params, new ParameterizedTypeReference<VotoResponseDto<String>>() {},
@@ -344,13 +337,9 @@ public class IvrService {
   }
 
   private MultiValueMap<String, String> prepareBasicSubscriberParamsToSend(String phoneNumber,
-      String name, Language preferredLanguage) {
-    IvrConfig ivrConfig = ivrConfigService.getConfig();
-    String preferredLanguageString = ivrConfig.getIvrLanguagesIds().get(preferredLanguage);
-
+      String name) {
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add(PHONE, phoneNumber);
-    params.add(PREFERRED_LANGUAGE, preferredLanguageString);
 
     if (StringUtils.isNotBlank(name)) {
       params.add(NAME_PROPERTY, name);

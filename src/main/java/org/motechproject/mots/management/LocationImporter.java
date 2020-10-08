@@ -14,6 +14,7 @@ import org.motechproject.mots.domain.District;
 import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
+import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.service.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class LocationImporter implements ApplicationRunner {
   private boolean loadLocations;
 
   private static final String DISTRICT_HEADER = "District";
-  private static final String SECTOR_HEADER = "Sector";
+  private static final String SECTOR_HEADER = "Chiefdom";
   private static final String FACILITY_HEADER = "Facility";
   private static final String VILLAGE_HEADER = "Village";
 
@@ -46,6 +47,8 @@ public class LocationImporter implements ApplicationRunner {
 
   private static final String LOCATIONS_SHEET = "Locations";
   private static final String FACILITIES_SHEET = "Facilities";
+
+  private static final int FACILITY_TYPE_COL_NUMBER = 3;
 
   private List<District> currentDistrictList;
   private List<Sector> currentSectorList;
@@ -187,7 +190,10 @@ public class LocationImporter implements ApplicationRunner {
         continue;
       }
 
-      Facility facility = new Facility(cellText);
+      FacilityType facilityType = FacilityType.getByDisplayName(
+          row.getCell(FACILITY_TYPE_COL_NUMBER).getStringCellValue());
+
+      Facility facility = new Facility(cellText, facilityType);
       String parentSectorName = row.getCell(SECTOR_COL_NUMBER).getStringCellValue();
       String parentDistrictName = row.getCell(DISTRICT_COL_NUMBER).getStringCellValue();
 

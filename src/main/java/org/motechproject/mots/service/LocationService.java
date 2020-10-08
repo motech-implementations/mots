@@ -18,6 +18,7 @@ import org.motechproject.mots.domain.Facility;
 import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
+import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.exception.ChwException;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
@@ -48,6 +49,7 @@ public class LocationService {
   private static final String SECTOR_HEADER = "sector";
   private static final String FACILITY_HEADER = "facility";
   private static final String VILLAGE_HEADER = "village";
+  private static final String FACILITY_TYPE_HEADER = "facility type";
   private static final String INCHARGE_NAME_HEADER = "incharge name";
   private static final String INCHARGE_PHONE_HEADER = "incharge phone";
   private static final String INCHARGE_EMAIL_HEADER = "incharge email";
@@ -59,7 +61,7 @@ public class LocationService {
       SECTOR_HEADER, FACILITY_HEADER, VILLAGE_HEADER);
 
   private static final List<String> FACILITY_CSV_HEADERS = Arrays.asList(DISTRICT_HEADER,
-      SECTOR_HEADER, FACILITY_HEADER,
+      SECTOR_HEADER, FACILITY_HEADER, FACILITY_TYPE_HEADER,
       INCHARGE_NAME_HEADER, INCHARGE_PHONE_HEADER, INCHARGE_EMAIL_HEADER);
 
   @Autowired
@@ -161,10 +163,10 @@ public class LocationService {
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityName,
-      String inchargeFullName, String inchargePhone, String inchargeEmail,
+      String facilityType, String inchargeFullName, String inchargePhone, String inchargeEmail,
       String parentSector, String districtName, Pageable pageable) {
 
-    return facilityRepository.search(facilityName,
+    return facilityRepository.search(facilityName, facilityType,
         inchargeFullName, inchargePhone, inchargeEmail, parentSector, districtName, pageable);
   }
 
@@ -267,7 +269,7 @@ public class LocationService {
         String sectorName = csvRow.get(SECTOR_HEADER);
 
         if (StringUtils.isBlank(sectorName)) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
           continue;
         }
 
@@ -277,7 +279,7 @@ public class LocationService {
         Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district);
 
         if (sector != null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name already exists");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name already exists");
           continue;
         }
 
@@ -321,7 +323,7 @@ public class LocationService {
         String sectorName = csvRow.get(SECTOR_HEADER);
 
         if (StringUtils.isBlank(sectorName)) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
           continue;
         }
 
@@ -349,7 +351,7 @@ public class LocationService {
         Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
         if (sector == null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name does not exist");
           continue;
         }
 
@@ -406,7 +408,7 @@ public class LocationService {
         String sectorName = csvRow.get(SECTOR_HEADER);
 
         if (StringUtils.isBlank(sectorName)) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector name is empty");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom name is empty");
           continue;
         }
 
@@ -414,6 +416,13 @@ public class LocationService {
 
         if (StringUtils.isBlank(facilityName)) {
           errorMap.put(csvMapReader.getLineNumber(), "Facility name is empty");
+          continue;
+        }
+
+        FacilityType facilityType = FacilityType.getByDisplayName(csvRow.get(FACILITY_TYPE_HEADER));
+
+        if (facilityType == null) {
+          errorMap.put(csvMapReader.getLineNumber(), "Invalid or empty Facility type");
           continue;
         }
 
@@ -427,7 +436,7 @@ public class LocationService {
         Sector sector = sectorRepository.findByNameAndDistrict(sectorName, district.get());
 
         if (sector == null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Sector with this name does not exist");
+          errorMap.put(csvMapReader.getLineNumber(), "Chiefdom with this name does not exist");
           continue;
         }
 
@@ -443,7 +452,7 @@ public class LocationService {
         String inchargePhone = csvRow.get(INCHARGE_PHONE_HEADER);
         String inchargeEmail = csvRow.get(INCHARGE_EMAIL_HEADER);
 
-        Facility newFacility = new Facility(facilityName, inchargeName,
+        Facility newFacility = new Facility(facilityName, facilityType, inchargeName,
             inchargePhone, inchargeEmail, sector);
 
         facilityRepository.save(newFacility);

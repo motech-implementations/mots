@@ -3,6 +3,7 @@ package org.motechproject.mots.repository.custom.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.motechproject.mots.domain.Facility;
+import org.motechproject.mots.domain.enums.FacilityType;
 import org.motechproject.mots.repository.custom.FacilityRepositoryCustom;
 import org.motechproject.mots.web.LocationController;
 import org.springframework.data.domain.Page;
@@ -26,19 +28,19 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
    * If there are no parameters, return all Facilities.
    */
   @Override
-  public Page<Facility> search(String facilityName,
+  public Page<Facility> search(String facilityName, String facilityType,
       String inchargeFullName, String inchargePhone, String inchargeEmail,
       String parentSector, String districtName, Pageable pageable) {
 
     CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
     CriteriaQuery<Facility> query = builder.createQuery(Facility.class);
-    query = prepareQuery(query, facilityName, inchargeFullName,
+    query = prepareQuery(query, facilityName, facilityType, inchargeFullName,
         inchargePhone, inchargeEmail, parentSector, districtName, false, pageable);
 
     CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-    countQuery = prepareQuery(countQuery, facilityName, inchargeFullName,
+    countQuery = prepareQuery(countQuery, facilityName, facilityType, inchargeFullName,
         inchargePhone, inchargeEmail, parentSector, districtName, true, pageable);
 
     Long count = entityManager.createQuery(countQuery).getSingleResult();
@@ -54,7 +56,7 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
   }
 
   private <T> CriteriaQuery<T> prepareQuery(CriteriaQuery<T> query,
-      String facilityName, String inchargeFullName, String inchargePhone,
+      String facilityName, String facilityType, String inchargeFullName, String inchargePhone,
       String inchargeEmail, String parentSector, String districtName,
       boolean count, Pageable pageable) {
 
@@ -71,6 +73,12 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     if (facilityName != null) {
       predicate = builder.and(predicate, builder.like(root.get(NAME),
           '%' + facilityName.trim() + '%'));
+    }
+    if (facilityType != null) {
+      FacilityType validFacilityType =
+          FacilityType.valueOf(facilityType.trim().toUpperCase(Locale.ENGLISH));
+      predicate = builder.and(predicate,
+          builder.equal(root.get(FACILITY_TYPE), validFacilityType));
     }
     if (inchargeFullName != null) {
       predicate = builder.and(predicate,
@@ -117,6 +125,10 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
       order = iterator.next();
       if (order.getProperty().equals(LocationController.PARENT_PARAM)) {
         path = root.get(SECTOR).get(NAME);
+        Order mountedOrder = getSortDirection(builder, order, path);
+        orders.add(mountedOrder);
+      } else if (order.getProperty().equals(LocationController.FACILITY_TYPE_PARAM)) {
+        path = root.get(FACILITY_TYPE);
         Order mountedOrder = getSortDirection(builder, order, path);
         orders.add(mountedOrder);
       } else if (order.getProperty().equals(LocationController.DISTRICT_NAME_PARAM)) {

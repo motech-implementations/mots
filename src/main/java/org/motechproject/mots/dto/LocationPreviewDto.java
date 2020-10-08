@@ -38,6 +38,11 @@ public class LocationPreviewDto {
   @Setter
   @Getter
   @JsonInclude(Include.NON_NULL)
+  private String facilityType;
+
+  @Setter
+  @Getter
+  @JsonInclude(Include.NON_NULL)
   private String inchargeFullName;
 
   @Setter
