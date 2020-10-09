@@ -25,6 +25,10 @@ import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.validate.CourseReleaseCheck;
 
+/**
+ * This class represents higher level entity that contains {@link Module}s. It is
+ *        used to organize the content and divide it in smaller parts to simplify progress tracking.
+ */
 @Entity
 @Table(name = "course")
 public class Course extends IvrObject {

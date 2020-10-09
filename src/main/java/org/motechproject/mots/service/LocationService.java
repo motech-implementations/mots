@@ -107,6 +107,13 @@ public class LocationService {
     return villageRepository.save(village);
   }
 
+  /**
+   * Creates IVR group and sets this group to {@link District} then saves the district into the db.
+   *
+   * @param district district to save
+   * @return saves District
+   * @throws ChwException if creating IVR group fails
+   */
   public District createDistrict(District district) {
     try {
       String ivrId = ivrService.createGroup(district.getName());
@@ -124,8 +131,12 @@ public class LocationService {
   }
 
   /**
-   * Finds districts matching all of the provided parameters.
+   * Finds {@link District}s matching all of the provided parameters.
    * If there are no parameters, return all districts.
+   *
+   * @param districtName name of a {@link District}
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @return page with found districts
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<District> searchDistricts(String districtName, Pageable pageable) {
@@ -136,6 +147,11 @@ public class LocationService {
   /**
    * Finds sectors matching all of the provided parameters.
    * If there are no parameters, return all sectors.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param sectorName name of sector
+   * @param parentDistrict name of {@link District} that may belong to sector
+   * @return page with found sectors.
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Sector> searchSectors(String sectorName, String parentDistrict, Pageable pageable) {
@@ -144,8 +160,16 @@ public class LocationService {
   }
 
   /**
-   * Finds Villages matching all of the provided parameters.
+   * Finds {@link Village}s matching all of the provided parameters.
    * If there are no parameters, return all Villages.
+   *
+   * @param parentFacility name of {@link Facility} to which a village may belong
+   * @param villageName name of a village
+   * @param districtName name of {@link District} to which a village may belong
+   * @param sectorName name of {@link Sector} to which a village may belong
+   * @param pageable pagination parameters (page size, page number, sort order)
+   *
+   * @return page with found villages
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Village> searchVillages(String villageName,
@@ -156,8 +180,17 @@ public class LocationService {
   }
 
   /**
-   * Finds facilities matching all of the provided parameters.
+   * Finds {@link Facility}s matching all of the provided parameters.
    * If there are no parameters, return all facilities.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param districtName name of {@link District} that may belong to a facility
+   * @param inchargeEmail email of person in charge
+   * @param inchargeFullName full name of person in charge
+   * @param inchargePhone phone of person in charge
+   * @param parentSector name of {@link Sector} that may belong to a facility
+   * @param facilityName name of facility
+   * @return page with found facilities
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_DISPLAY_FACILITIES_OR_MANAGE_FACILITIES_ROLE)
   public Page<Facility> searchFacilities(String facilityName,

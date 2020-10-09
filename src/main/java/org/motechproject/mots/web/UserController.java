@@ -47,6 +47,7 @@ public class UserController extends BaseController {
 
   /**
    * Get list of users.
+   *
    * @return list of all users
    */
   @RequestMapping(value = "/user", method = RequestMethod.GET)
@@ -61,6 +62,13 @@ public class UserController extends BaseController {
   /**
    * Finds users matching all of the provided parameters.
    * If there are no parameters, return all users.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param name name of a user
+   * @param email email of a user
+   * @param role name of role of a user
+   * @param username username of user
+   * @return page with found users
    */
   @RequestMapping(value = "/user/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -80,6 +88,7 @@ public class UserController extends BaseController {
 
   /**
    * Get User with given id.
+   *
    * @param id id of User to find
    * @return User with given id
    */
@@ -94,7 +103,9 @@ public class UserController extends BaseController {
 
   /**
    * Create User.
+   *
    * @param userDto DTO of User to be created
+   * @param bindingResult spring object used for validation
    * @return created User
    */
   @RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -110,8 +121,10 @@ public class UserController extends BaseController {
 
   /**
    * Update User.
+   *
    * @param id id of User to update
    * @param userDto DTO of User to be updated
+   * @param bindingResult spring object used for validation
    * @return updated User
    */
   @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
@@ -135,8 +148,11 @@ public class UserController extends BaseController {
 
   /**
    * Update User password.
+   *
    * @param oldPassword user previous password, should be the same as current password
    * @param newPassword user's new password
+   * @param principal java security object
+   * @return success message
    */
   @RequestMapping(value = "/user/passwordchange",
       method = RequestMethod.POST)
@@ -151,8 +167,10 @@ public class UserController extends BaseController {
 
   /**
    * Update profile information about User.
+   *
    * @param id id of User to update Profile
    * @param userProfileDto DTO of User Profile to be updated
+   * @param bindingResult spring object used for validation
    * @return updated User Profile
    */
   @RequestMapping(value = "/user/profile/{id}", method = RequestMethod.PUT)
@@ -168,6 +186,9 @@ public class UserController extends BaseController {
 
   /**
    * Get info about current logged-in User.
+   *
+   * @param principal java security object
+   * @return dto of user profile
    */
   @RequestMapping(value = "/user/profile",
       method = RequestMethod.GET)
@@ -180,6 +201,7 @@ public class UserController extends BaseController {
 
   /**
    * Get list of roles.
+   *
    * @return list of all roles
    */
   @RequestMapping(value = "/role", method = RequestMethod.GET)
@@ -193,6 +215,7 @@ public class UserController extends BaseController {
 
   /**
    * Get list of permissions.
+   *
    * @return list of all permissions
    */
   @RequestMapping(value = "/permission", method = RequestMethod.GET)
@@ -205,7 +228,8 @@ public class UserController extends BaseController {
   }
 
   /**
-   * Get Role with given id.
+   * Get {@link UserRole} with given id.
+   *
    * @param id id of Role to find
    * @return Role with given id
    */
@@ -221,6 +245,7 @@ public class UserController extends BaseController {
   /**
    * Finds roles matching all of the provided parameters.
    * If there are no parameters, return all roles.
+   *
    * @param name name of the role
    * @param pageable pagination parameters (page size, page number, sort order)
    * @return page with roles matching provided parameters
@@ -238,8 +263,10 @@ public class UserController extends BaseController {
   }
 
   /**
-   * Create Role.
+   * Create Role from given dto.
+   *
    * @param roleDto DTO of Role to be created
+   * @param bindingResult spring object used for validation
    * @return created Role
    */
   @RequestMapping(value = "/role", method = RequestMethod.POST)
@@ -253,9 +280,11 @@ public class UserController extends BaseController {
   }
 
   /**
-   * Update Role.
+   * Update {@link UserRole} from given dto.
+   *
    * @param id id of Role to update
    * @param roleDto DTO of Role to be updated
+   * @param bindingResult spring object used for validation
    * @return updated Role
    */
   @RequestMapping(value = "/role/{id}", method = RequestMethod.PUT)

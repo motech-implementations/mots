@@ -16,6 +16,12 @@ import lombok.Setter;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.Gender;
 
+/**
+ * This class represents a person who serves health services to a certain community (social cell)
+ *      and takes responsibility to contact a medical infrastructure making phone calls to
+ *      interactive phone system IVR. The worker works at certain location that have hierarchy
+ *      see {@link District}/{@link Sector}/{@link Facility}/{@link Village}.
+ */
 @Entity
 @Table(name = "community_health_worker")
 @NoArgsConstructor

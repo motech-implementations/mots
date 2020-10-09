@@ -48,6 +48,7 @@ public abstract class ModuleMapper {
 
   /**
    * Create new DTO with Course Module data.
+   *
    * @param courseModule used to create DTO
    * @return DTO with Course Module data
    */

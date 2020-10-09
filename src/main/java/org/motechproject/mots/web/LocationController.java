@@ -37,6 +37,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This class is responsible manage and manipulate entity classes related to location
+ * (i.e. {@link Sector}, {@link Facility}, {@link District}, {@link Village}).
+ */
 @Controller
 @SuppressWarnings("PMD.TooManyMethods")
 public class LocationController extends BaseController {
@@ -55,9 +59,10 @@ public class LocationController extends BaseController {
   private LocationService locationService;
 
   /**
-   * Creates District.
+   * Creates {@link District} from given dto.
    *
    * @param districtCreationDto DTO of District to be created
+   * @param bindingResult spring object used for validation
    * @return created District
    */
   @RequestMapping(value = "/district", method = RequestMethod.POST)
@@ -72,8 +77,10 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Creates Sector.
+   * Creates {@link Sector} from given dto.
+   *
    * @param sectorCreationDto DTO of sector to be created
+   * @param bindingResult spring object used for validation
    * @return created Sector
    */
   @RequestMapping(value = "/sector", method = RequestMethod.POST)
@@ -89,8 +96,10 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Creates Facility.
+   * Creates {@link Facility} from given dto.
+   *
    * @param facilityCreationDto DTO of facility to be created
+   * @param bindingResult spring object used for validation
    * @return created Facility
    */
   @RequestMapping(value = "/facility", method = RequestMethod.POST)
@@ -106,8 +115,10 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Creates Village.
+   * Creates {@link Village} from it's dto.
+   *
    * @param villageCreationDto DTO of village to be created
+   * @param bindingResult spring object used for validation
    * @return created Village
    */
   @RequestMapping(value = "/village", method = RequestMethod.POST)
@@ -124,10 +135,11 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Update District.
-
+   * Update {@link District} from given dto.
+   *
    * @param id                  id of District to update
    * @param districtCreationDto DTO of District to be updated
+   * @param bindingResult spring object used for validation
    * @return updated District
    */
   @RequestMapping(value = "/district/{id}", method = RequestMethod.PUT)
@@ -145,9 +157,11 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Update Sector.
+   * Update {@link Sector} from it's dto.
+   *
    * @param id                   id of Sector to update
    * @param sectorCreationDto DTO of Sector to be updated
+   * @param bindingResult spring object used for validation
    * @return updated Sector
    */
   @RequestMapping(value = "/sector/{id}", method = RequestMethod.PUT)
@@ -165,9 +179,11 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Update Village.
+   * Update {@link Village}. from it's dto
+   *
    * @param id id of Village to update
    * @param villageCreationDto DTO of Village to be updated
+   * @param bindingResult spring object used for validation
    * @return updated Village
    */
   @RequestMapping(value = "/village/{id}", method = RequestMethod.PUT)
@@ -186,10 +202,12 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Update Facility.
+   * Update {@link Facility} from it's dto.
+   *
    * @param id id of Facility to update
    * @param facilityCreationDto DTO of Facility to be updated
-   * @return updated Facility
+   * @param bindingResult spring object used for validation
+   * @return updated Facility {@link FacilityCreationDto}
    */
   @RequestMapping(value = "/facility/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
@@ -207,7 +225,7 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get District with given id.
+   * Get {@link District} with given id.
    *
    * @param id id of District to find
    * @return DistrictCreationDto with given id
@@ -222,7 +240,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get Sector with given id.
+   * Get {@link Sector} with given id.
+   *
    * @param id id of Sector to find
    * @return SectorCreationDto with given id
    */
@@ -236,7 +255,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get Facility with given id.
+   * Get {@link Facility} with given id.
+   *
    * @param id id of Facility to find
    * @return FacilityCreationDto with given id
    */
@@ -250,7 +270,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get Village with given id.
+   * Get {@link Village} with given id.
+   *
    * @param id id of Village to find
    * @return VillageCreationDto with given id
    */
@@ -264,7 +285,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of districts.
+   * Get list of {@link District}s.
+   *
    * @return list of all districts
    */
   @RequestMapping(value = "/districts", method = RequestMethod.GET)
@@ -277,7 +299,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of districts for preview.
+   * Get list of {@link District}s for preview.
+   *
    * @return list of all districts
    */
   @RequestMapping(value = "/districtsOnly", method = RequestMethod.GET)
@@ -290,7 +313,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of Sectors for preview.
+   * Get list of {@link Sector}s for preview.
+   *
    * @return list of all Sectors
    */
   @RequestMapping(value = "/sectorsOnly", method = RequestMethod.GET)
@@ -303,7 +327,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of facilities for preview.
+   * Get list of {@link Facility}s for preview.
+   *
    * @return list of all facilities
    */
   @RequestMapping(value = "/facilitiesOnly", method = RequestMethod.GET)
@@ -316,7 +341,8 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Get list of Villages for preview.
+   * Get list of {@link Village}s for preview.
+   *
    * @return list of all villages
    */
   @RequestMapping(value = "/villagesOnly", method = RequestMethod.GET)
@@ -329,8 +355,12 @@ public class LocationController extends BaseController {
   }
 
   /**
-   * Finds districts matching all of the provided parameters.
+   * Finds {@link District}s matching all of the provided parameters.
    * If there are no parameters, return all districts.
+   *
+   * @param name of the district
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @return page with districts
    */
   @RequestMapping(value = "district/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -349,6 +379,11 @@ public class LocationController extends BaseController {
   /**
    * Finds Sectors matching all of the provided parameters.
    * If there are no parameters, return all Sectors.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param name name of the sector
+   * @param parentDistrict district to which sector may belong
+   * @return page with sectors
    */
   @RequestMapping(value = "sector/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -369,6 +404,13 @@ public class LocationController extends BaseController {
   /**
    * Finds Villages matching all of the provided parameters.
    * If there are no parameters, return all Villages.
+   *
+   * @param name name of the village
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param district {@link District} to which villages may belong
+   * @param parentFacility {@link Facility} to which villages may belong
+   * @param sector {@link Sector} to which villages may belong
+   * @return page with villages
    */
   @RequestMapping(value = "village/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -391,6 +433,15 @@ public class LocationController extends BaseController {
   /**
    * Finds facilities matching all of the provided parameters.
    * If there are no parameters, return all facilities.
+   *
+   * @param district name of the {@link District} to which facility may belong
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param name name of facility
+   * @param inchargeEmail email of person in charge
+   * @param inchargeFullName full name of person in charge
+   * @param inchargePhone phone of person in charge
+   * @param parentSector name {@link Sector} to which facility may belong
+   * @return page with facilities
    */
   @RequestMapping(value = "facility/locations/search", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -414,7 +465,10 @@ public class LocationController extends BaseController {
 
   /**
    * Import list of Sectors in ".csv" format to mots, parse it and save records in DB.
+   *
    * @param file File in ".csv" format to upload
+   * @return map with row numbers as keys and errors as values.
+   * @throws IOException if there is an error while reading a file
    */
   @RequestMapping(value = "/sector/import", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
@@ -426,7 +480,10 @@ public class LocationController extends BaseController {
 
   /**
    * Import list of Villages in ".csv" format to mots, parse it and save records in DB.
+   *
    * @param file File in ".csv" format to upload
+   * @return map with row numbers as keys and errors as values.
+   * @throws IOException if there is an error while reading a file
    */
   @RequestMapping(value = "/village/import", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
@@ -438,7 +495,10 @@ public class LocationController extends BaseController {
 
   /**
    * Import list of Facilities in ".csv" format to mots, parse it and save records in DB.
+   *
    * @param file File in ".csv" format to upload
+   * @return map with row numbers as keys and errors as values.
+   * @throws IOException if there is an error while reading a file
    */
   @RequestMapping(value = "/facility/import", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)

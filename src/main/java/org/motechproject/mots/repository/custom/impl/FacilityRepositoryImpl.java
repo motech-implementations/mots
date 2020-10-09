@@ -22,8 +22,19 @@ public class FacilityRepositoryImpl extends BaseRepositoryImpl
     implements FacilityRepositoryCustom {
 
   /**
-   * Finds Facilities matching all of the provided parameters.
+   * Finds {@link Facility}es matching all of the provided parameters.
    * If there are no parameters, return all Facilities.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param districtName name of {@link org.motechproject.mots.domain.District}
+   *        that may belong to facility
+   * @param facilityName name of facility
+   * @param parentSector name of {@link org.motechproject.mots.domain.Sector}
+   *        that may belong to facility
+   * @param inchargePhone phone of a person in charge
+   * @param inchargeFullName full name of a person in charge
+   * @param inchargeEmail email of a person in charge
+   * @return page with found Facilities
    */
   @Override
   public Page<Facility> search(String facilityName,

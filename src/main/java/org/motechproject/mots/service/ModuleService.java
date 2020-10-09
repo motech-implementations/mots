@@ -45,6 +45,7 @@ public class ModuleService {
 
   /**
    * Get modules from released course.
+   *
    * @return released modules
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
@@ -60,6 +61,7 @@ public class ModuleService {
 
   /**
    * Create new Module.
+   *
    * @param moduleDto DTO of Module to be created
    * @return Created Module
    */
@@ -79,6 +81,7 @@ public class ModuleService {
 
   /**
    * Update existing Module.
+   *
    * @param id id of Module to be updated
    * @param moduleDto Module DTO
    * @return updated Module
@@ -103,6 +106,7 @@ public class ModuleService {
 
   /**
    * Copy Module as a new draft.
+   *
    * @param id id of module to be copied
    * @return copied module draft
    */
@@ -125,6 +129,7 @@ public class ModuleService {
 
   /**
    * Create new Course.
+   *
    * @return Created Course
    */
   @Transactional
@@ -150,6 +155,7 @@ public class ModuleService {
 
   /**
    * Update existing Course.
+   *
    * @param id id of Course to be updated
    * @param courseDto Course DTO
    * @return updated Course
@@ -168,8 +174,11 @@ public class ModuleService {
   }
 
   /**
-   * Release Course.
+   * Release Course. First unassign old modules, then update the module progress
+   * and update ivr main menu tree {@link IvrConfigService#updateMainMenuTreeId}.
+   *
    * @param course Course to be released
+   * @return released course dto
    */
   @PreAuthorize(DefaultPermissionConstants.HAS_MANAGE_MODULES_ROLE)
   public CourseDto releaseCourse(Course course) {
@@ -192,7 +201,8 @@ public class ModuleService {
 
   /**
    * Find released Course Module for Module with given Id.
-   * @param id if of related Module
+   *
+   * @param id id of related Module
    * @return Course Module with given Module
    */
   public CourseModule findReleasedCourseModuleByModuleId(UUID id) {
@@ -202,7 +212,9 @@ public class ModuleService {
 
   /**
    * Get released Course.
+   *
    * @return Course with released status
+   * @throws EntityNotFoundException if course is not found.
    */
   public Course getReleasedCourse() {
     Course course = getReleasedCourseIfExists();

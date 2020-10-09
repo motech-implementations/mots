@@ -14,8 +14,12 @@ import org.springframework.data.domain.Pageable;
 public class RoleRepositoryImpl extends BaseRepositoryImpl implements RoleRepositoryCustom {
 
   /**
-   * Finds Roles matching all of the provided parameters.
+   * Finds {@link UserRole}s matching all of the provided parameters.
    * If there are no parameters, return all Roles.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param name name of a role
+   * @return page with found Roles
    */
   @Override
   public Page<UserRole> search(String name, Pageable pageable) {

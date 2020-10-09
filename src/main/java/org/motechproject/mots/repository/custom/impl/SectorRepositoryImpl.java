@@ -18,8 +18,14 @@ public class SectorRepositoryImpl extends BaseRepositoryImpl
     implements SectorRepositoryCustom {
 
   /**
-   * Finds Sectors matching all of the provided parameters.
+   * Finds {@link Sector}s matching all of the provided parameters.
    * If there are no parameters, return all Sectors.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param sectorName name of sector
+   * @param parentDistrict name of {@link org.motechproject.mots.domain.District} that
+   *        may belong to a Sector
+   * @return page with found sectors
    */
   @Override
   public Page<Sector> search(String sectorName, String parentDistrict, Pageable pageable) {

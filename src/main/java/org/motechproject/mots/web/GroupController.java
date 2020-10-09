@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * This class is responsible for CRUD operations for {@link Group} entity class.
+ */
 @Controller
 public class GroupController extends BaseController {
 
@@ -28,7 +31,8 @@ public class GroupController extends BaseController {
 
   /**
    * Get list of groups.
-   * @return list of all groups
+   *
+   * @return list of all groups {@link GroupDto}
    */
   @RequestMapping(value = "/group", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -41,8 +45,9 @@ public class GroupController extends BaseController {
 
   /**
    * Get group with given id.
+   *
    * @param id id of Group to find
-   * @return Group with given id
+   * @return {@link GroupDto} with given id
    */
   @RequestMapping(value = "/group/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -55,8 +60,10 @@ public class GroupController extends BaseController {
 
   /**
    * Create Group.
+   *
    * @param groupDto DTO of Group to create
-   * @return created Group
+   * @param bindingResult spring object used for validation
+   * @return created Group {@link GroupDto}
    */
   @RequestMapping(value = "/group", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
@@ -71,9 +78,11 @@ public class GroupController extends BaseController {
 
   /**
    * Update Group.
+   *
    * @param id id of Group to update
    * @param groupDto DTO of Group to update
-   * @return updated Group
+   * @param bindingResult spring object used for validation
+   * @return updated Group {@link GroupDto}
    */
   @RequestMapping(value = "/group/{id}", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)

@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * This class represents a higher order location entity. District can have multiple sectors.
+ */
 @NoArgsConstructor
 @Entity
 @Table(name = "district", uniqueConstraints = @UniqueConstraint(columnNames = { "name" }))

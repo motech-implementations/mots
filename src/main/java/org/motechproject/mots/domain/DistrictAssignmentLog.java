@@ -10,6 +10,10 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.motechproject.mots.domain.security.User;
 
+/**
+ * This is used to track how and what modules were assigned (e.g. if the modules were
+ *        assigned to specific {@link Group} or the {@link Location}).
+ */
 @Entity
 @Table(name = "district_assignment_log")
 @NoArgsConstructor

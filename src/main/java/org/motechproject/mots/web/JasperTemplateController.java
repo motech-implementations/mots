@@ -35,6 +35,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * This class is responsible for manipulation of Jasper report files.
+ */
 @Controller
 @Transactional
 @RequestMapping("/api/reports/templates")
@@ -73,7 +76,7 @@ public class JasperTemplateController extends BaseController {
   }
 
   /**
-   * Get visible templates.
+   * Get visible templates {@link JasperTemplateDto}.
    *
    * @return Templates.
    */
@@ -87,10 +90,11 @@ public class JasperTemplateController extends BaseController {
   }
 
   /**
-   * Get chosen template.
+   * Get template from db with given id.
    *
    * @param templateId UUID of template which we want to get
-   * @return Template.
+   * @return template with given id or throws error if not found.
+   * @throws EntityNotFoundException if template is missing
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
@@ -105,9 +109,10 @@ public class JasperTemplateController extends BaseController {
   }
 
   /**
-   * Allows deleting template.
+   * Allows deleting template from db with given id.
    *
    * @param templateId UUID of template which we want to delete
+   * @throws EntityNotFoundException if jasper template is missing
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -127,6 +132,12 @@ public class JasperTemplateController extends BaseController {
    * @param request    request (to get the request parameters)
    * @param templateId report template ID
    * @param format     report format to generate, default is PDF
+   * @param response   response object used to set proper headers
+   * @throws SQLException if there is an error while connecting to db
+   * @throws IOException if there is an error while creating
+   *        {@link net.sf.jasperreports.export.Exporter}
+   * @throws JRException if there is an error while creating
+   *        {@link net.sf.jasperreports.engine.JasperReport}
    */
   @RequestMapping(value = "/{id}/{format}", method = RequestMethod.GET)
   public void generateReport(HttpServletRequest request, HttpServletResponse response,
@@ -142,6 +153,11 @@ public class JasperTemplateController extends BaseController {
    * @param templateId report template ID
    * @param version     a version (timestamp) of the report
    * @return the generated report along with its version
+   * @throws SQLException if there is an error while connecting to db
+   * @throws IOException if there is an error while creating
+   *        {@link net.sf.jasperreports.export.Exporter}
+   * @throws JRException if there is an error while creating
+   *        {@link net.sf.jasperreports.engine.JasperReport}
    */
   @RequestMapping(value = "/{id}/json/versioned", method = RequestMethod.GET,
       produces = "application/json")
