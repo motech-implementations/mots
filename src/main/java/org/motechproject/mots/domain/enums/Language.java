@@ -4,7 +4,15 @@ import lombok.Getter;
 
 public enum Language {
   ENGLISH("English"),
-  KINYARWANDA("Kinyarwanda");
+  KRIO("Krio"),
+  LIMBA("Limba"),
+  SUSU("Susu"),
+  TEMNE("Temne"),
+  MENDE("Mende"),
+  YALUNKA("Yalunka"),
+  SHERBO("Sherbo"),
+  KONO("Kono"),
+  KURANKO("Kuranko");
 
   @Getter
   private String displayName;
