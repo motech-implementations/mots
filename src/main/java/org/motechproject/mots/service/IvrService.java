@@ -8,19 +8,25 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.constants.DefaultPermissionConstants;
 import org.motechproject.mots.domain.CallDetailRecord;
+import org.motechproject.mots.domain.CommunityHealthWorker;
 import org.motechproject.mots.domain.IvrConfig;
 import org.motechproject.mots.domain.enums.CallStatus;
+import org.motechproject.mots.domain.enums.Language;
+import org.motechproject.mots.dto.ChwDetailsDto;
 import org.motechproject.mots.dto.VotoCallLogDto;
 import org.motechproject.mots.dto.VotoOutgoingCallDto;
 import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.MotsException;
 import org.motechproject.mots.repository.CallDetailRecordRepository;
+import org.motechproject.mots.repository.CommunityHealthWorkerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +92,9 @@ public class IvrService {
 
   @Autowired
   private ModuleProgressService moduleProgressService;
+
+  @Autowired
+  private CommunityHealthWorkerRepository communityHealthWorkerRepository;
 
   private final RestOperations restTemplate = new RestTemplate();
   private final ObjectMapper mapper = new ObjectMapper();
@@ -225,6 +234,8 @@ public class IvrService {
             ivrConfig.getMainMenuTreeId());
 
         moduleProgressService.updateModuleProgress(votoCallLogDto);
+        updateChwLanguageFromCallDetailRecord(votoCallLogDto, ivrConfig);
+
       } catch (Exception e) {
         LOGGER.error("Error occurred during module progress update, for call log with id: "
             + callDetailRecord.getCallLogId(), e);
@@ -232,6 +243,56 @@ public class IvrService {
     }
 
     callDetailRecordRepository.save(callDetailRecord);
+  }
+
+  /**
+   * If {@link CommunityHealthWorker} has not a language then it's fetched from IVR service.
+   *
+   * @param votoCallLogDto call log is used get info about subscriber language
+   * @param ivrConfig config to connect to IVR service and to get language map
+   * @throws IvrException if any errors occur during IRV request
+   */
+  private void updateChwLanguageFromCallDetailRecord(VotoCallLogDto votoCallLogDto,
+      IvrConfig ivrConfig) throws IvrException {
+    Optional<CommunityHealthWorker> optCommunityHealthWorker =
+        communityHealthWorkerRepository.findByChwId(votoCallLogDto.getChwIvrId());
+    if (optCommunityHealthWorker.isPresent()) {
+      CommunityHealthWorker communityHealthWorker = optCommunityHealthWorker.get();
+
+      if (communityHealthWorker.getPreferredLanguage() == null) {
+        String subscriberUrl = String.format(getAbsoluteUrl(MODIFY_SUBSCRIBERS_URL),
+            votoCallLogDto.getChwIvrId());
+        VotoResponseDto<ChwDetailsDto> response = sendVotoRequest(
+            subscriberUrl,
+            new LinkedMultiValueMap<>(),
+            new ParameterizedTypeReference<VotoResponseDto<ChwDetailsDto>>() {}, HttpMethod.GET
+        );
+
+        Language language = null;
+        String languageIvrId = response.getData().getLanguage();
+
+        for (Entry<Language, String> langEntry : ivrConfig.getIvrLanguagesIds().entrySet()) {
+          if (langEntry.getValue().equals(languageIvrId)) {
+            language = langEntry.getKey();
+            break;
+          }
+        }
+
+        if (language == null) {
+          LOGGER.error("Language not found with ivr_language_id: "
+              + languageIvrId);
+        } else {
+          communityHealthWorker.setPreferredLanguage(language);
+          communityHealthWorkerRepository.save(communityHealthWorker);
+
+          LOGGER.info("Community health workers language has been updated with ivrId: "
+              + votoCallLogDto.getChwIvrId());
+        }
+      }
+    } else {
+      LOGGER.error("Community health worker not found with ivrId: "
+          + votoCallLogDto.getChwIvrId());
+    }
   }
 
   /**
