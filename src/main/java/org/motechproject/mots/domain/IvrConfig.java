@@ -21,6 +21,10 @@ import lombok.Setter;
 import org.motechproject.mots.domain.enums.CallStatus;
 import org.motechproject.mots.domain.enums.Language;
 
+/**
+ * This class represents a configuration of IVR system. It defines data to connect
+ *        to the Voto (Viamo) system and configuration settings for a proper work.
+ */
 @Entity
 @Table(name = "ivr_config")
 @NoArgsConstructor

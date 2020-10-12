@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * This class is responsible for CURD operations.
+ */
 @Controller
 public class ModuleController extends BaseController {
 
@@ -45,8 +48,10 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Create Module.
+   * Create {@link org.motechproject.mots.domain.Module}.
+   *
    * @param moduleDto DTO of Module to create
+   * @param bindingResult spring object used for validation
    * @return created Module
    */
   @RequestMapping(value = "/modules", method = RequestMethod.POST)
@@ -60,9 +65,11 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Update Module.
+   * Update {@link org.motechproject.mots.domain.Module}.
+   *
    * @param id id of Module to update
    * @param moduleDto DTO of Module to update
+   * @param bindingResult spring object used for validation
    * @return updated Module
    */
   @RequestMapping(value = "/modules/{id}", method = RequestMethod.PUT)
@@ -76,7 +83,8 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Copy Module as a new draft.
+   * Copy {@link org.motechproject.mots.domain.Module} as a new draft.
+   *
    * @param id id of Module to update
    * @return copy of Module to be edited
    */
@@ -88,7 +96,7 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Get list of Courses.
+   * Get list of {@link Course}s.
    * @return list of all Courses
    */
   @RequestMapping(value = "/courses", method = RequestMethod.GET)
@@ -99,7 +107,7 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Create Course.
+   * Create {@link Course}.
    * @return created Course
    */
   @RequestMapping(value = "/courses", method = RequestMethod.POST)
@@ -110,9 +118,11 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Update Course.
+   * Update {@link Course}.
+   *
    * @param id id of Course to update
    * @param courseDto DTO of Course to update
+   * @param bindingResult spring object used for validation
    * @return updated Course
    */
   @RequestMapping(value = "/courses/{id}", method = RequestMethod.PUT)
@@ -126,8 +136,10 @@ public class ModuleController extends BaseController {
   }
 
   /**
-   * Release Course.
+   * Release {@link Course}.
+   *
    * @param id id of Course to release
+   * @return released Course
    */
   @RequestMapping(value = "/courses/{id}/release", method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)

@@ -18,8 +18,18 @@ public class VillageRepositoryImpl extends BaseRepositoryImpl implements
     VillageRepositoryCustom {
 
   /**
-   * Finds Villages matching all of the provided parameters.
+   * Finds {@link Village}s matching all of the provided parameters.
    * If there are no parameters, return all Villages.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param sectorName name of {@link org.motechproject.mots.domain.Sector}
+   *        that may belong to village
+   * @param districtName name of {@link org.motechproject.mots.domain.District}
+   *        that may belong to village
+   * @param villageName name of village
+   * @param parentFacility name of {@link org.motechproject.mots.domain.Facility}
+   *        that may belong to village
+   * @return page with found villages
    */
   @Override
   public Page<Village> search(String villageName, String parentFacility, String sectorName,

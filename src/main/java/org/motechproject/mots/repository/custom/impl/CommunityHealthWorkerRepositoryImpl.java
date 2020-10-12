@@ -19,8 +19,20 @@ public class CommunityHealthWorkerRepositoryImpl extends BaseRepositoryImpl
     implements CommunityHealthWorkerRepositoryCustom {
 
   /**
-   * Finds CommunityHealthWorkers matching all of the provided parameters.
+   * Finds {@link CommunityHealthWorker}s (CHW) matching all of the provided parameters.
    * If there are no parameters, return all CommunityHealthWorkers.
+   *
+   * @param pageable pagination parameters (page size, page number, sort order)
+   * @param selected flag indicating that CHW is selected
+   * @param chwId id of a CHW
+   * @param chwName name of a CHW
+   * @param districtName name of {@link org.motechproject.mots.domain.District} that CHW may belong
+   * @param facilityName name of {@link org.motechproject.mots.domain.Facility} that CHW may belong
+   * @param groupName name of {@link org.motechproject.mots.domain.Group} that CHW may belong
+   * @param phoneNumber phone number of CHW
+   * @param sectorName name of {@link org.motechproject.mots.domain.Sector} that CHW may belong
+   * @param villageName name of {@link org.motechproject.mots.domain.Village} that CHW may belong
+   * @return page with found CHWs
    */
   @Override
   public Page<CommunityHealthWorker> searchCommunityHealthWorkers(

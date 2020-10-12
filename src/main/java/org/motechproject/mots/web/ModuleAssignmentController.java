@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * This class is responsible for managing of {@link org.motechproject.mots.domain.Group},
+ * {@link org.motechproject.mots.domain.District} and
+ * {@link org.motechproject.mots.domain.Module} assigment.
+ */
 @Controller
 public class ModuleAssignmentController extends BaseController {
 
@@ -31,6 +36,7 @@ public class ModuleAssignmentController extends BaseController {
 
   /**
    * Assign modules for CHW.
+   *
    * @param moduleAssignmentDto dto with chw id and list of modules assigned to it
    */
   @RequestMapping(value = "/module/assign", method = RequestMethod.POST)
@@ -41,8 +47,11 @@ public class ModuleAssignmentController extends BaseController {
 
   /**
    * Assign modules to all CHWs in a district.
+   *
    * @param districtAssignmentDto dto with district id, list of modules assigned to it
    *     and start and end dates
+   * @param bindingResult spring object used for validation
+   * @return true if any module was assigned, false otherwise
    */
   @RequestMapping(value = "/module/district/assign", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
@@ -56,8 +65,11 @@ public class ModuleAssignmentController extends BaseController {
 
   /**
    * Assign modules to all CHWs in a group.
+   *
    * @param groupAssignmentDto dto with group id, list of modules assigned to it
    *     and start and end dates
+   * @param bindingResult spring object used for validation
+   * @return true if anything was assigned false otherwise
    */
   @RequestMapping(value = "/module/group/assign", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
@@ -71,6 +83,7 @@ public class ModuleAssignmentController extends BaseController {
 
   /**
    * Get Modules assigned to CHW.
+   *
    * @param chwId id of CHW
    * @return modules assigned to CHW
    */

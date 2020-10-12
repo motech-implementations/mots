@@ -5,6 +5,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
 
+/**
+ * This class represents message that can be sent via IVR system within a {@link Unit}.
+ */
 @Entity
 @Table(name = "message")
 @PrimaryKeyJoinColumn(name = "call_flow_element_id")

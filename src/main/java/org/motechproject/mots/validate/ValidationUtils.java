@@ -22,6 +22,7 @@ public final class ValidationUtils {
    * Validation of uuids.
    *
    * @param values collection of uuids
+   * @return true if all strings are valid UUIDs, false otherwise
    */
   public static boolean validateUuids(Collection<String> values) {
     for (String uuid : values) {
@@ -37,6 +38,7 @@ public final class ValidationUtils {
    *
    * @param format is the format of date
    * @param value is a date value to check
+   * @return true if date is valid against given format
    */
   public static boolean isValidDateFormat(String format, String value) {
     SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);

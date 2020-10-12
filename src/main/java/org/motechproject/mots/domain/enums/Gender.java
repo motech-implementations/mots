@@ -16,6 +16,7 @@ public enum Gender {
   /**
    * Return an enum value from display name.
    * @param name display name of enum value
+   * @return display name of Gender
    */
   public static Gender getByDisplayName(String name) {
     for (Gender gender : Gender.values()) {

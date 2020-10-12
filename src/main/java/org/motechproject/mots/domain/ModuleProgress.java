@@ -21,6 +21,10 @@ import org.hibernate.annotations.SortComparator;
 import org.motechproject.mots.domain.enums.ProgressStatus;
 import org.motechproject.mots.utils.UnitProgressComparator;
 
+/**
+ * This class represents state in which {@link Module} can be. This is used to determine
+ *        how much user have listened. Also it hold information about current {@link Unit}.
+ */
 @Entity
 @Table(name = "module_progress")
 @NoArgsConstructor
@@ -95,7 +99,13 @@ public class ModuleProgress extends BaseTimestampedEntity {
   }
 
   /**
-   * Calculate module status.
+   * Calculate module status. If module has not started the method sets it's status to in progress.
+   *        If status is not completed and all unit progresses are completed then module status is
+   *        also set to completed.
+   *
+   * @param date date of starting if the process has not started, in case of status
+   *        is not completed ad all units status is completed date is ending date
+   * @param currentUnitNumber number of currently processed unit
    */
   public void calculateModuleStatus(LocalDateTime date, Integer currentUnitNumber) {
     if (ProgressStatus.NOT_STARTED.equals(status)) {
@@ -116,6 +126,8 @@ public class ModuleProgress extends BaseTimestampedEntity {
 
   /**
    * Change current unit, if no more units change status to completed.
+   * @param endDate date of finish processing the unit
+   * @param currentUnitNumber number of currently processed unit
    */
   public void nextUnit(LocalDateTime endDate, Integer currentUnitNumber) {
     this.currentUnitNumber = currentUnitNumber;

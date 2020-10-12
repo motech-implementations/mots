@@ -12,7 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 public final class ReportingValidationHelper {
 
   /**
-   * Throws exception if file is empty.
+   * Throws {@link ReportingException} if file is empty.
+   *
    * @param file The file to check
    */
   public static void throwIfFileIsEmpty(MultipartFile file) {
@@ -23,6 +24,7 @@ public final class ReportingValidationHelper {
 
   /**
    * Throws exception if file has incorrect type.
+   *
    * @param file The file to check
    * @param allowedFileTypes Allowed file types, e.g. png, jpg
    */
@@ -36,6 +38,7 @@ public final class ReportingValidationHelper {
 
   /**
    * Throws exception if file is null.
+   *
    * @param file The file to check
    */
   public static void throwIfFileIsNull(MultipartFile file) {
