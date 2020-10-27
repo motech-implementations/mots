@@ -1,3 +1,6 @@
+## Documentation
+You can find javadoc documentation here: https://motech-implementations.github.io/mercir-docs/.
+
 ## Quick Start backend development
 Clone this repository from GitHub:
  ```shell
