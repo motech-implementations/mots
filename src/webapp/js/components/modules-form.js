@@ -191,7 +191,7 @@ const MODULE_FIELDS = {
   startModuleQuestionIvrId: {
     label: 'Start Module Question IVR Id',
     releasedEditable: true,
-    tooltip: 'Enter IVR Id of Start Module Question block which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of Start Module Question block which you can find on Voto.',
   },
   buttons: [{
     label: 'Add Unit',
@@ -222,11 +222,11 @@ const COURSE_FIELDS = {
   },
   menuIntroMessageIvrId: {
     label: 'Menu Intro Message IVR Id',
-    tooltip: 'Enter IVR Id of Menu Intro Message block which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of Menu Intro Message block which you can find on Voto.',
   },
   chooseModuleQuestionIvrId: {
     label: 'Choose Module Question IVR Id',
-    tooltip: 'Enter IVR Id of Choose Module Question block which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of Choose Module Question block which you can find on Voto.',
   },
   buttons: [{
     label: 'Add Module',
