@@ -8,12 +8,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.motechproject.mots.constants.ValidationMessageConstants;
-import org.motechproject.mots.validate.CourseReleaseCheck;
 
 /**
  * This class is used as a link between {@link Course} and a {@link Module}.
@@ -36,8 +33,6 @@ public class CourseModule extends IvrObject {
   @Setter
   private Module module;
 
-  @NotBlank(message = ValidationMessageConstants.EMPTY_START_MODULE_QUESTION_IVR_ID,
-      groups = CourseReleaseCheck.class)
   @Column(name = "start_module_question_ivr_id")
   @Getter
   @Setter

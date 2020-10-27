@@ -74,15 +74,11 @@ public class Course extends IvrObject {
   @Setter
   private String noModulesMessageIvrId;
 
-  @NotBlank(message = ValidationMessageConstants.EMPTY_MENU_INTRO_MESSAGE_IVR_ID,
-      groups = CourseReleaseCheck.class)
   @Column(name = "menu_intro_message_ivr_id")
   @Getter
   @Setter
   private String menuIntroMessageIvrId;
 
-  @NotBlank(message = ValidationMessageConstants.EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID,
-      groups = CourseReleaseCheck.class)
   @Column(name = "choose_module_question_ivr_id")
   @Getter
   @Setter
