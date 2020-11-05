@@ -67,7 +67,7 @@ public class CommunityHealthWorkerService {
   private static final String GENDER_CSV_HEADER = "gender";
   private static final String MOBILE_CSV_HEADER = "mobile phone";
   private static final String DISTRICT_CSV_HEADER = "district";
-  private static final String SECTOR_CSV_HEADER = "sector";
+  private static final String SECTOR_CSV_HEADER = "chiefdom";
   private static final String VILLAGE_CSV_HEADER = "village";
   private static final String FACILITY_CSV_HEADER = "facility";
   private static final String PREFERRED_LANGUAGE_CSV_HEADER = "preferred language";
