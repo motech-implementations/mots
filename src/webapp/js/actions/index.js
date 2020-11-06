@@ -35,6 +35,8 @@ import {
   CREATE_SECTOR,
   SAVE_DISTRICT,
   CREATE_DISTRICT,
+  FETCH_AUTOMATED_REPORTS,
+  UPDATE_AUTOMATED_REPORTS,
 } from './types';
 
 const BASE_URL = '/api';
@@ -379,4 +381,24 @@ export function fetchReports() {
     type: FETCH_REPORTS,
     payload: request,
   };
+}
+
+export function fetchAutomatedReports() {
+  const url = '/api/job';
+  const request = apiClient.get(url);
+
+  return {
+    type: FETCH_AUTOMATED_REPORTS,
+    payload: request,
+  };
+}
+
+export function updateAutomatedReports(reportSettings, callback) {
+  const url = 'api/job/update';
+  const request = apiClient.put(url, reportSettings);
+  request.then(() => callback());
+  return ({
+    type: UPDATE_AUTOMATED_REPORTS,
+    payload: request,
+  });
 }

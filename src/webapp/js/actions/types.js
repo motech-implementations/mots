@@ -36,3 +36,6 @@ export const CREATE_DISTRICT = 'create_district';
 export const SAVE_DISTRICT = 'save_district';
 
 export const FETCH_REPORTS = 'fetch_reports';
+
+export const FETCH_AUTOMATED_REPORTS = 'fetch_automated_reports';
+export const UPDATE_AUTOMATED_REPORTS = 'update_automated_reports';
