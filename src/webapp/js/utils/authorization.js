@@ -16,6 +16,7 @@ export const UPLOAD_CHW_CSV_AUTHORITY = 'ROLE_UPLOAD_CHW_CSV';
 export const UPLOAD_LOCATION_CSV_AUTHORITY = 'ROLE_UPLOAD_LOCATION_CSV';
 export const GROUP_READ_AUTHORITY = 'ROLE_GROUP_READ';
 export const GROUP_WRITE_AUTHORITY = 'ROLE_GROUP_WRITE';
+export const AUTOMATED_REPORT_AUTHORITY = 'AUTOMATED_REPORT_AUTHORITY';
 
 export function hasAuthority(...authorities) {
   const token = localStorage.getItem('token');
