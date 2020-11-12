@@ -23,6 +23,19 @@ spring:
         password: ${databasePassword}
         url: ${databaseUrl}
         username: ${databaseUser}
+    quartz:
+        job-store-type: jdbc
+        properties.org.quartz.threadPool.threadCount: 1
+        properties.org.quartz.jobStore.dataSource: quartzDataSource
+        properties.org.quartz.dataSource.quartzDataSource.URL: ${databaseUrl}
+        properties.org.quartz.dataSource.quartzDataSource.user: ${databaseUser}
+        properties.org.quartz.dataSource.quartzDataSource.password: ${databasePassword}
+        properties.org.quartz.jobStore.useProperties: true
+        properties.org.quartz.dataSource.quartzDataSource.driver: com.mysql.cj.jdbc.Driver
+        properties.org.quartz.jobStore.tablePrefix: QRTZ_
+        properties.org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+        # Enable HikariCP DB conn Pool
+        properties.org.quartz.dataSource.quartzDataSource.provider: hikaricp
     jpa:
         hibernate:
             ddl-auto: validate

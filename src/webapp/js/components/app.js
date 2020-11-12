@@ -34,6 +34,8 @@ import VillageUpload from './village-upload';
 import Groups from './groups';
 import GroupNew from './group-new';
 import GroupEdit from './group-edit';
+import AutomatedReports from './automated-reports';
+import AutomatedSettingsEdit from './automated-settings-edit';
 
 export default class App extends Component {
   constructor(props) {
@@ -70,6 +72,8 @@ export default class App extends Component {
           <div className="container-wrapper">
             <div className="container-fluid">
               <Switch>
+                <Route path="/automatedReports" exact component={AutomatedReports} />
+                <Route path="/automatedReportsEdit" exact component={AutomatedSettingsEdit} />
                 <Route path="/modules/assign/:chwId?" component={AssignModules} />
                 <Route path="/modules/groupAssign" component={GroupAssignModules} />
                 <Route path="/modules/manage" component={ModulesManage} />

@@ -8,6 +8,8 @@
   <include file="02_initial_data.mysql.sql" relativeToChangelogFile="true" />
   <include file="03_initial_jasper_values.mysql.sql" relativeToChangelogFile="true" />
   <include file="04_initial_reports.mysql.sql" relativeToChangelogFile="true" />
+  <include file="05_quartz_scheduler.xml" relativeToChangelogFile="true" />
+  <include file="06_automated_report_settings.mysql.sql" relativeToChangelogFile="true" />
   <include file="20200924_1402.mysql.sql" relativeToChangelogFile="true" />
   <include file="20201001_1606.mysql.sql" relativeToChangelogFile="true" />
 

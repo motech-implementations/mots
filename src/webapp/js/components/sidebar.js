@@ -11,6 +11,7 @@ import {
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
   UPLOAD_CHW_CSV_AUTHORITY,
   UPLOAD_LOCATION_CSV_AUTHORITY, GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY,
+  AUTOMATED_REPORT_AUTHORITY,
 } from '../utils/authorization';
 import { fetchReports } from '../actions/index';
 
@@ -414,6 +415,16 @@ class SideBar extends Component {
               />
             </a>
             {this.renderReportsMenu()}
+          </li>
+          )}
+          { hasAuthority(AUTOMATED_REPORT_AUTHORITY) && (
+          <li key="automated-reports" className="nav-item">
+            <Link className="nav-link" to="/automatedReports" onClick={this.props.hideMenuSmart}>
+              <span className="fa fa-file-text-o" />
+              <span className="icon-text">
+                Automated Report
+              </span>
+            </Link>
           </li>
           )}
           { hasAuthority(
