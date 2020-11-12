@@ -29,4 +29,12 @@ public class AutomatedReportSettingsDto {
   @Getter
   @Setter
   private String emails = "";
+
+  @Getter
+  @Setter
+  private String messageSubject = "";
+
+  @Getter
+  @Setter
+  private String messageBody = "";
 }

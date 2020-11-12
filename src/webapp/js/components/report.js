@@ -118,6 +118,7 @@ class Report extends Component {
       pageSize: 20,
       exportWithFilters: false,
       exportWithOrder: false,
+      isFetchingReport: false,
     };
 
     this.fetchPdf = this.fetchPdf.bind(this);
@@ -141,6 +142,7 @@ class Report extends Component {
           pageSize: 20,
           exportWithFilters: false,
           exportWithOrder: false,
+          isFetchingReport: true,
         },
         () => this.fetchReport(),
       );
@@ -148,7 +150,7 @@ class Report extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.match.params.reportId !== prevState.reportId) {
+    if ((this.props.match.params.reportId !== prevState.reportId) && !this.state.isFetchingReport) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState(
         {
@@ -160,6 +162,7 @@ class Report extends Component {
           pageSize: 20,
           exportWithFilters: false,
           exportWithOrder: false,
+          isFetchingReport: true,
         },
         () => this.fetchReport(),
       );
@@ -267,9 +270,15 @@ class Report extends Component {
               reportData,
               loading: false,
               totalPages: parseInt(totalPages, 10),
+              isFetchingReport: false,
             });
           }
         }
+      })
+      .catch(() => {
+        this.setState({
+          isFetchingReport: false,
+        });
       });
   }
 

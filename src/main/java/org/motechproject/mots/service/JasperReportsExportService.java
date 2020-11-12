@@ -11,14 +11,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -34,6 +37,7 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import org.motechproject.mots.domain.JasperTemplate;
+import org.motechproject.mots.exception.AutomatedReportException;
 import org.motechproject.mots.exception.EntityNotFoundException;
 import org.motechproject.mots.exception.JasperReportViewException;
 import org.motechproject.mots.repository.JasperTemplateRepository;
@@ -49,7 +53,7 @@ import org.springframework.stereotype.Service;
 public class JasperReportsExportService {
 
   @Autowired
-  private DataSource replicationDataSource;
+  private javax.sql.DataSource replicationDataSource;
 
   @Autowired
   private JasperTemplateService jasperTemplateService;
@@ -77,24 +81,52 @@ public class JasperReportsExportService {
       throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId);
     }
 
+    String fileName = template.getName().replaceAll("\\s+", "_");
+    String contentDisposition = "inline; filename=" + fileName + "." + format;
+
+    response.setHeader("Content-Disposition", contentDisposition);
     Map<String, Object> params =
         jasperTemplateService.mapRequestParametersToTemplate(request, template);
+    addContentType(format, response);
+    exportReport(response.getOutputStream(), template, params, format);
+  }
 
+  private void exportReport(OutputStream out, JasperTemplate template, Map<String, Object> params,
+      String format) {
     try (Connection connection = replicationDataSource.getConnection()) {
       JasperReport jasperReport =
           (JasperReport) JRLoader.loadObject(getReportUrlForReportData(template));
       JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, connection);
-
-      Exporter exporter = createExporter(format, response);
-
+      Exporter exporter = createExporter(format, out);
       exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
       exporter.exportReport();
-
-      String fileName = template.getName().replaceAll("\\s+", "_");
-      String contentDisposition = "inline; filename=" + fileName + "." + format;
-
-      response.setHeader("Content-Disposition", contentDisposition);
+    } catch (Exception e) {
+      throw new AutomatedReportException("Error occurred while generating report", e);
     }
+  }
+
+
+  /**
+   * Loads report template with given id and loads data from db to fill template
+   * and exports report to {@link HttpServletResponse} response.
+   *
+   * @param reportName name of the template that will be used to generate the report
+   * @return report data source
+   */
+  public DataSource generatePdfReport(String reportName) {
+    JasperTemplate template = jasperTemplateRepository.findByName(reportName);
+
+    if (template == null) {
+      throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, reportName);
+    }
+
+    Map<String, Object> params = new HashMap<>();
+    // params for test purpose
+    params.put("pageSize", "20");
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    exportReport(out, template, params, "pdf");
+    return new ByteArrayDataSource(out.toByteArray(), "application/pdf");
   }
 
   /**
@@ -142,11 +174,11 @@ public class JasperReportsExportService {
     }
 
     try (ObjectInputStream inputStream =
-             new ObjectInputStream(new ByteArrayInputStream(jasperTemplate.getData()))) {
+        new ObjectInputStream(new ByteArrayInputStream(jasperTemplate.getData()))) {
       JasperReport jasperReport = (JasperReport) inputStream.readObject();
 
       try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-           ObjectOutputStream out = new ObjectOutputStream(bos)) {
+          ObjectOutputStream out = new ObjectOutputStream(bos)) {
 
         out.writeObject(jasperReport);
         writeByteArrayToFile(tmpFile, bos.toByteArray());
@@ -158,43 +190,63 @@ public class JasperReportsExportService {
     }
   }
 
-  private Exporter createExporter(String format, HttpServletResponse response) throws IOException {
+  private Exporter createExporter(String format, OutputStream outputStream) throws IOException {
     Exporter exporter;
 
     switch (format) {
       case "json":
         exporter = new JsonMetadataExporter();
-        exporter.setExporterOutput(new SimpleWriterExporterOutput(response.getWriter()));
-        response.setContentType("application/json");
+        exporter.setExporterOutput(new SimpleWriterExporterOutput(outputStream));
         break;
       case "pdf":
         exporter = new JRPdfExporter();
         exporter.setExporterOutput(
-            new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-        response.setContentType("application/pdf");
+            new SimpleOutputStreamExporterOutput(outputStream));
         break;
       case "xls":
         exporter = new JRXlsExporter();
         exporter.setExporterOutput(
-            new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-        response.setContentType("application/vnd.ms-excel");
+            new SimpleOutputStreamExporterOutput(outputStream));
         break;
       case "xlsx":
         exporter = new JRXlsxExporter();
         exporter.setExporterOutput(
-            new SimpleOutputStreamExporterOutput(response.getOutputStream()));
-        response.setContentType(
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            new SimpleOutputStreamExporterOutput(outputStream));
         break;
       case "csv":
         exporter = new JRCsvExporter();
-        exporter.setExporterOutput(new SimpleWriterExporterOutput(response.getWriter()));
-        response.setContentType("text/csv");
+        exporter.setExporterOutput(new SimpleWriterExporterOutput(outputStream));
         break;
       default:
         throw new IllegalArgumentException("Unsupported report format: " + format);
     }
 
     return exporter;
+  }
+
+  private void addContentType(String format, HttpServletResponse response) {
+    if (response == null) {
+      return;
+    }
+    switch (format) {
+      case "json":
+        response.setContentType("application/json");
+        break;
+      case "pdf":
+        response.setContentType("application/pdf");
+        break;
+      case "xls":
+        response.setContentType("application/vnd.ms-excel");
+        break;
+      case "xlsx":
+        response.setContentType(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        break;
+      case "csv":
+        response.setContentType("text/csv");
+        break;
+      default:
+        throw new IllegalArgumentException("Unsupported report format: " + format);
+    }
   }
 }
