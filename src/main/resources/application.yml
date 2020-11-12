@@ -45,3 +45,11 @@ spring:
         show-sql: false
     liquibase:
         change-log: classpath:/db/changelog/liquibase-changelog.xml
+    mail:
+        host: ${mailHost}
+        username: ${mailUsername}
+        password: ${mailPassword}
+        properties:
+            mail:
+                smtp:
+                    starttls.enable: true

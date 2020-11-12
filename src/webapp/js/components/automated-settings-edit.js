@@ -44,6 +44,23 @@ const FIELDS = {
       ...input,
     }),
   },
+  messageSubject: {
+    label: 'Message Subject',
+    getAttributes: input => ({
+      type: 'text',
+      className: 'form-control',
+      ...input,
+    }),
+  },
+  messageBody: {
+    type: props => <textarea {...props} />,
+    label: 'Message Body',
+    getAttributes: input => ({
+      type: 'text-area',
+      className: 'form-control',
+      ...input,
+    }),
+  },
   enabled: {
     label: 'Enabled',
     getAttributes: input => ({
