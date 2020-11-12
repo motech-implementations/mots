@@ -48,4 +48,15 @@ public class AutomatedReportSettings extends BaseTimestampedEntity {
   @Getter
   @Setter
   private String emails;
+
+  @Type(type = "text")
+  @Column(name = "message_body")
+  @Getter
+  @Setter
+  private String messageBody;
+
+  @Column(name = "message_subject", nullable = false)
+  @Getter
+  @Setter
+  private String messageSubject;
 }
