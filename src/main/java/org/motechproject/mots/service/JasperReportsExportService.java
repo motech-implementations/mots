@@ -15,7 +15,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import javax.activation.DataSource;
@@ -113,16 +112,13 @@ public class JasperReportsExportService {
    * @param reportName name of the template that will be used to generate the report
    * @return report data source
    */
-  public DataSource generatePdfReport(String reportName) {
+  public DataSource generatePdfReport(String reportName, Map<String, Object> params) {
     JasperTemplate template = jasperTemplateRepository.findByName(reportName);
 
     if (template == null) {
       throw new EntityNotFoundException(ERROR_JASPER_TEMPLATE_NOT_FOUND, reportName);
     }
 
-    Map<String, Object> params = new HashMap<>();
-    // params for test purpose
-    params.put("pageSize", "20");
     ByteArrayOutputStream out = new ByteArrayOutputStream();
 
     exportReport(out, template, params, "pdf");

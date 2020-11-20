@@ -3,6 +3,8 @@ package org.motechproject.mots.scheduler;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import javax.activation.DataSource;
 import org.motechproject.mots.domain.AutomatedReportSettings;
 import org.motechproject.mots.exception.AutomatedReportException;
@@ -38,6 +40,10 @@ public class SendReportJob extends AutomatedReportJob {
   private static final String DESCRIPTION =
       "This task is responsible for sending reports to stakeholders";
 
+  private static final String LOGO_PATH = "/reports/ebodac_logo.jpg";
+
+  private static final String LOGO_PARAM = "logo";
+
   @Override
   public String getDescription() {
     return DESCRIPTION;
@@ -59,7 +65,10 @@ public class SendReportJob extends AutomatedReportJob {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
     String date = ZonedDateTime.now().format(formatter);
     String fileName = REPORT_NAME + date + ".pdf";
-    DataSource report = jasperReportsExportService.generatePdfReport("User Log");
+    Map<String, Object> params = new HashMap<>();
+    params.put(LOGO_PARAM, getClass().getResourceAsStream(LOGO_PATH));
+    DataSource report = jasperReportsExportService.generatePdfReport(
+        "Weekly Monitoring Report", params);
     mailService.sentToMultipleAddress(report, settings, fileName);
   }
 }
