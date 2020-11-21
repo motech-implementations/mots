@@ -1,0 +1,925 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="34459e1f-11bb-4670-b119-fcf5136ad81f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<style name="Table 2_TH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table 2_CH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table 2_TD" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table_TH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#D9D9D9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+		</box>
+	</style>
+	<subDataset name="number_of_selected" uuid="2e3cc4d4-b0b9-46e9-917b-ebe300a30083">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[Y29tbXVuaXR5X2hlYWx0aF93b3JrZXIgLDE1LDE1LGU3N2MyOGE3LTdmZDYtNGRhOS1iMmYxLTUw
+Yjk5YjYzMTg5Yzs=]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+	count(c.id),
+ 	(sum(case when (c.gender = 'MALE') then 1 else 0 end)) as males,
+  	(sum(case when (c.gender = 'FEMALE') then 1 else 0 end)) as females
+FROM community_health_worker c
+WHERE
+c.selected = 1]]>
+		</queryString>
+		<field name="count(c.id)" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="count(c.id)"/>
+		</field>
+		<field name="males" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="males"/>
+		</field>
+		<field name="females" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="females"/>
+		</field>
+		<group name="count(c.id)">
+			<groupExpression><![CDATA[$F{count(c.id)}]]></groupExpression>
+		</group>
+		<group name="males">
+			<groupExpression><![CDATA[$F{males}]]></groupExpression>
+		</group>
+		<group name="females">
+			<groupExpression><![CDATA[$F{females}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="chws_pre_chiefdom" uuid="78e9f413-ebdd-4f31-8e30-5881807e4495">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[ZmFjaWxpdHkgLDIyMCwzMCw1Y2E0MzM0YS03YmJkLTQzYmQtOGRlZi0yZTEyMDY0ZWZjNDE7c2Vj
+dG9yICwxMjksMzAsMTdjMmMwYTQtYmFmYS00ZTVlLTgyZTctMDI3NjhkOThjYmZmO2Rpc3RyaWN0
+ICwzMCwzMCxjZDZiYjNlNy03Nzk1LTQ1M2YtYjY4ZS04MWZjNjc5OTVlODY7Y29tbXVuaXR5X2hl
+YWx0aF93b3JrZXIgLDMxMywzMCw4ZTZjNDljMC1mNjFmLTRmYjEtYTE5MC0zZmY5ZTg1NjA3MWI7]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT count(distinct s.id) as n_cheifdoms, (count(c.id) / count(distinct s.id)) as n_chws, count(DISTINCT f.id) n_facilities
+FROM sector s
+LEFT JOIN facility f ON f.sector_id = s.id
+LEFT JOIN community_health_worker c ON c.facility_id = f.id
+WHERE c.selected = 1]]>
+		</queryString>
+		<field name="n_cheifdoms" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="n_cheifdoms"/>
+		</field>
+		<field name="n_chws" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="n_chws"/>
+		</field>
+		<field name="n_facilities" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="n_facilities"/>
+		</field>
+		<group name="n_cheifdoms">
+			<groupExpression><![CDATA[$F{n_cheifdoms}]]></groupExpression>
+		</group>
+		<group name="n_chws">
+			<groupExpression><![CDATA[$F{n_chws}]]></groupExpression>
+		</group>
+		<group name="n_facilities">
+			<groupExpression><![CDATA[$F{n_facilities}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="quizz_responses" uuid="d4313d4b-66b5-401a-a035-fe9adebf3558">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[bXVsdGlwbGVfY2hvaWNlX3F1ZXN0aW9uICw1NzIsMTUzLDdmYTJlNjBhLTJkMDYtNDliNy04YTgz
+LTZjYmE0OWE0YzM1YTttb2R1bGUgLDc4NiwxMjUsNzVkMzQzNmUtMGFmYi00MzM1LWIwODktMGI5
+OWRkNTJjYTllO3VuaXQgLDQ2OCwxOTYsMjRmNWJkZWYtNjc3Mi00N2E0LTk5N2QtYTJhNGJjY2Vi
+ZGEzO21vZHVsZV9wcm9ncmVzcyAsMTAzMywxMDAsMTE5MTBkZGQtZjk4ZC00YjI5LWEwMzEtMDFl
+YzQxNzE4ZDdiO2Nob2ljZSAsMTUsMTY0LDIzZjdhNjg2LTlhNTgtNGViYS05NDM2LTAwMDkwYzY2
+MjVhMDtjYWxsX2Zsb3dfZWxlbWVudCAsMjI1LDIyMSxjOTNiZWJmNi1hZjI1LTQ1NmYtOWExYS0y
+OTk1YTU1ZmNkZGY7dW5pdF9wcm9ncmVzcyAsMTIyNCwxNTcsYjA2ZGY4NjItNzgyMi00YzRjLWIy
+OTctMmFkYjA5YjVlMGI5O211bHRpcGxlX2Nob2ljZV9xdWVzdGlvbl9sb2cgLDIyNSwxMDAsOTgz
+MDRiMmItMjcwYS00YTRkLWFmODAtYTZkMmJhYmY0MGY5O2NhbGxfZmxvd19lbGVtZW50X2xvZyAs
+MTUsMTUsNzIxZmZkM2EtZDNjYi00ODAzLWE5NjctZGJjMjM2NTliOTEyO2NvdXJzZV9tb2R1bGUg
+LDg5MCwxMDAsMjVhNTNmYjQtYjI3Zi00NDc5LWI0MmEtMWY2MmMxM2MzODI4Ow==]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+	module.name as moduleName,		
+  unit.name AS unit,
+  question.name AS questionId,
+  (SUM(CASE WHEN (choice.type = "CORRECT") THEN 1 ELSE 0 END)) AS correct,
+  (SUM(CASE WHEN (choice.type = "INCORRECT") OR (choice.type = 'DONT_KNOW') THEN 1 ELSE 0 END)) AS wrong,
+  (SUM(CASE WHEN (choice.type IS NULL) THEN 1 ELSE 0 END)) AS skipped,
+  COUNT(*) AS total
+ FROM multiple_choice_question_log
+ JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
+ JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
+ JOIN multiple_choice_question ON question.id = multiple_choice_question.call_flow_element_id
+ JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
+ JOIN unit ON unit.id = unit_progress.unit_id
+ JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
+ JOIN course_module ON course_module.id = module_progress.course_module_id
+ JOIN module ON module.id = course_module.module_id
+ LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
+ GROUP BY module.name, unit, questionId]]>
+		</queryString>
+		<field name="moduleName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="moduleName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="module"/>
+		</field>
+		<field name="unit" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="unit"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="unit"/>
+		</field>
+		<field name="questionId" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="questionId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="call_flow_element"/>
+		</field>
+		<field name="correct" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="correct"/>
+		</field>
+		<field name="wrong" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="wrong"/>
+		</field>
+		<field name="skipped" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="skipped"/>
+		</field>
+		<field name="total" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="total"/>
+		</field>
+		<group name="moduleName">
+			<groupExpression><![CDATA[$F{moduleName}]]></groupExpression>
+		</group>
+		<group name="unit">
+			<groupExpression><![CDATA[$F{unit}]]></groupExpression>
+		</group>
+		<group name="questionId">
+			<groupExpression><![CDATA[$F{questionId}]]></groupExpression>
+		</group>
+		<group name="correct">
+			<groupExpression><![CDATA[$F{correct}]]></groupExpression>
+		</group>
+		<group name="wrong">
+			<groupExpression><![CDATA[$F{wrong}]]></groupExpression>
+		</group>
+		<group name="skipped">
+			<groupExpression><![CDATA[$F{skipped}]]></groupExpression>
+		</group>
+		<group name="total">
+			<groupExpression><![CDATA[$F{total}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="unit_progress" uuid="a0dc2f0b-6ffd-4e4c-b69a-edf49aa4f7d0">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[dW5pdF9wcm9ncmVzcyAsNTYzLDgyLGE5NjdiMTg1LWY4ZWMtNDYzMS1iNWFjLTYxNGM2ODIwZjQ2
+Nztjb3Vyc2VfbW9kdWxlICwxMTksMTUwLDI4MjM3YTlhLWU4MzItNGZjYi1iMmVmLTI0NjdmY2Jl
+YzU2Mzttb2R1bGVfcHJvZ3Jlc3MgLDM3MiwxMzYsYzMyYmRjMTItYjMzNC00YTFmLTkwMjEtZmJl
+YzYwYWQ0ZmYyO2NvbW11bml0eV9oZWFsdGhfd29ya2VyICwxMTksODAsZDIxNGJiZjAtNTYwYS00
+YWE4LWJjMjItMTZiNDQ4YWY3NTJiO3VuaXQgLDM3MiwxNSxkYTM3MTk2Mi02ZjBlLTRiZWYtODcy
+My1kOTI2ZTgzMzY5Zjc7bW9kdWxlICwxNSw1NSxkYzQ4MzYwZS1hZmEzLTQzYmYtYjNhNC1hODI3
+MTA3MGU4OTY7]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+  module.name as moduleName,
+  unit.name AS unitId,
+  (sum(case when (unit_progress.status = 'NOT_STARTED') then 1 else 0 end)) as notStarted,
+  (sum(case when (unit_progress.status = 'IN_PROGRESS') then 1 else 0 end)) as inProgress,
+  (sum(case when (unit_progress.status = 'COMPLETED') then 1 else 0 end)) as completed
+ FROM unit_progress
+ JOIN unit ON unit.id = unit_progress.unit_id
+ JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
+ JOIN course_module ON course_module.id = module_progress.course_module_id
+ JOIN module ON module.id = course_module.module_id
+ JOIN community_health_worker chw ON module_progress.chw_id = chw.id
+ GROUP BY unit.name, module.name
+ ORDER BY unit.name DESC,  module.name DESC]]>
+		</queryString>
+		<field name="moduleName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="moduleName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="module"/>
+		</field>
+		<field name="unitId" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="unitId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="unit"/>
+		</field>
+		<field name="notStarted" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="notStarted"/>
+		</field>
+		<field name="inProgress" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="inProgress"/>
+		</field>
+		<field name="completed" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="completed"/>
+		</field>
+		<group name="moduleName">
+			<groupExpression><![CDATA[$F{moduleName}]]></groupExpression>
+		</group>
+		<group name="unitId">
+			<groupExpression><![CDATA[$F{unitId}]]></groupExpression>
+		</group>
+		<group name="notStarted">
+			<groupExpression><![CDATA[$F{notStarted}]]></groupExpression>
+		</group>
+		<group name="inProgress">
+			<groupExpression><![CDATA[$F{inProgress}]]></groupExpression>
+		</group>
+		<group name="completed">
+			<groupExpression><![CDATA[$F{completed}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="unit_chart" uuid="9cbc80db-16e9-4164-aaf8-b373dad17fc8">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[dW5pdF9wcm9ncmVzcyAsNTQ5LDgyLDg5MmNiNDMxLWI4YWQtNDYxNi05YWE2LTFjNjA2ZmQ3OTc2
+NDttb2R1bGVfcHJvZ3Jlc3MgLDM1OCwxMzYsZDExY2M4NjYtMjBjMC00OWJlLWIxNzMtNjQ3NzYy
+MjBjYzg2O2NvdXJzZV9tb2R1bGUgLDEwNSwxNTAsNDdhMDY2OTQtOTVhNC00NTk2LWE1MWQtZTE3
+Mjk2NzQzMjkzO2NvbW11bml0eV9oZWFsdGhfd29ya2VyICwxMDUsODAsZGFkMGZhYjgtYzQ4MC00
+N2RiLWEwMzEtODI1ODAwMjhiYjVjO3VuaXQgLDM1OCwxNSw0MDA2NzI5MC02MGYzLTQxZjItOGQ4
+Ni1kZjVmY2U2MDRiNjI7bW9kdWxlICwxNSw2OSxlNWI3MzA1MS0xMmQzLTRkZTEtOTQ1Ny1iMTlk
+MGZiM2FlMzY7]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+  unit.name AS unitId,
+  ((sum(case when (unit_progress.status = 'NOT_STARTED') then 1 else 0 end) / count(unit_progress.status)) * 100) as notStarted,
+  ((sum(case when (unit_progress.status = 'IN_PROGRESS') then 1 else 0 end) / count(unit_progress.status)) * 100) as inProgress,
+  ((sum(case when (unit_progress.status = 'COMPLETED') then 1 else 0 end) / count(unit_progress.status)) * 100) as completed
+ FROM unit_progress
+ JOIN unit ON unit.id = unit_progress.unit_id
+ JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
+ JOIN course_module ON course_module.id = module_progress.course_module_id
+ JOIN module ON module.id = course_module.module_id
+ JOIN community_health_worker chw ON module_progress.chw_id = chw.id
+ GROUP BY unit.name
+ ORDER BY unit.name DESC]]>
+		</queryString>
+		<field name="unitId" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="unitId"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="unit"/>
+		</field>
+		<field name="notStarted" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="notStarted"/>
+		</field>
+		<field name="inProgress" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="inProgress"/>
+		</field>
+		<field name="completed" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="completed"/>
+		</field>
+		<group name="unitId">
+			<groupExpression><![CDATA[$F{unitId}]]></groupExpression>
+		</group>
+		<group name="notStarted">
+			<groupExpression><![CDATA[$F{notStarted}]]></groupExpression>
+		</group>
+		<group name="inProgress">
+			<groupExpression><![CDATA[$F{inProgress}]]></groupExpression>
+		</group>
+		<group name="completed">
+			<groupExpression><![CDATA[$F{completed}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="chws_pre_phu" uuid="82cf782a-e28d-424e-818f-ee1dc47b4a1b">
+		<property name="com.jaspersoft.studio.data.sql.tables">
+			<![CDATA[ZGlzdHJpY3QgLDI1LDY4LDdlYTdlYWJhLWRkZjgtNDBiNS05MmM2LWE1YTZjMjFhNzFiNTtzZWN0
+b3IgLDQ1OCwzNDUsMmZlZmFiYzEtYzBhNy00ZjYxLWIyMDgtYzFmYWI1ZjM3ZTY1O21vdHMuZmFj
+aWxpdHkgLDI1NywyNSw2YjQxOGZhOC0yYjBiLTQ4N2YtYjI0MC02ZTA1NTg3ZWVkNTk7bW90cy5j
+b21tdW5pdHlfaGVhbHRoX3dvcmtlciAsMjUsMTM4LDQyMzAzYjZiLTI4YWQtNDk4NC1iYmQzLThl
+YWFjMTk3MTcwNTs=]]>
+		</property>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT
+	d.name AS districtName,
+	s.name AS chiefdomName,
+	f.name AS facilityName,
+	count(c.id) AS total
+FROM district d
+LEFT JOIN sector s ON d.id = s.district_id
+LEFT JOIN mots.facility f ON s.id = f.sector_id 
+LEFT JOIN mots.community_health_worker c ON c.facility_id = f.id 
+GROUP BY d.name, s.name, f.name
+ORDER BY d.name DESC, s.name DESC]]>
+		</queryString>
+		<field name="districtName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="districtName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="district"/>
+		</field>
+		<field name="chiefdomName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="chiefdomName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="sector"/>
+		</field>
+		<field name="facilityName" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="facilityName"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="facility"/>
+		</field>
+		<field name="total" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="total"/>
+		</field>
+		<group name="districtName">
+			<groupExpression><![CDATA[$F{districtName}]]></groupExpression>
+		</group>
+		<group name="chiefdomName">
+			<groupExpression><![CDATA[$F{chiefdomName}]]></groupExpression>
+		</group>
+		<group name="facilityName">
+			<groupExpression><![CDATA[$F{facilityName}]]></groupExpression>
+		</group>
+		<group name="total">
+			<groupExpression><![CDATA[$F{total}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+	count(c.id) as total,
+ 	(sum(case when (c.gender = 'MALE') then 1 else 0 end)) as males,
+  	(sum(case when (c.gender = 'FEMALE') then 1 else 0 end)) as females
+FROM community_health_worker c
+WHERE
+c.selected = 1]]>
+	</queryString>
+	<field name="total" class="java.lang.String"/>
+	<field name="males" class="java.lang.String"/>
+	<field name="females" class="java.lang.String"/>
+	<background>
+		<band height="15" splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="84" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="350" height="50" forecolor="#1C466E" backcolor="#D9D9D9" uuid="071ffb10-a355-4a3d-9417-916b887ad764">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MOTS Weekly Monitoring Report]]></text>
+			</staticText>
+			<image>
+				<reportElement x="380" y="0" width="175" height="70" uuid="d91fb53d-5a3c-41f2-bc03-cf0afd9e0198"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="30" splitType="Prevent">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement key="" x="-1" y="15" width="555" height="15" uuid="8bcbb210-3c4d-4fe6-a0ff-9660fa525dc4"/>
+				<textElement markup="styled"/>
+				<textFieldExpression><![CDATA["<style isBold='true'>"+ $F{total} + "</style>" + " CHWs were selected for MOTS, " + "<style isBold='true'>" + $F{males}  + "</style>" + " males and " + "<style isBold='true'>"+ $F{females} + "</style>" + " females"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="-1" y="0" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="2f600586-2468-4b48-af06-4b6b0c3aae4f">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHW Selected for MOTS]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="780" splitType="Immediate">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="125" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="35d321d6-8763-4340-ae9b-e0da26317538">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHW Module Unit Progress]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="7b7caafd-3773-42e2-aa40-bbdb07011ab6">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHWs per PHU]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="-1" y="0" width="555" height="15" uuid="6231bec5-2e3b-44cc-9a43-a70c12597d76"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="chws_pre_chiefdom" uuid="597053bb-b2aa-4fff-ad5b-85739776df28">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="555">
+						<textField>
+							<reportElement key="" x="0" y="0" width="555" height="15" uuid="8bcbb210-3c4d-4fe6-a0ff-9660fa525dc4"/>
+							<textElement markup="styled"/>
+							<textFieldExpression><![CDATA["CHWs were selected from <style isBold='true'>"+ $F{n_cheifdoms} + "</style>" + " chiefdoms; " + "<style isBold='true'>" + String.format("%.2f", $F{n_chws} == null ? 0.0f : $F{n_chws})  + "</style>" + " CHWs per chiefdom and " + "<style isBold='true'>"+ $F{n_facilities} + "</style>" + " facilities/PHUs"]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="-1" y="545" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="0b0474e9-5bf7-4ff3-a1e5-86b89b65ad67">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quizz responses]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="-1" y="560" width="554" height="64" uuid="7c1fbbdc-2c34-485c-b4d5-ab64d12c0abe"/>
+				<textElement markup="styled"/>
+				<textFieldExpression><![CDATA["Summary of the number of CHWs who attempted each question per Unit and responses\n\n	\u2022 <style isBold='true'>Correct</style> refers to a right response\n	\u2022 <style isBold='true'>Incorrect</style> refers to a wrong response\n	\u2022 <style isBold='true'>Skipped</style> means the question was not answered"]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement positionType="Float" x="-1" y="635" width="554" height="90" uuid="6440d05f-8a6a-4481-bcf4-8494adb0d14d">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="quizz_responses" uuid="aa8960f0-1fda-44cf-aeb6-b3de77f28192">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="100" uuid="f2cec669-2566-464e-aea3-2d4522e3305b">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="70" forecolor="#06B154" uuid="ccc953d2-0c63-4e6f-9559-72f6681acc3b"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Module
+ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="20" uuid="5c2cc3f4-98f4-4501-8b43-99d6711dbd29"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{moduleName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="73be25c2-88c8-42b3-b981-49b1e63aef00">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="70" forecolor="#06B154" uuid="3880da6b-68da-42ed-9b1e-d51b86282087"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Unit
+ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="40e7539a-c604-42d4-ab5c-2d52dcc7074c"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="64c9171d-294e-4a2f-b6ba-71dba088a3d8">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="70" forecolor="#06B154" uuid="881b9c9a-6b0f-4a29-a279-6784453612bd"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Question ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="20" uuid="3b7ed3d1-09e3-4298-b8cd-20f9ef92f749"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{questionId}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="bcdf8a75-7a04-487b-a400-6d0e338d671a">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="80" height="70" forecolor="#06B154" uuid="788384b5-0c07-4151-a2e2-06a62eaf8627"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total # of CHWs who have attempted the Qn.]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="80" height="20" uuid="a84244d2-de75-4411-a6e4-a1f7aead5cc0"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="3741a898-8b91-4d8d-8f0c-1ab06313a831">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="70" forecolor="#06B154" uuid="052423b9-473d-4bf5-a570-2beb6768fbc3"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Correct]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="60" height="20" uuid="27aa39a6-f0c6-4a4b-81a5-9709e9434da8"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{correct}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="491cab5c-89c1-43c1-a5f8-1b5e78623544">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="70" forecolor="#06B154" uuid="23f65be3-605f-4b0a-ba3a-32f1638e9d6e"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Incorrect]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="60" height="20" uuid="8397dd59-78be-494e-9cbd-30f0396ba37a"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{wrong}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="64" uuid="e50e1b0c-14c6-49ed-828c-6a35267106d4">
+						<jr:columnHeader style="Table 2_CH" height="70">
+							<staticText>
+								<reportElement x="0" y="0" width="64" height="70" forecolor="#06B154" uuid="acd6b200-e5df-4f6d-857f-ab64de2571f2"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Skipped]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 2_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="64" height="20" uuid="803bacbc-a319-4bfa-ac64-2345d8e4f5c4"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{skipped}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement positionType="Float" x="1" y="140" width="554" height="69" uuid="84b1d645-989f-43e3-a84c-242a446dd3f1">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 1_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="unit_progress" uuid="a6844f56-1f55-42e7-8465-b16e529300e5">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="130" uuid="bcdfbe46-3f78-4a60-a820-9fc61bd5d9a0">
+						<jr:columnHeader style="Table 1_CH" height="50">
+							<staticText>
+								<reportElement x="0" y="0" width="130" height="50" forecolor="#06B154" uuid="5a4e5e60-99b6-454c-901d-9e261549fe84"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Module ID]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="130" height="20" uuid="fb5609bf-89d1-4fd7-8265-d139a0c5ff86"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{moduleName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="150" uuid="bdedc2c2-345f-4b8d-baad-39fee1723371">
+						<jr:columnHeader style="Table 1_CH" height="50">
+							<staticText>
+								<reportElement x="0" y="0" width="150" height="50" forecolor="#06B154" uuid="eaa8691a-291d-4713-9f45-46e979f9850f"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Unit]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="150" height="20" uuid="6e4178ca-45d3-42cf-ac85-f914a495de9d"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{unitId}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="84" uuid="f4847dd4-6602-45a2-b7ee-5e715e81a587">
+						<jr:columnHeader style="Table 1_CH" height="50">
+							<staticText>
+								<reportElement x="0" y="0" width="84" height="50" forecolor="#06B154" uuid="ae3c8433-f717-4419-9058-e376f75922a1"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[# of CHWs have
+completed]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="84" height="20" uuid="b42d7c63-9c0a-41ef-8927-3eb0dba08c85"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{completed}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="5f4c9436-ece1-4f79-b594-58ed882abe63">
+						<jr:columnHeader style="Table 1_CH" height="50">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="50" forecolor="#06B154" uuid="b6567c4d-df73-4250-87d1-0ef1df48bf0b"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[# of CHWs in
+progress]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="28699ddb-4336-4372-91d9-cf03226593c3"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{inProgress}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="a4d66b29-3116-4c59-8af0-78bef246251d">
+						<jr:columnHeader style="Table 1_CH" height="50">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="50" forecolor="#06B154" uuid="5e97ee9c-58ad-47bf-9341-ada1c76d9338"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[# of CHWs who
+have Not started]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="20" uuid="4ea1f1e3-23da-4808-b344-96e5c3824abf"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{notStarted}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement positionType="Float" x="0" y="255" width="554" height="280" uuid="c49e201c-bae3-4bc8-b625-6e1248e40867"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset incrementType="Group" incrementGroup="completed">
+						<datasetRun subDataset="unit_chart" uuid="f5bc9543-187a-4857-9682-a2bc4978e5ae">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["%Not Started"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{unitId}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{notStarted} == null ? 0 : $F{notStarted}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["%In Progress"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{unitId}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{inProgress} == null ? 0 : $F{inProgress}]]></valueExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["%Completed"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{unitId}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{completed} == null ? 0 : $F{completed}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot labelRotation="22.0">
+						<seriesColor seriesOrder="0" color="#5D8F3B"/>
+						<seriesColor seriesOrder="1" color="#70AD47"/>
+						<seriesColor seriesOrder="2" color="#C9E0BA"/>
+					</plot>
+					<itemLabel/>
+					<categoryAxisLabelExpression><![CDATA["Module Unit"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat labelRotation="22.0">
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#A3A3A3"/>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["% of CHWs"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#7D7D7D" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<break>
+				<reportElement positionType="Float" x="0" y="220" width="553" height="1" uuid="49c7327e-0aac-4f5a-bc50-c737ded7cc27"/>
+			</break>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="-1" y="240" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="e455e872-a42b-4c83-8f56-d8b13da98610">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Percentage of the CHW Unit Progress]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement positionType="Float" x="1" y="35" width="553" height="50" uuid="7fecc378-436f-4617-9346-4a9e9fc9c947">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="chws_pre_phu" uuid="709e8c78-7126-4834-8c2c-bc6e73f152b5">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="160" uuid="1c0ab4a0-8a8b-42fc-a05b-d888f5eddde3">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="160" height="30" forecolor="#06B154" uuid="37954879-b43d-42d6-a151-837f5bbd687a"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[District]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="160" height="20" uuid="8472609d-92f6-45df-92cc-ad998c2d97b2"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{districtName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="150" uuid="f70fb1e4-9684-45bc-b66a-86a28e406106">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="150" height="30" forecolor="#06B154" uuid="9e208b0c-120b-4ec8-b918-9ad3f2903ffd"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Chiefdom]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="150" height="20" uuid="609fa7b9-35a5-4289-98dd-b3fa4e2bfc7b"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{chiefdomName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="140" uuid="21c9cc70-3b09-4e26-8782-f9d9451f7450">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="140" height="30" forecolor="#06B154" uuid="9304df84-695a-49f1-89c4-91d87a9e04ba"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Facility]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="140" height="20" uuid="d022d57f-235e-4f2d-aa2b-4038b50c8100"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{facilityName}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="103" uuid="ee649119-32ae-4b9e-bf20-7898b266ca8a">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="103" height="30" forecolor="#06B154" uuid="9e1fd667-7f59-497c-80a3-3a9ac1acd272"/>
+								<box padding="4"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total # of CHWs]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="20">
+							<textField>
+								<reportElement x="0" y="0" width="103" height="20" uuid="f2df87f5-c007-4275-9775-15a081fa12e2"/>
+								<box padding="4"/>
+								<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>
