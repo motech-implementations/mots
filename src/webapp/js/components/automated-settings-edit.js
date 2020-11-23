@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
-import { updateAutomatedReports } from '../actions/index';
 import FormField from './form-field';
 import DatePicker from '../utils/date-picker';
+import { PERIOD_OPTIONS } from '../constants/period';
+import { updateAutomatedReports } from '../actions/index';
 
 export const AUTOMATED_REPORT_SETTINGS_FORM_NAME = 'AutomatedSettingsForm';
 
@@ -30,10 +30,13 @@ const FIELDS = {
       value: input.value,
     }),
   },
-  intervalInSeconds: {
-    minValue: 60,
-    label: 'Interval in seconds',
+  period: {
     required: true,
+    type: 'select',
+    label: 'Period',
+    getSelectOptions: () => ({
+      values: PERIOD_OPTIONS,
+    }),
   },
   emails: {
     type: props => <textarea {...props} />,
@@ -95,9 +98,17 @@ class AutomatedSettingsEdit extends Component {
 
   render() {
     const { handleSubmit } = this.props;
+    const { downloadPdf } = this.props.location.state;
     return (
       <div>
         <h1 className="page-header padding-bottom-xs margin-x-sm">Edit Automated Report Setting</h1>
+        <button
+          onClick={downloadPdf}
+          type="button"
+          className="btn btn-success margin-left-sm margin-bottom-lg"
+        >
+          Download PDF
+        </button>
         <form onSubmit={handleSubmit(this.onSubmit)}>
           { _.map(FIELDS, this.renderField) }
           <div className="row">
@@ -144,5 +155,10 @@ AutomatedSettingsEdit.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
+  }).isRequired,
+  location: PropTypes.shape({
+    state: PropTypes.shape({
+      downloadPdf: PropTypes.func.isRequired,
+    }),
   }).isRequired,
 };

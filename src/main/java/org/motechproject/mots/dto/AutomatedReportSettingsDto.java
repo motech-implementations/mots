@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.motechproject.mots.validate.annotations.Uuid;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class AutomatedReportSettingsDto {
 
   @Getter
   @Setter
-  private Integer intervalInSeconds;
+  private String period;
 
   @Getter
   @Setter
@@ -37,4 +38,9 @@ public class AutomatedReportSettingsDto {
   @Getter
   @Setter
   private String messageBody = "";
+
+  @Getter
+  @Setter
+  @Uuid
+  private String templateId = "";
 }

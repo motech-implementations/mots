@@ -3,6 +3,7 @@ package org.motechproject.mots.service;
 import java.util.List;
 import java.util.Objects;
 import org.motechproject.mots.domain.AutomatedReportSettings;
+import org.motechproject.mots.domain.enums.EmailSchedulePeriod;
 import org.motechproject.mots.dto.AutomatedReportSettingsDto;
 import org.motechproject.mots.exception.AutomatedReportException;
 import org.motechproject.mots.mapper.AutomatedReportSettingsMapper;
@@ -60,7 +61,8 @@ public class AutomatedReportService {
 
   private boolean settingsChanged(AutomatedReportSettingsDto settingsDto,
       AutomatedReportSettings settings) {
-    return Objects.equals(settingsDto.getIntervalInSeconds(), settings.getIntervalInSeconds())
+    return Objects.equals(EmailSchedulePeriod
+        .getByDisplayName(settingsDto.getPeriod()), settings.getPeriod())
       || Objects.equals(settingsDto.getStartDate(), settings.getStartDate());
   }
 }

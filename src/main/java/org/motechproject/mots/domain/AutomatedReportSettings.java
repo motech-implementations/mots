@@ -1,16 +1,19 @@
 package org.motechproject.mots.domain;
 
 import java.util.Date;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.motechproject.mots.domain.enums.EmailSchedulePeriod;
 
 /**
  * These settings are used to send reports to stakeholders via email.
@@ -27,11 +30,11 @@ public class AutomatedReportSettings extends BaseTimestampedEntity {
   @Setter
   private Date startDate;
 
-  @Column(name = "interval_in_seconds", nullable = false)
+  @Enumerated(EnumType.STRING)
+  @Column(name = "period", nullable = false)
   @Getter
   @Setter
-  @Min(60)
-  private Integer intervalInSeconds;
+  private EmailSchedulePeriod period;
 
   @Column(name = "enabled", nullable = false, columnDefinition = "BIT NULL DEFAULT 0")
   @Getter
@@ -59,4 +62,10 @@ public class AutomatedReportSettings extends BaseTimestampedEntity {
   @Getter
   @Setter
   private String messageSubject;
+
+  @Type(type = "uuid-char")
+  @Column(name = "template_id", nullable = false)
+  @Getter
+  @Setter
+  private UUID templateId;
 }
