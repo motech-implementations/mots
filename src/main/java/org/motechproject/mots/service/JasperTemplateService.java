@@ -96,6 +96,7 @@ public class JasperTemplateService {
    * @param template template with parameters
    * @return Map of matching parameters, empty Map if none match
    */
+  @SuppressWarnings({"PMD.CyclomaticComplexity"})
   public Map<String, Object> mapRequestParametersToTemplate(
       HttpServletRequest request, JasperTemplate template) {
     List<JasperTemplateParameter> templateParameters = template.getTemplateParameters();
@@ -120,7 +121,13 @@ public class JasperTemplateService {
           if (!(isBlank(requestParamValue)
               || "null".equals(requestParamValue)
               || "undefined".equals(requestParamValue))) {
-            map.put(templateParameterName, requestParamValue.trim());
+            if (templateParameter.getDataType() != null
+                && templateParameter.getDataType().equals("Image")) {
+              map.put(
+                  templateParameterName, getClass().getResourceAsStream(requestParamValue.trim()));
+            } else {
+              map.put(templateParameterName, requestParamValue.trim());
+            }
           }
         }
       }

@@ -16,5 +16,6 @@
   <include file="06_automated_report_settings.mysql.sql" relativeToChangelogFile="true" />
   <include file="07_automated_report_settings_email_fields.mysql.sql" relativeToChangelogFile="true" />
   <include file="08_add_weekly_report.mysql.sql" relativeToChangelogFile="true" />
+  <include file="09_automated_report_period.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

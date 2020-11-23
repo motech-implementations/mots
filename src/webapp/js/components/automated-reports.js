@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { initialize } from 'redux-form';
+import FileDownload from 'js-file-download';
 
 import {
   AUTOMATED_REPORT_AUTHORITY,
@@ -11,6 +12,7 @@ import {
 } from '../utils/authorization';
 import { fetchAutomatedReports } from '../actions/index';
 import { AUTOMATED_REPORT_SETTINGS_FORM_NAME } from './automated-settings-edit';
+import apiClient from '../utils/api-client';
 
 class AutomatedReports extends Component {
   componentDidMount() {
@@ -27,6 +29,23 @@ class AutomatedReports extends Component {
     this.props.initialize(AUTOMATED_REPORT_SETTINGS_FORM_NAME, { ...data, startDate: date });
   };
 
+  fetchPdf = (templateId, templateName) => {
+    const url = `api/reports/templates/${templateId}/pdf`;
+    const params = {
+      logo: '/reports/ebodac_logo.jpg',
+    };
+
+    apiClient({
+      url,
+      method: 'GET',
+      responseType: 'blob',
+      params,
+    })
+      .then((response) => {
+        FileDownload(response.data, `${templateName}.pdf`);
+      });
+  };
+
   getTableColumns = () => [
     {
       Header: 'Job name',
@@ -35,8 +54,8 @@ class AutomatedReports extends Component {
       Header: 'Start date',
       accessor: 'startDate',
     }, {
-      Header: 'Interval in seconds',
-      accessor: 'intervalInSeconds',
+      Header: 'Period',
+      accessor: 'period',
     }, {
       Header: 'Enabled',
       accessor: 'enabled',
@@ -52,18 +71,32 @@ class AutomatedReports extends Component {
         <div className="actions-buttons-container">
           { hasAuthority(AUTOMATED_REPORT_AUTHORITY)
           && (
-            <Link
-              to={{
-                pathname: 'automatedReportsEdit',
-              }}
-              onClick={() => this.initializeForm(this.getReport(cell.value))}
-              type="button"
-              className="btn btn-primary margin-right-sm"
-              title="Edit"
-            >
-              <span className="fa fa-edit" />
-              <span className="hide-min-r-small-min next-button-text">Edit</span>
-            </Link>
+            <div>
+              <Link
+                to={{
+                  pathname: 'automatedReportsEdit',
+                  state: {
+                    downloadPdf: () => this.fetchPdf(this.getReport(cell.value)
+                      .templateId, cell.value),
+                  },
+                }}
+                onClick={() => this.initializeForm(this.getReport(cell.value))}
+                type="button"
+                className="btn btn-primary margin-right-sm"
+                title="Edit"
+              >
+                <span className="fa fa-edit" />
+                <span className="hide-min-r-small-min next-button-text">Edit</span>
+              </Link>
+              <button
+                onClick={() => this.fetchPdf(this.getReport(cell.value)
+                  .templateId, cell.value)}
+                type="button"
+                className="btn btn-success margin-right-sm"
+              >
+                Download PDF
+              </button>
+            </div>
           )}
         </div>
       ),
@@ -73,6 +106,7 @@ class AutomatedReports extends Component {
     const { automatedReports } = this.props;
     return (
       <div className="hide-max-r-xsmall-max">
+        <h1 className="page-header padding-bottom-xs margin-x-sm">Automated Reports</h1>
         <ReactTable
           filterable
           data={automatedReports}

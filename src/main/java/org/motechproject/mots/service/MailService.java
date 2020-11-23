@@ -12,6 +12,7 @@ import org.motechproject.mots.domain.AutomatedReportSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailParseException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,6 +22,9 @@ import org.springframework.stereotype.Service;
 public class MailService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
+
+  @Value("${spring.mail.username}")
+  private String mailUsername;
 
   @Autowired
   private JavaMailSender mailSender;
@@ -58,6 +62,7 @@ public class MailService {
       MimeMessageHelper helper = new MimeMessageHelper(message, true);
       helper.setTo(InternetAddress.parse(to));
       helper.setSubject(subject);
+      helper.setFrom(mailUsername);
       helper.setText(content, false);
       helper.addAttachment(fileName, source);
 
