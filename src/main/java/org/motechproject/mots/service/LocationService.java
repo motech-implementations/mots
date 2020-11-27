@@ -46,7 +46,7 @@ public class LocationService {
   private static final Logger LOGGER = LoggerFactory.getLogger(LocationService.class);
 
   private static final String DISTRICT_HEADER = "district";
-  private static final String SECTOR_HEADER = "sector";
+  private static final String SECTOR_HEADER = "chiefdom";
   private static final String FACILITY_HEADER = "facility";
   private static final String VILLAGE_HEADER = "village";
   private static final String FACILITY_TYPE_HEADER = "facility type";
@@ -453,13 +453,6 @@ public class LocationService {
           continue;
         }
 
-        FacilityType facilityType = FacilityType.getByDisplayName(csvRow.get(FACILITY_TYPE_HEADER));
-
-        if (facilityType == null) {
-          errorMap.put(csvMapReader.getLineNumber(), "Invalid or empty Facility type");
-          continue;
-        }
-
         Optional<District> district = districtRepository.findByName(districtName);
 
         if (!district.isPresent()) {
@@ -481,6 +474,8 @@ public class LocationService {
               "Facility with this name already exists");
           continue;
         }
+
+        FacilityType facilityType = FacilityType.getByDisplayName(csvRow.get(FACILITY_TYPE_HEADER));
 
         String inchargeName = csvRow.get(INCHARGE_NAME_HEADER);
         String inchargePhone = csvRow.get(INCHARGE_PHONE_HEADER);
