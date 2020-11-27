@@ -28,7 +28,7 @@ import org.motechproject.mots.domain.enums.FacilityType;
 @EqualsAndHashCode(callSuper = true, of = { "sector" })
 public class Facility extends Location {
 
-  @Column(name = "type", nullable = false)
+  @Column(name = "type")
   @Getter
   @Setter
   @Enumerated(EnumType.STRING)
