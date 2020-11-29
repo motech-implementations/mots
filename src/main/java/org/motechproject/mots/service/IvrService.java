@@ -361,12 +361,14 @@ public class IvrService {
 
   private MultiValueMap<String, String> prepareBasicSubscriberParamsToSend(String phoneNumber,
       String name, Language preferredLanguage) {
-    IvrConfig ivrConfig = ivrConfigService.getConfig();
-    String preferredLanguageString = ivrConfig.getIvrLanguagesIds().get(preferredLanguage);
-
     MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
     params.add(PHONE, phoneNumber);
-    params.add(PREFERRED_LANGUAGE, preferredLanguageString);
+
+    if (preferredLanguage != null) {
+      IvrConfig ivrConfig = ivrConfigService.getConfig();
+      String preferredLanguageString = ivrConfig.getIvrLanguagesIds().get(preferredLanguage);
+      params.add(PREFERRED_LANGUAGE, preferredLanguageString);
+    }
 
     if (StringUtils.isNotBlank(name)) {
       params.add(NAME_PROPERTY, name);

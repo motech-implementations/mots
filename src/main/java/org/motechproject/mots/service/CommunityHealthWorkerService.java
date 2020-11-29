@@ -354,12 +354,11 @@ public class CommunityHealthWorkerService {
 
         Language preferredLanguage = Language.getByDisplayName(
             Objects.toString(csvRow.get(PREFERRED_LANGUAGE_CSV_HEADER)));
-        preferredLanguage = preferredLanguage == null ? Language.ENGLISH : preferredLanguage;
 
         String name = communityHealthWorker.getChwName();
 
         boolean ivrDataChanged =
-            !preferredLanguage.equals(communityHealthWorker.getPreferredLanguage())
+            !Objects.equals(preferredLanguage, communityHealthWorker.getPreferredLanguage())
                 || !StringUtils.equals(phoneNumber, communityHealthWorker.getPhoneNumber());
 
         District oldDistrict = communityHealthWorker.getDistrict();

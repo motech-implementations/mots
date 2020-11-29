@@ -17,7 +17,6 @@ public final class ValidationMessageConstants {
   public static final String EMPTY_CHW_NAME = "Community health worker name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_DISTRICT = "District cannot be empty";
-  public static final String EMPTY_PREFERRED_LANGUAGE = "Preferred Language cannot be empty";
   public static final String EMPTY_QUESTION_OR_MESSAGE = "Message/Question name cannot be empty";
   public static final String EMPTY_LOCATION_NAME = "Location name cannot be empty";
   public static final String EMPTY_MODULE_NAME = "Module Name cannot be empty";

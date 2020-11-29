@@ -225,7 +225,6 @@ const FIELDS = {
   preferredLanguage: {
     type: Select,
     label: 'Preferred Language',
-    required: true,
     getSelectOptions: () => ({
       values: ['English', 'Kinyarwanda'],
     }),
