@@ -14,7 +14,6 @@ import javax.persistence.MapKeyClass;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +22,7 @@ import org.motechproject.mots.domain.enums.Language;
 
 /**
  * This class represents a configuration of IVR system. It defines data to connect
- *        to the Voto (Viamo) system and configuration settings for a proper work.
+ *        to IVR system and configuration settings for a proper work.
  */
 @Entity
 @Table(name = "ivr_config")
@@ -40,54 +39,25 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Setter
   private String baseUrl;
 
-  @Column(name = "main_menu_tree_id")
+  @Column(name = "project_id", nullable = false)
   @Getter
   @Setter
-  private String mainMenuTreeId;
+  private String projectId;
+
+  @Column(name = "channel", nullable = false)
+  @Getter
+  @Setter
+  private String channel;
+
+  @Column(name = "send_module_assignment_message", nullable = false)
+  @Getter
+  @Setter
+  private Boolean sendModuleAssignmentMessage;
 
   @Column(name = "module_assigned_message_id", nullable = false)
   @Getter
   @Setter
   private String moduleAssignedMessageId;
-
-  @Column(name = "default_users_group_id", nullable = false)
-  @Getter
-  @Setter
-  private String defaultUsersGroupId;
-
-  @Column(name = "send_sms_if_voice_fails", nullable = false)
-  @Getter
-  @Setter
-  private Boolean sendSmsIfVoiceFails;
-
-  @Column(name = "detect_voicemail_action", nullable = false)
-  @Getter
-  @Setter
-  private Boolean detectVoicemailAction;
-
-  @Column(name = "retry_attempts_short", nullable = false)
-  @Getter
-  @Setter
-  @Min(0)
-  private Integer retryAttemptsShort;
-
-  @Column(name = "retry_delay_short", nullable = false)
-  @Getter
-  @Setter
-  @Min(0)
-  private Integer retryDelayShort;
-
-  @Column(name = "retry_attempts_long", nullable = false)
-  @Getter
-  @Setter
-  @Min(0)
-  private Integer retryAttemptsLong;
-
-  @Column(name = "retry_delay_long", nullable = false)
-  @Getter
-  @Setter
-  @Min(0)
-  private Integer retryDelayLong;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "ivr_config_languages", joinColumns = @JoinColumn(name = "ivr_config_id"))
@@ -99,25 +69,25 @@ public class IvrConfig extends BaseTimestampedEntity {
   @Setter
   private Map<Language, String> ivrLanguagesIds;
 
-  @Column(name = "incoming_call_id_field", nullable = false)
+  @Column(name = "call_id_field", nullable = false)
   @Getter
   @Setter
-  private String incomingCallIdField;
+  private String callIdField;
 
-  @Column(name = "outgoing_call_id_field", nullable = false)
+  @Column(name = "chw_phone_field", nullable = false)
   @Getter
   @Setter
-  private String outgoingCallIdField;
+  private String chwPhoneField;
 
-  @Column(name = "chw_ivr_id_field", nullable = false)
+  @Column(name = "call_duration_field", nullable = false)
   @Getter
   @Setter
-  private String chwIvrIdField;
+  private String callDurationField;
 
-  @Column(name = "call_log_id_field", nullable = false)
+  @Column(name = "call_status_reason_field", nullable = false)
   @Getter
   @Setter
-  private String callLogIdField;
+  private String callStatusReasonField;
 
   @Column(name = "call_status_field", nullable = false)
   @Getter

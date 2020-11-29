@@ -6,14 +6,9 @@ public final class ValidationMessageConstants {
   public static final String EMPTY_IVR_ID = "IVR Id cannot be empty";
   public static final String EMPTY_CONTINUATION_QUESTION_IVR_ID =
       "Unit Continuation Question IVR Id cannot be empty";
-  public static final String EMPTY_START_MODULE_QUESTION_IVR_ID =
-      "Start Module Question IVR Id cannot be empty";
   public static final String EMPTY_NO_MODULES_MESSAGE_IVR_ID =
       "No Modules Message IVR Id cannot be empty";
-  public static final String EMPTY_MENU_INTRO_MESSAGE_IVR_ID =
-      "Menu Intro Message IVR Id cannot be empty";
-  public static final String EMPTY_CHOOSE_MODULE_QUESTION_IVR_ID =
-      "Choose Module Question IVR Id cannot be empty";
+  public static final String EMPTY_CHOICE_ID = "Key Value cannot be empty in Question Choice";
   public static final String EMPTY_CHW_NAME = "Community health worker name cannot be empty";
   public static final String EMPTY_PHONE_NUMBER = "Phone number cannot be empty";
   public static final String EMPTY_DISTRICT = "District cannot be empty";

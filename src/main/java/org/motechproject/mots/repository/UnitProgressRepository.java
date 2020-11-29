@@ -8,8 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 @SuppressWarnings("checkstyle:linelength")
 public interface UnitProgressRepository extends CrudRepository<UnitProgress, UUID> {
 
-  Optional<UnitProgress> findByModuleProgressCommunityHealthWorkerIvrIdAndUnitIvrId(String chwIvrId,
-      String unitId);
+  Optional<UnitProgress> findByModuleProgressCommunityHealthWorkerIvrIdAndUnitId(String chwIvrId,
+      UUID unitId);
 
   Optional<UnitProgress> findByModuleProgressCommunityHealthWorkerIvrIdAndUnitContinuationQuestionIvrId(
       String chwIvrId, String unitId);

@@ -12,12 +12,6 @@ public interface ModuleProgressRepository extends CrudRepository<ModuleProgress,
       findByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(UUID chwId,
       UUID moduleId, UUID courseId);
 
-  Optional<ModuleProgress> findByCommunityHealthWorkerIvrIdAndInterrupted(String chwIvrId,
-      Boolean interrupted);
-
-  Optional<ModuleProgress> findByCommunityHealthWorkerIvrIdAndCourseModuleIvrId(String chwIvrId,
-      String moduleId);
-
   void removeAllByCommunityHealthWorkerIdAndCourseModuleModuleIdAndCourseModuleCourseId(
       UUID chwId, UUID moduleId, UUID courseId);
 

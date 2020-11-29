@@ -184,9 +184,9 @@ public class ModuleAssignmentServiceTest {
     assertEquals(newAssignedModules.getModules(), assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscriberToGroups(eq(CHW.getIvrId()), eq(Collections.singletonList(IVR_GROUP)));
+        .assignSubscriberToModules(eq(CHW.getIvrId()), eq(Collections.singleton(IVR_GROUP)));
     verify(ivrService)
-        .removeSubscriberFromGroups(eq(CHW.getIvrId()), eq(Collections.singletonList(IVR_GROUP)));
+        .unassignSubscriberFromModules(eq(CHW.getIvrId()), eq(Collections.singleton(IVR_GROUP)));
     verify(moduleProgressService)
         .removeModuleProgresses(any(), eq(Collections.singleton(MODULE_1)));
     verify(moduleProgressService)
@@ -229,7 +229,7 @@ public class ModuleAssignmentServiceTest {
     when(moduleProgressService.getModuleProgress(any(), any()))
         .thenReturn(getModuleProgress(ProgressStatus.NOT_STARTED));
 
-    doThrow(new IvrException("message")).when(ivrService).addSubscriberToGroups(any(), any());
+    doThrow(new IvrException("message")).when(ivrService).assignSubscriberToModules(any(), any());
 
     moduleAssignmentService.assignModules(toDto(newAssignedModules));
   }
@@ -262,7 +262,7 @@ public class ModuleAssignmentServiceTest {
     assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singletonList(CHW.getIvrId())));
+        .assignSubscriberToModules(eq(CHW.getIvrId()), eq(Collections.singleton(IVR_GROUP)));
     verify(moduleProgressService)
         .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
   }
@@ -298,7 +298,7 @@ public class ModuleAssignmentServiceTest {
     assertEquals(allModules, assignedModulesCaptor.getValue().getModules());
 
     verify(ivrService)
-        .addSubscribersToGroup(eq(IVR_GROUP), eq(Collections.singletonList(CHW.getIvrId())));
+        .assignSubscriberToModules(eq(CHW.getIvrId()), eq(Collections.singleton(IVR_GROUP)));
     verify(moduleProgressService)
         .createModuleProgresses(any(), eq(Collections.singleton(MODULE_3)));
   }
@@ -326,7 +326,7 @@ public class ModuleAssignmentServiceTest {
     when(communityHealthWorkerRepository.findByDistrictIdAndSelected(any(),
         any())).thenReturn(Collections.singletonList(CHW));
 
-    doThrow(new IvrException("message")).when(ivrService).addSubscribersToGroup(any(), any());
+    doThrow(new IvrException("message")).when(ivrService).assignSubscriberToModules(any(), any());
 
     moduleAssignmentService.assignModulesToChwsInLocation(districtAssignmentDto);
   }

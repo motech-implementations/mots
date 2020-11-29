@@ -2,15 +2,12 @@ package org.motechproject.mots.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -153,17 +150,17 @@ public class ModuleAssignmentService {
     validateModulesToUnassign(assignedModulesChw, modulesToRemove);
 
     try {
-      List<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
-      ivrService.addSubscriberToGroups(ivrId, ivrGroups);
+      Set<String> ivrGroups = getIvrGroupsFromModules(modulesToAdd);
+      ivrService.assignSubscriberToModules(ivrId, ivrGroups);
 
       if (!ivrGroups.isEmpty()) {
-        sendModuleAssignmentNotification(
-            Collections.singleton(ivrId), assignmentDto.getNotificationTime());
+        sendModuleAssignmentNotification(Collections.singleton(assignedModulesChw.getPhoneNumber()),
+            assignmentDto.getNotificationTime());
       }
-      ivrService.removeSubscriberFromGroups(ivrId, getIvrGroupsFromModules(modulesToRemove));
+      ivrService.unassignSubscriberFromModules(ivrId, getIvrGroupsFromModules(modulesToRemove));
     } catch (IvrException ex) {
       String message = "Could not assign or delete module for CHW, "
-          + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
+          + "because of IVR module assignment error.";
       throw new ModuleAssignmentException(message, ex);
     }
     moduleProgressService.removeModuleProgresses(assignedModulesChw, modulesToRemove);
@@ -199,11 +196,10 @@ public class ModuleAssignmentService {
         String chwIvrId = assignedModules.getHealthWorker().getIvrId();
 
         try {
-          ivrService.removeSubscriberFromGroups(chwIvrId, Collections.singletonList(ivrGroup));
+          ivrService.unassignSubscriberFromModules(chwIvrId, Collections.singleton(ivrGroup));
         } catch (IvrException ex) {
           throw new ModuleAssignmentException("Could not unassign old module version, "
-              + "because of IVR module assignment error. IVR id: " + chwIvrId + "\n\n"
-              + ex.getClearVotoInfo(), ex);
+              + "because of IVR module assignment error. IVR id: " + chwIvrId, ex);
         }
       });
 
@@ -219,8 +215,8 @@ public class ModuleAssignmentService {
     });
   }
 
-  private List<String> getIvrGroupsFromModules(Set<Module> modules) {
-    List<String> ivrGroups = new ArrayList<>();
+  private Set<String> getIvrGroupsFromModules(Set<Module> modules) {
+    Set<String> ivrGroups = new HashSet<>();
 
     for (Module module: modules) {
       if (module.getIvrGroup() != null) {
@@ -316,9 +312,6 @@ public class ModuleAssignmentService {
     }
 
     Set<String> newIvrSubscribers = new HashSet<>();
-    Map<String, List<String>> subscribersToAdd = new HashMap<>();
-
-    newChwModules.forEach(module -> subscribersToAdd.put(module.getIvrGroup(), new ArrayList<>()));
 
     for (CommunityHealthWorker chw : communityHealthWorkers) {
       AssignedModules existingAssignedModules = getAssignedModules(chw.getId());
@@ -340,21 +333,17 @@ public class ModuleAssignmentService {
       moduleProgressService.createModuleProgresses(chw, modulesToAdd);
 
       if (!modulesToAdd.isEmpty()) {
-        newIvrSubscribers.add(ivrId);
-      }
+        newIvrSubscribers.add(chw.getPhoneNumber());
 
-      modulesToAdd.forEach(module -> subscribersToAdd.get(module.getIvrGroup()).add(ivrId));
+        try {
+          ivrService.assignSubscriberToModules(ivrId, getIvrGroupsFromModules(modulesToAdd));
+        } catch (IvrException ex) {
+          String message = "Could not assign module for CHW, "
+              + "because of IVR module assignment error.";
+          throw new ModuleAssignmentException(message, ex);
+        }
+      }
     }
-
-    subscribersToAdd.forEach((ivrGroup, subscribers) -> {
-      try {
-        ivrService.addSubscribersToGroup(ivrGroup, subscribers);
-      } catch (IvrException ex) {
-        String message = "Could not assign module for CHW, "
-            + "because of IVR module assignment error.\n\n" + ex.getClearVotoInfo();
-        throw new ModuleAssignmentException(message, ex);
-      }
-    });
 
     User currentUser = authenticationHelper.getCurrentUser();
 
@@ -386,15 +375,9 @@ public class ModuleAssignmentService {
    */
   private void sendModuleAssignmentNotification(Set<String> subscribers, String notificationTime) {
     if (notificationTime == null) {
-      try {
-        LOGGER.info("Sending module assignment notifications right away, subscribers: "
-            + StringUtils.join(subscribers, ","));
-        ivrService.sendModuleAssignedMessage(subscribers);
-      } catch (IvrException ex) {
-        String message = "Could not send the module assignment notification to CHWs.\n"
-            + ex.getClearVotoInfo();
-        throw new ModuleAssignmentException(message, ex);
-      }
+      LOGGER.info("Sending module assignment notifications right away, subscribers: "
+          + StringUtils.join(subscribers, ","));
+      ivrService.sendModuleAssignedMessage(subscribers);
     } else {
       SimpleDateFormat sdf = new SimpleDateFormat(MotsConstants.DATE_TIME_PATTERN, Locale.ENGLISH);
       try {

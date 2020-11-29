@@ -1,5 +1,6 @@
 mots:
-    ivrApiKey: ${ivrApiKey}
+    ivrUsername: ${ivrUsername}
+    ivrPassword: ${ivrPassword}
     resourceId: mots
     loadLocations: ${loadLocations}
 

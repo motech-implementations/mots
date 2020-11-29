@@ -255,11 +255,10 @@ public abstract class ModuleMapper {
     List<Choice> choices = new ArrayList<>();
 
     if (choiceDtos != null) {
-      for (int i = 0; i < choiceDtos.size(); i++) {
-        Choice choice = fromDto(choiceDtos.get(i));
-        choice.setChoiceId(i + 1);
+      choiceDtos.forEach(choiceDto -> {
+        Choice choice = fromDto(choiceDto);
         choices.add(choice);
-      }
+      });
     }
 
     return choices;

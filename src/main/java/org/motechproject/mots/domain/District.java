@@ -23,7 +23,7 @@ public class District extends Location {
   @Column(name = "ivr_group_id")
   @Getter
   @Setter
-  private String ivrGroupId;
+  private String ivrName;
 
   @OneToMany(mappedBy = "district")
   @Getter

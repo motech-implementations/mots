@@ -3,8 +3,6 @@ package org.motechproject.mots.web;
 import java.util.Map;
 import org.motechproject.mots.domain.CallDetailRecord;
 import org.motechproject.mots.dto.CallDetailRecordDto;
-import org.motechproject.mots.dto.VotoCallLogDto;
-import org.motechproject.mots.dto.VotoResponseDto;
 import org.motechproject.mots.mapper.CallDetailRecordMapper;
 import org.motechproject.mots.service.IvrService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,14 +47,16 @@ public class IvrController extends BaseController {
   }
 
   /**
-   * Manually send Voto call log to Mots, this should be used only when call log is incorrect and
+   * Manually send IVR call log to Mots, this should be used only when call log is incorrect and
    * must be manually changed before it can be successfully processed in Mots.
    *
-   * @param votoResponse voto response containing call log
+   * @param chwIvrId id of the subscriber to update the progress for
+   * @param csv IVR response containing call log
    */
-  @RequestMapping(value = "/votoCallLog/send", method = RequestMethod.POST)
+  @RequestMapping(value = "/ivrCallLog/send", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void manuallySendVotoCallLog(@RequestBody VotoResponseDto<VotoCallLogDto> votoResponse) {
-    ivrService.manuallySendVotoCallLog(votoResponse.getData());
+  public void manuallySendIvrCallLog(@RequestParam("chwIvrId") String chwIvrId,
+      @RequestBody String csv) {
+    ivrService.manuallySendIvrCallLog(chwIvrId, csv);
   }
 }

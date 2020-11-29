@@ -19,8 +19,6 @@ import org.motechproject.mots.domain.Location;
 import org.motechproject.mots.domain.Sector;
 import org.motechproject.mots.domain.Village;
 import org.motechproject.mots.domain.enums.FacilityType;
-import org.motechproject.mots.exception.ChwException;
-import org.motechproject.mots.exception.IvrException;
 import org.motechproject.mots.exception.MotsAccessDeniedException;
 import org.motechproject.mots.repository.DistrictRepository;
 import org.motechproject.mots.repository.FacilityRepository;
@@ -79,9 +77,6 @@ public class LocationService {
   @Autowired
   private AuthenticationHelper authenticationHelper;
 
-  @Autowired
-  private IvrService ivrService;
-
   public List<District> getDistricts() {
     return districtRepository.findAllByOrderByNameAsc();
   }
@@ -110,21 +105,13 @@ public class LocationService {
   }
 
   /**
-   * Creates IVR group and sets this group to {@link District} then saves the district into the db.
+   * Creates and saves the district into the db.
    *
    * @param district district to save
    * @return saves District
-   * @throws ChwException if creating IVR group fails
    */
   public District createDistrict(District district) {
-    try {
-      String ivrId = ivrService.createGroup(district.getName());
-      district.setIvrGroupId(ivrId);
-    } catch (IvrException ex) {
-      String message = "Could not create district with name: " + district.getName()
-          + ", because of IVR group creation error. \n\n" + ex.getClearVotoInfo();
-      throw new ChwException(message, ex);
-    }
+    district.setIvrName(district.getName());
     return districtRepository.save(district);
   }
 

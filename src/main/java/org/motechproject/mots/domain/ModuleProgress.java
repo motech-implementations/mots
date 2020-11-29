@@ -98,6 +98,11 @@ public class ModuleProgress extends BaseTimestampedEntity {
     return ProgressStatus.COMPLETED.equals(status);
   }
 
+  public void startModule(LocalDateTime date) {
+    status = ProgressStatus.IN_PROGRESS;
+    this.startDate = date;
+  }
+
   /**
    * Calculate module status. If module has not started the method sets it's status to in progress.
    *        If status is not completed and all unit progresses are completed then module status is
@@ -108,11 +113,6 @@ public class ModuleProgress extends BaseTimestampedEntity {
    * @param currentUnitNumber number of currently processed unit
    */
   public void calculateModuleStatus(LocalDateTime date, Integer currentUnitNumber) {
-    if (ProgressStatus.NOT_STARTED.equals(status)) {
-      status = ProgressStatus.IN_PROGRESS;
-      this.startDate = date;
-    }
-
     if (this.currentUnitNumber < currentUnitNumber) {
       this.currentUnitNumber = currentUnitNumber;
     }

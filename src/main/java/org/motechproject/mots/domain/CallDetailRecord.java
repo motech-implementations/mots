@@ -30,13 +30,8 @@ public class CallDetailRecord extends BaseTimestampedEntity {
 
   @Getter
   @Setter
-  @Column(name = "incoming_call_id")
-  private String incomingCallId;
-
-  @Getter
-  @Setter
-  @Column(name = "outgoing_call_id")
-  private String outgoingCallId;
+  @Column(name = "call_id", nullable = false)
+  private String callId;
 
   @Getter
   @Setter
@@ -45,19 +40,24 @@ public class CallDetailRecord extends BaseTimestampedEntity {
 
   @Getter
   @Setter
-  @Column(name = "chw_ivr_id", nullable = false)
-  private String chwIvrId;
-
-  @Getter
-  @Setter
-  @Column(name = "call_log_id", nullable = false)
-  private String callLogId;
+  @Column(name = "chw_phone", nullable = false)
+  private String chwPhone;
 
   @Column(name = "call_status", nullable = false)
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private CallStatus callStatus;
+
+  @Getter
+  @Setter
+  @Column(name = "call_status_reason")
+  private String callStatusReason;
+
+  @Getter
+  @Setter
+  @Column(name = "call_duration")
+  private String callDuration;
 
   @Getter
   @Setter

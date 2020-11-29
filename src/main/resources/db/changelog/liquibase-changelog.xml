@@ -13,5 +13,6 @@
   <include file="20201001_1657.mysql.sql" relativeToChangelogFile="true" />
   <include file="20201001_1733.mysql.sql" relativeToChangelogFile="true" />
   <include file="10_change_facility_type_to_nullable.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20201128_1425.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

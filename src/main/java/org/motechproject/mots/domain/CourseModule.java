@@ -18,7 +18,17 @@ import lombok.Setter;
 @Entity
 @Table(name = "course_module")
 @NoArgsConstructor
-public class CourseModule extends IvrObject {
+public class CourseModule extends BaseTimestampedEntity {
+
+  @Column(name = "ivr_id")
+  @Getter
+  @Setter
+  private String ivrId;
+
+  @Column(name = "ivr_name")
+  @Getter
+  @Setter
+  private String ivrName;
 
   @ManyToOne
   @JoinColumn(name = "course_id", nullable = false)
@@ -68,7 +78,8 @@ public class CourseModule extends IvrObject {
 
   private CourseModule(String ivrId, String ivrName, Course course, Module module,
       String startModuleQuestionIvrId, Integer listOrder, CourseModule previousVersion) {
-    super(ivrId, ivrName);
+    this.ivrId = ivrId;
+    this.ivrName = ivrName;
     this.course = course;
     this.module = module;
     this.startModuleQuestionIvrId = startModuleQuestionIvrId;

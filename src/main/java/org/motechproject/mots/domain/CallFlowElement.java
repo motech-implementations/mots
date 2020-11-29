@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.motechproject.mots.constants.ValidationMessageConstants;
 import org.motechproject.mots.domain.enums.CallFlowElementType;
+import org.motechproject.mots.validate.CourseReleaseCheck;
 
 /**
  * This class is a base class for all IVR interactive classes (e.g. {@link Message},
@@ -24,7 +25,18 @@ import org.motechproject.mots.domain.enums.CallFlowElementType;
 @Entity
 @Table(name = "call_flow_element")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class CallFlowElement extends IvrObject {
+public abstract class CallFlowElement extends BaseTimestampedEntity {
+
+  @NotBlank(message = ValidationMessageConstants.EMPTY_IVR_ID, groups = CourseReleaseCheck.class)
+  @Column(name = "ivr_id")
+  @Getter
+  @Setter
+  private String ivrId;
+
+  @Column(name = "ivr_name")
+  @Getter
+  @Setter
+  private String ivrName;
 
   @Column(name = "name", nullable = false)
   @Getter
@@ -70,7 +82,8 @@ public abstract class CallFlowElement extends IvrObject {
    */
   public CallFlowElement(String ivrId, String ivrName, Unit unit, String name, String content,
       CallFlowElementType type, Integer listOrder) {
-    super(ivrId, ivrName);
+    this.ivrId = ivrId;
+    this.ivrName = ivrName;
     this.unit = unit;
     this.name = name;
     this.content = content;

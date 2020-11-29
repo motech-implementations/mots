@@ -37,10 +37,10 @@ mysql -uroot -p mots < src/main/resources/test_ivr_config.sql
 ```
 2. Type your root password
 
-## Add VOTO ivrApiKey
+## Add Verboice credentials
 1. Go into ~/.gradle
 2. Create gradle.properties file (it will overwrite project's properties)
-3. Add `ivrApiKey=<voto-api-key>` to set VOTO communication.
+3. Add `ivrUsername=<verboice-usename>` and `ivrPassword=<verboice-password>` to set IVR communication.
 
 ## Stopping the Service
 To stop the service (when it is running with `gradle bootRun`) use Control-C.

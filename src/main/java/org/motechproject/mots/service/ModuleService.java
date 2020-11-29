@@ -35,9 +35,6 @@ public class ModuleService {
   @Autowired
   private ModuleAssignmentService moduleAssignmentService;
 
-  @Autowired
-  private IvrConfigService ivrConfigService;
-
   @PreAuthorize(DefaultPermissionConstants.HAS_ASSIGN_OR_DISPLAY_OR_MANAGE_MODULES_ROLE)
   public List<CourseDto> getCourses() {
     return MODULE_MAPPER.toCourseDtos(courseRepository.findAllByOrderByVersionAsc());
@@ -174,8 +171,7 @@ public class ModuleService {
   }
 
   /**
-   * Release Course. First unassign old modules, then update the module progress
-   * and update ivr main menu tree {@link IvrConfigService#updateMainMenuTreeId}.
+   * Release Course. First unassign old modules, then update the module progress.
    *
    * @param course Course to be released
    * @return released course dto
@@ -188,8 +184,6 @@ public class ModuleService {
 
     moduleAssignmentService.unassignOldModulesVersions(newVersionModules);
     moduleAssignmentService.updateModuleProgress(releasedCourseModules);
-
-    ivrConfigService.updateMainMenuTreeId(course.getIvrId());
 
     return MODULE_MAPPER.toDto(courseRepository.save(course));
   }

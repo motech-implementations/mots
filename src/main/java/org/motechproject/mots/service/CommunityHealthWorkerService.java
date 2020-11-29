@@ -183,19 +183,17 @@ public class CommunityHealthWorkerService {
     healthWorker.setSelected(true);
 
     District district = districtRepository.getOne(healthWorker.getDistrict().getId());
-    String districtIvrId = district.getIvrGroupId();
+    String districtIvrName = district.getIvrName();
     String phoneNumber = healthWorker.getPhoneNumber();
     String name = healthWorker.getChwName();
     Language preferredLanguage = healthWorker.getPreferredLanguage();
 
     try {
       String ivrId = ivrService.createSubscriber(phoneNumber, name,
-          preferredLanguage, districtIvrId);
+          preferredLanguage, districtIvrName);
       healthWorker.setIvrId(ivrId);
     } catch (IvrException ex) {
-      String message = "Could not select CHW, because of IVR subscriber creation error. \n\n"
-          + ex.getClearVotoInfo();
-      throw new ChwException(message, ex);
+      throw new ChwException("Could not select CHW, because of IVR subscriber creation error.", ex);
     }
 
     healthWorkerRepository.save(healthWorker);
@@ -385,7 +383,7 @@ public class CommunityHealthWorkerService {
           selectHealthWorker(communityHealthWorker);
         } else if (communityHealthWorker.getSelected() && ivrDataChanged) {
           try {
-            saveHealthWorker(communityHealthWorker, oldDistrict);
+            saveHealthWorker(communityHealthWorker);
           } catch (ChwException ex) {
             errorMap.put(csvMapReader.getLineNumber(), ex.getDisplayMessage());
           }
@@ -408,32 +406,25 @@ public class CommunityHealthWorkerService {
   @PreAuthorize(DefaultPermissionConstants.HAS_CHW_WRITE_ROLE)
   public CommunityHealthWorkerDto saveHealthWorker(UUID id, CommunityHealthWorkerDto chw) {
     CommunityHealthWorker existingHealthWorker = getHealthWorker(id);
-    District oldDistrict = existingHealthWorker.getDistrict();
 
     healthWorkerMapper.updateFromDto(chw, existingHealthWorker);
 
-    return healthWorkerMapper.toDto(saveHealthWorker(existingHealthWorker, oldDistrict));
+    return healthWorkerMapper.toDto(saveHealthWorker(existingHealthWorker));
   }
 
-  private CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw, District oldDistrict) {
+  private CommunityHealthWorker saveHealthWorker(CommunityHealthWorker chw) {
     String ivrId = chw.getIvrId();
     String phoneNumber = chw.getPhoneNumber();
     String name = chw.getChwName();
     Language preferredLanguage = chw.getPreferredLanguage();
+    String districtIvrName = chw.getDistrict().getIvrName();
 
     try {
-      ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage);
-
-      if (!oldDistrict.getId().equals(chw.getDistrict().getId())) {
-        District newDistrict = districtRepository.getOne(chw.getDistrict().getId());
-        ivrService.changeSubscriberGroup(ivrId, oldDistrict.getIvrGroupId(),
-            newDistrict.getIvrGroupId());
-      }
+      ivrService.updateSubscriber(ivrId, phoneNumber, name, preferredLanguage, districtIvrName);
     } catch (IvrException ex) {
-      String message = "Could not update CHW, because of IVR subscriber update error. \n"
-          + ex.getClearVotoInfo();
-      throw new ChwException(message, ex);
+      throw new ChwException("Could not update CHW, because of IVR subscriber update error.", ex);
     }
+
     return healthWorkerRepository.save(chw);
   }
 

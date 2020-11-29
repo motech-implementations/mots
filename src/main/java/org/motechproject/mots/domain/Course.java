@@ -31,7 +31,17 @@ import org.motechproject.mots.validate.CourseReleaseCheck;
  */
 @Entity
 @Table(name = "course")
-public class Course extends IvrObject {
+public class Course extends BaseTimestampedEntity {
+
+  @Column(name = "ivr_id")
+  @Getter
+  @Setter
+  private String ivrId;
+
+  @Column(name = "ivr_name")
+  @Getter
+  @Setter
+  private String ivrName;
 
   @Column(name = "name")
   @Getter
@@ -102,7 +112,8 @@ public class Course extends IvrObject {
   private Course(String ivrId, String ivrName, String name, String description, Integer version,
       Course previousVersion, String noModulesMessageIvrId, String menuIntroMessageIvrId,
       String chooseModuleQuestionIvrId) {
-    super(ivrId, ivrName);
+    this.ivrId = ivrId;
+    this.ivrName = ivrName;
     this.name = name;
     this.description = description;
     this.version = version;

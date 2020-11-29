@@ -27,11 +27,11 @@ const getQuestionFields = (questionType, changeFieldValue) => ({
   },
   ivrId: {
     label: 'IVR Id',
-    tooltip: 'Enter IVR Id of all questions in this module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of all questions in this module. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
-    tooltip: 'Enter the IVR Name of the question which you can find on Voto. <br /> This field is optional.',
+    tooltip: 'Enter the IVR Name of the question. <br /> This field is optional.',
   },
   questionType: {
     label: 'Question type',
@@ -60,9 +60,14 @@ const getQuestionFields = (questionType, changeFieldValue) => ({
     addLabel: 'Add Choice',
     fieldLabel: 'Choice',
     fields: {
+      choiceId: {
+        label: 'Key Value',
+        required: true,
+        tooltip: 'Enter value of the key that should be pressed for this choice. <br /> This field is mandatory.',
+      },
       ivrName: {
         label: 'IVR Name',
-        tooltip: 'Enter the IVR Name of the choice which you can find on Voto. <br /> This field is optional.',
+        tooltip: 'Enter the IVR Name of the choice. <br /> This field is optional.',
       },
       type: {
         label: 'Type',
@@ -115,11 +120,11 @@ const MESSAGE_FIELDS = {
   },
   ivrId: {
     label: 'IVR Id',
-    tooltip: 'Enter IVR Id of all messages in this module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of all messages in this module. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
-    tooltip: 'Enter here the IVR Name of the message which you can find on Voto. <br /> This field is optional.',
+    tooltip: 'Enter here the IVR Name of the message. <br /> This field is optional.',
   },
 };
 
@@ -135,15 +140,15 @@ const UNIT_FIELDS = {
   },
   ivrId: {
     label: 'IVR Id',
-    tooltip: 'Enter IVR Id of all units in this module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of all units in this module. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
-    tooltip: 'Enter the IVR Name of the unit which you can find on Voto. <br /> This field is optional.',
+    tooltip: 'Enter the IVR Name of the unit. <br /> This field is optional.',
   },
   continuationQuestionIvrId: {
     label: 'Unit Continuation Question IVR Id',
-    tooltip: 'Enter IVR Id of Unit Continuation Question block which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of Unit Continuation Question block. <br /> This field is mandatory for publishing a course.',
   },
   allowReplay: {
     label: 'Allow Replay',
@@ -178,20 +183,20 @@ const MODULE_FIELDS = {
   ivrId: {
     label: 'IVR Id',
     releasedEditable: true,
-    tooltip: 'Enter IVR Id of the module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of the module. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
-    tooltip: 'Enter the IVR Name of the module which you can find on Voto. <br /> This field is optional.',
+    tooltip: 'Enter the IVR Name of the module. <br /> This field is optional.',
   },
   ivrGroup: {
     label: 'IVR Group',
-    tooltip: 'Enter IVR Group of the module which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Group of the module. <br /> This field is mandatory for publishing a course.',
   },
   startModuleQuestionIvrId: {
     label: 'Start Module Question IVR Id',
     releasedEditable: true,
-    tooltip: 'Enter IVR Id of Start Module Question block which you can find on Voto.',
+    tooltip: 'Enter IVR Id of Start Module Question block.',
   },
   buttons: [{
     label: 'Add Unit',
@@ -210,23 +215,23 @@ const COURSE_FIELDS = {
   },
   ivrId: {
     label: 'IVR Id',
-    tooltip: 'Enter IVR Id of the course which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of the course. <br /> This field is mandatory for publishing a course.',
   },
   ivrName: {
     label: 'IVR Name',
-    tooltip: 'Enter the IVR Name of the course which you can find on Voto. <br /> This field is optional.',
+    tooltip: 'Enter the IVR Name of the course. <br /> This field is optional.',
   },
   noModulesMessageIvrId: {
     label: 'No Modules Message IVR Id',
-    tooltip: 'Enter IVR Id of No Modules Message block which you can find on Voto. <br /> This field is mandatory for publishing a course.',
+    tooltip: 'Enter IVR Id of No Modules Message block. <br /> This field is mandatory for publishing a course.',
   },
   menuIntroMessageIvrId: {
     label: 'Menu Intro Message IVR Id',
-    tooltip: 'Enter IVR Id of Menu Intro Message block which you can find on Voto.',
+    tooltip: 'Enter IVR Id of Menu Intro Message block.',
   },
   chooseModuleQuestionIvrId: {
     label: 'Choose Module Question IVR Id',
-    tooltip: 'Enter IVR Id of Choose Module Question block which you can find on Voto.',
+    tooltip: 'Enter IVR Id of Choose Module Question block.',
   },
   buttons: [{
     label: 'Add Module',

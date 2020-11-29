@@ -24,7 +24,17 @@ import org.motechproject.mots.validate.CourseReleaseCheck;
  */
 @Entity
 @Table(name = "unit")
-public class Unit extends IvrObject {
+public class Unit extends BaseTimestampedEntity {
+
+  @Column(name = "ivr_id")
+  @Getter
+  @Setter
+  private String ivrId;
+
+  @Column(name = "ivr_name")
+  @Getter
+  @Setter
+  private String ivrName;
 
   @Column(name = "name", nullable = false)
   @Getter
@@ -71,7 +81,8 @@ public class Unit extends IvrObject {
 
   private Unit(String ivrId, String ivrName, Module module, String name, String description,
       Integer listOrder, String continuationQuestionIvrId, Boolean allowReplay) {
-    super(ivrId, ivrName);
+    this.ivrId = ivrId;
+    this.ivrName = ivrName;
     this.module = module;
     this.name = name;
     this.description = description;

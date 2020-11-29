@@ -16,17 +16,12 @@ public class IvrConfigService {
 
   private final IvrConfigRepository ivrConfigRepository;
 
-  private IvrConfig ivrConfig;
+  private final IvrConfig ivrConfig;
 
   @Autowired
   public IvrConfigService(IvrConfigRepository ivrConfigRepository) {
     this.ivrConfigRepository = ivrConfigRepository;
     this.ivrConfig = getFirstConfig();
-  }
-
-  public synchronized void updateMainMenuTreeId(String mainMenuTreeId) {
-    ivrConfig.setMainMenuTreeId(mainMenuTreeId);
-    ivrConfig = ivrConfigRepository.save(ivrConfig);
   }
 
   /**
