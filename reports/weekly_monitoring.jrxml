@@ -801,9 +801,9 @@ have Not started]]></text>
 				</categoryDataset>
 				<barPlot>
 					<plot labelRotation="22.0">
-						<seriesColor seriesOrder="0" color="#5D8F3B"/>
-						<seriesColor seriesOrder="1" color="#70AD47"/>
-						<seriesColor seriesOrder="2" color="#C9E0BA"/>
+						<seriesColor seriesOrder="0" color="#FF0000"/>
+						<seriesColor seriesOrder="1" color="#FFF605"/>
+						<seriesColor seriesOrder="2" color="#05E540"/>
 					</plot>
 					<itemLabel/>
 					<categoryAxisLabelExpression><![CDATA["Module Unit"]]></categoryAxisLabelExpression>

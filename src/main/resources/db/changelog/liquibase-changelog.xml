@@ -18,5 +18,6 @@
   <include file="08_add_weekly_report.mysql.sql" relativeToChangelogFile="true" />
   <include file="09_automated_report_period.mysql.sql" relativeToChangelogFile="true" />
   <include file="10_change_facility_type_to_nullable.mysql.sql" relativeToChangelogFile="true" />
+  <include file="11_change_colors_of_chart.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
