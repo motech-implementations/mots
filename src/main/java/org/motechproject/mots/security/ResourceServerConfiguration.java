@@ -35,6 +35,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         .antMatchers(
             "/api/users/forgotPassword"
         ).permitAll()
+        .antMatchers(HttpMethod.GET, "/api/ivrCallback/*").permitAll()
         .antMatchers(HttpMethod.POST, "/api/ivrCallback/*").permitAll()
         .antMatchers(HttpMethod.GET, "/favicon.ico").permitAll()
         .antMatchers(HttpMethod.GET, "/EBODAClogo-RGB-with.jpg").permitAll()

@@ -7,7 +7,6 @@ import org.motechproject.mots.mapper.CallDetailRecordMapper;
 import org.motechproject.mots.service.IvrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +33,7 @@ public class IvrController extends BaseController {
    * @param ivrData data in form of a map from IVR system callback
    * @param configName name of the config
    */
-  @RequestMapping(value = "/ivrCallback/{configName}", method = RequestMethod.POST,
-      consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  @RequestMapping("/ivrCallback/{configName}")
   @ResponseStatus(HttpStatus.OK)
   public void saveCallback(@PathVariable("configName") String configName,
       @RequestParam Map<String, String> ivrData) {
