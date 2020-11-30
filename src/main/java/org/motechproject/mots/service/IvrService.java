@@ -102,6 +102,7 @@ public class IvrService {
   @Autowired
   private ModuleProgressService moduleProgressService;
 
+  @Autowired
   private CommunityHealthWorkerRepository communityHealthWorkerRepository;
 
   private final RestOperations restTemplate = new RestTemplate();
