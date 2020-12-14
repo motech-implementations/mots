@@ -41,6 +41,7 @@ public class MailService {
     if (StringUtils.isNotBlank(emails)) {
       String[] addresses = emails.split(",");
       String recipients = getRecipients(addresses);
+      recipients = recipients.replaceAll("\\u00a0", "");
       sendMailWithAttachments(recipients, settings.getMessageSubject(),
           settings.getMessageBody(), report, fileName);
       LOGGER.info("Report has been sent to " + recipients);
