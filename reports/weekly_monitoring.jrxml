@@ -179,13 +179,14 @@ LDg5MCwxMDAsMjVhNTNmYjQtYjI3Zi00NDc5LWI0MmEtMWY2MmMxM2MzODI4Ow==]]>
  FROM multiple_choice_question_log
  JOIN call_flow_element_log ON call_flow_element_log.id = multiple_choice_question_log.call_flow_element_log_id
  JOIN call_flow_element question ON question.id = call_flow_element_log.call_flow_element_id
- JOIN multiple_choice_question ON question.id = multiple_choice_question.call_flow_element_id
+ JOIN multiple_choice_question q ON question.id = q.call_flow_element_id
  JOIN unit_progress ON call_flow_element_log.unit_progress_id = unit_progress.id
  JOIN unit ON unit.id = unit_progress.unit_id
  JOIN module_progress ON module_progress.id = unit_progress.module_progress_id
  JOIN course_module ON course_module.id = module_progress.course_module_id
  JOIN module ON module.id = course_module.module_id
  LEFT JOIN choice ON choice.id = multiple_choice_question_log.response_id
+ WHERE q.question_type != 'SURVEY'
  GROUP BY module.name, unit, questionId]]>
 		</queryString>
 		<field name="moduleName" class="java.lang.String">
