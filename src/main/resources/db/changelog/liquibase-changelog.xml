@@ -21,5 +21,6 @@
   <include file="11_change_colors_of_chart.mysql.sql" relativeToChangelogFile="true" />
   <include file="12_change_quizz_report_sql.sql" relativeToChangelogFile="true" />
   <include file="20201216_0859.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20201216_2246.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
