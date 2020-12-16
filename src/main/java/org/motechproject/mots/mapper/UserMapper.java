@@ -1,7 +1,6 @@
 package org.motechproject.mots.mapper;
 
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -35,18 +34,6 @@ public interface UserMapper {
   User fromDto(UserDto userDto);
 
   List<UserDto> toDtos(Iterable<User> users);
-
-  /**
-   * Updates user with userDto. Sets password if it's present in userDto.
-   * @param userDto data transfer object serialized from frontend.
-   * @param user user to be updated.
-   */
-  default void passwordNullSafeUpdateFromDto(UserDto userDto, @MappingTarget User user) {
-    updateFromDto(userDto, user);
-    if (StringUtils.isNotBlank(userDto.getPassword())) {
-      user.setPassword(userDto.getPassword());
-    }
-  }
 
   @Mappings({
       @Mapping(target = "id", ignore = true),
