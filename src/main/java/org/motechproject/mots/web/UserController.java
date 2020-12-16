@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
-import org.apache.commons.lang3.StringUtils;
 import org.motechproject.mots.domain.security.User;
 import org.motechproject.mots.domain.security.UserPermission;
 import org.motechproject.mots.domain.security.UserRole;
@@ -134,16 +133,8 @@ public class UserController extends BaseController {
       BindingResult bindingResult) {
 
     checkBindingResult(bindingResult);
-    boolean encodeNewPassword = true;
 
-    if (StringUtils.isEmpty(userDto.getPassword())) {
-      encodeNewPassword = false;
-    }
-
-    User existingUser = userService.getUser(id);
-    USER_MAPPER.passwordNullSafeUpdateFromDto(userDto, existingUser);
-
-    return USER_MAPPER.toDto(userService.saveUser(existingUser, encodeNewPassword));
+    return userService.saveUser(id, userDto);
   }
 
   /**

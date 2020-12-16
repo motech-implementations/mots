@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { initialize } from 'redux-form';
 
 import RoleForm, { ROLE_FORM_NAME } from './role-form';
-import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, MANAGE_ROLES_AUTHORITY } from '../utils/authorization';
 import { saveRole } from '../actions/index';
 import apiClient from '../utils/api-client';
 import MotsConfirmModal from './mots-confirm-modal';
@@ -28,7 +28,7 @@ class RoleEdit extends Component {
   }
 
   componentDidMount() {
-    if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_ROLES_AUTHORITY)) {
       this.props.history.push('/home');
     }
     this.fetchRole();

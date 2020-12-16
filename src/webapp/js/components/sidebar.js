@@ -7,7 +7,7 @@ import {
   ASSIGN_MODULES_AUTHORITY, CHW_READ_AUTHORITY, CHW_WRITE_AUTHORITY,
   hasAuthority,
   MANAGE_MODULES_AUTHORITY, DISPLAY_REPORTS_AUTHORITY, MANAGE_USERS_AUTHORITY,
-  CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
+  MANAGE_ROLES_AUTHORITY, CREATE_FACILITIES_AUTHORITY, DISPLAY_FACILITIES_AUTHORITY,
   DISPLAY_MODULES_AUTHORITY, MANAGE_OWN_FACILITIES_AUTHORITY, MANAGE_FACILITIES_AUTHORITY,
   UPLOAD_CHW_CSV_AUTHORITY,
   UPLOAD_LOCATION_CSV_AUTHORITY, GROUP_READ_AUTHORITY, GROUP_WRITE_AUTHORITY,
@@ -275,7 +275,7 @@ class SideBar extends Component {
           </Link>
         </li>
         )}
-        { hasAuthority(MANAGE_USERS_AUTHORITY)
+        { hasAuthority(MANAGE_ROLES_AUTHORITY)
         && (
         <li className="border-none">
           <Link to="/roles/new" onClick={this.props.hideMenuSmart}>
@@ -284,7 +284,7 @@ class SideBar extends Component {
           </Link>
         </li>
         )}
-        { hasAuthority(MANAGE_USERS_AUTHORITY)
+        { hasAuthority(MANAGE_ROLES_AUTHORITY)
         && (
         <li className="border-none">
           <Link to="/roles" onClick={this.props.hideMenuSmart}>
@@ -435,7 +435,7 @@ class SideBar extends Component {
             {this.renderLocationsMenu()}
           </li>
           )}
-          { hasAuthority(MANAGE_USERS_AUTHORITY)
+          { hasAuthority(MANAGE_USERS_AUTHORITY, MANAGE_ROLES_AUTHORITY)
           && (
           <li className="nav-item">
             <a className="nav-link" href="" onClick={this.toggleUsersMenu}>
