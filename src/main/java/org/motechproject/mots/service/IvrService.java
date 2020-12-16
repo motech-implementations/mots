@@ -268,7 +268,7 @@ public class IvrService {
   private void updateChwLanguageFromCallDetailRecord(VotoCallLogDto votoCallLogDto,
       IvrConfig ivrConfig) throws IvrException {
     Optional<CommunityHealthWorker> optCommunityHealthWorker =
-        communityHealthWorkerRepository.findByChwId(votoCallLogDto.getChwIvrId());
+        communityHealthWorkerRepository.findByIvrId(votoCallLogDto.getChwIvrId());
     if (optCommunityHealthWorker.isPresent()) {
       CommunityHealthWorker communityHealthWorker = optCommunityHealthWorker.get();
 
