@@ -13,5 +13,6 @@
   <include file="07_automated_report_settings_email_fields.mysql.sql" relativeToChangelogFile="true" />
   <include file="20200924_1402.mysql.sql" relativeToChangelogFile="true" />
   <include file="20201001_1606.mysql.sql" relativeToChangelogFile="true" />
+  <include file="20201216_0859.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
