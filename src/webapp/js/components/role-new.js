@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import RoleForm from './role-form';
-import { hasAuthority, MANAGE_USERS_AUTHORITY } from '../utils/authorization';
+import { hasAuthority, MANAGE_ROLES_AUTHORITY } from '../utils/authorization';
 import { createRole } from '../actions/index';
 
 class RoleNew extends Component {
@@ -17,7 +17,7 @@ class RoleNew extends Component {
   }
 
   componentDidMount() {
-    if (!hasAuthority(MANAGE_USERS_AUTHORITY)) {
+    if (!hasAuthority(MANAGE_ROLES_AUTHORITY)) {
       this.props.history.push('/home');
     }
   }

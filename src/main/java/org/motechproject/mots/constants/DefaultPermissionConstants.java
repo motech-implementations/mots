@@ -13,6 +13,7 @@ public class DefaultPermissionConstants {
   public static final String DISPLAY_FACILITIES = "ROLE_DISPLAY_FACILITIES";
   public static final String ASSIGN_MODULES = "ROLE_ASSIGN_MODULES";
   public static final String MANAGE_USERS = "ROLE_MANAGE_USERS";
+  public static final String MANAGE_ROLES = "ROLE_MANAGE_ROLES";
   public static final String DISPLAY_REPORTS = "ROLE_DISPLAY_REPORTS";
   public static final String UPLOAD_CHW_CSV = "ROLE_UPLOAD_CHW_CSV";
   public static final String ADMIN = "ROLE_ADMIN";
@@ -31,6 +32,9 @@ public class DefaultPermissionConstants {
           + MANAGE_FACILITIES + "','" + MANAGE_OWN_FACILITIES + "')";
   public static final String HAS_ASSIGN_MODULES_ROLE = "hasRole('" + ASSIGN_MODULES + "')";
   public static final String HAS_MANAGE_USERS_ROLE = "hasRole('" + MANAGE_USERS + "')";
+  public static final String HAS_MANAGE_ROLES_ROLE = "hasRole('" + MANAGE_ROLES + "')";
+  public static final String HAS_MANAGE_USERS_OR_MANAGE_ROLES_ROLE =
+      "hasAnyRole('" + MANAGE_USERS + "','" + MANAGE_ROLES + "')";
   public static final String HAS_DISPLAY_REPORTS_ROLE = "hasRole('" + DISPLAY_REPORTS + "')";
   public static final String HAS_MANAGE_OWN_FACILITIES =
       "hasRole('" + MANAGE_OWN_FACILITIES + "')";
