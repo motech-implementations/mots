@@ -425,10 +425,6 @@ c.selected = 1]]>
 				</textElement>
 				<text><![CDATA[MOTS Weekly Monitoring Report]]></text>
 			</staticText>
-			<image>
-				<reportElement x="380" y="0" width="175" height="70" uuid="d91fb53d-5a3c-41f2-bc03-cf0afd9e0198"/>
-				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="0" y="45" width="40" height="15" uuid="6320d337-4f83-44a1-b428-9539da1c763d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
