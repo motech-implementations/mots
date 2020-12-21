@@ -1,6 +1,7 @@
 package org.motechproject.mots.scheduler;
 
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import org.motechproject.mots.domain.AutomatedReportSettings;
 import org.motechproject.mots.domain.enums.EmailSchedulePeriod;
@@ -39,10 +40,10 @@ public abstract class AutomatedReportJob extends BaseJob {
         return CronScheduleBuilder.dailyAtHourAndMinute(date.getHours(), date.getMinutes());
       case WEEKLY:
         return CronScheduleBuilder.weeklyOnDayAndHourAndMinute(
-            date.getDay(), date.getHours(), date.getMinutes());
+            Calendar.getInstance().get(Calendar.DAY_OF_WEEK), date.getHours(), date.getMinutes());
       case MONTHLY:
         return CronScheduleBuilder.monthlyOnDayAndHourAndMinute(
-            date.getDate(), date.getHours(), date.getMinutes());
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH), date.getHours(), date.getMinutes());
       default:
         return null;
     }
