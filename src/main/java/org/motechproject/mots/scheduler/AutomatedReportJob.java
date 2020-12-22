@@ -35,15 +35,17 @@ public abstract class AutomatedReportJob extends BaseJob {
   private CronScheduleBuilder getSchedule(AutomatedReportSettings settings) {
     EmailSchedulePeriod period = settings.getPeriod();
     Date date = settings.getStartDate();
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
     switch (period) {
       case DAILY:
         return CronScheduleBuilder.dailyAtHourAndMinute(date.getHours(), date.getMinutes());
       case WEEKLY:
         return CronScheduleBuilder.weeklyOnDayAndHourAndMinute(
-            Calendar.getInstance().get(Calendar.DAY_OF_WEEK), date.getHours(), date.getMinutes());
+            calendar.get(Calendar.DAY_OF_WEEK), date.getHours(), date.getMinutes());
       case MONTHLY:
         return CronScheduleBuilder.monthlyOnDayAndHourAndMinute(
-            Calendar.getInstance().get(Calendar.DAY_OF_MONTH), date.getHours(), date.getMinutes());
+            calendar.get(Calendar.DAY_OF_MONTH), date.getHours(), date.getMinutes());
       default:
         return null;
     }
