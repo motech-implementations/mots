@@ -23,4 +23,6 @@
   <include file="20201216_0859.mysql.sql" relativeToChangelogFile="true" />
   <include file="20201216_2246.mysql.sql" relativeToChangelogFile="true" />
   <include file="13_remove_logo.sql" relativeToChangelogFile="true" />
+  <include file="14_add_module_progress_to_report.mysql.sql" relativeToChangelogFile="true" />
+
 </databaseChangeLog>

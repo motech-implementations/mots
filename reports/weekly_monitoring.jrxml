@@ -398,6 +398,28 @@ ORDER BY d.name, s.name]]>
 			<groupExpression><![CDATA[$F{total}]]></groupExpression>
 		</group>
 	</subDataset>
+	<subDataset name="module_progress_ratio" uuid="b95e499f-19b7-4ae2-9ffa-f3fe094f11ca">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+(sum(case when (m.status = 'COMPLETED') then 1 else 0 end)) as completed,
+(sum(case when (m.status = 'COMPLETED') then 1 else 0 end) / count(m.status) * 100) as completionRatio
+FROM module_progress m;]]>
+		</queryString>
+		<field name="completed" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="completed"/>
+		</field>
+		<field name="completionRatio" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="completionRatio"/>
+		</field>
+		<group name="completed">
+			<groupExpression><![CDATA[$F{completed}]]></groupExpression>
+		</group>
+		<group name="completionRatio">
+			<groupExpression><![CDATA[$F{completionRatio}]]></groupExpression>
+		</group>
+	</subDataset>
 	<parameter name="logo" class="java.io.InputStream"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT 
@@ -477,7 +499,7 @@ c.selected = 1]]>
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="125" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="35d321d6-8763-4340-ae9b-e0da26317538">
+				<reportElement positionType="Float" mode="Opaque" x="0" y="151" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="35d321d6-8763-4340-ae9b-e0da26317538">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -516,7 +538,7 @@ c.selected = 1]]>
 				</jr:list>
 			</componentElement>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="-1" y="545" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="0b0474e9-5bf7-4ff3-a1e5-86b89b65ad67">
+				<reportElement positionType="Float" mode="Opaque" x="-1" y="595" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="0b0474e9-5bf7-4ff3-a1e5-86b89b65ad67">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -528,12 +550,12 @@ c.selected = 1]]>
 				<text><![CDATA[Quizz responses]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="Float" x="-1" y="560" width="554" height="64" uuid="7c1fbbdc-2c34-485c-b4d5-ab64d12c0abe"/>
+				<reportElement positionType="Float" x="-1" y="610" width="554" height="64" uuid="7c1fbbdc-2c34-485c-b4d5-ab64d12c0abe"/>
 				<textElement markup="styled"/>
 				<textFieldExpression><![CDATA["Summary of the number of CHWs who attempted each question per Unit and responses\n\n	\u2022 <style isBold='true'>Correct</style> refers to a right response\n	\u2022 <style isBold='true'>Incorrect</style> refers to a wrong response\n	\u2022 <style isBold='true'>Skipped</style> means the question was not answered"]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement positionType="Float" x="-1" y="635" width="554" height="90" uuid="6440d05f-8a6a-4481-bcf4-8494adb0d14d">
+				<reportElement positionType="Float" x="-1" y="685" width="554" height="90" uuid="6440d05f-8a6a-4481-bcf4-8494adb0d14d">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -681,7 +703,7 @@ ID]]></text>
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement positionType="Float" x="1" y="140" width="554" height="69" uuid="84b1d645-989f-43e3-a84c-242a446dd3f1">
+				<reportElement positionType="Float" x="1" y="166" width="554" height="69" uuid="84b1d645-989f-43e3-a84c-242a446dd3f1">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
@@ -793,7 +815,7 @@ have Not started]]></text>
 			</componentElement>
 			<barChart>
 				<chart evaluationTime="Report">
-					<reportElement positionType="Float" x="0" y="255" width="554" height="280" uuid="c49e201c-bae3-4bc8-b625-6e1248e40867"/>
+					<reportElement positionType="Float" x="0" y="305" width="554" height="280" uuid="c49e201c-bae3-4bc8-b625-6e1248e40867"/>
 					<chartTitle/>
 					<chartSubtitle/>
 					<chartLegend/>
@@ -838,10 +860,10 @@ have Not started]]></text>
 				</barPlot>
 			</barChart>
 			<break>
-				<reportElement positionType="Float" x="0" y="220" width="553" height="1" uuid="49c7327e-0aac-4f5a-bc50-c737ded7cc27"/>
+				<reportElement positionType="Float" x="0" y="270" width="551" height="1" uuid="49c7327e-0aac-4f5a-bc50-c737ded7cc27"/>
 			</break>
 			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="-1" y="240" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="e455e872-a42b-4c83-8f56-d8b13da98610">
+				<reportElement positionType="Float" mode="Opaque" x="-1" y="290" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="e455e872-a42b-4c83-8f56-d8b13da98610">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -940,6 +962,33 @@ have Not started]]></text>
 						</jr:detailCell>
 					</jr:column>
 				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="100" width="555" height="15" forecolor="#FFFFFF" backcolor="#A6A6A6" uuid="8a5e74bc-eb92-46a2-a7a1-c57c28c2c848">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CHW Module Completion Summary]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement positionType="Float" x="1" y="115" width="553" height="36" uuid="d25c8a4d-a335-45e0-a2db-024050685720"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="module_progress_ratio" uuid="93718402-07d4-4645-9773-8b477e62fd31">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="36" width="553">
+						<textField>
+							<reportElement x="0" y="0" width="553" height="36" uuid="9b839235-9417-43ee-9f0b-b6c2823d16af"/>
+							<textElement markup="styled"/>
+							<textFieldExpression><![CDATA["Number of CHWs who completed Module 1: "+ $F{completed} + "\n% of CHWs who completed Module 1:" + String.format("%.2f", $F{completionRatio} == null ? 0.0f : $F{completionRatio})]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
 			</componentElement>
 		</band>
 	</summary>
