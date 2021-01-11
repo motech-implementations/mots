@@ -24,5 +24,6 @@
   <include file="20201216_2246.mysql.sql" relativeToChangelogFile="true" />
   <include file="13_remove_logo.sql" relativeToChangelogFile="true" />
   <include file="14_add_module_progress_to_report.mysql.sql" relativeToChangelogFile="true" />
+  <include file="15_fix_bold_on_weekly_report.mysql.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

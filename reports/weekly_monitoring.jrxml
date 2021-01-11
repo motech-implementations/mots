@@ -985,7 +985,7 @@ have Not started]]></text>
 						<textField>
 							<reportElement x="0" y="0" width="553" height="36" uuid="9b839235-9417-43ee-9f0b-b6c2823d16af"/>
 							<textElement markup="styled"/>
-							<textFieldExpression><![CDATA["Number of CHWs who completed Module 1: "+ $F{completed} + "\n% of CHWs who completed Module 1:" + String.format("%.2f", $F{completionRatio} == null ? 0.0f : $F{completionRatio})]]></textFieldExpression>
+							<textFieldExpression><![CDATA["Number of trainees who completed Module 1 - " + "<style fontName='SansSerif' isBold='true' isUnderline='true' isItalic='false' pdfFontName='Helvetica-Bold' isPdfEmbedded='true'>" + $F{completed} + "</style>" + "\n% of trainees who completed Module 1 - " + "<style fontName='SansSerif' isBold='true' isUnderline='true' isItalic='false' pdfFontName='Helvetica-Bold' isPdfEmbedded='true'>" + String.format("%.2f", $F{completionRatio} == null ? 0.0f : $F{completionRatio}) + "%" + "</style>"]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
 				</jr:list>
