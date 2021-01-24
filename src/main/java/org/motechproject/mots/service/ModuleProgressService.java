@@ -344,7 +344,19 @@ public class ModuleProgressService {
 
     if (blockDto.getBlockId().equals(unitContinuationQuestionId)) {
       unitProgress.endUnit();
-      parseUnitContinuationQuestion(votoCallLogDto, blockIterator, blockDto, unitProgress);
+      if (QUESTION_BLOCK_TYPE.equals(blockDto.getBlockType())) {
+        parseUnitContinuationQuestion(votoCallLogDto, blockIterator, blockDto, unitProgress);
+      } else {
+        ModuleProgress moduleProgress = unitProgress.getModuleProgress();
+        moduleProgress.nextUnit(parseDate(blockDto.getExitAt()),
+            unitProgress.getUnit().getListOrder());
+
+        blockDto = getVotoBlock(blockIterator);
+
+        if (blockDto != null) {
+          parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
+        }
+      }
     } else {
       parseVotoMainMenu(votoCallLogDto, blockIterator, blockDto);
     }
