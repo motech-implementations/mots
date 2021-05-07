@@ -27,7 +27,7 @@
     "immutability-helper": "^3.1.1",
     "js-file-download": "^0.4.12",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-countdown": "^2.2.1",
